@@ -38,24 +38,23 @@
   <p id="result"></p>
 
   <script>
-    async function submitForm() {
-      const name = document.getElementById("name").value;
-      const date = document.getElementById("date").value;
+  async function submitForm() {
+    const name = encodeURIComponent(document.getElementById("name").value);
+    const date = encodeURIComponent(document.getElementById("date").value);
 
-      const response = await fetch("https://script.google.com/macros/s/AKfycbxMsvFRnhCYX-7zF-3hm6H0hxmObjRWKLxr-xMZC_guG9lNlL8Tc0yZjr2KkPplDWGg4Q/exec
-", {
-        method: "POST",
-        body: JSON.stringify({ name, date }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
+    const url = `https://script.google.com/macros/s/AKfycbxMsvFRnhCYX-7zF-3hm6H0hxmObjRWKLxr-xMZC_guG9lNlL8Tc0yZjr2KkPplDWGg4Q/exec?name=${name}&date=${date}`;
 
+    try {
+      const response = await fetch(url);
       const result = await response.json();
+
       document.getElementById("result").innerText = result.success
         ? "✅ 報名成功！"
         : "❌ 報名失敗：" + result.message;
+    } catch (error) {
+      document.getElementById("result").innerText = "🚫 發生錯誤，請稍後再試";
     }
-  </script>
+  }
+</script>
 </body>
 </html>
