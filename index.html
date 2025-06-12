@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>功率課報名系統</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      margin-top: 10px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    h1 {
+      text-align: center;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>功率課報名</h1>
+  <label>姓名：<input type="text" id="name" /></label><br />
+  <label>日期：<input type="date" id="date" /></label><br />
+  <button onclick="submitForm()">送出報名</button>
+
+  <p id="result"></p>
+
+  <script>
+    async function submitForm() {
+      const name = document.getElementById("name").value;
+      const date = document.getElementById("date").value;
+
+      const response = await fetch("https://script.google.com/macros/s/AKfycbxkrx7ZnDgHzaSWT78dw9uYHnv1jOij8s_a9QRS4JDRu30Wm09Xekn1Eoa8MexsDzkVmA/exec", {
+        method: "POST",
+        body: JSON.stringify({ name, date }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const result = await response.json();
+      document.getElementById("result").innerText = result.success
+        ? "✅ 報名成功！"
+        : "❌ 報名失敗：" + result.message;
+    }
+  </script>
+</body>
+</html>
