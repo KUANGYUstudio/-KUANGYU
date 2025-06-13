@@ -21,7 +21,7 @@
       margin-bottom: 0.2em;
     }
     .sub-info {
-      text-align: left;
+      text-align: center;
       font-size: 15px;
       color: #555;
       margin-bottom: 1.5em;
@@ -42,11 +42,13 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 6px;
+      margin-bottom: 6px;
     }
     .weekday-header {
       font-weight: bold;
       text-align: center;
       padding: 0.5em 0;
+      color: #666;
     }
     .calendar-grid {
       display: grid;
@@ -138,6 +140,7 @@
           const title = document.createElement("div");
           title.className = "month-title";
           title.textContent = getMonthText(year, month);
+          block.appendChild(title);
 
           const header = document.createElement("div");
           header.className = "calendar-header";
@@ -147,6 +150,7 @@
             div.textContent = day;
             header.appendChild(div);
           });
+          block.appendChild(header);
 
           const grid = document.createElement("div");
           grid.className = "calendar-grid";
@@ -189,8 +193,6 @@
             grid.appendChild(cell);
           }
 
-          block.appendChild(title);
-          block.appendChild(header);
           block.appendChild(grid);
           container.appendChild(block);
         }
