@@ -2,28 +2,34 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>功率課報名系統</title>
+  <title>光聿功率課登記</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 500px;
+      max-width: 400px;
       margin: 40px auto;
       padding: 20px;
       background-color: #f9f9f9;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+    }
+    .info {
+      text-align: center;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
     input, button {
       margin-top: 10px;
       width: 100%;
       padding: 10px;
       font-size: 16px;
-    }
-    h1 {
-      text-align: center;
     }
     #result {
       margin-top: 20px;
@@ -33,17 +39,22 @@
   </style>
 </head>
 <body>
-  <h1>功率課報名</h1>
+  <h1>光聿功率課登記</h1>
+  <div class="info">
+    功率早班：週三 6:30 – 8:00<br />
+    功率晚班：週二、週四 19:30 – 21:00（線上功率同步）
+  </div>
   <label>姓名：<input type="text" id="name" readonly /></label><br />
   <label>日期：<input type="text" id="date" placeholder="選擇日期" readonly /></label><br />
   <button onclick="submitForm()">送出報名</button>
-
   <p id="result"></p>
 
   <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgquCboomVnb8FCZ5sy5GN3VP4Z4GJRmv5eW0sLTfPM8GCf0ttWgJ9ODF6Lh16a6KEfQ/exec"; // 替換 YOUR_SCRIPT_ID
+
     window.onload = async function () {
       try {
-        const resName = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?mode=getName");
+        const resName = await fetch(`${SCRIPT_URL}?mode=getName`);
         const nameData = await resName.json();
         if (nameData.success) {
           document.getElementById("name").value = nameData.name;
@@ -51,10 +62,10 @@
           document.getElementById("result").innerText = "⚠️ 載入姓名時發生錯誤，請從 LINE 點選報名連結進入。";
         }
 
-        const resDate = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?mode=dates");
+        const resDate = await fetch(`${SCRIPT_URL}?mode=dates`);
         const data = await resDate.json();
-        const openDates = data.open;
-        const closeDates = data.close;
+        const openDates = data.open || [];
+        const closeDates = data.close || [];
 
         flatpickr("#date", {
           dateFormat: "Y/m/d",
@@ -87,11 +98,12 @@
       }
 
       try {
-        const response = await fetch(`https://script.google.com/macros/s/AKfycbxgquCboomVnb8FCZ5sy5GN3VP4Z4GJRmv5eW0sLTfPM8GCf0ttWgJ9ODF6Lh16a6KEfQ/exec?mode=submit&date=${encodeURIComponent(date)}`);
+        const response = await fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}`);
         const result = await response.json();
+
         document.getElementById("result").innerText = result.success
           ? "✅ 登記成功！"
-          : `⚠️ 你已經登記過 ${date} 囉！`;
+          : `⚠️ ${result.message || '你已經登記過囉！'}`;
       } catch (error) {
         console.error("報名失敗：", error);
         document.getElementById("result").innerText = "🚫 發生錯誤，請稍後再試。";
@@ -100,3 +112,4 @@
   </script>
 </body>
 </html>
+
