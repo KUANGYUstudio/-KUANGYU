@@ -2,29 +2,22 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>光聿功率課登記</title>
+  <title>光聿功率課登記（除錯版）</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 400px;
+      max-width: 420px;
       margin: 40px auto;
       padding: 20px;
       background-color: #f9f9f9;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h1 {
-      text-align: center;
-      font-size: 24px;
-    }
-    .info {
-      text-align: center;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
+    h1 { text-align: center; font-size: 24px; }
+    .info { text-align: center; font-size: 14px; margin-bottom: 20px; }
     input, button {
       margin-top: 10px;
       width: 100%;
@@ -36,36 +29,53 @@
       font-weight: bold;
       text-align: center;
     }
+    .debug {
+      font-size: 12px;
+      margin-top: 10px;
+      color: #555;
+      background: #eef;
+      padding: 10px;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
   <h1>光聿功率課登記</h1>
   <div class="info">
     功率早班：週三 6:30 – 8:00<br />
-    功率晚班：週二、週四 19:30 – 21:00（線上功率同步）
+    功率晚班：週二、週四 19:30 – 21:00（線上同步）
   </div>
   <label>姓名：<input type="text" id="name" readonly /></label><br />
   <label>日期：<input type="text" id="date" placeholder="選擇日期" readonly /></label><br />
   <button onclick="submitForm()">送出報名</button>
   <p id="result"></p>
+  <div class="debug">
+    <strong>📋 Debug:</strong>
+    <pre id="debugBox">載入中...</pre>
+  </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwmWvRrx0QIZFn9L-DIFpeE19Fl5xPhrXEr8aVVBC9zhevIVks3TkS6zpPcoTTytIfkBw/exec"; // 替換 YOUR_SCRIPT_ID
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7GeOSy0tDs6B5fg_42LrLtexouRa6jK9tb8xnGElBAMHJ6-UxR1rB00TD5wS-uu11_Q/exec";
 
     window.onload = async function () {
+      const debugBox = document.getElementById("debugBox");
       try {
+        // 1. 載入姓名
         const resName = await fetch(`${SCRIPT_URL}?mode=getName`);
         const nameData = await resName.json();
         if (nameData.success) {
           document.getElementById("name").value = nameData.name;
         } else {
-          document.getElementById("result").innerText = "⚠️ 載入姓名時發生錯誤，請從 LINE 點選報名連結進入。";
+          document.getElementById("result").innerText = "⚠️ 載入姓名失敗，請從 LINE 點入。";
         }
 
+        // 2. 載入日期
         const resDate = await fetch(`${SCRIPT_URL}?mode=dates`);
         const data = await resDate.json();
         const openDates = data.open || [];
         const closeDates = data.close || [];
+
+        debugBox.innerText = `✅ 日期載入成功\n\nOpen:\n${openDates.join("\n")}\n\nClose:\n${closeDates.join("\n")}`;
 
         flatpickr("#date", {
           dateFormat: "Y/m/d",
@@ -82,9 +92,10 @@
             }
           }
         });
-      } catch (error) {
-        console.error("⚠️ 日期載入失敗：", error);
+      } catch (err) {
+        console.error("載入錯誤：", err);
         document.getElementById("result").innerText = "⚠️ 日期無法載入，請稍後再試。";
+        debugBox.innerText = "❌ 錯誤：" + err;
       }
     };
 
@@ -104,8 +115,8 @@
         document.getElementById("result").innerText = result.success
           ? "✅ 登記成功！"
           : `⚠️ ${result.message || '你已經登記過囉！'}`;
-      } catch (error) {
-        console.error("報名失敗：", error);
+      } catch (err) {
+        console.error("報名失敗：", err);
         document.getElementById("result").innerText = "🚫 發生錯誤，請稍後再試。";
       }
     }
