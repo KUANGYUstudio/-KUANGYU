@@ -40,7 +40,7 @@
  <script>
   window.onload = async function () {
     try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbxMsvFRnhCYX-7zF-3hm6H0hxmObjRWKLxr-xMZC_guG9lNlL8Tc0yZjr2KkPplDWGg4Q/exec?mode=getName");
+      const res = await fetch("https://script.google.com/macros/s/AKfycbxUsTt3319RFn_xTQRleL1SXSu9DV6jmD5frbZ6d8kYpxQprb9mLzwgaM0n6-9KznZrhQ/exec?mode=getName");
       const data = await res.json();
       if (data.success && data.name) {
         document.getElementById("name").value = data.name;
