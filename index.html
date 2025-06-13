@@ -42,13 +42,11 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 6px;
-      margin-bottom: 6px;
     }
     .weekday-header {
       font-weight: bold;
       text-align: center;
       padding: 0.5em 0;
-      color: #666;
     }
     .calendar-grid {
       display: grid;
@@ -80,6 +78,11 @@
       text-align: center;
       font-weight: bold;
     }
+    .loading {
+      text-align: center;
+      color: #666;
+      margin-bottom: 2em;
+    }
   </style>
 </head>
 <body>
@@ -94,8 +97,6 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDcma_niKFZiKmoWVzeEdixP4nege-j7S6P4kBAiT89L1YJL_qdtGguGuWje_bPKgpjw/exec";
-
     function formatDate(d) {
       const yyyy = d.getFullYear();
       const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -110,23 +111,32 @@
     async function loadDates() {
       const container = document.getElementById("calendar-container");
       const message = document.getElementById("message");
-      container.innerHTML = "載入中...";
+      container.innerHTML = "<div class='loading'>載入中...</div>";
 
       try {
-        const [nameRes, dateRes] = await Promise.all([
-          fetch(`${SCRIPT_URL}?mode=getName`).then(r => r.json()),
-          fetch(`${SCRIPT_URL}?mode=dates`).then(r => r.json())
+        const baseUrl = "https://script.google.com/macros/s/AKfycbxDcma_niKFZiKmoWVzeEdixP4nege-j7S6P4kBAiT89L1YJL_qdtGguGuWje_bPKgpjw/exec"; // <<👈換成你的 Web App URL
+        const [datesRes, countRes] = await Promise.all([
+          fetch(`${baseUrl}?mode=dates`),
+          fetch(`${baseUrl}?mode=count`)
         ]);
+        const dateData = await datesRes.json();
+        const countData = await countRes.json();
+        const available = new Set(dateData.open);
+        const minDate = new Date(dateData.open[0]);
+        const maxDate = new Date(dateData.open[dateData.open.length - 1]);
 
-        const userName = nameRes.name || "未知";
-        const openSet = new Set(dateRes.open || []);
-        const closeSet = new Set(dateRes.close || []);
+        const startYear = minDate.getFullYear();
+        const startMonth = minDate.getMonth();
+        const endYear = maxDate.getFullYear();
+        const endMonth = maxDate.getMonth();
 
         container.innerHTML = "";
-        const today = new Date();
-
-        for (let offset = 0; offset <= 1; offset++) {
-          const baseDate = new Date(today.getFullYear(), today.getMonth() + offset, 1);
+        for (
+          let y = startYear, m = startMonth;
+          y < endYear || (y === endYear && m <= endMonth);
+          m++, m >= 12 && (m = 0, y++)
+        ) {
+          const baseDate = new Date(y, m, 1);
           const year = baseDate.getFullYear();
           const month = baseDate.getMonth();
           const firstDay = new Date(year, month, 1);
@@ -140,7 +150,6 @@
           const title = document.createElement("div");
           title.className = "month-title";
           title.textContent = getMonthText(year, month);
-          block.appendChild(title);
 
           const header = document.createElement("div");
           header.className = "calendar-header";
@@ -150,7 +159,6 @@
             div.textContent = day;
             header.appendChild(div);
           });
-          block.appendChild(header);
 
           const grid = document.createElement("div");
           grid.className = "calendar-grid";
@@ -168,24 +176,41 @@
             cell.className = "day";
             cell.textContent = i;
 
-            if (openSet.has(dateStr)) {
-              cell.classList.add("available");
-              cell.onclick = async () => {
-                const confirmSignup = window.confirm(`是否要登記 ${dateStr} 的功率課？`);
-                if (!confirmSignup) return;
+            if (available.has(dateStr)) {
+              const signedUp = countData[dateStr] || 0;
+              const remaining = 6 - signedUp;
 
-                message.textContent = "登記處理中...";
-                try {
-                  const res = await fetch(`${SCRIPT_URL}?name=${encodeURIComponent(userName)}&date=${encodeURIComponent(dateStr)}`);
-                  const result = await res.json();
-                  message.textContent = result.success
-                    ? "✅ 登記成功！"
-                    : "⚠️ " + (result.message || "你已經登記過囉！");
-                  await loadDates();
-                } catch (e) {
-                  message.textContent = "❌ 登記失敗，請稍後再試";
-                }
-              };
+              if (remaining <= 0) {
+                cell.classList.add("inactive");
+                cell.textContent = `${i}\n滿班`;
+              } else {
+                cell.classList.add("available");
+
+                const label = document.createElement("div");
+                label.style.fontSize = "12px";
+                label.style.color = "#888";
+                label.style.marginTop = "4px";
+                label.style.fontWeight = "normal";
+                label.textContent = `${remaining}位`;
+                cell.appendChild(label);
+
+                cell.onclick = async () => {
+                  const confirmSignup = window.confirm(`是否要登記 ${dateStr} 的功率課？`);
+                  if (!confirmSignup) return;
+
+                  message.textContent = "登記處理中...";
+                  try {
+                    const res = await fetch(`${baseUrl}?mode=submit&date=${dateStr}`);
+                    const result = await res.text();
+                    message.textContent = `✅ ${result}`;
+                    alert(`✅ ${result}`);
+                    await loadDates();
+                  } catch (e) {
+                    message.textContent = "❌ 登記失敗，請稍後再試";
+                    alert("登記失敗，請稍後再試 🙏");
+                  }
+                };
+              }
             } else {
               cell.classList.add("inactive");
             }
@@ -193,11 +218,13 @@
             grid.appendChild(cell);
           }
 
+          block.appendChild(title);
+          block.appendChild(header);
           block.appendChild(grid);
           container.appendChild(block);
         }
       } catch (e) {
-        container.innerHTML = "<div style='text-align:center;'>讀取失敗，請稍後再試。</div>";
+        container.innerHTML = `<div class='loading'>讀取失敗，請稍後再試。<br><small>${e}</small></div>`;
       }
     }
 
