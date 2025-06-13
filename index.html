@@ -2,40 +2,51 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>光聿功率課登記（除錯版）</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+  <title>光聿功率課登記</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 420px;
+      max-width: 500px;
       margin: 40px auto;
       padding: 20px;
       background-color: #f9f9f9;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
     }
-    h1 { text-align: center; font-size: 24px; }
-    .info { text-align: center; font-size: 14px; margin-bottom: 20px; }
-    input, button {
-      margin-top: 10px;
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
+    h1 {
+      font-size: 24px;
+    }
+    .info {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 20px;
+    }
+    .day {
+      padding: 12px 0;
+      border-radius: 8px;
+      background: #eee;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+    .day.open {
+      background: #fff;
+      color: #333;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    .day:hover {
+      background-color: #e0f7fa;
     }
     #result {
       margin-top: 20px;
       font-weight: bold;
-      text-align: center;
-    }
-    .debug {
-      font-size: 12px;
-      margin-top: 10px;
-      color: #555;
-      background: #eef;
-      padding: 10px;
-      border-radius: 6px;
     }
   </style>
 </head>
@@ -43,83 +54,63 @@
   <h1>光聿功率課登記</h1>
   <div class="info">
     功率早班：週三 6:30 – 8:00<br />
-    功率晚班：週二、週四 19:30 – 21:00（線上同步）
+    功率晚班：週二、週四 19:30 – 21:00（線上功率同步）
   </div>
-  <label>姓名：<input type="text" id="name" readonly /></label><br />
-  <label>日期：<input type="text" id="date" placeholder="選擇日期" readonly /></label><br />
-  <button onclick="submitForm()">送出報名</button>
+  <div id="calendar" class="calendar"></div>
   <p id="result"></p>
-  <div class="debug">
-    <strong>📋 Debug:</strong>
-    <pre id="debugBox">載入中...</pre>
-  </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7GeOSy0tDs6B5fg_42LrLtexouRa6jK9tb8xnGElBAMHJ6-UxR1rB00TD5wS-uu11_Q/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDcma_niKFZiKmoWVzeEdixP4nege-j7S6P4kBAiT89L1YJL_qdtGguGuWje_bPKgpjw/exec";
 
-    window.onload = async function () {
-      const debugBox = document.getElementById("debugBox");
+    function formatDate(date) {
+      return `${date.getFullYear()}/${(date.getMonth()+1).toString().padStart(2,'0')}/${date.getDate().toString().padStart(2,'0')}`;
+    }
+
+    async function loadCalendar() {
+      const calendarDiv = document.getElementById("calendar");
+      calendarDiv.innerHTML = "載入中...";
+
       try {
-        // 1. 載入姓名
         const resName = await fetch(`${SCRIPT_URL}?mode=getName`);
         const nameData = await resName.json();
-        if (nameData.success) {
-          document.getElementById("name").value = nameData.name;
-        } else {
-          document.getElementById("result").innerText = "⚠️ 載入姓名失敗，請從 LINE 點入。";
-        }
+        const name = nameData.name;
 
-        // 2. 載入日期
-        const resDate = await fetch(`${SCRIPT_URL}?mode=dates`);
-        const data = await resDate.json();
-        const openDates = data.open || [];
-        const closeDates = data.close || [];
+        const res = await fetch(`${SCRIPT_URL}?mode=dates`);
+        const data = await res.json();
+        const open = data.open;
+        const close = data.close;
 
-        debugBox.innerText = `✅ 日期載入成功\n\nOpen:\n${openDates.join("\n")}\n\nClose:\n${closeDates.join("\n")}`;
+        const today = new Date();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
-        flatpickr("#date", {
-          dateFormat: "Y/m/d",
-          locale: "zh",
-          disableMobile: true,
-          enable: openDates,
-          disable: closeDates,
-          onDayCreate: function (dObj, dStr, fp, dayElem) {
-            const d = dayElem.dateObj;
-            const dStrFmt = `${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getDate().toString().padStart(2,'0')}`;
-            if (closeDates.includes(dStrFmt)) {
-              dayElem.classList.add("flatpickr-disabled");
-              dayElem.style.color = "#ccc";
-            }
+        calendarDiv.innerHTML = "";
+        for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
+          const formatted = formatDate(d);
+          const div = document.createElement("div");
+          div.className = "day";
+          div.innerText = d.getDate();
+
+          if (open.includes(formatted)) {
+            div.classList.add("open");
+            div.onclick = async () => {
+              const response = await fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&date=${encodeURIComponent(formatted)}`);
+              const result = await response.json();
+              document.getElementById("result").innerText = result.success
+                ? `✅ ${formatted} 登記成功！`
+                : `⚠️ ${result.message || '你已經登記過囉！'}`;
+            };
           }
-        });
-      } catch (err) {
-        console.error("載入錯誤：", err);
-        document.getElementById("result").innerText = "⚠️ 日期無法載入，請稍後再試。";
-        debugBox.innerText = "❌ 錯誤：" + err;
-      }
-    };
 
-    async function submitForm() {
-      const name = document.getElementById("name").value;
-      const date = document.getElementById("date").value;
-
-      if (!name || !date) {
-        document.getElementById("result").innerText = "⚠️ 請確認姓名與日期皆已填寫。";
-        return;
-      }
-
-      try {
-        const response = await fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}`);
-        const result = await response.json();
-
-        document.getElementById("result").innerText = result.success
-          ? "✅ 登記成功！"
-          : `⚠️ ${result.message || '你已經登記過囉！'}`;
-      } catch (err) {
-        console.error("報名失敗：", err);
-        document.getElementById("result").innerText = "🚫 發生錯誤，請稍後再試。";
+          calendarDiv.appendChild(div);
+        }
+      } catch (error) {
+        console.error("日曆載入錯誤：", error);
+        calendarDiv.innerText = "⚠️ 日期無法載入，請稍後再試。";
       }
     }
+
+    window.onload = loadCalendar;
   </script>
 </body>
 </html>
