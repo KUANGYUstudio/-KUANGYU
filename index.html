@@ -87,7 +87,7 @@
       }
 
       try {
-        const response = await fetch(`https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?mode=submit&date=${encodeURIComponent(date)}`);
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbxgquCboomVnb8FCZ5sy5GN3VP4Z4GJRmv5eW0sLTfPM8GCf0ttWgJ9ODF6Lh16a6KEfQ/exec?mode=submit&date=${encodeURIComponent(date)}`);
         const result = await response.json();
         document.getElementById("result").innerText = result.success
           ? "✅ 登記成功！"
