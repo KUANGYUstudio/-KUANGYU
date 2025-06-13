@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>功率課報名系統</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -32,45 +35,63 @@
 <body>
   <h1>功率課報名</h1>
   <label>姓名：<input type="text" id="name" readonly /></label><br />
-  <label>日期：<input type="date" id="date" /></label><br />
+  <label>日期：<input type="text" id="date" placeholder="選擇日期" readonly /></label><br />
   <button onclick="submitForm()">送出報名</button>
 
   <p id="result"></p>
 
   <script>
-    // ✅ 從網址參數自動帶入 name
-    function getQueryParam(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
+    window.onload = async function () {
+      try {
+        const resName = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?mode=getName");
+        const nameData = await resName.json();
+        if (nameData.success) {
+          document.getElementById("name").value = nameData.name;
+        } else {
+          document.getElementById("result").innerText = "⚠️ 載入姓名時發生錯誤，請從 LINE 點選報名連結進入。";
+        }
 
-    window.onload = function () {
-      const name = getQueryParam("name");
-      if (name) {
-        document.getElementById("name").value = decodeURIComponent(name);
-      } else {
-        document.getElementById("result").innerText = "⚠️ 載入姓名時發生錯誤，請從 LINE 點選報名連結進入。";
+        const resDate = await fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?mode=dates");
+        const data = await resDate.json();
+        const openDates = data.open;
+        const closeDates = data.close;
+
+        flatpickr("#date", {
+          dateFormat: "Y/m/d",
+          locale: "zh",
+          disableMobile: true,
+          enable: openDates,
+          disable: closeDates,
+          onDayCreate: function (dObj, dStr, fp, dayElem) {
+            const d = dayElem.dateObj;
+            const dStrFmt = `${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getDate().toString().padStart(2,'0')}`;
+            if (closeDates.includes(dStrFmt)) {
+              dayElem.classList.add("flatpickr-disabled");
+              dayElem.style.color = "#ccc";
+            }
+          }
+        });
+      } catch (error) {
+        console.error("⚠️ 日期載入失敗：", error);
+        document.getElementById("result").innerText = "⚠️ 日期無法載入，請稍後再試。";
       }
     };
 
     async function submitForm() {
-      const name = encodeURIComponent(document.getElementById("name").value);
-      const date = encodeURIComponent(document.getElementById("date").value);
+      const name = document.getElementById("name").value;
+      const date = document.getElementById("date").value;
 
       if (!name || !date) {
         document.getElementById("result").innerText = "⚠️ 請確認姓名與日期皆已填寫。";
         return;
       }
 
-      const url = `https://script.google.com/macros/s/AKfycbylFvsS-lvyLWtqIDE6HPYl7HMSTK-gZhhou5iGaqjb0od9eCV_sGYTDVxpfkE7pAhA/exec?name=${name}&date=${date}`;
-
       try {
-        const response = await fetch(url);
+        const response = await fetch(`https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?mode=submit&date=${encodeURIComponent(date)}`);
         const result = await response.json();
-
         document.getElementById("result").innerText = result.success
-          ? "✅ 報名成功！"
-          : "❌ 報名失敗：" + result.message;
+          ? "✅ 登記成功！"
+          : `⚠️ 你已經登記過 ${date} 囉！`;
       } catch (error) {
         console.error("報名失敗：", error);
         document.getElementById("result").innerText = "🚫 發生錯誤，請稍後再試。";
