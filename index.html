@@ -38,19 +38,18 @@
   <p id="result"></p>
 
   <script>
-    // 🚀 自動從 GAS 取得姓名
-    window.onload = async function () {
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbxMsvFRnhCYX-7zF-3hm6H0hxmObjRWKLxr-xMZC_guG9lNlL8Tc0yZjr2KkPplDWGg4Q/exec?mode=getName");
-        const data = await res.json();
-        if (data.success && data.name) {
-          document.getElementById("name").value = data.name;
-        } else {
-          document.getElementById("result").innerText = "⚠️ 無法自動載入姓名，請重新從 LINE 點擊進入。";
-        }
-      } catch (e) {
-        console.error("姓名載入錯誤：", e);
-        document.getElementById("result").innerText = "⚠️ 載入姓名時發生錯誤。";
+    // ✅ 從網址參數自動帶入 name
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    window.onload = function () {
+      const name = getQueryParam("name");
+      if (name) {
+        document.getElementById("name").value = decodeURIComponent(name);
+      } else {
+        document.getElementById("result").innerText = "⚠️ 載入姓名時發生錯誤，請從 LINE 點選報名連結進入。";
       }
     };
 
@@ -63,7 +62,7 @@
         return;
       }
 
-      const url = `https://script.google.com/macros/s/AKfycbw6T3xDJDP70zILYpZxhNajrQnp9mA5Fm_WybthxsXEuuX9Vr5o-rLnsy4x1R-QrbUoIQ/exec?name=${name}&date=${date}`;
+      const url = `https://script.google.com/macros/s/AKfycbylFvsS-lvyLWtqIDE6HPYl7HMSTK-gZhhou5iGaqjb0od9eCV_sGYTDVxpfkE7pAhA/exec?name=${name}&date=${date}`;
 
       try {
         const response = await fetch(url);
