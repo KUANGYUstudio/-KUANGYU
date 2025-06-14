@@ -71,8 +71,8 @@
       font-weight: bold;
     }
     .signed {
-      background: #c6f6c6;
-      font-weight: bold;
+      background: #d0f5c8 !important;
+      border: 2px solid #45a049;
     }
     #message {
       margin-top: 1em;
@@ -89,6 +89,7 @@
       width: 90%;
       max-width: 300px;
       margin-top: 4px;
+      text-align: center;
     }
   </style>
 </head>
@@ -110,7 +111,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDcma_niKFZiKmoWVzeEdixP4nege-j7S6P4kBAiT89L1YJL_qdtGguGuWje_bPKgpjw/exec"; // 替換成你自己的 Apps Script 網址
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDcma_niKFZiKmoWVzeEdixP4nege-j7S6P4kBAiT89L1YJL_qdtGguGuWje_bPKgpjw/exec";
 
     function formatDate(d) {
       const yyyy = d.getFullYear();
@@ -140,22 +141,10 @@
         const nameData = await nameRes.json();
 
         const userName = nameData.name;
-        if (nameData.success) {
-          document.getElementById("name").value = userName;
-        } else {
-          document.getElementById("name").value = "（載入失敗）";
-        }
+        document.getElementById("name").value = userName || "（載入失敗）";
 
         const available = new Set(dateData.open);
-        const closed = new Set(dateData.close);
-        const signedDates = [];
-
-        for (const date in countData) {
-          const names = countData[date].names || [];
-          if (names.includes(userName)) {
-            signedDates.push(date);
-          }
-        }
+        const signedMap = countData.signed || {}; // ✅ 你的後端回傳已報名名單對照
 
         const firstOpen = new Date(dateData.open[0]);
         const lastOpen = new Date(dateData.open[dateData.open.length - 1]);
@@ -202,19 +191,20 @@
               cell.textContent = d;
 
               if (available.has(dateStr)) {
-                const info = countData[dateStr] || {};
-                const signedUp = info.count || 0;
+                const signedUp = countData[dateStr] || 0;
                 const remaining = 6 - signedUp;
 
-                if (signedDates.includes(dateStr)) {
+                const alreadySigned = signedMap[dateStr]?.includes(userName);
+
+                if (alreadySigned) {
                   cell.classList.add("signed");
-                  cell.textContent = `${d}\n✅已登`;
+                  cell.textContent = `${d}\n已登記`;
                 } else if (remaining <= 0) {
                   cell.classList.add("inactive");
                   cell.textContent = `${d}\n滿班`;
                 } else {
                   cell.classList.add("available");
-                  cell.textContent = `${d}\n剩${remaining}`;
+                  cell.textContent = `${d}\n${remaining}人`;
                   cell.onclick = async () => {
                     const confirmSignup = window.confirm(`是否要登記 ${dateStr} 的功率課？`);
                     if (!confirmSignup) return;
@@ -225,7 +215,7 @@
                       const result = await res.text();
                       message.textContent = `✅ ${result}`;
                       alert(`✅ ${result}`);
-                      await loadDates(); // 重新載入畫面
+                      await loadDates(); // 刷新畫面
                     } catch (e) {
                       console.error("錯誤：", e);
                       message.textContent = "⚠️ 登記失敗，請稍後再試";
@@ -244,6 +234,7 @@
             container.appendChild(grid);
           }
         }
+
       } catch (e) {
         container.innerHTML = `<div style="color: red;">⚠️ 載入失敗，請稍後再試</div>`;
         console.error(e);
@@ -254,5 +245,6 @@
   </script>
 </body>
 </html>
+
 
 
