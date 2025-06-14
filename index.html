@@ -16,7 +16,7 @@
       margin: 0 auto;
     }
     h1 {
-      font-size: 22px;
+      font-size: 24px;
       text-align: center;
       margin-bottom: 0.2em;
     }
@@ -26,10 +26,6 @@
       color: #555;
       margin-bottom: 1.5em;
       line-height: 1.6;
-      white-space: pre-line;
-    }
-    .month-block {
-      margin-bottom: 2em;
     }
     .month-title {
       text-align: center;
@@ -52,6 +48,7 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 6px;
+      margin-bottom: 2em;
     }
     .day {
       aspect-ratio: 1/1;
@@ -62,7 +59,6 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       font-size: 18px;
       cursor: pointer;
-      white-space: pre-line;
     }
     .inactive {
       color: #ccc;
@@ -70,7 +66,7 @@
       cursor: default;
     }
     .available {
-      background: #e0f7fa;
+      background: #e0faff;
       font-weight: bold;
     }
     #message {
@@ -78,10 +74,16 @@
       text-align: center;
       font-weight: bold;
     }
-    .loading {
+    #name-box {
+      margin-bottom: 1em;
       text-align: center;
-      color: #666;
-      margin-bottom: 2em;
+    }
+    #name {
+      font-size: 16px;
+      padding: 6px 12px;
+      width: 90%;
+      max-width: 300px;
+      margin-top: 4px;
     }
   </style>
 </head>
@@ -89,14 +91,22 @@
   <div class="container">
     <h1>光聿功率課登記</h1>
     <div class="sub-info">
-功率早班：週三 6:30－8:00  
-功率晚班：週二、週四 19:30－21:00（線上功率同步）
+      功率早班：週三 6:30－8:00<br />
+      功率晚班：週二、週四 19:30－21:00（線上功率同步）
     </div>
+
+    <div id="name-box">
+      <label>姓名：</label><br/>
+      <input type="text" id="name" readonly />
+    </div>
+
     <div id="calendar-container"></div>
     <div id="message"></div>
   </div>
 
   <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDcma_niKFZiKmoWVzeEdixP4nege-j7S6P4kBAiT89L1YJL_qdtGguGuWje_bPKgpjw/exec"; // ✅ 替換成你的 Apps Script 網址
+
     function formatDate(d) {
       const yyyy = d.getFullYear();
       const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -111,120 +121,113 @@
     async function loadDates() {
       const container = document.getElementById("calendar-container");
       const message = document.getElementById("message");
-      container.innerHTML = "<div class='loading'>載入中...</div>";
 
+      container.innerHTML = "載入中...";
       try {
-        const baseUrl = "https://script.google.com/macros/s/AKfycbxDcma_niKFZiKmoWVzeEdixP4nege-j7S6P4kBAiT89L1YJL_qdtGguGuWje_bPKgpjw/exec"; // <<👈換成你的 Web App URL
-        const [datesRes, countRes] = await Promise.all([
-          fetch(`${baseUrl}?mode=dates`),
-          fetch(`${baseUrl}?mode=count`)
+        const [datesRes, countRes, nameRes] = await Promise.all([
+          fetch(`${SCRIPT_URL}?mode=dates`),
+          fetch(`${SCRIPT_URL}?mode=count`),
+          fetch(`${SCRIPT_URL}?mode=getName`)
         ]);
+
         const dateData = await datesRes.json();
         const countData = await countRes.json();
-        const available = new Set(dateData.open);
-        const minDate = new Date(dateData.open[0]);
-        const maxDate = new Date(dateData.open[dateData.open.length - 1]);
+        const nameData = await nameRes.json();
 
-        const startYear = minDate.getFullYear();
-        const startMonth = minDate.getMonth();
-        const endYear = maxDate.getFullYear();
-        const endMonth = maxDate.getMonth();
+        if (nameData.success) {
+          document.getElementById("name").value = nameData.name;
+        } else {
+          document.getElementById("name").value = "（載入失敗）";
+        }
+
+        const available = new Set(dateData.open);
+
+        const firstOpen = new Date(dateData.open[0]);
+        const lastOpen = new Date(dateData.open[dateData.open.length - 1]);
 
         container.innerHTML = "";
-        for (
-          let y = startYear, m = startMonth;
-          y < endYear || (y === endYear && m <= endMonth);
-          m++, m >= 12 && (m = 0, y++)
-        ) {
-          const baseDate = new Date(y, m, 1);
-          const year = baseDate.getFullYear();
-          const month = baseDate.getMonth();
-          const firstDay = new Date(year, month, 1);
-          const lastDay = new Date(year, month + 1, 0);
-          const startWeekday = firstDay.getDay();
-          const totalDays = lastDay.getDate();
 
-          const block = document.createElement("div");
-          block.className = "month-block";
+        for (let y = firstOpen.getFullYear(); y <= lastOpen.getFullYear(); y++) {
+          const startMonth = y === firstOpen.getFullYear() ? firstOpen.getMonth() : 0;
+          const endMonth = y === lastOpen.getFullYear() ? lastOpen.getMonth() : 11;
 
-          const title = document.createElement("div");
-          title.className = "month-title";
-          title.textContent = getMonthText(year, month);
+          for (let m = startMonth; m <= endMonth; m++) {
+            const firstDay = new Date(y, m, 1);
+            const lastDay = new Date(y, m + 1, 0);
+            const startWeekday = firstDay.getDay();
+            const totalDays = lastDay.getDate();
 
-          const header = document.createElement("div");
-          header.className = "calendar-header";
-          ["日", "一", "二", "三", "四", "五", "六"].forEach(day => {
-            const div = document.createElement("div");
-            div.className = "weekday-header";
-            div.textContent = day;
-            header.appendChild(div);
-          });
+            const title = document.createElement("div");
+            title.className = "month-title";
+            title.textContent = getMonthText(y, m);
 
-          const grid = document.createElement("div");
-          grid.className = "calendar-grid";
+            const header = document.createElement("div");
+            header.className = "calendar-header";
+            ["日", "一", "二", "三", "四", "五", "六"].forEach(day => {
+              const div = document.createElement("div");
+              div.className = "weekday-header";
+              div.textContent = day;
+              header.appendChild(div);
+            });
 
-          for (let i = 0; i < startWeekday; i++) {
-            const cell = document.createElement("div");
-            cell.className = "day inactive";
-            grid.appendChild(cell);
-          }
+            const grid = document.createElement("div");
+            grid.className = "calendar-grid";
 
-          for (let i = 1; i <= totalDays; i++) {
-            const current = new Date(year, month, i);
-            const dateStr = formatDate(current);
-            const cell = document.createElement("div");
-            cell.className = "day";
-            cell.textContent = i;
-
-            if (available.has(dateStr)) {
-              const signedUp = countData[dateStr] || 0;
-              const remaining = 6 - signedUp;
-
-              if (remaining <= 0) {
-                cell.classList.add("inactive");
-                cell.textContent = `${i}\n滿班`;
-              } else {
-                cell.classList.add("available");
-
-                const label = document.createElement("div");
-                label.style.fontSize = "12px";
-                label.style.color = "#888";
-                label.style.marginTop = "4px";
-                label.style.fontWeight = "normal";
-                label.textContent = `${remaining}位`;
-                cell.appendChild(label);
-
-                cell.onclick = async () => {
-                  const confirmSignup = window.confirm(`是否要登記 ${dateStr} 的功率課？`);
-                  if (!confirmSignup) return;
-
-                  message.textContent = "登記處理中...";
-                  try {
-                    const res = await fetch(`${baseUrl}?mode=submit&date=${dateStr}`);
-                    const result = await res.text();
-                    message.textContent = `✅ ${result}`;
-                    alert(`✅ ${result}`);
-                    await loadDates();
-                  } catch (e) {
-                    message.textContent = "❌ 登記失敗，請稍後再試";
-                    alert("登記失敗，請稍後再試 🙏");
-                  }
-                };
-              }
-            } else {
-              cell.classList.add("inactive");
+            for (let i = 0; i < startWeekday; i++) {
+              const cell = document.createElement("div");
+              cell.className = "day inactive";
+              grid.appendChild(cell);
             }
 
-            grid.appendChild(cell);
-          }
+            for (let d = 1; d <= totalDays; d++) {
+              const current = new Date(y, m, d);
+              const dateStr = formatDate(current);
+              const cell = document.createElement("div");
+              cell.className = "day";
+              cell.textContent = d;
 
-          block.appendChild(title);
-          block.appendChild(header);
-          block.appendChild(grid);
-          container.appendChild(block);
+              if (available.has(dateStr)) {
+                const signedUp = countData[dateStr] || 0;
+                const remaining = 6 - signedUp;
+
+                if (remaining <= 0) {
+                  cell.classList.add("inactive");
+                  cell.textContent = `${d}\n滿班`;
+                } else {
+                  cell.classList.add("available");
+                  cell.onclick = async () => {
+                    const confirmSignup = window.confirm(`是否要登記 ${dateStr} 的功率課？`);
+                    if (!confirmSignup) return;
+
+                    message.textContent = "處理中...";
+                    try {
+                      const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${dateStr}`);
+                      const result = await res.text();
+                      message.textContent = `✅ ${result}`;
+                      alert(`✅ ${result}`);
+                      await loadDates(); // 刷新畫面
+                    } catch (e) {
+                      console.error("錯誤：", e);
+                      message.textContent = "⚠️ 登記失敗，請稍後再試";
+                    }
+                  };
+                }
+              } else {
+                cell.classList.add("inactive");
+              }
+
+              grid.appendChild(cell);
+            }
+
+            container.appendChild(title);
+            container.appendChild(header);
+            container.appendChild(grid);
+          }
         }
+
       } catch (e) {
-        container.innerHTML = `<div class='loading'>讀取失敗，請稍後再試。<br><small>${e}</small></div>`;
+        container.innerHTML = `<div style="color: red;">⚠️ 載入失敗，請稍後再試</div>`;
+        console.error(e);
       }
     }
 
