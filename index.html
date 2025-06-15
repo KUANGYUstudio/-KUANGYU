@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <title>光聿功率課登記</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 🔧 CSS 樣式區：設定整體版面與日曆外觀 -->
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -93,6 +95,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>光聿功率課登記</h1>
@@ -101,18 +104,22 @@
       功率晚班：週二、週四 19:30－21:00（線上功率同步）
     </div>
 
+    <!-- 🔹 顯示目前使用者姓名 -->
     <div id="name-box">
       <label>姓名：</label><br/>
       <input type="text" id="name" readonly />
     </div>
 
+    <!-- 🔹 日曆與訊息顯示區 -->
     <div id="calendar-container"></div>
     <div id="message"></div>
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxu0T8gYFmeTnZeOB__NUv7tHjt5I5x_bjMnWTpt5hCNZyRulp70bQNJ4_HKIPgHANkpA/exec";
+    // ✅ 更換為你部署好的 Google Apps Script 網址
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPaVBQPB5_WBKZWecsSNpxsvx7JnCPnGZOLMlHdy8XhQC3b_H0GhLbtHRa03li84NK/exec";
 
+    // 🔧 日期格式處理：轉為 yyyy/mm/dd
     function formatDate(d) {
       const yyyy = d.getFullYear();
       const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -120,37 +127,43 @@
       return `${yyyy}/${mm}/${dd}`;
     }
 
+    // 📆 顯示月份文字，例如 2025年6月
     function getMonthText(year, month) {
       return `${year}年${month + 1}月`;
     }
 
+    // 🔄 主功能：載入報名資料與產生日曆
     async function loadDates() {
       const container = document.getElementById("calendar-container");
       const message = document.getElementById("message");
 
       container.innerHTML = "載入中...";
+
       try {
+        // 🔽 同時取得開放日期、每日期報名人數、使用者姓名
         const [datesRes, countRes, nameRes] = await Promise.all([
           fetch(`${SCRIPT_URL}?mode=dates`),
           fetch(`${SCRIPT_URL}?mode=count`),
           fetch(`${SCRIPT_URL}?mode=getName`)
         ]);
 
-        const dateData = await datesRes.json();
-        const countData = await countRes.json();
-        const nameData = await nameRes.json();
+        const dateData = await datesRes.json();  // { open: [...], close: [...] }
+        const countData = await countRes.json(); // { "2025/06/25": 3, signed: { "2025/06/25": ["王小明", ...] } }
+        const nameData = await nameRes.json();   // { name: "王小明" }
 
         const userName = nameData.name;
         document.getElementById("name").value = userName || "（載入失敗）";
 
         const available = new Set(dateData.open);
-        const signedMap = countData.signed || {}; // ✅ 你的後端回傳已報名名單對照
+        const signedMap = countData.signed || {};
 
+        // ➤ 決定日曆顯示區間
         const firstOpen = new Date(dateData.open[0]);
         const lastOpen = new Date(dateData.open[dateData.open.length - 1]);
 
         container.innerHTML = "";
 
+        // 🔁 每月一個月曆區塊
         for (let y = firstOpen.getFullYear(); y <= lastOpen.getFullYear(); y++) {
           const startMonth = y === firstOpen.getFullYear() ? firstOpen.getMonth() : 0;
           const endMonth = y === lastOpen.getFullYear() ? lastOpen.getMonth() : 11;
@@ -161,10 +174,12 @@
             const startWeekday = firstDay.getDay();
             const totalDays = lastDay.getDate();
 
+            // ⬅️ 月份標題
             const title = document.createElement("div");
             title.className = "month-title";
             title.textContent = getMonthText(y, m);
 
+            // 📅 星期標題
             const header = document.createElement("div");
             header.className = "calendar-header";
             ["日", "一", "二", "三", "四", "五", "六"].forEach(day => {
@@ -174,15 +189,18 @@
               header.appendChild(div);
             });
 
+            // 🔲 日曆格子
             const grid = document.createElement("div");
             grid.className = "calendar-grid";
 
+            // ⬛ 補空格（首日不是星期日時）
             for (let i = 0; i < startWeekday; i++) {
               const cell = document.createElement("div");
               cell.className = "day inactive";
               grid.appendChild(cell);
             }
 
+            // 🟦 建立每一日的格子
             for (let d = 1; d <= totalDays; d++) {
               const current = new Date(y, m, d);
               const dateStr = formatDate(current);
@@ -193,18 +211,24 @@
               if (available.has(dateStr)) {
                 const signedUp = countData[dateStr] || 0;
                 const remaining = 6 - signedUp;
-
                 const alreadySigned = signedMap[dateStr]?.includes(userName);
 
+                // ✅ 已登記顯示
                 if (alreadySigned) {
                   cell.classList.add("signed");
                   cell.textContent = `${d}\n已登記`;
-                } else if (remaining <= 0) {
+                }
+
+                // 🚫 滿班不能報名
+                else if (remaining <= 0) {
                   cell.classList.add("inactive");
                   cell.textContent = `${d}\n滿班`;
-                } else {
+                }
+
+                // 🟢 可登記
+                else {
                   cell.classList.add("available");
-                  cell.textContent = `${d}\n${remaining}人`;
+                  cell.textContent = `${d}\n剩${remaining}`;
                   cell.onclick = async () => {
                     const confirmSignup = window.confirm(`是否要登記 ${dateStr} 的功率課？`);
                     if (!confirmSignup) return;
@@ -215,7 +239,7 @@
                       const result = await res.text();
                       message.textContent = `✅ ${result}`;
                       alert(`✅ ${result}`);
-                      await loadDates(); // 刷新畫面
+                      await loadDates(); // 重新載入
                     } catch (e) {
                       console.error("錯誤：", e);
                       message.textContent = "⚠️ 登記失敗，請稍後再試";
@@ -223,6 +247,7 @@
                   };
                 }
               } else {
+                // 🔒 關閉日期
                 cell.classList.add("inactive");
               }
 
@@ -241,7 +266,7 @@
       }
     }
 
-    loadDates();
+    loadDates(); // 頁面載入後執行
   </script>
 </body>
 </html>
