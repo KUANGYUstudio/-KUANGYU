@@ -79,8 +79,21 @@
       text-align: center;
       font-weight: bold;
     }
+    #name-box {
+      margin-bottom: 1em;
+      text-align: center;
+    }
+    #name {
+      font-size: 16px;
+      padding: 6px 12px;
+      width: 90%;
+      max-width: 300px;
+      margin-top: 4px;
+      text-align: center;
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>光聿功率課登記</h1>
@@ -89,12 +102,18 @@
       功率晚班：週二、週四 19:30－21:00（線上功率同步）
     </div>
 
+    <!-- 🔹 顯示目前使用者姓名 -->
+    <div id="name-box">
+      <label>姓名：</label><br/>
+      <input type="text" id="name" readonly />
+    </div>
+
     <div id="calendar-container"></div>
     <div id="message"></div>
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYtQ3b99-AoON36QDYqEG6S1HODmT0AC9rc9m_Mqo2X9wFpTmFCywiFtV9sUAM6Oop/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYtQ3b99-AoON36QDYqEG6S1HODmT0AC9rc9m_Mqo2X9wFpTmFCywiFtV9sUAM6Oop/exec"; // 替換為你自己的 Apps Script 網址
 
     function formatDate(d) {
       const yyyy = d.getFullYear();
@@ -110,18 +129,25 @@
     async function loadDates() {
       const container = document.getElementById("calendar-container");
       const message = document.getElementById("message");
-      container.innerHTML = "載入中...";
+      const nameInput = document.getElementById("name");
 
+      container.innerHTML = "載入中...";
       try {
-        const [datesRes, countRes] = await Promise.all([
+        const [datesRes, countRes, nameRes] = await Promise.all([
           fetch(`${SCRIPT_URL}?mode=dates`),
-          fetch(`${SCRIPT_URL}?mode=count`)
+          fetch(`${SCRIPT_URL}?mode=count`),
+          fetch(`${SCRIPT_URL}?mode=getName`)
         ]);
 
-        const dateData = await datesRes.json(); // { open: [...], close: [...] }
-        const countData = await countRes.json(); // { "2025/06/25": 3 }
+        const dateData = await datesRes.json();
+        const countData = await countRes.json();
+        const nameData = await nameRes.json();
+
+        const userName = nameData.name || "（未登入）";
+        nameInput.value = userName;
 
         const available = new Set(dateData.open);
+        const signedMap = countData.signed || {};
         const firstOpen = new Date(dateData.open[0]);
         const lastOpen = new Date(dateData.open[dateData.open.length - 1]);
 
@@ -169,13 +195,17 @@
               if (available.has(dateStr)) {
                 const signedUp = countData[dateStr] || 0;
                 const remaining = 6 - signedUp;
+                const alreadySigned = signedMap[dateStr]?.includes(userName);
 
-                if (remaining <= 0) {
+                if (alreadySigned) {
+                  cell.classList.add("signed");
+                  cell.textContent = `${d}\n已登記`;
+                } else if (remaining <= 0) {
                   cell.classList.add("inactive");
                   cell.textContent = `${d}\n滿班`;
                 } else {
                   cell.classList.add("available");
-                  cell.textContent = `${d}\n${remaining}人`;
+                  cell.textContent = `${d}\n剩${remaining}`;
                   cell.onclick = async () => {
                     const confirmSignup = window.confirm(`是否要登記 ${dateStr} 的功率課？`);
                     if (!confirmSignup) return;
@@ -184,8 +214,8 @@
                     try {
                       const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${dateStr}`);
                       const result = await res.text();
-                      message.textContent = `✅ ${result}`;
-                      alert(`✅ ${result}`);
+                      message.textContent = result;
+                      alert(result);
                       await loadDates(); // 重新刷新畫面
                     } catch (e) {
                       console.error("錯誤：", e);
@@ -216,6 +246,4 @@
   </script>
 </body>
 </html>
-
-
 
