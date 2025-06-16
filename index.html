@@ -205,7 +205,7 @@
                   cell.textContent = `${d}\n滿班`;
                 } else {
                   cell.classList.add("available");
-                  cell.textContent = `${d}\n剩${remaining}`;
+                  cell.textContent = `${d}\n${remaining}人`;
                   cell.onclick = async () => {
                     const confirmSignup = window.confirm(`是否要登記 ${dateStr} 的功率課？`);
                     if (!confirmSignup) return;
