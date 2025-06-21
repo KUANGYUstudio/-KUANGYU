@@ -11,17 +11,22 @@
       margin: 0;
       padding: 2em;
       text-align: center;
+      color: #111;
     }
     h1 {
       font-size: 28px;
       font-weight: bold;
-      color: #111;
+      margin-bottom: 0.2em;
+    }
+    p {
+      font-size: 15px;
+      color: #777;
       margin-bottom: 2em;
     }
     .button-group {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
       max-width: 400px;
       margin: 0 auto;
     }
@@ -29,47 +34,64 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
       font-size: 18px;
       font-weight: bold;
       color: #333;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      background: #fff;
+      border-radius: 12px;
+      border: 2px solid transparent;
       text-decoration: none;
       transition: transform 0.15s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     a.button:hover {
       transform: translateY(-2px);
     }
+    .label {
+      display: inline-block;
+      margin-right: 10px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .morning .label {
+      background: #fff4cc;
+      color: #b98d00;
+    }
     .morning {
-      border-left: 10px solid #f9da6c;
+      border-color: #ffe89e;
+    }
+    .evening .label {
+      background: #e3f0ff;
+      color: #2a6fcb;
     }
     .evening {
-      border-left: 10px solid #8ec9f6;
+      border-color: #b9dbff;
+    }
+    .online .label {
+      background: #d9f7e8;
+      color: #2a9c64;
     }
     .online {
-      border-left: 10px solid #98e0bc;
-    }
-    .emoji {
-      margin-right: 8px;
-      font-size: 20px;
+      border-color: #9de7c0;
     }
   </style>
 </head>
 <body>
-  <h1>請選擇功率課登記頁面</h1>
+  <h1>功率課登記選單</h1>
+  <p>請選擇你要登記的課程</p>
+
   <div class="button-group">
     <a class="button morning" href="signup-morning.html">
-      <span class="emoji">🌞</span> 早班功率課
+      <span class="label">🌞</span> 早班功率課
     </a>
     <a class="button evening" href="signup-evening.html">
-      <span class="emoji">🌙</span> 晚班功率課
+      <span class="label">🌙</span> 晚班功率課
     </a>
     <a class="button online" href="signup-online.html">
-      <span class="emoji">💻</span> 線上功率課
+      <span class="label">💻</span> 線上功率課
     </a>
   </div>
 </body>
 </html>
-
