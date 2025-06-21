@@ -1,63 +1,69 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>功率課報名入口</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>功率課登記首頁</title>
   <style>
     body {
-      font-family: "Helvetica Neue", sans-serif;
-      background-color: #fdfdfd;
-      text-align: center;
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
       padding: 2em;
+      text-align: center;
+      color: #333;
     }
     h1 {
-      color: #333;
-      margin-bottom: 0.5em;
+      font-size: 28px;
+      margin-bottom: 0.2em;
     }
     p {
-      color: #666;
-      margin-bottom: 2em;
+      font-size: 16px;
+      color: #777;
     }
-    .button {
-      display: inline-block;
-      width: 80%;
-      max-width: 280px;
-      padding: 1em;
-      margin: 0.5em auto;
-      font-size: 1.1em;
-      font-weight: bold;
-      color: white;
-      border-radius: 8px;
+    .link-box {
+      margin: 2em auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      max-width: 300px;
+    }
+    .link-box a {
+      display: block;
+      padding: 12px;
+      font-size: 18px;
       text-decoration: none;
-      transition: background 0.3s;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.2s;
     }
-    .morning {
-      background-color: #f2c94c;
+    .link-morning {
+      background: #fff8d6;
+      color: #996600;
+      border: 2px solid #ffe27a;
     }
-    .morning:hover {
-      background-color: #e5b82f;
+    .link-evening {
+      background: #e6f2ff;
+      color: #004c99;
+      border: 2px solid #8cc4ff;
     }
-    .evening {
-      background-color: #4c8bf5;
+    .link-online {
+      background: #d9f9e2;
+      color: #007a3d;
+      border: 2px solid #80e6aa;
     }
-    .evening:hover {
-      background-color: #3c73db;
-    }
-    .online {
-      background-color: #58b475;
-    }
-    .online:hover {
-      background-color: #429d5e;
+    .link-box a:hover {
+      opacity: 0.85;
     }
   </style>
 </head>
 <body>
-  <h1>功率課報名選單</h1>
-  <p>請選擇你要報名的課程：</p>
+  <h1>功率課登記選單</h1>
+  <p>請選擇你要登記的課程</p>
 
-  <a href="signup-morning.html" class="button morning">☀️ 早班功率課</a>
-  <a href="signup-evening.html" class="button evening">🌙 晚班功率課</a>
-  <a href="signup-online.html" class="button online">🌐 線上功率課</a>
+  <div class="link-box">
+    <a href="signup-morning.html" class="link-morning">☀️ 早班功率課</a>
+    <a href="signup-evening.html" class="link-evening">🌙 晚班功率課</a>
+    <a href="signup-online.html" class="link-online">💻 線上功率課</a>
+  </div>
 </body>
 </html>
