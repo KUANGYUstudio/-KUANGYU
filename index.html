@@ -1,209 +1,49 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <title>早班功率課報名</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>功率課報名入口</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 1em;
-    }
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
+      text-align: center;
+      padding: 2em;
+      background: #f0f8ff;
     }
     h1 {
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 0.5em;
+      margin-bottom: 1em;
+      font-size: 28px;
     }
-    .info {
-      text-align: center;
-      font-size: 15px;
-      color: #666;
-      margin-bottom: 1.2em;
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      max-width: 300px;
+      margin: 0 auto;
     }
-    .month-title {
-      font-weight: bold;
-      font-size: 18px;
-      margin-top: 1.5em;
-      text-align: center;
-    }
-    .calendar-header, .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-top: 6px;
-    }
-    .weekday-header {
-      text-align: center;
-      font-weight: bold;
-    }
-    .day {
-      aspect-ratio: 1/1;
-      text-align: center;
-      padding: 6px 0;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      white-space: pre-line;
-    }
-    .inactive {
-      background: #eee;
-      color: #aaa;
-      cursor: default;
-    }
-    .available {
-      background: #e0faff;
-    }
-    .selected {
-      background: #a0e3ff;
-      font-weight: bold;
-    }
-    #submit-btn {
+    .btn {
       display: block;
-      margin: 2em auto 1em;
-      padding: 10px 20px;
-      font-size: 16px;
-      background: #007bff;
+      padding: 12px;
+      font-size: 18px;
+      text-decoration: none;
+      background-color: #007bff;
       color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s;
     }
-    #message {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 1em;
+    .btn:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>早班功率課報名</h1>
-    <div class="info">每週三 06:30～08:00</div>
-    <div id="calendar"></div>
-    <button id="submit-btn">送出報名</button>
-    <div id="message"></div>
+  <h1>功率課報名入口</h1>
+  <div class="btn-container">
+    <a class="btn" href="signup-morning.html">☀️ 早班功率課</a>
+    <a class="btn" href="signup-evening.html">🌆 晚班功率課</a>
+    <a class="btn" href="signup-online.html">💻 線上功率課</a>
   </div>
-
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXLWE-HipfOlHW8npxiqKmYBHCHVuyaUrXtB4i-LizqiCZBEIoN0knYvPro2OXoWV/exec"; // 改成你自己的 Apps Script 網址
-    const selectedDates = new Set();
-
-    async function loadAvailableDates() {
-      const res = await fetch(`${SCRIPT_URL}?mode=dates`);
-      const data = await res.json();
-      return data.open || [];
-    }
-
-    async function renderCalendar() {
-      const calendarDiv = document.getElementById("calendar");
-      calendarDiv.innerHTML = "";
-      const availableDates = await loadAvailableDates();
-      const availableSet = new Set(availableDates);
-
-      if (availableDates.length === 0) {
-        calendarDiv.innerHTML = "<div style='color:red;'>⚠️ 無可報名日期</div>";
-        return;
-      }
-
-      const start = new Date(availableDates[0]);
-      const end = new Date(availableDates[availableDates.length - 1]);
-
-      for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
-        for (let m = 0; m < 12; m++) {
-          const first = new Date(y, m, 1);
-          const last = new Date(y, m + 1, 0);
-
-          if (last < start || first > end) continue;
-
-          const title = document.createElement("div");
-          title.className = "month-title";
-          title.textContent = `${y}年${m + 1}月`;
-          calendarDiv.appendChild(title);
-
-          const header = document.createElement("div");
-          header.className = "calendar-header";
-          ["日", "一", "二", "三", "四", "五", "六"].forEach(d => {
-            const h = document.createElement("div");
-            h.className = "weekday-header";
-            h.textContent = d;
-            header.appendChild(h);
-          });
-          calendarDiv.appendChild(header);
-
-          const grid = document.createElement("div");
-          grid.className = "calendar-grid";
-
-          const startDay = first.getDay();
-          for (let i = 0; i < startDay; i++) {
-            const cell = document.createElement("div");
-            cell.className = "day inactive";
-            grid.appendChild(cell);
-          }
-
-          for (let d = 1; d <= last.getDate(); d++) {
-            const dateStr = `${y}/${String(m + 1).padStart(2, "0")}/${String(d).padStart(2, "0")}`;
-            const cell = document.createElement("div");
-            cell.className = "day";
-
-            if (availableSet.has(dateStr)) {
-              cell.classList.add("available");
-              cell.textContent = d;
-              cell.onclick = () => {
-                if (selectedDates.has(dateStr)) {
-                  selectedDates.delete(dateStr);
-                  cell.classList.remove("selected");
-                } else {
-                  selectedDates.add(dateStr);
-                  cell.classList.add("selected");
-                }
-              };
-            } else {
-              cell.className = "day inactive";
-              cell.textContent = d;
-            }
-
-            grid.appendChild(cell);
-          }
-
-          calendarDiv.appendChild(grid);
-        }
-      }
-    }
-
-    document.getElementById("submit-btn").addEventListener("click", async () => {
-      if (selectedDates.size === 0) {
-        alert("請先選擇欲報名的日期！");
-        return;
-      }
-
-      const messageDiv = document.getElementById("message");
-      messageDiv.textContent = "送出中...";
-
-      try {
-        for (let date of selectedDates) {
-          const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&course=morning`);
-          const result = await res.text();
-          console.log(result);
-        }
-
-        messageDiv.textContent = "✅ 已完成報名！";
-        alert("✅ 報名成功！");
-        selectedDates.clear();
-        renderCalendar();
-      } catch (err) {
-        console.error(err);
-        messageDiv.textContent = "⚠️ 發生錯誤，請稍後再試";
-      }
-    });
-
-    renderCalendar();
-  </script>
 </body>
 </html>
-
 
