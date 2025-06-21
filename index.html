@@ -1,49 +1,57 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
   <title>功率課報名入口</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
+      background: #f1f1f1;
+      margin: 0;
       padding: 2em;
-      background: #f0f8ff;
     }
     h1 {
+      text-align: center;
+      font-size: 26px;
       margin-bottom: 1em;
-      font-size: 28px;
     }
-    .btn-container {
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
       gap: 1em;
-      max-width: 300px;
-      margin: 0 auto;
     }
     .btn {
       display: block;
-      padding: 12px;
-      font-size: 18px;
-      text-decoration: none;
-      background-color: #007bff;
+      background: #007bff;
       color: white;
+      padding: 14px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 18px;
       border-radius: 8px;
-      transition: background-color 0.3s;
+      transition: background 0.3s ease;
     }
     .btn:hover {
-      background-color: #0056b3;
+      background: #0056b3;
+    }
+    .note {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-top: 2em;
     }
   </style>
 </head>
 <body>
-  <h1>功率課報名入口</h1>
-  <div class="btn-container">
-    <a class="btn" href="signup-morning.html">☀️ 早班功率課</a>
-    <a class="btn" href="signup-evening.html">🌆 晚班功率課</a>
-    <a class="btn" href="signup-online.html">💻 線上功率課</a>
+  <h1>功率課報名系統</h1>
+  <div class="container">
+    <a href="signup-morning.html" class="btn">🌅 早班功率課報名</a>
+    <a href="signup-evening.html" class="btn">🌇 晚班功率課報名</a>
+    <a href="signup-online.html" class="btn">💻 線上功率課報名</a>
   </div>
+  <div class="note">請選擇課程時段以進行報名</div>
 </body>
 </html>
-
