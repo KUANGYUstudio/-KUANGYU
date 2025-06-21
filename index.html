@@ -1,69 +1,75 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>功率課登記首頁</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>功率課登記選單</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f8f8f8;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: #fafafa;
+      margin: 0;
       padding: 2em;
       text-align: center;
-      color: #333;
     }
     h1 {
       font-size: 28px;
-      margin-bottom: 0.2em;
+      font-weight: bold;
+      color: #111;
+      margin-bottom: 2em;
     }
-    p {
-      font-size: 16px;
-      color: #777;
-    }
-    .link-box {
-      margin: 2em auto;
+    .button-group {
       display: flex;
       flex-direction: column;
-      gap: 1em;
-      max-width: 300px;
+      gap: 20px;
+      max-width: 400px;
+      margin: 0 auto;
     }
-    .link-box a {
-      display: block;
-      padding: 12px;
+    a.button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
       font-size: 18px;
-      text-decoration: none;
-      border-radius: 8px;
       font-weight: bold;
-      transition: background 0.2s;
+      color: #333;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      text-decoration: none;
+      transition: transform 0.15s ease;
     }
-    .link-morning {
-      background: #fff8d6;
-      color: #996600;
-      border: 2px solid #ffe27a;
+    a.button:hover {
+      transform: translateY(-2px);
     }
-    .link-evening {
-      background: #e6f2ff;
-      color: #004c99;
-      border: 2px solid #8cc4ff;
+    .morning {
+      border-left: 10px solid #f9da6c;
     }
-    .link-online {
-      background: #d9f9e2;
-      color: #007a3d;
-      border: 2px solid #80e6aa;
+    .evening {
+      border-left: 10px solid #8ec9f6;
     }
-    .link-box a:hover {
-      opacity: 0.85;
+    .online {
+      border-left: 10px solid #98e0bc;
+    }
+    .emoji {
+      margin-right: 8px;
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>功率課登記選單</h1>
-  <p>請選擇你要登記的課程</p>
-
-  <div class="link-box">
-    <a href="signup-morning.html" class="link-morning">☀️ 早班功率課</a>
-    <a href="signup-evening.html" class="link-evening">🌙 晚班功率課</a>
-    <a href="signup-online.html" class="link-online">💻 線上功率課</a>
+  <h1>請選擇功率課登記頁面</h1>
+  <div class="button-group">
+    <a class="button morning" href="signup-morning.html">
+      <span class="emoji">🌞</span> 早班功率課
+    </a>
+    <a class="button evening" href="signup-evening.html">
+      <span class="emoji">🌙</span> 晚班功率課
+    </a>
+    <a class="button online" href="signup-online.html">
+      <span class="emoji">💻</span> 線上功率課
+    </a>
   </div>
 </body>
 </html>
+
