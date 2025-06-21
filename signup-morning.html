@@ -56,10 +56,10 @@
       cursor: default;
     }
     .available {
-      background: #e0faff;
+      background: #fff4c2; /* 柔和的黃色 */
     }
     .selected {
-      background: #a0e3ff;
+      background: #ffe58a; /* 較深的黃色，表示選中 */
       font-weight: bold;
     }
     #submit-btn {
@@ -67,7 +67,7 @@
       margin: 2em auto 1em;
       padding: 10px 20px;
       font-size: 16px;
-      background: #007bff;
+      background: #f5b800;
       color: white;
       border: none;
       border-radius: 6px;
@@ -186,7 +186,7 @@
 
       try {
         for (let date of selectedDates) {
-          const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&course=morning`);
+          const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率`);
           const result = await res.text();
           console.log(result);
         }
