@@ -2,56 +2,62 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>功率課報名入口</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f1f1f1;
-      margin: 0;
+      font-family: "Helvetica Neue", sans-serif;
+      background-color: #fdfdfd;
+      text-align: center;
       padding: 2em;
     }
     h1 {
-      text-align: center;
-      font-size: 26px;
-      margin-bottom: 1em;
+      color: #333;
+      margin-bottom: 0.5em;
     }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1em;
-    }
-    .btn {
-      display: block;
-      background: #007bff;
-      color: white;
-      padding: 14px;
-      text-align: center;
-      text-decoration: none;
-      font-size: 18px;
-      border-radius: 8px;
-      transition: background 0.3s ease;
-    }
-    .btn:hover {
-      background: #0056b3;
-    }
-    .note {
-      text-align: center;
-      font-size: 14px;
+    p {
       color: #666;
-      margin-top: 2em;
+      margin-bottom: 2em;
+    }
+    .button {
+      display: inline-block;
+      width: 80%;
+      max-width: 280px;
+      padding: 1em;
+      margin: 0.5em auto;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .morning {
+      background-color: #f2c94c;
+    }
+    .morning:hover {
+      background-color: #e5b82f;
+    }
+    .evening {
+      background-color: #4c8bf5;
+    }
+    .evening:hover {
+      background-color: #3c73db;
+    }
+    .online {
+      background-color: #58b475;
+    }
+    .online:hover {
+      background-color: #429d5e;
     }
   </style>
 </head>
 <body>
-  <h1>功率課報名系統</h1>
-  <div class="container">
-    <a href="signup-morning.html" class="btn">🌅 早班功率課報名</a>
-    <a href="signup-evening.html" class="btn">🌇 晚班功率課報名</a>
-    <a href="signup-online.html" class="btn">💻 線上功率課報名</a>
-  </div>
-  <div class="note">請選擇課程時段以進行報名</div>
+  <h1>功率課報名選單</h1>
+  <p>請選擇你要報名的課程：</p>
+
+  <a href="signup-morning.html" class="button morning">☀️ 早班功率課</a>
+  <a href="signup-evening.html" class="button evening">🌙 晚班功率課</a>
+  <a href="signup-online.html" class="button online">🌐 線上功率課</a>
 </body>
 </html>
