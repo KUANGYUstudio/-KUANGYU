@@ -2,248 +2,208 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>光聿功率課登記</title>
+  <title>早班功率課報名</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 1em;
       background: #f9f9f9;
+      padding: 1em;
     }
     .container {
       max-width: 500px;
       margin: 0 auto;
     }
     h1 {
-      font-size: 24px;
       text-align: center;
-      margin-bottom: 0.2em;
+      font-size: 24px;
+      margin-bottom: 0.5em;
     }
-    .sub-info {
+    .info {
       text-align: center;
       font-size: 15px;
-      color: #555;
-      margin-bottom: 1.5em;
-      line-height: 1.6;
+      color: #666;
+      margin-bottom: 1.2em;
     }
     .month-title {
-      text-align: center;
       font-weight: bold;
-      font-size: 20px;
-      margin-bottom: 0.5em;
-      color: #333;
+      font-size: 18px;
+      margin-top: 1.5em;
+      text-align: center;
     }
-    .calendar-header {
+    .calendar-header, .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 6px;
+      margin-top: 6px;
     }
     .weekday-header {
-      font-weight: bold;
       text-align: center;
-      padding: 0.5em 0;
-    }
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-bottom: 2em;
+      font-weight: bold;
     }
     .day {
       aspect-ratio: 1/1;
-      background: #fff;
-      border-radius: 6px;
       text-align: center;
-      padding: 0.3em 0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      font-size: 18px;
+      padding: 6px 0;
+      font-size: 16px;
+      border-radius: 6px;
       cursor: pointer;
       white-space: pre-line;
     }
     .inactive {
-      color: #ccc;
-      background: #f0f0f0;
+      background: #eee;
+      color: #aaa;
       cursor: default;
     }
     .available {
       background: #e0faff;
+    }
+    .selected {
+      background: #a0e3ff;
       font-weight: bold;
     }
-    .signed {
-      background: #d0f5c8 !important;
-      border: 2px solid #45a049;
+    #submit-btn {
+      display: block;
+      margin: 2em auto 1em;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
     #message {
-      margin-top: 1em;
       text-align: center;
       font-weight: bold;
-    }
-    #name-box {
-      margin-bottom: 1em;
-      text-align: center;
-    }
-    #name {
-      font-size: 16px;
-      padding: 6px 12px;
-      width: 90%;
-      max-width: 300px;
-      margin-top: 4px;
-      text-align: center;
+      margin-top: 1em;
     }
   </style>
 </head>
-
 <body>
   <div class="container">
-    <h1>光聿功率課登記</h1>
-    <div class="sub-info">
-      功率早班：週三 6:30－8:00<br />
-      功率晚班：週二、週四 19:30－21:00（線上功率同步）
-    </div>
-
-    <!-- 🔹 顯示目前使用者姓名 -->
-    <div id="name-box">
-      <label>姓名：</label><br/>
-      <input type="text" id="name" readonly />
-    </div>
-
-    <div id="calendar-container"></div>
+    <h1>早班功率課報名</h1>
+    <div class="info">每週三 06:30～08:00</div>
+    <div id="calendar"></div>
+    <button id="submit-btn">送出報名</button>
     <div id="message"></div>
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziF3I7yozhzTj7ymWqK4i-SJEHXiv4Ko7I2kf0ftLePF0ZTYgGCacnv6moseC-KF3m/exec"; // 替換為你自己的 Apps Script 網址
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXLWE-HipfOlHW8npxiqKmYBHCHVuyaUrXtB4i-LizqiCZBEIoN0knYvPro2OXoWV/exec"; // 改成你自己的 Apps Script 網址
+    const selectedDates = new Set();
 
-    function formatDate(d) {
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
-      const dd = String(d.getDate()).padStart(2, "0");
-      return `${yyyy}/${mm}/${dd}`;
+    async function loadAvailableDates() {
+      const res = await fetch(`${SCRIPT_URL}?mode=dates`);
+      const data = await res.json();
+      return data.open || [];
     }
 
-    function getMonthText(year, month) {
-      return `${year}年${month + 1}月`;
-    }
+    async function renderCalendar() {
+      const calendarDiv = document.getElementById("calendar");
+      calendarDiv.innerHTML = "";
+      const availableDates = await loadAvailableDates();
+      const availableSet = new Set(availableDates);
 
-    async function loadDates() {
-      const container = document.getElementById("calendar-container");
-      const message = document.getElementById("message");
-      const nameInput = document.getElementById("name");
+      if (availableDates.length === 0) {
+        calendarDiv.innerHTML = "<div style='color:red;'>⚠️ 無可報名日期</div>";
+        return;
+      }
 
-      container.innerHTML = "載入中...";
-      try {
-        const [datesRes, countRes, nameRes] = await Promise.all([
-          fetch(`${SCRIPT_URL}?mode=dates`),
-          fetch(`${SCRIPT_URL}?mode=count`),
-          fetch(`${SCRIPT_URL}?mode=getName`)
-        ]);
+      const start = new Date(availableDates[0]);
+      const end = new Date(availableDates[availableDates.length - 1]);
 
-        const dateData = await datesRes.json();
-        const countData = await countRes.json();
-        const nameData = await nameRes.json();
+      for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
+        for (let m = 0; m < 12; m++) {
+          const first = new Date(y, m, 1);
+          const last = new Date(y, m + 1, 0);
 
-        const userName = nameData.name || "（未登入）";
-        nameInput.value = userName;
+          if (last < start || first > end) continue;
 
-        const available = new Set(dateData.open);
-        const signedMap = countData.signed || {};
-        const firstOpen = new Date(dateData.open[0]);
-        const lastOpen = new Date(dateData.open[dateData.open.length - 1]);
+          const title = document.createElement("div");
+          title.className = "month-title";
+          title.textContent = `${y}年${m + 1}月`;
+          calendarDiv.appendChild(title);
 
-        container.innerHTML = "";
+          const header = document.createElement("div");
+          header.className = "calendar-header";
+          ["日", "一", "二", "三", "四", "五", "六"].forEach(d => {
+            const h = document.createElement("div");
+            h.className = "weekday-header";
+            h.textContent = d;
+            header.appendChild(h);
+          });
+          calendarDiv.appendChild(header);
 
-        for (let y = firstOpen.getFullYear(); y <= lastOpen.getFullYear(); y++) {
-          const startMonth = y === firstOpen.getFullYear() ? firstOpen.getMonth() : 0;
-          const endMonth = y === lastOpen.getFullYear() ? lastOpen.getMonth() : 11;
+          const grid = document.createElement("div");
+          grid.className = "calendar-grid";
 
-          for (let m = startMonth; m <= endMonth; m++) {
-            const firstDay = new Date(y, m, 1);
-            const lastDay = new Date(y, m + 1, 0);
-            const startWeekday = firstDay.getDay();
-            const totalDays = lastDay.getDate();
-
-            const title = document.createElement("div");
-            title.className = "month-title";
-            title.textContent = getMonthText(y, m);
-
-            const header = document.createElement("div");
-            header.className = "calendar-header";
-            ["日", "一", "二", "三", "四", "五", "六"].forEach(day => {
-              const div = document.createElement("div");
-              div.className = "weekday-header";
-              div.textContent = day;
-              header.appendChild(div);
-            });
-
-            const grid = document.createElement("div");
-            grid.className = "calendar-grid";
-
-            for (let i = 0; i < startWeekday; i++) {
-              const cell = document.createElement("div");
-              cell.className = "day inactive";
-              grid.appendChild(cell);
-            }
-
-            for (let d = 1; d <= totalDays; d++) {
-              const current = new Date(y, m, d);
-              const dateStr = formatDate(current);
-              const cell = document.createElement("div");
-              cell.className = "day";
-              cell.textContent = d;
-
-              if (available.has(dateStr)) {
-                const signedUp = countData[dateStr] || 0;
-                const remaining = 6 - signedUp;
-                const alreadySigned = signedMap[dateStr]?.includes(userName);
-
-                if (alreadySigned) {
-                  cell.classList.add("signed");
-                  cell.textContent = `${d}\n已登記`;
-                } else if (remaining <= 0) {
-                  cell.classList.add("inactive");
-                  cell.textContent = `${d}\n滿班`;
-                } else {
-                  cell.classList.add("available");
-                  cell.textContent = `${d}\n${remaining}人`;
-                  cell.onclick = async () => {
-                    const confirmSignup = window.confirm(`是否要登記 ${dateStr} 的功率課？`);
-                    if (!confirmSignup) return;
-
-                    message.textContent = "處理中...";
-                    try {
-                      const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${dateStr}`);
-                      const result = await res.text();
-                      message.textContent = result;
-                      alert(result);
-                      await loadDates(); // 重新刷新畫面
-                    } catch (e) {
-                      console.error("錯誤：", e);
-                      message.textContent = "⚠️ 登記失敗，請稍後再試";
-                    }
-                  };
-                }
-              } else {
-                cell.classList.add("inactive");
-              }
-
-              grid.appendChild(cell);
-            }
-
-            container.appendChild(title);
-            container.appendChild(header);
-            container.appendChild(grid);
+          const startDay = first.getDay();
+          for (let i = 0; i < startDay; i++) {
+            const cell = document.createElement("div");
+            cell.className = "day inactive";
+            grid.appendChild(cell);
           }
-        }
 
-      } catch (e) {
-        container.innerHTML = `<div style="color: red;">⚠️ 載入失敗，請稍後再試</div>`;
-        console.error(e);
+          for (let d = 1; d <= last.getDate(); d++) {
+            const dateStr = `${y}/${String(m + 1).padStart(2, "0")}/${String(d).padStart(2, "0")}`;
+            const cell = document.createElement("div");
+            cell.className = "day";
+
+            if (availableSet.has(dateStr)) {
+              cell.classList.add("available");
+              cell.textContent = d;
+              cell.onclick = () => {
+                if (selectedDates.has(dateStr)) {
+                  selectedDates.delete(dateStr);
+                  cell.classList.remove("selected");
+                } else {
+                  selectedDates.add(dateStr);
+                  cell.classList.add("selected");
+                }
+              };
+            } else {
+              cell.className = "day inactive";
+              cell.textContent = d;
+            }
+
+            grid.appendChild(cell);
+          }
+
+          calendarDiv.appendChild(grid);
+        }
       }
     }
 
-    loadDates();
+    document.getElementById("submit-btn").addEventListener("click", async () => {
+      if (selectedDates.size === 0) {
+        alert("請先選擇欲報名的日期！");
+        return;
+      }
+
+      const messageDiv = document.getElementById("message");
+      messageDiv.textContent = "送出中...";
+
+      try {
+        for (let date of selectedDates) {
+          const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&course=morning`);
+          const result = await res.text();
+          console.log(result);
+        }
+
+        messageDiv.textContent = "✅ 已完成報名！";
+        alert("✅ 報名成功！");
+        selectedDates.clear();
+        renderCalendar();
+      } catch (err) {
+        console.error(err);
+        messageDiv.textContent = "⚠️ 發生錯誤，請稍後再試";
+      }
+    });
+
+    renderCalendar();
   </script>
 </body>
 </html>
+
 
