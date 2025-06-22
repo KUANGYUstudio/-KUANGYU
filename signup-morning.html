@@ -13,23 +13,21 @@
     .container {
       max-width: 500px;
       margin: 0 auto;
+      text-align: center;
     }
     h1 {
-      text-align: center;
       font-size: 24px;
-      margin-bottom: 0.5em;
+      margin-bottom: 0.4em;
     }
     .info {
-      text-align: center;
       font-size: 15px;
       color: #666;
-      margin-bottom: 1.2em;
+      margin-bottom: 1.5em;
     }
     .month-title {
       font-weight: bold;
       font-size: 18px;
       margin-top: 1.5em;
-      text-align: center;
     }
     .calendar-header, .calendar-grid {
       display: grid;
@@ -56,10 +54,10 @@
       cursor: default;
     }
     .available {
-      background: #fff4c2; /* 柔和的黃色 */
+      background: #fff4c2;
     }
     .selected {
-      background: #ffe58a; /* 較深的黃色，表示選中 */
+      background: #ffe58a;
       font-weight: bold;
     }
     #submit-btn {
@@ -117,7 +115,6 @@
         for (let m = 0; m < 12; m++) {
           const first = new Date(y, m, 1);
           const last = new Date(y, m + 1, 0);
-
           if (last < start || first > end) continue;
 
           const title = document.createElement("div");
@@ -147,10 +144,11 @@
 
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, "0")}/${String(d).padStart(2, "0")}`;
+            const currentDate = new Date(y, m, d);
             const cell = document.createElement("div");
             cell.className = "day";
 
-            if (availableSet.has(dateStr)) {
+            if (availableSet.has(dateStr) && currentDate.getDay() === 3) {
               cell.classList.add("available");
               cell.textContent = d;
               cell.onclick = () => {
