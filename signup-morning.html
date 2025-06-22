@@ -105,43 +105,67 @@ h1 {
 }
 
 /* ====== ✅ 手機版額外樣式（畫面小於 768px 時才套用）====== */
-@media (max-width: 767px) {
-  h1 {
-    font-size: 28px;
+/* ==== 手機優化樣式 ==== */
+@media (max-width: 768px) {
+
+  /* 整體排版容器 */
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px; /* 原 gap 過大會導致格子太擠，調小 */
+    padding: 10px;
   }
 
-  .info {
-    font-size: 18px;
-  }
-
-  .month-title {
-    font-size: 22px;
-  }
-
-  .weekday-header {
-    font-size: 16px;
-  }
-
+  /* ==== 每一個日期格子 ==== */
   .day {
-    font-size: 18px;
-    padding: 12px 0;
-    min-width: 44px;
+    width: 100%; /* 自動填滿欄位寬度 */
+    aspect-ratio: 1 / 1; /* 保持正方形 */
+    font-size: 20px;
+    text-align: center;
+    padding: 6px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s;
   }
 
-  .calendar-grid {
-    gap: 10px;
+  /* ==== 有報名的人數的格子 ==== */
+  .day.available {
+    background-color: #fffbe6;
+    border: 1px solid #f0c36d;
   }
 
-  #submit-btn {
-    font-size: 18px;
-    padding: 14px 28px;
+  /* ==== 已選中的日期格子 ==== */
+  .day.selected {
+    background-color: #ffe066;
+    font-weight: bold;
   }
 
-  #message {
+  /* ==== 無法選擇的日期格子（灰色） ==== */
+  .day.disabled {
+    background-color: #eee;
+    color: #aaa;
+    pointer-events: none;
+  }
+
+  /* ==== 顯示月份的文字樣式 ==== */
+  .month-title {
+    font-size: 24px;
+    text-align: center;
+    margin: 1em 0 0.5em;
+  }
+
+  /* ==== 星期列（例如日一二三...） ==== */
+  .weekday-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
     font-size: 16px;
+    margin: 0 0 4px;
+    padding: 0 10px;
+    color: #888;
   }
 }
-
+    
   </style>
 </head>
 <body>
