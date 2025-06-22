@@ -104,6 +104,14 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXLWE-HipfOlHW8npxiqKmYBHCHVuyaUrXtB4i-LizqiCZBEIoN0knYvPro2OXoWV/exec";
     const selectedDates = new Set();
 
+    function getParam(key) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(key) || "";
+    }
+
+    const lineId = getParam("lineId");
+    const name = getParam("name");
+
     async function loadAvailableDates() {
       const res = await fetch(`${SCRIPT_URL}?mode=dates`);
       const data = await res.json();
@@ -199,7 +207,7 @@
 
       try {
         for (let date of selectedDates) {
-          const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率`);
+          const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
           const result = await res.text();
           console.log(result);
         }
