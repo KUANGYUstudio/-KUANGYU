@@ -5,84 +5,83 @@
   <title>早班功率課登記</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f9f9f9;
-    padding: 1em;
-  }
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  h1 {
-    text-align: center;
-    font-size: 28px;
-    margin-bottom: 0.3em;
-  }
-  .info {
-    text-align: center;
-    font-size: 18px; /* 放大課程時間 */
-    color: #666;
-    margin-bottom: 1.8em;
-  }
-  .month-title {
-    font-weight: bold;
-    font-size: 22px; /* 放大月份標題 */
-    margin-top: 2em;  /* 增加與上區塊距離 */
-    margin-bottom: 1em;
-    text-align: center;
-  }
-  .calendar-header,
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-top: 6px;
-  }
-  .weekday-header {
-    text-align: center;
-    font-weight: bold;
-    font-size: 17px; /* 放大星期文字 */
-  }
-  .day {
-    aspect-ratio: 1/1;
-    text-align: center;
-    padding: 8px 0;
-    font-size: 18px;  /* 放大日期 */
-    border-radius: 6px;
-    cursor: pointer;
-    white-space: pre-line;
-  }
-  .inactive {
-    background: #eee;
-    color: #aaa;
-    cursor: default;
-  }
-  .available {
-    background: #fff4c2;
-  }
-  .selected {
-    background: #ffe58a;
-    font-weight: bold;
-  }
-  #submit-btn {
-    display: block;
-    margin: 2em auto 1em;
-    padding: 12px 24px;
-    font-size: 18px;
-    background: #f5b800;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  #message {
-    text-align: center;
-    font-weight: bold;
-    margin-top: 1em;
-  }
-</style>
-
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 1em;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 0.3em;
+    }
+    .info {
+      text-align: center;
+      font-size: 20px; /* ✅ 放大課程時間 */
+      color: #666;
+      margin-bottom: 2em;
+    }
+    .month-title {
+      font-weight: bold;
+      font-size: 24px; /* ✅ 放大月份標題 */
+      margin-top: 3em; /* ✅ 拉開距離 */
+      margin-bottom: 1em;
+      text-align: center;
+    }
+    .calendar-header,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .weekday-header {
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px; /* ✅ 放大星期 */
+    }
+    .day {
+      aspect-ratio: 1/1;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 20px;  /* ✅ 放大日期字體 */
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: pre-line;
+    }
+    .inactive {
+      background: #eee;
+      color: #aaa;
+      cursor: default;
+    }
+    .available {
+      background: #fff4c2;
+    }
+    .selected {
+      background: #ffe58a;
+      font-weight: bold;
+    }
+    #submit-btn {
+      display: block;
+      margin: 2em auto 1em;
+      padding: 12px 24px;
+      font-size: 18px;
+      background: #f5b800;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #message {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 1em;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -211,4 +210,3 @@
   </script>
 </body>
 </html>
-
