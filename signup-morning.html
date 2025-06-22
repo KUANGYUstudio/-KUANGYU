@@ -10,35 +10,42 @@
       background: #f9f9f9;
       padding: 1em;
     }
+
     .container {
       max-width: 500px;
       margin: 0 auto;
       text-align: center;
     }
+
     h1 {
       font-size: 24px;
-      margin-bottom: 0.4em;
+      margin-bottom: 0.3em;
     }
+
     .info {
       font-size: 15px;
       color: #666;
-      margin-bottom: 1.5em;
+      margin-bottom: 1.2em;
     }
+
     .month-title {
       font-weight: bold;
       font-size: 18px;
       margin-top: 1.5em;
     }
+
     .calendar-header, .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 6px;
       margin-top: 6px;
     }
+
     .weekday-header {
-      text-align: center;
       font-weight: bold;
+      text-align: center;
     }
+
     .day {
       aspect-ratio: 1/1;
       text-align: center;
@@ -46,20 +53,23 @@
       font-size: 16px;
       border-radius: 6px;
       cursor: pointer;
-      white-space: pre-line;
     }
+
     .inactive {
       background: #eee;
       color: #aaa;
       cursor: default;
     }
+
     .available {
       background: #fff4c2;
     }
+
     .selected {
       background: #ffe58a;
       font-weight: bold;
     }
+
     #submit-btn {
       display: block;
       margin: 2em auto 1em;
@@ -71,10 +81,37 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
     #message {
       text-align: center;
       font-weight: bold;
       margin-top: 1em;
+    }
+
+    /* 桌機版放大整體視覺 */
+    @media (min-width: 768px) {
+      .container {
+        max-width: 800px;
+      }
+      h1 {
+        font-size: 32px;
+      }
+      .info {
+        font-size: 18px;
+      }
+      .month-title {
+        font-size: 22px;
+      }
+      .day {
+        font-size: 20px;
+      }
+      .weekday-header {
+        font-size: 18px;
+      }
+      #submit-btn {
+        font-size: 20px;
+        padding: 12px 28px;
+      }
     }
   </style>
 </head>
@@ -115,6 +152,7 @@
         for (let m = 0; m < 12; m++) {
           const first = new Date(y, m, 1);
           const last = new Date(y, m + 1, 0);
+
           if (last < start || first > end) continue;
 
           const title = document.createElement("div");
@@ -144,13 +182,15 @@
 
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, "0")}/${String(d).padStart(2, "0")}`;
-            const currentDate = new Date(y, m, d);
+            const dateObj = new Date(y, m, d);
             const cell = document.createElement("div");
-            cell.className = "day";
+            const isWednesday = dateObj.getDay() === 3;
 
-            if (availableSet.has(dateStr) && currentDate.getDay() === 3) {
+            cell.className = "day";
+            cell.textContent = d;
+
+            if (isWednesday && availableSet.has(dateStr)) {
               cell.classList.add("available");
-              cell.textContent = d;
               cell.onclick = () => {
                 if (selectedDates.has(dateStr)) {
                   selectedDates.delete(dateStr);
@@ -161,8 +201,7 @@
                 }
               };
             } else {
-              cell.className = "day inactive";
-              cell.textContent = d;
+              cell.classList.add("inactive");
             }
 
             grid.appendChild(cell);
@@ -203,3 +242,4 @@
   </script>
 </body>
 </html>
+
