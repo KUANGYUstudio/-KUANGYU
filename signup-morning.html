@@ -5,77 +5,89 @@
   <title>早班功率課報名</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* ==== 整體背景與字型設定 ==== */
     body {
       font-family: Arial, sans-serif;
       background: #f9f9f9;
       padding: 1em;
     }
 
+    /* ==== 中央容器寬度設定 ==== */
     .container {
       max-width: 900px;
       margin: 0 auto;
       text-align: center;
     }
 
+    /* ==== 頁面主標題（例如：早班功率課報名） ==== */
     h1 {
-      font-size: 36px;
+      font-size: 28px; /* 原本為 36px，手機版太大 */
       margin-bottom: 0.4em;
     }
 
+    /* ==== 課程時間說明（例如：每週三 06:30～08:00） ==== */
     .info {
-      font-size: 22px;
+      font-size: 18px; /* 原本為 22px */
       color: #666;
       margin-bottom: 2em;
     }
 
+    /* ==== 月份標題（例如：2025年9月） ==== */
     .month-title {
       font-weight: bold;
-      font-size: 26px;
+      font-size: 22px; /* 原本為 26px */
       margin-top: 2.5em;
       margin-bottom: 1.2em;
     }
 
+    /* ==== 星期列與日期格子排版設定 ==== */
     .calendar-header, .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 12px;
     }
 
+    /* ==== 星期（日一二三四五六）字體 ==== */
     .weekday-header {
       font-weight: bold;
-      font-size: 22px;
+      font-size: 18px; /* 原本為 22px */
       text-align: center;
     }
 
+    /* ==== 每一個日期格子 ==== */
     .day {
       aspect-ratio: 1/1;
-      font-size: 26px;
+      font-size: 20px; /* 原本為 26px */
       text-align: center;
-      padding: 12px 0;
+      padding: 10px 0; /* 原本為 12px */
       border-radius: 8px;
       cursor: pointer;
     }
 
+    /* ==== 灰色格子（不可點選日期） ==== */
     .inactive {
       background: #eee;
       color: #aaa;
       cursor: default;
     }
 
+    /* ==== 可選日期（淡黃色） ==== */
     .available {
       background: #fff4c2;
     }
 
+    /* ==== 已選日期（深黃色加粗） ==== */
     .selected {
       background: #ffe58a;
       font-weight: bold;
     }
 
+    /* ==== 送出報名按鈕 ==== */
     #submit-btn {
       display: block;
       margin: 3em auto 1em;
-      padding: 16px 36px;
-      font-size: 22px;
+      padding: 14px 30px;
+      font-size: 18px; /* 原本為 22px */
       background: #f5b800;
       color: white;
       border: none;
@@ -83,11 +95,12 @@
       cursor: pointer;
     }
 
+    /* ==== 提示訊息（送出中／成功等） ==== */
     #message {
       text-align: center;
       font-weight: bold;
       margin-top: 2em;
-      font-size: 20px;
+      font-size: 16px;
     }
   </style>
 </head>
@@ -101,23 +114,28 @@
   </div>
 
   <script>
+    // ✅ Google Apps Script 的部署網址
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXLWE-HipfOlHW8npxiqKmYBHCHVuyaUrXtB4i-LizqiCZBEIoN0knYvPro2OXoWV/exec";
+
+    // ✅ 使用者選取的日期集合
     const selectedDates = new Set();
 
+    // ✅ 取得網址中的 lineId 和 name（從 LINE 傳入）
     function getParam(key) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(key) || "";
     }
-
     const lineId = getParam("lineId");
     const name = getParam("name");
 
+    // ✅ 從後端取得可報名日期
     async function loadAvailableDates() {
       const res = await fetch(`${SCRIPT_URL}?mode=dates`);
       const data = await res.json();
       return data.open || [];
     }
 
+    // ✅ 渲染日曆畫面
     async function renderCalendar() {
       const calendarDiv = document.getElementById("calendar");
       calendarDiv.innerHTML = "";
@@ -136,7 +154,6 @@
         for (let m = 0; m < 12; m++) {
           const first = new Date(y, m, 1);
           const last = new Date(y, m + 1, 0);
-
           if (last < start || first > end) continue;
 
           const title = document.createElement("div");
@@ -196,6 +213,7 @@
       }
     }
 
+    // ✅ 送出報名按鈕的點擊事件
     document.getElementById("submit-btn").addEventListener("click", async () => {
       if (selectedDates.size === 0) {
         alert("請先選擇欲報名的日期！");
