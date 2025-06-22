@@ -2,152 +2,219 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>早班功率課報名</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      font-family: "Arial", sans-serif;
-      margin: 0;
-      padding: 2em 1em;
-      background: #fdfdfd;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 1em;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
       text-align: center;
     }
 
     h1 {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 0.2em;
+      font-size: 36px;
+      margin-bottom: 0.4em;
     }
 
-    .sub-title {
-      font-size: 18px;
+    .info {
+      font-size: 22px;
       color: #666;
       margin-bottom: 2em;
     }
 
     .month-title {
-      font-size: 22px;
       font-weight: bold;
-      margin: 2em 0 1em;
+      font-size: 26px;
+      margin-top: 2.5em;
+      margin-bottom: 1.2em;
     }
 
-    .calendar {
-      display: inline-grid;
+    .calendar-header, .calendar-grid {
+      display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-      justify-content: center;
+      gap: 12px;
     }
 
-    .day-label {
-      font-size: 18px;
+    .weekday-header {
       font-weight: bold;
+      font-size: 22px;
+      text-align: center;
     }
 
-    .calendar-day, .calendar-header {
-      width: 60px;
-      height: 60px;
-      line-height: 60px;
-      font-size: 18px;
-      font-weight: bold;
-      background-color: #f2f2f2;
+    .day {
+      aspect-ratio: 1/1;
+      font-size: 26px;
+      text-align: center;
+      padding: 12px 0;
       border-radius: 8px;
-      color: #222;
-    }
-
-    .selected {
-      background-color: #fff3b0;
-    }
-
-    button {
-      margin-top: 3em;
-      padding: 12px 24px;
-      font-size: 18px;
-      background-color: #f9a825;
-      color: white;
-      border: none;
-      border-radius: 6px;
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #f57f17;
+    .inactive {
+      background: #eee;
+      color: #aaa;
+      cursor: default;
     }
 
-    @media (max-width: 768px) {
-      .calendar-day, .calendar-header {
-        width: 44px;
-        height: 44px;
-        line-height: 44px;
-        font-size: 16px;
-      }
+    .available {
+      background: #fff4c2;
+    }
 
-      .month-title {
-        font-size: 18px;
-      }
+    .selected {
+      background: #ffe58a;
+      font-weight: bold;
+    }
 
-      .sub-title {
-        font-size: 16px;
-      }
+    #submit-btn {
+      display: block;
+      margin: 3em auto 1em;
+      padding: 16px 36px;
+      font-size: 22px;
+      background: #f5b800;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-      h1 {
-        font-size: 22px;
-      }
+    #message {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 2em;
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>早班功率課報名</h1>
-  <div class="sub-title">每週三 06:30～08:00</div>
-
-  <div class="month-title">2025年9月</div>
-  <div class="calendar">
-    <div class="calendar-header day-label">日</div>
-    <div class="calendar-header day-label">一</div>
-    <div class="calendar-header day-label">二</div>
-    <div class="calendar-header day-label">三</div>
-    <div class="calendar-header day-label">四</div>
-    <div class="calendar-header day-label">五</div>
-    <div class="calendar-header day-label">六</div>
-    <!-- Week 1 -->
-    <div class="calendar-day"></div>
-    <div class="calendar-day"></div>
-    <div class="calendar-day">2</div>
-    <div class="calendar-day selected">3</div>
-    <div class="calendar-day">4</div>
-    <div class="calendar-day">5</div>
-    <div class="calendar-day">6</div>
-    <!-- Week 2 -->
-    <div class="calendar-day">7</div>
-    <div class="calendar-day">8</div>
-    <div class="calendar-day">9</div>
-    <div class="calendar-day selected">10</div>
-    <div class="calendar-day">11</div>
-    <div class="calendar-day">12</div>
-    <div class="calendar-day">13</div>
-    <!-- Add more days as needed -->
+  <div class="container">
+    <h1>早班功率課報名</h1>
+    <div class="info">每週三 06:30～08:00</div>
+    <div id="calendar"></div>
+    <button id="submit-btn">送出報名</button>
+    <div id="message"></div>
   </div>
 
-  <div class="month-title">2025年10月</div>
-  <div class="calendar">
-    <div class="calendar-header day-label">日</div>
-    <div class="calendar-header day-label">一</div>
-    <div class="calendar-header day-label">二</div>
-    <div class="calendar-header day-label">三</div>
-    <div class="calendar-header day-label">四</div>
-    <div class="calendar-header day-label">五</div>
-    <div class="calendar-header day-label">六</div>
-    <!-- Week 1 -->
-    <div class="calendar-day">28</div>
-    <div class="calendar-day">29</div>
-    <div class="calendar-day">30</div>
-    <div class="calendar-day selected">1</div>
-    <div class="calendar-day">2</div>
-    <div class="calendar-day">3</div>
-    <div class="calendar-day">4</div>
-    <!-- Add more days as needed -->
-  </div>
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXLWE-HipfOlHW8npxiqKmYBHCHVuyaUrXtB4i-LizqiCZBEIoN0knYvPro2OXoWV/exec";
+    const selectedDates = new Set();
 
-  <button>送出報名</button>
+    async function loadAvailableDates() {
+      const res = await fetch(`${SCRIPT_URL}?mode=dates`);
+      const data = await res.json();
+      return data.open || [];
+    }
+
+    async function renderCalendar() {
+      const calendarDiv = document.getElementById("calendar");
+      calendarDiv.innerHTML = "";
+      const availableDates = await loadAvailableDates();
+      const availableSet = new Set(availableDates);
+
+      if (availableDates.length === 0) {
+        calendarDiv.innerHTML = "<div style='color:red;'>⚠️ 無可報名日期</div>";
+        return;
+      }
+
+      const start = new Date(availableDates[0]);
+      const end = new Date(availableDates[availableDates.length - 1]);
+
+      for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
+        for (let m = 0; m < 12; m++) {
+          const first = new Date(y, m, 1);
+          const last = new Date(y, m + 1, 0);
+
+          if (last < start || first > end) continue;
+
+          const title = document.createElement("div");
+          title.className = "month-title";
+          title.textContent = `${y}年${m + 1}月`;
+          calendarDiv.appendChild(title);
+
+          const header = document.createElement("div");
+          header.className = "calendar-header";
+          ["日", "一", "二", "三", "四", "五", "六"].forEach(d => {
+            const h = document.createElement("div");
+            h.className = "weekday-header";
+            h.textContent = d;
+            header.appendChild(h);
+          });
+          calendarDiv.appendChild(header);
+
+          const grid = document.createElement("div");
+          grid.className = "calendar-grid";
+
+          const startDay = first.getDay();
+          for (let i = 0; i < startDay; i++) {
+            const cell = document.createElement("div");
+            cell.className = "day inactive";
+            grid.appendChild(cell);
+          }
+
+          for (let d = 1; d <= last.getDate(); d++) {
+            const dateStr = `${y}/${String(m + 1).padStart(2, "0")}/${String(d).padStart(2, "0")}`;
+            const dateObj = new Date(y, m, d);
+            const cell = document.createElement("div");
+            const isWednesday = dateObj.getDay() === 3;
+
+            cell.className = "day";
+            cell.textContent = d;
+
+            if (isWednesday && availableSet.has(dateStr)) {
+              cell.classList.add("available");
+              cell.onclick = () => {
+                if (selectedDates.has(dateStr)) {
+                  selectedDates.delete(dateStr);
+                  cell.classList.remove("selected");
+                } else {
+                  selectedDates.add(dateStr);
+                  cell.classList.add("selected");
+                }
+              };
+            } else {
+              cell.classList.add("inactive");
+            }
+
+            grid.appendChild(cell);
+          }
+
+          calendarDiv.appendChild(grid);
+        }
+      }
+    }
+
+    document.getElementById("submit-btn").addEventListener("click", async () => {
+      if (selectedDates.size === 0) {
+        alert("請先選擇欲報名的日期！");
+        return;
+      }
+
+      const messageDiv = document.getElementById("message");
+      messageDiv.textContent = "送出中...";
+
+      try {
+        for (let date of selectedDates) {
+          const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率`);
+          const result = await res.text();
+          console.log(result);
+        }
+
+        messageDiv.textContent = "✅ 已完成報名！";
+        alert("✅ 報名成功！");
+        selectedDates.clear();
+        renderCalendar();
+      } catch (err) {
+        console.error(err);
+        messageDiv.textContent = "⚠️ 發生錯誤，請稍後再試";
+      }
+    });
+
+    renderCalendar();
+  </script>
 </body>
 </html>
-
