@@ -5,93 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>功率課登記選單</title>
   <style>
+    :root {
+      --font-scale: 1;
+    }
+
+    @media (min-width: 768px) {
+      :root {
+        --font-scale: 1.3;
+      }
+    }
+
     body {
-      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       background: #fafafa;
       margin: 0;
-      padding: 2em;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .container {
       text-align: center;
-      color: #111;
+      padding: 2em;
+      max-width: 480px;
+      width: 90%;
     }
+
     h1 {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 0.2em;
+      font-size: calc(24px * var(--font-scale));
+      margin-bottom: 0.4em;
     }
+
     p {
-      font-size: 15px;
-      color: #777;
+      font-size: calc(16px * var(--font-scale));
+      color: #666;
       margin-bottom: 2em;
     }
+
     .button-group {
       display: flex;
       flex-direction: column;
-      gap: 18px;
-      max-width: 400px;
-      margin: 0 auto;
+      gap: 1em;
     }
-    a.button {
+
+    .button {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 14px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-      background: #fff;
+      padding: calc(14px * var(--font-scale)) calc(24px * var(--font-scale));
       border-radius: 12px;
-      border: 2px solid transparent;
+      background: white;
+      font-weight: bold;
+      font-size: calc(18px * var(--font-scale));
       text-decoration: none;
-      transition: transform 0.15s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 100%;
+      position: relative;
+      border-left: 10px solid transparent;
+      transition: transform 0.1s;
     }
-    a.button:hover {
-      transform: translateY(-2px);
+
+    .button.morning {
+      border-left-color: #ffe082;
     }
+
+    .button.evening {
+      border-left-color: #90caf9;
+    }
+
+    .button.online {
+      border-left-color: #a5d6a7;
+    }
+
+    .button:hover {
+      transform: scale(1.02);
+    }
+
     .label {
-      display: inline-block;
-      margin-right: 10px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-    .morning .label {
-      background: #fff4cc;
-      color: #b98d00;
-    }
-    .morning {
-      border-color: #ffe89e;
-    }
-    .evening .label {
-      background: #e3f0ff;
-      color: #2a6fcb;
-    }
-    .evening {
-      border-color: #b9dbff;
-    }
-    .online .label {
-      background: #d9f7e8;
-      color: #2a9c64;
-    }
-    .online {
-      border-color: #9de7c0;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>功率課登記選單</h1>
-  <p>請選擇你要登記的課程</p>
-
-<div class="button-group">
-  <a class="button morning" href="signup-morning.html">
-    <span class="label"></span> 早班功率課
-  </a>
-  <a class="button evening" href="signup-evening.html">
-    <span class="label"></span> 晚班功率課
-  </a>
-  <a class="button online" href="signup-online.html">
-    <span class="label"></span> 線上功率課
-  </a>
-</div>
+  <div class="container">
+    <h1>功率課登記選單</h1>
+    <p>請選擇你要登記的課程</p>
+    <div class="button-group">
+      <a class="button morning" href="signup-morning.html">
+        <span class="label"></span> 早班功率課
+      </a>
+      <a class="button evening" href="signup-evening.html">
+        <span class="label"></span> 晚班功率課
+      </a>
+      <a class="button online" href="signup-online.html">
+        <span class="label"></span> 線上功率課
+      </a>
+    </div>
+  </div>
 </body>
 </html>
