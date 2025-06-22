@@ -52,12 +52,14 @@
     .button-group {
       display: flex;
       flex-direction: column;
-      gap: 1.4em; /* ✅ 原本是 1em，現在變更為 1.4em */
+      gap: 1.4em;
     }
 
     .button {
+      position: relative;
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: calc(14px * var(--font-scale)) calc(16px * var(--font-scale));
       border-radius: 12px;
       background: white;
@@ -66,21 +68,30 @@
       text-decoration: none;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
       width: 100%;
-      border-left: 8px solid transparent;
       color: #5e35b1;
       transition: transform 0.1s;
     }
 
-    .button.morning {
-      border-left-color: #ffe082;
+    .button::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      border-radius: 12px 0 0 12px;
     }
 
-    .button.evening {
-      border-left-color: #90caf9;
+    .button.morning::before {
+      background-color: #ffe082;
     }
 
-    .button.online {
-      border-left-color: #a5d6a7;
+    .button.evening::before {
+      background-color: #90caf9;
+    }
+
+    .button.online::before {
+      background-color: #a5d6a7;
     }
 
     .button:hover {
@@ -100,3 +111,4 @@
   </div>
 </body>
 </html>
+
