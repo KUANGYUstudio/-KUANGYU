@@ -5,115 +5,84 @@
   <title>早班功率課報名</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 1em;
-    }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    padding: 1em;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 0.3em;
+  }
+  .info {
+    text-align: center;
+    font-size: 18px; /* 放大課程時間 */
+    color: #666;
+    margin-bottom: 1.8em;
+  }
+  .month-title {
+    font-weight: bold;
+    font-size: 22px; /* 放大月份標題 */
+    margin-top: 2em;  /* 增加與上區塊距離 */
+    margin-bottom: 1em;
+    text-align: center;
+  }
+  .calendar-header,
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .weekday-header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px; /* 放大星期文字 */
+  }
+  .day {
+    aspect-ratio: 1/1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 18px;  /* 放大日期 */
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: pre-line;
+  }
+  .inactive {
+    background: #eee;
+    color: #aaa;
+    cursor: default;
+  }
+  .available {
+    background: #fff4c2;
+  }
+  .selected {
+    background: #ffe58a;
+    font-weight: bold;
+  }
+  #submit-btn {
+    display: block;
+    margin: 2em auto 1em;
+    padding: 12px 24px;
+    font-size: 18px;
+    background: #f5b800;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  #message {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 1em;
+  }
+</style>
 
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 0.3em;
-    }
-
-    .info {
-      font-size: 15px;
-      color: #666;
-      margin-bottom: 1.2em;
-    }
-
-    .month-title {
-      font-weight: bold;
-      font-size: 18px;
-      margin-top: 1.5em;
-    }
-
-    .calendar-header, .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .weekday-header {
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .day {
-      aspect-ratio: 1/1;
-      text-align: center;
-      padding: 6px 0;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .inactive {
-      background: #eee;
-      color: #aaa;
-      cursor: default;
-    }
-
-    .available {
-      background: #fff4c2;
-    }
-
-    .selected {
-      background: #ffe58a;
-      font-weight: bold;
-    }
-
-    #submit-btn {
-      display: block;
-      margin: 2em auto 1em;
-      padding: 10px 20px;
-      font-size: 16px;
-      background: #f5b800;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    #message {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 1em;
-    }
-
-    /* 桌機版放大整體視覺 */
-    @media (min-width: 768px) {
-      .container {
-        max-width: 800px;
-      }
-      h1 {
-        font-size: 32px;
-      }
-      .info {
-        font-size: 18px;
-      }
-      .month-title {
-        font-size: 22px;
-      }
-      .day {
-        font-size: 20px;
-      }
-      .weekday-header {
-        font-size: 18px;
-      }
-      #submit-btn {
-        font-size: 20px;
-        padding: 12px 28px;
-      }
-    }
-  </style>
 </head>
 <body>
   <div class="container">
