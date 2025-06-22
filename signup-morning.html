@@ -5,103 +5,143 @@
   <title>早班功率課報名</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* ==== 整體背景與字型設定 ==== */
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 1em;
-    }
+    /* ==== 全頁背景與字型 ==== */
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  padding: 1em;
+}
 
-    /* ==== 中央容器寬度設定 ==== */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-    }
+/* ==== 包住整個內容的容器 ==== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
 
-    /* ==== 頁面主標題（例如：早班功率課報名） ==== */
-    h1 {
-      font-size: 28px; /* 原本為 36px，手機版太大 */
-      margin-bottom: 0.4em;
-    }
+/* ==== 頁面標題（早班功率課報名） ==== */
+h1 {
+  font-size: 32px; /* 原為36，手機會太大，這樣更剛好 */
+  margin-bottom: 0.4em;
+}
 
-    /* ==== 課程時間說明（例如：每週三 06:30～08:00） ==== */
-    .info {
-      font-size: 18px; /* 原本為 22px */
-      color: #666;
-      margin-bottom: 2em;
-    }
+/* ==== 課程時間說明 ==== */
+.info {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 2em;
+}
 
-    /* ==== 月份標題（例如：2025年9月） ==== */
-    .month-title {
-      font-weight: bold;
-      font-size: 22px; /* 原本為 26px */
-      margin-top: 2.5em;
-      margin-bottom: 1.2em;
-    }
+/* ==== 每個月份標題 ==== */
+.month-title {
+  font-weight: bold;
+  font-size: 24px;
+  margin-top: 2.5em;
+  margin-bottom: 1.2em;
+}
 
-    /* ==== 星期列與日期格子排版設定 ==== */
-    .calendar-header, .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 12px;
-    }
+/* ==== 星期標題區（星期日～六）與日期格子區，都是 7 欄 grid ==== */
+.calendar-header,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+}
 
-    /* ==== 星期（日一二三四五六）字體 ==== */
-    .weekday-header {
-      font-weight: bold;
-      font-size: 18px; /* 原本為 22px */
-      text-align: center;
-    }
+/* ==== 星期幾的文字樣式（例如：日、一、二…） ==== */
+.weekday-header {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+}
 
-    /* ==== 每一個日期格子 ==== */
-    .day {
-      aspect-ratio: 1/1;
-      font-size: 20px; /* 原本為 26px */
-      text-align: center;
-      padding: 10px 0; /* 原本為 12px */
-      border-radius: 8px;
-      cursor: pointer;
-    }
+/* ==== 每一個日期格子 ==== */
+.day {
+  aspect-ratio: 1/1;
+  font-size: 20px; /* 原本為 26px，手機太大會擠，調小一點 */
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    /* ==== 灰色格子（不可點選日期） ==== */
-    .inactive {
-      background: #eee;
-      color: #aaa;
-      cursor: default;
-    }
+/* ==== 不可點選的日期（非星期三或不開放） ==== */
+.inactive {
+  background: #eee;
+  color: #aaa;
+  cursor: default;
+}
 
-    /* ==== 可選日期（淡黃色） ==== */
-    .available {
-      background: #fff4c2;
-    }
+/* ==== 可選擇的日期（報名開放） ==== */
+.available {
+  background: #fff4c2;
+}
 
-    /* ==== 已選日期（深黃色加粗） ==== */
-    .selected {
-      background: #ffe58a;
-      font-weight: bold;
-    }
+/* ==== 已選擇的日期 ==== */
+.selected {
+  background: #ffe58a;
+  font-weight: bold;
+}
 
-    /* ==== 送出報名按鈕 ==== */
-    #submit-btn {
-      display: block;
-      margin: 3em auto 1em;
-      padding: 14px 30px;
-      font-size: 18px; /* 原本為 22px */
-      background: #f5b800;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+/* ==== 送出按鈕樣式 ==== */
+#submit-btn {
+  display: block;
+  margin: 3em auto 1em;
+  padding: 16px 36px;
+  font-size: 20px;
+  background: #f5b800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    /* ==== 提示訊息（送出中／成功等） ==== */
-    #message {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 2em;
-      font-size: 16px;
-    }
+/* ==== 報名完成後訊息 ==== */
+#message {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 2em;
+  font-size: 18px;
+}
+
+/* ====== ✅ 手機版額外樣式（畫面小於 768px 時才套用）====== */
+@media (max-width: 767px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  .info {
+    font-size: 18px;
+  }
+
+  .month-title {
+    font-size: 22px;
+  }
+
+  .weekday-header {
+    font-size: 16px;
+  }
+
+  .day {
+    font-size: 18px;
+    padding: 12px 0;
+    min-width: 44px;
+  }
+
+  .calendar-grid {
+    gap: 10px;
+  }
+
+  #submit-btn {
+    font-size: 18px;
+    padding: 14px 28px;
+  }
+
+  #message {
+    font-size: 16px;
+  }
+}
+
   </style>
 </head>
 <body>
