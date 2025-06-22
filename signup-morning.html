@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>早班功率課報名</title>
+  <title>早班功率課登記</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
@@ -93,10 +93,10 @@
 </head>
 <body>
   <div class="container">
-    <h1>早班功率課報名</h1>
+    <h1>早班功率課登記</h1>
     <div class="info">每週三 06:30～08:00</div>
     <div id="calendar"></div>
-    <button id="submit-btn">送出報名</button>
+    <button id="submit-btn">送出登記</button>
     <div id="message"></div>
   </div>
 
@@ -117,7 +117,7 @@
       const availableSet = new Set(availableDates);
 
       if (availableDates.length === 0) {
-        calendarDiv.innerHTML = "<div style='color:red;'>⚠️ 無可報名日期</div>";
+        calendarDiv.innerHTML = "<div style='color:red;'>⚠️ 無可登記日期</div>";
         return;
       }
 
@@ -190,7 +190,7 @@
 
     document.getElementById("submit-btn").addEventListener("click", async () => {
       if (selectedDates.size === 0) {
-        alert("請先選擇欲報名的日期！");
+        alert("請先選擇欲登記的日期！");
         return;
       }
 
@@ -204,8 +204,8 @@
           console.log(result);
         }
 
-        messageDiv.textContent = "✅ 已完成報名！";
-        alert("✅ 報名成功！");
+        messageDiv.textContent = "✅ 已完成登記！";
+        alert("✅ 登記成功！");
         selectedDates.clear();
         renderCalendar();
       } catch (err) {
