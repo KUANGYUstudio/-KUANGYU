@@ -6,125 +6,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 1em;
-    }
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  padding: 1em;
+}
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-    }
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 0.4em;
-    }
+h1 {
+  font-size: 36px;
+  margin-bottom: 0.4em;
+}
 
-    .info {
-      font-size: 22px;
-      color: #666;
-      margin-bottom: 2em;
-    }
+.info {
+  font-size: 22px;
+  color: #666;
+  margin-bottom: 2em;
+}
 
-    .month-title {
-      font-weight: bold;
-      font-size: 26px;
-      margin-top: 2.5em;
-      margin-bottom: 1.2em;
-    }
+.month-title {
+  font-weight: bold;
+  font-size: 26px;
+  margin-top: 2.5em;
+  margin-bottom: 1.2em;
+}
 
-    .calendar-header, .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 12px;
-    }
+.calendar-header, .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+}
 
-    .weekday-header {
-      font-weight: bold;
-      font-size: 22px;
-      text-align: center;
-    }
+.weekday-header {
+  font-weight: bold;
+  font-size: 22px;
+  text-align: center;
+}
 
-    .day {
-      aspect-ratio: 1/1;
-      font-size: 26px;
-      text-align: center;
-      padding: 12px 0;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+.day {
+  font-size: 26px;
+  text-align: center;
+  padding: 12px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  min-height: 80px;
+}
 
-    .inactive {
-      background: #eee;
-      color: #aaa;
-      cursor: default;
-    }
+.inactive {
+  background: #eee;
+  color: #aaa;
+  cursor: default;
+}
 
-    .available {
-      background: #fff4c2;
-    }
+.available {
+  background: #fff4c2;
+}
 
-    .selected {
-      background: #ffe58a;
-      font-weight: bold;
-    }
+.selected {
+  background: #ffe58a;
+  font-weight: bold;
+}
 
-    #submit-btn {
-      display: block;
-      margin: 3em auto 1em;
-      padding: 16px 36px;
-      font-size: 22px;
-      background: #f5b800;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+#submit-btn {
+  display: block;
+  margin: 3em auto 1em;
+  padding: 16px 36px;
+  font-size: 22px;
+  background: #f5b800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    #message {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 2em;
-      font-size: 20px;
-    }
+#message {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 2em;
+  margin-bottom: 4em; /* ✅ 加大底部留白 */
+  font-size: 20px;
+}
 
-    /* ✅ 手機版放大樣式 */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 28px;
-      }
+/* ✅ 手機版放大樣式 */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+  }
 
-      .info {
-        font-size: 18px;
-      }
+  .info {
+    font-size: 18px;
+  }
 
-      .month-title {
-        font-size: 22px;
-        margin-top: 2em;
-        margin-bottom: 1em;
-      }
+  .month-title {
+    font-size: 22px;
+    margin-top: 2em;
+    margin-bottom: 1em;
+  }
 
-      .weekday-header {
-        font-size: 18px;
-      }
+  .weekday-header {
+    font-size: 18px;
+  }
 
-      .day {
-        font-size: 22px;
-        padding: 16px 0;
-        border-radius: 10px;
-      }
+  .day {
+    font-size: 22px;
+    padding: 16px 0;
+    border-radius: 10px;
+    min-height: 64px;  /* ✅ 手機版強制增加高度 */
+    min-width: 100%;   /* ✅ 讓格子撐滿欄寬 */
+  }
 
-      #submit-btn {
-        font-size: 20px;
-        padding: 14px 28px;
-      }
+  #submit-btn {
+    font-size: 20px;
+    padding: 14px 28px;
+  }
 
-      #message {
-        font-size: 18px;
-      }
-    }
+  #message {
+    font-size: 18px;
+  }
+}
+
   </style>
 </head>
 <body>
