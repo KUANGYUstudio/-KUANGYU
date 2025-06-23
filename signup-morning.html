@@ -6,166 +6,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* ==== 全頁背景與字型 ==== */
-body {
-  font-family: Arial, sans-serif;
-  background: #f9f9f9;
-  padding: 1em;
-}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 1em;
+    }
 
-/* ==== 包住整個內容的容器 ==== */
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-}
+    /* ==== 包住整個內容的容器 ==== */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
 
-/* ==== 頁面標題（早班功率課報名） ==== */
-h1 {
-  font-size: 32px; /* 原為36，手機會太大，這樣更剛好 */
-  margin-bottom: 0.4em;
-}
+    /* ==== 頁面標題 ==== */
+    h1 {
+      font-size: 32px;
+      margin-bottom: 0.4em;
+    }
 
-/* ==== 課程時間說明 ==== */
-.info {
-  font-size: 20px;
-  color: #666;
-  margin-bottom: 2em;
-}
+    /* ==== 課程時間說明 ==== */
+    .info {
+      font-size: 20px;
+      color: #666;
+      margin-bottom: 2em;
+    }
 
-/* ==== 每個月份標題 ==== */
-.month-title {
-  font-weight: bold;
-  font-size: 24px;
-  margin-top: 2.5em;
-  margin-bottom: 1.2em;
-}
+    /* ==== 月份標題 ==== */
+    .month-title {
+      font-weight: bold;
+      font-size: 24px;
+      margin-top: 2.5em;
+      margin-bottom: 1.2em;
+    }
 
-/* ==== 星期標題區（星期日～六）與日期格子區，都是 7 欄 grid ==== */
-.calendar-header,
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 12px;
-}
+    /* ==== 星期與格子排版 ==== */
+    .calendar-header,
+    .calendar-grid,
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+      padding: 10px;
+    }
 
-/* ==== 星期幾的文字樣式（例如：日、一、二…） ==== */
-.weekday-header {
-  font-weight: bold;
-  font-size: 18px;
-  text-align: center;
-}
+    .weekday-header {
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+    }
 
-/* ==== 每一個日期格子 ==== */
-.day {
-  aspect-ratio: 1/1;
-  font-size: 20px; /* 原本為 26px，手機太大會擠，調小一點 */
-  text-align: center;
-  padding: 10px 0;
-  border-radius: 8px;
-  cursor: pointer;
-}
+    .day {
+      aspect-ratio: 1/1;
+      font-size: 20px;
+      text-align: center;
+      padding: 10px 0;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-/* ==== 不可點選的日期（非星期三或不開放） ==== */
-.inactive {
-  background: #eee;
-  color: #aaa;
-  cursor: default;
-}
+    .inactive {
+      background: #eee;
+      color: #aaa;
+      cursor: default;
+    }
 
-/* ==== 可選擇的日期（報名開放） ==== */
-.available {
-  background: #fff4c2;
-}
+    .available {
+      background: #fff4c2;
+    }
 
-/* ==== 已選擇的日期 ==== */
-.selected {
-  background: #ffe58a;
-  font-weight: bold;
-}
+    .selected {
+      background: #ffe58a;
+      font-weight: bold;
+    }
 
-/* ==== 送出按鈕樣式 ==== */
-#submit-btn {
-  display: block;
-  margin: 3em auto 1em;
-  padding: 16px 36px;
-  font-size: 20px;
-  background: #f5b800;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
+    #submit-btn {
+      display: block;
+      margin: 3em auto 1em;
+      padding: 16px 36px;
+      font-size: 20px;
+      background: #f5b800;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-/* ==== 報名完成後訊息 ==== */
-#message {
-  text-align: center;
-  font-weight: bold;
-  margin-top: 2em;
-  font-size: 18px;
-}
+    #message {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 2em;
+      font-size: 18px;
+    }
 
-/* ====== ✅ 手機版額外樣式（畫面小於 768px 時才套用）====== */
-/* ==== 手機優化樣式 ==== */
-@media (max-width: 768px) {
+    @media (max-width: 768px) {
+      .day {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        font-size: 20px;
+        padding: 6px 0;
+        border-radius: 8px;
+        cursor: pointer;
+        background-color: #fff;
+        transition: background-color 0.3s;
+      }
 
-  /* 整體排版容器 */
-  .calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px; /* 原 gap 過大會導致格子太擠，調小 */
-    padding: 10px;
-  }
+      .day.available {
+        background-color: #fffbe6;
+        border: 1px solid #f0c36d;
+      }
 
-  /* ==== 每一個日期格子 ==== */
-  .day {
-    width: 100%; /* 自動填滿欄位寬度 */
-    aspect-ratio: 1 / 1; /* 保持正方形 */
-    font-size: 20px;
-    text-align: center;
-    padding: 6px 0;
-    border-radius: 8px;
-    cursor: pointer;
-    background-color: #fff;
-    transition: background-color 0.3s;
-  }
+      .day.selected {
+        background-color: #ffe066;
+        font-weight: bold;
+      }
 
-  /* ==== 有報名的人數的格子 ==== */
-  .day.available {
-    background-color: #fffbe6;
-    border: 1px solid #f0c36d;
-  }
+      .day.disabled {
+        background-color: #eee;
+        color: #aaa;
+        pointer-events: none;
+      }
 
-  /* ==== 已選中的日期格子 ==== */
-  .day.selected {
-    background-color: #ffe066;
-    font-weight: bold;
-  }
+      .month-title {
+        font-size: 24px;
+        text-align: center;
+        margin: 1em 0 0.5em;
+      }
 
-  /* ==== 無法選擇的日期格子（灰色） ==== */
-  .day.disabled {
-    background-color: #eee;
-    color: #aaa;
-    pointer-events: none;
-  }
-
-  /* ==== 顯示月份的文字樣式 ==== */
-  .month-title {
-    font-size: 24px;
-    text-align: center;
-    margin: 1em 0 0.5em;
-  }
-
-  /* ==== 星期列（例如日一二三...） ==== */
-  .weekday-header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    font-size: 16px;
-    margin: 0 0 4px;
-    padding: 0 10px;
-    color: #888;
-  }
-}
-    
+      .weekday-header {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        font-size: 16px;
+        margin: 0 0 4px;
+        padding: 0 10px;
+        color: #888;
+      }
+    }
   </style>
 </head>
 <body>
@@ -178,13 +154,9 @@ h1 {
   </div>
 
   <script>
-    // ✅ Google Apps Script 的部署網址
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXLWE-HipfOlHW8npxiqKmYBHCHVuyaUrXtB4i-LizqiCZBEIoN0knYvPro2OXoWV/exec";
-
-    // ✅ 使用者選取的日期集合
     const selectedDates = new Set();
 
-    // ✅ 取得網址中的 lineId 和 name（從 LINE 傳入）
     function getParam(key) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(key) || "";
@@ -192,14 +164,12 @@ h1 {
     const lineId = getParam("lineId");
     const name = getParam("name");
 
-    // ✅ 從後端取得可報名日期
     async function loadAvailableDates() {
       const res = await fetch(`${SCRIPT_URL}?mode=dates`);
       const data = await res.json();
       return data.open || [];
     }
 
-    // ✅ 渲染日曆畫面
     async function renderCalendar() {
       const calendarDiv = document.getElementById("calendar");
       calendarDiv.innerHTML = "";
@@ -277,7 +247,6 @@ h1 {
       }
     }
 
-    // ✅ 送出報名按鈕的點擊事件
     document.getElementById("submit-btn").addEventListener("click", async () => {
       if (selectedDates.size === 0) {
         alert("請先選擇欲報名的日期！");
