@@ -4,142 +4,156 @@
   <meta charset="UTF-8" />
   <title>早班功率課報名</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    /* ==== 全頁背景與字型 ==== */
+    <style>
+    /* ✅ 全頁背景與字型設定 */
     body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 1em;
+      font-family: Arial, sans-serif;       /* 使用無襯線字體 */
+      background: #f9f9f9;                  /* 淺灰底色讓整體柔和 */
+      padding: 1em;                         /* 四周留白 */
     }
 
-    /* ==== 包住整個內容的容器 ==== */
+    /* ✅ 主容器區塊，控制寬度與置中對齊 */
     .container {
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
+      max-width: 900px;                     /* 最大寬度 900px，避免太寬 */
+      margin: 0 auto;                        /* 水平置中 */
+      text-align: center;                   /* 內容置中對齊 */
     }
 
-    /* ==== 頁面標題 ==== */
+    /* ✅ 頁面標題 */
     h1 {
-      font-size: 32px;
-      margin-bottom: 0.4em;
+      font-size: 32px;                      /* 大標題字體大小 */
+      margin-bottom: 0.4em;                 /* 與下方元素間距 */
     }
 
-    /* ==== 課程時間說明 ==== */
+    /* ✅ 課程時間說明 */
     .info {
-      font-size: 22px;
-      color: #666;
-      margin-bottom: 2em;
+      font-size: 22px;                      /* 字體大小 */
+      color: #666;                          /* 灰色字體，避免過黑 */
+      margin-bottom: 2em;                   /* 與下方間距拉開 */
     }
 
-    /* ==== 月份標題 ==== */
+    /* ✅ 月份標題樣式（例如：2025年6月） */
     .month-title {
-      font-weight: bold;
-      font-size: 24px;
-      margin-top: 2.5em;
-      margin-bottom: 1.2em;
+      font-weight: bold;                    /* 粗體讓標題更醒目 */
+      font-size: 24px;                      /* 字體大小 */
+      margin-top: 2.5em;                    /* 與上方元素距離 */
+      margin-bottom: 1.2em;                 /* 與下方格子距離 */
     }
 
-    /* ==== 星期與格子排版 ==== */
+    /* ✅ 日曆標題與格子排版設定：一週七格＋間距 */
     .calendar-header,
     .calendar-grid,
     .calendar {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 12px;
-      padding: 10px;
+      display: grid;                         /* 使用 Grid 排版 */
+      grid-template-columns: repeat(7, 1fr); /* 每行 7 格（對應 7 天） */
+      gap: 12px;                             /* 每格間距 */
+      padding: 10px;                         /* 格子區域內距 */
     }
 
+    /* ✅ 星期欄位樣式（如日一二三四五六） */
     .weekday-header {
-      font-weight: bold;
-      font-size: 18px;
-      text-align: center;
+      font-weight: bold;                    /* 粗體標示 */
+      font-size: 18px;                      /* 字體大小 */
+      text-align: center;                   /* 置中顯示 */
     }
 
+    /* ✅ 每格日期的基本樣式（含選取邏輯） */
     .day {
-      aspect-ratio: 1/1;
-      font-size: 20px;
-      text-align: center;
-      padding: 10px 0;
-      border-radius: 8px;
-      cursor: pointer;
+      aspect-ratio: 1/1;                    /* 維持正方形比例 */
+      font-size: 20px;                      /* 日期數字大小 */
+      text-align: center;                   /* 文字置中 */
+      padding: 10px 0;                      /* 上下內距 */
+      border-radius: 8px;                   /* 圓角外框 */
+      cursor: pointer;                      /* 滑鼠移過會變成可點狀態 */
     }
 
+    /* ✅ 無法報名的日期格（非週三或未開放） */
     .inactive {
-      background: #eee;
-      color: #aaa;
-      cursor: default;
+      background: #eee;                     /* 淺灰底色代表無法點擊 */
+      color: #aaa;                          /* 字體也變灰 */
+      cursor: default;                      /* 滑鼠變回預設狀態 */
     }
 
+    /* ✅ 可選日期格（週三且開放） */
     .available {
-      background: #fff4c2;
+      background: #fff4c2;                  /* 柔和黃色底色 */
     }
 
+    /* ✅ 使用者已點選的日期格 */
     .selected {
-      background: #ffe58a;
-      font-weight: bold;
+      background: #ffe58a;                  /* 深一點的黃色表示已選 */
+      font-weight: bold;                    /* 字體加粗 */
     }
 
+    /* ✅ 送出按鈕樣式 */
     #submit-btn {
-      display: block;
-      margin: 3em auto 1em;
-      padding: 16px 36px;
-      font-size: 20px;
-      background: #f5b800;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      display: block;                       /* 讓按鈕置中顯示 */
+      margin: 3em auto 1em;                 /* 上下留白 */
+      padding: 16px 36px;                   /* 按鈕內距 */
+      font-size: 20px;                      /* 按鈕文字大小 */
+      background: #f5b800;                  /* 鮮黃色底色 */
+      color: white;                         /* 白色字體 */
+      border: none;                         /* 移除邊框 */
+      border-radius: 8px;                   /* 圓角 */
+      cursor: pointer;                      /* 滑鼠指標變成手指 */
     }
 
+    /* ✅ 報名訊息區塊（下方提示用） */
     #message {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 2em;
-      font-size: 18px;
+      text-align: center;                   /* 文字置中 */
+      font-weight: bold;                    /* 加粗顯示 */
+      margin-top: 2em;                      /* 與按鈕間距 */
+      font-size: 18px;                      /* 字體大小 */
     }
 
+    /* ✅ 手機版樣式（寬度小於 750px） */
     @media (max-width: 750px) {
+      /* ✅ 每個日期格子的樣式（在手機畫面上） */
       .day {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        font-size: 20px;
-        padding: 6px 0;
-        border-radius: 8px;
-        cursor: pointer;
-        background-color: #fff;
-        transition: background-color 0.3s;
+        width: 100%;                         /* 每格占滿欄位寬度（會依 grid 欄位自動調整） */
+        aspect-ratio: 1 / 1;                 /* 格子維持正方形 */
+        font-size: 20px;                     /* 文字大小 */
+        padding: 6px 0;                      /* 上下內距 */
+        border-radius: 8px;                  /* 圓角邊框 */
+        cursor: pointer;                     /* 滑鼠指標變成可點擊狀態 */
+        background-color: #fff;              /* 預設背景色為白色（⚠️ 這會蓋過整體底色） */
+        transition: background-color 0.3s;   /* 背景顏色變化時有動畫效果 */
       }
 
+      /* ✅ 可選擇的日期格子樣式 */
       .day.available {
-        background-color: #fffbe6;
-        border: 1px solid #f0c36d;
+        background-color: #fffbe6;           /* 淡黃色底色 */
+        border: 1px solid #f0c36d;           /* 淡黃邊框讓格子有層次 */
       }
 
+      /* ✅ 使用者已選取的日期格子樣式 */
       .day.selected {
-        background-color: #ffe066;
-        font-weight: bold;
+        background-color: #ffe066;           /* 更深的黃色顯示選中狀態 */
+        font-weight: bold;                   /* 加粗字體 */
       }
 
+      /* ✅ 不可選的日期格子樣式（如非功率課日期） */
       .day.disabled {
-        background-color: #f7f7f7;
-        color: #f7f7f7;
-        pointer-events: none;
+        background-color: #f7f7f7;           /* 灰色背景，表示無法選取 */
+        color: #aaa;                         /* 字體顏色 */
+        pointer-events: none;                /* 關閉點擊功能 */
       }
 
+      /* ✅ 月份標題（如「2025年6月」）樣式 */
       .month-title {
-        font-size: 24px;
-        text-align: center;
-        margin: 1em 0 0.5em;
+        font-size: 24px;                     /* 標題大小 */
+        text-align: center;                  /* 置中對齊 */
+        margin: 1em 0 0.5em;                 /* 上下間距 */
       }
 
+      /* ✅ 星期標題列（如「日 一 二 三 四 五 六」）樣式 */
       .weekday-header {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        font-size: 16px;
-        margin: 0 0 4px;
-        padding: 0 10px;
-        color: #888;
+        display: grid;                       /* 使用 grid 排版 */
+        grid-template-columns: repeat(7, 1fr); /* 分成七等份 */
+        font-size: 16px;                     /* 字體大小 */
+        margin: 0 0 4px;                     /* 底部間距 */
+        padding: 0 10px;                     /* 左右內距 */
+        color: #888;                         /* 灰色字體，與日期做出區分 */
       }
     }
   </style>
@@ -155,8 +169,9 @@
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXLWE-HipfOlHW8npxiqKmYBHCHVuyaUrXtB4i-LizqiCZBEIoN0knYvPro2OXoWV/exec";
-    const selectedDates = new Set();
+    const selectedDates = new Set(); // ✅ 存放使用者選取的日期
 
+    // ✅ 從網址取得 name / lineId 參數
     function getParam(key) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(key) || "";
@@ -164,12 +179,14 @@
     const lineId = getParam("lineId");
     const name = getParam("name");
 
+    // ✅ 向後端抓取所有可報名的開放日期（格式為字串陣列）
     async function loadAvailableDates() {
       const res = await fetch(`${SCRIPT_URL}?mode=dates`);
       const data = await res.json();
       return data.open || [];
     }
 
+    // ✅ 渲染整個月曆畫面
     async function renderCalendar() {
       const calendarDiv = document.getElementById("calendar");
       calendarDiv.innerHTML = "";
@@ -190,11 +207,13 @@
           const last = new Date(y, m + 1, 0);
           if (last < start || first > end) continue;
 
+          // ✅ 顯示月份標題
           const title = document.createElement("div");
           title.className = "month-title";
           title.textContent = `${y}年${m + 1}月`;
           calendarDiv.appendChild(title);
 
+          // ✅ 顯示星期標題（七格）
           const header = document.createElement("div");
           header.className = "calendar-header";
           ["日", "一", "二", "三", "四", "五", "六"].forEach(d => {
@@ -205,6 +224,7 @@
           });
           calendarDiv.appendChild(header);
 
+          // ✅ 建立格子區域（每月日曆）
           const grid = document.createElement("div");
           grid.className = "calendar-grid";
 
@@ -215,16 +235,18 @@
             grid.appendChild(cell);
           }
 
+          // ✅ 產生日格（依照每月天數）
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, "0")}/${String(d).padStart(2, "0")}`;
             const dateObj = new Date(y, m, d);
             const cell = document.createElement("div");
-            const isWednesday = dateObj.getDay() === 3;
+            const isWednesday = dateObj.getDay() === 3; // ✅ 是否為週三
 
             cell.className = "day";
             cell.textContent = d;
 
             if (isWednesday && availableSet.has(dateStr)) {
+              // ✅ 可報名日期，加入事件
               cell.classList.add("available");
               cell.onclick = () => {
                 if (selectedDates.has(dateStr)) {
@@ -247,6 +269,7 @@
       }
     }
 
+    // ✅ 點擊送出按鈕，依序送出報名日期
     document.getElementById("submit-btn").addEventListener("click", async () => {
       if (selectedDates.size === 0) {
         alert("請先選擇欲報名的日期！");
@@ -277,6 +300,7 @@
   </script>
 </body>
 </html>
+
 
 
 
