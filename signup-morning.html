@@ -122,7 +122,7 @@
       }
 
       .day.disabled {
-        background-color: #e0e0e0;
+        background-color: #f7f7f7;
         color: #f7f7f7;
         pointer-events: none;
       }
@@ -141,7 +141,6 @@
         padding: 0 10px;
         color: #888;
       }
-}
     }
   </style>
 </head>
@@ -166,7 +165,7 @@
     const name = getParam("name");
 
     async function loadAvailableDates() {
-      const res = await fetch(${SCRIPT_URL}?mode=dates);
+      const res = await fetch(`${SCRIPT_URL}?mode=dates`);
       const data = await res.json();
       return data.open || [];
     }
@@ -193,7 +192,7 @@
 
           const title = document.createElement("div");
           title.className = "month-title";
-          title.textContent = ${y}年${m + 1}月;
+          title.textContent = `${y}年${m + 1}月`;
           calendarDiv.appendChild(title);
 
           const header = document.createElement("div");
@@ -217,7 +216,7 @@
           }
 
           for (let d = 1; d <= last.getDate(); d++) {
-            const dateStr = ${y}/${String(m + 1).padStart(2, "0")}/${String(d).padStart(2, "0")};
+            const dateStr = `${y}/${String(m + 1).padStart(2, "0")}/${String(d).padStart(2, "0")}`;
             const dateObj = new Date(y, m, d);
             const cell = document.createElement("div");
             const isWednesday = dateObj.getDay() === 3;
@@ -259,7 +258,7 @@
 
       try {
         for (let date of selectedDates) {
-          const res = await fetch(${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)});
+          const res = await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
           const result = await res.text();
           console.log(result);
         }
