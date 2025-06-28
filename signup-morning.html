@@ -122,14 +122,15 @@
 
       /* ✅ 可選擇的日期格子樣式 */
       .day.available {
-        background-color: #fff4c2;           /* 淡黃色底色 */
-        border: 1px solid #f5d69a;           /* 淡黃邊框讓格子有層次 */
+        background-color: #fffbe6; /* 淡黃底 */
+        color: #000;
+        border: 1px solid #f0c36d;
+        cursor: pointer;
       }
-
       /* ✅ 使用者已選取的日期格子樣式 */
       .day.selected {
-        background-color: #ffe066;           /* 更深的黃色顯示選中狀態 */
-        font-weight: bold;                   /* 加粗字體 */
+        background-color: #ffe066; /* 深黃底 */
+        font-weight: bold;
       }
 
      /* ✅ 不可選的日期格子樣式（如非功率課日期） */
@@ -150,9 +151,9 @@
       .weekday-header {
         display: grid;                       /* 使用 grid 排版 */
         grid-template-columns: repeat(7, 1fr); /* 分成七等份 */
-        font-size: 16px;                     /* 字體大小 */
+        font-size: 18px;                     /* 字體大小 */
         margin: 0 0 4px;                     /* 底部間距 */
-        padding: 0 10px;                     /* 左右內距 */
+        padding: 0 12px;                     /* 左右內距 */
         color: #888;                         /* 灰色字體，與日期做出區分 */
       }
     }
