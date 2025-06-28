@@ -5,34 +5,29 @@
   <title>早班功率課報名</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* ==== 全頁背景與字型 ==== */
     body {
       font-family: Arial, sans-serif;
       background: #f9f9f9;
       padding: 1em;
     }
 
-    /* ==== 包住整個內容的容器 ==== */
     .container {
       max-width: 900px;
       margin: 0 auto;
       text-align: center;
     }
 
-    /* ==== 頁面標題 ==== */
     h1 {
       font-size: 32px;
       margin-bottom: 0.4em;
     }
 
-    /* ==== 課程時間說明 ==== */
     .info {
-      font-size: 22px;
+      font-size: 20px;
       color: #666;
       margin-bottom: 2em;
     }
 
-    /* ==== 月份標題 ==== */
     .month-title {
       font-weight: bold;
       font-size: 24px;
@@ -40,14 +35,11 @@
       margin-bottom: 1.2em;
     }
 
-    /* ==== 星期與格子排版 ==== */
     .calendar-header,
-    .calendar-grid,
-    .calendar {
+    .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 12px;
-      padding: 10px;
     }
 
     .weekday-header {
@@ -65,18 +57,20 @@
       cursor: pointer;
     }
 
-    .inactive {
-      background: #eee;
+    .inactive,
+    .day.disabled {
+      background-color: #eee;
       color: #aaa;
-      cursor: default;
+      pointer-events: none;
     }
 
     .available {
-      background: #fff4c2;
+      background-color: #fffbe6;
+      border: 1px solid #f0c36d;
     }
 
     .selected {
-      background: #ffe58a;
+      background-color: #ffe066;
       font-weight: bold;
     }
 
@@ -100,31 +94,15 @@
     }
 
     @media (max-width: 750px) {
+      .calendar-header,
+      .calendar-grid {
+        gap: 6px;
+        padding: 0 6px;
+      }
+
       .day {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        font-size: 20px;
+        font-size: 18px;
         padding: 6px 0;
-        border-radius: 8px;
-        cursor: pointer;
-        background-color: #fff;
-        transition: background-color 0.3s;
-      }
-
-      .day.available {
-        background-color: #fffbe6;
-        border: 1px solid #f0c36d;
-      }
-
-      .day.selected {
-        background-color: #ffe066;
-        font-weight: bold;
-      }
-
-      .day.disabled {
-        background-color: #e0e0e0;
-        color: #f7f7f7;
-        pointer-events: none;
       }
 
       .month-title {
@@ -134,11 +112,9 @@
       }
 
       .weekday-header {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
         font-size: 16px;
         margin: 0 0 4px;
-        padding: 0 10px;
+        padding: 0 6px;
         color: #888;
       }
     }
@@ -154,9 +130,8 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXLWE-HipfOlHW8npxiqKmYBHCHVuyaUrXtB4i-LizqiCZBEIoN0knYvPro2OXoWV/exec";
+    const SCRIPT_URL = "這裡填入你的 Apps Script URL";
     const selectedDates = new Set();
-
     function getParam(key) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(key) || "";
@@ -175,7 +150,6 @@
       calendarDiv.innerHTML = "";
       const availableDates = await loadAvailableDates();
       const availableSet = new Set(availableDates);
-
       if (availableDates.length === 0) {
         calendarDiv.innerHTML = "<div style='color:red;'>⚠️ 無可報名日期</div>";
         return;
@@ -211,7 +185,7 @@
           const startDay = first.getDay();
           for (let i = 0; i < startDay; i++) {
             const cell = document.createElement("div");
-            cell.className = "day inactive";
+            cell.className = "day disabled";
             grid.appendChild(cell);
           }
 
@@ -219,10 +193,9 @@
             const dateStr = `${y}/${String(m + 1).padStart(2, "0")}/${String(d).padStart(2, "0")}`;
             const dateObj = new Date(y, m, d);
             const cell = document.createElement("div");
-            const isWednesday = dateObj.getDay() === 3;
-
             cell.className = "day";
             cell.textContent = d;
+            const isWednesday = dateObj.getDay() === 3;
 
             if (isWednesday && availableSet.has(dateStr)) {
               cell.classList.add("available");
@@ -236,7 +209,7 @@
                 }
               };
             } else {
-              cell.classList.add("inactive");
+              cell.classList.add("disabled");
             }
 
             grid.appendChild(cell);
@@ -277,3 +250,4 @@
   </script>
 </body>
 </html>
+
