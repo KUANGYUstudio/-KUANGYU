@@ -122,8 +122,8 @@
 
       /* ✅ 可選擇的日期格子樣式 */
       .day.available {
-        background-color: #fffbe6;           /* 淡黃色底色 */
-        border: 1px solid #f0c36d;           /* 淡黃邊框讓格子有層次 */
+        background-color: #fff4c2;           /* 淡黃色底色 */
+        border: 1px solid #f5d69a;           /* 淡黃邊框讓格子有層次 */
       }
 
       /* ✅ 使用者已選取的日期格子樣式 */
@@ -132,11 +132,11 @@
         font-weight: bold;                   /* 加粗字體 */
       }
 
-      /* ✅ 不可選的日期格子樣式（如非功率課日期） */
+     /* ✅ 不可選的日期格子樣式（如非功率課日期） */
       .day.disabled {
-        background-color: #eee;              /* 灰色背景，表示無法選取 */
-        color: #aaa;                         /* 字體顏色 */
-        pointer-events: none;                /* 關閉點擊功能 */
+        background-color: #eeeeee !important; /* 灰色背景強制蓋過白底 */
+        color: #aaa;                          /* 灰字較清晰 */
+        pointer-events: none;                 /* 禁止點擊 */
       }
 
       /* ✅ 月份標題（如「2025年6月」）樣式 */
