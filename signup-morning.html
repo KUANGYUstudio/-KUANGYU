@@ -8,32 +8,23 @@
     /* ==== 全頁背景與字型 ==== */
     body {
       font-family: Arial, sans-serif;
-      background: #ffffff;  /* 整體背景白 */
+      background: #ffffff;
       margin: 0;
       padding: 0;
     }
 
-    /* ==== 主容器：寬度上限 + 手機左右留白 ==== */
+    /* ==== 主容器 ===== */
     .container {
       max-width: 1000px;
       margin: 0 auto;
-      padding: 0.5em;    /* 手機左右留白 */
+      padding: 0.5em;
       box-sizing: border-box;
       text-align: center;
     }
 
-    /* ==== 頁面標題 ==== */
-    h1 {
-      font-size: 32px;
-      margin: 0.5em 0 0.2em;
-    }
-
-    /* ==== 課程時間說明 ==== */
-    .info {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 1.5em;
-    }
+    /* ==== 標題與說明 ==== */
+    h1 { font-size: 32px; margin: 0.5em 0 0.2em; }
+    .info { font-size: 18px; color: #666; margin-bottom: 1.5em; }
 
     /* ==== 月份標題 ==== */
     .month-title {
@@ -42,17 +33,15 @@
       margin: 2em 0 0.8em;
     }
 
-    /* ==== 星期與日期格子容器 ==== */
+    /* ==== 日曆布局 ==== */
     .calendar-header,
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 6px;      /* 手機上格子間距 */
-      padding: 0 4px;/* 手機左右內距 */
+      gap: 6px;
+      padding: 0 4px;
       box-sizing: border-box;
     }
-
-    /* ==== 星期文字 ==== */
     .weekday-header {
       font-weight: bold;
       font-size: 16px;
@@ -61,7 +50,7 @@
       padding-bottom: 4px;
     }
 
-    /* ==== 基本日期格子 ==== */
+    /* ==== 格子樣式 ==== */
     .day {
       aspect-ratio: 1;
       font-size: 18px;
@@ -69,35 +58,29 @@
       align-items: center;
       justify-content: center;
       border-radius: 8px;
-      background-color: #eeeeee; /* 預設灰底 */
+      background-color: #eeeeee;
       color: #aaa;
       cursor: default;
     }
-
-    /* ==== 可選格子（淡黃底） ==== */
     .day.available {
-      background-color: #fcf5cf;  /* 可選：淡黃色底 */
+      background-color: #fcf5cf;
       color: #000;
       cursor: pointer;
       border: 1px solid #f0c36d;
       box-sizing: border-box;
     }
-
-    /* ==== 已選格子（深黃底） ==== */
     .day.selected {
       background-color: #ffe066;
       font-weight: bold;
       color: #000;
     }
-
-    /* ==== 不可選格子（灰底） ==== */
     .day.disabled {
       background-color: #dddddd !important;
       color: #aaa;
       pointer-events: none;
     }
 
-    /* ==== 送出按鈕 ==== */
+    /* ==== 按鈕與提示 ==== */
     #submit-btn {
       margin: 2em auto;
       padding: 12px 24px;
@@ -110,26 +93,17 @@
       max-width: 80%;
       display: block;
     }
+    #message { font-size: 16px; margin-top: 1em; font-weight: bold; }
 
-    /* ==== 提示訊息 ==== */
-    #message {
-      font-size: 16px;
-      margin-top: 1em;
-      font-weight: bold;
-    }
-
-    /* ==== 手機優化（<=750px） ==== */
+    /* ==== 手機版樣式（<=750px） ==== */
     @media (max-width: 750px) {
-      /* 容器左右留白 */
       .container { padding: 0.5em; }
-      /* header/grid 間距與內距 */
       .calendar-header,
       .calendar-grid { gap: 4px; padding: 0 2px; }
-      /* 星期文字大小、上下間距 */
       .weekday-header { font-size: 14px; padding-bottom: 2px; }
-      /* 日期格子文字大小 */
-      .day { font-size: 16px; }
-      /* 按鈕文字大小 */
+      .day { font-size: 16px; padding: 6px 3px; }
+      /* 手機版可選格子維持淡黃底 */
+      .day.available { background-color: #fcf5cf; }
       #submit-btn { font-size: 16px; padding: 10px 20px; }
     }
   </style>
@@ -146,47 +120,32 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXXLWE-HipfOlHW8npxiqKmYBHCHVuyaUrXtB4i-LizqiCZBEIoN0knYvPro2OXoWV/exec";
     const selectedDates = new Set();
-    function getParam(key) {
-      return new URLSearchParams(window.location.search).get(key) || '';
-    }
+    function getParam(key) { return new URLSearchParams(window.location.search).get(key) || ''; }
     const lineId = getParam('lineId');
     const name = getParam('name');
-
-    async function loadAvailableDates() {
-      const res = await fetch(`${SCRIPT_URL}?mode=dates`);
-      const data = await res.json();
-      return data.open || [];
-    }
-
+    async function loadAvailableDates() { const res = await fetch(`${SCRIPT_URL}?mode=dates`); const data = await res.json(); return data.open || []; }
     async function renderCalendar() {
-      const calendarDiv = document.getElementById('calendar');
-      calendarDiv.innerHTML = '';
-      const availableDates = await loadAvailableDates();
-      const availableSet = new Set(availableDates);
-      if (!availableDates.length) {
-        calendarDiv.innerHTML = '<div style="color:red;">⚠️ 無可報名日期</div>';
-        return;
-      }
-      const start = new Date(availableDates[0]);
-      const end = new Date(availableDates[availableDates.length-1]);
+      const calendarDiv = document.getElementById('calendar'); calendarDiv.innerHTML = '';
+      const availableDates = await loadAvailableDates(); const availableSet = new Set(availableDates);
+      if (!availableDates.length) { calendarDiv.innerHTML = '<div style="color:red;">⚠️ 無可報名日期</div>'; return; }
+      const start = new Date(availableDates[0]), end = new Date(availableDates[availableDates.length-1]);
       for (let y = start.getFullYear(); y<= end.getFullYear(); y++) {
         for (let m = 0; m<12; m++) {
           const first = new Date(y,m,1), last = new Date(y,m+1,0);
           if (last < start || first > end) continue;
-          const title = document.createElement('div'); title.className = 'month-title'; title.textContent = `${y}年${m+1}月`;
-          calendarDiv.appendChild(title);
+          const title = document.createElement('div'); title.className = 'month-title'; title.textContent = `${y}年${m+1}月`; calendarDiv.appendChild(title);
           const header = document.createElement('div'); header.className = 'calendar-header';
-          ['日','一','二','三','四','五','六'].forEach(d=>{ const h=document.createElement('div'); h.className='weekday-header'; h.textContent=d; header.appendChild(h); });
+          ['日','一','二','三','四','五','六'].forEach(d=>{ const h = document.createElement('div'); h.className='weekday-header'; h.textContent=d; header.appendChild(h); });
           calendarDiv.appendChild(header);
-          const grid=document.createElement('div'); grid.className='calendar-grid';
-          for (let i=0;i<first.getDay();i++){ const cell=document.createElement('div'); cell.className='day inactive'; grid.appendChild(cell); }
+          const grid = document.createElement('div'); grid.className = 'calendar-grid';
+          for (let i=0; i<first.getDay(); i++) { const cell = document.createElement('div'); cell.className='day inactive'; grid.appendChild(cell); }
           for (let d=1; d<= last.getDate(); d++) {
-            const dateStr=`${y}/${String(m+1).padStart(2,'0')}/${String(d).padStart(2,'0')}`;
-            const cell=document.createElement('div'); cell.className='day'; cell.textContent=d;
+            const dateStr = `${y}/${String(m+1).padStart(2,'0')}/${String(d).padStart(2,'0')}`;
+            const cell = document.createElement('div'); cell.className='day'; cell.textContent=d;
             if (availableSet.has(dateStr) && new Date(dateStr).getDay()===3) {
               cell.classList.replace('inactive','available');
-              cell.onclick=()=>{
-                if (selectedDates.has(dateStr)){ selectedDates.delete(dateStr); cell.classList.remove('selected'); }
+              cell.onclick = () => {
+                if (selectedDates.has(dateStr)) { selectedDates.delete(dateStr); cell.classList.remove('selected'); }
                 else { selectedDates.add(dateStr); cell.classList.add('selected'); }
               };
             }
@@ -196,24 +155,18 @@
         }
       }
     }
-
     document.getElementById('submit-btn').addEventListener('click', async()=>{
       if (!selectedDates.size) return alert('請先選擇日期');
-      const msg=document.getElementById('message'); msg.textContent='送出中...';
+      const msg = document.getElementById('message'); msg.textContent='送出中...';
       for (const date of selectedDates) {
         await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
       }
-      msg.textContent='✅ 報名完成';
-      selectedDates.clear(); renderCalendar();
+      msg.textContent='✅ 報名完成'; selectedDates.clear(); renderCalendar();
     });
-
     renderCalendar();
   </script>
 </body>
 </html>
-
-
-
 
 
 
