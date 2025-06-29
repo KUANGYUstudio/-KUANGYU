@@ -116,13 +116,13 @@
     @media (max-width: 750px) {
       /* ✅ 每個日期格子的樣式（手機上） */
       .day {
-        width: 95%;                         /* 每格佔滿欄位寬度 */
+        width: 100%;                         /* 每格佔滿欄位寬度 */
         aspect-ratio: 1 / 1;                 /* 維持正方形比例 */
         font-size: 20px;                     /* 字體大小 */
-        padding: 12px 0;                      /* 上下間距 */
+        padding: 6px 6px;                    /* 上下 6px，左右 6px，框框更寬 */
         border-radius: 8px;                  /* 圓角邊框 */
         cursor: default;                     /* 預設為不可點（白底） */
-        background-color: #ffffff;           /* ✅ 白色背景代表不可選的預設狀態 */
+        background-color: #ffffff;           /* 白色背景代表不可選 */
         color: #aaa;                         /* 灰色文字 */
         transition: background-color 0.3s;   /* 背景變化動畫 */
       }
