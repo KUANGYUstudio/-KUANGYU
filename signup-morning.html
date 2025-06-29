@@ -4,157 +4,166 @@
   <meta charset="UTF-8" />
   <title>早班功率課</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
+     <style>
     /* ✅ 全頁背景與字型設定 */
     body {
-      font-family: Arial, sans-serif;       /* 使用無襯線字體 */
-      background: #f9f9f9;                  /* 淺灰底色讓整體柔和 */
-      padding: 1em;                         /* 四周留白 */
+      font-family: Arial, sans-serif;
+      background: #f9f9f9; /* 整體背景色（白灰） */
+      padding: 1em;        /* 外圍內距 */
     }
 
     /* ✅ 主容器區塊，控制寬度與置中對齊 */
     .container {
-      max-width: 900px;                     /* 最大寬度 900px，避免太寬 */
-      margin: 0 auto;                        /* 水平置中 */
-      text-align: center;                   /* 內容置中對齊 */
+      max-width: 900px;    /* 最大寬度 */
+      margin: 0 auto;      /* 左右置中 */
+      text-align: center;  /* 內容置中 */
     }
 
     /* ✅ 頁面標題 */
     h1 {
-      font-size: 32px;                      /* 大標題字體大小 */
-      margin-bottom: 0.4em;                 /* 與下方元素間距 */
+      font-size: 32px;     /* 字體大小 */
+      margin-bottom: 0.4em;/* 下方距離 */
     }
 
     /* ✅ 課程時間說明 */
     .info {
-      font-size: 22px;                      /* 字體大小 */
-      color: #666;                          /* 灰色字體，避免過黑 */
-      margin-bottom: 2em;                   /* 與下方間距拉開 */
+      font-size: 22px;
+      color: #666;
+      margin-bottom: 2em;
     }
 
     /* ✅ 月份標題樣式（例如：2025年6月） */
     .month-title {
-      font-weight: bold;                    /* 粗體讓標題更醒目 */
-      font-size: 24px;                      /* 字體大小 */
-      margin-top: 2.5em;                    /* 與上方元素距離 */
-      margin-bottom: 1.2em;                 /* 與下方格子距離 */
+      font-weight: bold;
+      font-size: 24px;
+      margin-top: 2.5em;
+      margin-bottom: 1.2em;
     }
 
     /* ✅ 日曆標題與格子排版設定：一週七格＋間距 */
     .calendar-header,
     .calendar-grid,
     .calendar {
-      display: grid;                         /* 使用 Grid 排版 */
-      grid-template-columns: repeat(7, 1fr); /* 每行 7 格（對應 7 天） */
-      gap: 12px;                             /* 每格間距 */
-      padding: 10px;                         /* 格子區域內距 */
+      display: grid;
+      grid-template-columns: repeat(7, 1fr); /* 7 等分 */
+      gap: 12px;                              /* 格子間距 */
+      padding: 10px;
     }
 
     /* ✅ 星期欄位樣式（如日一二三四五六） */
     .weekday-header {
-      font-weight: bold;                    /* 粗體標示 */
-      font-size: 18px;                      /* 字體大小 */
-      text-align: center;                   /* 置中顯示 */
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
     }
 
     /* ✅ 每格日期的基本樣式（含選取邏輯） */
     .day {
-      aspect-ratio: 1/1;                    /* 維持正方形比例 */
-      font-size: 20px;                      /* 日期數字大小 */
-      text-align: center;                   /* 文字置中 */
-      padding: 10px 0;                      /* 上下內距 */
-      border-radius: 8px;                   /* 圓角外框 */
-      cursor: pointer;                      /* 滑鼠移過會變成可點狀態 */
-    }
-
-    /* ✅ 無法報名的日期格（非週三或未開放） */
-    .inactive {
-      background: #eee;                     /* 淺灰底色代表無法點擊 */
-      color: #aaa;                          /* 字體也變灰 */
-      cursor: default;                      /* 滑鼠變回預設狀態 */
+      aspect-ratio: 1/1;             /* 維持正方形 */
+      font-size: 20px;
+      text-align: center;
+      padding: 10px 0;
+      border-radius: 8px;
+      background-color: #eeeeee;    /* ❗預設為灰底不可選 */
+      color: #aaa;                  /* 灰字 */
+      cursor: default;              /* 預設不可點 */
     }
 
     /* ✅ 可選日期格（週三且開放） */
     .available {
-      background: #fff4c2;                  /* 柔和黃色底色 */
+      background-color: #fffbe6;    /* 淡黃色底色 */
+      color: #000;
+      cursor: pointer;
+      border: 1px solid #f0c36d;
     }
 
     /* ✅ 使用者已點選的日期格 */
     .selected {
-      background: #ffe58a;                  /* 深一點的黃色表示已選 */
-      font-weight: bold;                    /* 字體加粗 */
+      background-color: #ffe066;    /* 深黃色 */
+      font-weight: bold;
+    }
+
+    /* ✅ 無法報名的日期格（非週三或未開放） */
+    .inactive {
+      background-color: #eeeeee !important; /* 灰色背景強制蓋過其他樣式 */
+      color: #aaa;                          /* 灰字較清晰 */
+      cursor: default;
+      pointer-events: none;                 /* 禁止點擊 */
     }
 
     /* ✅ 送出按鈕樣式 */
     #submit-btn {
-      display: block;                       /* 讓按鈕置中顯示 */
-      margin: 3em auto 1em;                 /* 上下留白 */
-      padding: 16px 36px;                   /* 按鈕內距 */
-      font-size: 20px;                      /* 按鈕文字大小 */
-      background: #f5b800;                  /* 鮮黃色底色 */
-      color: white;                         /* 白色字體 */
-      border: none;                         /* 移除邊框 */
-      border-radius: 8px;                   /* 圓角 */
-      cursor: pointer;                      /* 滑鼠指標變成手指 */
+      display: block;
+      margin: 3em auto 1em;
+      padding: 16px 36px;
+      font-size: 20px;
+      background: #f5b800;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
 
     /* ✅ 報名訊息區塊（下方提示用） */
     #message {
-      text-align: center;                   /* 文字置中 */
-      font-weight: bold;                    /* 加粗顯示 */
-      margin-top: 2em;                      /* 與按鈕間距 */
-      font-size: 18px;                      /* 字體大小 */
+      text-align: center;
+      font-weight: bold;
+      margin-top: 2em;
+      font-size: 18px;
     }
 
     /* ✅ 手機版樣式（寬度小於 750px） */
     @media (max-width: 750px) {
-      /* ✅ 每個日期格子的樣式（在手機畫面上） */
+      /* ✅ 每個日期格子的樣式（手機上） */
       .day {
-        width: 100%;                         /* 每格占滿欄位寬度（會依 grid 欄位自動調整） */
-        aspect-ratio: 1 / 1;                 /* 格子維持正方形 */
-        font-size: 20px;                     /* 文字大小 */
-        padding: 6px 0;                      /* 上下內距 */
+        width: 100%;                         /* 每格佔滿欄位寬度 */
+        aspect-ratio: 1 / 1;                 /* 維持正方形比例 */
+        font-size: 20px;                     /* 字體大小 */
+        padding: 6px 0;                      /* 上下間距 */
         border-radius: 8px;                  /* 圓角邊框 */
-        cursor: pointer;                     /* 滑鼠指標變成可點擊狀態 */
-        background-color: #ffffff;           /* 預設背景色為白色（⚠️ 這會蓋過整體底色） */
-        transition: background-color 0.3s;   /* 背景顏色變化時有動畫效果 */
+        cursor: default;                     /* 預設為不可點（白底） */
+        background-color: #ffffff;           /* ✅ 白色背景代表不可選的預設狀態 */
+        color: #aaa;                         /* 灰色文字 */
+        transition: background-color 0.3s;   /* 背景變化動畫 */
       }
 
-      /* ✅ 可選擇的日期格子樣式 */
+      /* ✅ 可選擇的日期格子樣式（淡黃底） */
       .day.available {
-        background-color: #fffbe6; /* 淡黃底 */
-        color: #000;
-        border: 1px solid #f0c36d;
-        cursor: pointer;
+        background-color: #fffbe6;           /* ✅ 可選：淡黃色底 */
+        color: #000;                         /* 黑字 */
+        border: 1px solid #f0c36d;           /* 黃邊框 */
+        cursor: pointer;                     /* 可點擊 */
       }
-      /* ✅ 使用者已選取的日期格子樣式 */
+
+      /* ✅ 使用者已選取的日期格子樣式（深黃底） */
       .day.selected {
-        background-color: #ffe066; /* 深黃底 */
-        font-weight: bold;
+        background-color: #ffe066;           /* ✅ 已選：深黃底 */
+        font-weight: bold;                   /* 加粗文字 */
       }
 
-     /* ✅ 不可選的日期格子樣式（如非功率課日期） */
+      /* ✅ 不可選的日期格子樣式（明確灰底） */
       .day.disabled {
-        background-color: #eeeeee !important; /* 灰色背景強制蓋過白底 */
-        color: #aaa;                          /* 灰字較清晰 */
-        pointer-events: none;                 /* 禁止點擊 */
+        background-color: #eeeeee !important; /* ✅ 灰底強制蓋掉白底 */
+        color: #aaa !important;              /* 灰字加強顯示 */
+        pointer-events: none;                /* 禁止點擊 */
+        cursor: default;                     /* 滑鼠樣式 */
       }
 
-      /* ✅ 月份標題（如「2025年6月」）樣式 */
+      /* ✅ 月份標題樣式（例如 2025年9月） */
       .month-title {
-        font-size: 24px;                     /* 標題大小 */
+        font-size: 24px;                     /* 字體大小 */
         text-align: center;                  /* 置中對齊 */
         margin: 1em 0 0.5em;                 /* 上下間距 */
       }
 
-      /* ✅ 星期標題列（如「日 一 二 三 四 五 六」）樣式 */
+      /* ✅ 星期標題列樣式（日～六） */
       .weekday-header {
         display: grid;                       /* 使用 grid 排版 */
-        grid-template-columns: repeat(7, 1fr); /* 分成七等份 */
+        grid-template-columns: repeat(7, 1fr); /* 七等分 */
         font-size: 18px;                     /* 字體大小 */
-        margin: 0 0 4px;                     /* 底部間距 */
+        margin: 0 0 4px;                     /* 底部距離 */
         padding: 0 12px;                     /* 左右內距 */
-        color: #888;                         /* 灰色字體，與日期做出區分 */
+        color: #888;                         /* 灰色字體 */
       }
     }
   </style>
