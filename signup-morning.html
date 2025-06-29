@@ -97,6 +97,18 @@
 
     /* ==== 手機版樣式（<=750px） ==== */
     @media (max-width: 750px) {
+            /* 手機版標題（h1）放大／縮小 */
+      h1 {
+        font-size: 28px;   /* 原本是 36px，改成 28px，你也可以調其他值 */
+        margin-bottom: 0.4em;  /* 保持原本間距或做微調 */
+      }
+
+      /* 手機版 info 敘述字體大小 */
+      .info {
+        font-size: 18px;   /* 原本是 22px，改成 18px，看起來更適合手機 */
+        margin-bottom: 1.2em;  /* 如有需要，也可以調整上下間距 */
+      }
+
       .container { padding: 0.5em; }
       .calendar-header,
       .calendar-grid { gap: 4px; padding: 0 2px; }
