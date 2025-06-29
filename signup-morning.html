@@ -116,7 +116,7 @@
     @media (max-width: 750px) {
       /* ✅ 每個日期格子的樣式（手機上） */
       .day {
-        width: 95%;                         /* 每格佔滿欄位寬度 */
+        width: 98%;                         /* 每格佔滿欄位寬度 */
         aspect-ratio: 1 / 1;                 /* 維持正方形比例 */
         font-size: 20px;                     /* 字體大小 */
         padding: 6px 0;                      /* 上下間距 */
@@ -172,7 +172,7 @@
     <h1>早班功率課</h1>
     <div class="info">每週三 06:30～08:00</div>
     <div id="calendar"></div>
-    <button id="submit-btn">送出報名</button>
+    <button id="submit-btn">送出登記</button>
     <div id="message"></div>
   </div>
 
@@ -188,7 +188,7 @@
     const lineId = getParam("lineId");
     const name = getParam("name");
 
-    // ✅ 向後端抓取所有可報名的開放日期（格式為字串陣列）
+    // ✅ 向後端抓取所有可登記的開放日期（格式為字串陣列）
     async function loadAvailableDates() {
       const res = await fetch(`${SCRIPT_URL}?mode=dates`);
       const data = await res.json();
