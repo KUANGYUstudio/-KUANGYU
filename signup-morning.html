@@ -102,8 +102,28 @@
       .calendar-grid { gap: 4px; padding: 0 2px; }
       .weekday-header { font-size: 14px; padding-bottom: 2px; }
       .day { font-size: 16px; padding: 6px 3px; }
-      /* 手機版可選格子維持淡黃底 */
-      .day.available { background-color: #fcf5cf; }
+
+      /* ✅ 手機版可選格子維持淡黃底並加邊框 */
+      .day.available {
+        background-color: #fcf5cf;
+        color: #000;
+        border: 1px solid #f0c36d;
+        cursor: pointer;
+      }
+      /* ✅ 手機版已選日期格加深顏色 */
+      .day.selected {
+        background-color: #ffe066;
+        font-weight: bold;
+        color: #000;
+      }
+      /* ✅ 手機版不可選格灰底 */
+      .day.disabled {
+        background-color: #eeeeee !important;
+        color: #aaa !important;
+        pointer-events: none;
+        cursor: default;
+      }
+
       #submit-btn { font-size: 16px; padding: 10px 20px; }
     }
   </style>
