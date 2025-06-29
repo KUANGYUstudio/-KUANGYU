@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>早班功率課報名</title>
+  <title>早班功率課</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
     /* ✅ 全頁背景與字型設定 */
@@ -116,7 +116,7 @@
         padding: 6px 0;                      /* 上下內距 */
         border-radius: 8px;                  /* 圓角邊框 */
         cursor: pointer;                     /* 滑鼠指標變成可點擊狀態 */
-        background-color: #fff;              /* 預設背景色為白色（⚠️ 這會蓋過整體底色） */
+        background-color: #ffffff;           /* 預設背景色為白色（⚠️ 這會蓋過整體底色） */
         transition: background-color 0.3s;   /* 背景顏色變化時有動畫效果 */
       }
 
@@ -161,7 +161,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>早班功率課報名</h1>
+    <h1>早班功率課</h1>
     <div class="info">每週三 06:30～08:00</div>
     <div id="calendar"></div>
     <button id="submit-btn">送出報名</button>
@@ -247,7 +247,7 @@
             cell.textContent = d;
 
             if (isWednesday && availableSet.has(dateStr)) {
-              // ✅ 可報名日期，加入事件
+              // ✅ 可登記日期，加入事件
               cell.classList.add("available");
               cell.onclick = () => {
                 if (selectedDates.has(dateStr)) {
@@ -270,10 +270,10 @@
       }
     }
 
-    // ✅ 點擊送出按鈕，依序送出報名日期
+    // ✅ 點擊送出按鈕，依序送出登記日期
     document.getElementById("submit-btn").addEventListener("click", async () => {
       if (selectedDates.size === 0) {
-        alert("請先選擇欲報名的日期！");
+        alert("請先選擇欲登記的日期！");
         return;
       }
 
@@ -287,8 +287,8 @@
           console.log(result);
         }
 
-        messageDiv.textContent = "✅ 已完成報名！";
-        alert("✅ 報名成功！");
+        messageDiv.textContent = "✅ 已完成登記！";
+        alert("✅ 登記成功！");
         selectedDates.clear();
         renderCalendar();
       } catch (err) {
