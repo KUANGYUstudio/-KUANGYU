@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
@@ -23,13 +23,20 @@
     }
 
     /* ==== 標題與說明 ==== */
-    h1 { font-size: 32px; margin: 0.5em 0 0.2em; }
-    .info { font-size: 22px; color: #666; margin-bottom: 1.5em; }
+    h1 {
+      font-size: 32px;
+      margin: 0.5em 0 0.2em;
+    }
+    .info {
+      font-size: 22px;
+      color: #666;
+      margin-bottom: 1.5em;
+    }
 
-    /* ==== 月份標題 ==== */
+    /* ==== 月份標題（桌機＋手機共用） ==== */
     .month-title {
       font-weight: bold;
-      font-size: 38px;
+      font-size: 32px;
       margin: 2em 0 0.8em;
     }
 
@@ -80,7 +87,7 @@
       pointer-events: none;
     }
 
-    /* ==== 按鈕與提示 ==== */
+    /* ==== 按鈕與提示（桌機版） ==== */
     #submit-btn {
       margin: 2em auto;
       padding: 16px 32px;
@@ -93,22 +100,31 @@
       max-width: 60%;
       display: block;
     }
-    #message { font-size: 16px; margin-top: 1em; font-weight: bold; }
+    #message {
+      font-size: 16px;
+      margin-top: 1em;
+      font-weight: bold;
+    }
 
     /* ==== 手機版樣式（<=750px） ==== */
     @media (max-width: 750px) {
-            /* 手機版標題（h1）放大／縮小 */
+      /* 標題／說明 */
       h1 {
-        font-size: 28px;   /* 原本是 36px，改成 28px，你也可以調其他值 */
-        margin-bottom: 0.4em;  /* 保持原本間距或做微調 */
+        font-size: 28px;
+        margin-bottom: 0.4em;
       }
-
-      /* 手機版 info 敘述字體大小 */
       .info {
-        font-size: 18px;   /* 原本是 22px，改成 18px，看起來更適合手機 */
-        margin-bottom: 1em;  /* 如有需要，也可以調整上下間距 */
+        font-size: 18px;
+        margin-bottom: 1em;
       }
 
+      /* 月份標題 override */
+      .month-title {
+        font-size: 24px;
+        margin: 1.5em 0 0.6em;
+      }
+
+      /* 容器與格子微調 */
       .container { padding: 0.5em; }
       .calendar-header,
       .calendar-grid { gap: 4px; padding: 0 2px; }
@@ -123,8 +139,6 @@
       }
       .day.selected {
         background-color: #ffe066;
-        font-weight: bold;
-        color: #000;
       }
       .day.disabled {
         background-color: #eeeeee !important;
@@ -133,12 +147,11 @@
         cursor: default;
       }
 
-      #submit-btn { font-size: 18px; padding: 12px 22px; }
-    }
-      /* 新增：手機版的「年月」字體放大 */
-      .month-title {
-        font-size: 24px;    /* 你想要的大小，例如從 30px 改為 24px */
-        margin: 1.5em 0 0.6em; /* 如果需要，也可以調上下間距 */
+      /* 按鈕尺寸回調 */
+      #submit-btn {
+        font-size: 18px;
+        padding: 12px 22px;
+      }
     }
   </style>
 </head>
@@ -256,3 +269,4 @@
   </script>
 </body>
 </html>
+
