@@ -113,58 +113,71 @@
     }
 
     /* ✅ 手機版樣式（寬度小於 750px） */
-    @media (max-width: 650px) {
-      /* ✅ 每個日期格子的樣式（手機上） */
-      .day {
-        width: 100%;                          /* 每格佔滿欄位寬度 */
-        aspect-ratio: 1 / 1;                 /* 維持正方形比例 */
-        font-size: 20px;                     /* 字體大小 */
-        padding: 5px 4px;                    /* 上下 4px，左右 4px，框框更寬 */
-        border-radius: 8px;                  /* 圓角邊框 */
-        cursor: default;                     /* 預設為不可點（白底） */
-        background-color: #ffffff;           /* 白色背景代表不可選 */
-        color: #aaa;                         /* 灰色文字 */
-        transition: background-color 0.3s;   /* 背景變化動畫 */
-      }
+@media (max-width: 750px) {
+  /* ==== 縮小最外層容器左右內距 ==== */
+  .container {
+    padding: 0.5em;            /* 原本 1em，手機上縮小留白 */
+  }
 
-      /* ✅ 可選擇的日期格子樣式（淡黃底） */
-      .day.available {
-        background-color: #fcf5cf;           /* ✅ 可選：淡黃色底 */
-        color: #000;                         /* 黑字 */
-        cursor: pointer;                     /* 可點擊 */
-      }
+  /* ==== 縮小日曆 header/grid 的間距與內距 ==== */
+  .calendar-header,
+  .calendar-grid {
+    gap: 6px;                  /* 原本 12px，手機上縮小 */
+    padding: 0 4px;            /* 原本 10px，左右各 4px */
+  }
 
-      /* ✅ 使用者已選取的日期格子樣式（深黃底） */
-      .day.selected {
-        background-color: #ffe066;           /* ✅ 已選：深黃底 */
-        font-weight: bold;                   /* 加粗文字 */
-      }
+  /* ✅ 每個日期格子的樣式（手機上） */
+  .day {
+    width: 100%;               /* 每格佔滿欄位寬度 */
+    aspect-ratio: 1 / 1;       /* 維持正方形比例 */
+    font-size: 18px;           /* 字體稍微縮小 */
+    padding: 6px 4px;          /* 上下 6px，左右 4px */
+    border-radius: 8px;
+    background-color: #ffffff; /* 白色背景代表不可選 */
+    color: #aaa;               /* 灰色文字 */
+    cursor: default;           /* 預設不可點 */
+    transition: background-color 0.3s;
+  }
 
-      /* ✅ 不可選的日期格子樣式（明確灰底） */
-      .day.disabled {
-        background-color: #eeeeee !important; /* ✅ 灰底強制蓋掉白底 */
-        color: #aaa !important;              /* 灰字加強顯示 */
-        pointer-events: none;                /* 禁止點擊 */
-        cursor: default;                     /* 滑鼠樣式 */
-      }
+  /* ✅ 可選擇的日期格子樣式（淡黃底） */
+  .day.available {
+    background-color: #fffbe6; /* 淡黃底 */
+    color: #000;
+    border: 1px solid #f0c36d;
+    cursor: pointer;
+  }
 
-      /* ✅ 月份標題樣式（例如 2025年9月） */
-      .month-title {
-        font-size: 24px;                     /* 字體大小 */
-        text-align: center;                  /* 置中對齊 */
-        margin: 4em 0 0.5em;                 /* 上下間距 */
-      }
+  /* ✅ 使用者已選取的日期格子樣式（深黃底） */
+  .day.selected {
+    background-color: #ffe066; /* 深黃底 */
+    font-weight: bold;
+  }
 
-      /* ✅ 星期標題列樣式（日～六） */
-      .weekday-header {
-        display: grid;                       /* 使用 grid 排版 */
-        grid-template-columns: repeat(7, 1fr); /* 七等分 */
-        font-size: 18px;                     /* 字體大小 */
-        margin: 0 0 2px;                     /* 底部距離 */
-        padding: 0 8px;                     /* 左右內距 */
-        color: #888;                         /* 灰色字體 */
-      }
-    }
+  /* ✅ 不可選的日期格子樣式（灰底） */
+  .day.disabled {
+    background-color: #eeeeee !important; /* 強制灰底 */
+    color: #aaa !important;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  /* ✅ 月份標題（例如 2025年9月） */
+  .month-title {
+    font-size: 22px;
+    text-align: center;
+    margin: 1em 0 0.5em;
+  }
+
+  /* ✅ 星期標題列（日～六） */
+  .weekday-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-size: 16px;
+    margin: 0 0 4px;
+    padding: 0 4px;
+    color: #888;
+  }
+}
   </style>
 </head>
 <body>
