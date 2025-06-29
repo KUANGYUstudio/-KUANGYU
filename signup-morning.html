@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>早班功率課</title>
+  <title>早班功率課報名</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* ==== 全頁背景與字型 ==== */
@@ -110,10 +110,10 @@
 </head>
 <body>
   <div class="container">
-    <h1>早班功率課</h1>
+    <h1>早班功率課報名</h1>
     <div class="info">每週三 06:30～08:00</div>
     <div id="calendar"></div>
-    <button id="submit-btn">送出登記</button>
+    <button id="submit-btn">送出報名</button>
     <div id="message"></div>
   </div>
 
@@ -127,7 +127,7 @@
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar'); calendarDiv.innerHTML = '';
       const availableDates = await loadAvailableDates(); const availableSet = new Set(availableDates);
-      if (!availableDates.length) { calendarDiv.innerHTML = '<div style="color:red;">⚠️ 無可登記日期</div>'; return; }
+      if (!availableDates.length) { calendarDiv.innerHTML = '<div style="color:red;">⚠️ 無可報名日期</div>'; return; }
       const start = new Date(availableDates[0]), end = new Date(availableDates[availableDates.length-1]);
       for (let y = start.getFullYear(); y<= end.getFullYear(); y++) {
         for (let m = 0; m<12; m++) {
@@ -161,12 +161,9 @@
       for (const date of selectedDates) {
         await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
       }
-      msg.textContent='✅ 登記完成'; selectedDates.clear(); renderCalendar();
+      msg.textContent='✅ 報名完成'; selectedDates.clear(); renderCalendar();
     });
     renderCalendar();
   </script>
 </body>
 </html>
-
-
-
