@@ -113,13 +113,13 @@
     }
 
     /* ✅ 手機版樣式（寬度小於 750px） */
-    @media (max-width: 750px) {
+    @media (max-width: 700px) {
       /* ✅ 每個日期格子的樣式（手機上） */
       .day {
-        width: 90%;                          /* 每格佔滿欄位寬度 */
+        width: 100%;                          /* 每格佔滿欄位寬度 */
         aspect-ratio: 1 / 1;                 /* 維持正方形比例 */
         font-size: 20px;                     /* 字體大小 */
-        padding: 4px 4px;                    /* 上下 4px，左右 4px，框框更寬 */
+        padding: 5px 4px;                    /* 上下 4px，左右 4px，框框更寬 */
         border-radius: 8px;                  /* 圓角邊框 */
         cursor: default;                     /* 預設為不可點（白底） */
         background-color: #ffffff;           /* 白色背景代表不可選 */
@@ -152,7 +152,7 @@
       .month-title {
         font-size: 24px;                     /* 字體大小 */
         text-align: center;                  /* 置中對齊 */
-        margin: 1em 0 0.5em;                 /* 上下間距 */
+        margin: 2em 0 0.5em;                 /* 上下間距 */
       }
 
       /* ✅ 星期標題列樣式（日～六） */
