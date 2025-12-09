@@ -1,19 +1,16 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <title>早班功率課</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* ==== 全頁背景與字型 ==== */
     body {
       font-family: Arial, sans-serif;
       background: #ffffff;
       margin: 0;
       padding: 0;
     }
-
-    /* ==== 主容器 ===== */
     .container {
       max-width: 1000px;
       margin: 0 auto;
@@ -21,8 +18,6 @@
       box-sizing: border-box;
       text-align: center;
     }
-
-    /* ==== 標題與說明 ==== */
     h1 {
       font-size: 36px;
       margin: 0.5em 0 0.2em;
@@ -32,15 +27,11 @@
       color: #666;
       margin-bottom: 1.5em;
     }
-
-    /* ==== 月份標題（桌機＋手機共用） ==== */
     .month-title {
       font-weight: bold;
       font-size: 32px;
       margin: 2em 0 0.8em;
     }
-
-    /* ==== 日曆布局 ==== */
     .calendar-header,
     .calendar-grid {
       display: grid;
@@ -56,8 +47,6 @@
       color: #888;
       padding-bottom: 6px;
     }
-
-    /* ==== 格子樣式 ==== */
     .day {
       aspect-ratio: 1;
       font-size: 25px;
@@ -81,13 +70,6 @@
       font-weight: bold;
       color: #000;
     }
-    .day.disabled {
-      background-color: #dddddd !important;
-      color: #aaa;
-      pointer-events: none;
-    }
-
-    /* ==== 按鈕與提示（桌機版） ==== */
     #submit-btn {
       margin: 2em auto;
       padding: 16px 32px;
@@ -105,53 +87,16 @@
       margin-top: 1em;
       font-weight: bold;
     }
-
-    /* ==== 手機版樣式（<=750px） ==== */
     @media (max-width: 750px) {
-      /* 標題／說明 */
-      h1 {
-        font-size: 28px;
-        margin-bottom: 0.4em;
-      }
-      .info {
-        font-size: 18px;
-        margin-bottom: 1em;
-      }
-
-      /* 月份標題 override */
-      .month-title {
-        font-size: 24px;
-        margin: 1.5em 0 0.6em;
-      }
-
-      /* 容器與格子微調 */
+      h1 { font-size: 28px; margin-bottom: 0.4em; }
+      .info { font-size: 18px; margin-bottom: 1em; }
+      .month-title { font-size: 24px; margin: 1.5em 0 0.6em; }
       .container { padding: 0.5em; }
       .calendar-header,
       .calendar-grid { gap: 4px; padding: 0 6px; }
       .weekday-header { font-size: 16px; padding-bottom: 3px; }
       .day { font-size: 18px; padding: 6px 3px; }
-
-      .day.available {
-        background-color: #fcf5cf;
-        color: #000;
-        border: 1px solid #f0c36d;
-        cursor: pointer;
-      }
-      .day.selected {
-        background-color: #ffe066;
-      }
-      .day.disabled {
-        background-color: #eeeeee !important;
-        color: #aaa !important;
-        pointer-events: none;
-        cursor: default;
-      }
-
-      /* 按鈕尺寸回調 */
-      #submit-btn {
-        font-size: 18px;
-        padding: 12px 22px;
-      }
+      #submit-btn { font-size: 18px; padding: 12px 22px; }
     }
   </style>
 </head>
@@ -165,22 +110,34 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyw3s2Uzp_GZ6flUJ13yAvVuK6uwSAAHFV_5dTqmy04Nw15nLv1-n84m8WsA5np4BpG/exec;
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyw3s2Uzp_GZ6flUJ13yAvVuK6uwSAAHFV_5dTqmy04Nw15nLv1-n84m8WsA5np4BpG/exec";
     const selectedDates = new Set();
-    function getParam(key) { return new URLSearchParams(window.location.search).get(key) || ''; }
+    
+    function getParam(key) { 
+      return new URLSearchParams(window.location.search).get(key) || ''; 
+    }
+    
     const lineId = getParam('lineId');
     const name = getParam('name');
 
     async function loadAvailableDates() {
-      const res = await fetch(`${SCRIPT_URL}?mode=dates`);
-      const data = await res.json();
-      return data.open || [];
+      try {
+        const res = await fetch(`${SCRIPT_URL}?mode=dates`);
+        const data = await res.json();
+        return data.open || [];
+      } catch (error) {
+        console.error('載入日期錯誤:', error);
+        return [];
+      }
     }
 
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
-      calendarDiv.innerHTML = '';
+      calendarDiv.innerHTML = '載入中...';
+      
       const availableDates = await loadAvailableDates();
+      calendarDiv.innerHTML = '';
+      
       const availableSet = new Set(availableDates);
 
       if (!availableDates.length) {
@@ -197,13 +154,11 @@
           const last = new Date(y, m + 1, 0);
           if (last < start || first > end) continue;
 
-          // 月份標題
           const title = document.createElement('div');
           title.className = 'month-title';
           title.textContent = `${y}年${m + 1}月`;
           calendarDiv.appendChild(title);
 
-          // 星期標頭
           const header = document.createElement('div');
           header.className = 'calendar-header';
           ['日','一','二','三','四','五','六'].forEach(d => {
@@ -214,23 +169,21 @@
           });
           calendarDiv.appendChild(header);
 
-          // 日期格子
           const grid = document.createElement('div');
           grid.className = 'calendar-grid';
-          // 空白格
+          
           for (let i = 0; i < first.getDay(); i++) {
             const cell = document.createElement('div');
-            cell.className = 'day inactive';
+            cell.className = 'day';
             grid.appendChild(cell);
           }
-          // 實際日期
+          
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
             const cell = document.createElement('div');
             cell.className = 'day';
             cell.textContent = d;
 
-            // 星期三且可登記就加 available
             if (availableSet.has(dateStr) && new Date(dateStr).getDay() === 3) {
               cell.classList.add('available');
               cell.onclick = () => {
@@ -252,21 +205,30 @@
     }
 
     document.getElementById('submit-btn').addEventListener('click', async () => {
-      if (!selectedDates.size) return alert('請先選擇日期');
+      if (!selectedDates.size) {
+        alert('請先選擇日期');
+        return;
+      }
+      
       const msg = document.getElementById('message');
       msg.textContent = '送出中...';
 
-      for (const date of selectedDates) {
-        await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
-      }
+      try {
+        for (const date of selectedDates) {
+          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
+        }
 
-      msg.textContent = '✅ 登記完成';
-      selectedDates.clear();
-      renderCalendar();
+        msg.textContent = '✅ 登記完成';
+        alert('✅ 登記成功！');
+        selectedDates.clear();
+        renderCalendar();
+      } catch (error) {
+        console.error('提交錯誤:', error);
+        msg.textContent = '⚠️ 發生錯誤，請稍後再試';
+      }
     });
 
     renderCalendar();
   </script>
 </body>
 </html>
-
