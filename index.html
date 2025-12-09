@@ -39,21 +39,21 @@
       font-size: 1.3em;
       font-weight: bold;
       transition: transform 0.2s;
+      background: white;
       border-left: 6px solid;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .course-card:hover {
       transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
     .course-card.morning {
-      background: #fff3cd;
-      border-color: #ffc107;
+      border-color: #FFC107;
     }
     .course-card.evening {
-      background: #d9ebff;
       border-color: #007bff;
     }
     .course-card.online {
-      background: #d7f7dd;
       border-color: #28a745;
     }
   </style>
@@ -69,18 +69,14 @@
   </div>
 
   <script>
-    // 取得網址參數
     function getParam(key) {
       return new URLSearchParams(window.location.search).get(key) || '';
     }
 
     const name = getParam('name');
     const lineId = getParam('lineId');
-
-    // 組合參數字串
     const params = `?name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`;
 
-    // 設定三個按鈕的連結
     document.getElementById('morning-link').href = `signup-morning.html${params}`;
     document.getElementById('evening-link').href = `signup-evening.html${params}`;
     document.getElementById('online-link').href = `signup-online.html${params}`;
