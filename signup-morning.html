@@ -70,6 +70,14 @@ background-color: #ffe066;
 font-weight: bold;
 color: #000;
 }
+/* 🆕 已報名的樣式 */
+.day.registered {
+background-color: #ffd666;
+color: #000;
+cursor: not-allowed;
+border: 2px solid #f5a800;
+opacity: 0.7;
+}
 #submit-btn {
 margin: 2em auto;
 padding: 16px 32px;
@@ -110,9 +118,10 @@ h1 { font-size: 28px; margin-bottom: 0.4em; }
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby0u08bpivrsMktjwtv-E44u_w0VirFoZEtnYXCO104rpg5xGdRFynKd8kDBZb-pczP/exec";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvyneeBpPV3ayC0DPZGIv2sv58wr1_ORhxChBMVeyYpjHOGkL3iIQlW9HayPyVi6DT/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvyneeBpPV3ayC0DPZGIv2sv58wr1_ORhxChBMVeyYpjHOGkL3iIQlW9HayPyVi6DT/exec";
+
 const selectedDates = new Set();
+let myRegisteredDates = new Set(); // 🆕 已報名的日期
 
 function getParam(key) { 
 return new URLSearchParams(window.location.search).get(key) || ''; 
@@ -132,11 +141,25 @@ return [];
 }
 }
 
+// 🆕 載入已報名的日期
+async function loadMyRegisteredDates() {
+try {
+const res = await fetch(`${SCRIPT_URL}?mode=mySignups&lineId=${encodeURIComponent(lineId)}&courseType=early`);
+const data = await res.json();
+return new Set(data.dates || []);
+} catch (error) {
+console.error('載入已報名日期錯誤:', error);
+return new Set();
+}
+}
+
 async function renderCalendar() {
 const calendarDiv = document.getElementById('calendar');
 calendarDiv.innerHTML = '載入中...';
 
 const availableDates = await loadAvailableDates();
+myRegisteredDates = await loadMyRegisteredDates(); // 🆕 載入已報名日期
+
 calendarDiv.innerHTML = '';
 
 const availableSet = new Set(availableDates);
@@ -185,7 +208,11 @@ const cell = document.createElement('div');
 cell.className = 'day';
 cell.textContent = d;
 
-if (availableSet.has(dateStr) && new Date(dateStr).getDay() === 3) {
+// 🆕 判斷是否已報名
+if (myRegisteredDates.has(dateStr)) {
+cell.classList.add('registered');
+cell.textContent = d + ' ✓';
+} else if (availableSet.has(dateStr) && new Date(dateStr).getDay() === 3) {
 cell.classList.add('available');
 cell.onclick = () => {
 if (selectedDates.has(dateStr)) {
@@ -216,7 +243,7 @@ msg.textContent = '送出中...';
 
 try {
 for (const date of selectedDates) {
-await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=早班功率&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
+await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=early&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
 }
 
 msg.textContent = '✅ 登記完成';
