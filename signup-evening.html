@@ -104,4 +104,159 @@ h1 { font-size: 28px; margin-bottom: 0.4em; }
 .calendar-grid { gap: 4px; padding: 0 6px; }
 .weekday-header { font-size: 16px; padding-bottom: 3px; }
 .day { font-size: 18px; padding: 6px 3px; }
-#su
+#submit-btn { font-size: 18px; padding: 12px 22px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>晚班功率課</h1>
+<div class="info">每週二 / 週四 19:30～21:00</div>
+<div id="calendar"></div>
+<button id="submit-btn">送出報名</button>
+<div id="message"></div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvyneeBpPV3ayC0DPZGIv2sv58wr1_ORhxChBMVeyYpjHOGkL3iIQlW9HayPyVi6DT/exec";
+
+const selectedDates = new Set();
+let myRegisteredDates = new Set();
+
+function getParam(key) { 
+return new URLSearchParams(window.location.search).get(key) || ''; 
+}
+
+const lineId = getParam('lineId');
+const name = getParam('name');
+
+async function loadAvailableDates() {
+try {
+const res = await fetch(`${SCRIPT_URL}?mode=dates`);
+const data = await res.json();
+return data.open || [];
+} catch (error) {
+console.error('載入日期錯誤:', error);
+return [];
+}
+}
+
+async function loadMyRegisteredDates() {
+try {
+const res = await fetch(`${SCRIPT_URL}?mode=mySignups&lineId=${encodeURIComponent(lineId)}&courseType=evening`);
+const data = await res.json();
+return new Set(data.dates || []);
+} catch (error) {
+console.error('載入已報名日期錯誤:', error);
+return new Set();
+}
+}
+
+async function renderCalendar() {
+const calendarDiv = document.getElementById('calendar');
+calendarDiv.innerHTML = '載入中...';
+
+const availableDates = await loadAvailableDates();
+myRegisteredDates = await loadMyRegisteredDates();
+
+calendarDiv.innerHTML = '';
+
+const availableSet = new Set(availableDates);
+
+if (!availableDates.length) {
+calendarDiv.innerHTML = '<div style="color:red;">⚠️ 無可登記日期</div>';
+return;
+}
+
+const start = new Date(availableDates[0]);
+const end = new Date(availableDates[availableDates.length - 1]);
+
+for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
+for (let m = 0; m < 12; m++) {
+const first = new Date(y, m, 1);
+const last = new Date(y, m + 1, 0);
+if (last < start || first > end) continue;
+
+const title = document.createElement('div');
+title.className = 'month-title';
+title.textContent = `${y}年${m + 1}月`;
+calendarDiv.appendChild(title);
+
+const header = document.createElement('div');
+header.className = 'calendar-header';
+['日','一','二','三','四','五','六'].forEach(d => {
+const h = document.createElement('div');
+h.className = 'weekday-header';
+h.textContent = d;
+header.appendChild(h);
+});
+calendarDiv.appendChild(header);
+
+const grid = document.createElement('div');
+grid.className = 'calendar-grid';
+
+for (let i = 0; i < first.getDay(); i++) {
+const cell = document.createElement('div');
+cell.className = 'day';
+grid.appendChild(cell);
+}
+
+for (let d = 1; d <= last.getDate(); d++) {
+const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
+const cell = document.createElement('div');
+cell.className = 'day';
+cell.textContent = d;
+
+const dayOfWeek = new Date(dateStr).getDay();
+
+if (myRegisteredDates.has(dateStr)) {
+cell.classList.add('registered');
+cell.textContent = d + ' ✓';
+} else if (availableSet.has(dateStr) && (dayOfWeek === 2 || dayOfWeek === 4)) {
+cell.classList.add('available');
+cell.onclick = () => {
+if (selectedDates.has(dateStr)) {
+selectedDates.delete(dateStr);
+cell.classList.remove('selected');
+} else {
+selectedDates.add(dateStr);
+cell.classList.add('selected');
+}
+};
+}
+
+grid.appendChild(cell);
+}
+calendarDiv.appendChild(grid);
+}
+}
+}
+
+document.getElementById('submit-btn').addEventListener('click', async () => {
+if (!selectedDates.size) {
+alert('請先選擇日期');
+return;
+}
+
+const msg = document.getElementById('message');
+msg.textContent = '送出中...';
+
+try {
+for (const date of selectedDates) {
+await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=evening&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
+}
+
+msg.textContent = '✅ 登記完成';
+alert('✅ 登記成功！');
+selectedDates.clear();
+renderCalendar();
+} catch (error) {
+console.error('提交錯誤:', error);
+msg.textContent = '⚠️ 發生錯誤，請稍後再試';
+}
+});
+
+renderCalendar();
+</script>
+</body>
+</html>
