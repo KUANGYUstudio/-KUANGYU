@@ -87,15 +87,15 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 4px;
+      padding: 8px 4px;
     }
     .day.full .date-number {
       font-size: 25px;
       line-height: 1;
+      margin-bottom: 2px;
     }
     .day.full .full-label {
-      font-size: 12px;
-      margin-top: 2px;
+      font-size: 14px;
       line-height: 1;
     }
     #submit-btn {
@@ -124,8 +124,9 @@
       .calendar-grid { gap: 4px; padding: 0 6px; }
       .weekday-header { font-size: 16px; padding-bottom: 3px; }
       .day { font-size: 18px; padding: 6px 3px; }
-      .day.full .date-number { font-size: 18px; }
-      .day.full .full-label { font-size: 10px; margin-top: 1px; }
+      .day.full { padding: 6px 3px; }
+      .day.full .date-number { font-size: 18px; margin-bottom: 1px; }
+      .day.full .full-label { font-size: 12px; }
       #submit-btn { font-size: 18px; padding: 12px 22px; }
     }
   </style>
@@ -303,19 +304,3 @@
   </script>
 </body>
 </html>
-```
-
----
-
-## 🎨 效果預覽
-
-### 修改後的樣式：
-```
-┌─────────────┐
-│             │
-│     17      │  ← 25px，跟其他日期一樣大
-│    額滿     │  ← 12px 小字
-│             │
-└─────────────┘
-  灰底 #e0e0e0
-  黃框 #f5a800
