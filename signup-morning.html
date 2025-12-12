@@ -85,9 +85,10 @@
       opacity: 0.8;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       gap: 16px;
+      padding-top: 18px;
     }
     .day.full .date-number {
       font-size: 25px;
@@ -123,7 +124,10 @@
       .calendar-grid { gap: 4px; padding: 0 6px; }
       .weekday-header { font-size: 16px; padding-bottom: 3px; }
       .day { font-size: 18px; padding: 6px 3px; }
-      .day.full { gap: 3px; }
+      .day.full { 
+        gap: 12px;
+        padding-top: 14px;
+      }
       .day.full .date-number { font-size: 18px; }
       .day.full .full-label { font-size: 13px; }
       #submit-btn { font-size: 18px; padding: 12px 22px; }
