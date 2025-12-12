@@ -81,9 +81,23 @@
       background-color: #e0e0e0;
       color: #666;
       cursor: not-allowed;
-      border: 2px solid #999;
-      opacity: 0.6;
-      font-size: 20px;
+      border: 2px solid #17a2b8;
+      opacity: 0.8;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+    .day.full .date-number {
+      font-size: 25px;
+      line-height: 1;
+      margin-top: -8px;
+    }
+    .day.full .full-label {
+      font-size: 14px;
+      line-height: 1;
     }
     #submit-btn {
       margin: 2em auto;
@@ -111,7 +125,9 @@
       .calendar-grid { gap: 4px; padding: 0 6px; }
       .weekday-header { font-size: 16px; padding-bottom: 3px; }
       .day { font-size: 18px; padding: 6px 3px; }
-      .day.full { font-size: 16px; }
+      .day.full { gap: 6px; }
+      .day.full .date-number { font-size: 18px; margin-top: -6px; }
+      .day.full .full-label { font-size: 12px; }
       #submit-btn { font-size: 18px; padding: 12px 22px; }
     }
   </style>
@@ -240,7 +256,7 @@
               cell.textContent = d + ' ✓';
             } else if (isFull && (dayOfWeek === 2 || dayOfWeek === 4)) {
               cell.classList.add('full');
-              cell.textContent = d + ' 額滿';
+              cell.innerHTML = `<div class="date-number">${d}</div><div class="full-label">額滿</div>`;
             } else if (availableSet.has(dateStr) && (dayOfWeek === 2 || dayOfWeek === 4)) {
               cell.classList.add('available');
               cell.onclick = () => {
