@@ -1,1 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>床墊試躺預約 | Chrisus Sport</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 1.1em;
+      opacity: 0.95;
+    }
+
+    .location-box {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .location-box h3 {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+
+    .location-box a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .location-box a:hover {
+      text-decoration: underline;
+    }
+
+    .notice-section {
+      background: #fff8e1;
+      padding: 20px 30px;
+      border-left: 4px solid #ffc107;
+    }
+
+    .notice-section h3 {
+      color: #f57c00;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+
+    .notice-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .notice-section li {
+      padding: 5px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .notice-section li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #f57c00;
+      font-weight: bold;
+    }
+
+    .form-section {
+      padding: 40px 30px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 600;
+      font-size: 0.95em;
+    }
+
+    .required {
+      color: #e74c3c;
+      margin-left: 3px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1em;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      background: #f8f9fa;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .radio-option:hover {
+      background: #e8eaf6;
+      border-color: #667eea;
+    }
+
+    .radio-option input {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .month-section {
+      margin-bottom: 30px;
+    }
+
+    .month-title {
+      font-weight: bold;
+      font-size: 1.3em;
+      margin-bottom: 15px;
+      color: #333;
+      text-align: center;
+    }
+
+    .calendar-header,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .weekday-header {
+      font-weight: 600;
+      font-size: 0.9em;
+      text-align: center;
+      color: #888;
+      padding: 8px 0;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 500;
+      cursor: default;
+      background-color: #f5f5f5;
+      color: #ccc;
+      transition: all 0.3s ease;
+    }
+
+    .calendar-day.available {
+      background-color: #e8eaf6;
+      color: #333;
+      cursor: pointer;
+      border: 2px solid #667eea;
+    }
+
+    .calendar-day.available:hover {
+      background-color: #c5cae9;
+      transform: scale(1.05);
+    }
+
+    .calendar-day.selected {
+      background-color: #667eea;
+      color: white;
+      font-weight: 700;
+      border: 2px solid #667eea;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .calendar-day.sunday {
+      color: #e74c3c;
+    }
+
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .time-slot {
+      padding: 10px;
+      text-align: center;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    .time-slot:hover {
+      background: #e8eaf6;
+      border-color: #667eea;
+    }
+
+    .time-slot.selected {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .submit-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .loading.active {
+      display: block;
+    }
+
+    .message {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+
+    .footer {
+      background: #f8f9fa;
+      padding: 30px;
+      text-align: center;
+      color: #666;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .footer a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 10px; }
+      .header h1 { font-size: 1.5em; }
+      .form-section { padding: 20px 15px; }
+      .calendar-header, .calendar-grid { gap: 4px; }
+      .weekday-header { font-size: 0.8em; }
+      .calendar-day { font-size: 0.9em; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🛏️ 床墊試躺預約</h1>
+      <p>找到最適合您的睡眠體驗</p>
+      
+      <div class="location-box">
+        <h3>📍 試躺地點</h3>
+        <p>台北市大安區臥龍街278號1樓</p>
+        <a href="https://maps.app.goo.gl/VfBiAho8HJeCnHwW7" target="_blank">查看地圖 →</a>
+      </div>
+    </div>
+
+    <div class="notice-section">
+      <h3>⚠️ 預約注意事項</h3>
+      <ul>
+        <li>可預約時段：週一至週五 10:00-12:00、14:00-18:00｜週六 14:00-18:00</li>
+        <li>每組試躺時間為 30 分鐘</li>
+        <li>我們將於 1-2 個工作天內與您聯繫確認</li>
+        <li>如需更改預約，請提前聯繫我們</li>
+      </ul>
+    </div>
+
+    <div class="form-section">
+      <div id="message" class="message"></div>
+      
+      <form id="booking-form">
+        <div class="form-group">
+          <label>姓名 <span class="required">*</span></label>
+          <input type="text" id="name" name="name" required placeholder="請輸入您的姓名">
+        </div>
+
+        <div class="form-group">
+          <label>聯絡電話 <span class="required">*</span></label>
+          <input type="tel" id="phone" name="phone" required placeholder="0912-345-678">
+        </div>
+
+        <div class="form-group">
+          <label>LINE ID <span class="required">*</span></label>
+          <input type="text" id="lineId" name="lineId" required placeholder="您的 LINE ID">
+        </div>
+
+        <div class="form-group">
+          <label>預約人數 <span class="required">*</span></label>
+          <input type="number" id="numberOfPeople" name="numberOfPeople" min="1" max="10" value="1" required>
+        </div>
+
+        <div class="form-group">
+          <label>預約日期 <span class="required">*</span></label>
+          <div id="calendar-container"></div>
+          <input type="hidden" id="selected-date" name="date" required>
+        </div>
+
+        <div class="form-group" id="time-slot-section" style="display: none;">
+          <label>預約時段 <span class="required">*</span></label>
+          <div id="time-slots-container" class="time-slots"></div>
+          <input type="hidden" id="selected-time-slot" name="timeSlot" required>
+        </div>
+
+        <div class="form-group">
+          <label>平常睡姿 <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="sleepingPosition" value="仰睡" required> 仰睡
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="sleepingPosition" value="側睡"> 側睡
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="sleepingPosition" value="翻身頻繁"> 翻身頻繁
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="sleepingPosition" value="不確定"> 不確定
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="sleepingPosition" value="其他" id="sleeping-position-other"> 其他
+              <input type="text" id="sleeping-position-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1;">
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>目前使用床墊類型 <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="currentMattress" value="獨立筒" required> 獨立筒
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="currentMattress" value="全乳膠/全泡棉"> 全乳膠／全泡棉
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="currentMattress" value="不確定"> 不確定
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="currentMattress" value="其他" id="mattress-other"> 其他
+              <input type="text" id="mattress-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1;">
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>主要考量重點 <span class="required">*</span></label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="mainConcern" value="支撐感" required> 支撐感
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="mainConcern" value="柔軟度"> 柔軟度
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="mainConcern" value="溫度調節"> 溫度調節
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="mainConcern" value="防過敏"> 防過敏
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="mainConcern" value="價格"> 價格
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="mainConcern" value="其他" id="concern-other"> 其他
+              <input type="text" id="concern-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1;">
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>是否有腰痠、肩頸緊繃、或其他睡眠困擾</label>
+          <textarea id="sleepIssues" name="sleepIssues" placeholder="請描述您的睡眠困擾（選填）"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>其他特殊需求</label>
+          <textarea id="specialRequests" name="specialRequests" placeholder="如有其他需求請告訴我們（選填）"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">確認預約</button>
+      </form>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; color: #666;">處理中，請稍候...</p>
+      </div>
+
+      <div id="success-message" class="hidden" style="text-align: center; padding: 40px 20px;">
+        <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
+        <h2 style="color: #667eea; margin-bottom: 15px;">預約成功！</h2>
+        <p style="font-size: 1.1em; color: #666; line-height: 1.8;">
+          感謝您的預約！<br>
+          我們將於 <strong>1－2個工作天內</strong> 與您聯繫確認。<br><br>
+          如有任何問題，請與 <a href="https://www.facebook.com/ChrisusSport" target="_blank" style="color: #667eea; font-weight: 600;">Chrisus Sport FB粉絲專頁</a> 聯繫，謝謝！
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2024 Chrisus Sport | 專業床墊試躺服務</p>
+      <p style="margin-top: 10px;">
+        <a href="https://www.facebook.com/ChrisusSport" target="_blank">Facebook 粉絲專頁</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ 重要：請把這個網址改成你的 Google Apps Script 部署網址
+    const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+
+    let selectedDate = null;
+
+    async function renderCalendar() {
+      const container = document.getElementById('calendar-container');
+      container.innerHTML = '<p style="color: #999; text-align: center;">載入中...</p>';
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getDates`);
+        const dates = await res.json();
+
+        if (!dates || dates.length === 0) {
+          container.innerHTML = '<p style="color: #999; text-align: center;">目前無可預約日期</p>';
+          return;
+        }
+
+        container.innerHTML = '';
+
+        const datesByMonth = {};
+        dates.forEach(dateObj => {
+          const date = new Date(dateObj.value);
+          const yearMonth = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+          if (!datesByMonth[yearMonth]) {
+            datesByMonth[yearMonth] = [];
+          }
+          datesByMonth[yearMonth].push(dateObj.value);
+        });
+
+        Object.keys(datesByMonth).sort().forEach(yearMonth => {
+          const [year, month] = yearMonth.split('-');
+          const monthDates = new Set(datesByMonth[yearMonth]);
+          renderMonthCalendar(container, parseInt(year), parseInt(month), monthDates);
+        });
+      } catch (error) {
+        console.error('載入日曆錯誤:', error);
+        container.innerHTML = '<p style="color: #e74c3c; text-align: center;">載入失敗，請重新整理頁面</p>';
+      }
+    }
+
+    function renderMonthCalendar(container, year, month, availableDates) {
+      const monthSection = document.createElement('div');
+      monthSection.className = 'month-section';
+
+      const title = document.createElement('div');
+      title.className = 'month-title';
+      title.textContent = year + '年' + month + '月';
+      monthSection.appendChild(title);
+
+      const header = document.createElement('div');
+      header.className = 'calendar-header';
+      ['日', '一', '二', '三', '四', '五', '六'].forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'weekday-header';
+        dayHeader.textContent = day;
+        header.appendChild(dayHeader);
+      });
+      monthSection.appendChild(header);
+
+      const grid = document.createElement('div');
+      grid.className = 'calendar-grid';
+
+      const firstDay = new Date(year, month - 1, 1);
+      const lastDay = new Date(year, month, 0);
+      const startDay = firstDay.getDay();
+
+      for (let i = 0; i < startDay; i++) {
+        grid.appendChild(document.createElement('div')).className = 'calendar-day';
+      }
+
+      for (let day = 1; day <= lastDay.getDate(); day++) {
+        const dateStr = year + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+        const dayCell = document.createElement('div');
+        dayCell.className = 'calendar-day';
+        dayCell.textContent = day;
+
+        const dayOfWeek = new Date(year, month - 1, day).getDay();
+        if (dayOfWeek === 0) dayCell.classList.add('sunday');
+
+        if (availableDates.has(dateStr)) {
+          dayCell.classList.add('available');
+          dayCell.onclick = function() { selectDate(dateStr, dayCell); };
+        }
+
+        grid.appendChild(dayCell);
+      }
+
+      monthSection.appendChild(grid);
+      container.appendChild(monthSection);
+    }
+
+    function selectDate(dateStr, element) {
+      document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedDate = dateStr;
+      document.getElementById('selected-date').value = dateStr;
+      loadTimeSlots(dateStr);
+    }
+
+    async function loadTimeSlots(dateStr) {
+      const container = document.getElementById('time-slots-container');
+      const section = document.getElementById('time-slot-section');
+      
+      container.innerHTML = '<p style="color: #999; grid-column: 1/-1;">載入時段中...</p>';
+      section.style.display = 'block';
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getSlots&date=${encodeURIComponent(dateStr)}`);
+        const slots = await res.json();
+
+        container.innerHTML = '';
+
+        if (!slots || slots.length === 0) {
+          container.innerHTML = '<p style="color: #999; grid-column: 1/-1;">此日期無可用時段</p>';
+          return;
+        }
+
+        slots.forEach(slot => {
+          const slotDiv = document.createElement('div');
+          slotDiv.className = 'time-slot';
+          slotDiv.textContent = slot.display;
+          slotDiv.onclick = function() {
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            this.classList.add('selected');
+            document.getElementById('selected-time-slot').value = slot.time;
+          };
+          container.appendChild(slotDiv);
+        });
+      } catch (error) {
+        console.error('載入時段錯誤:', error);
+        container.innerHTML = '<p style="color: #e74c3c; grid-column: 1/-1;">載入失敗</p>';
+      }
+    }
+
+    function setupOtherOption(radioId, textId) {
+      document.getElementById(radioId).addEventListener('change', function() {
+        if (this.checked) document.getElementById(textId).focus();
+      });
+      document.getElementById(textId).addEventListener('focus', function() {
+        document.getElementById(radioId).checked = true;
+      });
+    }
+
+    setupOtherOption('sleeping-position-other', 'sleeping-position-other-text');
+    setupOtherOption('mattress-other', 'mattress-other-text');
+    setupOtherOption('concern-other', 'concern-other-text');
+
+    document.getElementById('booking-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const bookingData = {};
+      
+      for (let pair of formData.entries()) {
+        bookingData[pair[0]] = pair[1];
+      }
+
+      if (bookingData.sleepingPosition === '其他') {
+        bookingData.sleepingPosition = '其他：' + document.getElementById('sleeping-position-other-text').value;
+      }
+      if (bookingData.currentMattress === '其他') {
+        bookingData.currentMattress = '其他：' + document.getElementById('mattress-other-text').value;
+      }
+      if (bookingData.mainConcern === '其他') {
+        bookingData.mainConcern = '其他：' + document.getElementById('concern-other-text').value;
+      }
+
+      if (!bookingData.date || !bookingData.timeSlot) {
+        showMessage('請選擇預約日期和時段', 'error');
+        return;
+      }
+
+      document.getElementById('booking-form').style.display = 'none';
+      document.getElementById('loading').classList.add('active');
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=submit`, {
+          method: 'POST',
+          body: JSON.stringify(bookingData)
+        });
+
+        const result = await res.json();
+        
+        document.getElementById('loading').classList.remove('active');
+        
+        if (result.success) {
+          document.getElementById('success-message').classList.remove('hidden');
+        } else {
+          document.getElementById('booking-form').style.display = 'block';
+          showMessage(result.message, 'error');
+        }
+      } catch (error) {
+        document.getElementById('loading').classList.remove('active');
+        document.getElementById('booking-form').style.display = 'block';
+        showMessage('系統發生錯誤，請稍後再試', 'error');
+      }
+    });
+
+    function showMessage(text, type) {
+      const msgDiv = document.getElementById('message');
+      msgDiv.textContent = text;
+      msgDiv.className = 'message ' + type;
+      setTimeout(() => msgDiv.className = 'message', 5000);
+      msgDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    renderCalendar();
+  </script>
+</body>
+</html>
