@@ -13,7 +13,7 @@
 
     body {
       font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
       min-height: 100vh;
       padding: 20px;
       line-height: 1.6;
@@ -22,17 +22,18 @@
     .container {
       max-width: 800px;
       margin: 0 auto;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      background: #fefdfb;
+      border-radius: 30px;
+      box-shadow: 0 10px 40px rgba(139, 115, 85, 0.15);
       overflow: hidden;
     }
 
     .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background: linear-gradient(135deg, #d4a574 0%, #c9956e 100%);
+      color: #fff;
       padding: 40px 30px;
       text-align: center;
+      border-radius: 30px 30px 0 0;
     }
 
     .header h1 {
@@ -47,9 +48,9 @@
     }
 
     .location-box {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.2);
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 20px;
       margin-top: 20px;
       backdrop-filter: blur(10px);
     }
@@ -74,14 +75,16 @@
     }
 
     .notice-section {
-      background: #fff8e1;
-      padding: 20px 30px;
-      border-left: 4px solid #ffc107;
+      background: #fef8f0;
+      padding: 25px 30px;
+      border-left: 4px solid #d4a574;
+      border-radius: 0 20px 20px 0;
+      margin: 20px 20px 0 20px;
     }
 
     .notice-section h3 {
-      color: #f57c00;
-      margin-bottom: 10px;
+      color: #a67c52;
+      margin-bottom: 15px;
       font-size: 1.1em;
     }
 
@@ -91,16 +94,17 @@
     }
 
     .notice-section li {
-      padding: 5px 0;
-      padding-left: 20px;
+      padding: 8px 0;
+      padding-left: 25px;
       position: relative;
+      color: #6b5d52;
     }
 
     .notice-section li:before {
       content: "✓";
       position: absolute;
       left: 0;
-      color: #f57c00;
+      color: #d4a574;
       font-weight: bold;
     }
 
@@ -115,13 +119,13 @@
     label {
       display: block;
       margin-bottom: 8px;
-      color: #333;
+      color: #6b5d52;
       font-weight: 600;
       font-size: 0.95em;
     }
 
     .required {
-      color: #e74c3c;
+      color: #c9705f;
       margin-left: 3px;
     }
 
@@ -130,21 +134,22 @@
     input[type="number"],
     textarea {
       width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
+      padding: 14px 18px;
+      border: 2px solid #e8d5c4;
+      border-radius: 15px;
       font-size: 1em;
       font-family: inherit;
       transition: all 0.3s ease;
-      background: #f8f9fa;
+      background: #fefdfb;
+      color: #4a3f35;
     }
 
     input:focus,
     textarea:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: #d4a574;
       background: white;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.1);
     }
 
     textarea {
@@ -155,28 +160,30 @@
     .radio-group {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .radio-option {
       display: flex;
       align-items: center;
-      padding: 12px 15px;
-      background: #f8f9fa;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
+      padding: 14px 18px;
+      background: #fef8f0;
+      border: 2px solid #e8d5c4;
+      border-radius: 15px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
     .radio-option:hover {
-      background: #e8eaf6;
-      border-color: #667eea;
+      background: #f5ebe0;
+      border-color: #d4a574;
+      transform: translateX(5px);
     }
 
     .radio-option input {
-      margin-right: 10px;
+      margin-right: 12px;
       cursor: pointer;
+      accent-color: #d4a574;
     }
 
     .month-section {
@@ -187,7 +194,7 @@
       font-weight: bold;
       font-size: 1.3em;
       margin-bottom: 15px;
-      color: #333;
+      color: #6b5d52;
       text-align: center;
     }
 
@@ -195,15 +202,15 @@
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
+      gap: 10px;
     }
 
     .weekday-header {
       font-weight: 600;
       font-size: 0.9em;
       text-align: center;
-      color: #888;
-      padding: 8px 0;
+      color: #a67c52;
+      padding: 10px 0;
     }
 
     .calendar-day {
@@ -211,90 +218,102 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
+      border-radius: 15px;
       font-size: 1em;
       font-weight: 500;
       cursor: default;
-      background-color: #f5f5f5;
-      color: #ccc;
+      background-color: #f5ebe0;
+      color: #c9b5a0;
       transition: all 0.3s ease;
     }
 
     .calendar-day.available {
-      background-color: #e8eaf6;
-      color: #333;
+      background-color: #fef8f0;
+      color: #6b5d52;
       cursor: pointer;
-      border: 2px solid #667eea;
+      border: 2px solid #d4a574;
     }
 
     .calendar-day.available:hover {
-      background-color: #c5cae9;
-      transform: scale(1.05);
+      background-color: #f5ebe0;
+      transform: scale(1.08);
+      box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2);
     }
 
     .calendar-day.selected {
-      background-color: #667eea;
+      background-color: #d4a574;
       color: white;
       font-weight: 700;
-      border: 2px solid #667eea;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      border: 2px solid #d4a574;
+      box-shadow: 0 6px 16px rgba(212, 165, 116, 0.4);
     }
 
     .calendar-day.sunday {
-      color: #e74c3c;
+      color: #c9705f;
     }
 
     .time-slots {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 10px;
-      margin-top: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
     }
 
     .time-slot {
-      padding: 10px;
+      padding: 12px;
       text-align: center;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
+      border: 2px solid #e8d5c4;
+      border-radius: 15px;
       cursor: pointer;
       transition: all 0.3s ease;
-      background: #f8f9fa;
+      background: #fef8f0;
+      color: #6b5d52;
+      font-weight: 500;
     }
 
     .time-slot:hover {
-      background: #e8eaf6;
-      border-color: #667eea;
+      background: #f5ebe0;
+      border-color: #d4a574;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2);
     }
 
     .time-slot.selected {
-      background: #667eea;
+      background: #d4a574;
       color: white;
-      border-color: #667eea;
+      border-color: #d4a574;
+      box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3);
     }
 
     .submit-btn {
       width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 16px;
+      background: linear-gradient(135deg, #d4a574 0%, #c9956e 100%);
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 20px;
       font-size: 1.1em;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
     }
 
     .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
     }
 
     .submit-btn:disabled {
-      background: #ccc;
+      background: #c9b5a0;
       cursor: not-allowed;
       transform: none;
+      box-shadow: none;
     }
 
     .loading {
@@ -308,31 +327,37 @@
     }
 
     .message {
-      padding: 15px;
-      border-radius: 10px;
+      padding: 16px 20px;
+      border-radius: 15px;
       margin-bottom: 20px;
       display: none;
+      font-weight: 500;
     }
 
     .message.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
+      background: #fce8e6;
+      color: #c9705f;
+      border: 2px solid #f5c6cb;
       display: block;
     }
 
     .footer {
-      background: #f8f9fa;
+      background: #fef8f0;
       padding: 30px;
       text-align: center;
-      color: #666;
-      border-top: 1px solid #e0e0e0;
+      color: #8b7355;
+      border-top: 1px solid #e8d5c4;
+      border-radius: 0 0 30px 30px;
     }
 
     .footer a {
-      color: #667eea;
+      color: #d4a574;
       text-decoration: none;
       font-weight: 600;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
     }
 
     .hidden {
@@ -340,8 +365,8 @@
     }
 
     .spinner {
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #667eea;
+      border: 3px solid #f5ebe0;
+      border-top: 3px solid #d4a574;
       border-radius: 50%;
       width: 40px;
       height: 40px;
@@ -357,10 +382,13 @@
     @media (max-width: 600px) {
       body { padding: 10px; }
       .header h1 { font-size: 1.5em; }
-      .form-section { padding: 20px 15px; }
-      .calendar-header, .calendar-grid { gap: 4px; }
-      .weekday-header { font-size: 0.8em; }
-      .calendar-day { font-size: 0.9em; }
+      .form-section { padding: 25px 20px; }
+      .calendar-header, .calendar-grid { gap: 6px; }
+      .weekday-header { font-size: 0.8em; padding: 6px 0; }
+      .calendar-day { font-size: 0.9em; border-radius: 12px; }
+      .time-slots { gap: 8px; }
+      .time-slot { padding: 10px; border-radius: 12px; }
+      .submit-btn { border-radius: 15px; }
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -441,7 +469,7 @@
             </label>
             <label class="radio-option">
               <input type="radio" name="sleepingPosition" value="其他" id="sleeping-position-other"> 其他
-              <input type="text" id="sleeping-position-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1;">
+              <input type="text" id="sleeping-position-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; border-radius: 10px;">
             </label>
           </div>
         </div>
@@ -460,7 +488,7 @@
             </label>
             <label class="radio-option">
               <input type="radio" name="currentMattress" value="其他" id="mattress-other"> 其他
-              <input type="text" id="mattress-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1;">
+              <input type="text" id="mattress-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; border-radius: 10px;">
             </label>
           </div>
         </div>
@@ -485,7 +513,7 @@
             </label>
             <label class="radio-option">
               <input type="radio" name="mainConcern" value="其他" id="concern-other"> 其他
-              <input type="text" id="concern-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1;">
+              <input type="text" id="concern-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; border-radius: 10px;">
             </label>
           </div>
         </div>
@@ -505,16 +533,16 @@
 
       <div class="loading" id="loading">
         <div class="spinner"></div>
-        <p style="margin-top: 15px; color: #666;">處理中，請稍候...</p>
+        <p style="margin-top: 15px; color: #8b7355;">處理中，請稍候...</p>
       </div>
 
       <div id="success-message" class="hidden" style="text-align: center; padding: 40px 20px;">
         <div style="font-size: 4em; margin-bottom: 20px;">✅</div>
-        <h2 style="color: #667eea; margin-bottom: 15px;">預約成功！</h2>
-        <p style="font-size: 1.1em; color: #666; line-height: 1.8;">
+        <h2 style="color: #d4a574; margin-bottom: 15px;">預約成功！</h2>
+        <p style="font-size: 1.1em; color: #6b5d52; line-height: 1.8;">
           感謝您的預約！<br>
           我們將於 <strong>1－2個工作天內</strong> 與您聯繫確認。<br><br>
-          如有任何問題，請與 <a href="https://www.facebook.com/ChrisusSport" target="_blank" style="color: #667eea; font-weight: 600;">Chrisus Sport FB粉絲專頁</a> 聯繫，謝謝！
+          如有任何問題，請與 <a href="https://www.facebook.com/ChrisusSport" target="_blank" style="color: #d4a574; font-weight: 600;">Chrisus Sport FB粉絲專頁</a> 聯繫，謝謝！
         </p>
       </div>
     </div>
@@ -529,20 +557,20 @@
 
   <script>
     // ⚠️ 重要：請把這個網址改成你的 Google Apps Script 部署網址
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpA-p88R_bnjt9ZbkUjg3AafVKjlXWPriDTd71jhTeV6qKcjV4et_honBp1VLx3PN6/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
 
     let selectedDate = null;
 
     async function renderCalendar() {
       const container = document.getElementById('calendar-container');
-      container.innerHTML = '<p style="color: #999; text-align: center;">載入中...</p>';
+      container.innerHTML = '<p style="color: #a67c52; text-align: center;">載入中...</p>';
 
       try {
         const res = await fetch(`${SCRIPT_URL}?action=getDates`);
         const dates = await res.json();
 
         if (!dates || dates.length === 0) {
-          container.innerHTML = '<p style="color: #999; text-align: center;">目前無可預約日期</p>';
+          container.innerHTML = '<p style="color: #a67c52; text-align: center;">目前無可預約日期</p>';
           return;
         }
 
@@ -565,7 +593,7 @@
         });
       } catch (error) {
         console.error('載入日曆錯誤:', error);
-        container.innerHTML = '<p style="color: #e74c3c; text-align: center;">載入失敗，請重新整理頁面</p>';
+        container.innerHTML = '<p style="color: #c9705f; text-align: center;">載入失敗，請重新整理頁面</p>';
       }
     }
 
@@ -632,7 +660,7 @@
       const container = document.getElementById('time-slots-container');
       const section = document.getElementById('time-slot-section');
       
-      container.innerHTML = '<p style="color: #999; grid-column: 1/-1;">載入時段中...</p>';
+      container.innerHTML = '<p style="color: #a67c52; grid-column: 1/-1;">載入時段中...</p>';
       section.style.display = 'block';
 
       try {
@@ -642,7 +670,7 @@
         container.innerHTML = '';
 
         if (!slots || slots.length === 0) {
-          container.innerHTML = '<p style="color: #999; grid-column: 1/-1;">此日期無可用時段</p>';
+          container.innerHTML = '<p style="color: #a67c52; grid-column: 1/-1;">此日期無可用時段</p>';
           return;
         }
 
@@ -659,7 +687,7 @@
         });
       } catch (error) {
         console.error('載入時段錯誤:', error);
-        container.innerHTML = '<p style="color: #e74c3c; grid-column: 1/-1;">載入失敗</p>';
+        container.innerHTML = '<p style="color: #c9705f; grid-column: 1/-1;">載入失敗</p>';
       }
     }
 
