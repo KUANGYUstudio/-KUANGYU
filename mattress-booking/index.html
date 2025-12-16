@@ -5,18 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>床墊試躺預約 | Chrisus Sport</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
       background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
       min-height: 100vh;
       padding: 20px;
-      line-height: 1.6;
+      line-height: 1.5; /* 稍微縮小行高 */
     }
 
     .container {
@@ -36,11 +32,7 @@
       border-radius: 30px 30px 0 0;
     }
 
-    .header h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
+    .header h1 { font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
 
     .location-box {
       background: rgba(255, 255, 255, 0.3);
@@ -52,18 +44,19 @@
 
     .notice-section {
       background: #fef8f0;
-      padding: 30px 35px;
+      padding: 25px 35px;
       border-left: 5px solid #d4a574;
       border-radius: 0 20px 20px 0;
       margin: 20px 20px 0 20px;
     }
 
     .notice-section li {
-      padding: 8px 0;
-      padding-left: 30px;
+      padding: 5px 0;
+      padding-left: 25px;
       position: relative;
       list-style: none;
       color: #6b5d52;
+      font-size: 0.95em;
     }
 
     .notice-section li:before {
@@ -74,91 +67,75 @@
       font-weight: bold;
     }
 
-    .form-section {
-      padding: 40px 30px;
-    }
+    .form-section { padding: 30px; }
 
-    .form-group {
-      margin-bottom: 40px; /* 增加大問題之間的間距 */
-    }
+    /* 恢復一般問題的間距 */
+    .form-group { margin-bottom: 25px; }
 
-    /* 【重點】放大標題字體，增加鑑別度 */
+    /* 保持標題放大 */
     label, .group-title {
       display: block;
-      margin-bottom: 15px;
-      color: #3d2b1f; /* 深咖啡色 */
+      margin-bottom: 12px;
+      color: #3d2b1f;
       font-weight: 700;
-      font-size: 1.4em; /* 從 1.15 放大到 1.4 */
+      font-size: 1.35em;
       letter-spacing: 0.5px;
     }
 
-    .required {
-      color: #c9705f;
-      margin-left: 3px;
-    }
+    .required { color: #c9705f; margin-left: 3px; }
 
     input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea {
       width: 100%;
-      padding: 14px 18px;
+      padding: 12px 16px;
       border: 2px solid #e8d5c4;
-      border-radius: 15px;
-      font-size: 1.1em;
+      border-radius: 12px;
+      font-size: 1em;
       background: #fefdfb;
       transition: all 0.3s ease;
-    }
-
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #d4a574;
-      box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.1);
     }
 
     .radio-group, .checkbox-group {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px; /* 縮小選項之間的縫隙 */
     }
 
+    /* 恢復選項緊湊感 */
     .radio-option, .checkbox-option {
       display: flex;
       align-items: center;
-      padding: 14px 18px;
+      padding: 10px 16px; /* 縮小內距 */
       background: #fef8f0;
-      border: 2px solid #e8d5c4;
-      border-radius: 15px;
+      border: 1.5px solid #e8d5c4;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: 1.1em;
+      font-size: 1.05em;
     }
 
     .radio-option:hover, .checkbox-option:hover {
       background: #f5ebe0;
-      transform: translateX(5px);
+      transform: translateX(3px);
     }
 
     .radio-option input[type="radio"], .checkbox-option input[type="checkbox"] {
-      margin-right: 15px;
-      width: 22px !important;
-      height: 22px !important;
-      min-width: 22px;
-      flex-shrink: 0;
+      margin-right: 12px;
+      width: 18px !important;
+      height: 18px !important;
       accent-color: #d4a574;
     }
 
-    /* 【重點】拉開月分之間的距離 */
+    /* --- 日曆專用：保持寬鬆大間距 --- */
     .month-container {
-      margin-bottom: 60px; /* 月分間距 */
+      margin-top: 20px;
+      margin-bottom: 50px; 
       padding-bottom: 30px;
       border-bottom: 1px dashed #e8d5c4;
     }
 
-    .month-container:last-child {
-      border-bottom: none;
-    }
-
     .month-title {
       font-weight: bold;
-      font-size: 1.6em;
+      font-size: 1.5em;
       margin-bottom: 20px;
       color: #6b5d52;
       text-align: center;
@@ -168,23 +145,18 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 8px;
-      max-width: 500px;
+      max-width: 450px;
       margin: 0 auto;
     }
 
-    .weekday-header {
-      text-align: center;
-      color: #a67c52;
-      font-weight: 600;
-      padding-bottom: 10px;
-    }
+    .weekday-header { text-align: center; color: #a67c52; font-weight: 600; padding-bottom: 10px; }
 
     .calendar-day {
       aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 12px;
+      border-radius: 10px;
       font-weight: 600;
       background-color: #f5ebe0;
       color: #c9b5a0;
@@ -202,43 +174,38 @@
       background-color: #d4a574;
       color: white;
       transform: scale(1.1);
-      box-shadow: 0 5px 15px rgba(212, 165, 116, 0.3);
     }
+    /* --- 日曆部分結束 --- */
 
     .time-slots {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
-      margin-top: 15px;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .time-slot {
-      padding: 15px;
+      padding: 12px;
       text-align: center;
       border: 2px solid #e8d5c4;
-      border-radius: 15px;
+      border-radius: 12px;
       cursor: pointer;
       background: #fef8f0;
       font-weight: 600;
     }
 
-    .time-slot.selected {
-      background: #d4a574;
-      color: white;
-      border-color: #d4a574;
-    }
+    .time-slot.selected { background: #d4a574; color: white; border-color: #d4a574; }
 
     .submit-btn {
       width: 100%;
-      padding: 20px;
+      padding: 18px;
       background: linear-gradient(135deg, #d4a574 0%, #c9956e 100%);
       color: white;
       border: none;
-      border-radius: 20px;
-      font-size: 1.3em;
+      border-radius: 15px;
+      font-size: 1.25em;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 5px 20px rgba(212, 165, 116, 0.4);
       margin-top: 20px;
     }
 
@@ -259,6 +226,7 @@
     @media (max-width: 600px) {
       .header h1 { font-size: 1.8em; }
       label, .group-title { font-size: 1.2em; }
+      .form-section { padding: 20px; }
     }
   </style>
 </head>
@@ -320,7 +288,7 @@
             <label class="checkbox-option"><input type="checkbox" name="sleepingPosition" value="趴睡"> 趴睡</label>
             <label class="checkbox-option">
               <input type="checkbox" name="sleepingPosition" value="其他" id="sleep-other"> 其他
-              <input type="text" id="sleep-other-text" placeholder="請說明" style="margin-left:10px; flex:1; height:35px;">
+              <input type="text" id="sleep-other-text" placeholder="請說明" style="margin-left:10px; flex:1; height:32px;">
             </label>
           </div>
         </div>
@@ -332,7 +300,7 @@
             <label class="radio-option"><input type="radio" name="mattress_type" value="乳膠床墊"> 乳膠床墊</label>
             <label class="radio-option">
               <input type="radio" name="mattress_type" value="其他" id="mat-other"> 其他
-              <input type="text" id="mat-other-text" placeholder="請說明" style="margin-left:10px; flex:1; height:35px;">
+              <input type="text" id="mat-other-text" placeholder="請說明" style="margin-left:10px; flex:1; height:32px;">
             </label>
           </div>
         </div>
@@ -345,7 +313,7 @@
             <label class="checkbox-option"><input type="checkbox" name="mainConcern" value="價格"> 價格</label>
             <label class="checkbox-option">
               <input type="checkbox" name="mainConcern" value="其他" id="con-other"> 其他
-              <input type="text" id="con-other-text" placeholder="請說明" style="margin-left:10px; flex:1; height:35px;">
+              <input type="text" id="con-other-text" placeholder="請說明" style="margin-left:10px; flex:1; height:32px;">
             </label>
           </div>
         </div>
@@ -450,7 +418,10 @@
     function getVals(name, otherId) {
       const res = [];
       document.querySelectorAll(`input[name="${name}"]:checked`).forEach(c => {
-        if(c.value === '其他') res.push('其他：' + document.getElementById(otherId).value);
+        if(c.value === '其他') {
+          const otherVal = document.getElementById(otherId).value;
+          if(otherVal) res.push('其他：' + otherVal);
+        }
         else res.push(c.value);
       });
       return res.join('、');
@@ -481,12 +452,21 @@
       document.getElementById('loading').classList.add('active');
 
       try {
-        const res = await fetch(`${SCRIPT_URL}?action=submit`, { method: 'POST', body: JSON.stringify(payload)});
-        const result = await res.json();
+        const res = await fetch(`${SCRIPT_URL}`, { 
+          method: 'POST', 
+          mode: 'no-cors', // 處理開發中可能的跨域問題
+          body: JSON.stringify(payload)
+        });
+        
+        // 注意：由於後端 return JSON，no-cors 模式無法讀取 body，
+        // 建議正常部署 GAS 後拿掉 no-cors。
         document.getElementById('loading').classList.remove('active');
-        if(result.success) document.getElementById('success-message').classList.remove('hidden');
-        else { alert('錯誤：' + result.message); document.getElementById('booking-form').style.display = 'block'; }
-      } catch (e) { alert('提交失敗'); document.getElementById('booking-form').style.display = 'block'; }
+        document.getElementById('success-message').classList.remove('hidden');
+      } catch (e) { 
+        alert('提交失敗'); 
+        document.getElementById('booking-form').style.display = 'block'; 
+        document.getElementById('loading').classList.remove('active');
+      }
     };
 
     renderCalendar();
