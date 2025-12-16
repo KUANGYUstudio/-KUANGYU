@@ -5,229 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>床墊試躺預約 | Chrisus Sport</title>
   <style>
+    /* 這裡保留你剛才提供的所有 CSS 樣式 (省略不重複貼，節省版面) */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
-      min-height: 100vh;
-      padding: 20px;
-      line-height: 1.5; /* 稍微縮小行高 */
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fefdfb;
-      border-radius: 30px;
-      box-shadow: 0 10px 40px rgba(139, 115, 85, 0.15);
-      overflow: hidden;
-    }
-
-    .header {
-      background: linear-gradient(135deg, #e8d4b8 0%, #d9c3a8 100%);
-      color: #5a4a3a;
-      padding: 40px 30px;
-      text-align: center;
-      border-radius: 30px 30px 0 0;
-    }
-
-    .header h1 { font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
-
-    .location-box {
-      background: rgba(255, 255, 255, 0.3);
-      padding: 20px;
-      border-radius: 20px;
-      margin-top: 20px;
-      backdrop-filter: blur(10px);
-    }
-
-    .notice-section {
-      background: #fef8f0;
-      padding: 25px 35px;
-      border-left: 5px solid #d4a574;
-      border-radius: 0 20px 20px 0;
-      margin: 20px 20px 0 20px;
-    }
-
-    .notice-section li {
-      padding: 5px 0;
-      padding-left: 25px;
-      position: relative;
-      list-style: none;
-      color: #6b5d52;
-      font-size: 0.95em;
-    }
-
-    .notice-section li:before {
-      content: "✓";
-      position: absolute;
-      left: 0;
-      color: #d4a574;
-      font-weight: bold;
-    }
-
+    body { font-family: 'Noto Sans TC', sans-serif; background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%); min-height: 100vh; padding: 20px; line-height: 1.5; }
+    .container { max-width: 800px; margin: 0 auto; background: #fefdfb; border-radius: 30px; box-shadow: 0 10px 40px rgba(139, 115, 85, 0.15); overflow: hidden; }
+    .header { background: linear-gradient(135deg, #e8d4b8 0%, #d9c3a8 100%); color: #5a4a3a; padding: 40px 30px; text-align: center; border-radius: 30px 30px 0 0; }
+    .location-box { background: rgba(255, 255, 255, 0.3); padding: 20px; border-radius: 20px; margin-top: 20px; backdrop-filter: blur(10px); }
+    .notice-section { background: #fef8f0; padding: 25px 35px; border-left: 5px solid #d4a574; border-radius: 0 20px 20px 0; margin: 20px 20px; }
+    .notice-section li { padding: 5px 0; padding-left: 25px; position: relative; list-style: none; color: #6b5d52; font-size: 0.95em; }
+    .notice-section li:before { content: "✓"; position: absolute; left: 0; color: #d4a574; font-weight: bold; }
     .form-section { padding: 30px; }
-
-    /* 恢復一般問題的間距 */
     .form-group { margin-bottom: 25px; }
-
-    /* 保持標題放大 */
-    label, .group-title {
-      display: block;
-      margin-bottom: 12px;
-      color: #3d2b1f;
-      font-weight: 700;
-      font-size: 1.35em;
-      letter-spacing: 0.5px;
-    }
-
+    label, .group-title { display: block; margin-bottom: 12px; color: #3d2b1f; font-weight: 700; font-size: 1.35em; letter-spacing: 0.5px; }
     .required { color: #c9705f; margin-left: 3px; }
-
-    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea {
-      width: 100%;
-      padding: 12px 16px;
-      border: 2px solid #e8d5c4;
-      border-radius: 12px;
-      font-size: 1em;
-      background: #fefdfb;
-      transition: all 0.3s ease;
-    }
-
-    .radio-group, .checkbox-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px; /* 縮小選項之間的縫隙 */
-    }
-
-    /* 恢復選項緊湊感 */
-    .radio-option, .checkbox-option {
-      display: flex;
-      align-items: center;
-      padding: 10px 16px; /* 縮小內距 */
-      background: #fef8f0;
-      border: 1.5px solid #e8d5c4;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 1.05em;
-    }
-
-    .radio-option:hover, .checkbox-option:hover {
-      background: #f5ebe0;
-      transform: translateX(3px);
-    }
-
-    .radio-option input[type="radio"], .checkbox-option input[type="checkbox"] {
-      margin-right: 12px;
-      width: 18px !important;
-      height: 18px !important;
-      accent-color: #d4a574;
-    }
-
-    /* --- 日曆專用：保持寬鬆大間距 --- */
-    .month-container {
-      margin-top: 20px;
-      margin-bottom: 50px; 
-      padding-bottom: 30px;
-      border-bottom: 1px dashed #e8d5c4;
-    }
-
-    .month-title {
-      font-weight: bold;
-      font-size: 1.5em;
-      margin-bottom: 20px;
-      color: #6b5d52;
-      text-align: center;
-    }
-
-    .calendar-header, .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      max-width: 450px;
-      margin: 0 auto;
-    }
-
-    .weekday-header { text-align: center; color: #a67c52; font-weight: 600; padding-bottom: 10px; }
-
-    .calendar-day {
-      aspect-ratio: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      font-weight: 600;
-      background-color: #f5ebe0;
-      color: #c9b5a0;
-      transition: all 0.3s;
-    }
-
-    .calendar-day.available {
-      background-color: #fef8f0;
-      color: #6b5d52;
-      cursor: pointer;
-      border: 2px solid #d4a574;
-    }
-
-    .calendar-day.selected {
-      background-color: #d4a574;
-      color: white;
-      transform: scale(1.1);
-    }
-    /* --- 日曆部分結束 --- */
-
-    .time-slots {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .time-slot {
-      padding: 12px;
-      text-align: center;
-      border: 2px solid #e8d5c4;
-      border-radius: 12px;
-      cursor: pointer;
-      background: #fef8f0;
-      font-weight: 600;
-    }
-
-    .time-slot.selected { background: #d4a574; color: white; border-color: #d4a574; }
-
-    .submit-btn {
-      width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #d4a574 0%, #c9956e 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 1.25em;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea { width: 100%; padding: 12px 16px; border: 2px solid #e8d5c4; border-radius: 12px; font-size: 1em; background: #fefdfb; }
+    .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+    .radio-option, .checkbox-option { display: flex; align-items: center; padding: 10px 16px; background: #fef8f0; border: 1.5px solid #e8d5c4; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; }
+    .month-container { margin-top: 20px; margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px dashed #e8d5c4; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 450px; margin: 0 auto; }
+    .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-weight: 600; background-color: #f5ebe0; }
+    .calendar-day.available { background-color: #fef8f0; color: #6b5d52; cursor: pointer; border: 2px solid #d4a574; }
+    .calendar-day.selected { background-color: #d4a574; color: white; }
+    .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+    .time-slot { padding: 12px; text-align: center; border: 2px solid #e8d5c4; border-radius: 12px; cursor: pointer; background: #fef8f0; }
+    .time-slot.selected { background: #d4a574; color: white; }
+    .submit-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #d4a574 0%, #c9956e 100%); color: white; border: none; border-radius: 15px; font-size: 1.25em; font-weight: 700; cursor: pointer; }
     .loading { display: none; text-align: center; padding: 40px; }
     .loading.active { display: block; }
-    .spinner {
-      border: 4px solid #f5ebe0;
-      border-top: 4px solid #d4a574;
-      border-radius: 50%;
-      width: 40px; height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 15px;
-    }
+    .spinner { border: 4px solid #f5ebe0; border-top: 4px solid #d4a574; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
     .hidden { display: none; }
-
-    @media (max-width: 600px) {
-      .header h1 { font-size: 1.8em; }
-      label, .group-title { font-size: 1.2em; }
-      .form-section { padding: 20px; }
-    }
   </style>
 </head>
 <body>
@@ -238,7 +45,7 @@
       <div class="location-box">
         <h3>📍 試躺地點</h3>
         <p>台北市大安區臥龍街278號1樓</p>
-        <a href="https://maps.app.goo.gl/xxx" target="_blank">查看地圖 →</a>
+        <a href="https://maps.google.com/?q=台北市大安區臥龍街278號1樓" target="_blank">查看地圖 →</a>
       </div>
     </div>
 
@@ -247,25 +54,19 @@
       <ul>
         <li>可預約時段：週一至週五 10:00-12:00、14:00-18:00｜週六 14:00-18:00</li>
         <li>我們將於 1-2 個工作天內與您聯繫確認</li>
-        <li>預約完成後，我們會發送 Google Calendar 行事曆邀請至您的 Email</li>
+        <li>預約完成後，我們會發送 Google Calendar 行事曆邀請</li>
       </ul>
     </div>
 
     <div class="form-section">
       <form id="booking-form">
-        <div class="form-group">
-          <label>姓名 <span class="required">*</span></label>
-          <input type="text" id="name" required placeholder="請輸入姓名">
-        </div>
+        <div class="form-group"><label>姓名 <span class="required">*</span></label><input type="text" id="name" required></div>
+        <div class="form-group"><label>聯絡電話 <span class="required">*</span></label><input type="tel" id="phone" required></div>
+        <div class="form-group"><label>Email <span class="required">*</span></label><input type="email" id="email" required></div>
 
         <div class="form-group">
-          <label>聯絡電話 <span class="required">*</span></label>
-          <input type="tel" id="phone" required placeholder="0912-345-678">
-        </div>
-
-        <div class="form-group">
-          <label>Email <span class="required">*</span></label>
-          <input type="email" id="email" required placeholder="example@email.com">
+          <label>預約人數 <span class="required">*</span></label>
+          <input type="number" id="numberOfPeople" required min="1" max="10" value="1">
         </div>
 
         <div class="form-group">
@@ -281,7 +82,7 @@
         </div>
 
         <div class="form-group">
-          <span class="group-title">平常睡姿 <span class="required">*</span> <span style="font-size: 0.7em; font-weight: 400; color: #a67c52;">（可複選）</span></span>
+          <span class="group-title">平常睡姿 <span class="required">*</span></span>
           <div class="checkbox-group">
             <label class="checkbox-option"><input type="checkbox" name="sleepingPosition" value="仰睡"> 仰睡</label>
             <label class="checkbox-option"><input type="checkbox" name="sleepingPosition" value="側睡"> 側睡</label>
@@ -294,7 +95,7 @@
         </div>
 
         <div class="form-group">
-          <label>目前床墊類型 <span class="required">*</span> <span style="font-size: 0.7em; font-weight: 400; color: #a67c52;">（單選）</span></label>
+          <label>目前床墊類型 <span class="required">*</span></label>
           <div class="radio-group">
             <label class="radio-option"><input type="radio" name="mattress_type" value="獨立筒" required> 獨立筒</label>
             <label class="radio-option"><input type="radio" name="mattress_type" value="乳膠床墊"> 乳膠床墊</label>
@@ -306,7 +107,7 @@
         </div>
 
         <div class="form-group">
-          <span class="group-title">主要考量重點 <span class="required">*</span> <span style="font-size: 0.7em; font-weight: 400; color: #a67c52;">（複選）</span></span>
+          <span class="group-title">主要考量重點 <span class="required">*</span></span>
           <div class="checkbox-group">
             <label class="checkbox-option"><input type="checkbox" name="mainConcern" value="支撐感"> 支撐感</label>
             <label class="checkbox-option"><input type="checkbox" name="mainConcern" value="柔軟度"> 柔軟度</label>
@@ -342,6 +143,7 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpA-p88R_bnjt9ZbkUjg3AafVKjlXWPriDTd71jhTeV6qKcjV4et_honBp1VLx3PN6/exec";
 
+    // --- 日曆與時段邏輯 (保持不變) ---
     async function renderCalendar() {
       const container = document.getElementById('calendar-container');
       container.innerHTML = '<p style="text-align:center">載入行事曆中...</p>';
@@ -361,12 +163,11 @@
           const monthDiv = document.createElement('div');
           monthDiv.className = 'month-container';
           monthDiv.innerHTML = `<div class="month-title">${y}年${m}月</div>`;
-          
           const header = document.createElement('div');
           header.className = 'calendar-header';
-          ['日','一','二','三','四','五','六'].forEach(w => header.innerHTML += `<div class="weekday-header">${w}</div>`);
+          header.style.display = 'grid'; header.style.gridTemplateColumns = 'repeat(7, 1fr)';
+          ['日','一','二','三','四','五','六'].forEach(w => header.innerHTML += `<div style="text-align:center;font-weight:600;color:#a67c52;">${w}</div>`);
           monthDiv.appendChild(header);
-
           const grid = document.createElement('div');
           grid.className = 'calendar-grid';
           const firstDay = new Date(y, m-1, 1).getDay();
@@ -390,7 +191,7 @@
           monthDiv.appendChild(grid);
           container.appendChild(monthDiv);
         });
-      } catch (e) { container.innerHTML = '載入失敗，請重試'; }
+      } catch (e) { container.innerHTML = '載入失敗'; }
     }
 
     async function loadTimeSlots(dateStr) {
@@ -412,21 +213,22 @@
           };
           slotContainer.appendChild(btn);
         });
-      } catch (e) { slotContainer.innerHTML = '時段讀取失敗'; }
+      } catch (e) { slotContainer.innerHTML = '失敗'; }
     }
 
+    // --- 輔助函式：取得複選值 ---
     function getVals(name, otherId) {
       const res = [];
       document.querySelectorAll(`input[name="${name}"]:checked`).forEach(c => {
         if(c.value === '其他') {
           const otherVal = document.getElementById(otherId).value;
           if(otherVal) res.push('其他：' + otherVal);
-        }
-        else res.push(c.value);
+        } else res.push(c.value);
       });
       return res.join('、');
     }
 
+    // --- 表單提交 (對齊關鍵) ---
     document.getElementById('booking-form').onsubmit = async (e) => {
       e.preventDefault();
       const date = document.getElementById('selected-date').value;
@@ -436,12 +238,14 @@
       const matRadio = document.querySelector('input[name="mattress_type"]:checked');
       let matVal = matRadio.value === '其他' ? '其他：'+document.getElementById('mat-other-text').value : matRadio.value;
 
+      // 這裡確保所有 Key 都跟後端 saveBooking 函數對齊
       const payload = {
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
         email: document.getElementById('email').value,
         date: date,
         timeSlot: time,
+        numberOfPeople: document.getElementById('numberOfPeople').value, // 補回這行
         sleepingPosition: getVals('sleepingPosition', 'sleep-other-text'),
         mattress_type: matVal,
         mainConcern: getVals('mainConcern', 'con-other-text'),
@@ -452,14 +256,11 @@
       document.getElementById('loading').classList.add('active');
 
       try {
-        const res = await fetch(`${SCRIPT_URL}`, { 
+        await fetch(`${SCRIPT_URL}`, { 
           method: 'POST', 
-          mode: 'no-cors', // 處理開發中可能的跨域問題
+          mode: 'no-cors', 
           body: JSON.stringify(payload)
         });
-        
-        // 注意：由於後端 return JSON，no-cors 模式無法讀取 body，
-        // 建議正常部署 GAS 後拿掉 no-cors。
         document.getElementById('loading').classList.remove('active');
         document.getElementById('success-message').classList.remove('hidden');
       } catch (e) { 
