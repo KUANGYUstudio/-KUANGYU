@@ -125,13 +125,13 @@
       margin-bottom: 28px;
     }
 
-    /* 2）調整問題標題字體放大 */
+    /* 問題大標題字體放大 */
     label, .group-title {
       display: block;
       margin-bottom: 12px;
       color: #5a4a3a;
       font-weight: 700;
-      font-size: 1.3em; /* 從 1.15em 放大到 1.3em */
+      font-size: 1.35em; /* 放大問題標題 */
     }
 
     .required {
@@ -148,7 +148,7 @@
       padding: 14px 18px;
       border: 2px solid #e8d5c4;
       border-radius: 15px;
-      font-size: 1em;
+      font-size: 1em; /* 保持輸入框字體正常 */
       font-family: inherit;
       transition: all 0.3s ease;
       background: #fefdfb;
@@ -175,6 +175,7 @@
       gap: 8px;
     }
 
+    /* 選項字體大小維持原本的 1em (透過 label 繼承) */
     .radio-option,
     .checkbox-option {
       display: flex;
@@ -185,6 +186,14 @@
       border-radius: 15px;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-size: 0.75em; /* 強制重設選項內的字體，不被外層大標題影響 */
+      font-weight: 400;
+    }
+
+    /* 重新補償：讓標籤裡面的文字恢復正常大小 */
+    .radio-option, .checkbox-option {
+      font-size: 1rem; 
+      font-weight: 500;
     }
 
     .radio-option:hover,
@@ -205,17 +214,16 @@
       flex-shrink: 0;
     }
 
-    /* 1）調整月份之間的距離 */
+    /* 調整月份之間的距離 */
     .month-title {
       font-weight: bold;
       font-size: 1.5em;
-      margin-top: 40px; /* 增加上距，讓月份之間分開 */
+      margin-top: 45px; 
       margin-bottom: 15px;
       color: #6b5d52;
       text-align: center;
     }
     
-    /* 確保第一個月份不要有太大的上距 */
     #calendar-container > div:first-child .month-title {
       margin-top: 15px;
     }
@@ -229,12 +237,13 @@
       margin: 0 auto;
     }
 
+    /* 放大日曆的星期標題 */
     .weekday-header {
-      font-weight: 600;
-      font-size: 0.85em;
+      font-weight: 700;
+      font-size: 1em; /* 從 0.85em 放大到 1em */
       text-align: center;
       color: #a67c52;
-      padding: 6px 0;
+      padding: 8px 0;
     }
 
     .calendar-day {
@@ -462,7 +471,7 @@
         </div>
 
         <div class="form-group">
-          <span class="group-title">平常睡姿 <span class="required">*</span> <span style="font-size: 0.75em; font-weight: 400; color: #a67c52;">（可複選）</span></span>
+          <span class="group-title">平常睡姿 <span class="required">*</span> <span style="font-size: 0.6em; font-weight: 400; color: #a67c52; vertical-align: middle;">（可複選）</span></span>
           <div class="checkbox-group">
             <label class="checkbox-option">
               <input type="checkbox" name="sleepingPosition" value="仰睡"> 仰睡
@@ -478,13 +487,13 @@
             </label>
             <label class="checkbox-option">
               <input type="checkbox" name="sleepingPosition" value="其他" id="sleeping-position-other"> 其他
-              <input type="text" id="sleeping-position-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; height: 35px; border-radius: 10px; border: 1px solid #e8d5c4; padding: 5px 10px;">
+              <input type="text" id="sleeping-position-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; height: 35px; border-radius: 10px; border: 1px solid #e8d5c4; padding: 5px 10px; font-size: 0.9em;">
             </label>
           </div>
         </div>
 
         <div class="form-group">
-          <label>目前使用床墊類型 <span class="required">*</span> <small style="color: #999; font-weight: normal;">(單選)</small></label>
+          <label>目前使用床墊類型 <span class="required">*</span> <small style="font-size: 0.5em; color: #999; font-weight: normal; vertical-align: middle;">(單選)</small></label>
           <div class="radio-group">
             <label class="radio-option">
               <input type="radio" name="mattress_type" value="獨立筒" required> 獨立筒
@@ -500,13 +509,13 @@
             </label>
             <label class="radio-option">
               <input type="radio" name="mattress_type" value="其他" id="mattress-other"> 其他
-              <input type="text" id="mattress-other-text" name="mattress_type_other" placeholder="請說明" style="margin-left: 10px; flex: 1; height: 35px; border-radius: 10px; border: 1px solid #e8d5c4; padding: 5px 10px;">
+              <input type="text" id="mattress-other-text" name="mattress_type_other" placeholder="請說明" style="margin-left: 10px; flex: 1; height: 35px; border-radius: 10px; border: 1px solid #e8d5c4; padding: 5px 10px; font-size: 0.9em;">
             </label>
           </div>
         </div>
 
         <div class="form-group">
-          <span class="group-title">主要考量重點 <span class="required">*</span> <span style="font-size: 0.75em; font-weight: 400; color: #a67c52;">（複選）</span></span>
+          <span class="group-title">主要考量重點 <span class="required">*</span> <span style="font-size: 0.6em; font-weight: 400; color: #a67c52; vertical-align: middle;">（複選）</span></span>
           <div class="checkbox-group">
             <label class="checkbox-option">
               <input type="checkbox" name="mainConcern" value="支撐感"> 支撐感
@@ -525,7 +534,7 @@
             </label>
             <label class="checkbox-option">
               <input type="checkbox" name="mainConcern" value="其他" id="concern-other"> 其他
-              <input type="text" id="concern-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; height: 35px; border-radius: 10px; border: 1px solid #e8d5c4; padding: 5px 10px;">
+              <input type="text" id="concern-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; height: 35px; border-radius: 10px; border: 1px solid #e8d5c4; padding: 5px 10px; font-size: 0.9em;">
             </label>
           </div>
         </div>
