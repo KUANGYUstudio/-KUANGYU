@@ -172,7 +172,14 @@
       gap: 8px;
     }
 
-    .radio-option {
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .radio-option,
+    .checkbox-option {
       display: flex;
       align-items: center;
       padding: 12px 16px;
@@ -183,16 +190,26 @@
       transition: all 0.3s ease;
     }
 
-    .radio-option:hover {
+    .radio-option:hover,
+    .checkbox-option:hover {
       background: #f5ebe0;
       border-color: #d4a574;
       transform: translateX(5px);
     }
 
-    .radio-option input {
+    .radio-option input,
+    .checkbox-option input {
       margin-right: 12px;
       cursor: pointer;
       accent-color: #d4a574;
+    }
+
+    .group-title {
+      font-size: 1.25em;
+      font-weight: 700;
+      color: #5a4a3a;
+      margin-bottom: 12px;
+      display: block;
     }
 
     .month-section {
@@ -401,6 +418,38 @@
       .time-slot { padding: 10px; border-radius: 12px; }
       .submit-btn { border-radius: 15px; }
     }
+
+    /* Checkbox 群組樣式 */
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: #fef8f0;
+      border: 2px solid #e8d5c4;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-option:hover {
+      background: #f5ebe0;
+      border-color: #d4a574;
+      transform: translateX(5px);
+    }
+
+    .checkbox-option input[type="checkbox"] {
+      margin-right: 12px;
+      cursor: pointer;
+      accent-color: #d4a574;
+      width: 18px;
+      height: 18px;
+    }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -422,7 +471,7 @@
       <ul>
         <li>可預約時段：週一至週五 10:00-12:00、14:00-18:00｜週六 14:00-18:00</li>
         <li>每組試躺時間為 30 分鐘</li>
-        <li>完成預約後，我們將於 1-2 個工作天內與您聯繫確認</li>
+        <li>我們將於 1-2 個工作天內與您聯繫確認</li>
         <li>如需更改預約，請提前聯繫我們</li>
       </ul>
     </div>
@@ -442,8 +491,11 @@
         </div>
 
         <div class="form-group">
-          <label>LINE ID <span class="required">*</span></label>
-          <input type="text" id="lineId" name="lineId" required placeholder="您的 LINE ID">
+          <label>Email <span class="required">*</span></label>
+          <input type="email" id="email" name="email" required placeholder="your-email@example.com">
+          <p style="color: #a67c52; font-size: 0.85em; margin-top: 8px;">
+            ※ 我們將透過 Email 聯繫您，並發送 Google Calendar 行事曆邀請
+          </p>
         </div>
 
         <div class="form-group">
@@ -464,48 +516,57 @@
         </div>
 
         <div class="form-group">
-          <label>平常睡姿 <span class="required">*</span></label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="sleepingPosition" value="仰睡" required> 仰睡
+          <span class="group-title">平常睡姿 <span class="required">*</span> <span style="font-size: 0.75em; font-weight: 400; color: #a67c52;">（可複選）</span></span>
+          <div class="checkbox-group" id="sleeping-position-group">
+            <label class="checkbox-option">
+              <input type="checkbox" name="sleepingPosition" value="仰睡"> 仰睡
             </label>
-            <label class="radio-option">
-              <input type="radio" name="sleepingPosition" value="側睡"> 側睡
+            <label class="checkbox-option">
+              <input type="checkbox" name="sleepingPosition" value="側睡"> 側睡
             </label>
-            <label class="radio-option">
-              <input type="radio" name="sleepingPosition" value="翻身頻繁"> 翻身頻繁
+            <label class="checkbox-option">
+              <input type="checkbox" name="sleepingPosition" value="趴睡"> 趴睡
             </label>
-            <label class="radio-option">
-              <input type="radio" name="sleepingPosition" value="不確定"> 不確定
+            <label class="checkbox-option">
+              <input type="checkbox" name="sleepingPosition" value="翻身頻繁"> 翻身頻繁
             </label>
-            <label class="radio-option">
-              <input type="radio" name="sleepingPosition" value="其他" id="sleeping-position-other"> 其他
+            <label class="checkbox-option">
+              <input type="checkbox" name="sleepingPosition" value="不確定"> 不確定
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="sleepingPosition" value="其他" id="sleeping-position-other"> 其他
               <input type="text" id="sleeping-position-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; border-radius: 10px;">
             </label>
           </div>
         </div>
 
         <div class="form-group">
-          <label>目前使用床墊類型 <span class="required">*</span></label>
-          <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="currentMattress" value="獨立筒" required> 獨立筒
+          <span class="group-title">目前使用床墊類型 <span class="required">*</span> <span style="font-size: 0.75em; font-weight: 400; color: #a67c52;">（可複選）</span></span>
+          <div class="checkbox-group" id="mattress-type-group">
+            <label class="checkbox-option">
+              <input type="checkbox" name="currentMattress" value="獨立筒"> 獨立筒
             </label>
-            <label class="radio-option">
-              <input type="radio" name="currentMattress" value="全乳膠/全泡棉"> 全乳膠／全泡棉
+            <label class="checkbox-option">
+              <input type="checkbox" name="currentMattress" value="全乳膠"> 全乳膠
             </label>
-            <label class="radio-option">
-              <input type="radio" name="currentMattress" value="不確定"> 不確定
+            <label class="checkbox-option">
+              <input type="checkbox" name="currentMattress" value="全泡棉"> 全泡棉
             </label>
-            <label class="radio-option">
-              <input type="radio" name="currentMattress" value="其他" id="mattress-other"> 其他
+            <label class="checkbox-option">
+              <input type="checkbox" name="currentMattress" value="乳膠+獨立筒"> 乳膠+獨立筒
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="currentMattress" value="不確定"> 不確定
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="currentMattress" value="其他" id="mattress-other"> 其他
               <input type="text" id="mattress-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; border-radius: 10px;">
             </label>
           </div>
         </div>
 
         <div class="form-group">
-          <label>主要考量重點 <span class="required">*</span></label>
+          <span class="group-title">主要考量重點 <span class="required">*</span></span>
           <div class="radio-group">
             <label class="radio-option">
               <input type="radio" name="mainConcern" value="支撐感" required> 支撐感
@@ -702,41 +763,82 @@
       }
     }
 
-    function setupOtherOption(radioId, textId) {
-      document.getElementById(radioId).addEventListener('change', function() {
-        if (this.checked) document.getElementById(textId).focus();
-      });
-      document.getElementById(textId).addEventListener('focus', function() {
-        document.getElementById(radioId).checked = true;
-      });
+    
+    function setupOtherOption(checkboxId, textId) {
+      const checkbox = document.getElementById(checkboxId);
+      const text = document.getElementById(textId);
+      
+      if (checkbox && text) {
+        checkbox.addEventListener('change', function() {
+          if (this.checked) text.focus();
+        });
+        text.addEventListener('focus', function() {
+          checkbox.checked = true;
+        });
+      }
     }
 
     setupOtherOption('sleeping-position-other', 'sleeping-position-other-text');
     setupOtherOption('mattress-other', 'mattress-other-text');
     setupOtherOption('concern-other', 'concern-other-text');
 
+    // 處理複選選項
+    function getCheckboxValues(name) {
+      const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+      const values = [];
+      
+      checkboxes.forEach(cb => {
+        if (cb.value === '其他') {
+          const otherId = cb.id.replace('-other', '-other-text');
+          const otherText = document.getElementById(otherId).value;
+          if (otherText) {
+            values.push(`其他：${otherText}`);
+          } else {
+            values.push(cb.value);
+          }
+        } else {
+          values.push(cb.value);
+        }
+      });
+      
+      return values.join('、');
+    }
+
     document.getElementById('booking-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
-      const formData = new FormData(this);
-      const bookingData = {};
-      
-      for (let pair of formData.entries()) {
-        bookingData[pair[0]] = pair[1];
-      }
+      const bookingData = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        numberOfPeople: document.getElementById('numberOfPeople').value,
+        date: document.getElementById('selected-date').value,
+        timeSlot: document.getElementById('selected-time-slot').value,
+        sleepingPosition: getCheckboxValues('sleepingPosition'),
+        currentMattress: getCheckboxValues('currentMattress'),
+        mainConcern: getCheckboxValues('mainConcern'),
+        sleepIssues: document.getElementById('sleepIssues').value || '',
+        specialRequests: document.getElementById('specialRequests').value || ''
+      };
 
-      if (bookingData.sleepingPosition === '其他') {
-        bookingData.sleepingPosition = '其他：' + document.getElementById('sleeping-position-other-text').value;
-      }
-      if (bookingData.currentMattress === '其他') {
-        bookingData.currentMattress = '其他：' + document.getElementById('mattress-other-text').value;
-      }
-      if (bookingData.mainConcern === '其他') {
-        bookingData.mainConcern = '其他：' + document.getElementById('concern-other-text').value;
-      }
-
+      // 驗證必填項
       if (!bookingData.date || !bookingData.timeSlot) {
         showMessage('請選擇預約日期和時段', 'error');
+        return;
+      }
+
+      if (!bookingData.sleepingPosition) {
+        showMessage('請至少選擇一個睡姿選項', 'error');
+        return;
+      }
+
+      if (!bookingData.currentMattress) {
+        showMessage('請至少選擇一個床墊類型', 'error');
+        return;
+      }
+
+      if (!bookingData.mainConcern) {
+        showMessage('請至少選擇一個考量重點', 'error');
         return;
       }
 
@@ -765,14 +867,6 @@
         showMessage('系統發生錯誤，請稍後再試', 'error');
       }
     });
-
-    function showMessage(text, type) {
-      const msgDiv = document.getElementById('message');
-      msgDiv.textContent = text;
-      msgDiv.className = 'message ' + type;
-      setTimeout(() => msgDiv.className = 'message', 5000);
-      msgDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
 
     renderCalendar();
   </script>
