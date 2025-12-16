@@ -138,7 +138,7 @@
       margin-left: 3px;
     }
 
-    /* 這裡已經幫你把 email 補進去點名單了 */
+    /* 這裡修正了：把 email 加入美化名單 */
     input[type="text"],
     input[type="email"],
     input[type="tel"],
@@ -153,9 +153,10 @@
       transition: all 0.3s ease;
       background: #fefdfb;
       color: #4a3f35;
-      box-sizing: border-box; /* 這行可以確保寬度不會超出邊界 */
+      box-sizing: border-box; /* 加上這行能確保框框寬度跟別人完全對齊 */
     }
 
+    /* 焦點狀態也同步補上 email */
     input:focus,
     textarea:focus {
       outline: none;
