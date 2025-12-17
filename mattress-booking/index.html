@@ -319,27 +319,35 @@
       container.appendChild(section);
     }
 
-    async function loadTimeSlots(dateStr) {
-      const container = document.getElementById('time-slots-container');
-      document.getElementById('time-slot-section').style.display = 'block';
-      container.innerHTML = '載入中...';
-      try {
-        const res = await fetch(`${SCRIPT_URL}?action=getSlots&date=${encodeURIComponent(dateStr)}`);
-        const slots = await res.json();
-        container.innerHTML = '';
-        slots.forEach(slot => {
-          const div = document.createElement('div');
-          div.className = 'time-slot';
-          div.textContent = slot.display;
-          div.onclick = () => {
-            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-            div.classList.add('selected');
-            document.getElementById('selected-time-slot').value = slot.time;
-          };
-          container.appendChild(div);
-        });
-      } catch (e) { container.innerHTML = '載入時段失敗'; }
+   async function loadTimeSlots(dateStr) {
+  const container = document.getElementById('time-slots-container');
+  document.getElementById('time-slot-section').style.display = 'block';
+  container.innerHTML = '載入中...';
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=getSlots&date=${encodeURIComponent(dateStr)}`);
+    const slots = await res.json();
+    container.innerHTML = '';
+
+    // --- 新增：如果這天時段都沒了，顯示提示 ---
+    if (!slots || slots.length === 0) {
+      container.innerHTML = '<p style="color: #c9705f; grid-column: 1/-1; padding: 20px;">抱歉，此日期的時段已全數約滿，請選擇其他日期。</p>';
+      return;
     }
+    // --------------------------------------
+
+    slots.forEach(slot => {
+      const div = document.createElement('div');
+      div.className = 'time-slot';
+      div.textContent = slot.display; // 這裡會顯示 10:00
+      div.onclick = () => {
+        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+        div.classList.add('selected');
+        document.getElementById('selected-time-slot').value = slot.time;
+      };
+      container.appendChild(div);
+    });
+  } catch (e) { container.innerHTML = '載入時段失敗'; }
+}
 
     function getCheckboxValues(name) {
       const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
