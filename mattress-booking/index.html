@@ -50,31 +50,207 @@
     }
     /* ▲▲▲ 修改結束 ▲▲▲ */
 
-    .radio-option:hover, .checkbox-option:hover { background: #f5ebe0; border-color: #d4a574; transform: translateX(5px); }
-    .radio-option input[type="radio"], .checkbox-option input[type="checkbox"] { margin-right: 12px; cursor: pointer; accent-color: #d4a574; width: 20px !important; height: 20px !important; min-width: 20px; flex-shrink: 0; }
-    .month-title { font-weight: bold; font-size: 1.5em; margin-top: 45px; margin-bottom: 15px; color: #6b5d52; text-align: center; }
-    #calendar-container > div:first-child .month-title { margin-top: 15px; }
-    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 500px; margin: 0 auto; }
-    .weekday-header { font-weight: 700; font-size: 1em; text-align: center; color: #a67c52; padding: 8px 0; }
-    .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 1.1em; font-weight: 600; cursor: default; background-color: #f5ebe0; color: #c9b5a0; transition: all 0.3s ease; }
-    .calendar-day.available { background-color: #fef8f0; color: #6b5d52; cursor: pointer; border: 2px solid #d4a574; }
-    .calendar-day.available:hover { background-color: #f5ebe0; transform: scale(1.08); box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2); }
-    .calendar-day.selected { background-color: #d4a574; color: white; font-weight: 700; border: 2px solid #d4a574; box-shadow: 0 6px 16px rgba(212, 165, 116, 0.4); }
-    .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
-    .time-slot { padding: 12px; text-align: center; border: 2px solid #e8d5c4; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; background: #fef8f0; color: #6b5d52; font-weight: 500; }
-    .time-slot:hover { background: #f5ebe0; border-color: #d4a574; transform: translateY(-3px); box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2); }
-    .time-slot.selected { background: #d4a574; color: white; border-color: #d4a574; box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3); }
-    .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4a574 0%, #c9956e 100%); color: white; border: none; border-radius: 20px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 20px; box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3); }
-    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4); }
-    .loading { display: none; text-align: center; padding: 20px; }
-    .loading.active { display: block; }
-    .message { padding: 16px 20px; border-radius: 15px; margin-bottom: 20px; display: none; font-weight: 500; }
-    .footer { background: #fef8f0; padding: 30px; text-align: center; color: #8b7355; border-top: 1px solid #e8d5c4; border-radius: 0 0 30px 30px; }
-    .footer a { color: #d4a574; text-decoration: none; font-weight: 600; }
-    .hidden { display: none; }
-    .spinner { border: 3px solid #f5ebe0; border-top: 3px solid #d4a574; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @media (max-width: 600px) { body { padding: 10px; } .header h1 { font-size: 1.5em; } .form-section { padding: 25px 20px; } }
+/* 1. 縮減框與框之間的「外部距離」 */
+.radio-group, .checkbox-group { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 4px; /* 從 8px 縮小到 4px，讓框框幾乎貼在一起 */
+}
+
+/* 2. 縮減文字與邊框的「上下距離」，但維持文字大小 */
+.radio-option, .checkbox-option { 
+  display: flex; 
+  align-items: center; 
+  padding: 6px 16px; /* 原本是 12px，縮小到 6px 會讓框變扁，但字不縮小 */
+  background: #fef8f0; 
+  border: 2px solid #e8d5c4; 
+  border-radius: 12px; /* 稍微縮小圓角讓框框看起來更俐落 */
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+  font-size: 1.1rem; /* 維持或稍微放大字體，確保閱讀清晰 */
+  font-weight: 500;  /* 稍微加粗，讓字看起來更飽滿 */
+}
+    .month-title {
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-top: 45px;
+  margin-bottom: 15px;
+  color: #6b5d52;
+  text-align: center;
+}
+
+#calendar-container > div:first-child .month-title {
+  margin-top: 15px;
+}
+
+.calendar-header,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.weekday-header {
+  font-weight: 700;
+  font-size: 1em;
+  text-align: center;
+  color: #a67c52;
+  padding: 8px 0;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: default;
+  background-color: #f5ebe0;
+  color: #c9b5a0;
+  transition: all 0.3s ease;
+}
+
+.calendar-day.available {
+  background-color: #fef8f0;
+  color: #6b5d52;
+  cursor: pointer;
+  border: 2px solid #d4a574;
+}
+
+.calendar-day.available:hover {
+  background-color: #f5ebe0;
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2);
+}
+
+.calendar-day.selected {
+  background-color: #d4a574;
+  color: white;
+  font-weight: 700;
+  border: 2px solid #d4a574;
+  box-shadow: 0 6px 16px rgba(212, 165, 116, 0.4);
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.time-slot {
+  padding: 12px;
+  text-align: center;
+  border: 2px solid #e8d5c4;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fef8f0;
+  color: #6b5d52;
+  font-weight: 500;
+}
+
+.time-slot:hover {
+  background: #f5ebe0;
+  border-color: #d4a574;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2);
+}
+
+.time-slot.selected {
+  background: #d4a574;
+  color: white;
+  border-color: #d4a574;
+  box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #d4a574 0%, #c9956e 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4);
+}
+
+.loading {
+  display: none;
+  text-align: center;
+  padding: 20px;
+}
+
+.loading.active {
+  display: block;
+}
+
+.message {
+  padding: 16px 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  display: none;
+  font-weight: 500;
+}
+
+.footer {
+  background: #fef8f0;
+  padding: 30px;
+  text-align: center;
+  color: #8b7355;
+  border-top: 1px solid #e8d5c4;
+  border-radius: 0 0 30px 30px;
+}
+
+.footer a {
+  color: #d4a574;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.hidden {
+  display: none;
+}
+
+.spinner {
+  border: 3px solid #f5ebe0;
+  border-top: 3px solid #d4a574;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  .header h1 {
+    font-size: 1.5em;
+  }
+  .form-section {
+    padding: 25px 20px;
+  }
+}
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
