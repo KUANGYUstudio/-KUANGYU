@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>床墊試躺預約 | Chrisus Sport</title>
   <style>
+    /* 這裡維持你原本漂亮的樣式設定 */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%); min-height: 100vh; padding: 20px; line-height: 1.6; }
     .container { max-width: 800px; margin: 0 auto; background: #fefdfb; border-radius: 30px; box-shadow: 0 10px 40px rgba(139, 115, 85, 0.15); overflow: hidden; }
@@ -29,27 +30,8 @@
     input:focus, textarea:focus { outline: none; border-color: #d4a574; background: white; box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.1); }
     textarea { resize: vertical; min-height: 100px; }
     
-    /* ▼▼▼ 修改處：縮小間距 ▼▼▼ */
-    .radio-group, .checkbox-group { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 3px; /* 原本是 8px，改小至 5px */
-    }
-    
-    .radio-option, .checkbox-option { 
-      display: flex; 
-      align-items: center; 
-      padding: 9px 16px; /* 原本是 12px，改小至 9px 讓按鈕變瘦 */
-      background: #fef8f0; 
-      border: 2px solid #e8d5c4; 
-      border-radius: 15px; 
-      cursor: pointer; 
-      transition: all 0.3s ease; 
-      font-size: 1rem; 
-      font-weight: 500; 
-    }
-    /* ▲▲▲ 修改結束 ▲▲▲ */
-
+    .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 3px; }
+    .radio-option, .checkbox-option { display: flex; align-items: center; padding: 9px 16px; background: #fef8f0; border: 2px solid #e8d5c4; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; font-size: 1rem; font-weight: 500; }
     .radio-option:hover, .checkbox-option:hover { background: #f5ebe0; border-color: #d4a574; transform: translateX(5px); }
     .radio-option input[type="radio"], .checkbox-option input[type="checkbox"] { margin-right: 12px; cursor: pointer; accent-color: #d4a574; width: 20px !important; height: 20px !important; min-width: 20px; flex-shrink: 0; }
     .month-title { font-weight: bold; font-size: 1.5em; margin-top: 45px; margin-bottom: 15px; color: #6b5d52; text-align: center; }
@@ -146,18 +128,10 @@
         <div class="form-group">
           <span class="group-title">平常睡姿 <span class="required">*</span> <span style="font-size: 0.6em; font-weight: 400; color: #a67c52; vertical-align: middle;">（可複選）</span></span>
           <div class="checkbox-group">
-            <label class="checkbox-option">
-              <input type="checkbox" name="sleepingPosition" value="仰睡"> 仰睡
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="sleepingPosition" value="側睡"> 側睡
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="sleepingPosition" value="趴睡"> 趴睡
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="sleepingPosition" value="翻身頻繁"> 翻身頻繁
-            </label>
+            <label class="checkbox-option"><input type="checkbox" name="sleepingPosition" value="仰睡"> 仰睡</label>
+            <label class="checkbox-option"><input type="checkbox" name="sleepingPosition" value="側睡"> 側睡</label>
+            <label class="checkbox-option"><input type="checkbox" name="sleepingPosition" value="趴睡"> 趴睡</label>
+            <label class="checkbox-option"><input type="checkbox" name="sleepingPosition" value="翻身頻繁"> 翻身頻繁</label>
             <label class="checkbox-option">
               <input type="checkbox" name="sleepingPosition" value="其他" id="sleeping-position-other"> 其他
               <input type="text" id="sleeping-position-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; height: 35px; border-radius: 10px; border: 1px solid #e8d5c4; padding: 5px 10px; font-size: 0.9em;">
@@ -168,18 +142,10 @@
         <div class="form-group">
           <label>目前使用床墊類型 <span class="required">*</span> <small style="font-size: 0.5em; color: #999; font-weight: normal; vertical-align: middle;">(單選)</small></label>
           <div class="radio-group">
-            <label class="radio-option">
-              <input type="radio" name="mattress_type" value="獨立筒" required> 獨立筒
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="mattress_type" value="全乳膠"> 全乳膠
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="mattress_type" value="全泡棉"> 全泡棉
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="mattress_type" value="乳膠+獨立筒"> 乳膠+獨立筒
-            </label>
+            <label class="radio-option"><input type="radio" name="mattress_type" value="獨立筒" required> 獨立筒</label>
+            <label class="radio-option"><input type="radio" name="mattress_type" value="全乳膠"> 全乳膠</label>
+            <label class="radio-option"><input type="radio" name="mattress_type" value="全泡棉"> 全泡棉</label>
+            <label class="radio-option"><input type="radio" name="mattress_type" value="乳膠+獨立筒"> 乳膠+獨立筒</label>
             <label class="radio-option">
               <input type="radio" name="mattress_type" value="其他" id="mattress-other"> 其他
               <input type="text" id="mattress-other-text" name="mattress_type_other" placeholder="請說明" style="margin-left: 10px; flex: 1; height: 35px; border-radius: 10px; border: 1px solid #e8d5c4; padding: 5px 10px; font-size: 0.9em;">
@@ -190,21 +156,11 @@
         <div class="form-group">
           <span class="group-title">主要考量重點 <span class="required">*</span> <span style="font-size: 0.6em; font-weight: 400; color: #a67c52; vertical-align: middle;">（複選）</span></span>
           <div class="checkbox-group">
-            <label class="checkbox-option">
-              <input type="checkbox" name="mainConcern" value="支撐感"> 支撐感
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="mainConcern" value="柔軟度"> 柔軟度
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="mainConcern" value="溫度調節"> 溫度調節
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="mainConcern" value="防過敏"> 防過敏
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="mainConcern" value="價格"> 價格
-            </label>
+            <label class="checkbox-option"><input type="checkbox" name="mainConcern" value="支撐感"> 支撐感</label>
+            <label class="checkbox-option"><input type="checkbox" name="mainConcern" value="柔軟度"> 柔軟度</label>
+            <label class="checkbox-option"><input type="checkbox" name="mainConcern" value="溫度調節"> 溫度調節</label>
+            <label class="checkbox-option"><input type="checkbox" name="mainConcern" value="防過敏"> 防過敏</label>
+            <label class="checkbox-option"><input type="checkbox" name="mainConcern" value="價格"> 價格</label>
             <label class="checkbox-option">
               <input type="checkbox" name="mainConcern" value="其他" id="concern-other"> 其他
               <input type="text" id="concern-other-text" placeholder="請說明" style="margin-left: 10px; flex: 1; height: 35px; border-radius: 10px; border: 1px solid #e8d5c4; padding: 5px 10px; font-size: 0.9em;">
@@ -319,35 +275,33 @@
       container.appendChild(section);
     }
 
-   async function loadTimeSlots(dateStr) {
-  const container = document.getElementById('time-slots-container');
-  document.getElementById('time-slot-section').style.display = 'block';
-  container.innerHTML = '載入中...';
-  try {
-    const res = await fetch(`${SCRIPT_URL}?action=getSlots&date=${encodeURIComponent(dateStr)}`);
-    const slots = await res.json();
-    container.innerHTML = '';
+    async function loadTimeSlots(dateStr) {
+      const container = document.getElementById('time-slots-container');
+      document.getElementById('time-slot-section').style.display = 'block';
+      container.innerHTML = '載入中...';
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getSlots&date=${encodeURIComponent(dateStr)}`);
+        const slots = await res.json();
+        container.innerHTML = '';
+        
+        if (!slots || slots.length === 0) {
+          container.innerHTML = '<p style="color: #c9705f; grid-column: 1/-1; padding: 20px;">抱歉，此日期的時段已全數約滿，請選擇其他日期。</p>';
+          return;
+        }
 
-    // --- 新增：如果這天時段都沒了，顯示提示 ---
-    if (!slots || slots.length === 0) {
-      container.innerHTML = '<p style="color: #c9705f; grid-column: 1/-1; padding: 20px;">抱歉，此日期的時段已全數約滿，請選擇其他日期。</p>';
-      return;
+        slots.forEach(slot => {
+          const div = document.createElement('div');
+          div.className = 'time-slot';
+          div.textContent = slot.display;
+          div.onclick = () => {
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            div.classList.add('selected');
+            document.getElementById('selected-time-slot').value = slot.time;
+          };
+          container.appendChild(div);
+        });
+      } catch (e) { container.innerHTML = '載入時段失敗'; }
     }
-    // --------------------------------------
-
-    slots.forEach(slot => {
-      const div = document.createElement('div');
-      div.className = 'time-slot';
-      div.textContent = slot.display; // 這裡會顯示 10:00
-      div.onclick = () => {
-        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-        div.classList.add('selected');
-        document.getElementById('selected-time-slot').value = slot.time;
-      };
-      container.appendChild(div);
-    });
-  } catch (e) { container.innerHTML = '載入時段失敗'; }
-}
 
     function getCheckboxValues(name) {
       const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
@@ -396,7 +350,6 @@
         const result = await res.json();
         document.getElementById('loading').classList.remove('active');
         if(result.success) {
-          // 成功！顯示預約日期與時段
           document.getElementById('display-date').textContent = dateVal;
           document.getElementById('display-time').textContent = timeVal;
           document.getElementById('success-message').classList.remove('hidden');
