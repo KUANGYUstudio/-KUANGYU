@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>床墊試躺預約 | Chrisus Sport</title>
   <style>
-    /* ========== CSS 樣式完全依照您提供的版本保留 ========== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%); min-height: 100vh; padding: 20px; line-height: 1.6; }
     .container { max-width: 800px; margin: 0 auto; background: #fefdfb; border-radius: 30px; box-shadow: 0 10px 40px rgba(139, 115, 85, 0.15); overflow: hidden; }
@@ -29,8 +28,28 @@
     input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea { width: 100%; padding: 14px 18px; border: 2px solid #e8d5c4; border-radius: 15px; font-size: 1em; font-family: inherit; transition: all 0.3s ease; background: #fefdfb; color: #4a3f35; box-sizing: border-box; }
     input:focus, textarea:focus { outline: none; border-color: #d4a574; background: white; box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.1); }
     textarea { resize: vertical; min-height: 100px; }
-    .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
-    .radio-option, .checkbox-option { display: flex; align-items: center; padding: 12px 16px; background: #fef8f0; border: 2px solid #e8d5c4; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; font-size: 1rem; font-weight: 500; }
+    
+    /* ▼▼▼ 修改處：縮小間距 ▼▼▼ */
+    .radio-group, .checkbox-group { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 5px; /* 原本是 8px，改小至 5px */
+    }
+    
+    .radio-option, .checkbox-option { 
+      display: flex; 
+      align-items: center; 
+      padding: 9px 16px; /* 原本是 12px，改小至 9px 讓按鈕變瘦 */
+      background: #fef8f0; 
+      border: 2px solid #e8d5c4; 
+      border-radius: 15px; 
+      cursor: pointer; 
+      transition: all 0.3s ease; 
+      font-size: 1rem; 
+      font-weight: 500; 
+    }
+    /* ▲▲▲ 修改結束 ▲▲▲ */
+
     .radio-option:hover, .checkbox-option:hover { background: #f5ebe0; border-color: #d4a574; transform: translateX(5px); }
     .radio-option input[type="radio"], .checkbox-option input[type="checkbox"] { margin-right: 12px; cursor: pointer; accent-color: #d4a574; width: 20px !important; height: 20px !important; min-width: 20px; flex-shrink: 0; }
     .month-title { font-weight: bold; font-size: 1.5em; margin-top: 45px; margin-bottom: 15px; color: #6b5d52; text-align: center; }
