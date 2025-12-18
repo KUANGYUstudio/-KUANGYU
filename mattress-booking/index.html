@@ -3,15 +3,12 @@
 <html lang="zh-TW">
 
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>床墊試躺預約 | Chrisus Sport</title>
 
 <style>
-    /* 結構不變，僅針對配色進行溫和化調整 */
+    /* 結構不變，對調主色與強調色 */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body { 
@@ -24,20 +21,20 @@
       max-width: 800px; margin: 0 auto; 
       background: #ffffff; 
       border-radius: 30px; 
-      box-shadow: 0 10px 40px rgba(233, 139, 125, 0.1); 
+      box-shadow: 0 10px 40px rgba(0, 188, 212, 0.1); 
       overflow: hidden; 
     }
 
-    /* Header 改為您提供的溫和粉橘色漸層 */
+    /* Header 改為藍綠色漸層 (原本日曆的顏色) */
     .header { 
-      background: linear-gradient(135deg, #f4a792 0%, #e98b7d 100%); 
+      background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%); 
       color: white; padding: 40px 30px; text-align: center; border-radius: 30px 30px 0 0; 
     }
     .header h1 { font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
     .header p { font-size: 1.2em; opacity: 0.95; }
 
     .location-box { 
-      background: rgba(255, 255, 255, 0.25); 
+      background: rgba(255, 255, 255, 0.2); 
       padding: 20px; border-radius: 20px; margin-top: 20px; 
       backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3);
     }
@@ -45,68 +42,69 @@
     .location-box a { text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; }
 
     .notice-section { 
-      background: #fffcf5; 
+      background: #f0fbfc; 
       padding: 30px 35px; 
-      border-left: 5px solid #fbd0c4; 
+      border-left: 5px solid #00bcd4; 
       border-radius: 0 20px 20px 0; margin: 20px 20px 0 20px; 
     }
-    .notice-section h3 { color: #d47e6a; margin-bottom: 20px; font-size: 1.4em; font-weight: 700; }
-    .notice-section li { padding: 10px 0; padding-left: 30px; position: relative; color: #7a6a66; font-size: 1.05em; }
-    .notice-section li:before { content: "✓"; position: absolute; left: 0; color: #e98b7d; font-weight: bold; }
+    .notice-section h3 { color: #0097a7; margin-bottom: 20px; font-size: 1.4em; font-weight: 700; }
+    .notice-section li { padding: 10px 0; padding-left: 30px; position: relative; color: #546e7a; font-size: 1.05em; }
+    .notice-section li:before { content: "✓"; position: absolute; left: 0; color: #f4a792; font-weight: bold; }
 
     .form-section { padding: 40px 30px; }
     .form-group { margin-bottom: 28px; }
-    label, .group-title { display: block; margin-bottom: 12px; color: #5a5250; font-weight: 700; font-size: 1.35em; }
-    .required { color: #e98b7d; margin-left: 3px; }
+    label, .group-title { display: block; margin-bottom: 12px; color: #455a64; font-weight: 700; font-size: 1.35em; }
+    .required { color: #f4a792; margin-left: 3px; }
 
     input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea { 
-      width: 100%; padding: 14px 18px; border: 2px solid #f1e4e1; border-radius: 15px; 
+      width: 100%; padding: 14px 18px; border: 2px solid #e0f2f1; border-radius: 15px; 
       font-size: 1em; font-family: inherit; transition: all 0.3s ease; background: #fff; color: #444; box-sizing: border-box; 
     }
     input:focus, textarea:focus { 
-      outline: none; border-color: #f4a792; background: white; 
-      box-shadow: 0 0 0 4px rgba(244, 167, 146, 0.15); 
+      outline: none; border-color: #00bcd4; background: white; 
+      box-shadow: 0 0 0 4px rgba(0, 188, 212, 0.1); 
     }
 
     .radio-option, .checkbox-option { 
       display: flex; align-items: center; padding: 12px 16px; 
-      background: #fdfaf9; border: 2px solid #f1e4e1; border-radius: 15px; 
+      background: #f9fdfd; border: 2px solid #e0f2f1; border-radius: 15px; 
       cursor: pointer; transition: all 0.3s ease; font-weight: 500; 
     }
-    .radio-option:hover, .checkbox-option:hover { background: #fff2ef; border-color: #f4a792; transform: translateX(5px); }
-    .radio-option input, .checkbox-option input { accent-color: #e98b7d; width: 20px; height: 20px; margin-right: 12px; }
+    .radio-option:hover, .checkbox-option:hover { background: #e0f7fa; border-color: #00bcd4; transform: translateX(5px); }
+    .radio-option input, .checkbox-option input { accent-color: #00bcd4; width: 20px; height: 20px; margin-right: 12px; }
 
+    /* 日曆改為粉橘色系列 (原本 Header 的顏色) */
     .month-title { font-weight: bold; font-size: 1.5em; margin-top: 45px; margin-bottom: 15px; color: #e98b7d; text-align: center; }
-    .weekday-header { font-weight: 700; color: #00bcd4; padding: 8px 0; text-align: center; }
+    .weekday-header { font-weight: 700; color: #f4a792; padding: 8px 0; text-align: center; }
     .calendar-day { 
       aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
       border-radius: 12px; font-weight: 600; background-color: #f5f5f5; color: #ccc; 
     }
-    .calendar-day.available { background-color: #fff; color: #444; cursor: pointer; border: 2px solid #bce4eb; }
-    .calendar-day.available:hover { background-color: #e0f7fa; transform: scale(1.08); border-color: #00bcd4; }
-    .calendar-day.selected { background-color: #00bcd4; color: white; border: 2px solid #00bcd4; }
+    .calendar-day.available { background-color: #fff; color: #444; cursor: pointer; border: 2px solid #fbd0c4; }
+    .calendar-day.available:hover { background-color: #fff2ef; transform: scale(1.08); border-color: #f4a792; }
+    .calendar-day.selected { background-color: #f4a792; color: white; border: 2px solid #f4a792; box-shadow: 0 4px 10px rgba(244, 167, 146, 0.3); }
 
     .time-slot { 
-      padding: 12px; text-align: center; border: 2px solid #f1e4e1; border-radius: 15px; 
-      cursor: pointer; background: #fdfaf9; color: #444; font-weight: 500; 
+      padding: 12px; text-align: center; border: 2px solid #fbd0c4; border-radius: 15px; 
+      cursor: pointer; background: #fffcfb; color: #444; font-weight: 500; transition: 0.3s;
     }
     .time-slot:hover { border-color: #f4a792; background: #fff2ef; }
-    .time-slot.selected { background: #e98b7d; color: white; border-color: #e98b7d; }
+    .time-slot.selected { background: #f4a792; color: white; border-color: #f4a792; }
 
-    /* 按鈕使用您指定的溫和粉橘色 */
+    /* 按鈕使用藍綠色漸層 */
     .submit-btn { 
       width: 100%; padding: 18px; 
-      background: linear-gradient(135deg, #f4a792 0%, #e98b7d 100%); 
+      background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%); 
       color: white; border: none; border-radius: 20px; font-size: 1.2em; font-weight: 700; 
       cursor: pointer; transition: all 0.3s ease; margin-top: 20px; 
-      box-shadow: 0 4px 15px rgba(233, 139, 125, 0.25); 
+      box-shadow: 0 4px 15px rgba(0, 172, 193, 0.2); 
     }
-    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(233, 139, 125, 0.35); }
+    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 172, 193, 0.3); }
 
     .footer { background: #fafafa; padding: 30px; text-align: center; color: #b0a09d; border-top: 1px solid #f0f0f0; border-radius: 0 0 30px 30px; }
-    .footer a { color: #e98b7d; text-decoration: none; }
+    .footer a { color: #00bcd4; text-decoration: none; }
 
-    .spinner { border: 3px solid #f1e4e1; border-top: 3px solid #e98b7d; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
+    .spinner { border: 3px solid #e0f2f1; border-top: 3px solid #f4a792; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 500px; margin: 0 auto; }
@@ -118,27 +116,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 </head>
-
 <body>
-
   <div class="container">
-
     <div class="header">
-
       <h1>床墊試躺預約</h1>
-
       <p>找到最適合您的睡眠體驗</p>
 
-      
-
       <div class="location-box">
-
         <h3>📍 試躺地點</h3>
-
+        <p>Chrisus Life Well 奎爾斯企業</p>
         <p>台北市大安區臥龍街278號1樓</p>
-
         <a href="https://maps.app.goo.gl/BHPdFwmSCWmVrEH56" target="_blank">查看地圖 →</a>
-
       </div>
 
     </div>
