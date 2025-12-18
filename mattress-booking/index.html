@@ -10,162 +10,109 @@
 
   <title>床墊試躺預約 | Chrisus Sport</title>
 
-  <style>
-
+<style>
     /* 結構不變，僅針對配色進行溫和化調整 */
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     
-
     body { 
-
       font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif; 
-
       background: linear-gradient(135deg, #f0f7f9 0%, #fdf9e8 100%); 
-
       min-height: 100vh; padding: 20px; line-height: 1.6; 
-
     }
-
-
 
     .container { 
-
       max-width: 800px; margin: 0 auto; 
-
       background: #ffffff; 
-
       border-radius: 30px; 
-
       box-shadow: 0 10px 40px rgba(233, 139, 125, 0.1); 
-
       overflow: hidden; 
-
     }
-
-
 
     /* Header 改為您提供的溫和粉橘色漸層 */
-
     .header { 
-
       background: linear-gradient(135deg, #f4a792 0%, #e98b7d 100%); 
-
       color: white; padding: 40px 30px; text-align: center; border-radius: 30px 30px 0 0; 
-
     }
-
     .header h1 { font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
-
     .header p { font-size: 1.2em; opacity: 0.95; }
 
-
-
     .location-box { 
-
       background: rgba(255, 255, 255, 0.25); 
-
       padding: 20px; border-radius: 20px; margin-top: 20px; 
-
       backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3);
-
     }
-
     .location-box h3, .location-box p, .location-box a { color: white; }
-
     .location-box a { text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; }
 
-
-
     .notice-section { 
-
       background: #fffcf5; 
-
       padding: 30px 35px; 
-
       border-left: 5px solid #fbd0c4; 
-
       border-radius: 0 20px 20px 0; margin: 20px 20px 0 20px; 
-
     }
-
     .notice-section h3 { color: #d47e6a; margin-bottom: 20px; font-size: 1.4em; font-weight: 700; }
-
     .notice-section li { padding: 10px 0; padding-left: 30px; position: relative; color: #7a6a66; font-size: 1.05em; }
-
     .notice-section li:before { content: "✓"; position: absolute; left: 0; color: #e98b7d; font-weight: bold; }
 
     .form-section { padding: 40px 30px; }
-
     .form-group { margin-bottom: 28px; }
+    label, .group-title { display: block; margin-bottom: 12px; color: #5a5250; font-weight: 700; font-size: 1.35em; }
+    .required { color: #e98b7d; margin-left: 3px; }
 
-    label, .group-title { display: block; margin-bottom: 12px; color: #5a4a3a; font-weight: 700; font-size: 1.35em; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea { 
+      width: 100%; padding: 14px 18px; border: 2px solid #f1e4e1; border-radius: 15px; 
+      font-size: 1em; font-family: inherit; transition: all 0.3s ease; background: #fff; color: #444; box-sizing: border-box; 
+    }
+    input:focus, textarea:focus { 
+      outline: none; border-color: #f4a792; background: white; 
+      box-shadow: 0 0 0 4px rgba(244, 167, 146, 0.15); 
+    }
 
-    .required { color: #c9705f; margin-left: 3px; }
+    .radio-option, .checkbox-option { 
+      display: flex; align-items: center; padding: 12px 16px; 
+      background: #fdfaf9; border: 2px solid #f1e4e1; border-radius: 15px; 
+      cursor: pointer; transition: all 0.3s ease; font-weight: 500; 
+    }
+    .radio-option:hover, .checkbox-option:hover { background: #fff2ef; border-color: #f4a792; transform: translateX(5px); }
+    .radio-option input, .checkbox-option input { accent-color: #e98b7d; width: 20px; height: 20px; margin-right: 12px; }
 
-    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea { width: 100%; padding: 14px 18px; border: 2px solid #e8d5c4; border-radius: 15px; font-size: 1em; font-family: inherit; transition: all 0.3s ease; background: #fefdfb; color: #4a3f35; box-sizing: border-box; }
+    .month-title { font-weight: bold; font-size: 1.5em; margin-top: 45px; margin-bottom: 15px; color: #e98b7d; text-align: center; }
+    .weekday-header { font-weight: 700; color: #00bcd4; padding: 8px 0; text-align: center; }
+    .calendar-day { 
+      aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
+      border-radius: 12px; font-weight: 600; background-color: #f5f5f5; color: #ccc; 
+    }
+    .calendar-day.available { background-color: #fff; color: #444; cursor: pointer; border: 2px solid #bce4eb; }
+    .calendar-day.available:hover { background-color: #e0f7fa; transform: scale(1.08); border-color: #00bcd4; }
+    .calendar-day.selected { background-color: #00bcd4; color: white; border: 2px solid #00bcd4; }
 
-    input:focus, textarea:focus { outline: none; border-color: #d4a574; background: white; box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.1); }
+    .time-slot { 
+      padding: 12px; text-align: center; border: 2px solid #f1e4e1; border-radius: 15px; 
+      cursor: pointer; background: #fdfaf9; color: #444; font-weight: 500; 
+    }
+    .time-slot:hover { border-color: #f4a792; background: #fff2ef; }
+    .time-slot.selected { background: #e98b7d; color: white; border-color: #e98b7d; }
 
-    textarea { resize: vertical; min-height: 100px; }
+    /* 按鈕使用您指定的溫和粉橘色 */
+    .submit-btn { 
+      width: 100%; padding: 18px; 
+      background: linear-gradient(135deg, #f4a792 0%, #e98b7d 100%); 
+      color: white; border: none; border-radius: 20px; font-size: 1.2em; font-weight: 700; 
+      cursor: pointer; transition: all 0.3s ease; margin-top: 20px; 
+      box-shadow: 0 4px 15px rgba(233, 139, 125, 0.25); 
+    }
+    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(233, 139, 125, 0.35); }
 
-    
+    .footer { background: #fafafa; padding: 30px; text-align: center; color: #b0a09d; border-top: 1px solid #f0f0f0; border-radius: 0 0 30px 30px; }
+    .footer a { color: #e98b7d; text-decoration: none; }
 
-    .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 3px; }
-
-    .radio-option, .checkbox-option { display: flex; align-items: center; padding: 9px 16px; background: #fef8f0; border: 2px solid #e8d5c4; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; font-size: 1rem; font-weight: 500; }
-
-    .radio-option:hover, .checkbox-option:hover { background: #f5ebe0; border-color: #d4a574; transform: translateX(5px); }
-
-    .radio-option input[type="radio"], .checkbox-option input[type="checkbox"] { margin-right: 12px; cursor: pointer; accent-color: #d4a574; width: 20px !important; height: 20px !important; min-width: 20px; flex-shrink: 0; }
-
-    .month-title { font-weight: bold; font-size: 1.5em; margin-top: 45px; margin-bottom: 15px; color: #6b5d52; text-align: center; }
-
-    #calendar-container > div:first-child .month-title { margin-top: 15px; }
-
-    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 500px; margin: 0 auto; }
-
-    .weekday-header { font-weight: 700; font-size: 1em; text-align: center; color: #a67c52; padding: 8px 0; }
-
-    .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 1.1em; font-weight: 600; cursor: default; background-color: #f5ebe0; color: #c9b5a0; transition: all 0.3s ease; }
-
-    .calendar-day.available { background-color: #fef8f0; color: #6b5d52; cursor: pointer; border: 2px solid #d4a574; }
-
-    .calendar-day.available:hover { background-color: #f5ebe0; transform: scale(1.08); box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2); }
-
-    .calendar-day.selected { background-color: #d4a574; color: white; font-weight: 700; border: 2px solid #d4a574; box-shadow: 0 6px 16px rgba(212, 165, 116, 0.4); }
-
-    .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
-
-    .time-slot { padding: 12px; text-align: center; border: 2px solid #e8d5c4; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; background: #fef8f0; color: #6b5d52; font-weight: 500; }
-
-    .time-slot:hover { background: #f5ebe0; border-color: #d4a574; transform: translateY(-3px); box-shadow: 0 4px 12px rgba(212, 165, 116, 0.2); }
-
-    .time-slot.selected { background: #d4a574; color: white; border-color: #d4a574; box-shadow: 0 6px 16px rgba(212, 165, 116, 0.3); }
-
-    .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4a574 0%, #c9956e 100%); color: white; border: none; border-radius: 20px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 20px; box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3); }
-
-    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(212, 165, 116, 0.4); }
-
-    .loading { display: none; text-align: center; padding: 20px; }
-
-    .loading.active { display: block; }
-
-    .message { padding: 16px 20px; border-radius: 15px; margin-bottom: 20px; display: none; font-weight: 500; }
-
-    .footer { background: #fef8f0; padding: 30px; text-align: center; color: #8b7355; border-top: 1px solid #e8d5c4; border-radius: 0 0 30px 30px; }
-
-    .footer a { color: #d4a574; text-decoration: none; font-weight: 600; }
-
-    .hidden { display: none; }
-
-    .spinner { border: 3px solid #f5ebe0; border-top: 3px solid #d4a574; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
-
+    .spinner { border: 3px solid #f1e4e1; border-top: 3px solid #e98b7d; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+    
+    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 500px; margin: 0 auto; }
+    .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
+    .hidden { display: none; }
     @media (max-width: 600px) { body { padding: 10px; } .header h1 { font-size: 1.5em; } .form-section { padding: 25px 20px; } }
-
   </style>
 
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
