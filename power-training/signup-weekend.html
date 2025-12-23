@@ -20,12 +20,7 @@
     }
     h1 {
       font-size: 36px;
-      margin: 0.5em 0 0.2em;
-    }
-    .info {
-      font-size: 24px;
-      color: #666;
-      margin-bottom: 1.5em;
+      margin: 0.5em 0 1.5em;  /* ✅ 增加下方間距 */
     }
     .month-title {
       font-weight: bold;
@@ -102,21 +97,22 @@
       font-weight: 600;
     }
     
-    /* 🆕 時間上下排列樣式 */
+    /* 時間上下排列樣式 */
     .date-time-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       margin-top: 2px;
       font-size: 11px;
-      line-height: 1.2;
+      line-height: 1.1;  /* ✅ 調整行高 */
       color: #ff5722;
       font-weight: 500;
     }
     
     .date-time-divider {
-      margin: 1px 0;
+      margin: 0;  /* ✅ 移除間距 */
       color: #ff5722;
+      font-size: 10px;
     }
     
     .day.selected .date-time-container,
@@ -172,8 +168,10 @@
     }
     
     @media (max-width: 750px) {
-      h1 { font-size: 28px; margin-bottom: 0.4em; }
-      .info { font-size: 18px; margin-bottom: 1em; }
+      h1 { 
+        font-size: 28px; 
+        margin: 0.5em 0 1em;  /* ✅ 手機版也增加下方間距 */
+      }
       .month-title { font-size: 24px; margin: 1.5em 0 0.6em; }
       .container { padding: 0.5em; }
       .calendar-header,
@@ -184,9 +182,11 @@
       .date-time-container { 
         font-size: 9px;
         margin-top: 1px;
+        line-height: 1;  /* ✅ 更緊湊 */
       }
       .date-time-divider {
         margin: 0;
+        font-size: 8px;
       }
       .registered-label {
         font-size: 9px;
