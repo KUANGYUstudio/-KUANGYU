@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>晚班功率課</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
+<style>
 body {
   font-family: Arial, sans-serif;
   background: #ffffff;
@@ -59,29 +59,29 @@ h1 {
   cursor: default;
 }
 .day.available {
-  background-color: #fff3cd;
+  background-color: #bbdefb;
   color: #000;
   cursor: pointer;
-  border: 1px solid #f5a800;
+  border: 1px solid #2196f3;
   box-sizing: border-box;
 }
 .day.selected {
-  background-color: #ffc107;
+  background-color: #2196f3;
   font-weight: bold;
   color: #fff;
 }
 .day.registered {
-  background-color: #ffd666;
+  background-color: #90caf9;
   color: #000;
   cursor: not-allowed;
-  border: 2px solid #f5a800;
+  border: 2px solid #2196f3;
   opacity: 0.7;
 }
 .day.full {
   background-color: #e0e0e0;
   color: #666;
   cursor: not-allowed;
-  border: 2px solid #f5a800;
+  border: 2px solid #2196f3;
   opacity: 0.8;
   display: flex;
   flex-direction: column;
@@ -103,7 +103,7 @@ h1 {
   margin: 2em auto;
   padding: 16px 32px;
   font-size: 22px;
-  background: #ffc107;
+  background: #2196f3;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -122,18 +122,12 @@ h1 {
   .month-title { font-size: 24px; margin: 1.5em 0 0.6em; }
   .container { padding: 0.5em; }
   .calendar-header,
-  .calendar-grid { 
-    gap: 3px;
-    padding: 0 3px;
-  }
+  .calendar-grid { gap: 4px; padding: 0 6px; }
   .weekday-header { font-size: 16px; padding-bottom: 3px; }
-  .day { 
-    font-size: 18px; 
-    padding: 8px 2px;
-  }
-  .day.full { gap: 4px; }
-  .day.full .date-number { font-size: 18px; margin-top: -4px; }
-  .day.full .full-label { font-size: 11px; }
+  .day { font-size: 18px; padding: 6px 3px; }
+  .day.full { gap: 6px; }
+  .day.full .date-number { font-size: 18px; margin-top: -6px; }
+  .day.full .full-label { font-size: 12px; }
   #submit-btn { font-size: 18px; padding: 12px 22px; }
 }
 </style>
