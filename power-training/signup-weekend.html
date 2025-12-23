@@ -20,7 +20,7 @@
     }
     h1 {
       font-size: 36px;
-      margin: 0.5em 0 1.5em;  /* ✅ 增加下方間距 */
+      margin: 0.5em 0 0.2em;
     }
     .month-title {
       font-weight: bold;
@@ -55,6 +55,7 @@
       cursor: default;
       padding: 4px;
       box-sizing: border-box;
+      overflow: hidden;
     }
     .day.available {
       background-color: #ffe0cc;
@@ -93,7 +94,7 @@
     /* 日期顯示樣式 */
     .date-number {
       font-size: 25px;
-      line-height: 1.2;
+      line-height: 1;
       font-weight: 600;
     }
     
@@ -102,17 +103,17 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 2px;
+      margin-top: 3px;
       font-size: 11px;
-      line-height: 1.1;  /* ✅ 調整行高 */
+      line-height: 1.1;
       color: #ff5722;
       font-weight: 500;
     }
     
     .date-time-divider {
-      margin: 0;  /* ✅ 移除間距 */
+      margin: 1px 0;
       color: #ff5722;
-      font-size: 10px;
+      font-size: 9px;
     }
     
     .day.selected .date-time-container,
@@ -126,7 +127,7 @@
     }
     
     .registered-label {
-      font-size: 11px;
+      font-size: 10px;
       color: #666;
       margin-top: 2px;
     }
@@ -136,9 +137,9 @@
     }
     
     .full-label {
-      font-size: 14px;
+      font-size: 12px;
       line-height: 1;
-      margin-top: 4px;
+      margin-top: 3px;
     }
     
     #submit-btn {
@@ -170,29 +171,63 @@
     @media (max-width: 750px) {
       h1 { 
         font-size: 28px; 
-        margin: 0.5em 0 1em;  /* ✅ 手機版也增加下方間距 */
+        margin-bottom: 0.8em;
       }
-      .month-title { font-size: 24px; margin: 1.5em 0 0.6em; }
-      .container { padding: 0.5em; }
+      .month-title { 
+        font-size: 24px; 
+        margin: 1.5em 0 0.6em; 
+      }
+      .container { 
+        padding: 0.5em; 
+      }
       .calendar-header,
-      .calendar-grid { gap: 4px; padding: 0 6px; }
-      .weekday-header { font-size: 16px; padding-bottom: 3px; }
-      .day { padding: 6px 3px; }
-      .date-number { font-size: 18px; }
-      .date-time-container { 
-        font-size: 9px;
-        margin-top: 1px;
-        line-height: 1;  /* ✅ 更緊湊 */
+      .calendar-grid { 
+        gap: 4px; 
+        padding: 0 6px; 
       }
+      .weekday-header { 
+        font-size: 16px; 
+        padding-bottom: 3px; 
+      }
+      
+      /* 🔧 關鍵修正：固定格子大小 */
+      .day { 
+        padding: 2px;
+        font-size: 18px;
+        min-height: 0;
+      }
+      
+      .date-number { 
+        font-size: 16px;
+        line-height: 1;
+      }
+      
+      .date-time-container { 
+        font-size: 8px;
+        margin-top: 1px;
+        line-height: 1;
+      }
+      
       .date-time-divider {
         margin: 0;
-        font-size: 8px;
+        font-size: 7px;
       }
+      
       .registered-label {
-        font-size: 9px;
+        font-size: 7px;
+        margin-top: 1px;
       }
-      .full-label { font-size: 12px; margin-top: 2px; }
-      #submit-btn { font-size: 18px; padding: 12px 22px; }
+      
+      .full-label { 
+        font-size: 9px; 
+        margin-top: 1px; 
+      }
+      
+      #submit-btn { 
+        font-size: 18px; 
+        padding: 12px 22px;
+        margin-top: 2em;
+      }
     }
   </style>
 </head>
@@ -342,12 +377,12 @@
                     <div class="date-time-divider">|</div>
                     <div>${info.endTime}</div>
                   </div>
-                  <div class="registered-label">✓ 已報名</div>
+                  <div class="registered-label">✓</div>
                 `;
               } else {
                 cell.innerHTML = `
                   <div class="date-number">${d}</div>
-                  <div class="registered-label">✓ 已報名</div>
+                  <div class="registered-label">✓</div>
                 `;
               }
             } else if (isFull && availableSet.has(dateStr)) {
@@ -425,7 +460,7 @@
         renderCalendar();
       } catch (error) {
         console.error('提交錯誤:', error);
-        msg.textContent = '⚠️ 發生錯誤，請稍後再試';
+        msg.textContent = '⚠️ 發生錯誤,請稍後再試';
       }
     });
 
