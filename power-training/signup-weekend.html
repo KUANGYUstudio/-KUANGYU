@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>【週六】長距離訓練</title>
+  <title>【光聿】長距離訓練</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
@@ -95,7 +95,7 @@
       opacity: 0.8;
     }
     
-    /* 🆕 日期顯示樣式 */
+    /* 日期顯示樣式 */
     .date-number {
       font-size: 25px;
       line-height: 1.2;
@@ -103,7 +103,7 @@
     }
     
     .date-time {
-      font-size: 11px;
+      font-size: 14px;  /* ✅ 電腦版從 11px 改成 14px */
       line-height: 1.3;
       color: #ff5722;
       margin-top: 2px;
@@ -159,9 +159,18 @@
       .calendar-header,
       .calendar-grid { gap: 4px; padding: 0 6px; }
       .weekday-header { font-size: 16px; padding-bottom: 3px; }
-      .day { padding: 3px; }
+      
+      /* ✅ 手機版格子調整 */
+      .day { 
+        padding: 6px 3px;
+        min-height: 70px;  /* 確保有時間的格子對齊 */
+      }
+      
       .date-number { font-size: 18px; }
-      .date-time { font-size: 9px; margin-top: 1px; }
+      .date-time { 
+        font-size: 10px;  /* ✅ 從 9px 改成 10px */
+        margin-top: 2px; 
+      }
       .full-label { font-size: 12px; margin-top: 2px; }
       #submit-btn { font-size: 18px; padding: 12px 22px; }
     }
@@ -169,7 +178,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>【週六】長距離訓練</h1>
+    <h1>【光聿】長距離訓練</h1>
     <div class="info">不定期開課 · 時間依實際排課為準</div>
     <div id="calendar"></div>
     <button id="submit-btn">送出報名</button>
@@ -181,7 +190,7 @@
 
     const selectedDates = new Set();
     let myRegisteredDates = new Set();
-    let weekendInfo = {};  // 🆕 儲存課程時間資訊
+    let weekendInfo = {};
 
     function getParam(key) { 
       return new URLSearchParams(window.location.search).get(key) || ''; 
@@ -201,7 +210,6 @@
       }
     }
 
-    // 🆕 載入週末課程詳細資訊
     async function loadWeekendInfo() {
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=weekendInfo`);
@@ -242,7 +250,7 @@
       const availableDates = await loadAvailableDates();
       myRegisteredDates = await loadMyRegisteredDates();
       const signupCounts = await loadSignupCounts();
-      weekendInfo = await loadWeekendInfo();  // 🆕 載入時間資訊
+      weekendInfo = await loadWeekendInfo();
 
       calendarDiv.innerHTML = '';
 
@@ -292,22 +300,19 @@
             cell.className = 'day';
 
             let currentCount = 0;
-            let maxCapacity = 15;  // 預設值
+            let maxCapacity = 15;
             
             if (signupCounts[dateStr]) {
               currentCount = signupCounts[dateStr].weekend || 0;
             }
             
-            // 🆕 從 weekendInfo 取得人數上限
             if (weekendInfo[dateStr]) {
               maxCapacity = weekendInfo[dateStr].maxCapacity || 15;
             }
             
             const isFull = currentCount >= maxCapacity;
 
-            // 🆕 優化顯示邏輯
             if (myRegisteredDates.has(dateStr)) {
-              // 已報名
               cell.classList.add('registered');
               const info = weekendInfo[dateStr];
               if (info) {
@@ -323,7 +328,6 @@
                 `;
               }
             } else if (isFull && availableSet.has(dateStr)) {
-              // 已額滿
               cell.classList.add('full');
               const info = weekendInfo[dateStr];
               if (info) {
@@ -339,7 +343,6 @@
                 `;
               }
             } else if (availableSet.has(dateStr)) {
-              // 可報名
               cell.classList.add('available');
               const info = weekendInfo[dateStr];
               if (info) {
@@ -361,7 +364,6 @@
                 }
               };
             } else {
-              // 不可選
               cell.innerHTML = `<div class="date-number">${d}</div>`;
             }
 
