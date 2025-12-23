@@ -31,25 +31,28 @@
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      padding: 0 4px;
+      gap: 4px;
+      padding: 0;
       box-sizing: border-box;
+      max-width: 100%;
     }
     .weekday-header {
       font-weight: bold;
-      font-size: 24px;
+      font-size: 20px;
       text-align: center;
       color: #888;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
     }
     .day {
       aspect-ratio: 1;
-      font-size: 25px;
+      max-width: 100%;
+      width: 100%;
+      font-size: 22px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
+      border-radius: 6px;
       background-color: #eeeeee;
       color: #aaa;
       cursor: default;
@@ -62,7 +65,6 @@
       color: #000;
       cursor: pointer;
       border: 1px solid #ff8a65;
-      box-sizing: border-box;
       transition: all 0.2s;
     }
     .day.available:hover {
@@ -93,7 +95,7 @@
     
     /* 日期顯示樣式 */
     .date-number {
-      font-size: 25px;
+      font-size: 22px;
       line-height: 1;
       font-weight: 600;
     }
@@ -103,8 +105,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 3px;
-      font-size: 13px;
+      margin-top: 2px;
+      font-size: 11px;
       line-height: 1.1;
       color: #ff5722;
       font-weight: 500;
@@ -113,7 +115,7 @@
     .date-time-divider {
       margin: 1px 0;
       color: #ff5722;
-      font-size: 11px;
+      font-size: 10px;
     }
     
     .day.selected .date-time-container,
@@ -137,9 +139,9 @@
     }
     
     .full-label {
-      font-size: 12px;
+      font-size: 10px;
       line-height: 1;
-      margin-top: 3px;
+      margin-top: 2px;
     }
     
     #submit-btn {
@@ -182,19 +184,18 @@
       }
       .calendar-header,
       .calendar-grid { 
-        gap: 4px; 
-        padding: 0 6px; 
+        gap: 3px; 
+        padding: 0; 
       }
       .weekday-header { 
         font-size: 16px; 
         padding-bottom: 3px; 
       }
       
-      /* 🔧 關鍵修正：固定格子大小 */
       .day { 
         padding: 2px;
         font-size: 18px;
-        min-height: 0;
+        border-radius: 4px;
       }
       
       .date-number { 
@@ -219,7 +220,7 @@
       }
       
       .full-label { 
-        font-size: 9px; 
+        font-size: 8px; 
         margin-top: 1px; 
       }
       
