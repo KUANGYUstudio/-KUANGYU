@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>【光聿】長距離訓練</title>
+  <title>週末訓練</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
@@ -102,21 +102,41 @@
       font-weight: 600;
     }
     
-    .date-time {
-      font-size: 14px;
-      line-height: 1.3;
-      color: #ff5722;
+    /* 🆕 時間上下排列樣式 */
+    .date-time-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       margin-top: 2px;
+      font-size: 11px;
+      line-height: 1.2;
+      color: #ff5722;
       font-weight: 500;
-      white-space: nowrap;
     }
     
-    .day.selected .date-time {
+    .date-time-divider {
+      margin: 1px 0;
+      color: #ff5722;
+    }
+    
+    .day.selected .date-time-container,
+    .day.selected .date-time-divider {
       color: #fff;
     }
     
-    .day.registered .date-time {
+    .day.registered .date-time-container,
+    .day.registered .date-time-divider {
       color: #666;
+    }
+    
+    .registered-label {
+      font-size: 11px;
+      color: #666;
+      margin-top: 2px;
+    }
+    
+    .day.selected .registered-label {
+      color: #fff;
     }
     
     .full-label {
@@ -161,9 +181,15 @@
       .weekday-header { font-size: 16px; padding-bottom: 3px; }
       .day { padding: 6px 3px; }
       .date-number { font-size: 18px; }
-      .date-time { 
-        font-size: 10px;
-        margin-top: 2px; 
+      .date-time-container { 
+        font-size: 9px;
+        margin-top: 1px;
+      }
+      .date-time-divider {
+        margin: 0;
+      }
+      .registered-label {
+        font-size: 9px;
       }
       .full-label { font-size: 12px; margin-top: 2px; }
       #submit-btn { font-size: 18px; padding: 12px 22px; }
@@ -172,8 +198,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>【光聿】長距離訓練</h1>
-    <div class="info">不定期開課 · 時間依實際排課為準</div>
+    <h1>長距離訓練</h1>
     <div id="calendar"></div>
     <button id="submit-btn">送出報名</button>
     <div id="message"></div>
@@ -312,13 +337,17 @@
               if (info) {
                 cell.innerHTML = `
                   <div class="date-number">${d}</div>
-                  <div class="date-time">${info.startTime}-${info.endTime}</div>
-                  <div class="date-time">✓ 已報名</div>
+                  <div class="date-time-container">
+                    <div>${info.startTime}</div>
+                    <div class="date-time-divider">|</div>
+                    <div>${info.endTime}</div>
+                  </div>
+                  <div class="registered-label">✓ 已報名</div>
                 `;
               } else {
                 cell.innerHTML = `
                   <div class="date-number">${d}</div>
-                  <div class="date-time">✓ 已報名</div>
+                  <div class="registered-label">✓ 已報名</div>
                 `;
               }
             } else if (isFull && availableSet.has(dateStr)) {
@@ -327,7 +356,11 @@
               if (info) {
                 cell.innerHTML = `
                   <div class="date-number">${d}</div>
-                  <div class="date-time">${info.startTime}-${info.endTime}</div>
+                  <div class="date-time-container">
+                    <div>${info.startTime}</div>
+                    <div class="date-time-divider">|</div>
+                    <div>${info.endTime}</div>
+                  </div>
                   <div class="full-label">額滿</div>
                 `;
               } else {
@@ -342,7 +375,11 @@
               if (info) {
                 cell.innerHTML = `
                   <div class="date-number">${d}</div>
-                  <div class="date-time">${info.startTime}-${info.endTime}</div>
+                  <div class="date-time-container">
+                    <div>${info.startTime}</div>
+                    <div class="date-time-divider">|</div>
+                    <div>${info.endTime}</div>
+                  </div>
                 `;
               } else {
                 cell.innerHTML = `<div class="date-number">${d}</div>`;
