@@ -51,12 +51,15 @@
       aspect-ratio: 1;
       font-size: 25px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       border-radius: 8px;
       background-color: #eeeeee;
       color: #aaa;
       cursor: default;
+      padding: 4px;
+      box-sizing: border-box;
     }
     .day.available {
       background-color: #ffe0cc;
@@ -64,11 +67,18 @@
       cursor: pointer;
       border: 1px solid #ff8a65;
       box-sizing: border-box;
+      transition: all 0.2s;
+    }
+    .day.available:hover {
+      background-color: #ffccbc;
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(255, 138, 101, 0.3);
     }
     .day.selected {
       background-color: #ff8a65;
       font-weight: bold;
       color: #fff;
+      border: 2px solid #ff5722;
     }
     .day.registered {
       background-color: #ffccbc;
@@ -83,22 +93,38 @@
       cursor: not-allowed;
       border: 2px solid #ff8a65;
       opacity: 0.8;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      position: relative;
     }
-    .day.full .date-number {
+    
+    /* 🆕 日期顯示樣式 */
+    .date-number {
       font-size: 25px;
-      line-height: 1;
-      margin-top: -8px;
+      line-height: 1.2;
+      font-weight: 600;
     }
-    .day.full .full-label {
+    
+    .date-time {
+      font-size: 11px;
+      line-height: 1.3;
+      color: #ff5722;
+      margin-top: 2px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    
+    .day.selected .date-time {
+      color: #fff;
+    }
+    
+    .day.registered .date-time {
+      color: #666;
+    }
+    
+    .full-label {
       font-size: 14px;
       line-height: 1;
+      margin-top: 4px;
     }
+    
     #submit-btn {
       margin: 2em auto;
       padding: 16px 32px;
@@ -110,12 +136,21 @@
       cursor: pointer;
       max-width: 60%;
       display: block;
+      transition: all 0.2s;
     }
+    
+    #submit-btn:hover {
+      background: #ff5722;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+    }
+    
     #message {
       font-size: 16px;
       margin-top: 1em;
       font-weight: bold;
     }
+    
     @media (max-width: 750px) {
       h1 { font-size: 28px; margin-bottom: 0.4em; }
       .info { font-size: 18px; margin-bottom: 1em; }
@@ -124,10 +159,10 @@
       .calendar-header,
       .calendar-grid { gap: 4px; padding: 0 6px; }
       .weekday-header { font-size: 16px; padding-bottom: 3px; }
-      .day { font-size: 18px; padding: 6px 3px; }
-      .day.full { gap: 6px; }
-      .day.full .date-number { font-size: 18px; margin-top: -6px; }
-      .day.full .full-label { font-size: 12px; }
+      .day { padding: 3px; }
+      .date-number { font-size: 18px; }
+      .date-time { font-size: 9px; margin-top: 1px; }
+      .full-label { font-size: 12px; margin-top: 2px; }
       #submit-btn { font-size: 18px; padding: 12px 22px; }
     }
   </style>
@@ -135,7 +170,7 @@
 <body>
   <div class="container">
     <h1>【週六】長距離訓練</h1>
-    <div class="info">不定期開課 · 彈性時間</div>
+    <div class="info">不定期開課 · 時間依實際排課為準</div>
     <div id="calendar"></div>
     <button id="submit-btn">送出報名</button>
     <div id="message"></div>
@@ -146,6 +181,7 @@
 
     const selectedDates = new Set();
     let myRegisteredDates = new Set();
+    let weekendInfo = {};  // 🆕 儲存課程時間資訊
 
     function getParam(key) { 
       return new URLSearchParams(window.location.search).get(key) || ''; 
@@ -162,6 +198,18 @@
       } catch (error) {
         console.error('載入日期錯誤:', error);
         return [];
+      }
+    }
+
+    // 🆕 載入週末課程詳細資訊
+    async function loadWeekendInfo() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?mode=weekendInfo`);
+        const data = await res.json();
+        return data.info || {};
+      } catch (error) {
+        console.error('載入課程資訊錯誤:', error);
+        return {};
       }
     }
 
@@ -194,6 +242,7 @@
       const availableDates = await loadAvailableDates();
       myRegisteredDates = await loadMyRegisteredDates();
       const signupCounts = await loadSignupCounts();
+      weekendInfo = await loadWeekendInfo();  // 🆕 載入時間資訊
 
       calendarDiv.innerHTML = '';
 
@@ -241,22 +290,67 @@
             const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
             const cell = document.createElement('div');
             cell.className = 'day';
-            cell.textContent = d;
 
             let currentCount = 0;
+            let maxCapacity = 15;  // 預設值
+            
             if (signupCounts[dateStr]) {
               currentCount = signupCounts[dateStr].weekend || 0;
             }
-            const isFull = currentCount >= 15;
+            
+            // 🆕 從 weekendInfo 取得人數上限
+            if (weekendInfo[dateStr]) {
+              maxCapacity = weekendInfo[dateStr].maxCapacity || 15;
+            }
+            
+            const isFull = currentCount >= maxCapacity;
 
+            // 🆕 優化顯示邏輯
             if (myRegisteredDates.has(dateStr)) {
+              // 已報名
               cell.classList.add('registered');
-              cell.textContent = d + ' ✓';
+              const info = weekendInfo[dateStr];
+              if (info) {
+                cell.innerHTML = `
+                  <div class="date-number">${d}</div>
+                  <div class="date-time">${info.startTime}-${info.endTime}</div>
+                  <div class="date-time">✓ 已報名</div>
+                `;
+              } else {
+                cell.innerHTML = `
+                  <div class="date-number">${d}</div>
+                  <div class="date-time">✓ 已報名</div>
+                `;
+              }
             } else if (isFull && availableSet.has(dateStr)) {
+              // 已額滿
               cell.classList.add('full');
-              cell.innerHTML = `<div class="date-number">${d}</div><div class="full-label">額滿</div>`;
+              const info = weekendInfo[dateStr];
+              if (info) {
+                cell.innerHTML = `
+                  <div class="date-number">${d}</div>
+                  <div class="date-time">${info.startTime}-${info.endTime}</div>
+                  <div class="full-label">額滿</div>
+                `;
+              } else {
+                cell.innerHTML = `
+                  <div class="date-number">${d}</div>
+                  <div class="full-label">額滿</div>
+                `;
+              }
             } else if (availableSet.has(dateStr)) {
+              // 可報名
               cell.classList.add('available');
+              const info = weekendInfo[dateStr];
+              if (info) {
+                cell.innerHTML = `
+                  <div class="date-number">${d}</div>
+                  <div class="date-time">${info.startTime}-${info.endTime}</div>
+                `;
+              } else {
+                cell.innerHTML = `<div class="date-number">${d}</div>`;
+              }
+              
               cell.onclick = () => {
                 if (selectedDates.has(dateStr)) {
                   selectedDates.delete(dateStr);
@@ -266,6 +360,9 @@
                   cell.classList.add('selected');
                 }
               };
+            } else {
+              // 不可選
+              cell.innerHTML = `<div class="date-number">${d}</div>`;
             }
 
             grid.appendChild(cell);
