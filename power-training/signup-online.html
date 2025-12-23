@@ -36,34 +36,37 @@
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      padding: 0 4px;
+      gap: 4px;
+      padding: 0;
       box-sizing: border-box;
+      max-width: 100%;
     }
     .weekday-header {
       font-weight: bold;
-      font-size: 24px;
+      font-size: 20px;
       text-align: center;
       color: #888;
-      padding-bottom: 6px;
+      padding-bottom: 4px;
     }
     .day {
       aspect-ratio: 1;
-      font-size: 25px;
+      max-width: 100%;
+      width: 100%;
+      font-size: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
+      border-radius: 6px;
       background-color: #eeeeee;
       color: #aaa;
       cursor: default;
+      box-sizing: border-box;
     }
     .day.available {
       background-color: #d4edda;
       color: #000;
       cursor: pointer;
       border: 1px solid #28a745;
-      box-sizing: border-box;
     }
     .day.selected {
       background-color: #28a745;
@@ -87,16 +90,16 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 8px;
+      gap: 4px;
       position: relative;
     }
     .day.full .date-number {
-      font-size: 25px;
+      font-size: 22px;
       line-height: 1;
-      margin-top: -8px;
+      margin-top: -4px;
     }
     .day.full .full-label {
-      font-size: 14px;
+      font-size: 12px;
       line-height: 1;
     }
     #submit-btn {
@@ -122,12 +125,12 @@
       .month-title { font-size: 24px; margin: 1.5em 0 0.6em; }
       .container { padding: 0.5em; }
       .calendar-header,
-      .calendar-grid { gap: 4px; padding: 0 6px; }
+      .calendar-grid { gap: 3px; padding: 0; }
       .weekday-header { font-size: 16px; padding-bottom: 3px; }
-      .day { font-size: 18px; padding: 6px 3px; }
-      .day.full { gap: 6px; }
-      .day.full .date-number { font-size: 18px; margin-top: -6px; }
-      .day.full .full-label { font-size: 12px; }
+      .day { font-size: 18px; border-radius: 4px; }
+      .day.full { gap: 3px; }
+      .day.full .date-number { font-size: 16px; margin-top: -3px; }
+      .day.full .full-label { font-size: 11px; }
       #submit-btn { font-size: 18px; padding: 12px 22px; }
     }
   </style>
