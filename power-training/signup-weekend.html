@@ -388,23 +388,10 @@
               }
             } else if (isFull && availableSet.has(dateStr)) {
               cell.classList.add('full');
-              const info = weekendInfo[dateStr];
-              if (info) {
-                cell.innerHTML = `
-                  <div class="date-number">${d}</div>
-                  <div class="date-time-container">
-                    <div>${info.startTime}</div>
-                    <div class="date-time-divider">|</div>
-                    <div>${info.endTime}</div>
-                  </div>
-                  <div class="full-label">額滿</div>
-                `;
-              } else {
-                cell.innerHTML = `
-                  <div class="date-number">${d}</div>
-                  <div class="full-label">額滿</div>
-                `;
-              }
+              cell.innerHTML = `
+                <div class="date-number">${d}</div>
+                <div class="full-label">額滿</div>
+              `;
             } else if (availableSet.has(dateStr)) {
               cell.classList.add('available');
               const info = weekendInfo[dateStr];
