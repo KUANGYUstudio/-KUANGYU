@@ -28,7 +28,7 @@ h1 {
   margin-bottom: 1.5em;
 }
 
-/* 🆕 載入動畫樣式 */
+/* 載入動畫樣式 */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -79,17 +79,17 @@ h1 {
   font-size: 20px;
   text-align: center;
   color: #888;
-  padding-bottom: 10px;
+  padding-bottom: 20px;  /* ✨ 原本 10px → 20px（拉開距離）*/
 }
 .day {
   aspect-ratio: 1;
   max-width: 100%;
   width: 100%;
-  font-size: 22px;
+  font-size: 28px;  /* ✨ 原本 22px → 28px（數字變大）*/
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px; /* ✨ 電腦版：更圓的角 */
+  border-radius: 12px;  /* ✨ 原本 6px → 12px（角更圓）*/
   background-color: #eeeeee;
   color: #aaa;
   cursor: default;
@@ -127,7 +127,7 @@ h1 {
   position: relative;
 }
 .day.full .date-number {
-  font-size: 22px;
+  font-size: 28px;  /* ✨ 原本 22px → 28px（配合整體數字大小）*/
   line-height: 1;
   margin-top: -4px;
 }
@@ -136,7 +136,7 @@ h1 {
   line-height: 1;
 }
 #submit-btn {
-  margin: 2em auto;
+  margin: 3em auto 2em;  /* ✨ 原本 2em auto → 3em auto 2em（往下移一點）*/
   padding: 16px 32px;
   font-size: 22px;
   background: #00bcd4;
@@ -152,6 +152,8 @@ h1 {
   margin-top: 1em;
   font-weight: bold;
 }
+
+/* 🔒 手機版完全不改（維持原樣）*/
 @media (max-width: 750px) {
   h1 { font-size: 28px; margin-bottom: 0.4em; }
   .info { font-size: 18px; margin-bottom: 1em; }
@@ -160,10 +162,7 @@ h1 {
   .calendar-header,
   .calendar-grid { gap: 3px; padding: 0; }
   .weekday-header { font-size: 16px; padding-bottom: 3px; }
-  .day { 
-    font-size: 18px; 
-    border-radius: 4px; /* 📱 手機版：保持原樣 */
-  }
+  .day { font-size: 18px; border-radius: 6px; }
   .day.full { gap: 3px; }
   .day.full .date-number { font-size: 16px; margin-top: -3px; }
   .day.full .full-label { font-size: 11px; }
@@ -173,7 +172,7 @@ h1 {
 </style>
 </head>
 <body>
-  <!-- 🆕 載入動畫 -->
+  <!-- 載入動畫 -->
   <div id="loading" class="loading-overlay">
     <div class="loading-spinner"></div>
     <div class="loading-text">載入中...</div>
@@ -200,7 +199,7 @@ h1 {
     const lineId = getParam('lineId');
     const name = getParam('name');
 
-    // 🆕 合併版 API：一次取得所有資料
+    // 合併版 API：一次取得所有資料
     async function loadAllData() {
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(lineId)}&courseType=evening`);
@@ -228,7 +227,7 @@ h1 {
       loadingDiv.style.display = 'flex';
       calendarDiv.innerHTML = '';
 
-      // 🚀 只呼叫 1 次 API，取得所有資料
+      // 只呼叫 1 次 API，取得所有資料
       const allData = await loadAllData();
       const availableDates = allData.dates;
       myRegisteredDates = allData.mySignups;
