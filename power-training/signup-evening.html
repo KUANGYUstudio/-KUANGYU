@@ -89,7 +89,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 12px; /* ✨ 電腦版：更圓的角 */
   background-color: #eeeeee;
   color: #aaa;
   cursor: default;
@@ -160,7 +160,10 @@ h1 {
   .calendar-header,
   .calendar-grid { gap: 3px; padding: 0; }
   .weekday-header { font-size: 16px; padding-bottom: 3px; }
-  .day { font-size: 18px; border-radius: 6px; }
+  .day { 
+    font-size: 18px; 
+    border-radius: 4px; /* 📱 手機版：保持原樣 */
+  }
   .day.full { gap: 3px; }
   .day.full .date-number { font-size: 16px; margin-top: -3px; }
   .day.full .full-label { font-size: 11px; }
