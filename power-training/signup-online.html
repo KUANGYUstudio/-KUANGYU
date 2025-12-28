@@ -27,6 +27,39 @@
       color: #666;
       margin-bottom: 1.5em;
     }
+
+    /* 載入動畫樣式 */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #28a745;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading-text {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #666;
+    }
+
     .month-title {
       font-weight: bold;
       font-size: 32px;
@@ -36,7 +69,7 @@
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      gap: 8px;  /* ✨ 原本 4px → 8px（格子間距變大，格子會自動變小）*/
       padding: 0;
       box-sizing: border-box;
       max-width: 100%;
@@ -46,17 +79,17 @@
       font-size: 20px;
       text-align: center;
       color: #888;
-      padding-bottom: 10px;
+      padding-bottom: 20px;  /* ✨ 拉開距離 */
     }
     .day {
       aspect-ratio: 1;
       max-width: 100%;
       width: 100%;
-      font-size: 22px;
+      font-size: 28px;  /* ✨ 數字變大 */
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 6px;
+      border-radius: 12px;  /* ✨ 角更圓 */
       background-color: #eeeeee;
       color: #aaa;
       cursor: default;
@@ -94,7 +127,7 @@
       position: relative;
     }
     .day.full .date-number {
-      font-size: 22px;
+      font-size: 28px;  /* ✨ 配合整體數字大小 */
       line-height: 1;
       margin-top: -4px;
     }
@@ -103,7 +136,7 @@
       line-height: 1;
     }
     #submit-btn {
-      margin: 2em auto;
+      margin: 3em auto 2em;  /* ✨ 往下移 */
       padding: 16px 32px;
       font-size: 22px;
       background: #28a745;
@@ -119,6 +152,8 @@
       margin-top: 1em;
       font-weight: bold;
     }
+
+    /* 🔒 手機版完全不改 */
     @media (max-width: 750px) {
       h1 { font-size: 28px; margin-bottom: 0.4em; }
       .info { font-size: 18px; margin-bottom: 1em; }
@@ -132,10 +167,17 @@
       .day.full .date-number { font-size: 16px; margin-top: -3px; }
       .day.full .full-label { font-size: 11px; }
       #submit-btn { font-size: 18px; padding: 12px 22px; }
+      .loading-text { font-size: 16px; }
     }
   </style>
 </head>
 <body>
+  <!-- 載入動畫 -->
+  <div id="loading" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">載入中...</div>
+  </div>
+
   <div class="container">
     <h1>線上功率課</h1>
     <div class="info">每週二 / 週四 19:30～21:00</div>
@@ -157,48 +199,42 @@
     const lineId = getParam('lineId');
     const name = getParam('name');
 
-    async function loadAvailableDates() {
+    // 🚀 合併版 API：一次取得所有資料
+    async function loadAllData() {
       try {
-        const res = await fetch(`${SCRIPT_URL}?mode=dates`);
+        const res = await fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(lineId)}&courseType=online`);
         const data = await res.json();
-        return data.open || [];
+        return {
+          dates: data.dates || [],
+          mySignups: new Set(data.mySignups || []),
+          counts: data.counts || {}
+        };
       } catch (error) {
-        console.error('載入日期錯誤:', error);
-        return [];
-      }
-    }
-
-    async function loadMyRegisteredDates() {
-      try {
-        const res = await fetch(`${SCRIPT_URL}?mode=mySignups&lineId=${encodeURIComponent(lineId)}&courseType=online`);
-        const data = await res.json();
-        return new Set(data.dates || []);
-      } catch (error) {
-        console.error('載入已報名日期錯誤:', error);
-        return new Set();
-      }
-    }
-
-    async function loadSignupCounts() {
-      try {
-        const res = await fetch(`${SCRIPT_URL}?mode=count`);
-        const data = await res.json();
-        return data || {};
-      } catch (error) {
-        console.error('載入報名人數錯誤:', error);
-        return {};
+        console.error('載入資料錯誤:', error);
+        return {
+          dates: [],
+          mySignups: new Set(),
+          counts: {}
+        };
       }
     }
 
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
-      calendarDiv.innerHTML = '載入中...';
-
-      const availableDates = await loadAvailableDates();
-      myRegisteredDates = await loadMyRegisteredDates();
-      const signupCounts = await loadSignupCounts();
-
+      const loadingDiv = document.getElementById('loading');
+      
+      // 顯示載入動畫
+      loadingDiv.style.display = 'flex';
       calendarDiv.innerHTML = '';
+
+      // 只呼叫 1 次 API
+      const allData = await loadAllData();
+      const availableDates = allData.dates;
+      myRegisteredDates = allData.mySignups;
+      const signupCounts = allData.counts;
+
+      // 隱藏載入動畫
+      loadingDiv.style.display = 'none';
 
       const availableSet = new Set(availableDates);
 
@@ -287,19 +323,24 @@
       }
 
       const msg = document.getElementById('message');
-      msg.textContent = '送出中...';
+      const loadingDiv = document.getElementById('loading');
+      
+      loadingDiv.style.display = 'flex';
+      msg.textContent = '';
 
       try {
         for (const date of selectedDates) {
           await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=online&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
         }
 
+        loadingDiv.style.display = 'none';
         msg.textContent = '✅ 登記完成';
         alert('✅ 登記成功！');
         selectedDates.clear();
         renderCalendar();
       } catch (error) {
         console.error('提交錯誤:', error);
+        loadingDiv.style.display = 'none';
         msg.textContent = '⚠️ 發生錯誤，請稍後再試';
       }
     });
