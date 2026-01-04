@@ -4,175 +4,174 @@
   <meta charset="UTF-8" />
   <title>晚班功率課</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #ffffff;
-  margin: 0;
-  padding: 0;
-}
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0.5em;
-  box-sizing: border-box;
-  text-align: center;
-}
-h1 {
-  font-size: 36px;
-  margin: 0.5em 0 0.2em;
-}
-.info {
-  font-size: 24px;
-  color: #666;
-  margin-bottom: 1.5em;
-}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0.5em;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    h1 {
+      font-size: 36px;
+      margin: 0.5em 0 0.2em;
+    }
+    .info {
+      font-size: 24px;
+      color: #666;
+      margin-bottom: 1.5em;
+    }
 
-/* 載入動畫樣式 */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #00bcd4;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-.loading-text {
-  margin-top: 20px;
-  font-size: 18px;
-  color: #666;
-}
+    /* 載入動畫樣式 */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #00bcd4;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading-text {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #666;
+    }
 
-.month-title {
-  font-weight: bold;
-  font-size: 32px;
-  margin: 2em 0 0.8em;
-}
-.calendar-header,
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;  /* ✨ 原本 4px → 8px（格子間距變大，格子會自動變小）*/
-  padding: 0;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-.weekday-header {
-  font-weight: bold;
-  font-size: 20px;
-  text-align: center;
-  color: #888;
-  padding-bottom: 20px;  /* ✨ 原本 10px → 20px（拉開距離）*/
-}
-.day {
-  aspect-ratio: 1;
-  max-width: 100%;
-  width: 100%;
-  font-size: 28px;  /* ✨ 原本 22px → 28px（數字變大）*/
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;  /* ✨ 原本 6px → 12px（角更圓）*/
-  background-color: #eeeeee;
-  color: #aaa;
-  cursor: default;
-  box-sizing: border-box;
-}
-.day.available {
-  background-color: #b2ebf2;
-  color: #000;
-  cursor: pointer;
-  border: 1px solid #00bcd4;
-}
-.day.selected {
-  background-color: #00bcd4;
-  font-weight: bold;
-  color: #fff;
-}
-.day.registered {
-  background-color: #80deea;
-  color: #000;
-  cursor: not-allowed;
-  border: 2px solid #00bcd4;
-  opacity: 0.7;
-}
-.day.full {
-  background-color: #e0e0e0;
-  color: #666;
-  cursor: not-allowed;
-  border: 2px solid #00bcd4;
-  opacity: 0.8;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  position: relative;
-}
-.day.full .date-number {
-  font-size: 28px;  /* ✨ 原本 22px → 28px（配合整體數字大小）*/
-  line-height: 1;
-  margin-top: -4px;
-}
-.day.full .full-label {
-  font-size: 12px;
-  line-height: 1;
-}
-#submit-btn {
-  margin: 3em auto 2em;  /* ✨ 原本 2em auto → 3em auto 2em（往下移一點）*/
-  padding: 16px 32px;
-  font-size: 22px;
-  background: #00bcd4;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  max-width: 60%;
-  display: block;
-}
-#message {
-  font-size: 16px;
-  margin-top: 1em;
-  font-weight: bold;
-}
+    .month-title {
+      font-weight: bold;
+      font-size: 32px;
+      margin: 2em 0 0.8em;
+    }
+    .calendar-header,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px; 
+      padding: 0;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+    .weekday-header {
+      font-weight: bold;
+      font-size: 20px;
+      text-align: center;
+      color: #888;
+      padding-bottom: 20px; 
+    }
+    .day {
+      aspect-ratio: 1;
+      max-width: 100%;
+      width: 100%;
+      font-size: 28px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px; 
+      background-color: #eeeeee;
+      color: #aaa;
+      cursor: default;
+      box-sizing: border-box;
+    }
+    .day.available {
+      background-color: #b2ebf2;
+      color: #000;
+      cursor: pointer;
+      border: 1px solid #00bcd4;
+    }
+    .day.selected {
+      background-color: #00bcd4;
+      font-weight: bold;
+      color: #fff;
+    }
+    .day.registered {
+      background-color: #80deea;
+      color: #000;
+      cursor: not-allowed;
+      border: 2px solid #00bcd4;
+      opacity: 0.7;
+    }
+    .day.full {
+      background-color: #e0e0e0;
+      color: #666;
+      cursor: not-allowed;
+      border: 2px solid #00bcd4;
+      opacity: 0.8;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      position: relative;
+    }
+    .day.full .date-number {
+      font-size: 28px; 
+      line-height: 1;
+      margin-top: -4px;
+    }
+    .day.full .full-label {
+      font-size: 12px;
+      line-height: 1;
+    }
+    #submit-btn {
+      margin: 3em auto 2em; 
+      padding: 16px 32px;
+      font-size: 22px;
+      background: #00bcd4;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      max-width: 60%;
+      display: block;
+    }
+    #message {
+      font-size: 16px;
+      margin-top: 1em;
+      font-weight: bold;
+    }
 
-/* 🔒 手機版完全不改（維持原樣）*/
-@media (max-width: 750px) {
-  h1 { font-size: 28px; margin-bottom: 0.4em; }
-  .info { font-size: 18px; margin-bottom: 1em; }
-  .month-title { font-size: 24px; margin: 1.5em 0 0.6em; }
-  .container { padding: 0.5em; }
-  .calendar-header,
-  .calendar-grid { gap: 3px; padding: 0; }
-  .weekday-header { font-size: 16px; padding-bottom: 3px; }
-  .day { font-size: 18px; border-radius: 6px; }
-  .day.full { gap: 3px; }
-  .day.full .date-number { font-size: 16px; margin-top: -3px; }
-  .day.full .full-label { font-size: 11px; }
-  #submit-btn { font-size: 18px; padding: 12px 22px; }
-  .loading-text { font-size: 16px; }
-}
-</style>
+    /* 🔒 手機版完全不改（維持原樣）*/
+    @media (max-width: 750px) {
+      h1 { font-size: 28px; margin-bottom: 0.4em; }
+      .info { font-size: 18px; margin-bottom: 1em; }
+      .month-title { font-size: 24px; margin: 1.5em 0 0.6em; }
+      .container { padding: 0.5em; }
+      .calendar-header,
+      .calendar-grid { gap: 3px; padding: 0; }
+      .weekday-header { font-size: 16px; padding-bottom: 3px; }
+      .day { font-size: 18px; border-radius: 6px; }
+      .day.full { gap: 3px; }
+      .day.full .date-number { font-size: 16px; margin-top: -3px; }
+      .day.full .full-label { font-size: 11px; }
+      #submit-btn { font-size: 18px; padding: 12px 22px; }
+      .loading-text { font-size: 16px; }
+    }
+  </style>
 </head>
 <body>
-  <!-- 載入動畫 -->
   <div id="loading" class="loading-overlay">
     <div class="loading-spinner"></div>
     <div class="loading-text">載入中...</div>
@@ -187,6 +186,7 @@ h1 {
   </div>
 
   <script>
+    // ✅ 已更新為您的新網址
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
     const selectedDates = new Set();
@@ -239,7 +239,7 @@ h1 {
       const availableSet = new Set(availableDates);
 
       if (!availableDates.length) {
-        calendarDiv.innerHTML = '<div style="color:red;">⚠️ 無可登記日期</div>';
+        calendarDiv.innerHTML = '<div style="color:red; font-size: 1.2em; margin-top: 20px;">⚠️ 無可登記日期</div>';
         return;
       }
 
@@ -337,7 +337,10 @@ h1 {
         msg.textContent = '✅ 登記完成';
         alert('✅ 登記成功！');
         selectedDates.clear();
-        renderCalendar();
+        
+        // 🚀【關鍵修改】強制重新載入頁面，確保資料同步
+        window.location.reload();
+
       } catch (error) {
         console.error('提交錯誤:', error);
         loadingDiv.style.display = 'none';
