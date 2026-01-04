@@ -69,7 +69,7 @@
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;  /* ✨ 原本 4px → 8px（格子間距變大，格子會自動變小）*/
+      gap: 8px; 
       padding: 0;
       box-sizing: border-box;
       max-width: 100%;
@@ -79,17 +79,17 @@
       font-size: 20px;
       text-align: center;
       color: #888;
-      padding-bottom: 20px;  /* ✨ 拉開距離 */
+      padding-bottom: 20px; 
     }
     .day {
       aspect-ratio: 1;
       max-width: 100%;
       width: 100%;
-      font-size: 28px;  /* ✨ 數字變大 */
+      font-size: 28px; 
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 12px;  /* ✨ 角更圓 */
+      border-radius: 12px; 
       background-color: #eeeeee;
       color: #aaa;
       cursor: default;
@@ -127,7 +127,7 @@
       position: relative;
     }
     .day.full .date-number {
-      font-size: 28px;  /* ✨ 配合整體數字大小 */
+      font-size: 28px; 
       line-height: 1;
       margin-top: -4px;
     }
@@ -136,7 +136,7 @@
       line-height: 1;
     }
     #submit-btn {
-      margin: 3em auto 2em;  /* ✨ 往下移 */
+      margin: 3em auto 2em; 
       padding: 16px 32px;
       font-size: 22px;
       background: #28a745;
@@ -153,7 +153,6 @@
       font-weight: bold;
     }
 
-    /* 🔒 手機版完全不改 */
     @media (max-width: 750px) {
       h1 { font-size: 28px; margin-bottom: 0.4em; }
       .info { font-size: 18px; margin-bottom: 1em; }
@@ -172,7 +171,6 @@
   </style>
 </head>
 <body>
-  <!-- 載入動畫 -->
   <div id="loading" class="loading-overlay">
     <div class="loading-spinner"></div>
     <div class="loading-text">載入中...</div>
@@ -187,6 +185,7 @@
   </div>
 
   <script>
+    // ✅ 已更新為新網址
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
     const selectedDates = new Set();
@@ -239,7 +238,7 @@
       const availableSet = new Set(availableDates);
 
       if (!availableDates.length) {
-        calendarDiv.innerHTML = '<div style="color:red;">⚠️ 無可登記日期</div>';
+        calendarDiv.innerHTML = '<div style="color:red; font-size: 1.2em; margin-top: 20px;">⚠️ 無可登記日期</div>';
         return;
       }
 
@@ -337,7 +336,10 @@
         msg.textContent = '✅ 登記完成';
         alert('✅ 登記成功！');
         selectedDates.clear();
-        renderCalendar();
+        
+        // 🚀【關鍵修改】強制重新載入頁面
+        window.location.reload();
+
       } catch (error) {
         console.error('提交錯誤:', error);
         loadingDiv.style.display = 'none';
