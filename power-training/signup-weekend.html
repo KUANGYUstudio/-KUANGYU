@@ -137,27 +137,24 @@
       font-size: 28px; 
       line-height: 1;
       font-weight: 600;
-      margin-bottom: 4px; /* 增加一點與下方內容的間距 */
     }
     
-    /* --- 修改重點開始：放大電腦版時間 --- */
     .date-time-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       margin-top: 2px;
-      font-size: 14px; /* 從 11px 改為 14px */
-      line-height: 1.2;
+      font-size: 14px; /* ✨ 只改這裡：11px -> 14px */
+      line-height: 1.1;
       color: #ff5722;
-      font-weight: 600; /*稍微加粗*/
+      font-weight: 500;
     }
     
     .date-time-divider {
       margin: 1px 0;
       color: #ff5722;
-      font-size: 12px; /* 稍微放大分隔線 */
+      font-size: 10px;
     }
-    /* --- 修改重點結束 --- */
     
     .day.selected .date-time-container,
     .day.selected .date-time-divider {
@@ -170,7 +167,7 @@
     }
     
     .registered-label {
-      font-size: 14px; /* 也稍微放大已登記的勾勾 */
+      font-size: 10px;
       color: #666;
       margin-top: 2px;
     }
@@ -179,15 +176,11 @@
       color: #fff;
     }
     
-    /* --- 修改重點開始：放大電腦版額滿 --- */
     .full-label {
-      font-size: 16px; /* 從 10px 改為 16px */
+      font-size: 16px; /* ✨ 只改這裡：10px -> 16px */
       line-height: 1;
-      margin-top: 4px;
-      font-weight: bold; /* 加粗讓它更明顯 */
-      color: #d32f2f; /* 稍微加深紅色 */
+      margin-top: 2px;
     }
-    /* --- 修改重點結束 --- */
     
     #submit-btn {
       margin: 3em auto 2em; 
@@ -215,7 +208,6 @@
       font-weight: bold;
     }
     
-    /* 手機版樣式保持小字體，避免跑版 */
     @media (max-width: 750px) {
       h1 { 
         font-size: 28px; 
@@ -251,11 +243,10 @@
       .date-number { 
         font-size: 16px;
         line-height: 1;
-        margin-bottom: 0;
       }
       
       .date-time-container { 
-        font-size: 8px; /* 手機維持小字 */
+        font-size: 8px;
         margin-top: 1px;
         line-height: 1;
       }
@@ -271,7 +262,7 @@
       }
       
       .full-label { 
-        font-size: 8px; /* 手機維持小字 */
+        font-size: 8px; 
         margin-top: 1px; 
       }
       
