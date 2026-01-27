@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>光聿功率 單堂體驗</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* =========================================
+       🎨 配色控制區 (想換色改這裡就好！)
+       ========================================= */
+    :root {
+      /* 主色調：目前是「活力橘」，你可以換成任何 hex 色碼 */
+      --primary-color: #ff5722; 
+      
+      /* 次要色：淺色背景，用來顯示可預約的日期 */
+      --light-bg: #fbe9e7; 
+      
+      /* 強調色：用來顯示重要文字或邊框 */
+      --accent-color: #e64a19;
+    }
+
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 800px; /* 稍微縮窄一點，電腦版比較精緻 */
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 0.5em 0 0.2em;
+      color: var(--primary-color); /* 這裡會自動吃上面的設定 */
+      font-weight: 800;
+    }
+    .info {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 0.5em;
+    }
+    .sub-info {
+        font-size: 15px; 
+        color: #d32f2f; /* 警告紅維持不變 */
+        margin-bottom: 25px;
+        font-weight: bold;
+        background: #ffebee;
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+    }
+
+    /* 📝 訪客資料輸入區 (美化版) */
+    .guest-form {
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 16px;
+        margin-bottom: 30px;
+        text-align: left;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* 增加陰影質感 */
+        border: 1px solid #eee;
+    }
+    .form-group {
+        margin-bottom: 18px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #444;
+        font-size: 15px;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #f0f0f0;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+    .form-group input:focus {
+        border-color: var(--primary-color);
+        outline: none;
+    }
+    
+    /* 載入動畫 */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading-text {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #666;
+      font-weight: bold;
+    }
+
+    /* 日曆樣式 */
+    .month-title {
+      font-weight: bold;
+      font-size: 24px;
+      margin: 1.5em 0 0.8em;
+      color: #444;
+    }
+    .calendar-header,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px; 
+      padding: 0;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+    .weekday-header {
+      font-weight: bold;
+      font-size: 14px;
+      text-align: center;
+      color: #999;
+      padding-bottom: 10px; 
+    }
+    .day {
+      aspect-ratio: 1;
+      width: 100%;
+      font-size: 20px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px; 
+      background-color: #f9f9f9;
+      color: #ccc;
+      cursor: default;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+    .day.available {
+      background-color: var(--light-bg);
+      color: var(--accent-color);
+      cursor: pointer;
+      border: 1px solid var(--primary-color);
+      font-weight: bold;
+    }
+    /* 體驗課限定單選，選中樣式 */
+    .day.selected {
+      background-color: var(--primary-color);
+      color: #fff;
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      border: none;
+    }
+    .day.full {
+      background-color: #eeeeee;
+      color: #bdbdbd;
+      cursor: not-allowed;
+      border: 1px solid #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2px;
+    }
+    .day.full .full-label {
+      font-size: 10px;
+      color: #999;
+    }
+
+    #submit-btn {
+      margin: 2em auto 3em; 
+      padding: 16px 0;
+      font-size: 20px;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 50px; /* 變成圓角按鈕 */
+      cursor: pointer;
+      width: 100%;
+      max-width: 320px;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.1s;
+    }
+    #submit-btn:active {
+        transform: scale(0.98);
+    }
+    #submit-btn:disabled {
+        background-color: #e0e0e0;
+        color: #999;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    @media (max-width: 750px) {
+      h1 { font-size: 24px; }
+      .guest-form { padding: 20px; margin-bottom: 20px; }
+      .container { padding: 15px; }
+      .calendar-header, .calendar-grid { gap: 5px; }
+      .day { font-size: 18px; border-radius: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">載入課程資訊...</div>
+  </div>
+
+  <div class="container">
+    <h1>晚班功率課 - 首次體驗預約</h1>
+    <div class="info">每週二 / 週四 19:30～21:00</div>
+    <div class="sub-info">⚠️ 體驗課每人限預約一堂</div>
+
+    <div class="guest-form">
+        <div class="form-group">
+            <label>真實姓名</label>
+            <input type="text" id="guest-name" placeholder="請輸入姓名" required>
+        </div>
+        <div class="form-group">
+            <label>聯絡電話 (作為預約代碼)</label>
+            <input type="tel" id="guest-phone" placeholder="09xxxxxxxx" required>
+        </div>
+        <div class="form-group">
+            <label>Email (接收日曆邀請)</label>
+            <input type="email" id="guest-email" placeholder="example@gmail.com" required>
+        </div>
+    </div>
+
+    <div id="calendar"></div>
+    <button id="submit-btn">確認預約</button>
+  </div>
+
+  <script>
+    // ⚠️⚠️⚠️ 請將這裡換成你剛剛部署的最新 GAS 網址 (exec 結尾) ⚠️⚠️⚠️
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
+
+    let selectedDate = null; 
+
+    // 1. 載入資料
+    async function loadData() {
+      try {
+        const res = await fetch(`${SCRIPT_URL}?mode=powerAllData&courseType=evening`);
+        const data = await res.json();
+        return data;
+      } catch (error) {
+        console.error('載入資料錯誤:', error);
+        alert('無法連結伺服器，請稍後再試');
+        return null;
+      }
+    }
+
+    // 2. 渲染日曆
+    async function renderCalendar() {
+      const calendarDiv = document.getElementById('calendar');
+      const loadingDiv = document.getElementById('loading');
+      
+      loadingDiv.style.display = 'flex';
+      calendarDiv.innerHTML = '';
+
+      const allData = await loadData();
+      loadingDiv.style.display = 'none';
+
+      if (!allData || !allData.dates || allData.dates.length === 0) {
+        calendarDiv.innerHTML = '<div style="color:red; font-size: 1.2em; margin-top: 20px;">⚠️ 目前無可預約時段</div>';
+        return;
+      }
+
+      const availableDates = allData.dates;
+      const signupCounts = allData.counts || {};
+      const availableSet = new Set(availableDates);
+
+      const start = new Date(availableDates[0]);
+      const end = new Date(availableDates[availableDates.length - 1]);
+
+      for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
+        for (let m = 0; m < 12; m++) {
+          const first = new Date(y, m, 1);
+          const last = new Date(y, m + 1, 0);
+          
+          if (last < start || first > end) continue; 
+          
+          const title = document.createElement('div');
+          title.className = 'month-title';
+          title.textContent = `${y}年${m + 1}月`;
+          calendarDiv.appendChild(title);
+
+          const header = document.createElement('div');
+          header.className = 'calendar-header';
+          ['日','一','二','三','四','五','六'].forEach(d => {
+            const h = document.createElement('div');
+            h.className = 'weekday-header';
+            h.textContent = d;
+            header.appendChild(h);
+          });
+          calendarDiv.appendChild(header);
+
+          const grid = document.createElement('div');
+          grid.className = 'calendar-grid';
+
+          for (let i = 0; i < first.getDay(); i++) {
+            const cell = document.createElement('div');
+            cell.className = 'day';
+            grid.appendChild(cell);
+          }
+
+          for (let d = 1; d <= last.getDate(); d++) {
+            const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
+            const cell = document.createElement('div');
+            cell.className = 'day';
+            cell.textContent = d;
+
+            const dayOfWeek = new Date(dateStr).getDay();
+            let currentCount = 0;
+            if (signupCounts[dateStr]) {
+              currentCount = signupCounts[dateStr].evening || 0; 
+            }
+            const isFull = currentCount >= 6; 
+
+            if (isFull && (dayOfWeek === 2 || dayOfWeek === 4) && availableSet.has(dateStr)) {
+               cell.classList.add('full');
+               cell.innerHTML = `<div class="date-number">${d}</div><div class="full-label">額滿</div>`;
+            } else if (availableSet.has(dateStr)) {
+               cell.classList.add('available');
+               cell.onclick = () => {
+                  if (selectedDate === dateStr) {
+                      selectedDate = null;
+                      cell.classList.remove('selected');
+                  } else {
+                      document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
+                      selectedDate = dateStr;
+                      cell.classList.add('selected');
+                  }
+               };
+            }
+
+            grid.appendChild(cell);
+          }
+          calendarDiv.appendChild(grid);
+        }
+      }
+    }
+
+    // 3. 送出預約
+    document.getElementById('submit-btn').addEventListener('click', async () => {
+        const name = document.getElementById('guest-name').value.trim();
+        const phone = document.getElementById('guest-phone').value.trim();
+        const email = document.getElementById('guest-email').value.trim();
+
+        if (!name || !phone || !email) {
+            alert('請完整填寫：姓名、電話、Email');
+            return;
+        }
+
+        if (!selectedDate) {
+            alert('請點選一個預約日期');
+            return;
+        }
+
+        if (!confirm(`請確認預約資訊：\n\n日期：${selectedDate}\n姓名：${name}\n電話：${phone}\nEmail：${email}\n\n送出後請留意 Email 通知！`)) {
+            return;
+        }
+
+        const loadingDiv = document.getElementById('loading');
+        const loadingText = document.querySelector('.loading-text');
+        loadingText.textContent = "正在預約並同步日曆...";
+        loadingDiv.style.display = 'flex';
+        
+        try {
+            const params = new URLSearchParams({
+                mode: 'trial_submit',
+                date: selectedDate,
+                name: name,
+                phone: phone,
+                email: email
+            });
+
+            const res = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+            const result = await res.json();
+
+            loadingDiv.style.display = 'none';
+
+            if (result.status === 'success') {
+                alert('✅ 預約成功！\n\n系統已發送 Google Calendar 邀請至您的 Email，請查收。');
+                window.location.reload();
+            } else {
+                alert('❌ 預約失敗：' + result.message);
+            }
+
+        } catch (error) {
+            console.error(error);
+            loadingDiv.style.display = 'none';
+            alert('❌ 系統發生錯誤，請稍後再試或聯繫教練。');
+        }
+    });
+
+    renderCalendar();
+  </script>
+</body>
+</html>
