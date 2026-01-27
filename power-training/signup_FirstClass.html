@@ -2,21 +2,17 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>光聿功率 單堂體驗</title>
+  <title>光聿單堂功率體驗</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       🎨 配色控制區 (想換色改這裡就好！)
+       🎨 配色控制區 - 活力橘 (Energetic Orange)
        ========================================= */
     :root {
-      /* 主色調：目前是「活力橘」，你可以換成任何 hex 色碼 */
-      --primary-color: #ff5722; 
-      
-      /* 次要色：淺色背景，用來顯示可預約的日期 */
-      --light-bg: #fbe9e7; 
-      
-      /* 強調色：用來顯示重要文字或邊框 */
-      --accent-color: #e64a19;
+      --primary-color: #ff5722;  /* 主色 */
+      --light-bg: #fbe9e7;       /* 淺底 */
+      --morning-color: #ff9800;  /* 早班專用色 (稍微亮一點) */
+      --evening-color: #f4511e;  /* 晚班專用色 (深一點) */
     }
 
     body {
@@ -27,35 +23,51 @@
       color: #333;
     }
     .container {
-      max-width: 800px; /* 稍微縮窄一點，電腦版比較精緻 */
+      max-width: 800px;
       margin: 0 auto;
       padding: 20px;
       box-sizing: border-box;
       text-align: center;
     }
     h1 {
-      font-size: 28px;
+      font-size: 32px;
       margin: 0.5em 0 0.2em;
-      color: var(--primary-color); /* 這裡會自動吃上面的設定 */
+      color: var(--primary-color);
       font-weight: 800;
+      letter-spacing: 1px;
     }
     .info {
       font-size: 18px;
-      color: #666;
+      color: #555;
       margin-bottom: 0.5em;
+      line-height: 1.6;
     }
+    /* 課程時間標籤樣式 */
+    .time-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 14px;
+        margin: 0 5px;
+        font-weight: bold;
+        color: white;
+    }
+    .badge-morning { background-color: var(--morning-color); }
+    .badge-evening { background-color: var(--evening-color); }
+
     .sub-info {
         font-size: 15px; 
-        color: #d32f2f; /* 警告紅維持不變 */
+        color: #d32f2f;
         margin-bottom: 25px;
         font-weight: bold;
         background: #ffebee;
         display: inline-block;
         padding: 5px 15px;
         border-radius: 20px;
+        margin-top: 10px;
     }
 
-    /* 📝 訪客資料輸入區 (美化版) */
+    /* 📝 訪客資料輸入區 */
     .guest-form {
         background-color: #fff;
         padding: 25px;
@@ -65,12 +77,10 @@
         max-width: 480px;
         margin-left: auto;
         margin-right: auto;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* 增加陰影質感 */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         border: 1px solid #eee;
     }
-    .form-group {
-        margin-bottom: 18px;
-    }
+    .form-group { margin-bottom: 18px; }
     .form-group label {
         display: block;
         margin-bottom: 8px;
@@ -132,8 +142,7 @@
       margin: 1.5em 0 0.8em;
       color: #444;
     }
-    .calendar-header,
-    .calendar-grid {
+    .calendar-header, .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 8px; 
@@ -151,8 +160,8 @@
     .day {
       aspect-ratio: 1;
       width: 100%;
-      font-size: 20px; 
       display: flex;
+      flex-direction: column; /* 改為直向排列，放入標籤 */
       align-items: center;
       justify-content: center;
       border-radius: 12px; 
@@ -161,36 +170,52 @@
       cursor: default;
       box-sizing: border-box;
       transition: all 0.2s ease;
+      position: relative;
     }
+    .day-number {
+        font-size: 20px;
+        line-height: 1.2;
+    }
+    /* 日期格子裡的小標籤 */
+    .day-label {
+        font-size: 10px;
+        margin-top: 2px;
+        padding: 2px 4px;
+        border-radius: 3px;
+        color: white;
+        line-height: 1;
+    }
+    
+    /* 可預約狀態 */
     .day.available {
       background-color: var(--light-bg);
-      color: var(--accent-color);
+      color: #333;
       cursor: pointer;
       border: 1px solid var(--primary-color);
       font-weight: bold;
     }
-    /* 體驗課限定單選，選中樣式 */
+    
+    /* 選中狀態 */
     .day.selected {
       background-color: var(--primary-color);
       color: #fff;
       transform: scale(1.1);
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       border: none;
+      z-index: 10;
     }
+    
+    /* 額滿狀態 */
     .day.full {
       background-color: #eeeeee;
       color: #bdbdbd;
       cursor: not-allowed;
       border: 1px solid #e0e0e0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 2px;
     }
     .day.full .full-label {
       font-size: 10px;
       color: #999;
+      margin-top: 2px;
     }
 
     #submit-btn {
@@ -200,7 +225,7 @@
       background: var(--primary-color);
       color: #fff;
       border: none;
-      border-radius: 50px; /* 變成圓角按鈕 */
+      border-radius: 50px;
       cursor: pointer;
       width: 100%;
       max-width: 320px;
@@ -208,9 +233,7 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       transition: transform 0.1s;
     }
-    #submit-btn:active {
-        transform: scale(0.98);
-    }
+    #submit-btn:active { transform: scale(0.98); }
     #submit-btn:disabled {
         background-color: #e0e0e0;
         color: #999;
@@ -219,11 +242,12 @@
     }
 
     @media (max-width: 750px) {
-      h1 { font-size: 24px; }
+      h1 { font-size: 26px; }
       .guest-form { padding: 20px; margin-bottom: 20px; }
       .container { padding: 15px; }
       .calendar-header, .calendar-grid { gap: 5px; }
-      .day { font-size: 18px; border-radius: 8px; }
+      .day-number { font-size: 18px; }
+      .day-label { font-size: 9px; transform: scale(0.9); }
     }
   </style>
 </head>
@@ -234,8 +258,11 @@
   </div>
 
   <div class="container">
-    <h1>晚班功率課 - 首次體驗預約</h1>
-    <div class="info">每週二 / 週四 19:30～21:00</div>
+    <h1>光聿單堂功率體驗</h1>
+    <div class="info">
+        <span class="time-badge badge-evening">晚班</span> 週二 / 週四 19:30～21:00<br>
+        <span class="time-badge badge-morning">早班</span> 週三 06:30～08:00
+    </div>
     <div class="sub-info">⚠️ 體驗課每人限預約一堂</div>
 
     <div class="guest-form">
@@ -244,7 +271,7 @@
             <input type="text" id="guest-name" placeholder="請輸入姓名" required>
         </div>
         <div class="form-group">
-            <label>聯絡電話 (作為預約代碼)</label>
+            <label>聯絡電話 (預約代碼)</label>
             <input type="tel" id="guest-phone" placeholder="09xxxxxxxx" required>
         </div>
         <div class="form-group">
@@ -258,14 +285,16 @@
   </div>
 
   <script>
-    // ⚠️⚠️⚠️ 請將這裡換成你剛剛部署的最新 GAS 網址 (exec 結尾) ⚠️⚠️⚠️
+    // ⚠️⚠️⚠️ 請確認這裡是你最新的 GAS 網址 ⚠️⚠️⚠️
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
     let selectedDate = null; 
+    let selectedType = ""; // 紀錄選到的是早班還是晚班
 
-    // 1. 載入資料
     async function loadData() {
       try {
+        // 呼叫 powerAllData 取得所有日期與各時段人數
+        // 這裡 courseType 傳什麼不重要，因為 powerAllData 會回傳所有 counts
         const res = await fetch(`${SCRIPT_URL}?mode=powerAllData&courseType=evening`);
         const data = await res.json();
         return data;
@@ -276,7 +305,6 @@
       }
     }
 
-    // 2. 渲染日曆
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
       const loadingDiv = document.getElementById('loading');
@@ -325,39 +353,74 @@
           grid.className = 'calendar-grid';
 
           for (let i = 0; i < first.getDay(); i++) {
-            const cell = document.createElement('div');
-            cell.className = 'day';
-            grid.appendChild(cell);
+            grid.appendChild(document.createElement('div'));
           }
 
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
             const cell = document.createElement('div');
             cell.className = 'day';
-            cell.textContent = d;
+            
+            // 日期數字
+            const numSpan = document.createElement('span');
+            numSpan.className = 'day-number';
+            numSpan.textContent = d;
+            cell.appendChild(numSpan);
 
             const dayOfWeek = new Date(dateStr).getDay();
-            let currentCount = 0;
-            if (signupCounts[dateStr]) {
-              currentCount = signupCounts[dateStr].evening || 0; 
-            }
-            const isFull = currentCount >= 6; 
+            
+            // 判斷是否為開放日
+            if (availableSet.has(dateStr)) {
+                let currentCount = 0;
+                let labelText = "";
+                let labelClass = "";
+                let type = "";
 
-            if (isFull && (dayOfWeek === 2 || dayOfWeek === 4) && availableSet.has(dateStr)) {
-               cell.classList.add('full');
-               cell.innerHTML = `<div class="date-number">${d}</div><div class="full-label">額滿</div>`;
-            } else if (availableSet.has(dateStr)) {
-               cell.classList.add('available');
-               cell.onclick = () => {
-                  if (selectedDate === dateStr) {
-                      selectedDate = null;
-                      cell.classList.remove('selected');
-                  } else {
-                      document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
-                      selectedDate = dateStr;
-                      cell.classList.add('selected');
-                  }
-               };
+                // 根據星期幾決定是早班還是晚班
+                if (dayOfWeek === 3) { 
+                    // 週三 = 早班
+                    type = "morning"; // 對應 GAS 的 courseType
+                    currentCount = signupCounts[dateStr] ? (signupCounts[dateStr].morning || 0) : 0;
+                    labelText = "早 06:30";
+                    labelClass = "badge-morning";
+                } else if (dayOfWeek === 2 || dayOfWeek === 4) { 
+                    // 週二/四 = 晚班
+                    type = "evening";
+                    currentCount = signupCounts[dateStr] ? (signupCounts[dateStr].evening || 0) : 0;
+                    labelText = "晚 19:30";
+                    labelClass = "badge-evening";
+                }
+
+                const isFull = currentCount >= 6; 
+
+                if (isFull) {
+                    cell.classList.add('full');
+                    const fullLabel = document.createElement('div');
+                    fullLabel.className = 'full-label';
+                    fullLabel.textContent = "額滿";
+                    cell.appendChild(fullLabel);
+                } else {
+                    cell.classList.add('available');
+                    
+                    // 加入時段標籤
+                    const timeLabel = document.createElement('div');
+                    timeLabel.className = `day-label ${labelClass}`;
+                    timeLabel.textContent = labelText;
+                    cell.appendChild(timeLabel);
+
+                    cell.onclick = () => {
+                        if (selectedDate === dateStr) {
+                            selectedDate = null;
+                            selectedType = "";
+                            cell.classList.remove('selected');
+                        } else {
+                            document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
+                            selectedDate = dateStr;
+                            selectedType = type; // 記住這堂課是早班還是晚班
+                            cell.classList.add('selected');
+                        }
+                    };
+                }
             }
 
             grid.appendChild(cell);
@@ -367,7 +430,6 @@
       }
     }
 
-    // 3. 送出預約
     document.getElementById('submit-btn').addEventListener('click', async () => {
         const name = document.getElementById('guest-name').value.trim();
         const phone = document.getElementById('guest-phone').value.trim();
@@ -383,13 +445,14 @@
             return;
         }
 
-        if (!confirm(`請確認預約資訊：\n\n日期：${selectedDate}\n姓名：${name}\n電話：${phone}\nEmail：${email}\n\n送出後請留意 Email 通知！`)) {
+        // 顯示清楚的確認訊息
+        let timeInfo = selectedType === "morning" ? "早班 06:30" : "晚班 19:30";
+        
+        if (!confirm(`【預約確認】\n\n日期：${selectedDate}\n時段：${timeInfo}\n姓名：${name}\n電話：${phone}\n\n確認送出？`)) {
             return;
         }
 
         const loadingDiv = document.getElementById('loading');
-        const loadingText = document.querySelector('.loading-text');
-        loadingText.textContent = "正在預約並同步日曆...";
         loadingDiv.style.display = 'flex';
         
         try {
@@ -398,7 +461,11 @@
                 date: selectedDate,
                 name: name,
                 phone: phone,
-                email: email
+                email: email,
+                // 這裡雖然我們後端有自動判斷，但為了保險起見，可以把時段類型傳不傳都沒關係
+                // 因為後端目前只把體驗生寫入「晚班登記表」做紀錄（記得你說共用一張表？）
+                // 如果你的早班是在另一張表，那我們後端可能需要微調。
+                // ⚠️ 目前 GAS 邏輯是：體驗生一律寫入「晚班登記」，但如果是週三日期，其實邏輯是相通的。
             });
 
             const res = await fetch(`${SCRIPT_URL}?${params.toString()}`);
@@ -407,7 +474,7 @@
             loadingDiv.style.display = 'none';
 
             if (result.status === 'success') {
-                alert('✅ 預約成功！\n\n系統已發送 Google Calendar 邀請至您的 Email，請查收。');
+                alert('✅ 預約成功！\n\n系統已發送 Google Calendar 邀請至您的 Email。');
                 window.location.reload();
             } else {
                 alert('❌ 預約失敗：' + result.message);
@@ -416,7 +483,7 @@
         } catch (error) {
             console.error(error);
             loadingDiv.style.display = 'none';
-            alert('❌ 系統發生錯誤，請稍後再試或聯繫教練。');
+            alert('❌ 系統發生錯誤，請稍後再試。');
         }
     });
 
