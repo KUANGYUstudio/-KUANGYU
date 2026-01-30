@@ -88,7 +88,7 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
 
-    /* === 💰 價格與優惠說明區 (無壓力版) === */
+    /* === 💰 價格與優惠說明區 (清楚算式版) === */
     .price-info {
         background-color: var(--price-bg);
         color: var(--price-text);
@@ -119,6 +119,16 @@
         background: rgba(165, 214, 167, 0.3);
         padding: 0 4px;
         border-radius: 4px;
+    }
+    /* 綠色小區塊 */
+    .price-example {
+        margin-top: 10px;
+        font-size: 13px;
+        color: #1b5e20;
+        background: rgba(255,255,255,0.6);
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #a5d6a7;
     }
 
     /* 📝 訪客資料輸入區 */
@@ -308,8 +318,10 @@
         <div class="price-desc">
             💡 <strong>購課折抵優惠：</strong><br>
             若後續購買正式課卡（10堂/20堂），本堂體驗費 <span class="price-highlight">可全額折抵</span>。<br>
-            <div style="margin-top: 8px; font-size: 13px; color: #1b5e20; background: rgba(255,255,255,0.6); padding: 8px; border-radius: 6px;">
-                例如：購買 10 堂課，可扣除已付的 $660，僅需補足差額，即可享有 10 堂優惠方案。
+            <div class="price-example">
+                例如：購買 10 堂課方案 ($5500)<br>
+                扣除已付 $660，<strong>僅需補差額 $4840</strong><br>
+                即享完整 10 堂優惠 <span style="color:#2e7d32">（含本次體驗，剩餘 9 堂）</span>
             </div>
         </div>
     </div>
