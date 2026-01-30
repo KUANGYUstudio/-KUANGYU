@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>平日功率課</title>
+  <title>平日功率課預約</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
@@ -52,7 +52,14 @@
       letter-spacing: 1px;
     }
 
-    /* === 🔑 會員登入區 === */
+    /* === 👋 歡迎訊息與登入區 === */
+    .user-welcome {
+        font-size: 18px;
+        color: var(--evening-main);
+        margin-bottom: 15px;
+        font-weight: bold;
+        min-height: 24px;
+    }
     .login-section {
         background-color: #fafafa;
         padding: 20px;
@@ -147,13 +154,13 @@
     }
     .weekday-header {
       font-weight: bold;
-      font-size: 14px; 
+      font-size: 16px; 
       text-align: center;
       color: #b0bec5;
       padding-bottom: 10px; 
     }
     
-    /* 日曆格子 (維持大尺寸) */
+    /* 日曆格子 */
     .day {
       aspect-ratio: 1;
       width: 100%;
@@ -171,7 +178,7 @@
       position: relative;
     }
     
-    /* 日期數字 (22px 粗體) */
+    /* 日期數字 */
     .day-number { 
         font-size: 22px; 
         font-weight: bold; 
@@ -247,7 +254,7 @@
     }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
 
-    /* 送出按鈕 (瘦身版) */
+    /* 🚀 送出按鈕 (電腦版固定寬度) */
     #submit-btn {
       margin: 40px auto 20px; 
       padding: 16px 0;
@@ -258,7 +265,7 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      max-width: 260px; /* 電腦版固定寬度 */
+      max-width: 260px; /* 電腦版固定 260px */
       display: block;
       width: 100%;
       font-weight: bold;
@@ -275,18 +282,13 @@
       .container { margin: 0; padding: 15px; }
       h1 { font-size: 26px; }
       .schedule-box { padding: 12px 15px; }
-      
       .calendar-header, .calendar-grid { gap: 4px; }
       
-      /* 手機版設定 */
-      .day { 
-          font-size: 22px; 
-          border-radius: 10px; 
-      }
+      .day { font-size: 22px; border-radius: 10px; }
       .day-number { font-size: 18px; } 
       .day-label { font-size: 10px; }
       
-      /* 手機版按鈕寬度 */
+      /* 🚀 手機版按鈕寬度 60% */
       #submit-btn { 
           font-size: 18px; 
           max-width: 60%; 
@@ -301,13 +303,15 @@
   </div>
 
   <div class="container">
-    <h1>平日功率課</h1>
+    <h1>平日功率課預約</h1>
     
+    <div id="welcome-msg" class="user-welcome"></div> 
+
     <div id="login-area" class="login-section">
         <div class="login-title">⚠️ 請驗證會員身分</div>
-        <div style="font-size:13px; color:#666; margin-bottom:10px;">若未自動登入，請輸入姓名進行驗證</div>
+        <div style="font-size:13px; color:#666; margin-bottom:10px;">請輸入您留存的「Email」進行驗證</div>
         <div class="login-input-group">
-            <input type="text" id="member-search-name" class="login-input" placeholder="例如：王小明">
+            <input type="email" id="member-search-email" class="login-input" placeholder="例如：example@gmail.com">
             <button onclick="searchMember()" class="login-btn">驗證</button>
         </div>
         <div id="login-error" style="color:#e53935; margin-top:8px; font-size:13px;"></div>
@@ -327,7 +331,7 @@
   </div>
 
   <script>
-    // ⚠️ 你的 GAS 網址 (v2026.01.30)
+    // ⚠️ 請確認您的 GAS 網址已更新
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
     const selectedDates = new Set(); 
@@ -338,7 +342,6 @@
       return new URLSearchParams(window.location.search).get(key) || ''; 
     }
 
-    // --- 1. 初始化與身分驗證 ---
     async function initSystem() {
         const loadingDiv = document.getElementById('loading');
         loadingDiv.style.display = 'flex';
@@ -357,12 +360,12 @@
     }
 
     async function searchMember() {
-        const nameInput = document.getElementById('member-search-name').value.trim();
+        const emailInput = document.getElementById('member-search-email').value.trim();
         const errorMsg = document.getElementById('login-error');
         const loadingDiv = document.getElementById('loading');
 
-        if (!nameInput) {
-            errorMsg.textContent = "請輸入姓名";
+        if (!emailInput) {
+            errorMsg.textContent = "請輸入 Email";
             return;
         }
 
@@ -370,7 +373,8 @@
         document.querySelector('.loading-text').textContent = "正在搜尋會員資料...";
         
         try {
-            const res = await fetch(`${SCRIPT_URL}?mode=search_member&searchName=${encodeURIComponent(nameInput)}`);
+            // 🔥 改為傳送 email 參數
+            const res = await fetch(`${SCRIPT_URL}?mode=search_member&email=${encodeURIComponent(emailInput)}`);
             const data = await res.json();
 
             if (data.found) {
@@ -380,12 +384,12 @@
                 loginSuccess();
             } else {
                 loadingDiv.style.display = 'none';
-                errorMsg.textContent = "❌ 找不到此會員，請確認姓名是否正確";
+                errorMsg.textContent = "❌ 找不到此 Email，請確認是否與報名資料一致";
             }
         } catch (e) {
             console.error(e);
             loadingDiv.style.display = 'none';
-            errorMsg.textContent = "系統連線錯誤";
+            errorMsg.textContent = "系統連線錯誤 (請確認 GAS 已更新)";
         }
     }
 
@@ -394,8 +398,6 @@
         document.getElementById('login-area').style.display = 'none'; 
         document.getElementById('submit-btn').style.display = 'block'; 
         
-        // 🚀 關鍵修改：移除了原本的 welcome-msg 設定
-        
         document.querySelector('.loading-text').textContent = "載入課程資料...";
         if(loadingDiv.style.display === 'none') loadingDiv.style.display = 'flex';
 
@@ -403,7 +405,6 @@
         loadingDiv.style.display = 'none';
     }
 
-    // --- 2. 資料讀取 ---
     async function loadMergedData() {
       try {
         const targetLineId = currentUser.lineId || "";
@@ -426,7 +427,6 @@
       } catch (error) { return { dates: [], mySignups: new Set(), counts: {} }; }
     }
 
-    // --- 3. 渲染日曆 ---
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
       calendarDiv.innerHTML = '';
@@ -582,7 +582,9 @@
         loadingDiv.style.display = 'none';
         alert('✅ 登記成功！');
         selectedDates.clear();
-        window.location.reload();
+        
+        // 🚀 關鍵修改：重新導向並帶上參數，保持登入狀態
+        window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId);
 
       } catch (error) {
         console.error('提交錯誤:', error);
