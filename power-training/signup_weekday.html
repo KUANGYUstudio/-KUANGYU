@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       🎨 配色定義
+       🎨 配色定義 (源自 FirstClass)
        ========================================= */
     :root {
       /* 晚班 - 專業藍 */
@@ -137,34 +137,34 @@
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
 
-    /* === 日曆樣式 (修正版) === */
+    /* === 日曆樣式 === */
     .month-title {
       font-weight: 800;
-      font-size: 32px;
+      font-size: 24px; /* 🎯 修改這裡：從 32px 縮小為 24px */
       margin: 1.5em 0 0.8em;
       color: var(--text-main);
     }
     .calendar-header, .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px; /* 電腦版間距 */
+      gap: 8px;
       padding: 0;
       box-sizing: border-box;
       max-width: 100%;
     }
     .weekday-header {
       font-weight: bold;
-      font-size: 20px;
+      font-size: 20px; 
       text-align: center;
       color: #b0bec5;
       padding-bottom: 10px; 
     }
     
-    /* 日曆格子 (參考週末版樣式) */
+    /* 日曆格子 (維持加大版) */
     .day {
       aspect-ratio: 1;
       width: 100%;
-      font-size: 28px; /* 電腦版字體 */
+      font-size: 28px; 
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -176,30 +176,18 @@
       box-sizing: border-box;
       transition: all 0.1s;
       position: relative;
-      padding: 2px; /* 內縮防止文字貼邊 */
     }
-    
-    /* 數字與標籤樣式 (絕對置中) */
-    .day-number { 
-        font-weight: 600; 
-        line-height: 1; 
-        margin-bottom: 2px; /* 數字與時間的間距 */
-    }
-    .day-label { 
-        font-size: 12px; 
-        line-height: 1.1;
-        font-weight: 500; 
-        text-align: center;
-    }
+    .day-number { font-weight: 600; margin-bottom: 0; line-height: 1; }
+    .day-label { font-size: 12px; margin-top: 4px; font-weight: normal; line-height: 1; }
 
     /* === 晚班樣式 (藍色) === */
     .day.available.evening {
       background-color: #fff;
       color: #333;
-      border: 2px solid var(--evening-main); /* 加粗邊框 */
+      border: 2px solid var(--evening-main);
       cursor: pointer;
     }
-    .day.available.evening .day-label { color: var(--evening-main); font-weight: bold; }
+    .day.available.evening .day-label { color: var(--evening-main); font-weight: 800; }
     
     .day.selected.evening {
       background-color: var(--evening-main);
@@ -214,10 +202,10 @@
     .day.available.morning {
       background-color: #fff;
       color: #333;
-      border: 2px solid var(--morning-main); /* 加粗邊框 */
+      border: 2px solid var(--morning-main);
       cursor: pointer;
     }
-    .day.available.morning .day-label { color: var(--morning-main); font-weight: bold; }
+    .day.available.morning .day-label { color: var(--morning-main); font-weight: 800; }
 
     .day.selected.morning {
       background-color: var(--morning-main);
@@ -240,14 +228,14 @@
     /* 額滿 */
     .day.full {
       background-color: #e0e0e0;
-      color: #90a4ae;
+      color: #666; 
       cursor: not-allowed;
-      border: 2px solid #b0bec5; 
-      opacity: 0.9;
+      border: 2px solid var(--evening-main); 
+      opacity: 0.8;
     }
-    .day.full .full-label { font-size: 11px; color: #78909c; margin-top: 2px;}
+    .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
 
-    /* 送出按鈕 */
+    /* 送出按鈕 (維持瘦身版) */
     #submit-btn {
       margin: 40px auto 20px; 
       padding: 16px 0;
@@ -271,31 +259,13 @@
         box-shadow: none;
     }
 
-    /* 📱 手機版 RWD 修正 (關鍵!) */
     @media (max-width: 750px) {
-      .container { 
-          margin: 0; 
-          padding: 0.5em; /* 縮小 Padding 防止撐開 */
-      }
+      .container { margin: 0; padding: 15px; }
       h1 { font-size: 26px; }
       .schedule-box { padding: 12px 15px; }
       
-      /* 縮小間距，確保不爆版 */
-      .calendar-header, .calendar-grid { 
-          gap: 3px; 
-          padding: 0;
-      }
-      .weekday-header { 
-          font-size: 16px; 
-          padding-bottom: 3px; 
-      }
-      
-      /* 調整格子與字體大小 */
-      .day { 
-          font-size: 18px; /* 縮小字體以適應手機 */
-          border-radius: 6px; 
-      }
-      .day-number { margin-bottom: 1px; }
+      .calendar-header, .calendar-grid { gap: 4px; }
+      .day { font-size: 22px; border-radius: 10px; }
       .day-label { font-size: 10px; }
       
       #submit-btn { 
