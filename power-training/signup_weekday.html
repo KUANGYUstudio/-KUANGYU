@@ -160,11 +160,11 @@
       padding-bottom: 10px; 
     }
     
-    /* 日曆格子 */
+    /* 日曆格子 (維持大尺寸) */
     .day {
       aspect-ratio: 1;
       width: 100%;
-      font-size: 28px; 
+      font-size: 28px; /* 這裡維持大字體以撐開格子 */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -178,16 +178,18 @@
       position: relative;
     }
     
-    /* 🎯 修改：取消粗體，改為一般字重 */
+    /* 🎯 修改：數字縮小一點 */
     .day-number { 
-        font-weight: normal; /* 從 600 改為 normal */
-        margin-bottom: 0; 
+        font-size: 22px; /* 從繼承 28px 縮小到 22px */
+        font-weight: normal; 
+        margin-bottom: 2px; 
         line-height: 1; 
     }
+    
     .day-label { 
         font-size: 12px; 
-        margin-top: 4px; 
-        font-weight: normal; /* 從 500 改為 normal */
+        margin-top: 2px; 
+        font-weight: normal; 
         line-height: 1; 
     }
 
@@ -198,10 +200,9 @@
       border: 2px solid var(--evening-main);
       cursor: pointer;
     }
-    /* 🎯 修改：取消粗體 */
     .day.available.evening .day-label { 
         color: var(--evening-main); 
-        font-weight: normal; /* 從 800 改為 normal */
+        font-weight: normal; 
     }
     
     .day.selected.evening {
@@ -220,10 +221,9 @@
       border: 2px solid var(--morning-main);
       cursor: pointer;
     }
-    /* 🎯 修改：取消粗體 */
     .day.available.morning .day-label { 
         color: var(--morning-main); 
-        font-weight: normal; /* 從 800 改為 normal */
+        font-weight: normal; 
     }
 
     .day.selected.morning {
@@ -284,7 +284,13 @@
       .schedule-box { padding: 12px 15px; }
       
       .calendar-header, .calendar-grid { gap: 4px; }
-      .day { font-size: 22px; border-radius: 10px; }
+      
+      /* 手機版設定 */
+      .day { 
+          font-size: 22px; /* 格子基底字體 */
+          border-radius: 10px; 
+      }
+      .day-number { font-size: 18px; } /* 數字再縮小一點以配合手機 */
       .day-label { font-size: 10px; }
       
       #submit-btn { 
