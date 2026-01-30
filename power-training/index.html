@@ -6,22 +6,20 @@
   <title>光聿功率課</title>
   <style>
     /* =========================================
-       🎨 全局設定 (無 Emoji 專業版)
+       🎨 全局設定 (統一白底風格)
        ========================================= */
     :root {
-      /* 使用您原本的藍色系作為主色 */
-      --brand-blue: #00bcd4; 
-      --brand-dark: #0097a7;
-      
-      /* 漸層改回單純的藍色系，不混橘色 */
-      --hero-gradient: linear-gradient(135deg, #00bcd4 0%, #008ba3 100%);
-      
       --bg-color: #f4f6f8;
       --card-bg: #ffffff;
       --text-main: #333;
       --text-sub: #666;
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       --radius: 12px;
+      
+      /* 定義各區塊代表色 */
+      --color-weekday: #00bcd4; /* 平日藍 */
+      --color-online: #a5d6a7;  /* 線上綠 */
+      --color-weekend: #ff8a65; /* 週末橘 */
     }
 
     body {
@@ -72,11 +70,11 @@
       gap: 16px;
     }
 
-    /* 通用按鈕樣式 */
+    /* 通用按鈕樣式 (全部統一) */
     .card-btn {
       display: flex;
       align-items: center;
-      padding: 24px 20px; /* 增加一點高度讓文字呼吸 */
+      padding: 24px 20px;
       background: var(--card-bg);
       border-radius: var(--radius);
       text-decoration: none;
@@ -94,7 +92,7 @@
     /* 文字區塊 */
     .btn-content {
       flex: 1;
-      padding-left: 5px; /* 因為拿掉了icon，稍微補一點左邊距 */
+      padding-left: 5px;
     }
     .btn-title {
       font-size: 18px;
@@ -110,22 +108,14 @@
       font-weight: normal;
     }
 
-    /* 🌟 Hero Button: 平日功率課 (主推) - 改回藍色系 */
-    .card-btn.hero {
-      background: var(--hero-gradient);
-      color: white;
-      border: none; /* Hero 不需要左側色條 */
-    }
-    .card-btn.hero .btn-title {
-      font-size: 20px; /* 主按鈕字稍微大一點 */
-    }
-    .card-btn.hero .btn-desc {
-      color: rgba(255, 255, 255, 0.9);
-      opacity: 1;
-    }
-    /* 右側箭頭 (純CSS繪製，非 Emoji) */
+    /* 個別按鈕顏色設定 (只改左邊框顏色) */
+    .card-btn.weekday { border-left-color: var(--color-weekday); }
+    .card-btn.online  { border-left-color: var(--color-online); }
+    .card-btn.weekend { border-left-color: var(--color-weekend); }
+
+    /* 右側箭頭 (純CSS繪製) */
     .arrow {
-      border: solid currentColor;
+      border: solid #ccc; /* 統一用灰色 */
       border-width: 0 2px 2px 0;
       display: inline-block;
       padding: 4px;
@@ -133,10 +123,6 @@
       -webkit-transform: rotate(-45deg);
       opacity: 0.6;
     }
-
-    /* 其他按鈕的左側色條 */
-    .card-btn.online { border-left-color: #a5d6a7; }
-    .card-btn.weekend { border-left-color: #ff8a65; }
 
     /* 頁尾 */
     .footer {
@@ -159,7 +145,7 @@
 
     <div class="menu-grid">
       
-      <a href="#" id="weekday-link" class="card-btn hero">
+      <a href="#" id="weekday-link" class="card-btn weekday">
         <div class="btn-content">
           <span class="btn-title">平日功率課</span>
           <span class="btn-desc">週二 / 週四晚班 & 週三早班</span>
