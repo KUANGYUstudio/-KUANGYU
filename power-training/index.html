@@ -9,7 +9,7 @@
        🎨 全局設定 (極簡質感版)
        ========================================= */
     :root {
-      --bg-color: #f8f9fa; /* 背景色稍微調亮一點，更有空氣感 */
+      --bg-color: #f8f9fa;
       --card-bg: #ffffff;
       --text-main: #2c3e50;
       --text-sub: #95a5a6;
@@ -18,7 +18,7 @@
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
       --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.08);
       
-      --radius: 16px; /* 卡片圓角加大一點，更圓潤 */
+      --radius: 16px;
       
       /* 定義各區塊代表色 */
       --color-weekday: #00bcd4; /* 平日藍 */
@@ -36,7 +36,7 @@
       align-items: center;
       min-height: 100vh;
       color: var(--text-main);
-      -webkit-font-smoothing: antialiased; /* 讓字體更清晰 */
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
@@ -49,28 +49,17 @@
       align-items: center;
     }
 
-    /* === 標題區優化 === */
+    /* === 標題區 (移除裝飾線，回歸純粹) === */
     .header {
       margin-bottom: 40px;
       text-align: center;
-      position: relative;
     }
     h1 {
       font-size: 28px;
-      margin: 0 0 12px;
+      margin: 0 0 8px; /* 稍微縮小間距 */
       font-weight: 800;
       letter-spacing: 1.5px;
       color: #2c3e50;
-    }
-    /* 標題下方的裝飾線 (取代 Emoji 的視覺焦點) */
-    h1::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 4px;
-      background-color: var(--color-weekday);
-      margin: 12px auto 0;
-      border-radius: 2px;
     }
     p {
       font-size: 15px;
@@ -84,26 +73,26 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 20px; /* 增加卡片間距 */
+      gap: 20px;
     }
 
-    /* === 卡片樣式優化 === */
+    /* === 卡片樣式 === */
     .card-btn {
       display: flex;
       align-items: center;
-      padding: 28px 24px; /* 增加內部留白，讓畫面更舒適 */
+      padding: 28px 24px;
       background: var(--card-bg);
       border-radius: var(--radius);
       text-decoration: none;
       color: var(--text-main);
       box-shadow: var(--shadow-sm);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* 平滑過渡動畫 */
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       position: relative;
       overflow: hidden;
       border-left: 6px solid transparent; 
     }
 
-    /* 懸浮與點擊效果：卡片上浮 + 陰影加深 */
+    /* 懸浮與點擊效果 */
     .card-btn:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-hover);
@@ -119,7 +108,7 @@
       padding-left: 8px; 
     }
     .btn-title {
-      font-size: 19px; /* 字體加大 */
+      font-size: 19px;
       font-weight: 700;
       display: block;
       margin-bottom: 6px;
@@ -155,7 +144,7 @@
 
     .arrow {
       border: solid currentColor;
-      border-width: 0 2.5px 2.5px 0; /* 線條稍微加粗 */
+      border-width: 0 2.5px 2.5px 0;
       display: inline-block;
       padding: 4px;
       transform: rotate(-45deg);
