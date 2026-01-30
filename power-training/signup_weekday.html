@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       🎨 配色定義 (源自 FirstClass)
+       🎨 配色定義
        ========================================= */
     :root {
       /* 晚班 - 專業藍 */
@@ -22,7 +22,7 @@
       /* 系統色 */
       --text-main: #2c3e50;
       --text-sub: #546e7a;
-      --bg-color: #f5f5f5;
+      --bg-color: #ffffff;
     }
 
     body {
@@ -37,19 +37,16 @@
       align-items: center; 
     }
     .container {
-      max-width: 500px; 
+      max-width: 800px; 
       width: 100%;
-      margin: 20px auto;
-      padding: 30px 25px;
+      margin: 0 auto;
+      padding: 20px;
       box-sizing: border-box;
       text-align: center;
-      background: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     }
     h1 {
-      font-size: 28px;
-      margin: 0 0 0.5em;
+      font-size: 32px;
+      margin: 0.5em 0 0.5em;
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
@@ -57,7 +54,7 @@
 
     /* === 👋 歡迎訊息與登入區 === */
     .user-welcome {
-        font-size: 16px;
+        font-size: 18px;
         color: var(--evening-main);
         margin-bottom: 15px;
         font-weight: bold;
@@ -69,19 +66,22 @@
         border-radius: 12px;
         margin-bottom: 20px;
         border: 1px solid #eee;
-        display: none; /* 預設隱藏 */
+        display: none; 
         text-align: left;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
     }
-    .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 15px; }
+    .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
     .login-input-group { display: flex; gap: 8px; }
     .login-input {
         flex: 1;
-        padding: 10px; font-size: 15px; border-radius: 8px; border: 1px solid #ddd;
+        padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd;
         outline: none; transition: border 0.3s;
     }
     .login-input:focus { border-color: var(--evening-light); }
     .login-btn {
-        padding: 10px 20px; font-size: 15px; border-radius: 8px; border: none; 
+        padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; 
         background-color: var(--text-main); color: white; cursor: pointer;
         font-weight: bold;
     }
@@ -95,21 +95,24 @@
       padding: 15px 20px;
       border-radius: 12px;
       border: 1px solid #eee;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .schedule-row {
       margin: 8px 0;
-      font-size: 15px;
+      font-size: 16px;
       color: var(--text-sub);
       display: flex;
       align-items: center;
     }
     .time-badge {
         display: inline-block;
-        width: 45px;
+        width: 50px;
         text-align: center;
         padding: 4px 0;
         border-radius: 6px;
-        font-size: 13px;
+        font-size: 14px;
         margin-right: 12px;
         font-weight: bold;
         color: white;
@@ -125,69 +128,78 @@
       display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
     }
     .loading-spinner {
-      width: 40px; height: 40px;
+      width: 50px; height: 50px;
       border: 4px solid #f3f3f3;
       border-top: 4px solid var(--evening-main);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .loading-text { margin-top: 15px; font-size: 15px; color: #666; font-weight: 500; }
+    .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
 
-    /* === 日曆樣式 === */
+    /* === 日曆樣式 (修正版) === */
     .month-title {
       font-weight: 800;
-      font-size: 20px; /* 保持原樣，沒有變大 */
+      font-size: 32px;
       margin: 1.5em 0 0.8em;
       color: var(--text-main);
     }
     .calendar-header, .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
+      gap: 8px; /* 電腦版間距 */
       padding: 0;
       box-sizing: border-box;
       max-width: 100%;
     }
-    
-    /* 🎯 修改點 1：星期標題變大 */
     .weekday-header {
       font-weight: bold;
-      font-size: 18px; /* 從 13px 改為 18px */
+      font-size: 20px;
       text-align: center;
       color: #b0bec5;
       padding-bottom: 10px; 
     }
     
-    /* 🎯 修改點 2：日曆格子變大 */
+    /* 日曆格子 (參考週末版樣式) */
     .day {
       aspect-ratio: 1;
       width: 100%;
+      font-size: 28px; /* 電腦版字體 */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: 12px; /* 圓角加大到 12px */
+      border-radius: 12px; 
       background-color: #f7f9fa;
       color: #cfd8dc;
       cursor: default;
       box-sizing: border-box;
       transition: all 0.1s;
       position: relative;
-      font-size: 20px; /* 基礎字體加大，撐大格子 */
+      padding: 2px; /* 內縮防止文字貼邊 */
     }
-    /* 配合格子變大，內部文字稍微調整 */
-    .day-number { font-size: 20px; font-weight: 600; margin-bottom: 2px; }
-    .day-label { font-size: 12px; margin-top: 0px; font-weight: normal; }
+    
+    /* 數字與標籤樣式 (絕對置中) */
+    .day-number { 
+        font-weight: 600; 
+        line-height: 1; 
+        margin-bottom: 2px; /* 數字與時間的間距 */
+    }
+    .day-label { 
+        font-size: 12px; 
+        line-height: 1.1;
+        font-weight: 500; 
+        text-align: center;
+    }
 
     /* === 晚班樣式 (藍色) === */
     .day.available.evening {
       background-color: #fff;
       color: #333;
-      border: 2px solid var(--evening-main);
+      border: 2px solid var(--evening-main); /* 加粗邊框 */
       cursor: pointer;
     }
-    .day.available.evening .day-label { color: var(--evening-main); font-weight: 800; }
+    .day.available.evening .day-label { color: var(--evening-main); font-weight: bold; }
     
     .day.selected.evening {
       background-color: var(--evening-main);
@@ -202,10 +214,10 @@
     .day.available.morning {
       background-color: #fff;
       color: #333;
-      border: 2px solid var(--morning-main);
+      border: 2px solid var(--morning-main); /* 加粗邊框 */
       cursor: pointer;
     }
-    .day.available.morning .day-label { color: var(--morning-main); font-weight: 800; }
+    .day.available.morning .day-label { color: var(--morning-main); font-weight: bold; }
 
     .day.selected.morning {
       background-color: var(--morning-main);
@@ -220,32 +232,34 @@
     .day.registered {
       background-color: #eceff1;
       color: #b0bec5;
-      border: 1px solid #cfd8dc;
+      border: 2px solid #cfd8dc; 
       cursor: not-allowed;
     }
-    .day.registered .day-label { color: #b0bec5; font-weight: normal; content: "已登記"; }
+    .day.registered .day-label { color: #b0bec5; font-weight: normal; }
 
     /* 額滿 */
     .day.full {
-      background-color: #f5f5f5;
-      color: #bdbdbd;
+      background-color: #e0e0e0;
+      color: #90a4ae;
       cursor: not-allowed;
-      border: 1px dashed #e0e0e0;
+      border: 2px solid #b0bec5; 
+      opacity: 0.9;
     }
-    /* 配合格子變大，額滿標籤也稍微調整 */
-    .day.full .full-label { font-size: 12px; color: #bdbdbd; margin-top: 2px;}
+    .day.full .full-label { font-size: 11px; color: #78909c; margin-top: 2px;}
 
     /* 送出按鈕 */
     #submit-btn {
-      margin: 30px auto 10px; 
-      padding: 14px 0;
-      font-size: 18px;
+      margin: 40px auto 20px; 
+      padding: 16px 0;
+      font-size: 20px;
       letter-spacing: 1px;
-      background: var(--evening-main); /* 預設用晚班藍 */
+      background: var(--evening-main); 
       color: #fff;
       border: none;
       border-radius: 50px;
       cursor: pointer;
+      max-width: 60%; 
+      display: block;
       width: 100%;
       font-weight: bold;
       transition: all 0.3s;
@@ -257,12 +271,37 @@
         box-shadow: none;
     }
 
-    @media (max-width: 600px) {
-      body { align-items: flex-start; background: #fff; } 
-      .container { margin: 0; padding: 20px; box-shadow: none; border-radius: 0; }
-      h1 { font-size: 24px; }
-      /* 手機版星期標題稍微縮小一點，避免擁擠 */
-      .weekday-header { font-size: 16px; }
+    /* 📱 手機版 RWD 修正 (關鍵!) */
+    @media (max-width: 750px) {
+      .container { 
+          margin: 0; 
+          padding: 0.5em; /* 縮小 Padding 防止撐開 */
+      }
+      h1 { font-size: 26px; }
+      .schedule-box { padding: 12px 15px; }
+      
+      /* 縮小間距，確保不爆版 */
+      .calendar-header, .calendar-grid { 
+          gap: 3px; 
+          padding: 0;
+      }
+      .weekday-header { 
+          font-size: 16px; 
+          padding-bottom: 3px; 
+      }
+      
+      /* 調整格子與字體大小 */
+      .day { 
+          font-size: 18px; /* 縮小字體以適應手機 */
+          border-radius: 6px; 
+      }
+      .day-number { margin-bottom: 1px; }
+      .day-label { font-size: 10px; }
+      
+      #submit-btn { 
+          font-size: 18px; 
+          max-width: 80%; 
+      }
     }
   </style>
 </head>
@@ -312,7 +351,6 @@
       return new URLSearchParams(window.location.search).get(key) || ''; 
     }
 
-    // --- 1. 初始化與身分驗證 ---
     async function initSystem() {
         const loadingDiv = document.getElementById('loading');
         loadingDiv.style.display = 'flex';
@@ -376,7 +414,6 @@
         loadingDiv.style.display = 'none';
     }
 
-    // --- 2. 資料讀取 ---
     async function loadMergedData() {
       try {
         const targetLineId = currentUser.lineId || "";
@@ -399,7 +436,6 @@
       } catch (error) { return { dates: [], mySignups: new Set(), counts: {} }; }
     }
 
-    // --- 3. 渲染日曆 (核心視覺邏輯) ---
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
       calendarDiv.innerHTML = '';
@@ -456,7 +492,6 @@
 
             const dayOfWeek = new Date(dateStr).getDay();
             
-            // 邏輯：判斷是早班還是晚班，給予不同顏色 Class
             let type = ""; 
             let currentCount = 0;
             let labelText = "";
@@ -490,7 +525,7 @@
               cell.appendChild(label);
             } else if (availableSet.has(dateStr) && type) {
               cell.classList.add('available');
-              cell.classList.add(themeClass); // 關鍵：加入 evening 或 morning 類別
+              cell.classList.add(themeClass); 
               
               const timeLabel = document.createElement('div');
               timeLabel.className = 'day-label';
@@ -498,7 +533,6 @@
               cell.appendChild(timeLabel);
 
               cell.onclick = () => {
-                // 這裡保留多選邏輯
                 if (selectedDates.has(dateStr)) {
                   selectedDates.delete(dateStr);
                   cell.classList.remove('selected');
@@ -523,7 +557,7 @@
             btn.disabled = false;
         } else {
             btn.textContent = "請先選擇日期";
-            btn.disabled = true; // 這裡不鎖死 disabled 屬性，改為文字提示，或可根據需求調整
+            btn.disabled = true; 
         }
     }
 
@@ -537,7 +571,6 @@
         return;
       }
 
-      const msg = document.getElementById('message'); // 雖然這個版本沒放 message div，但 JS 保留無妨
       const loadingDiv = document.getElementById('loading');
       const btn = document.getElementById('submit-btn');
       
