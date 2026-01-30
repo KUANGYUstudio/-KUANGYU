@@ -26,26 +26,26 @@
 
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background: #f5f5f5; /* 背景改稍微灰一點，讓卡片更突出 */
+      background: #f5f5f5; 
       margin: 0;
       padding: 0;
       color: #333;
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center; /* 讓整個卡片在電腦版垂直置中 */
+      align-items: center; 
     }
     .container {
-      /* 📐 調整寬度：原本 800px 改為 500px，電腦版更精緻 */
+      /* 電腦版寬度 500px */
       max-width: 500px; 
       width: 100%;
       margin: 20px auto;
       padding: 30px 25px;
       box-sizing: border-box;
       text-align: center;
-      background: #ffffff; /* 卡片白底 */
-      border-radius: 20px; /* 圓角 */
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05); /* 增加立體感 */
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     }
     h1 {
       font-size: 28px;
@@ -58,7 +58,7 @@
     /* === 📅 課程時間表 === */
     .schedule-box {
       text-align: left;
-      display: block; /* 讓它佔滿寬度 */
+      display: block; 
       margin-bottom: 20px;
       background: #fafafa;
       padding: 15px 20px;
@@ -83,12 +83,12 @@
         margin-right: 12px;
         font-weight: bold;
         color: white;
-        flex-shrink: 0; /* 防止標籤被壓縮 */
+        flex-shrink: 0; 
     }
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
 
-    /* === 💰 價格與優惠說明區 (優化文案版) === */
+    /* === 💰 價格與優惠說明區 (無壓力版) === */
     .price-info {
         background-color: var(--price-bg);
         color: var(--price-text);
@@ -279,7 +279,7 @@
     #submit-btn:disabled { cursor: not-allowed; }
 
     @media (max-width: 600px) {
-      body { align-items: flex-start; background: #fff; } /* 手機版不置中，滿版白底 */
+      body { align-items: flex-start; background: #fff; } 
       .container { margin: 0; padding: 20px; box-shadow: none; border-radius: 0; }
       h1 { font-size: 24px; }
     }
@@ -306,12 +306,10 @@
     <div class="price-info">
         <div class="price-title">單堂體驗費用 <span>$660</span></div>
         <div class="price-desc">
-            💡 <strong>當日升級優惠：</strong><br>
-            體驗後若補差額升級為正式課卡（10堂/20堂），本堂費用可全額折抵。<br>
+            💡 <strong>購課折抵優惠：</strong><br>
+            若後續購買正式課卡（10堂/20堂），本堂體驗費 <span class="price-highlight">可全額折抵</span>。<br>
             <div style="margin-top: 8px; font-size: 13px; color: #1b5e20; background: rgba(255,255,255,0.6); padding: 8px; border-radius: 6px;">
-                例如：10 堂課原價 $5500<br>
-                扣除已付 $660，<strong>僅需補差額 $4840</strong><br>
-                即升級為 10 堂正式課卡 <span class="price-highlight">（含本次體驗，剩餘 9 堂）</span>
+                例如：購買 10 堂課，可扣除已付的 $660，僅需補足差額，即可享有 10 堂優惠方案。
             </div>
         </div>
     </div>
