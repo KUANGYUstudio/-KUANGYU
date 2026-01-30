@@ -41,6 +41,7 @@
       font-size: calc(24px * var(--font-scale));
       margin-bottom: 0.4em;
       text-align: center;
+      color: #333;
     }
     p {
       font-size: calc(16px * var(--font-scale));
@@ -66,7 +67,7 @@
       font-size: calc(18px * var(--font-scale));
       text-decoration: none;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-      width: 260px;
+      width: 280px; /* 稍微加寬一點以容納文字 */
       color: #000000;
       transition: transform 0.1s;
     }
@@ -79,12 +80,12 @@
       width: 8px;
       border-radius: 12px 0 0 12px;
     }
-    .button.morning::before {
-      background-color: #ffe082;
+    
+    /* 平日合併版顏色 (結合藍黃) - 用藍色為主 */
+    .button.weekday::before {
+      background-color: #00bcd4; 
     }
-    .button.evening::before {
-      background-color: #90caf9;
-    }
+    
     .button.online::before {
       background-color: #a5d6a7;
     }
@@ -103,21 +104,27 @@
       <p>請選擇你要登記的課程</p>
     </div>
     <div class="button-group">
-      <a class="button morning" href="#" id="morning-link">早班功率課</a>
-      <a class="button evening" href="#" id="evening-link">晚班功率課</a>
+      <a class="button weekday" href="#" id="weekday-link">平日功率課 (早/晚班)</a>
+      
       <a class="button online" href="#" id="online-link">線上功率課</a>
       <a class="button weekend" href="#" id="weekend-link">【週末】長距離訓練</a>
     </div>
   </div>
+  
   <script>
     function getParam(key) {
       return new URLSearchParams(window.location.search).get(key) || '';
     }
     const name = getParam('name');
     const lineId = getParam('lineId');
+    
+    // 組合參數字串
     const params = `?name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`;
-    document.getElementById('morning-link').href = `signup-morning.html${params}`;
-    document.getElementById('evening-link').href = `signup-evening.html${params}`;
+    
+    // 🚀 設定新連結指向 signup_weekday.html
+    document.getElementById('weekday-link').href = `signup_weekday.html${params}`;
+    
+    // 其他連結維持原樣 (如果有對應檔案的話)
     document.getElementById('online-link').href = `signup-online.html${params}`;
     document.getElementById('weekend-link').href = `signup-weekend.html${params}`;
   </script>
