@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>平日功率課預約</title>
+  <title>平日功率課</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
@@ -44,22 +44,26 @@
       box-sizing: border-box;
       text-align: center;
     }
+    
+    /* 🎯 修改：縮小下方間距 */
     h1 {
       font-size: 32px;
-      margin: 0.5em 0 0.5em;
+      margin: 0.5em 0 0.2em; /* 這裡原本是 0.5em，改小一點 */
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
     }
 
     /* === 👋 歡迎訊息與登入區 === */
+    /* 🎯 修改：縮小下方間距 */
     .user-welcome {
         font-size: 18px;
         color: var(--evening-main);
-        margin-bottom: 15px;
+        margin-bottom: 8px; /* 這裡原本是 15px，改小一點 */
         font-weight: bold;
         min-height: 24px;
     }
+    
     .login-section {
         background-color: #fafafa;
         padding: 20px;
@@ -152,6 +156,8 @@
       box-sizing: border-box;
       max-width: 100%;
     }
+    
+    /* 星期標題 (維持 16px) */
     .weekday-header {
       font-weight: bold;
       font-size: 16px; 
@@ -160,7 +166,7 @@
       padding-bottom: 10px; 
     }
     
-    /* 日曆格子 */
+    /* 日曆格子 (維持大尺寸) */
     .day {
       aspect-ratio: 1;
       width: 100%;
@@ -178,7 +184,7 @@
       position: relative;
     }
     
-    /* 日期數字 */
+    /* 日期數字 (維持 22px 粗體) */
     .day-number { 
         font-size: 22px; 
         font-weight: bold; 
@@ -303,7 +309,7 @@
   </div>
 
   <div class="container">
-    <h1>平日功率課預約</h1>
+    <h1>平日功率課</h1>
     
     <div id="welcome-msg" class="user-welcome"></div> 
 
