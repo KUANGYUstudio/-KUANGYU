@@ -6,15 +6,19 @@
   <title>光聿功率課</title>
   <style>
     /* =========================================
-       🎨 全局設定 (統一白底風格)
+       🎨 全局設定 (極簡質感版)
        ========================================= */
     :root {
-      --bg-color: #f4f6f8;
+      --bg-color: #f8f9fa; /* 背景色稍微調亮一點，更有空氣感 */
       --card-bg: #ffffff;
-      --text-main: #333;
-      --text-sub: #666;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      --radius: 12px;
+      --text-main: #2c3e50;
+      --text-sub: #95a5a6;
+      
+      /* 更加柔和、擴散的高級陰影 */
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.08);
+      
+      --radius: 16px; /* 卡片圓角加大一點，更圓潤 */
       
       /* 定義各區塊代表色 */
       --color-weekday: #00bcd4; /* 平日藍 */
@@ -25,41 +29,54 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background-color: var(--bg-color);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       color: var(--text-main);
+      -webkit-font-smoothing: antialiased; /* 讓字體更清晰 */
     }
 
     .container {
       width: 100%;
       max-width: 420px;
-      padding: 40px 20px;
+      padding: 40px 24px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    /* 標題區 */
+    /* === 標題區優化 === */
     .header {
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       text-align: center;
+      position: relative;
     }
     h1 {
-      font-size: 26px;
-      margin: 0 0 10px;
+      font-size: 28px;
+      margin: 0 0 12px;
       font-weight: 800;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       color: #2c3e50;
+    }
+    /* 標題下方的裝飾線 (取代 Emoji 的視覺焦點) */
+    h1::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 4px;
+      background-color: var(--color-weekday);
+      margin: 12px auto 0;
+      border-radius: 2px;
     }
     p {
       font-size: 15px;
       color: var(--text-sub);
       margin: 0;
+      letter-spacing: 0.5px;
     }
 
     /* 按鈕容器 */
@@ -67,70 +84,97 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px; /* 增加卡片間距 */
     }
 
-    /* 通用按鈕樣式 (全部統一) */
+    /* === 卡片樣式優化 === */
     .card-btn {
       display: flex;
       align-items: center;
-      padding: 24px 20px;
+      padding: 28px 24px; /* 增加內部留白，讓畫面更舒適 */
       background: var(--card-bg);
       border-radius: var(--radius);
       text-decoration: none;
       color: var(--text-main);
-      box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* 平滑過渡動畫 */
       position: relative;
       overflow: hidden;
-      border-left: 6px solid transparent; /* 預留左側色條位置 */
+      border-left: 6px solid transparent; 
+    }
+
+    /* 懸浮與點擊效果：卡片上浮 + 陰影加深 */
+    .card-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
     }
     .card-btn:active {
-      transform: scale(0.98);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
     }
     
     /* 文字區塊 */
     .btn-content {
       flex: 1;
-      padding-left: 5px;
+      padding-left: 8px; 
     }
     .btn-title {
-      font-size: 18px;
-      font-weight: bold;
+      font-size: 19px; /* 字體加大 */
+      font-weight: 700;
       display: block;
       margin-bottom: 6px;
       letter-spacing: 0.5px;
+      color: #333;
     }
     .btn-desc {
-      font-size: 13px;
-      opacity: 0.7;
+      font-size: 14px;
+      color: #888;
       display: block;
-      font-weight: normal;
+      font-weight: 400;
     }
 
-    /* 個別按鈕顏色設定 (只改左邊框顏色) */
+    /* 個別按鈕顏色設定 */
     .card-btn.weekday { border-left-color: var(--color-weekday); }
     .card-btn.online  { border-left-color: var(--color-online); }
     .card-btn.weekend { border-left-color: var(--color-weekend); }
 
-    /* 右側箭頭 (純CSS繪製) */
+    /* === 精緻的 CSS 箭頭 === */
+    .arrow-container {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.4;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    /* 讓箭頭跟隨卡片主題色 */
+    .card-btn.weekday .arrow-container { color: var(--color-weekday); }
+    .card-btn.online .arrow-container  { color: var(--color-online); }
+    .card-btn.weekend .arrow-container { color: var(--color-weekend); }
+
     .arrow {
-      border: solid #ccc; /* 統一用灰色 */
-      border-width: 0 2px 2px 0;
+      border: solid currentColor;
+      border-width: 0 2.5px 2.5px 0; /* 線條稍微加粗 */
       display: inline-block;
       padding: 4px;
       transform: rotate(-45deg);
-      -webkit-transform: rotate(-45deg);
-      opacity: 0.6;
+    }
+
+    /* 懸浮時箭頭變亮且稍微移動 */
+    .card-btn:hover .arrow-container {
+      opacity: 1;
+      transform: translateX(4px);
     }
 
     /* 頁尾 */
     .footer {
-      margin-top: 50px;
+      margin-top: 60px;
       font-size: 12px;
-      color: #ccc;
+      color: #d1d5db;
       text-align: center;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      font-weight: 500;
     }
 
   </style>
@@ -150,7 +194,7 @@
           <span class="btn-title">平日功率課</span>
           <span class="btn-desc">週二 / 週四晚班 & 週三早班</span>
         </div>
-        <div class="arrow"></div>
+        <div class="arrow-container"><div class="arrow"></div></div>
       </a>
 
       <a href="#" id="online-link" class="card-btn online">
@@ -158,7 +202,7 @@
           <span class="btn-title">線上功率課</span>
           <span class="btn-desc">Rouvy 線上同步訓練</span>
         </div>
-        <div class="arrow"></div>
+        <div class="arrow-container"><div class="arrow"></div></div>
       </a>
 
       <a href="#" id="weekend-link" class="card-btn weekend">
@@ -166,7 +210,7 @@
           <span class="btn-title">週末長距離</span>
           <span class="btn-desc">室內功率3hr起＋轉換跑</span>
         </div>
-        <div class="arrow"></div>
+        <div class="arrow-container"><div class="arrow"></div></div>
       </a>
 
     </div>
