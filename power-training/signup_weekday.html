@@ -5,286 +5,400 @@
   <title>平日功率課預約</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* =========================================
+       🎨 配色定義 (源自 FirstClass)
+       ========================================= */
     :root {
-      --evening-color: #00bcd4; /* 晚班藍 */
+      /* 晚班 - 專業藍 */
+      --evening-main: #00838f; 
+      --evening-light: #00acc1;
       --evening-bg: #e0f7fa;
-      --morning-color: #ffc107; /* 早班黃 */
+      
+      /* 早班 - 活力黃 */
+      --morning-main: #ffb300; 
+      --morning-light: #ffca28;
       --morning-bg: #fff8e1;
+
+      /* 系統色 */
+      --text-main: #2c3e50;
+      --text-sub: #546e7a;
+      --bg-color: #f5f5f5;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #ffffff;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg-color); 
       margin: 0;
       padding: 0;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center; 
     }
     .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0.5em;
+      max-width: 500px; 
+      width: 100%;
+      margin: 20px auto;
+      padding: 30px 25px;
       box-sizing: border-box;
       text-align: center;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     }
     h1 {
-      font-size: 32px;
-      margin: 0.5em 0 0.2em;
-      color: #333;
+      font-size: 28px;
+      margin: 0 0 0.5em;
+      color: var(--text-main);
+      font-weight: 800;
+      letter-spacing: 1px;
     }
-    .info {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 1.5em;
-      line-height: 1.6;
-    }
-    /* 時間標籤 */
-    .badge {
-        display: inline-block;
-        padding: 2px 6px;
-        border-radius: 4px;
-        color: white;
-        font-size: 14px;
-        font-weight: bold;
-        margin-right: 5px;
-        vertical-align: middle;
-    }
-    .badge-evening { background-color: var(--evening-color); }
-    .badge-morning { background-color: var(--morning-color); text-shadow: 0 1px 1px rgba(0,0,0,0.2); }
 
-    /* 載入動畫 */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.95);
+    /* === 👋 歡迎訊息與登入區 === */
+    .user-welcome {
+        font-size: 16px;
+        color: var(--evening-main);
+        margin-bottom: 15px;
+        font-weight: bold;
+        min-height: 24px;
+    }
+    .login-section {
+        background-color: #fafafa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #eee;
+        display: none; /* 預設隱藏 */
+        text-align: left;
+    }
+    .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 15px; }
+    .login-input-group { display: flex; gap: 8px; }
+    .login-input {
+        flex: 1;
+        padding: 10px; font-size: 15px; border-radius: 8px; border: 1px solid #ddd;
+        outline: none; transition: border 0.3s;
+    }
+    .login-input:focus { border-color: var(--evening-light); }
+    .login-btn {
+        padding: 10px 20px; font-size: 15px; border-radius: 8px; border: none; 
+        background-color: var(--text-main); color: white; cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* === 📅 課程時間表 (Schedule Box) === */
+    .schedule-box {
+      text-align: left;
+      display: block; 
+      margin-bottom: 25px;
+      background: #fafafa;
+      padding: 15px 20px;
+      border-radius: 12px;
+      border: 1px solid #eee;
+    }
+    .schedule-row {
+      margin: 8px 0;
+      font-size: 15px;
+      color: var(--text-sub);
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      z-index: 9999;
+    }
+    .time-badge {
+        display: inline-block;
+        width: 45px;
+        text-align: center;
+        padding: 4px 0;
+        border-radius: 6px;
+        font-size: 13px;
+        margin-right: 12px;
+        font-weight: bold;
+        color: white;
+        flex-shrink: 0; 
+    }
+    .badge-morning { background-color: var(--morning-light); }
+    .badge-evening { background-color: var(--evening-light); }
+
+    /* === 載入動畫 === */
+    .loading-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
     }
     .loading-spinner {
-      width: 50px;
-      height: 50px;
+      width: 40px; height: 40px;
       border: 4px solid #f3f3f3;
-      border-top: 4px solid #0097a7;
+      border-top: 4px solid var(--evening-main);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .loading-text { margin-top: 20px; font-size: 18px; color: #666; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .loading-text { margin-top: 15px; font-size: 15px; color: #666; font-weight: 500; }
 
+    /* === 日曆樣式 === */
     .month-title {
-      font-weight: bold;
-      font-size: 28px;
-      margin: 2em 0 0.8em;
+      font-weight: 800;
+      font-size: 20px;
+      margin: 1.5em 0 0.8em;
+      color: var(--text-main);
     }
     .calendar-header, .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px; 
+      gap: 8px;
       padding: 0;
       box-sizing: border-box;
       max-width: 100%;
     }
     .weekday-header {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 13px;
       text-align: center;
-      color: #888;
-      padding-bottom: 10px; 
+      color: #b0bec5;
+      padding-bottom: 8px; 
     }
-    
-    /* 日期格子基礎樣式 */
     .day {
       aspect-ratio: 1;
       width: 100%;
-      font-size: 24px; 
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: 12px; 
-      background-color: #eeeeee;
-      color: #aaa;
+      border-radius: 8px; 
+      background-color: #f7f9fa;
+      color: #cfd8dc;
       cursor: default;
       box-sizing: border-box;
+      transition: all 0.1s;
       position: relative;
-      flex-direction: column;
     }
-    
-    /* === 晚班樣式 (週二/四) === */
-    .day.available.evening {
-      background-color: var(--evening-bg);
-      color: #006064;
-      cursor: pointer;
-      border: 1px solid var(--evening-color);
-    }
-    .day.selected.evening {
-      background-color: var(--evening-color);
-      font-weight: bold;
-      color: #fff;
-      transform: scale(1.05);
-    }
-    /* === 早班樣式 (週三) === */
-    .day.available.morning {
-      background-color: var(--morning-bg);
-      color: #f57f17;
-      cursor: pointer;
-      border: 1px solid var(--morning-color);
-    }
-    .day.selected.morning {
-      background-color: var(--morning-color);
-      font-weight: bold;
-      color: #fff;
-      transform: scale(1.05);
-    }
+    .day-number { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+    .day-label { font-size: 10px; margin-top: 0px; font-weight: normal; }
 
-    /* 已登記 */
-    .day.registered {
-      background-color: #bdbdbd; /* 統一用灰色表示已登記，避免混亂 */
-      color: #fff;
-      cursor: not-allowed;
-      border: 2px solid #9e9e9e;
-      opacity: 0.8;
+    /* === 晚班樣式 (藍色) === */
+    .day.available.evening {
+      background-color: #fff;
+      color: #333;
+      border: 2px solid var(--evening-main);
+      cursor: pointer;
     }
+    .day.available.evening .day-label { color: var(--evening-main); font-weight: 800; }
     
+    .day.selected.evening {
+      background-color: var(--evening-main);
+      color: #fff;
+      border-color: var(--evening-main);
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 131, 143, 0.4);
+    }
+    .day.selected.evening .day-label { color: #fff; }
+
+    /* === 早班樣式 (黃色) === */
+    .day.available.morning {
+      background-color: #fff;
+      color: #333;
+      border: 2px solid var(--morning-main);
+      cursor: pointer;
+    }
+    .day.available.morning .day-label { color: var(--morning-main); font-weight: 800; }
+
+    .day.selected.morning {
+      background-color: var(--morning-main);
+      color: #fff;
+      border-color: var(--morning-main);
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(255, 179, 0, 0.4);
+    }
+    .day.selected.morning .day-label { color: #fff; }
+    
+    /* 已登記 (灰色) */
+    .day.registered {
+      background-color: #eceff1;
+      color: #b0bec5;
+      border: 1px solid #cfd8dc;
+      cursor: not-allowed;
+    }
+    .day.registered .day-label { color: #b0bec5; font-weight: normal; content: "已登記"; }
+
     /* 額滿 */
     .day.full {
-      background-color: #e0e0e0;
-      color: #666;
+      background-color: #f5f5f5;
+      color: #bdbdbd;
       cursor: not-allowed;
-      border: 2px solid #ccc;
-      opacity: 0.8;
-      gap: 2px;
+      border: 1px dashed #e0e0e0;
     }
-    .day.full .date-number { font-size: 24px; line-height: 1; margin-top: -4px; }
-    .day.full .full-label { font-size: 11px; line-height: 1; }
+    .day.full .full-label { font-size: 10px; color: #bdbdbd; margin-top: 2px;}
 
+    /* 送出按鈕 */
     #submit-btn {
-      margin: 3em auto 2em; 
-      padding: 16px 32px;
-      font-size: 22px;
-      background: #0097a7; /* 通用按鈕色 */
+      margin: 30px auto 10px; 
+      padding: 14px 0;
+      font-size: 18px;
+      letter-spacing: 1px;
+      background: var(--evening-main); /* 預設用晚班藍 */
       color: #fff;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      max-width: 80%;
-      width: 300px;
-      display: block;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    #message {
-      font-size: 16px;
-      margin-top: 1em;
+      width: 100%;
       font-weight: bold;
-      color: #d32f2f;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3);
+    }
+    #submit-btn:disabled { 
+        background-color: #cfd8dc; 
+        cursor: not-allowed; 
+        box-shadow: none;
     }
 
-    @media (max-width: 750px) {
-      h1 { font-size: 26px; }
-      .info { font-size: 16px; }
-      .month-title { font-size: 22px; }
-      .container { padding: 0.5em; }
-      .calendar-header, .calendar-grid { gap: 4px; padding: 0; }
-      .weekday-header { font-size: 14px; padding-bottom: 5px; }
-      .day { font-size: 18px; border-radius: 8px; }
-      .day.full .date-number { font-size: 16px; margin-top: -2px; }
-      .day.full .full-label { font-size: 10px; }
-      #submit-btn { font-size: 18px; padding: 12px 20px; }
+    @media (max-width: 600px) {
+      body { align-items: flex-start; background: #fff; } 
+      .container { margin: 0; padding: 20px; box-shadow: none; border-radius: 0; }
+      h1 { font-size: 24px; }
     }
   </style>
 </head>
 <body>
   <div id="loading" class="loading-overlay">
     <div class="loading-spinner"></div>
-    <div class="loading-text">載入課程資訊...</div>
+    <div class="loading-text">載入課程與身分...</div>
   </div>
 
   <div class="container">
     <h1>平日功率課預約</h1>
-    <div class="info">
-        <span class="badge badge-evening">晚班</span> 週二 / 週四 19:30～21:00<br>
-        <div style="margin-top:5px;"></div>
-        <span class="badge badge-morning">早班</span> 週三 06:30～08:00
+    
+    <div id="welcome-msg" class="user-welcome"></div> 
+
+    <div id="login-area" class="login-section">
+        <div class="login-title">⚠️ 請驗證會員身分</div>
+        <div style="font-size:13px; color:#666; margin-bottom:10px;">若未自動登入，請輸入姓名進行驗證</div>
+        <div class="login-input-group">
+            <input type="text" id="member-search-name" class="login-input" placeholder="例如：王小明">
+            <button onclick="searchMember()" class="login-btn">驗證</button>
+        </div>
+        <div id="login-error" style="color:#e53935; margin-top:8px; font-size:13px;"></div>
+    </div>
+
+    <div class="schedule-box">
+        <div class="schedule-row">
+            <span class="time-badge badge-evening">晚班</span> 週二 / 週四 19:30～21:00
+        </div>
+        <div class="schedule-row">
+            <span class="time-badge badge-morning">早班</span> 週三 06:30～08:00
+        </div>
     </div>
     
     <div id="calendar"></div>
-    <button id="submit-btn">送出選課</button>
-    <div id="message"></div>
+    <button id="submit-btn" style="display:none;">送出選課</button>
   </div>
 
   <script>
-    // ⚠️ 請確認這是您最新的 GAS 網址 (v2026.01.30 Final)
+    // ⚠️ 你的 GAS 網址 (v2026.01.30)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
-    const selectedDates = new Set(); // 儲存選取的日期字串 (yyyy/MM/dd)
+    const selectedDates = new Set(); 
     let myRegisteredDates = new Set();
+    let currentUser = { name: "", lineId: "" };
 
     function getParam(key) { 
       return new URLSearchParams(window.location.search).get(key) || ''; 
     }
 
-    const lineId = getParam('lineId');
-    const name = getParam('name');
+    // --- 1. 初始化與身分驗證 ---
+    async function initSystem() {
+        const loadingDiv = document.getElementById('loading');
+        loadingDiv.style.display = 'flex';
 
-    // 🚀 關鍵修改：同時讀取「早班」與「晚班」的個人紀錄
-    // 因為 GAS 的 powerAllData 一次只能回傳一種 courseType 的 mySignups
-    // 我們在前端呼叫兩次並合併，確保學生看到完整的已報名狀態
+        let urlName = getParam('name');
+        let urlLineId = getParam('lineId');
+
+        if (urlName && urlLineId) {
+            currentUser.name = urlName;
+            currentUser.lineId = urlLineId;
+            loginSuccess();
+        } else {
+            loadingDiv.style.display = 'none';
+            document.getElementById('login-area').style.display = 'block';
+        }
+    }
+
+    async function searchMember() {
+        const nameInput = document.getElementById('member-search-name').value.trim();
+        const errorMsg = document.getElementById('login-error');
+        const loadingDiv = document.getElementById('loading');
+
+        if (!nameInput) {
+            errorMsg.textContent = "請輸入姓名";
+            return;
+        }
+
+        loadingDiv.style.display = 'flex';
+        document.querySelector('.loading-text').textContent = "正在搜尋會員資料...";
+        
+        try {
+            const res = await fetch(`${SCRIPT_URL}?mode=search_member&searchName=${encodeURIComponent(nameInput)}`);
+            const data = await res.json();
+
+            if (data.found) {
+                currentUser.name = data.name;
+                currentUser.lineId = data.lineId;
+                errorMsg.textContent = "";
+                loginSuccess();
+            } else {
+                loadingDiv.style.display = 'none';
+                errorMsg.textContent = "❌ 找不到此會員，請確認姓名是否正確";
+            }
+        } catch (e) {
+            console.error(e);
+            loadingDiv.style.display = 'none';
+            errorMsg.textContent = "系統連線錯誤";
+        }
+    }
+
+    async function loginSuccess() {
+        const loadingDiv = document.getElementById('loading');
+        document.getElementById('login-area').style.display = 'none'; 
+        document.getElementById('submit-btn').style.display = 'block'; 
+        document.getElementById('welcome-msg').textContent = `Hi, ${currentUser.name}`;
+        
+        document.querySelector('.loading-text').textContent = "載入課程資料...";
+        if(loadingDiv.style.display === 'none') loadingDiv.style.display = 'flex';
+
+        await renderCalendar();
+        loadingDiv.style.display = 'none';
+    }
+
+    // --- 2. 資料讀取 ---
     async function loadMergedData() {
       try {
-        // 平行呼叫兩個 API，加快速度
+        const targetLineId = currentUser.lineId || "";
         const [resEvening, resEarly] = await Promise.all([
-            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(lineId)}&courseType=evening`),
-            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(lineId)}&courseType=early`)
+            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(targetLineId)}&courseType=evening`),
+            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(targetLineId)}&courseType=early`)
         ]);
 
         const dataEvening = await resEvening.json();
         const dataEarly = await resEarly.json();
 
-        // 合併可預約日期 (基本上是一樣的，因為 GAS 會回傳所有開放日)
-        // 但為了保險，我們取聯集
         const allDates = [...new Set([...(dataEvening.dates || []), ...(dataEarly.dates || [])])].sort();
-
-        // 合併已報名紀錄 (這是重點！)
         const mySignupsCombined = new Set([
             ...(dataEvening.mySignups || []),
             ...(dataEarly.mySignups || [])
         ]);
-
-        // 名額資訊 (counts 是一樣的，取一份即可)
         const counts = dataEvening.counts || {};
 
-        return {
-          dates: allDates,
-          mySignups: mySignupsCombined,
-          counts: counts
-        };
-
-      } catch (error) {
-        console.error('載入資料錯誤:', error);
-        return { dates: [], mySignups: new Set(), counts: {} };
-      }
+        return { dates: allDates, mySignups: mySignupsCombined, counts: counts };
+      } catch (error) { return { dates: [], mySignups: new Set(), counts: {} }; }
     }
 
+    // --- 3. 渲染日曆 (核心視覺邏輯) ---
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
-      const loadingDiv = document.getElementById('loading');
-      
-      loadingDiv.style.display = 'flex';
       calendarDiv.innerHTML = '';
 
       const allData = await loadMergedData();
       const availableDates = allData.dates;
       myRegisteredDates = allData.mySignups;
       const signupCounts = allData.counts;
-
-      loadingDiv.style.display = 'none';
-
       const availableSet = new Set(availableDates);
 
       if (!availableDates.length) {
@@ -299,7 +413,6 @@
         for (let m = 0; m < 12; m++) {
           const first = new Date(y, m, 1);
           const last = new Date(y, m + 1, 0);
-          
           if (last < start || first > end) continue;
 
           const title = document.createElement('div');
@@ -311,9 +424,7 @@
           header.className = 'calendar-header';
           ['日','一','二','三','四','五','六'].forEach(d => {
             const h = document.createElement('div');
-            h.className = 'weekday-header';
-            h.textContent = d;
-            header.appendChild(h);
+            h.className = 'weekday-header'; h.textContent = d; header.appendChild(h);
           });
           calendarDiv.appendChild(header);
 
@@ -321,31 +432,36 @@
           grid.className = 'calendar-grid';
 
           for (let i = 0; i < first.getDay(); i++) {
-            const cell = document.createElement('div');
-            cell.className = 'day';
-            grid.appendChild(cell);
+            grid.appendChild(document.createElement('div'));
           }
 
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
             const cell = document.createElement('div');
             cell.className = 'day';
-            cell.textContent = d;
+            
+            const numSpan = document.createElement('span');
+            numSpan.className = 'day-number';
+            numSpan.textContent = d;
+            cell.appendChild(numSpan);
 
             const dayOfWeek = new Date(dateStr).getDay();
             
-            // 判斷時段類型
-            let type = ""; // evening 或 morning
+            // 邏輯：判斷是早班還是晚班，給予不同顏色 Class
+            let type = ""; 
             let currentCount = 0;
+            let labelText = "";
             let themeClass = "";
 
-            if (dayOfWeek === 3) {
+            if (dayOfWeek === 3) { 
                 type = "early";
                 currentCount = signupCounts[dateStr] ? (signupCounts[dateStr].morning || 0) : 0;
+                labelText = "06:30";
                 themeClass = "morning";
-            } else if (dayOfWeek === 2 || dayOfWeek === 4) {
+            } else if (dayOfWeek === 2 || dayOfWeek === 4) { 
                 type = "evening";
                 currentCount = signupCounts[dateStr] ? (signupCounts[dateStr].evening || 0) : 0;
+                labelText = "19:30";
                 themeClass = "evening";
             }
 
@@ -353,15 +469,27 @@
 
             if (myRegisteredDates.has(dateStr)) {
               cell.classList.add('registered');
-              cell.textContent = d + ' ✓';
+              const label = document.createElement('div');
+              label.className = 'day-label';
+              label.textContent = "已登記";
+              cell.appendChild(label);
             } else if (isFull && type) {
               cell.classList.add('full');
-              cell.innerHTML = `<div class="date-number">${d}</div><div class="full-label">額滿</div>`;
+              const label = document.createElement('div');
+              label.className = 'full-label';
+              label.textContent = "額滿";
+              cell.appendChild(label);
             } else if (availableSet.has(dateStr) && type) {
               cell.classList.add('available');
-              cell.classList.add(themeClass); // 加入顏色 class (morning/evening)
+              cell.classList.add(themeClass); // 關鍵：加入 evening 或 morning 類別
               
+              const timeLabel = document.createElement('div');
+              timeLabel.className = 'day-label';
+              timeLabel.textContent = labelText;
+              cell.appendChild(timeLabel);
+
               cell.onclick = () => {
+                // 這裡保留多選邏輯
                 if (selectedDates.has(dateStr)) {
                   selectedDates.delete(dateStr);
                   cell.classList.remove('selected');
@@ -369,9 +497,9 @@
                   selectedDates.add(dateStr);
                   cell.classList.add('selected');
                 }
+                updateSubmitButton();
               };
             }
-
             grid.appendChild(cell);
           }
           calendarDiv.appendChild(grid);
@@ -379,50 +507,58 @@
       }
     }
 
+    function updateSubmitButton() {
+        const btn = document.getElementById('submit-btn');
+        if (selectedDates.size > 0) {
+            btn.textContent = `確認送出 (${selectedDates.size}堂)`;
+            btn.disabled = false;
+        } else {
+            btn.textContent = "請先選擇日期";
+            btn.disabled = true; // 這裡不鎖死 disabled 屬性，改為文字提示，或可根據需求調整
+        }
+    }
+
     document.getElementById('submit-btn').addEventListener('click', async () => {
+      if (!currentUser.name || !currentUser.lineId) {
+          alert('請先進行會員驗證');
+          return;
+      }
       if (!selectedDates.size) {
         alert('請至少選擇一個日期');
         return;
       }
 
-      const msg = document.getElementById('message');
+      const msg = document.getElementById('message'); // 雖然這個版本沒放 message div，但 JS 保留無妨
       const loadingDiv = document.getElementById('loading');
       const btn = document.getElementById('submit-btn');
       
       loadingDiv.style.display = 'flex';
+      document.querySelector('.loading-text').textContent = `正在為 ${currentUser.name} 預約中...`;
       btn.disabled = true;
-      msg.textContent = '';
 
       try {
-        // 🚀 關鍵修改：根據日期自動分流
         for (const date of selectedDates) {
           const dayOfWeek = new Date(date).getDay();
-          let courseType = "evening"; // 預設晚班 (週二/四)
-          
-          if (dayOfWeek === 3) {
-            courseType = "early"; // 週三改成早班
-          }
+          let courseType = "evening"; 
+          if (dayOfWeek === 3) courseType = "early"; 
 
-          // 呼叫原本的 submit 模式 (自動根據 courseType 寫入不同表單)
-          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${courseType}&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
+          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${courseType}&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}`);
         }
 
         loadingDiv.style.display = 'none';
-        msg.textContent = '✅ 登記完成';
         alert('✅ 登記成功！');
         selectedDates.clear();
-        
         window.location.reload();
 
       } catch (error) {
         console.error('提交錯誤:', error);
         loadingDiv.style.display = 'none';
         btn.disabled = false;
-        msg.textContent = '⚠️ 發生錯誤，請稍後再試';
+        alert('⚠️ 發生錯誤，請稍後再試');
       }
     });
 
-    renderCalendar();
+    initSystem();
   </script>
 </body>
 </html>
