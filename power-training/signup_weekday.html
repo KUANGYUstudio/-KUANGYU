@@ -160,11 +160,11 @@
       padding-bottom: 10px; 
     }
     
-    /* 日曆格子 (維持大尺寸) */
+    /* 日曆格子 */
     .day {
       aspect-ratio: 1;
       width: 100%;
-      font-size: 28px; /* 這裡維持大字體以撐開格子 */
+      font-size: 28px; 
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -178,10 +178,10 @@
       position: relative;
     }
     
-    /* 🎯 修改：數字縮小一點 */
+    /* 🎯 修改：日期數字改回粗體，大小維持 22px */
     .day-number { 
-        font-size: 22px; /* 從繼承 28px 縮小到 22px */
-        font-weight: normal; 
+        font-size: 22px; 
+        font-weight: bold; /* 改回 Bold */
         margin-bottom: 2px; 
         line-height: 1; 
     }
@@ -287,10 +287,10 @@
       
       /* 手機版設定 */
       .day { 
-          font-size: 22px; /* 格子基底字體 */
+          font-size: 22px; 
           border-radius: 10px; 
       }
-      .day-number { font-size: 18px; } /* 數字再縮小一點以配合手機 */
+      .day-number { font-size: 18px; } 
       .day-label { font-size: 10px; }
       
       #submit-btn { 
