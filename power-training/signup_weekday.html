@@ -22,7 +22,7 @@
       /* 系統色 */
       --text-main: #2c3e50;
       --text-sub: #546e7a;
-      --bg-color: #ffffff;
+      --bg-color: #f5f5f5;
     }
 
     body {
@@ -37,16 +37,19 @@
       align-items: center; 
     }
     .container {
-      max-width: 800px; /* 稍微放寬一點，配合大格子 */
+      max-width: 500px; 
       width: 100%;
-      margin: 0 auto;
-      padding: 20px;
+      margin: 20px auto;
+      padding: 30px 25px;
       box-sizing: border-box;
       text-align: center;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     }
     h1 {
-      font-size: 32px;
-      margin: 0.5em 0 0.5em;
+      font-size: 28px;
+      margin: 0 0 0.5em;
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
@@ -54,7 +57,7 @@
 
     /* === 👋 歡迎訊息與登入區 === */
     .user-welcome {
-        font-size: 18px;
+        font-size: 16px;
         color: var(--evening-main);
         margin-bottom: 15px;
         font-weight: bold;
@@ -68,20 +71,17 @@
         border: 1px solid #eee;
         display: none; /* 預設隱藏 */
         text-align: left;
-        max-width: 500px;
-        margin-left: auto;
-        margin-right: auto;
     }
-    .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
+    .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 15px; }
     .login-input-group { display: flex; gap: 8px; }
     .login-input {
         flex: 1;
-        padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd;
+        padding: 10px; font-size: 15px; border-radius: 8px; border: 1px solid #ddd;
         outline: none; transition: border 0.3s;
     }
     .login-input:focus { border-color: var(--evening-light); }
     .login-btn {
-        padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; 
+        padding: 10px 20px; font-size: 15px; border-radius: 8px; border: none; 
         background-color: var(--text-main); color: white; cursor: pointer;
         font-weight: bold;
     }
@@ -95,24 +95,21 @@
       padding: 15px 20px;
       border-radius: 12px;
       border: 1px solid #eee;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
     }
     .schedule-row {
       margin: 8px 0;
-      font-size: 16px;
+      font-size: 15px;
       color: var(--text-sub);
       display: flex;
       align-items: center;
     }
     .time-badge {
         display: inline-block;
-        width: 50px;
+        width: 45px;
         text-align: center;
         padding: 4px 0;
         border-radius: 6px;
-        font-size: 14px;
+        font-size: 13px;
         margin-right: 12px;
         font-weight: bold;
         color: white;
@@ -128,19 +125,19 @@
       display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
     }
     .loading-spinner {
-      width: 50px; height: 50px;
+      width: 40px; height: 40px;
       border: 4px solid #f3f3f3;
       border-top: 4px solid var(--evening-main);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
+    .loading-text { margin-top: 15px; font-size: 15px; color: #666; font-weight: 500; }
 
-    /* === 日曆樣式 (放大版 - 參考線上功率課) === */
+    /* === 日曆樣式 === */
     .month-title {
       font-weight: 800;
-      font-size: 32px; /* 放大 */
+      font-size: 20px;
       margin: 1.5em 0 0.8em;
       color: var(--text-main);
     }
@@ -154,22 +151,19 @@
     }
     .weekday-header {
       font-weight: bold;
-      font-size: 18px; /* 放大 */
+      font-size: 13px;
       text-align: center;
       color: #b0bec5;
-      padding-bottom: 10px; 
+      padding-bottom: 8px; 
     }
-    
-    /* 🚀 日曆格子加大設定 */
     .day {
       aspect-ratio: 1;
       width: 100%;
-      font-size: 24px; /* 放大字體 */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: 12px; /* 圓角加大 */
+      border-radius: 8px; 
       background-color: #f7f9fa;
       color: #cfd8dc;
       cursor: default;
@@ -177,8 +171,8 @@
       transition: all 0.1s;
       position: relative;
     }
-    .day-number { font-weight: 600; margin-bottom: 0; line-height: 1; }
-    .day-label { font-size: 11px; margin-top: 2px; font-weight: normal; line-height: 1; }
+    .day-number { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+    .day-label { font-size: 10px; margin-top: 0px; font-weight: normal; }
 
     /* === 晚班樣式 (藍色) === */
     .day.available.evening {
@@ -220,37 +214,32 @@
     .day.registered {
       background-color: #eceff1;
       color: #b0bec5;
-      border: 2px solid #cfd8dc; /* 保持邊框一致性 */
+      border: 1px solid #cfd8dc;
       cursor: not-allowed;
     }
-    .day.registered .day-label { color: #b0bec5; font-weight: normal; }
+    .day.registered .day-label { color: #b0bec5; font-weight: normal; content: "已登記"; }
 
     /* 額滿 */
     .day.full {
-      background-color: #e0e0e0;
-      color: #666; /* 加深顏色提高對比 */
+      background-color: #f5f5f5;
+      color: #bdbdbd;
       cursor: not-allowed;
-      border: 2px solid var(--evening-main); /* 讓框線明顯一點 */
-      opacity: 0.8;
+      border: 1px dashed #e0e0e0;
     }
-    .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
+    .day.full .full-label { font-size: 10px; color: #bdbdbd; margin-top: 2px;}
 
-    /* 🚀 送出按鈕 (變短版) */
+    /* 送出按鈕 */
     #submit-btn {
-      margin: 40px auto 20px; 
-      padding: 16px 0;
-      font-size: 20px;
+      margin: 30px auto 10px; 
+      padding: 14px 0;
+      font-size: 18px;
       letter-spacing: 1px;
-      background: var(--evening-main); 
+      background: var(--evening-main); /* 預設用晚班藍 */
       color: #fff;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      /* 關鍵修改：限制寬度並置中 */
-      max-width: 60%; 
-      display: block;
       width: 100%;
-      
       font-weight: bold;
       transition: all 0.3s;
       box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3);
@@ -261,20 +250,10 @@
         box-shadow: none;
     }
 
-    @media (max-width: 750px) {
-      .container { margin: 0; padding: 15px; }
-      h1 { font-size: 26px; }
-      .schedule-box { padding: 12px 15px; }
-      
-      /* 手機版格子稍微縮小一點，不然會爆版 */
-      .calendar-header, .calendar-grid { gap: 4px; }
-      .day { font-size: 18px; border-radius: 8px; }
-      .day-label { font-size: 9px; }
-      
-      #submit-btn { 
-          font-size: 18px; 
-          max-width: 80%; /* 手機版按鈕稍微寬一點比較好按 */
-      }
+    @media (max-width: 600px) {
+      body { align-items: flex-start; background: #fff; } 
+      .container { margin: 0; padding: 20px; box-shadow: none; border-radius: 0; }
+      h1 { font-size: 24px; }
     }
   </style>
 </head>
@@ -411,7 +390,7 @@
       } catch (error) { return { dates: [], mySignups: new Set(), counts: {} }; }
     }
 
-    // --- 3. 渲染日曆 ---
+    // --- 3. 渲染日曆 (核心視覺邏輯) ---
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
       calendarDiv.innerHTML = '';
@@ -502,7 +481,7 @@
               cell.appendChild(label);
             } else if (availableSet.has(dateStr) && type) {
               cell.classList.add('available');
-              cell.classList.add(themeClass); 
+              cell.classList.add(themeClass); // 關鍵：加入 evening 或 morning 類別
               
               const timeLabel = document.createElement('div');
               timeLabel.className = 'day-label';
@@ -510,6 +489,7 @@
               cell.appendChild(timeLabel);
 
               cell.onclick = () => {
+                // 這裡保留多選邏輯
                 if (selectedDates.has(dateStr)) {
                   selectedDates.delete(dateStr);
                   cell.classList.remove('selected');
@@ -534,7 +514,7 @@
             btn.disabled = false;
         } else {
             btn.textContent = "請先選擇日期";
-            btn.disabled = true; 
+            btn.disabled = true; // 這裡不鎖死 disabled 屬性，改為文字提示，或可根據需求調整
         }
     }
 
@@ -548,6 +528,7 @@
         return;
       }
 
+      const msg = document.getElementById('message'); // 雖然這個版本沒放 message div，但 JS 保留無妨
       const loadingDiv = document.getElementById('loading');
       const btn = document.getElementById('submit-btn');
       
