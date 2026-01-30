@@ -52,14 +52,7 @@
       letter-spacing: 1px;
     }
 
-    /* === 👋 歡迎訊息與登入區 === */
-    .user-welcome {
-        font-size: 18px;
-        color: var(--evening-main);
-        margin-bottom: 15px;
-        font-weight: bold;
-        min-height: 24px;
-    }
+    /* === 🔑 會員登入區 === */
     .login-section {
         background-color: #fafafa;
         padding: 20px;
@@ -152,11 +145,9 @@
       box-sizing: border-box;
       max-width: 100%;
     }
-    
-    /* 星期標題 (維持 16px) */
     .weekday-header {
       font-weight: bold;
-      font-size: 16px; 
+      font-size: 14px; 
       text-align: center;
       color: #b0bec5;
       padding-bottom: 10px; 
@@ -180,7 +171,7 @@
       position: relative;
     }
     
-    /* 日期數字 (維持 22px 粗體) */
+    /* 日期數字 (22px 粗體) */
     .day-number { 
         font-size: 22px; 
         font-weight: bold; 
@@ -256,7 +247,7 @@
     }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
 
-    /* 🚀 送出按鈕 (寬度縮短) */
+    /* 送出按鈕 (瘦身版) */
     #submit-btn {
       margin: 40px auto 20px; 
       padding: 16px 0;
@@ -267,10 +258,7 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      
-      /* 🎯 修改點：限制最大寬度為 260px，讓它左右縮短 */
-      max-width: 260px; 
-      
+      max-width: 260px; /* 電腦版固定寬度 */
       display: block;
       width: 100%;
       font-weight: bold;
@@ -298,7 +286,7 @@
       .day-number { font-size: 18px; } 
       .day-label { font-size: 10px; }
       
-      /* 🎯 手機版按鈕也縮短一點，從 80% 改為 60% */
+      /* 手機版按鈕寬度 */
       #submit-btn { 
           font-size: 18px; 
           max-width: 60%; 
@@ -315,8 +303,6 @@
   <div class="container">
     <h1>平日功率課預約</h1>
     
-    <div id="welcome-msg" class="user-welcome"></div> 
-
     <div id="login-area" class="login-section">
         <div class="login-title">⚠️ 請驗證會員身分</div>
         <div style="font-size:13px; color:#666; margin-bottom:10px;">若未自動登入，請輸入姓名進行驗證</div>
@@ -352,6 +338,7 @@
       return new URLSearchParams(window.location.search).get(key) || ''; 
     }
 
+    // --- 1. 初始化與身分驗證 ---
     async function initSystem() {
         const loadingDiv = document.getElementById('loading');
         loadingDiv.style.display = 'flex';
@@ -406,7 +393,8 @@
         const loadingDiv = document.getElementById('loading');
         document.getElementById('login-area').style.display = 'none'; 
         document.getElementById('submit-btn').style.display = 'block'; 
-        document.getElementById('welcome-msg').textContent = `Hi, ${currentUser.name}`;
+        
+        // 🚀 關鍵修改：移除了原本的 welcome-msg 設定
         
         document.querySelector('.loading-text').textContent = "載入課程資料...";
         if(loadingDiv.style.display === 'none') loadingDiv.style.display = 'flex';
@@ -415,6 +403,7 @@
         loadingDiv.style.display = 'none';
     }
 
+    // --- 2. 資料讀取 ---
     async function loadMergedData() {
       try {
         const targetLineId = currentUser.lineId || "";
@@ -437,6 +426,7 @@
       } catch (error) { return { dates: [], mySignups: new Set(), counts: {} }; }
     }
 
+    // --- 3. 渲染日曆 ---
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
       calendarDiv.innerHTML = '';
@@ -493,6 +483,7 @@
 
             const dayOfWeek = new Date(dateStr).getDay();
             
+            // 邏輯：判斷是早班還是晚班，給予不同顏色 Class
             let type = ""; 
             let currentCount = 0;
             let labelText = "";
