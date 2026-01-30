@@ -6,17 +6,22 @@
   <title>光聿功率課</title>
   <style>
     /* =========================================
-       🎨 全局設定
+       🎨 全局設定 (無 Emoji 專業版)
        ========================================= */
     :root {
-      --primary-gradient: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%); /* 晚班藍 */
-      --mixed-gradient: linear-gradient(135deg, #29b6f6 0%, #ffa726 100%); /* 藍黃混合 */
-      --secondary-bg: #ffffff;
+      /* 使用您原本的藍色系作為主色 */
+      --brand-blue: #00bcd4; 
+      --brand-dark: #0097a7;
+      
+      /* 漸層改回單純的藍色系，不混橘色 */
+      --hero-gradient: linear-gradient(135deg, #00bcd4 0%, #008ba3 100%);
+      
       --bg-color: #f4f6f8;
+      --card-bg: #ffffff;
       --text-main: #333;
       --text-sub: #666;
-      --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      --radius: 16px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 12px;
     }
 
     body {
@@ -34,7 +39,7 @@
     .container {
       width: 100%;
       max-width: 420px;
-      padding: 30px 20px;
+      padding: 40px 20px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -46,14 +51,9 @@
       margin-bottom: 30px;
       text-align: center;
     }
-    .logo-emoji {
-      font-size: 48px;
-      margin-bottom: 10px;
-      display: block;
-    }
     h1 {
-      font-size: 24px;
-      margin: 0 0 8px;
+      font-size: 26px;
+      margin: 0 0 10px;
       font-weight: 800;
       letter-spacing: 1px;
       color: #2c3e50;
@@ -76,8 +76,8 @@
     .card-btn {
       display: flex;
       align-items: center;
-      padding: 20px;
-      background: var(--secondary-bg);
+      padding: 24px 20px; /* 增加一點高度讓文字呼吸 */
+      background: var(--card-bg);
       border-radius: var(--radius);
       text-decoration: none;
       color: var(--text-main);
@@ -85,55 +85,66 @@
       transition: transform 0.2s, box-shadow 0.2s;
       position: relative;
       overflow: hidden;
+      border-left: 6px solid transparent; /* 預留左側色條位置 */
     }
     .card-btn:active {
       transform: scale(0.98);
-    }
-
-    /* icon 區塊 */
-    .btn-icon {
-      font-size: 28px;
-      margin-right: 15px;
-      width: 40px;
-      text-align: center;
     }
     
     /* 文字區塊 */
     .btn-content {
       flex: 1;
+      padding-left: 5px; /* 因為拿掉了icon，稍微補一點左邊距 */
     }
     .btn-title {
       font-size: 18px;
       font-weight: bold;
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
     }
     .btn-desc {
       font-size: 13px;
-      opacity: 0.8;
+      opacity: 0.7;
       display: block;
+      font-weight: normal;
     }
 
-    /* 🌟 Hero Button: 平日功率課 (主推) */
+    /* 🌟 Hero Button: 平日功率課 (主推) - 改回藍色系 */
     .card-btn.hero {
-      background: var(--mixed-gradient);
+      background: var(--hero-gradient);
       color: white;
-      border: none;
+      border: none; /* Hero 不需要左側色條 */
+    }
+    .card-btn.hero .btn-title {
+      font-size: 20px; /* 主按鈕字稍微大一點 */
     }
     .card-btn.hero .btn-desc {
       color: rgba(255, 255, 255, 0.9);
+      opacity: 1;
+    }
+    /* 右側箭頭 (純CSS繪製，非 Emoji) */
+    .arrow {
+      border: solid currentColor;
+      border-width: 0 2px 2px 0;
+      display: inline-block;
+      padding: 4px;
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+      opacity: 0.6;
     }
 
-    /* 其他按鈕的微調 */
-    .card-btn.online { border-left: 5px solid #a5d6a7; }
-    .card-btn.weekend { border-left: 5px solid #ff8a65; }
+    /* 其他按鈕的左側色條 */
+    .card-btn.online { border-left-color: #a5d6a7; }
+    .card-btn.weekend { border-left-color: #ff8a65; }
 
     /* 頁尾 */
     .footer {
-      margin-top: 40px;
+      margin-top: 50px;
       font-size: 12px;
-      color: #bbb;
+      color: #ccc;
       text-align: center;
+      letter-spacing: 1px;
     }
 
   </style>
@@ -142,7 +153,6 @@
 
   <div class="container">
     <div class="header">
-      <span class="logo-emoji">🚴</span>
       <h1>光聿功率課</h1>
       <p>請選擇您的訓練計畫</p>
     </div>
@@ -150,34 +160,33 @@
     <div class="menu-grid">
       
       <a href="#" id="weekday-link" class="card-btn hero">
-        <div class="btn-icon">⚡️</div>
         <div class="btn-content">
           <span class="btn-title">平日功率課</span>
           <span class="btn-desc">週二 / 週四晚班 & 週三早班</span>
         </div>
-        <div style="font-size: 20px;">➜</div>
+        <div class="arrow"></div>
       </a>
 
       <a href="#" id="online-link" class="card-btn online">
-        <div class="btn-icon">💻</div>
         <div class="btn-content">
           <span class="btn-title">線上功率課</span>
-          <span class="btn-desc">Zwift 線上同步訓練</span>
+          <span class="btn-desc">Rouvy 線上同步訓練</span>
         </div>
+        <div class="arrow"></div>
       </a>
 
       <a href="#" id="weekend-link" class="card-btn weekend">
-        <div class="btn-icon">⛰️</div>
         <div class="btn-content">
           <span class="btn-title">週末長距離</span>
-          <span class="btn-desc">外騎團練 / 移地訓練</span>
+          <span class="btn-desc">室內功率3hr起＋轉換跑</span>
         </div>
+        <div class="arrow"></div>
       </a>
 
     </div>
 
     <div class="footer">
-      © KUANGYU STUDIO
+      KUANGYU STUDIO
     </div>
   </div>
 
