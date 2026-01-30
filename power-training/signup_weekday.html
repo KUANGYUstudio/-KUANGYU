@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>平日功率課</title>
+  <title>平日功率課預約</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
@@ -153,10 +153,10 @@
       max-width: 100%;
     }
     
-    /* 🎯 修改：星期標題縮小 */
+    /* 星期標題 (維持 16px) */
     .weekday-header {
       font-weight: bold;
-      font-size: 16px; /* 從 20px 縮小到 16px */
+      font-size: 16px; 
       text-align: center;
       color: #b0bec5;
       padding-bottom: 10px; 
@@ -256,7 +256,7 @@
     }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
 
-    /* 送出按鈕 */
+    /* 🚀 送出按鈕 (寬度縮短) */
     #submit-btn {
       margin: 40px auto 20px; 
       padding: 16px 0;
@@ -267,7 +267,10 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      max-width: 60%; 
+      
+      /* 🎯 修改點：限制最大寬度為 260px，讓它左右縮短 */
+      max-width: 260px; 
+      
       display: block;
       width: 100%;
       font-weight: bold;
@@ -295,9 +298,10 @@
       .day-number { font-size: 18px; } 
       .day-label { font-size: 10px; }
       
+      /* 🎯 手機版按鈕也縮短一點，從 80% 改為 60% */
       #submit-btn { 
           font-size: 18px; 
-          max-width: 80%; 
+          max-width: 60%; 
       }
     }
   </style>
