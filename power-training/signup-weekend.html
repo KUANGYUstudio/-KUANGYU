@@ -31,6 +31,8 @@
       justify-content: center;
       align-items: center; 
     }
+    
+    /* 🎯 修改：容器寬度統一為 800px (跟平日課一樣) */
     .container {
       max-width: 800px; 
       width: 100%;
@@ -40,7 +42,6 @@
       text-align: center;
     }
     
-    /* 標題設定 */
     h1 {
       font-size: 32px;
       margin: 0.3em 0 0.1em;
@@ -177,12 +178,7 @@
       padding: 4px 0; 
     }
     
-    /* 這裡修復了空白格子的顯示問題，讓它維持灰色底框 */
-    .day:empty {
-        background-color: #f7f9fa; /* 確保空格也有顏色 */
-        cursor: default;
-    }
-    
+    /* 🎯 關鍵修正：讓數字字體縮小，避免擠壓 (28px -> 22px) */
     .day-number { 
         font-size: 22px; 
         font-weight: bold; 
@@ -445,7 +441,7 @@
           const grid = document.createElement('div');
           grid.className = 'calendar-grid';
 
-          // 🔥 關鍵修正：這裡幫空格加上 class="day"，讓它跟其他格子一樣有背景
+          // 🔥 關鍵修正：幫空白日子加上 class="day"，撐起格子
           for (let i = 0; i < first.getDay(); i++) {
             const cell = document.createElement('div');
             cell.className = 'day'; 
