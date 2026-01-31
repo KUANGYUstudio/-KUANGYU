@@ -5,183 +5,144 @@
   <title>長距離訓練</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* =========================================
-       🎨 配色定義 (FirstClass 風格 - 週末橙版)
-       ========================================= */
-    :root {
-      /* 週末課 - 活力橙 */
-      --weekend-main: #ff7043; 
-      --weekend-light: #ff8a65;
-      --weekend-bg: #fbe9e7;
-      
-      /* 系統色 */
-      --text-main: #2c3e50;
-      --text-sub: #546e7a;
-      --bg-color: #ffffff;
-    }
-
     body {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background: var(--bg-color); 
+      font-family: Arial, sans-serif;
+      background: #ffffff;
       margin: 0;
       padding: 0;
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center; 
     }
-    
-    /* 容器寬度統一為 800px */
     .container {
-      max-width: 800px; 
-      width: 100%;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0.5em;
       box-sizing: border-box;
       text-align: center;
     }
-    
     h1 {
-      font-size: 32px;
-      margin: 0.3em 0 0.1em;
-      color: var(--text-main);
-      font-weight: 800;
-      letter-spacing: 1px;
+      font-size: 36px;
+      margin: 0.5em 0 0.2em;
     }
-
-    .user-welcome {
-        font-size: 18px;
-        color: var(--weekend-main);
-        margin-bottom: 4px;
-        font-weight: bold;
-        min-height: 24px;
+    
+    .subtitle {
+      font-size: 14px;
+      color: #666;
+      margin: 0.3em 0 1em;
+      font-weight: normal;
     }
-
-    .login-section {
-        background-color: #fafafa;
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        border: 1px solid #eee;
-        display: none; 
-        text-align: left;
-        max-width: 500px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
-    .login-input-group { display: flex; gap: 8px; }
-    .login-input {
-        flex: 1;
-        padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd;
-        outline: none; transition: border 0.3s;
-    }
-    .login-input:focus { border-color: var(--weekend-main); }
-    .login-btn {
-        padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; 
-        background-color: var(--text-main); color: white; cursor: pointer;
-        font-weight: bold;
-    }
-
-    .schedule-box {
-      text-align: left;
-      display: block; 
-      margin-bottom: 20px;
-      background: #fafafa;
-      padding: 15px 20px;
-      border-radius: 12px;
-      border: 1px solid #eee;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .schedule-row {
-      margin: 8px 0;
-      font-size: 16px;
-      color: var(--text-sub);
-      display: flex;
-      align-items: center;
-    }
-    .time-badge {
-        display: inline-block;
-        width: 80px; 
-        text-align: center;
-        padding: 4px 0;
-        border-radius: 6px;
-        font-size: 14px;
-        margin-right: 12px;
-        font-weight: bold;
-        color: white;
-        flex-shrink: 0; 
-    }
-    .badge-weekend { background-color: var(--weekend-main); }
-
+    
+    /* 載入動畫樣式 */
     .loading-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255, 255, 255, 0.98);
-      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
     }
     .loading-spinner {
-      width: 50px; height: 50px;
+      width: 50px;
+      height: 50px;
       border: 4px solid #f3f3f3;
-      border-top: 4px solid var(--weekend-main);
+      border-top: 4px solid #ff6b35;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
-
-    /* === 日曆樣式 === */
-    .month-title {
-      font-weight: 800;
-      font-size: 24px; 
-      margin: 1.5em 0 0.8em;
-      color: var(--text-main);
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
-    .calendar-header, .calendar-grid {
+    .loading-text {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #666;
+    }
+    
+    .month-title {
+      font-weight: bold;
+      font-size: 32px;
+      margin: 2em 0 0.8em;
+    }
+    .calendar-header,
+    .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
+      gap: 8px; 
       padding: 0;
       box-sizing: border-box;
       max-width: 100%;
     }
     .weekday-header {
       font-weight: bold;
-      font-size: 16px; 
+      font-size: 20px;
       text-align: center;
-      color: #b0bec5;
-      padding-bottom: 10px; 
+      color: #888;
+      padding-bottom: 20px; 
     }
-    
     .day {
       aspect-ratio: 1;
+      max-width: 100%;
       width: 100%;
+      font-size: 28px; 
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       border-radius: 12px; 
-      background-color: #f7f9fa;
-      color: #cfd8dc;
+      background-color: #eeeeee;
+      color: #aaa;
       cursor: default;
+      padding: 4px;
       box-sizing: border-box;
-      transition: all 0.1s;
-      position: relative;
-      padding: 4px 0; 
+      overflow: hidden;
     }
 
-    /* 空白格子隱藏背景色，但保留高度 */
+    /* ✨ 修正：讓沒有日期的空白格子保持透明，但維持結構高度 */
     .day.empty {
       background-color: transparent;
     }
+
+    .day.available {
+      background-color: #ffe0cc;
+      color: #000;
+      cursor: pointer;
+      border: 1px solid #ff8a65;
+      transition: all 0.2s;
+    }
+    .day.available:hover {
+      background-color: #ffccbc;
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(255, 138, 101, 0.3);
+    }
+    .day.selected {
+      background-color: #ff8a65;
+      font-weight: bold;
+      color: #fff;
+      border: 2px solid #ff5722;
+    }
+    .day.registered {
+      background-color: #ffccbc;
+      color: #000;
+      cursor: not-allowed;
+      border: 2px solid #ff8a65;
+      opacity: 0.7;
+    }
+    .day.full {
+      background-color: #e0e0e0;
+      color: #666;
+      cursor: not-allowed;
+      border: 2px solid #ff8a65;
+      opacity: 0.8;
+    }
     
-    .day-number { 
-        font-size: 22px; 
-        font-weight: bold; 
-        margin-bottom: 2px; 
-        line-height: 1; 
+    .date-number {
+      font-size: 28px; 
+      line-height: 1;
+      font-weight: 600;
     }
     
     .date-time-container {
@@ -189,184 +150,171 @@
       flex-direction: column;
       align-items: center;
       margin-top: 2px;
-      font-size: 11px;
-      line-height: 1.2;
-      color: var(--weekend-main);
-      font-weight: normal;
-    }
-
-    .day.available.weekend {
-      background-color: #fff;
-      color: #333;
-      border: 2px solid var(--weekend-main);
-      cursor: pointer;
+      font-size: 14px; 
+      line-height: 1.1;
+      color: #ff5722;
+      font-weight: 500;
     }
     
-    .day.selected.weekend {
-      background-color: var(--weekend-main);
+    .date-time-divider {
+      margin: 1px 0;
+      color: #ff5722;
+      font-size: 10px;
+    }
+    
+    .day.selected .date-time-container,
+    .day.selected .date-time-divider {
       color: #fff;
-      border-color: var(--weekend-main);
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(255, 112, 67, 0.4);
     }
     
-    .day.registered {
-      background-color: #eceff1;
-      color: #b0bec5;
-      border: 2px solid #cfd8dc; 
-      cursor: not-allowed;
+    .day.registered .date-time-container,
+    .day.registered .date-time-divider {
+      color: #666;
     }
-
-    .day.full {
-      background-color: #e0e0e0;
-      color: #666; 
-      cursor: not-allowed;
-      border: 2px solid var(--weekend-main); 
-      opacity: 0.8;
+    
+    .registered-label {
+      font-size: 10px;
+      color: #666;
+      margin-top: 2px;
     }
-    .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
-
+    
+    .day.selected .registered-label {
+      color: #fff;
+    }
+    
+    .full-label {
+      font-size: 16px; 
+      line-height: 1;
+      margin-top: 2px;
+    }
+    
     #submit-btn {
-      margin: 40px auto 20px; 
-      padding: 16px 0;
-      font-size: 20px;
-      letter-spacing: 1px;
-      background: var(--weekend-main); 
+      margin: 3em auto 2em; 
+      padding: 16px 32px;
+      font-size: 22px;
+      background: #ff8a65;
       color: #fff;
       border: none;
-      border-radius: 50px;
+      border-radius: 8px;
       cursor: pointer;
-      max-width: 260px;
+      max-width: 60%;
       display: block;
-      width: 100%;
+      transition: all 0.2s;
+    }
+    
+    #submit-btn:hover {
+      background: #ff5722;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3);
+    }
+    
+    #message {
+      font-size: 16px;
+      margin-top: 1em;
       font-weight: bold;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(255, 112, 67, 0.3);
     }
-    #submit-btn:disabled { 
-        background-color: #cfd8dc; 
-        cursor: not-allowed; 
-        box-shadow: none;
-    }
-
+    
     @media (max-width: 750px) {
-      .container { margin: 0; padding: 15px; }
-      h1 { font-size: 26px; }
-      .schedule-box { padding: 12px 15px; }
-      .calendar-header, .calendar-grid { gap: 4px; }
-      .day { border-radius: 10px; }
-      .day-number { font-size: 18px; } 
-      #submit-btn { font-size: 18px; max-width: 60%; }
+      h1 { 
+        font-size: 28px; 
+        margin-bottom: 0.8em;
+      }
+      .subtitle {
+        font-size: 12px;
+        margin: 0.3em 0 0.8em;
+      }
+      .month-title { 
+        font-size: 24px; 
+        margin: 1.5em 0 0.6em; 
+      }
+      .container { 
+        padding: 0.5em; 
+      }
+      .calendar-header,
+      .calendar-grid { 
+        gap: 3px; 
+        padding: 0; 
+      }
+      .weekday-header { 
+        font-size: 16px; 
+        padding-bottom: 3px; 
+      }
+      
+      .day { 
+        padding: 2px;
+        font-size: 18px;
+        border-radius: 4px;
+      }
+      
+      .date-number { 
+        font-size: 16px;
+        line-height: 1;
+      }
+      
+      .date-time-container { 
+        font-size: 8px;
+        margin-top: 1px;
+        line-height: 1;
+      }
+      
+      .date-time-divider {
+        margin: 0;
+        font-size: 7px;
+      }
+      
+      .registered-label {
+        font-size: 7px;
+        margin-top: 1px;
+      }
+      
+      .full-label { 
+        font-size: 8px; 
+        margin-top: 1px; 
+      }
+      
+      #submit-btn { 
+        font-size: 18px; 
+        padding: 12px 22px;
+        margin-top: 2em;
+      }
+      
+      .loading-text {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
   <div id="loading" class="loading-overlay">
     <div class="loading-spinner"></div>
-    <div class="loading-text">載入課程與身分...</div>
+    <div class="loading-text">載入中...</div>
   </div>
 
   <div class="container">
     <h1>長距離訓練</h1>
-    <div id="welcome-msg" class="user-welcome"></div> 
-
-    <div id="login-area" class="login-section">
-        <div class="login-title">⚠️ 請驗證會員身分</div>
-        <div style="font-size:13px; color:#666; margin-bottom:10px;">請輸入您留存的「Email」進行驗證</div>
-        <div class="login-input-group">
-            <input type="email" id="member-search-email" class="login-input" placeholder="例如：example@gmail.com">
-            <button onclick="searchMember()" class="login-btn">驗證</button>
-        </div>
-        <div id="login-error" style="color:#e53935; margin-top:8px; font-size:13px;"></div>
-    </div>
-
-    <div class="schedule-box">
-        <div class="schedule-row">
-            <span class="time-badge badge-weekend">⚡ 扣2堂</span> 週末專項長距離
-        </div>
-    </div>
-    
+    <div class="subtitle">⚡ 功率堂數 扣2堂</div>
     <div id="calendar"></div>
-    <button id="submit-btn" style="display:none;">送出選課</button>
+    <button id="submit-btn">送出報名</button>
+    <div id="message"></div>
   </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
-    const selectedDates = new Set(); 
+    const selectedDates = new Set();
     let myRegisteredDates = new Set();
     let weekendInfo = {};
-    let currentUser = { name: "", lineId: "" };
 
     function getParam(key) { 
       return new URLSearchParams(window.location.search).get(key) || ''; 
     }
 
-    async function initSystem() {
-        const loadingDiv = document.getElementById('loading');
-        loadingDiv.style.display = 'flex';
-
-        let urlName = getParam('name');
-        let urlLineId = getParam('lineId');
-
-        if (urlName && urlLineId) {
-            currentUser.name = urlName;
-            currentUser.lineId = urlLineId;
-            loginSuccess();
-        } else {
-            loadingDiv.style.display = 'none';
-            document.getElementById('login-area').style.display = 'block';
-        }
-    }
-
-    async function searchMember() {
-        const emailInput = document.getElementById('member-search-email').value.trim();
-        const errorMsg = document.getElementById('login-error');
-        const loadingDiv = document.getElementById('loading');
-
-        if (!emailInput) {
-            errorMsg.textContent = "請輸入 Email";
-            return;
-        }
-
-        loadingDiv.style.display = 'flex';
-        document.querySelector('.loading-text').textContent = "正在搜尋會員資料...";
-        
-        try {
-            const res = await fetch(`${SCRIPT_URL}?mode=search_member&email=${encodeURIComponent(emailInput)}`);
-            const data = await res.json();
-
-            if (data.found) {
-                currentUser.name = data.name;
-                currentUser.lineId = data.lineId;
-                errorMsg.textContent = "";
-                loginSuccess();
-            } else {
-                loadingDiv.style.display = 'none';
-                errorMsg.textContent = "❌ 找不到此 Email，請確認是否與報名資料一致";
-            }
-        } catch (e) {
-            console.error(e);
-            loadingDiv.style.display = 'none';
-            errorMsg.textContent = "系統連線錯誤";
-        }
-    }
-
-    async function loginSuccess() {
-        const loadingDiv = document.getElementById('loading');
-        document.getElementById('login-area').style.display = 'none'; 
-        document.getElementById('submit-btn').style.display = 'block'; 
-        document.querySelector('.loading-text').textContent = "載入課程資料...";
-        if(loadingDiv.style.display === 'none') loadingDiv.style.display = 'flex';
-
-        await renderCalendar();
-        loadingDiv.style.display = 'none';
-    }
+    const lineId = getParam('lineId');
+    const name = getParam('name');
 
     async function loadAllData() {
       try {
-        const targetLineId = currentUser.lineId || "";
-        const res = await fetch(`${SCRIPT_URL}?mode=weekendAllData&lineId=${encodeURIComponent(targetLineId)}`);
+        const res = await fetch(`${SCRIPT_URL}?mode=weekendAllData&lineId=${encodeURIComponent(lineId)}`);
         const data = await res.json();
         return {
           dates: data.dates || [],
@@ -376,12 +324,20 @@
         };
       } catch (error) {
         console.error('載入資料錯誤:', error);
-        return { dates: [], info: {}, mySignups: new Set(), counts: {} };
+        return {
+          dates: [],
+          info: {},
+          mySignups: new Set(),
+          counts: {}
+        };
       }
     }
 
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
+      const loadingDiv = document.getElementById('loading');
+      
+      loadingDiv.style.display = 'flex';
       calendarDiv.innerHTML = '';
 
       const allData = await loadAllData();
@@ -389,6 +345,8 @@
       myRegisteredDates = allData.mySignups;
       weekendInfo = allData.info;
       const signupCounts = allData.counts;
+
+      loadingDiv.style.display = 'none';
       const availableSet = new Set(availableDates);
 
       if (!availableDates.length) {
@@ -414,18 +372,19 @@
           header.className = 'calendar-header';
           ['日','一','二','三','四','五','六'].forEach(d => {
             const h = document.createElement('div');
-            h.className = 'weekday-header'; h.textContent = d; header.appendChild(h);
+            h.className = 'weekday-header';
+            h.textContent = d;
+            header.appendChild(h);
           });
           calendarDiv.appendChild(header);
 
           const grid = document.createElement('div');
           grid.className = 'calendar-grid';
 
-          // --- 🎯 關鍵修正處 ---
-          // 為空白日子加上 .day class 以確保高度與 aspect-ratio 統一
+          // --- 🎯 核心修復點：幫月初之前的空白格子加上 class="day empty" ---
           for (let i = 0; i < first.getDay(); i++) {
             const cell = document.createElement('div');
-            cell.className = 'day empty'; 
+            cell.className = 'day empty'; // 加入 day class 以獲得 aspect-ratio，加上 empty 以保持背景透明
             grid.appendChild(cell);
           }
 
@@ -433,11 +392,6 @@
             const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
             const cell = document.createElement('div');
             cell.className = 'day';
-            
-            const numSpan = document.createElement('span');
-            numSpan.className = 'day-number';
-            numSpan.textContent = d;
-            cell.appendChild(numSpan);
 
             let currentCount = 0;
             let maxCapacity = 15;
@@ -445,6 +399,7 @@
             if (signupCounts[dateStr]) {
               currentCount = signupCounts[dateStr].weekend || 0;
             }
+            
             if (weekendInfo[dateStr]) {
               maxCapacity = weekendInfo[dateStr].maxCapacity || 15;
             }
@@ -455,35 +410,43 @@
               cell.classList.add('registered');
               const info = weekendInfo[dateStr];
               if (info) {
-                  const timeDiv = document.createElement('div');
-                  timeDiv.className = 'date-time-container';
-                  timeDiv.innerHTML = `<div>${info.startTime}</div><div>${info.endTime}</div>`;
-                  cell.appendChild(timeDiv);
+                cell.innerHTML = `
+                  <div class="date-number">${d}</div>
+                  <div class="date-time-container">
+                    <div>${info.startTime}</div>
+                    <div class="date-time-divider">|</div>
+                    <div>${info.endTime}</div>
+                  </div>
+                  <div class="registered-label">✓</div>
+                `;
+              } else {
+                cell.innerHTML = `
+                  <div class="date-number">${d}</div>
+                  <div class="registered-label">✓</div>
+                `;
               }
-              const checkLabel = document.createElement('div');
-              checkLabel.className = 'registered-label';
-              checkLabel.textContent = "已登記";
-              cell.appendChild(checkLabel);
-
             } else if (isFull && availableSet.has(dateStr)) {
               cell.classList.add('full');
-              const fullLabel = document.createElement('div');
-              fullLabel.className = 'full-label';
-              fullLabel.textContent = "額滿";
-              cell.appendChild(fullLabel);
-
+              cell.innerHTML = `
+                <div class="date-number">${d}</div>
+                <div class="full-label">額滿</div>
+              `;
             } else if (availableSet.has(dateStr)) {
               cell.classList.add('available');
-              cell.classList.add('weekend'); 
-              
               const info = weekendInfo[dateStr];
               if (info) {
-                  const timeDiv = document.createElement('div');
-                  timeDiv.className = 'date-time-container';
-                  timeDiv.innerHTML = `<div>${info.startTime}</div><div>${info.endTime}</div>`;
-                  cell.appendChild(timeDiv);
+                cell.innerHTML = `
+                  <div class="date-number">${d}</div>
+                  <div class="date-time-container">
+                    <div>${info.startTime}</div>
+                    <div class="date-time-divider">|</div>
+                    <div>${info.endTime}</div>
+                  </div>
+                `;
+              } else {
+                cell.innerHTML = `<div class="date-number">${d}</div>`;
               }
-
+              
               cell.onclick = () => {
                 if (selectedDates.has(dateStr)) {
                   selectedDates.delete(dateStr);
@@ -492,9 +455,11 @@
                   selectedDates.add(dateStr);
                   cell.classList.add('selected');
                 }
-                updateSubmitButton();
               };
+            } else {
+              cell.innerHTML = `<div class="date-number">${d}</div>`;
             }
+
             grid.appendChild(cell);
           }
           calendarDiv.appendChild(grid);
@@ -502,54 +467,38 @@
       }
     }
 
-    function updateSubmitButton() {
-        const btn = document.getElementById('submit-btn');
-        if (selectedDates.size > 0) {
-            btn.textContent = `確認送出 (${selectedDates.size}堂)`;
-            btn.disabled = false;
-        } else {
-            btn.textContent = "請先選擇日期";
-            btn.disabled = true; 
-        }
-    }
-
     document.getElementById('submit-btn').addEventListener('click', async () => {
-      if (!currentUser.name || !currentUser.lineId) {
-          alert('請先進行會員驗證');
-          return;
-      }
       if (!selectedDates.size) {
-        alert('請至少選擇一個日期');
+        alert('請先選擇日期');
         return;
       }
 
+      const msg = document.getElementById('message');
       const loadingDiv = document.getElementById('loading');
-      const btn = document.getElementById('submit-btn');
       
       loadingDiv.style.display = 'flex';
-      document.querySelector('.loading-text').textContent = `正在為 ${currentUser.name} 預約中...`;
-      btn.disabled = true;
+      msg.textContent = '';
 
       try {
         for (const date of selectedDates) {
-          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=weekend&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}`);
+          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=weekend&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`);
         }
 
         loadingDiv.style.display = 'none';
+        msg.textContent = '✅ 登記完成';
         alert('✅ 登記成功！');
         selectedDates.clear();
         
-        window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId);
+        window.location.reload();
 
       } catch (error) {
         console.error('提交錯誤:', error);
         loadingDiv.style.display = 'none';
-        btn.disabled = false;
-        alert('⚠️ 發生錯誤，請稍後再試');
+        msg.textContent = '⚠️ 發生錯誤,請稍後再試';
       }
     });
 
-    initSystem();
+    renderCalendar();
   </script>
 </body>
 </html>
