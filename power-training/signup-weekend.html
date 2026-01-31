@@ -40,6 +40,7 @@
       text-align: center;
     }
     
+    /* 標題設定 */
     h1 {
       font-size: 32px;
       margin: 0.3em 0 0.1em;
@@ -106,7 +107,7 @@
     }
     .time-badge {
         display: inline-block;
-        width: 80px; /* 週末標籤稍微寬一點 */
+        width: 80px; 
         text-align: center;
         padding: 4px 0;
         border-radius: 6px;
@@ -173,8 +174,13 @@
       box-sizing: border-box;
       transition: all 0.1s;
       position: relative;
-      /* 週末格子內容較多，允許撐開 */
       padding: 4px 0; 
+    }
+    
+    /* 這裡修復了空白格子的顯示問題，讓它維持灰色底框 */
+    .day:empty {
+        background-color: #f7f9fa; /* 確保空格也有顏色 */
+        cursor: default;
     }
     
     .day-number { 
@@ -190,13 +196,10 @@
       flex-direction: column;
       align-items: center;
       margin-top: 2px;
-      font-size: 11px; /* 這裡字體要小一點，不然塞不下 */
+      font-size: 11px;
       line-height: 1.2;
       color: var(--weekend-main);
       font-weight: normal;
-    }
-    .date-time-divider {
-      display: none; /* 隱藏分隔線，用換行顯示比較清楚 */
     }
 
     /* === 週末課樣式 (橙色) === */
@@ -377,10 +380,6 @@
         const loadingDiv = document.getElementById('loading');
         document.getElementById('login-area').style.display = 'none'; 
         document.getElementById('submit-btn').style.display = 'block'; 
-        
-        // 歡迎訊息
-        // document.getElementById('welcome-msg').textContent = `Hi, ${currentUser.name}`;
-        
         document.querySelector('.loading-text').textContent = "載入課程資料...";
         if(loadingDiv.style.display === 'none') loadingDiv.style.display = 'flex';
 
@@ -391,7 +390,6 @@
     async function loadAllData() {
       try {
         const targetLineId = currentUser.lineId || "";
-        // 呼叫 weekendAllData
         const res = await fetch(`${SCRIPT_URL}?mode=weekendAllData&lineId=${encodeURIComponent(targetLineId)}`);
         const data = await res.json();
         return {
@@ -447,8 +445,11 @@
           const grid = document.createElement('div');
           grid.className = 'calendar-grid';
 
+          // 🔥 關鍵修正：這裡幫空格加上 class="day"，讓它跟其他格子一樣有背景
           for (let i = 0; i < first.getDay(); i++) {
-            grid.appendChild(document.createElement('div'));
+            const cell = document.createElement('div');
+            cell.className = 'day'; 
+            grid.appendChild(cell);
           }
 
           for (let d = 1; d <= last.getDate(); d++) {
@@ -474,18 +475,15 @@
             
             const isFull = currentCount >= maxCapacity;
 
-            // 渲染格子內容
             if (myRegisteredDates.has(dateStr)) {
               cell.classList.add('registered');
               const info = weekendInfo[dateStr];
               if (info) {
-                  // 顯示時間
                   const timeDiv = document.createElement('div');
                   timeDiv.className = 'date-time-container';
                   timeDiv.innerHTML = `<div>${info.startTime}</div><div>${info.endTime}</div>`;
                   cell.appendChild(timeDiv);
               }
-              // 顯示已登記勾勾
               const checkLabel = document.createElement('div');
               checkLabel.className = 'registered-label';
               checkLabel.textContent = "已登記";
@@ -500,7 +498,7 @@
 
             } else if (availableSet.has(dateStr)) {
               cell.classList.add('available');
-              cell.classList.add('weekend'); // 橙色樣式
+              cell.classList.add('weekend'); 
               
               const info = weekendInfo[dateStr];
               if (info) {
@@ -558,7 +556,6 @@
 
       try {
         for (const date of selectedDates) {
-          // 這裡 courseType 固定為 weekend
           await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=weekend&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}`);
         }
 
