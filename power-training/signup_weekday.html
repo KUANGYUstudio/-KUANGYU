@@ -48,22 +48,23 @@
     /* 🎯 修改：縮小下方間距 */
     h1 {
       font-size: 32px;
-      margin: 0.5em 0 0.2em; /* 這裡原本是 0.5em，改小一點 */
+      margin: 0.3em 0 0.1em; /* 這裡原本是 0.5em 0 0.2em，改得更小 */
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
     }
 
-    /* === 👋 歡迎訊息與登入區 === */
+    /* === 👋 歡迎訊息 === */
     /* 🎯 修改：縮小下方間距 */
     .user-welcome {
         font-size: 18px;
         color: var(--evening-main);
-        margin-bottom: 8px; /* 這裡原本是 15px，改小一點 */
+        margin-bottom: 4px; /* 這裡原本是 8px，改小一點 */
         font-weight: bold;
         min-height: 24px;
     }
     
+    /* === 🔑 會員驗證區 (Email) === */
     .login-section {
         background-color: #fafafa;
         padding: 20px;
@@ -94,7 +95,7 @@
     .schedule-box {
       text-align: left;
       display: block; 
-      margin-bottom: 25px;
+      margin-bottom: 20px; /* 這裡原本是 25px，稍微拉近與日曆的距離 */
       background: #fafafa;
       padding: 15px 20px;
       border-radius: 12px;
@@ -157,7 +158,7 @@
       max-width: 100%;
     }
     
-    /* 星期標題 (維持 16px) */
+    /* 星期標題 */
     .weekday-header {
       font-weight: bold;
       font-size: 16px; 
@@ -166,7 +167,7 @@
       padding-bottom: 10px; 
     }
     
-    /* 日曆格子 (維持大尺寸) */
+    /* 日曆格子 */
     .day {
       aspect-ratio: 1;
       width: 100%;
@@ -184,7 +185,7 @@
       position: relative;
     }
     
-    /* 日期數字 (維持 22px 粗體) */
+    /* 日期數字 */
     .day-number { 
         font-size: 22px; 
         font-weight: bold; 
