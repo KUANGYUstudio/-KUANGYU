@@ -39,21 +39,24 @@
       box-sizing: border-box;
       text-align: center;
     }
+    
+    /* 🎯 修改：縮小標題間距 */
     h1 {
       font-size: 32px;
-      margin: 0.5em 0 0.2em;
+      margin: 0.3em 0 0.1em; /* 上下邊距都縮小 */
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
     }
 
     /* === 👋 歡迎訊息 === */
+    /* 🎯 修改：縮小保留高度與間距 */
     .user-welcome {
         font-size: 18px;
         color: var(--online-main);
-        margin-bottom: 8px;
+        margin-bottom: 4px; /* 貼得更近 */
         font-weight: bold;
-        min-height: 24px;
+        min-height: 20px; /* 縮小保留空間 */
     }
 
     /* === 🔑 會員驗證區 (Email) === */
@@ -87,7 +90,7 @@
     .schedule-box {
       text-align: left;
       display: block; 
-      margin-bottom: 25px;
+      margin-bottom: 20px; /* 稍微縮小與日曆的間距 */
       background: #fafafa;
       padding: 15px 20px;
       border-radius: 12px;
@@ -228,7 +231,7 @@
     }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
 
-    /* 送出按鈕 (膠囊狀) */
+    /* 送出按鈕 (膠囊狀 + 縮短) */
     #submit-btn {
       margin: 40px auto 20px; 
       padding: 16px 0;
@@ -446,7 +449,6 @@
 
             const dayOfWeek = new Date(dateStr).getDay();
             
-            // 邏輯：判斷週二/四，並加上顏色
             let type = ""; 
             let currentCount = 0;
             let labelText = "";
@@ -473,7 +475,7 @@
               cell.appendChild(label);
             } else if (availableSet.has(dateStr) && type) {
               cell.classList.add('available');
-              cell.classList.add('online'); // 加入 online 綠色樣式
+              cell.classList.add('online'); 
               
               const timeLabel = document.createElement('div');
               timeLabel.className = 'day-label';
