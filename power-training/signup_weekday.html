@@ -47,29 +47,26 @@
     }
     
     /* =========================================
-       🔥 Logo 響應式切換設定 
+       🔥 Logo 響應式切換設定 (全部改為置中)
        ========================================= */
     
-    /* 1. 電腦版 Logo (純圖形) - 右上角 */
+    /* 1. 電腦版 Logo (含文字) - 置中顯示 */
     .logo-desktop {
-        display: block;     /* 電腦版顯示 */
-        position: absolute; /* 固定在右上角 */
-        top: 20px;
-        right: 20px;
-        width: 70px;        /* 🎯 因為是純圖形，70px 在角落最精緻 */
+        display: block;        /* 電腦版顯示 */
+        margin: 0 auto 5px;    /* 置中，下方留一點白 */
+        width: 60px;           /* 🎯 依照要求，縮小至 60px */
         height: auto;
-        z-index: 10;
     }
 
     /* 2. 手機版 Logo (純圖形) - 預設隱藏 */
     .logo-mobile {
-        display: none;      /* 電腦版不顯示這個 */
+        display: none;         /* 電腦版隱藏 */
     }
     
     /* 標題設定 */
     h1 {
       font-size: 32px;
-      margin: 0.6em 0 0.2em; 
+      margin: 0.1em 0 0.2em; /* 因為上面有Logo，上方間距縮小 */
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
@@ -120,17 +117,17 @@
       /* 隱藏電腦版 Logo */
       .logo-desktop { display: none; }
 
-      /* 顯示手機版 Logo (移到標題上方) */
+      /* 顯示手機版 Logo (移到標題上方，置中) */
       .logo-mobile {
           display: block;
-          margin: 0 auto 5px; /* 置中，下方留一點點距離 */
-          width: 40px;        /* 保持您滿意的小尺寸 */
-          opacity: 1;         /* 原色顯示 */
+          margin: 0 auto 5px; /* 置中 */
+          width: 60px;        /* 🎯 手機版也同步縮小至 60px */
+          opacity: 1;         /* 原色 */
       }
       
       h1 { 
           font-size: 26px; 
-          margin-top: 0.1em; /* 因為 Logo 在上面，標題稍微拉近一點 */
+          margin-top: 0.1em; /* 標題稍微拉近 */
       }
       
       .schedule-box { padding: 12px 15px; }
@@ -150,9 +147,9 @@
 
   <div class="container">
     
-    <img src="logo_icon.png" alt="光聿 Logo" class="logo-desktop">
+    <img src="KUANGYU_logo.png" alt="光聿 Logo" class="logo-desktop">
 
-    <img src="logo_icon.png" alt="光聿 Icon" class="logo-mobile">
+    <img src="KUANGYU_logo.png" alt="光聿 Icon" class="logo-mobile">
 
     <h1>平日功率課</h1>
     
