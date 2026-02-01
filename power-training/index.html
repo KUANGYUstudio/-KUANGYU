@@ -49,14 +49,32 @@
       align-items: center;
     }
 
-    /* === 標題區 (極簡純文字) === */
+    /* =========================================
+       🔥 Logo 設定 (全站統一風格)
+       ========================================= */
+    .main-logo {
+        display: block;
+        margin: 0 auto 5px; /* 置中，下方留一點白 */
+        width: 40px;        /* 🎯 手機版預設大小：40px */
+        height: auto;
+    }
+
+    /* 💻 電腦版變大 */
+    @media (min-width: 751px) {
+        .main-logo {
+            width: 60px;     /* 🎯 電腦版大小：60px */
+            margin-bottom: 10px;
+        }
+    }
+
+    /* === 標題區 === */
     .header {
       margin-bottom: 40px;
       text-align: center;
     }
     h1 {
       font-size: 28px;
-      margin: 0 0 8px; /* 稍微縮小間距 */
+      margin: 0.1em 0 8px; /* 配合上方 Logo 調整間距 */
       font-weight: 800;
       letter-spacing: 1.5px;
       color: #2c3e50;
@@ -171,6 +189,9 @@
 <body>
 
   <div class="container">
+    
+    <img src="logo_icon.png" alt="光聿 Logo" class="main-logo">
+
     <div class="header">
       <h1>光聿功率課</h1>
       <p>請選擇您的訓練計畫</p>
@@ -220,7 +241,7 @@
     // 組合參數字串
     const params = `?name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`;
     
-    // 設定連結 (⚠️ 修正檔名：統一使用底線 _ 而不是短橫線 -)
+    // 設定連結 (⚠️ 檔名已統一確認)
     document.getElementById('weekday-link').href = `signup_weekday.html${params}`;
     document.getElementById('online-link').href = `signup_online.html${params}`;
     document.getElementById('weekend-link').href = `signup_weekend.html${params}`;
