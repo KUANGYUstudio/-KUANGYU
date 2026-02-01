@@ -22,6 +22,9 @@
       /* 價格區塊 - 鈔票綠 */
       --price-bg: #e8f5e9;
       --price-text: #2e7d32;
+      
+      /* 系統色 */
+      --text-main: #2c3e50;
     }
 
     body {
@@ -46,10 +49,30 @@
       background: #ffffff;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      position: relative;
     }
+
+    /* =========================================
+       🔥 Logo 設定 (統一置中，手機優先)
+       ========================================= */
+    .main-logo {
+        display: block;
+        margin: 0 auto 5px; /* 置中，下方留一點白 */
+        width: 40px;        /* 🎯 手機版預設大小：40px */
+        height: auto;
+    }
+
+    /* 💻 電腦版變大 */
+    @media (min-width: 601px) {
+        .main-logo {
+            width: 60px;     /* 🎯 電腦版大小：60px */
+            margin-bottom: 10px;
+        }
+    }
+
     h1 {
       font-size: 28px;
-      margin: 0 0 0.8em;
+      margin: 0.1em 0 0.6em; /* 配合上方 Logo，縮小間距 */
       color: #2c3e50;
       font-weight: 800;
       letter-spacing: 1px;
@@ -302,6 +325,9 @@
   </div>
 
   <div class="container">
+    
+    <img src="logo_icon.png" alt="光聿 Logo" class="main-logo">
+
     <h1>光聿單堂功率體驗</h1>
     
     <div class="schedule-box">
@@ -316,8 +342,8 @@
     <div class="price-info">
         <div class="price-title">單堂體驗費用 <span>$660</span></div>
         <div class="price-desc">
-            💡 <strong>購課折抵優惠：</strong><br>
-            若後續購買正式課卡（10堂/20堂），本堂體驗費 <span class="price-highlight">可全額折抵</span>。<br>
+            💡 <strong>購課折抵優惠：</strong><br><br>
+            若後續購買正式課卡（10堂/20堂），本堂體驗費 <span class="price-highlight">可全額折抵</span>。<br><br>
             <div class="price-example">
                 例如：購買 10 堂課方案 ($5500)<br>
                 扣除已付 $660，<strong>僅需補差額 $4840</strong><br>
