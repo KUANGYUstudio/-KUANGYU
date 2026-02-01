@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       🎨 配色定義 (FirstClass 風格 - 線上綠版)
+       🎨 配色定義 (線上課專用 - 綠色系)
        ========================================= */
     :root {
       /* 線上課 - 活力綠 */
@@ -46,23 +46,22 @@
        ========================================= */
     .main-logo {
         display: block;
-        margin: 0 auto 5px; /* 置中，下方留一點白 */
-        width: 40px;        /* 🎯 手機版預設大小：40px */
+        margin: 0 auto 5px; /* 置中 */
+        width: 40px;        /* 🎯 手機版：40px */
         height: auto;
     }
 
-    /* 💻 電腦版變大 (當螢幕寬度大於 750px 時) */
+    /* 💻 電腦版變大 */
     @media (min-width: 751px) {
         .main-logo {
-            width: 60px;     /* 🎯 電腦版大小：60px */
+            width: 60px;     /* 🎯 電腦版：60px */
             margin-bottom: 10px;
         }
     }
     
-    /* 標題設定 */
     h1 {
       font-size: 32px;
-      margin: 0.1em 0 0.2em; /* 配合上方 Logo，縮小間距 */
+      margin: 0.1em 0 0.2em;
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
@@ -77,7 +76,7 @@
         min-height: 20px; 
     }
 
-    /* === 🔑 會員驗證區 (Email) === */
+    /* === 🔑 會員驗證區 === */
     .login-section {
         background-color: #fafafa;
         padding: 20px;
@@ -135,24 +134,8 @@
         font-weight: bold;
         color: white;
         flex-shrink: 0; 
+        background-color: var(--online-main); /* 直接指定綠色 */
     }
-    .badge-online { background-color: var(--online-main); }
-
-    /* === 載入動畫 === */
-    .loading-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255, 255, 255, 0.98);
-      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
-    }
-    .loading-spinner {
-      width: 50px; height: 50px;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid var(--online-main);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
 
     /* === 日曆樣式 === */
     .month-title {
@@ -177,7 +160,6 @@
       padding-bottom: 10px; 
     }
     
-    /* 日曆格子 (大尺寸) */
     .day {
       aspect-ratio: 1;
       width: 100%;
@@ -194,50 +176,37 @@
       transition: all 0.1s;
       position: relative;
     }
-    
-    .day-number { 
-        font-size: 22px; 
-        font-weight: bold; 
-        margin-bottom: 2px; 
-        line-height: 1; 
-    }
-    
-    .day-label { 
-        font-size: 12px; 
-        margin-top: 2px; 
-        font-weight: normal; 
-        line-height: 1; 
-    }
+    .day-number { font-size: 22px; font-weight: bold; margin-bottom: 2px; line-height: 1; }
+    .day-label { font-size: 12px; margin-top: 2px; font-weight: normal; line-height: 1; }
 
-    /* === 線上課樣式 (綠色) === */
-    .day.available.online {
+    /* === 狀態樣式 === */
+    /* 可預約 (綠色) */
+    .day.available {
       background-color: #fff;
       color: #333;
       border: 2px solid var(--online-main);
       cursor: pointer;
     }
-    .day.available.online .day-label { 
-        color: var(--online-main); 
-        font-weight: normal; 
-    }
+    .day.available .day-label { color: var(--online-main); }
     
-    .day.selected.online {
+    /* 已選取 */
+    .day.selected {
       background-color: var(--online-main);
       color: #fff;
       border-color: var(--online-main);
       transform: scale(1.05);
       box-shadow: 0 4px 10px rgba(102, 187, 106, 0.4);
     }
-    .day.selected.online .day-label { color: #fff; }
+    .day.selected .day-label { color: #fff; }
     
-    /* 已登記 (灰色) */
+    /* 已登記 */
     .day.registered {
       background-color: #eceff1;
       color: #b0bec5;
       border: 2px solid #cfd8dc; 
       cursor: not-allowed;
     }
-    .day.registered .day-label { color: #b0bec5; font-weight: normal; }
+    .day.registered .day-label { color: #b0bec5; }
 
     /* 額滿 */
     .day.full {
@@ -249,7 +218,7 @@
     }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
 
-    /* 送出按鈕 (膠囊狀 + 縮短) */
+    /* 送出按鈕 */
     #submit-btn {
       margin: 40px auto 20px; 
       padding: 16px 0;
@@ -260,7 +229,7 @@
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      max-width: 260px; /* 電腦版固定 260px */
+      max-width: 260px;
       display: block;
       width: 100%;
       font-weight: bold;
@@ -273,24 +242,31 @@
         box-shadow: none;
     }
 
+    /* 載入動畫 */
+    .loading-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
+    }
+    .loading-spinner {
+      width: 50px; height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--online-main);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
+
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; }
-      h1 { 
-          font-size: 26px; 
-          margin-top: 0.1em;
-      }
+      h1 { font-size: 26px; margin-top: 0.1em; }
       .schedule-box { padding: 12px 15px; }
       .calendar-header, .calendar-grid { gap: 4px; }
-      
       .day { font-size: 22px; border-radius: 10px; }
       .day-number { font-size: 18px; } 
       .day-label { font-size: 10px; }
-      
-      /* 手機版按鈕寬度 */
-      #submit-btn { 
-          font-size: 18px; 
-          max-width: 60%; 
-      }
+      #submit-btn { font-size: 18px; max-width: 60%; }
     }
   </style>
 </head>
@@ -320,7 +296,7 @@
 
     <div class="schedule-box">
         <div class="schedule-row">
-            <span class="time-badge badge-online">晚班</span> 週二 / 週四 19:30～21:00
+            <span class="time-badge">晚班</span> 週二 / 週四 19:30～21:00
         </div>
     </div>
     
@@ -329,7 +305,7 @@
   </div>
 
   <script>
-    // ⚠️ 請確認您的 GAS 網址 (v2026.01.30)
+    // ⚠️ 請確認您的 GAS 網址
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
     const selectedDates = new Set(); 
@@ -473,14 +449,10 @@
 
             const dayOfWeek = new Date(dateStr).getDay();
             
-            let type = ""; 
             let currentCount = 0;
-            let labelText = "";
-
+            // 簡化：只有晚班邏輯，固定為 19:30
             if (dayOfWeek === 2 || dayOfWeek === 4) { 
-                type = "online";
                 currentCount = signupCounts[dateStr] ? (signupCounts[dateStr].online || 0) : 0;
-                labelText = "19:30";
             }
 
             const isFull = currentCount >= 6;
@@ -497,13 +469,12 @@
               label.className = 'full-label';
               label.textContent = "額滿";
               cell.appendChild(label);
-            } else if (availableSet.has(dateStr) && type) {
+            } else if (availableSet.has(dateStr)) {
               cell.classList.add('available');
-              cell.classList.add('online'); 
               
               const timeLabel = document.createElement('div');
               timeLabel.className = 'day-label';
-              timeLabel.textContent = labelText;
+              timeLabel.textContent = "19:30"; // 寫死，因為只有這個時間
               cell.appendChild(timeLabel);
 
               cell.onclick = () => {
