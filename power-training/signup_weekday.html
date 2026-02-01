@@ -38,24 +38,25 @@
       padding: 20px;
       box-sizing: border-box;
       text-align: center;
-      position: relative; /* ⚠️ 重要：為了讓裡面的 Logo 可以絕對定位 */
+      position: relative; /* ⚠️ 讓 Logo 可以根據這個框框定位 */
     }
     
-    /* 🔥 Logo 樣式 (左上角版) */
+    /* 🔥 Logo 樣式 (右上角固定版) */
     .logo-img {
-        position: absolute; /* 絕對定位：讓它脫離正常排版流 */
-        top: 20px;          /* 距離上方邊緣 20px */
-        left: 20px;         /* 距離左方邊緣 20px */
-        width: 70px;        /* 設定一個精緻的小尺寸 */
+        position: absolute; /* 絕對定位：固定在角落 */
+        top: 15px;          /* 距離上方 15px */
+        right: 15px;        /* 距離右方 15px (靠右) */
+        width: 60px;        /* 🎯 縮小尺寸：改為 60px */
         height: auto;
         margin: 0;
+        z-index: 10;        /* 確保浮在最上層 */
     }
     
     /* 標題設定 */
     h1 {
       font-size: 32px;
-      /* 這裡加大一點上方邊距，確保在某些螢幕不會跟 Logo 太近 */
-      margin: 0.8em 0 0.2em; 
+      /* 上方留一點空間，雖然 Logo 在旁邊，但保持呼吸感 */
+      margin: 0.6em 0 0.2em; 
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
@@ -102,15 +103,12 @@
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; }
       
-      /* 🔥 手機版特殊處理：讓 Logo 回到中間堆疊 */
-      .logo-img {
-          position: static; /* 取消絕對定位 */
-          margin: 0 auto 10px; /* 置中 */
-          width: 80px; /* 手機上稍微大一點點 */
-      }
+      /* 🔥 這裡原本有強制 Logo 置中的代碼，我已經刪掉了！ */
+      /* 現在手機版也會乖乖待在右上角 */
+
       h1 { 
           font-size: 26px; 
-          margin-top: 0.2em; /* 手機版標題上方距離縮小 */
+          margin-top: 0.8em; /* 確保標題不會被右上角的 Logo 擋住 */
       }
       
       .schedule-box { padding: 12px 15px; }
@@ -161,10 +159,7 @@
   </div>
 
   <script>
-    // ... (JS 部分完全不用動，請直接使用您原本的 JS 代碼) ...
-    // 為了版面簡潔，這裡省略 JS 代碼，請確保您複製時包含完整的 <script> 區塊
-    // ...
-    
+    // ... JS 部分保持不變，請保留您原本的代碼 ...
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
     const selectedDates = new Set(); 
