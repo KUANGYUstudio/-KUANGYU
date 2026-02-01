@@ -45,18 +45,23 @@
       text-align: center;
     }
     
-    /* 🔥 Logo 樣式 (修改版) */
+    /* 🔥 Logo 樣式 (移到底部版) */
     .logo-img {
         display: block;
-        margin: 0 auto 5px; /* 置中 */
-        max-width: 80px;    /* 🎯 這裡改小了！從 150px -> 80px */
-        height: auto;       /* 維持比例 */
+        margin: 40px auto 10px; /* 上方留 40px 距離，讓它跟按鈕分開 */
+        max-width: 80px;        /* 維持精緻小尺寸 */
+        height: auto;
+        opacity: 0.8;           /* ✨ 小巧思：稍微透明一點，讓它像個有質感的頁尾署名 */
+        transition: opacity 0.3s;
+    }
+    .logo-img:hover {
+        opacity: 1;             /* 滑鼠移過去會變回全彩 */
     }
     
     /* 標題設定 */
     h1 {
       font-size: 32px;
-      margin: 0.1em 0 0.1em; 
+      margin: 0.3em 0 0.1em; /* 恢復原本的上方間距，因為上面沒有 Logo 了 */
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
@@ -318,8 +323,6 @@
 
   <div class="container">
     
-    <img src="KUANGYU_logo.PNG" alt="光聿 Logo" class="logo-img">
-
     <h1>平日功率課</h1>
     
     <div id="welcome-msg" class="user-welcome"></div> 
@@ -345,6 +348,9 @@
     
     <div id="calendar"></div>
     <button id="submit-btn" style="display:none;">送出選課</button>
+
+    <img src="KUANGYU_logo.PNG" alt="光聿 Logo" class="logo-img">
+
   </div>
 
   <script>
