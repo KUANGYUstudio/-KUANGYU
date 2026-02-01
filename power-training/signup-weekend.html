@@ -38,11 +38,31 @@
       padding: 20px;
       box-sizing: border-box;
       text-align: center;
+      position: relative;
     }
     
+    /* =========================================
+       🔥 Logo 設定 (統一置中，手機優先)
+       ========================================= */
+    .main-logo {
+        display: block;
+        margin: 0 auto 5px; /* 置中，下方留一點白 */
+        width: 40px;        /* 🎯 手機版預設大小：40px */
+        height: auto;
+    }
+
+    /* 💻 電腦版變大 (當螢幕寬度大於 750px 時) */
+    @media (min-width: 751px) {
+        .main-logo {
+            width: 60px;     /* 🎯 電腦版大小：60px */
+            margin-bottom: 10px;
+        }
+    }
+    
+    /* 標題設定 */
     h1 {
       font-size: 32px;
-      margin: 0.3em 0 0.1em;
+      margin: 0.1em 0 0.2em; /* 配合上方 Logo，縮小間距 */
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
@@ -252,7 +272,10 @@
 
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; }
-      h1 { font-size: 26px; }
+      h1 { 
+          font-size: 26px; 
+          margin-top: 0.1em;
+      }
       .schedule-box { padding: 12px 15px; }
       .calendar-header, .calendar-grid { gap: 4px; }
       .day { font-size: 22px; border-radius: 8px; }
@@ -269,6 +292,9 @@
   </div>
 
   <div class="container">
+    
+    <img src="logo_icon.png" alt="光聿 Logo" class="main-logo">
+
     <h1>長距離訓練</h1>
     <div id="welcome-msg" class="user-welcome"></div> 
 
