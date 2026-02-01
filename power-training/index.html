@@ -231,20 +231,23 @@
   </div>
 
   <script>
-    // 取得網址參數
+    // 1. 取得網址參數 (會員姓名與 LineID)
     function getParam(key) {
       return new URLSearchParams(window.location.search).get(key) || '';
     }
     const name = getParam('name');
     const lineId = getParam('lineId');
     
-    // 組合參數字串
-    const params = `?name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`;
+    // 2. 組合參數字串
+    // ⚠️ 注意：這裡用 & 連接，因為前面的 ?page=xxx 已經用了 ?
+    const params = `&name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`;
     
-    // 設定連結 (⚠️ 檔名已統一確認)
-    document.getElementById('weekday-link').href = `signup_weekday.html${params}`;
-    document.getElementById('online-link').href = `signup_online.html${params}`;
-    document.getElementById('weekend-link').href = `signup_weekend.html${params}`;
+    // 3. 設定連結 (🔥 關鍵修正)
+    // 修正 A: 改為 ?page= 格式，讓 GAS 知道要切換頁面
+    // 修正 B: 檔名全部改為底線 (_)，解決 404 問題
+    document.getElementById('weekday-link').href = `?page=signup_weekday${params}`;
+    document.getElementById('online-link').href = `?page=signup_online${params}`;
+    document.getElementById('weekend-link').href = `?page=signup_weekend${params}`;
   </script>
 
 </body>
