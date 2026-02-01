@@ -47,18 +47,18 @@
     }
     
     /* =========================================
-       🔥 Logo 響應式切換設定 (全部改為置中)
+       🔥 Logo 響應式設定 (統一使用純圖形、置中、縮小)
        ========================================= */
     
-    /* 1. 電腦版 Logo (含文字) - 置中顯示 */
+    /* 1. 電腦版 Logo 設定 */
     .logo-desktop {
         display: block;        /* 電腦版顯示 */
         margin: 0 auto 5px;    /* 置中，下方留一點白 */
-        width: 60px;           /* 🎯 依照要求，縮小至 60px */
+        width: 60px;           /* 🎯 縮小至 60px */
         height: auto;
     }
 
-    /* 2. 手機版 Logo (純圖形) - 預設隱藏 */
+    /* 2. 手機版 Logo 設定 - 預設隱藏，由下方媒體查詢開啟 */
     .logo-mobile {
         display: none;         /* 電腦版隱藏 */
     }
@@ -121,7 +121,7 @@
       .logo-mobile {
           display: block;
           margin: 0 auto 5px; /* 置中 */
-          width: 60px;        /* 🎯 手機版也同步縮小至 60px */
+          width: 60px;        /* 🎯 統一設定為 60px */
           opacity: 1;         /* 原色 */
       }
       
@@ -147,9 +147,9 @@
 
   <div class="container">
     
-    <img src="KUANGYU_logo.png" alt="光聿 Logo" class="logo-desktop">
+    <img src="logo_icon.png" alt="光聿 Logo" class="logo-desktop">
 
-    <img src="KUANGYU_logo.png" alt="光聿 Icon" class="logo-mobile">
+    <img src="logo_icon.png" alt="光聿 Icon" class="logo-mobile">
 
     <h1>平日功率課</h1>
     
