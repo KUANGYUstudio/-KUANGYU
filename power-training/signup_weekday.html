@@ -61,9 +61,9 @@
         z-index: 10;
     }
 
-    /* 2. 手機版 Logo (純圖形) - 底部 */
+    /* 2. 手機版 Logo (純圖形) - 預設隱藏 */
     .logo-mobile {
-        display: none;      /* 電腦版預設隱藏 */
+        display: none;      /* 電腦版不顯示這個 */
     }
     
     /* 標題設定 */
@@ -75,25 +75,19 @@
       letter-spacing: 1px;
     }
 
-    /* === 👋 歡迎訊息 === */
+    /* ... (中間 CSS 保持不變) ... */
     .user-welcome { font-size: 18px; color: var(--evening-main); margin-bottom: 4px; font-weight: bold; min-height: 24px; }
-    
-    /* === 🔑 會員驗證區 (Email) === */
     .login-section { background-color: #fafafa; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; display: none; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; }
     .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
     .login-input-group { display: flex; gap: 8px; }
     .login-input { flex: 1; padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd; outline: none; transition: border 0.3s; }
     .login-input:focus { border-color: var(--evening-light); }
     .login-btn { padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: var(--text-main); color: white; cursor: pointer; font-weight: bold; }
-    
-    /* === 📅 課程時間表 === */
     .schedule-box { text-align: left; display: block; margin-bottom: 20px; background: #fafafa; padding: 15px 20px; border-radius: 12px; border: 1px solid #eee; max-width: 600px; margin-left: auto; margin-right: auto; }
     .schedule-row { margin: 8px 0; font-size: 16px; color: var(--text-sub); display: flex; align-items: center; }
     .time-badge { display: inline-block; width: 50px; text-align: center; padding: 4px 0; border-radius: 6px; font-size: 14px; margin-right: 12px; font-weight: bold; color: white; flex-shrink: 0; }
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
-    
-    /* === 其他樣式 === */
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
     .loading-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--evening-main); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -126,17 +120,17 @@
       /* 隱藏電腦版 Logo */
       .logo-desktop { display: none; }
 
-      /* 顯示手機版底部 Logo */
+      /* 顯示手機版 Logo (移到標題上方) */
       .logo-mobile {
           display: block;
-          margin: 40px auto 20px; /* 上方留白，下方留白 */
-          width: 40px;            /* 🎯 縮小至 40px */
-          opacity: 0.5;           /* 半透明質感 */
+          margin: 0 auto 5px; /* 置中，下方留一點點距離 */
+          width: 40px;        /* 保持您滿意的小尺寸 */
+          opacity: 1;         /* 🔥 原色顯示 (不透明) */
       }
       
       h1 { 
           font-size: 26px; 
-          margin-top: 0.5em; /* 恢復原本標題位置 */
+          margin-top: 0.1em; /* 因為 Logo 在上面，標題稍微拉近一點 */
       }
       
       .schedule-box { padding: 12px 15px; }
@@ -157,6 +151,8 @@
   <div class="container">
     
     <img src="KUANGYU_logo.PNG" alt="光聿 Logo" class="logo-desktop">
+
+    <img src="logo_icon.png" alt="光聿 Icon" class="logo-mobile">
 
     <h1>平日功率課</h1>
     
@@ -183,8 +179,6 @@
     
     <div id="calendar"></div>
     <button id="submit-btn" style="display:none;">送出選課</button>
-
-    <img src="logo_icon.png" alt="光聿 Icon" class="logo-mobile">
 
   </div>
 
