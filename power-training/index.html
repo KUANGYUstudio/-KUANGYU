@@ -49,6 +49,24 @@
       align-items: center;
     }
 
+    /* =========================================
+       🔥 Logo 設定 (新增此段 CSS)
+       ========================================= */
+    .main-logo {
+        display: block;
+        margin: 0 auto 5px; /* 置中，下方留一點白 */
+        width: 40px;        /* 🎯 手機版預設大小：40px */
+        height: auto;
+    }
+
+    /* 💻 電腦版變大 */
+    @media (min-width: 751px) {
+        .main-logo {
+            width: 60px;     /* 🎯 電腦版大小：60px */
+            margin-bottom: 10px;
+        }
+    }
+
     /* === 標題區 (移除裝飾線，回歸純粹) === */
     .header {
       margin-bottom: 40px;
@@ -56,7 +74,7 @@
     }
     h1 {
       font-size: 28px;
-      margin: 0 0 8px; /* 稍微縮小間距 */
+      margin: 0.1em 0 8px; /* 稍微增加一點點上方間距來配合 Logo */
       font-weight: 800;
       letter-spacing: 1.5px;
       color: #2c3e50;
@@ -172,6 +190,7 @@
 
   <div class="container">
     <div class="header">
+      <img src="logo_icon.png" alt="光聿 Logo" class="main-logo">
       <h1>光聿功率課</h1>
       <p>請選擇您的訓練計畫</p>
     </div>
@@ -220,7 +239,7 @@
     // 組合參數字串
     const params = `?name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`;
     
-    // 設定連結
+    // 設定連結 (⚠️ 完全保留您原本的寫法，包含短橫線)
     document.getElementById('weekday-link').href = `signup_weekday.html${params}`;
     document.getElementById('online-link').href = `signup-online.html${params}`;
     document.getElementById('weekend-link').href = `signup-weekend.html${params}`;
