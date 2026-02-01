@@ -49,7 +49,7 @@
       align-items: center;
     }
 
-    /* === 標題區 (移除裝飾線，回歸純粹) === */
+    /* === 標題區 (極簡純文字) === */
     .header {
       margin-bottom: 40px;
       text-align: center;
@@ -220,10 +220,10 @@
     // 組合參數字串
     const params = `?name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`;
     
-    // 設定連結
+    // 設定連結 (⚠️ 修正檔名：統一使用底線 _ 而不是短橫線 -)
     document.getElementById('weekday-link').href = `signup_weekday.html${params}`;
-    document.getElementById('online-link').href = `signup-online.html${params}`;
-    document.getElementById('weekend-link').href = `signup-weekend.html${params}`;
+    document.getElementById('online-link').href = `signup_online.html${params}`;
+    document.getElementById('weekend-link').href = `signup_weekend.html${params}`;
   </script>
 
 </body>
