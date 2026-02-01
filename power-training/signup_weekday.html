@@ -9,17 +9,12 @@
        🎨 配色定義 (源自 FirstClass)
        ========================================= */
     :root {
-      /* 晚班 - 專業藍 */
       --evening-main: #00838f; 
       --evening-light: #00acc1;
       --evening-bg: #e0f7fa;
-      
-      /* 早班 - 活力黃 */
       --morning-main: #ffb300; 
       --morning-light: #ffca28;
       --morning-bg: #fff8e1;
-
-      /* 系統色 */
       --text-main: #2c3e50;
       --text-sub: #546e7a;
       --bg-color: #ffffff;
@@ -43,275 +38,87 @@
       padding: 20px;
       box-sizing: border-box;
       text-align: center;
+      position: relative; /* ⚠️ 重要：為了讓裡面的 Logo 可以絕對定位 */
     }
     
-    /* 🔥 Logo 樣式 (移到底部版) */
+    /* 🔥 Logo 樣式 (左上角版) */
     .logo-img {
-        display: block;
-        margin: 40px auto 10px; /* 上方留 40px 距離，讓它跟按鈕分開 */
-        max-width: 80px;        /* 維持精緻小尺寸 */
+        position: absolute; /* 絕對定位：讓它脫離正常排版流 */
+        top: 20px;          /* 距離上方邊緣 20px */
+        left: 20px;         /* 距離左方邊緣 20px */
+        width: 70px;        /* 設定一個精緻的小尺寸 */
         height: auto;
-        opacity: 0.8;           /* ✨ 小巧思：稍微透明一點，讓它像個有質感的頁尾署名 */
-        transition: opacity 0.3s;
-    }
-    .logo-img:hover {
-        opacity: 1;             /* 滑鼠移過去會變回全彩 */
+        margin: 0;
     }
     
     /* 標題設定 */
     h1 {
       font-size: 32px;
-      margin: 0.3em 0 0.1em; /* 恢復原本的上方間距，因為上面沒有 Logo 了 */
+      /* 這裡加大一點上方邊距，確保在某些螢幕不會跟 Logo 太近 */
+      margin: 0.8em 0 0.2em; 
       color: var(--text-main);
       font-weight: 800;
       letter-spacing: 1px;
     }
 
-    /* === 👋 歡迎訊息 === */
-    .user-welcome {
-        font-size: 18px;
-        color: var(--evening-main);
-        margin-bottom: 4px; 
-        font-weight: bold;
-        min-height: 24px;
-    }
-    
-    /* === 🔑 會員驗證區 (Email) === */
-    .login-section {
-        background-color: #fafafa;
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        border: 1px solid #eee;
-        display: none; 
-        text-align: left;
-        max-width: 500px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+    /* ... (中間 CSS 保持不變) ... */
+    .user-welcome { font-size: 18px; color: var(--evening-main); margin-bottom: 4px; font-weight: bold; min-height: 24px; }
+    .login-section { background-color: #fafafa; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; display: none; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; }
     .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
     .login-input-group { display: flex; gap: 8px; }
-    .login-input {
-        flex: 1;
-        padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd;
-        outline: none; transition: border 0.3s;
-    }
+    .login-input { flex: 1; padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd; outline: none; transition: border 0.3s; }
     .login-input:focus { border-color: var(--evening-light); }
-    .login-btn {
-        padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; 
-        background-color: var(--text-main); color: white; cursor: pointer;
-        font-weight: bold;
-    }
-
-    /* === 📅 課程時間表 (Schedule Box) === */
-    .schedule-box {
-      text-align: left;
-      display: block; 
-      margin-bottom: 20px; 
-      background: #fafafa;
-      padding: 15px 20px;
-      border-radius: 12px;
-      border: 1px solid #eee;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .schedule-row {
-      margin: 8px 0;
-      font-size: 16px;
-      color: var(--text-sub);
-      display: flex;
-      align-items: center;
-    }
-    .time-badge {
-        display: inline-block;
-        width: 50px;
-        text-align: center;
-        padding: 4px 0;
-        border-radius: 6px;
-        font-size: 14px;
-        margin-right: 12px;
-        font-weight: bold;
-        color: white;
-        flex-shrink: 0; 
-    }
+    .login-btn { padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: var(--text-main); color: white; cursor: pointer; font-weight: bold; }
+    .schedule-box { text-align: left; display: block; margin-bottom: 20px; background: #fafafa; padding: 15px 20px; border-radius: 12px; border: 1px solid #eee; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .schedule-row { margin: 8px 0; font-size: 16px; color: var(--text-sub); display: flex; align-items: center; }
+    .time-badge { display: inline-block; width: 50px; text-align: center; padding: 4px 0; border-radius: 6px; font-size: 14px; margin-right: 12px; font-weight: bold; color: white; flex-shrink: 0; }
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
-
-    /* === 載入動畫 === */
-    .loading-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255, 255, 255, 0.98);
-      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
-    }
-    .loading-spinner {
-      width: 50px; height: 50px;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid var(--evening-main);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+    .loading-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--evening-main); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
-
-    /* === 日曆樣式 === */
-    .month-title {
-      font-weight: 800;
-      font-size: 24px; 
-      margin: 1.5em 0 0.8em;
-      color: var(--text-main);
-    }
-    .calendar-header, .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      padding: 0;
-      box-sizing: border-box;
-      max-width: 100%;
-    }
-    
-    /* 星期標題 */
-    .weekday-header {
-      font-weight: bold;
-      font-size: 16px; 
-      text-align: center;
-      color: #b0bec5;
-      padding-bottom: 10px; 
-    }
-    
-    /* 日曆格子 */
-    .day {
-      aspect-ratio: 1;
-      width: 100%;
-      font-size: 28px; 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px; 
-      background-color: #f7f9fa;
-      color: #cfd8dc;
-      cursor: default;
-      box-sizing: border-box;
-      transition: all 0.1s;
-      position: relative;
-    }
-    
-    /* 日期數字 */
-    .day-number { 
-        font-size: 22px; 
-        font-weight: bold; 
-        margin-bottom: 2px; 
-        line-height: 1; 
-    }
-    
-    .day-label { 
-        font-size: 12px; 
-        margin-top: 2px; 
-        font-weight: normal; 
-        line-height: 1; 
-    }
-
-    /* === 晚班樣式 (藍色) === */
-    .day.available.evening {
-      background-color: #fff;
-      color: #333;
-      border: 2px solid var(--evening-main);
-      cursor: pointer;
-    }
-    .day.available.evening .day-label { 
-        color: var(--evening-main); 
-        font-weight: normal; 
-    }
-    
-    .day.selected.evening {
-      background-color: var(--evening-main);
-      color: #fff;
-      border-color: var(--evening-main);
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(0, 131, 143, 0.4);
-    }
+    .month-title { font-weight: 800; font-size: 24px; margin: 1.5em 0 0.8em; color: var(--text-main); }
+    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
+    .weekday-header { font-weight: bold; font-size: 16px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
+    .day { aspect-ratio: 1; width: 100%; font-size: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; background-color: #f7f9fa; color: #cfd8dc; cursor: default; box-sizing: border-box; transition: all 0.1s; position: relative; }
+    .day-number { font-size: 22px; font-weight: bold; margin-bottom: 2px; line-height: 1; }
+    .day-label { font-size: 12px; margin-top: 2px; font-weight: normal; line-height: 1; }
+    .day.available.evening { background-color: #fff; color: #333; border: 2px solid var(--evening-main); cursor: pointer; }
+    .day.available.evening .day-label { color: var(--evening-main); font-weight: normal; }
+    .day.selected.evening { background-color: var(--evening-main); color: #fff; border-color: var(--evening-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0, 131, 143, 0.4); }
     .day.selected.evening .day-label { color: #fff; }
-
-    /* === 早班樣式 (黃色) === */
-    .day.available.morning {
-      background-color: #fff;
-      color: #333;
-      border: 2px solid var(--morning-main);
-      cursor: pointer;
-    }
-    .day.available.morning .day-label { 
-        color: var(--morning-main); 
-        font-weight: normal; 
-    }
-
-    .day.selected.morning {
-      background-color: var(--morning-main);
-      color: #fff;
-      border-color: var(--morning-main);
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(255, 179, 0, 0.4);
-    }
+    .day.available.morning { background-color: #fff; color: #333; border: 2px solid var(--morning-main); cursor: pointer; }
+    .day.available.morning .day-label { color: var(--morning-main); font-weight: normal; }
+    .day.selected.morning { background-color: var(--morning-main); color: #fff; border-color: var(--morning-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(255, 179, 0, 0.4); }
     .day.selected.morning .day-label { color: #fff; }
-    
-    /* 已登記 (灰色) */
-    .day.registered {
-      background-color: #eceff1;
-      color: #b0bec5;
-      border: 2px solid #cfd8dc; 
-      cursor: not-allowed;
-    }
+    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: not-allowed; }
     .day.registered .day-label { color: #b0bec5; font-weight: normal; }
-
-    /* 額滿 */
-    .day.full {
-      background-color: #e0e0e0;
-      color: #666; 
-      cursor: not-allowed;
-      border: 2px solid var(--evening-main); 
-      opacity: 0.8;
-    }
+    .day.full { background-color: #e0e0e0; color: #666; cursor: not-allowed; border: 2px solid var(--evening-main); opacity: 0.8; }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
-
-    /* 🚀 送出按鈕 (電腦版固定寬度) */
-    #submit-btn {
-      margin: 40px auto 20px; 
-      padding: 16px 0;
-      font-size: 20px;
-      letter-spacing: 1px;
-      background: var(--evening-main); 
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      max-width: 260px; /* 電腦版固定 260px */
-      display: block;
-      width: 100%;
-      font-weight: bold;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3);
-    }
-    #submit-btn:disabled { 
-        background-color: #cfd8dc; 
-        cursor: not-allowed; 
-        box-shadow: none;
-    }
+    #submit-btn { margin: 40px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--evening-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3); }
+    #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; box-shadow: none; }
 
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; }
-      h1 { font-size: 26px; }
+      
+      /* 🔥 手機版特殊處理：讓 Logo 回到中間堆疊 */
+      .logo-img {
+          position: static; /* 取消絕對定位 */
+          margin: 0 auto 10px; /* 置中 */
+          width: 80px; /* 手機上稍微大一點點 */
+      }
+      h1 { 
+          font-size: 26px; 
+          margin-top: 0.2em; /* 手機版標題上方距離縮小 */
+      }
+      
       .schedule-box { padding: 12px 15px; }
       .calendar-header, .calendar-grid { gap: 4px; }
-      
       .day { font-size: 22px; border-radius: 10px; }
       .day-number { font-size: 18px; } 
       .day-label { font-size: 10px; }
-      
-      /* 🚀 手機版按鈕寬度 60% */
-      #submit-btn { 
-          font-size: 18px; 
-          max-width: 60%; 
-      }
+      #submit-btn { font-size: 18px; max-width: 60%; }
     }
   </style>
 </head>
@@ -323,6 +130,8 @@
 
   <div class="container">
     
+    <img src="KUANGYU_logo.PNG" alt="光聿 Logo" class="logo-img">
+
     <h1>平日功率課</h1>
     
     <div id="welcome-msg" class="user-welcome"></div> 
@@ -349,12 +158,13 @@
     <div id="calendar"></div>
     <button id="submit-btn" style="display:none;">送出選課</button>
 
-    <img src="KUANGYU_logo.PNG" alt="光聿 Logo" class="logo-img">
-
   </div>
 
   <script>
-    // ⚠️ 請確認您的 GAS 網址已更新
+    // ... (JS 部分完全不用動，請直接使用您原本的 JS 代碼) ...
+    // 為了版面簡潔，這裡省略 JS 代碼，請確保您複製時包含完整的 <script> 區塊
+    // ...
+    
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
     const selectedDates = new Set(); 
