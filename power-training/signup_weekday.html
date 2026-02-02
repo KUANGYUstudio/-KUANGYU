@@ -86,7 +86,7 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
     
-    /* === 📝 注意事項區塊 (樣式更新) === */
+    /* === 📝 注意事項區塊 (樣式) === */
     .notice-box {
         text-align: left;
         background-color: #fff; 
@@ -100,12 +100,11 @@
         margin: 0 auto 20px; 
     }
     
-    /* 🔥 標題樣式調整：加大、去括號、粗體 */
     .notice-title {
-        font-size: 18px;        /* 加大字體 */
-        font-weight: bold;      /* 粗體 */
+        font-size: 18px;        
+        font-weight: bold;      
         color: var(--text-main);
-        margin-bottom: 10px;    /* 增加一點下方間距 */
+        margin-bottom: 10px;    
     }
     
     .notice-list {
@@ -113,7 +112,7 @@
         padding-left: 1.4em;
     }
     .notice-list li {
-        margin-bottom: 4px;
+        margin-bottom: 4px; /* 統一間距 */
     }
     
     /* 強制換行並縮排 */
@@ -207,8 +206,7 @@
             <li>逾期取消視同上課，扣除１堂課。</li>
             <li>若因生病或突發急事，經告知可免扣堂。</li>
             <li>如遇天災，依行政院公告辦理。</li>
-            <li style="margin-top: 8px;">有任何問題，請直接與教練聯繫。</li>
-        </ul>
+            <li>有任何問題，請直接與教練聯繫。</li> </ul>
     </div>
     
     <div id="calendar"></div>
@@ -468,7 +466,6 @@
         alert('✅ 登記成功！');
         selectedDates.clear();
         
-        // 🚀 關鍵修改：重新導向並帶上參數，保持登入狀態
         window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId);
 
       } catch (error) {
