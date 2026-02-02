@@ -63,14 +63,14 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
     
-    /* === 📝 注意事項區塊 (摺疊版樣式) === */
+    /* 注意事項區 (摺疊版) */
     .notice-box {
         text-align: left;
         background-color: #fff; 
         color: #666; 
         border-radius: 12px;
         border: 1px dashed #cfd8dc; 
-        font-size: 14px;
+        font-size: 15px; 
         line-height: 1.6;
         max-width: 600px;
         margin: 0 auto 20px; 
@@ -174,7 +174,7 @@
 <body>
   <div id="loading" class="loading-overlay">
     <div class="loading-spinner"></div>
-    <div id="loading-text" class="loading-text">全力翻找會員資料...</div>
+    <div id="loading-text" class="loading-text">你正在變強的路上⋯⋯</div>
   </div>
 
   <div class="container">
@@ -242,23 +242,33 @@
     let currentUser = { name: "", lineId: "" };
     let isSubmitting = false;
 
-    // 🔥 Loading 文案 (精簡慢速版)
+    // 🔥 Loading 文案 (熱血版：跑完就停)
     const loadingMessages = [
-        "全力翻找會員資料...", 
-        "正在計算課程名額...", 
-        "載入課程資料中..."
+        "你正在變強的路上⋯⋯", 
+        "你的教練迫不及待⋯⋯", 
+        "載入課程資料中⋯⋯"
     ];
     let msgIndex = 0;
     
-    setInterval(() => {
-        if (isSubmitting) return;
+    const loadingInterval = setInterval(() => {
+        if (isSubmitting) return; // 若正在送出表單，暫停這裡的更新 (交給送出邏輯)
+
         const textEl = document.getElementById('loading-text');
         const loadingDiv = document.getElementById('loading');
+        
+        // 只有當 loading 畫面顯示中，才執行
         if (textEl && loadingDiv.style.display !== 'none') {
-            msgIndex = (msgIndex + 1) % loadingMessages.length;
-            textEl.textContent = loadingMessages[msgIndex];
+            msgIndex++; // 準備顯示下一句
+            
+            if (msgIndex < loadingMessages.length) {
+                // 如果還有下一句，就更新
+                textEl.textContent = loadingMessages[msgIndex];
+            } else {
+                // 如果已經是最後一句了，就清除計時器，停在最後一句
+                clearInterval(loadingInterval);
+            }
         }
-    }, 2000); // 🔥 改成 2000 毫秒 (2秒)
+    }, 2000); // 2秒切換一次
 
     // 切換注意事項展開/收合
     function toggleNotice() {
@@ -490,7 +500,6 @@
         return;
       }
 
-      // 🔥 檢查同意條款
       if (!document.getElementById('agree-checkbox').checked) {
           alert('請勾選「我已詳閱並同意上述事項」才能送出預約喔！');
           return;
