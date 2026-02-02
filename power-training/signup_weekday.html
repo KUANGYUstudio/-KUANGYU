@@ -63,9 +63,61 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
     
-    /* 注意事項區 */
-    .notice-box { text-align: left; background-color: #fff; color: #666; padding: 15px 20px; border-radius: 12px; border: 1px dashed #cfd8dc; font-size: 14px; line-height: 1.6; max-width: 600px; margin: 0 auto 20px; }
-    .notice-title { font-size: 18px; font-weight: bold; color: var(--text-main); margin-bottom: 10px; }
+    /* === 📝 注意事項區塊 (摺疊版樣式) === */
+    .notice-box {
+        text-align: left;
+        background-color: #fff; 
+        color: #666; 
+        border-radius: 12px;
+        border: 1px dashed #cfd8dc; 
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto 20px; 
+        overflow: hidden; 
+        cursor: pointer;  
+        transition: all 0.3s ease;
+    }
+    
+    .notice-header {
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff; 
+    }
+
+    .notice-title {
+        font-size: 18px;        
+        font-weight: bold;      
+        color: var(--text-main);
+        margin: 0; 
+    }
+    
+    .notice-arrow {
+        font-size: 12px;
+        color: #999;
+        transition: transform 0.3s ease;
+    }
+    
+    .notice-content {
+        max-height: 0; 
+        opacity: 0;    
+        padding: 0 20px; 
+        transition: all 0.3s ease-out; 
+        overflow: hidden;
+    }
+
+    /* 展開狀態 */
+    .notice-box.open .notice-arrow {
+        transform: rotate(180deg); 
+    }
+    .notice-box.open .notice-content {
+        max-height: 500px; 
+        opacity: 1;
+        padding-bottom: 15px; 
+    }
+    
     .notice-list { margin: 0; padding-left: 1.4em; }
     .notice-list li { margin-bottom: 4px; }
     .sub-item { display: block; margin-top: 4px; margin-left: 0.5em; color: #666; }
@@ -108,7 +160,9 @@
       .container { margin: 0; padding: 15px; }
       h1 { font-size: 26px; margin-top: 0.1em; }
       .schedule-box { padding: 12px 15px; }
-      .notice-box { padding: 12px 15px; }
+      .notice-box { margin: 0 auto 20px; }
+      .notice-header { padding: 12px 15px; }
+      .notice-content { padding: 0 15px; }
       .calendar-header, .calendar-grid { gap: 4px; }
       .day { font-size: 22px; border-radius: 10px; }
       .day-number { font-size: 18px; } 
@@ -120,7 +174,7 @@
 <body>
   <div id="loading" class="loading-overlay">
     <div class="loading-spinner"></div>
-    <div id="loading-text" class="loading-text">正在呼叫光聿教練...</div>
+    <div id="loading-text" class="loading-text">全力翻找會員資料...</div>
   </div>
 
   <div class="container">
@@ -147,19 +201,24 @@
         </div>
     </div>
 
-    <div class="notice-box">
-        <div class="notice-title">注意事項</div>
-        <ul class="notice-list">
-            <li>如需請假，請依時限完成取消：
-                <span class="sub-item">- 早班：前一天 22:00 前</span>
-                <span class="sub-item">- 晚班：當天中午 12:00 前</span>
-            </li>
-            <li>遲到不另補時，課程仍依原時段進行。</li>
-            <li>逾期取消視同上課，扣除１堂課。</li>
-            <li>若因生病或突發急事，經告知可免扣堂。</li>
-            <li>如遇天災，依行政院公告辦理。</li>
-            <li>有任何問題，請直接與教練聯繫。</li>
-        </ul>
+    <div class="notice-box" id="notice-box" onclick="toggleNotice()">
+        <div class="notice-header">
+            <div class="notice-title">注意事項</div>
+            <div class="notice-arrow">▼</div> 
+        </div>
+        <div class="notice-content">
+            <ul class="notice-list">
+                <li>如需請假，請依時限完成取消：
+                    <span class="sub-item">- 早班：前一天 22:00 前</span>
+                    <span class="sub-item">- 晚班：當天中午 12:00 前</span>
+                </li>
+                <li>遲到不另補時，課程仍依原時段進行。</li>
+                <li>逾期取消視同上課，扣除１堂課。</li>
+                <li>若因生病或突發急事，經告知可免扣堂。</li>
+                <li>如遇天災，依行政院公告辦理。</li>
+                <li>有任何問題，請直接與教練聯繫。</li>
+            </ul>
+        </div>
     </div>
     
     <div id="calendar"></div>
@@ -181,33 +240,31 @@
     const selectedDates = new Set(); 
     let myRegisteredDates = new Set();
     let currentUser = { name: "", lineId: "" };
-    
-    // 🔥 全局變數：控制是否正在送出，若為 true 則停止輪播文字
     let isSubmitting = false;
 
-    // 🔥 Loading 有趣文案 (您的指定版本)
+    // 🔥 Loading 文案 (精簡慢速版)
     const loadingMessages = [
-        "正在呼叫光聿教練...", 
         "全力翻找會員資料...", 
-        "努力計算課程名額...", 
-        "正在載入課程資料...",
-        "準備好了！"
+        "正在計算課程名額...", 
+        "載入課程資料中..."
     ];
     let msgIndex = 0;
     
     setInterval(() => {
-        // 如果正在送出預約 (isSubmitting = true)，就不再輪播文字
         if (isSubmitting) return;
-
         const textEl = document.getElementById('loading-text');
         const loadingDiv = document.getElementById('loading');
-        
-        // 只有當 loading 畫面顯示中，才更新文字
         if (textEl && loadingDiv.style.display !== 'none') {
             msgIndex = (msgIndex + 1) % loadingMessages.length;
             textEl.textContent = loadingMessages[msgIndex];
         }
-    }, 1500); // 每 1.5 秒換一句話
+    }, 2000); // 🔥 改成 2000 毫秒 (2秒)
+
+    // 切換注意事項展開/收合
+    function toggleNotice() {
+        const box = document.getElementById('notice-box');
+        box.classList.toggle('open');
+    }
 
     function getParam(key) { 
       return new URLSearchParams(window.location.search).get(key) || ''; 
@@ -241,7 +298,6 @@
         }
 
         loadingDiv.style.display = 'flex';
-        // 搜尋時也可以顯示一些文字
         document.getElementById('loading-text').textContent = "正在搜尋會員資料...";
         
         try {
@@ -443,7 +499,6 @@
       const loadingDiv = document.getElementById('loading');
       const btn = document.getElementById('submit-btn');
       
-      // 🔥 鎖定輪播，並顯示專屬預約文字
       isSubmitting = true;
       loadingDiv.style.display = 'flex';
       document.getElementById('loading-text').textContent = `正在為 ${currentUser.name} 預約中...`;
@@ -460,7 +515,7 @@
         }
 
         loadingDiv.style.display = 'none';
-        isSubmitting = false; // 重置狀態
+        isSubmitting = false; 
         alert('✅ 登記成功！');
         selectedDates.clear();
         
