@@ -239,10 +239,13 @@
 
     const selectedDates = new Set(); 
     let myRegisteredDates = new Set();
-    let currentUser = { name: "", lineId: "" };
+    
+    // 確保這裡有包含 email 欄位
+    let currentUser = { name: "", lineId: "", email: "" };
+    
     let isSubmitting = false;
 
-    // 🔥 Loading 文案 (熱血版：跑完就停)
+    // 🔥 Loading 文案 (男友熱血版：預備備...)
     const loadingMessages = [
         "你正在變強的路上⋯⋯", 
         "你的教練迫不及待⋯⋯", 
@@ -251,24 +254,20 @@
     let msgIndex = 0;
     
     const loadingInterval = setInterval(() => {
-        if (isSubmitting) return; // 若正在送出表單，暫停這裡的更新 (交給送出邏輯)
+        if (isSubmitting) return;
 
         const textEl = document.getElementById('loading-text');
         const loadingDiv = document.getElementById('loading');
         
-        // 只有當 loading 畫面顯示中，才執行
         if (textEl && loadingDiv.style.display !== 'none') {
-            msgIndex++; // 準備顯示下一句
-            
+            msgIndex++;
             if (msgIndex < loadingMessages.length) {
-                // 如果還有下一句，就更新
                 textEl.textContent = loadingMessages[msgIndex];
             } else {
-                // 如果已經是最後一句了，就清除計時器，停在最後一句
-                clearInterval(loadingInterval);
+                clearInterval(loadingInterval); // 停在最後一句
             }
         }
-    }, 2000); // 2秒切換一次
+    }, 2000); 
 
     // 切換注意事項展開/收合
     function toggleNotice() {
@@ -317,6 +316,10 @@
             if (data.found) {
                 currentUser.name = data.name;
                 currentUser.lineId = data.lineId;
+                
+                // 儲存 email 以供後續預約使用
+                currentUser.email = emailInput;
+                
                 errorMsg.textContent = "";
                 loginSuccess();
             } else {
@@ -520,7 +523,8 @@
           let courseType = "evening"; 
           if (dayOfWeek === 3) courseType = "early"; 
 
-          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${courseType}&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}`);
+          // 傳送 email 給後端
+          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${courseType}&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`);
         }
 
         loadingDiv.style.display = 'none';
