@@ -86,11 +86,11 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
     
-    /* === 📝 注意事項區塊 (微調換行) === */
+    /* === 📝 注意事項區塊 (樣式更新) === */
     .notice-box {
         text-align: left;
         background-color: #fff; 
-        color: #666;
+        color: #666; /* 統一深灰色，不強調 */
         padding: 15px 20px;
         border-radius: 12px;
         border: 1px dashed #cfd8dc; 
@@ -112,17 +112,13 @@
     .notice-list li {
         margin-bottom: 4px;
     }
-    .highlight {
-        color: #e53935; /* 強調色 (紅) */
-        font-weight: bold;
-    }
     
-    /* 🔥 關鍵修改：強制換行並縮排 */
+    /* 強制換行並縮排，顏色統一 */
     .sub-item {
         display: block;       /* 強制換行 */
-        margin-top: 4px;      /* 與上方文字拉開一點距離 */
-        margin-left: 0.5em;   /* 稍微縮排 */
-        color: #546e7a;
+        margin-top: 4px;      
+        margin-left: 0.5em;   
+        color: #666;          /* 跟內文一樣顏色 */
     }
 
     /* ... (日曆與按鈕 CSS) ... */
@@ -198,16 +194,16 @@
     </div>
 
     <div class="notice-box">
-        <div class="notice-title">【學員注意事項】</div>
+        <div class="notice-title">【注意事項】</div>
         <ul class="notice-list">
-            <li>如需請假，請依時限 <span class="highlight">完成取消</span>：
+            <li>如需請假，請依時限完成取消：
                 <span class="sub-item">- 早班：前一天 22:00 前</span>
                 <span class="sub-item">- 晚班：課前 6 小時前</span>
             </li>
             <li>逾期取消視同上課，扣除一堂課。</li>
             <li>若因生病或突發急事，經告知可免扣堂。</li>
             <li>如遇天災，依行政院公告辦理。</li>
-            <li style="margin-top: 8px; font-weight:bold; color:var(--evening-main);">有任何問題請直接私訊教練。</li>
+            <li style="margin-top: 8px;">有任何問題請直接與教練聯繫。</li>
         </ul>
     </div>
     
@@ -468,7 +464,6 @@
         alert('✅ 登記成功！');
         selectedDates.clear();
         
-        // 🚀 關鍵修改：重新導向並帶上參數，保持登入狀態
         window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId);
 
       } catch (error) {
