@@ -86,11 +86,11 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
     
-    /* === 📝 注意事項區塊 (樣式更新) === */
+    /* === 📝 注意事項區塊 (樣式維持) === */
     .notice-box {
         text-align: left;
         background-color: #fff; 
-        color: #666; /* 統一深灰色，不強調 */
+        color: #666; /* 統一深灰色 */
         padding: 15px 20px;
         border-radius: 12px;
         border: 1px dashed #cfd8dc; 
@@ -113,12 +113,12 @@
         margin-bottom: 4px;
     }
     
-    /* 強制換行並縮排，顏色統一 */
+    /* 強制換行並縮排 */
     .sub-item {
-        display: block;       /* 強制換行 */
+        display: block;       
         margin-top: 4px;      
         margin-left: 0.5em;   
-        color: #666;          /* 跟內文一樣顏色 */
+        color: #666;          
     }
 
     /* ... (日曆與按鈕 CSS) ... */
@@ -200,6 +200,7 @@
                 <span class="sub-item">- 早班：前一天 22:00 前</span>
                 <span class="sub-item">- 晚班：課前 6 小時前</span>
             </li>
+            <li>遲到不另補時，課程仍依原時段進行。</li>
             <li>逾期取消視同上課，扣除一堂課。</li>
             <li>若因生病或突發急事，經告知可免扣堂。</li>
             <li>如遇天災，依行政院公告辦理。</li>
@@ -464,6 +465,7 @@
         alert('✅ 登記成功！');
         selectedDates.clear();
         
+        // 🚀 關鍵修改：重新導向並帶上參數，保持登入狀態
         window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId);
 
       } catch (error) {
