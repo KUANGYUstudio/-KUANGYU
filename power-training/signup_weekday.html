@@ -9,12 +9,17 @@
        🎨 配色定義 (源自 FirstClass)
        ========================================= */
     :root {
+      /* 晚班 - 專業藍 */
       --evening-main: #00838f; 
       --evening-light: #00acc1;
       --evening-bg: #e0f7fa;
+      
+      /* 早班 - 活力黃 */
       --morning-main: #ffb300; 
       --morning-light: #ffca28;
       --morning-bg: #fff8e1;
+
+      /* 系統色 */
       --text-main: #2c3e50;
       --text-sub: #546e7a;
       --bg-color: #ffffff;
@@ -47,19 +52,18 @@
     .main-logo {
         display: block;
         margin: 0 auto 5px; /* 置中，下方留一點白 */
-        width: 40px;        /* 🎯 手機版預設大小：40px (較小) */
+        width: 40px;        /* 🎯 手機版預設大小：40px */
         height: auto;
     }
 
-    /* 💻 電腦版變大 (當螢幕寬度大於 750px 時) */
+    /* 💻 電腦版變大 */
     @media (min-width: 751px) {
         .main-logo {
-            width: 60px;     /* 🎯 電腦版大小：維持您滿意的 60px */
+            width: 60px;     /* 🎯 電腦版大小：60px */
             margin-bottom: 10px;
         }
     }
     
-    /* 標題設定 */
     h1 {
       font-size: 32px;
       margin: 0.1em 0 0.2em; 
@@ -76,11 +80,52 @@
     .login-input { flex: 1; padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd; outline: none; transition: border 0.3s; }
     .login-input:focus { border-color: var(--evening-light); }
     .login-btn { padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: var(--text-main); color: white; cursor: pointer; font-weight: bold; }
-    .schedule-box { text-align: left; display: block; margin-bottom: 20px; background: #fafafa; padding: 15px 20px; border-radius: 12px; border: 1px solid #eee; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .schedule-box { text-align: left; display: block; margin-bottom: 15px; background: #fafafa; padding: 15px 20px; border-radius: 12px; border: 1px solid #eee; max-width: 600px; margin-left: auto; margin-right: auto; }
     .schedule-row { margin: 8px 0; font-size: 16px; color: var(--text-sub); display: flex; align-items: center; }
     .time-badge { display: inline-block; width: 50px; text-align: center; padding: 4px 0; border-radius: 6px; font-size: 14px; margin-right: 12px; font-weight: bold; color: white; flex-shrink: 0; }
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
+    
+    /* === 📝 注意事項區塊 (微調換行) === */
+    .notice-box {
+        text-align: left;
+        background-color: #fff; 
+        color: #666;
+        padding: 15px 20px;
+        border-radius: 12px;
+        border: 1px dashed #cfd8dc; 
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto 20px; 
+    }
+    .notice-title {
+        font-weight: bold;
+        color: var(--text-main);
+        margin-bottom: 6px;
+        font-size: 15px;
+    }
+    .notice-list {
+        margin: 0;
+        padding-left: 1.4em;
+    }
+    .notice-list li {
+        margin-bottom: 4px;
+    }
+    .highlight {
+        color: #e53935; /* 強調色 (紅) */
+        font-weight: bold;
+    }
+    
+    /* 🔥 關鍵修改：強制換行並縮排 */
+    .sub-item {
+        display: block;       /* 強制換行 */
+        margin-top: 4px;      /* 與上方文字拉開一點距離 */
+        margin-left: 0.5em;   /* 稍微縮排 */
+        color: #546e7a;
+    }
+
+    /* ... (日曆與按鈕 CSS) ... */
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
     .loading-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--evening-main); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -106,14 +151,11 @@
     #submit-btn { margin: 40px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--evening-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3); }
     #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; box-shadow: none; }
 
-    /* 🔥 手機版樣式調整 (這段主要是調整標題大小和間距) */
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; }
-      h1 { 
-          font-size: 26px; 
-          margin-top: 0.1em; 
-      }
+      h1 { font-size: 26px; margin-top: 0.1em; }
       .schedule-box { padding: 12px 15px; }
+      .notice-box { padding: 12px 15px; }
       .calendar-header, .calendar-grid { gap: 4px; }
       .day { font-size: 22px; border-radius: 10px; }
       .day-number { font-size: 18px; } 
@@ -153,6 +195,20 @@
         <div class="schedule-row">
             <span class="time-badge badge-morning">早班</span> 週三 06:30～08:00
         </div>
+    </div>
+
+    <div class="notice-box">
+        <div class="notice-title">【學員注意事項】</div>
+        <ul class="notice-list">
+            <li>如需請假，請依時限 <span class="highlight">完成取消</span>：
+                <span class="sub-item">- 早班：前一天 22:00 前</span>
+                <span class="sub-item">- 晚班：課前 6 小時前</span>
+            </li>
+            <li>逾期取消視同上課，扣除一堂課。</li>
+            <li>若因生病或突發急事，經告知可免扣堂。</li>
+            <li>如遇天災，依行政院公告辦理。</li>
+            <li style="margin-top: 8px; font-weight:bold; color:var(--evening-main);">有任何問題請直接私訊教練。</li>
+        </ul>
     </div>
     
     <div id="calendar"></div>
@@ -203,7 +259,6 @@
         document.querySelector('.loading-text').textContent = "正在搜尋會員資料...";
         
         try {
-            // 🔥 改為傳送 email 參數
             const res = await fetch(`${SCRIPT_URL}?mode=search_member&email=${encodeURIComponent(emailInput)}`);
             const data = await res.json();
 
