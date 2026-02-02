@@ -47,19 +47,18 @@
     }
     
     /* =========================================
-       🔥 Logo 設定 (統一置中，手機優先)
+       🔥 Logo 設定
        ========================================= */
     .main-logo {
         display: block;
-        margin: 0 auto 5px; /* 置中，下方留一點白 */
-        width: 40px;        /* 🎯 手機版預設大小：40px */
+        margin: 0 auto 5px; 
+        width: 40px;        
         height: auto;
     }
 
-    /* 💻 電腦版變大 */
     @media (min-width: 751px) {
         .main-logo {
-            width: 60px;     /* 🎯 電腦版大小：60px */
+            width: 60px;     
             margin-bottom: 10px;
         }
     }
@@ -86,7 +85,7 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
     
-    /* === 📝 注意事項區塊 (樣式) === */
+    /* === 📝 注意事項區塊 === */
     .notice-box {
         text-align: left;
         background-color: #fff; 
@@ -99,28 +98,48 @@
         max-width: 600px;
         margin: 0 auto 20px; 
     }
-    
     .notice-title {
         font-size: 18px;        
         font-weight: bold;      
         color: var(--text-main);
         margin-bottom: 10px;    
     }
-    
     .notice-list {
         margin: 0;
         padding-left: 1.4em;
     }
     .notice-list li {
-        margin-bottom: 4px; /* 統一間距 */
+        margin-bottom: 4px;
     }
-    
-    /* 強制換行並縮排 */
     .sub-item {
         display: block;       
         margin-top: 4px;      
         margin-left: 0.5em;   
         color: #666;          
+    }
+
+    /* === ✅ 同意條款區塊 (新增) === */
+    .agreement-container {
+        margin: 20px auto 10px;
+        text-align: center;
+        max-width: 260px;
+        display: none; /* 預設隱藏，登入後顯示 */
+    }
+    .agreement-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        color: var(--text-main);
+        cursor: pointer;
+        user-select: none;
+    }
+    .agreement-label input {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        cursor: pointer;
+        accent-color: var(--evening-main); /* 勾選框顏色 */
     }
 
     /* ... (日曆與按鈕 CSS) ... */
@@ -146,7 +165,9 @@
     .day.registered .day-label { color: #b0bec5; font-weight: normal; }
     .day.full { background-color: #e0e0e0; color: #666; cursor: not-allowed; border: 2px solid var(--evening-main); opacity: 0.8; }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
-    #submit-btn { margin: 40px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--evening-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3); }
+    
+    /* 按鈕調整 (上方間距縮小，因為有勾選框了) */
+    #submit-btn { margin: 15px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--evening-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3); }
     #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; box-shadow: none; }
 
     @media (max-width: 750px) {
@@ -206,10 +227,19 @@
             <li>逾期取消視同上課，扣除１堂課。</li>
             <li>若因生病或突發急事，經告知可免扣堂。</li>
             <li>如遇天災，依行政院公告辦理。</li>
-            <li>有任何問題，請直接與教練聯繫。</li> </ul>
+            <li>有任何問題，請直接與教練聯繫。</li>
+        </ul>
     </div>
     
     <div id="calendar"></div>
+
+    <div id="agreement-area" class="agreement-container">
+        <label class="agreement-label">
+            <input type="checkbox" id="agree-checkbox">
+            我已詳閱並同意上述事項
+        </label>
+    </div>
+
     <button id="submit-btn" style="display:none;">送出選課</button>
 
   </div>
@@ -279,7 +309,10 @@
     async function loginSuccess() {
         const loadingDiv = document.getElementById('loading');
         document.getElementById('login-area').style.display = 'none'; 
+        
+        // 登入成功後顯示按鈕和勾選框
         document.getElementById('submit-btn').style.display = 'block'; 
+        document.getElementById('agreement-area').style.display = 'block'; 
         
         document.querySelector('.loading-text').textContent = "載入課程資料...";
         if(loadingDiv.style.display === 'none') loadingDiv.style.display = 'flex';
@@ -444,6 +477,12 @@
       if (!selectedDates.size) {
         alert('請至少選擇一個日期');
         return;
+      }
+
+      // 🔥 新增：檢查是否勾選同意
+      if (!document.getElementById('agree-checkbox').checked) {
+          alert('請勾選「我已詳閱並同意上述事項」才能送出預約喔！');
+          return;
       }
 
       const loadingDiv = document.getElementById('loading');
