@@ -86,11 +86,11 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
     
-    /* === 📝 注意事項區塊 (樣式維持) === */
+    /* === 📝 注意事項區塊 (樣式更新) === */
     .notice-box {
         text-align: left;
         background-color: #fff; 
-        color: #666; /* 統一深灰色 */
+        color: #666; 
         padding: 15px 20px;
         border-radius: 12px;
         border: 1px dashed #cfd8dc; 
@@ -99,12 +99,15 @@
         max-width: 600px;
         margin: 0 auto 20px; 
     }
+    
+    /* 🔥 標題樣式調整：加大、去括號、粗體 */
     .notice-title {
-        font-weight: bold;
+        font-size: 18px;        /* 加大字體 */
+        font-weight: bold;      /* 粗體 */
         color: var(--text-main);
-        margin-bottom: 6px;
-        font-size: 15px;
+        margin-bottom: 10px;    /* 增加一點下方間距 */
     }
+    
     .notice-list {
         margin: 0;
         padding-left: 1.4em;
@@ -194,17 +197,17 @@
     </div>
 
     <div class="notice-box">
-        <div class="notice-title">【注意事項】</div>
+        <div class="notice-title">注意事項</div>
         <ul class="notice-list">
             <li>如需請假，請依時限完成取消：
                 <span class="sub-item">- 早班：前一天 22:00 前</span>
-                <span class="sub-item">- 晚班：課前 6 小時前</span>
+                <span class="sub-item">- 晚班：當天中午 12:00 前</span>
             </li>
             <li>遲到不另補時，課程仍依原時段進行。</li>
-            <li>逾期取消視同上課，扣除一堂課。</li>
+            <li>逾期取消視同上課，扣除１堂課。</li>
             <li>若因生病或突發急事，經告知可免扣堂。</li>
             <li>如遇天災，依行政院公告辦理。</li>
-            <li style="margin-top: 8px;">有任何問題請直接與教練聯繫。</li>
+            <li style="margin-top: 8px;">有任何問題，請直接與教練聯繫。</li>
         </ul>
     </div>
     
