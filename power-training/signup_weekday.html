@@ -23,22 +23,14 @@
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       background: var(--bg-color); 
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       color: var(--text-main);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center; 
+      display: flex; justify-content: center; align-items: center; 
     }
     .container {
-      max-width: 800px; 
-      width: 100%;
-      margin: 0 auto;
-      padding: 20px;
-      box-sizing: border-box;
-      text-align: center;
-      position: relative; 
+      max-width: 800px; width: 100%; margin: 0 auto; padding: 20px;
+      box-sizing: border-box; text-align: center; position: relative; 
     }
     
     /* Logo 設定 */
@@ -65,58 +57,21 @@
     
     /* 課程規範區 (摺疊版) */
     .notice-box {
-        text-align: left;
-        background-color: #fff; 
-        color: #666; 
-        border-radius: 12px;
-        border: 1px dashed #cfd8dc; 
-        font-size: 15px; 
-        line-height: 1.6;
-        max-width: 600px;
-        margin: 0 auto 20px; 
-        overflow: hidden; 
-        cursor: pointer;  
-        transition: all 0.3s ease;
+        text-align: left; background-color: #fff; 
+        color: #666; border-radius: 12px;
+        border: 1px dashed #cfd8dc; font-size: 15px; 
+        line-height: 1.6; max-width: 600px;
+        margin: 0 auto 20px; overflow: hidden; 
+        cursor: pointer; transition: all 0.3s ease;
     }
-    
-    .notice-header {
-        padding: 15px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #fff; 
-    }
-
-    .notice-title {
-        font-size: 18px;        
-        font-weight: bold;      
-        color: var(--text-main);
-        margin: 0; 
-    }
-    
-    .notice-arrow {
-        font-size: 12px;
-        color: #999;
-        transition: transform 0.3s ease;
-    }
-    
-    .notice-content {
-        max-height: 0; 
-        opacity: 0;    
-        padding: 0 20px; 
-        transition: all 0.3s ease-out; 
-        overflow: hidden;
-    }
+    .notice-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background-color: #fff; }
+    .notice-title { font-size: 18px; font-weight: bold; color: var(--text-main); margin: 0; }
+    .notice-arrow { font-size: 12px; color: #999; transition: transform 0.3s ease; }
+    .notice-content { max-height: 0; opacity: 0; padding: 0 20px; transition: all 0.3s ease-out; overflow: hidden; }
 
     /* 展開狀態 */
-    .notice-box.open .notice-arrow {
-        transform: rotate(180deg); 
-    }
-    .notice-box.open .notice-content {
-        max-height: 500px; 
-        opacity: 1;
-        padding-bottom: 15px; 
-    }
+    .notice-box.open .notice-arrow { transform: rotate(180deg); }
+    .notice-box.open .notice-content { max-height: 500px; opacity: 1; padding-bottom: 15px; }
     
     .notice-list { margin: 0; padding-left: 1.4em; }
     .notice-list li { margin-bottom: 4px; }
@@ -203,7 +158,7 @@
 
     <div class="notice-box" id="notice-box" onclick="toggleNotice()">
         <div class="notice-header">
-            <div class=>課程規範ˋ</div>
+            <div class="notice-title">課程規範</div>
             <div class="notice-arrow">▼</div> 
         </div>
         <div class="notice-content">
@@ -234,244 +189,125 @@
   </div>
 
   <script>
-    // ⚠️ 請確認您的 GAS 網址已更新
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
+    const selectedDates = new Set(), myRegisteredDates = new Set();
+    let currentUser = { name: "", lineId: "", email: "" }, isSubmitting = false;
 
-    const selectedDates = new Set(); 
-    let myRegisteredDates = new Set();
-    
-    // 確保這裡有包含 email 欄位
-    let currentUser = { name: "", lineId: "", email: "" };
-    
-    let isSubmitting = false;
-
-    // 🔥 Loading 文案
-    const loadingMessages = [
-        "正在放下甜甜圈⋯⋯", 
-        "全力翻找會員資料⋯⋯", 
-        "準備好囉 預備備⋯⋯"
-    ];
+    // Loading 文案循環
+    const loadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     let msgIndex = 0;
-    
-    const loadingInterval = setInterval(() => {
-        if (isSubmitting) return;
-
+    setInterval(() => {
         const textEl = document.getElementById('loading-text');
-        const loadingDiv = document.getElementById('loading');
-        
-        if (textEl && loadingDiv.style.display !== 'none') {
-            msgIndex++;
-            if (msgIndex < loadingMessages.length) {
-                textEl.textContent = loadingMessages[msgIndex];
-            } else {
-                clearInterval(loadingInterval); // 停在最後一句
-            }
+        if (textEl && document.getElementById('loading').style.display !== 'none' && !isSubmitting) {
+            msgIndex = (msgIndex + 1) % loadingMessages.length;
+            textEl.textContent = loadingMessages[msgIndex];
         }
     }, 2000); 
 
-    // 切換課程規範展開/收合
-    function toggleNotice() {
-        const box = document.getElementById('notice-box');
-        box.classList.toggle('open');
-    }
-
-    function getParam(key) { 
-      return new URLSearchParams(window.location.search).get(key) || ''; 
-    }
+    function toggleNotice() { document.getElementById('notice-box').classList.toggle('open'); }
+    function getParam(key) { return new URLSearchParams(window.location.search).get(key) || ''; }
 
     async function initSystem() {
-        const loadingDiv = document.getElementById('loading');
-        loadingDiv.style.display = 'flex';
-
-        let urlName = getParam('name');
-        let urlLineId = getParam('lineId');
-
-        if (urlName && urlLineId) {
-            currentUser.name = urlName;
-            currentUser.lineId = urlLineId;
+        let name = getParam('name'), lineId = getParam('lineId');
+        if (name && lineId) {
+            currentUser = { name, lineId };
             loginSuccess();
         } else {
-            loadingDiv.style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
             document.getElementById('login-area').style.display = 'block';
         }
     }
 
     async function searchMember() {
-        const emailInput = document.getElementById('member-search-email').value.trim();
-        const errorMsg = document.getElementById('login-error');
-        const loadingDiv = document.getElementById('loading');
-
-        if (!emailInput) {
-            errorMsg.textContent = "請輸入 Email";
-            return;
-        }
-
-        loadingDiv.style.display = 'flex';
-        document.getElementById('loading-text').textContent = "正在搜尋會員資料...";
-        
+        const email = document.getElementById('member-search-email').value.trim();
+        const errorMsg = document.getElementById('login-error'), loading = document.getElementById('loading');
+        if (!email) { errorMsg.textContent = "請輸入 Email"; return; }
+        loading.style.display = 'flex';
         try {
-            const res = await fetch(`${SCRIPT_URL}?mode=search_member&email=${encodeURIComponent(emailInput)}`);
+            const res = await fetch(`${SCRIPT_URL}?mode=search_member&email=${encodeURIComponent(email)}`);
             const data = await res.json();
-
             if (data.found) {
-                currentUser.name = data.name;
-                currentUser.lineId = data.lineId;
-                
-                // 儲存 email 以供後續預約使用
-                currentUser.email = emailInput;
-                
-                errorMsg.textContent = "";
+                currentUser = { name: data.name, lineId: data.lineId, email: email };
                 loginSuccess();
             } else {
-                loadingDiv.style.display = 'none';
+                loading.style.display = 'none';
                 errorMsg.textContent = "❌ 找不到此 Email，請確認是否與報名資料一致";
             }
-        } catch (e) {
-            console.error(e);
-            loadingDiv.style.display = 'none';
-            errorMsg.textContent = "系統連線錯誤 (請確認 GAS 已更新)";
-        }
+        } catch (e) { loading.style.display = 'none'; errorMsg.textContent = "系統連線錯誤"; }
     }
 
     async function loginSuccess() {
-        const loadingDiv = document.getElementById('loading');
         document.getElementById('login-area').style.display = 'none'; 
-        
         document.getElementById('submit-btn').style.display = 'block'; 
         document.getElementById('agreement-area').style.display = 'block'; 
-        
-        if(loadingDiv.style.display === 'none') loadingDiv.style.display = 'flex';
-
         await renderCalendar();
-        loadingDiv.style.display = 'none';
+        document.getElementById('loading').style.display = 'none';
     }
 
     async function loadMergedData() {
       try {
-        const targetLineId = currentUser.lineId || "";
-        const [resEvening, resEarly] = await Promise.all([
-            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(targetLineId)}&courseType=evening`),
-            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(targetLineId)}&courseType=early`)
+        const [resEv, resEa] = await Promise.all([
+            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=evening`),
+            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=early`)
         ]);
-
-        const dataEvening = await resEvening.json();
-        const dataEarly = await resEarly.json();
-
-        const allDates = [...new Set([...(dataEvening.dates || []), ...(dataEarly.dates || [])])].sort();
-        const mySignupsCombined = new Set([
-            ...(dataEvening.mySignups || []),
-            ...(dataEarly.mySignups || [])
-        ]);
-        const counts = dataEvening.counts || {};
-
-        return { dates: allDates, mySignups: mySignupsCombined, counts: counts };
-      } catch (error) { return { dates: [], mySignups: new Set(), counts: {} }; }
+        const dEv = await resEv.json(), dEa = await resEa.json();
+        return {
+          dates: [...new Set([...(dEv.dates || []), ...(dEa.dates || [])])].sort(),
+          mySignups: new Set([...(dEv.mySignups || []), ...(dEa.mySignups || [])]),
+          counts: dEv.counts || {}
+        };
+      } catch (e) { return { dates: [], mySignups: new Set(), counts: {} }; }
     }
 
     async function renderCalendar() {
-      const calendarDiv = document.getElementById('calendar');
-      calendarDiv.innerHTML = '';
-
+      const calendarDiv = document.getElementById('calendar'); calendarDiv.innerHTML = '';
       const allData = await loadMergedData();
-      const availableDates = allData.dates;
-      myRegisteredDates = allData.mySignups;
-      const signupCounts = allData.counts;
-      const availableSet = new Set(availableDates);
+      const availableDates = allData.dates, signupCounts = allData.counts, availableSet = new Set(availableDates);
+      allData.mySignups.forEach(d => myRegisteredDates.add(d));
 
       if (!availableDates.length) {
-        calendarDiv.innerHTML = '<div style="color:red; font-size: 1.2em; margin-top: 20px;">⚠️ 目前無可預約時段</div>';
-        return;
+        calendarDiv.innerHTML = '<div style="color:red; margin-top: 20px;">⚠️ 目前無可預約時段</div>'; return;
       }
 
-      const start = new Date(availableDates[0]);
-      const end = new Date(availableDates[availableDates.length - 1]);
-
+      const start = new Date(availableDates[0]), end = new Date(availableDates[availableDates.length - 1]);
       for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
         for (let m = 0; m < 12; m++) {
-          const first = new Date(y, m, 1);
-          const last = new Date(y, m + 1, 0);
+          const first = new Date(y, m, 1), last = new Date(y, m + 1, 0);
           if (last < start || first > end) continue;
 
-          const title = document.createElement('div');
-          title.className = 'month-title';
-          title.textContent = `${y}年${m + 1}月`;
+          const title = document.createElement('div'); title.className = 'month-title'; title.textContent = `${y}年${m + 1}月`;
           calendarDiv.appendChild(title);
-
-          const header = document.createElement('div');
-          header.className = 'calendar-header';
+          const header = document.createElement('div'); header.className = 'calendar-header';
           ['日','一','二','三','四','五','六'].forEach(d => {
-            const h = document.createElement('div');
-            h.className = 'weekday-header'; h.textContent = d; header.appendChild(h);
+            const h = document.createElement('div'); h.className = 'weekday-header'; h.textContent = d; header.appendChild(h);
           });
           calendarDiv.appendChild(header);
 
-          const grid = document.createElement('div');
-          grid.className = 'calendar-grid';
-
-          for (let i = 0; i < first.getDay(); i++) {
-            grid.appendChild(document.createElement('div'));
-          }
+          const grid = document.createElement('div'); grid.className = 'calendar-grid';
+          for (let i = 0; i < first.getDay(); i++) grid.appendChild(document.createElement('div'));
 
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
-            const cell = document.createElement('div');
-            cell.className = 'day';
-            
-            const numSpan = document.createElement('span');
-            numSpan.className = 'day-number';
-            numSpan.textContent = d;
-            cell.appendChild(numSpan);
-
+            const cell = document.createElement('div'); cell.className = 'day';
             const dayOfWeek = new Date(dateStr).getDay();
-            
-            let type = ""; 
-            let currentCount = 0;
-            let labelText = "";
-            let themeClass = "";
+            let info = { type: "", label: "", theme: "" };
 
-            if (dayOfWeek === 3) { 
-                type = "early";
-                currentCount = signupCounts[dateStr] ? (signupCounts[dateStr].morning || 0) : 0;
-                labelText = "06:30";
-                themeClass = "morning";
-            } else if (dayOfWeek === 2 || dayOfWeek === 4) { 
-                type = "evening";
-                currentCount = signupCounts[dateStr] ? (signupCounts[dateStr].evening || 0) : 0;
-                labelText = "19:30";
-                themeClass = "evening";
-            }
+            if (dayOfWeek === 3) info = { type: "early", label: "06:30", theme: "morning" };
+            else if (dayOfWeek === 2 || dayOfWeek === 4) info = { type: "evening", label: "19:30", theme: "evening" };
 
-            const isFull = currentCount >= 6;
+            cell.innerHTML = `<span class="day-number">${d}</span>`;
+            const count = info.type === "early" ? (signupCounts[dateStr]?.morning || 0) : (signupCounts[dateStr]?.evening || 0);
 
             if (myRegisteredDates.has(dateStr)) {
-              cell.classList.add('registered');
-              const label = document.createElement('div');
-              label.className = 'day-label';
-              label.textContent = "已登記";
-              cell.appendChild(label);
-            } else if (isFull && type) {
-              cell.classList.add('full');
-              const label = document.createElement('div');
-              label.className = 'full-label';
-              label.textContent = "額滿";
-              cell.appendChild(label);
-            } else if (availableSet.has(dateStr) && type) {
-              cell.classList.add('available');
-              cell.classList.add(themeClass); 
-              
-              const timeLabel = document.createElement('div');
-              timeLabel.className = 'day-label';
-              timeLabel.textContent = labelText;
-              cell.appendChild(timeLabel);
-
+              cell.classList.add('registered'); cell.innerHTML += `<div class="day-label">已登記</div>`;
+            } else if (count >= 6 && info.type) {
+              cell.classList.add('full'); cell.innerHTML += `<div class="full-label">額滿</div>`;
+            } else if (availableSet.has(dateStr) && info.type) {
+              cell.classList.add('available', info.theme);
+              cell.innerHTML += `<div class="day-label">${info.label}</div>`;
               cell.onclick = () => {
-                if (selectedDates.has(dateStr)) {
-                  selectedDates.delete(dateStr);
-                  cell.classList.remove('selected');
-                } else {
-                  selectedDates.add(dateStr);
-                  cell.classList.add('selected');
-                }
+                if (selectedDates.has(dateStr)) { selectedDates.delete(dateStr); cell.classList.remove('selected'); }
+                else { selectedDates.add(dateStr); cell.classList.add('selected'); }
                 updateSubmitButton();
               };
             }
@@ -484,63 +320,22 @@
 
     function updateSubmitButton() {
         const btn = document.getElementById('submit-btn');
-        if (selectedDates.size > 0) {
-            btn.textContent = `確認送出 (${selectedDates.size}堂)`;
-            btn.disabled = false;
-        } else {
-            btn.textContent = "請先選擇日期";
-            btn.disabled = true; 
-        }
+        btn.textContent = selectedDates.size ? `確認送出 (${selectedDates.size}堂)` : "請先選擇日期";
+        btn.disabled = !selectedDates.size;
     }
 
     document.getElementById('submit-btn').addEventListener('click', async () => {
-      if (!currentUser.name || !currentUser.lineId) {
-          alert('請先進行會員驗證');
-          return;
-      }
-      if (!selectedDates.size) {
-        alert('請至少選擇一個日期');
-        return;
-      }
-
-      if (!document.getElementById('agree-checkbox').checked) {
-          alert('請勾選「我已詳閱，並同意上述課程規範」才能送出預約喔！');
-          return;
-      }
-
-      const loadingDiv = document.getElementById('loading');
-      const btn = document.getElementById('submit-btn');
-      
-      isSubmitting = true;
-      loadingDiv.style.display = 'flex';
-      document.getElementById('loading-text').textContent = `正在為 ${currentUser.name} 預約中...`;
-      
-      btn.disabled = true;
-
+      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選同意課程規範'); return; }
+      const btn = document.getElementById('submit-btn'), loading = document.getElementById('loading');
+      isSubmitting = true; loading.style.display = 'flex'; btn.disabled = true;
       try {
         for (const date of selectedDates) {
-          const dayOfWeek = new Date(date).getDay();
-          let courseType = "evening"; 
-          if (dayOfWeek === 3) courseType = "early"; 
-
-          // 傳送 email 給後端
-          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${courseType}&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`);
+          const type = new Date(date).getDay() === 3 ? "early" : "evening";
+          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${type}&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`);
         }
-
-        loadingDiv.style.display = 'none';
-        isSubmitting = false; 
         alert('✅ 登記成功！');
-        selectedDates.clear();
-        
         window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId);
-
-      } catch (error) {
-        console.error('提交錯誤:', error);
-        loadingDiv.style.display = 'none';
-        isSubmitting = false;
-        btn.disabled = false;
-        alert('⚠️ 發生錯誤，請稍後再試');
-      }
+      } catch (e) { isSubmitting = false; loading.style.display = 'none'; btn.disabled = false; alert('⚠️ 發生錯誤'); }
     });
 
     initSystem();
