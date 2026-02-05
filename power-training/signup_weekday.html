@@ -23,31 +23,22 @@
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       background: var(--bg-color); 
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       color: var(--text-main);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center; 
+      display: flex; justify-content: center; align-items: center; 
     }
     .container {
-      max-width: 800px; 
-      width: 100%;
-      margin: 0 auto;
-      padding: 20px;
-      box-sizing: border-box;
-      text-align: center;
-      position: relative; 
+      max-width: 800px; width: 100%; margin: 0 auto; padding: 20px;
+      box-sizing: border-box; text-align: center; position: relative; 
     }
     
-    /* Logo 設定 */
     .main-logo { display: block; margin: 0 auto 5px; width: 40px; height: auto; }
     @media (min-width: 751px) { .main-logo { width: 60px; margin-bottom: 10px; } }
     
     h1 { font-size: 32px; margin: 0.1em 0 0.2em; color: var(--text-main); font-weight: 800; letter-spacing: 1px; }
 
-    /* 歡迎與登入區 */
+    /* 歡迎區 */
     .user-welcome { font-size: 18px; color: var(--evening-main); margin-bottom: 4px; font-weight: bold; min-height: 24px; }
     .login-section { background-color: #fafafa; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; display: none; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; }
     .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
@@ -63,60 +54,17 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
     
-    /* 課程規範區 (摺疊版) */
+    /* 課程規範摺疊區 */
     .notice-box {
-        text-align: left;
-        background-color: #fff; 
-        color: #666; 
-        border-radius: 12px;
-        border: 1px dashed #cfd8dc; 
-        font-size: 15px; 
-        line-height: 1.6;
-        max-width: 600px;
-        margin: 0 auto 20px; 
-        overflow: hidden; 
-        cursor: pointer;   
-        transition: all 0.3s ease;
+        text-align: left; background-color: #fff; color: #666; border-radius: 12px; border: 1px dashed #cfd8dc; 
+        font-size: 15px; line-height: 1.6; max-width: 600px; margin: 0 auto 20px; overflow: hidden; cursor: pointer; transition: all 0.3s ease;
     }
-    
-    .notice-header {
-        padding: 15px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #fff; 
-    }
-
-    .notice-title {
-        font-size: 18px;        
-        font-weight: bold;      
-        color: var(--text-main);
-        margin: 0; 
-    }
-    
-    .notice-arrow {
-        font-size: 12px;
-        color: #999;
-        transition: transform 0.3s ease;
-    }
-    
-    .notice-content {
-        max-height: 0; 
-        opacity: 0;    
-        padding: 0 20px; 
-        transition: all 0.3s ease-out; 
-        overflow: hidden;
-    }
-
-    /* 展開狀態 */
-    .notice-box.open .notice-arrow {
-        transform: rotate(180deg); 
-    }
-    .notice-box.open .notice-content {
-        max-height: 500px; 
-        opacity: 1;
-        padding-bottom: 15px; 
-    }
+    .notice-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background-color: #fff; }
+    .notice-title { font-size: 18px; font-weight: bold; color: var(--text-main); margin: 0; }
+    .notice-arrow { font-size: 12px; color: #999; transition: transform 0.3s ease; }
+    .notice-content { max-height: 0; opacity: 0; padding: 0 20px; transition: all 0.3s ease-out; overflow: hidden; }
+    .notice-box.open .notice-arrow { transform: rotate(180deg); }
+    .notice-box.open .notice-content { max-height: 500px; opacity: 1; padding-bottom: 15px; }
     
     .notice-list { margin: 0; padding-left: 1.4em; }
     .notice-list li { margin-bottom: 4px; }
@@ -148,13 +96,12 @@
         background: var(--evening-main); color: white; font-weight: bold; cursor: pointer;
         width: 100%; font-size: 16px; transition: background 0.2s;
     }
-    .modal-btn:hover { background: var(--evening-light); }
 
     /* Loading 遮罩 */
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
     .loading-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--evening-main); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; transition: opacity 0.3s; }
+    .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
 
     /* 日曆與按鈕 */
     .month-title { font-weight: 800; font-size: 24px; margin: 1.5em 0 0.8em; color: var(--text-main); }
@@ -258,7 +205,7 @@
     <div id="agreement-area" class="agreement-container">
         <label class="agreement-label">
             <input type="checkbox" id="agree-checkbox">
-            我已詳閱並同意上述課程規範
+            我已詳閱，並同意上述課程規範
         </label>
     </div>
 
@@ -440,7 +387,7 @@
     document.getElementById('submit-btn').addEventListener('click', async () => {
       if (!currentUser.name || !currentUser.lineId) { alert('請先進行會員驗證'); return; }
       if (!selectedDates.size) { alert('請至少選擇一個日期'); return; }
-      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱並同意上述課程規範」才能送出預約喔！'); return; }
+      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱，並同意上述課程規範」才能送出預約喔！'); return; }
 
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       isSubmitting = true; 
@@ -452,6 +399,8 @@
           const courseType = new Date(date).getDay() === 3 ? "early" : "evening";
           await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${courseType}&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`);
         }
+        // 資料處理完，隱藏 Loading，跳出登記成功
+        loading.style.display = 'none';
         document.getElementById('success-modal').style.display = 'flex';
       } catch (error) { 
         isSubmitting = false; loading.style.display = 'none'; alert('⚠️ 發生錯誤'); 
