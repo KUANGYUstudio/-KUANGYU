@@ -258,7 +258,7 @@
     <div id="agreement-area" class="agreement-container">
         <label class="agreement-label">
             <input type="checkbox" id="agree-checkbox">
-            我已詳閱，並同意上述課程規範
+            我已詳閱並同意上述課程規範
         </label>
     </div>
 
@@ -440,7 +440,7 @@
     document.getElementById('submit-btn').addEventListener('click', async () => {
       if (!currentUser.name || !currentUser.lineId) { alert('請先進行會員驗證'); return; }
       if (!selectedDates.size) { alert('請至少選擇一個日期'); return; }
-      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱，並同意上述課程規範」才能送出預約喔！'); return; }
+      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱並同意上述課程規範」才能送出預約喔！'); return; }
 
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       isSubmitting = true; 
