@@ -184,8 +184,8 @@
             <ul class="notice-list">
                 <span class="section-label">線上課規範</span>
                 <li>課前請先檢查網路跟視訊設備，確保上課不中斷。</li>
-                <li>請提早3分鐘登入 Rouvy 並進入 Google Meet。<br>
-                    <span class="sub-item">（Rouvy 有時效性，時間過了就會被擋住喔！）</span>
+                <li>請提早3分鐘登入 Rouvy 和 Google Meet。<br>
+                    <span class="sub-item">（Rouvy有時效性，超過時間就會進不去喔！）</span>
                 </li>
                 <li>進入教室後請先關靜音，要發言時再開啟。</li>
 
@@ -204,7 +204,7 @@
     <div id="agreement-area" class="agreement-container">
         <label class="agreement-label">
             <input type="checkbox" id="agree-checkbox">
-            我已詳閱，並同意上述課程規範
+            我已詳閱並同意上述課程規範
         </label>
     </div>
 
@@ -387,7 +387,7 @@
     document.getElementById('submit-btn').addEventListener('click', async () => {
       if (!currentUser.name || !currentUser.lineId) { alert('請先進行會員驗證'); return; }
       if (!selectedDates.size) { alert('請至少選擇一個日期'); return; }
-      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱，並同意上述課程規範」才能送出預約喔！'); return; }
+      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱並同意上述課程規範」才能送出預約喔！'); return; }
 
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       isSubmitting = true; 
