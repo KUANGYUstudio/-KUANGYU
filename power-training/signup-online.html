@@ -117,7 +117,7 @@
     .day.available .day-label { color: var(--online-main); }
     .day.selected { background-color: var(--online-main); color: #fff; border-color: var(--online-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(102, 187, 106, 0.4); }
     .day.selected .day-label { color: #fff; }
-    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: not-allowed; }
+    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer; } /* 讓已登記可點擊 */
     .day.registered .day-label { color: #b0bec5; }
     .day.full { background-color: #e0e0e0; color: #666; cursor: not-allowed; border: 2px solid var(--online-main); opacity: 0.8; }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
@@ -214,11 +214,11 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
     const selectedDates = new Set(); 
-    let myRegisteredDetails = []; // 關鍵新增：儲存報名細節（含時間）
+    let myRegisteredDetails = []; 
     let currentUser = { name: "", lineId: "", email: "" };
     let isSubmitting = false;
 
-    // Loading 文案管理 (保留您所有的文案)
+    // Loading 文案管理
     const initialLoadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     const finishLoadingMessages = ["正在穿越時光隧道⋯⋯", "準備登陸預約畫面⋯⋯"];
     
@@ -299,14 +299,13 @@
         loadingDiv.style.display = 'none';
     }
 
-    // 更新：抓取合併資料，並接收 mySignupsDetails
     async function loadMergedData() {
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=online`);
         const data = await res.json();
         return {
           dates: data.dates || [],
-          mySignupsDetails: data.mySignupsDetails || [], // 改用 details 以獲得時間
+          mySignupsDetails: data.mySignupsDetails || [], 
           counts: data.counts || {}
         };
       } catch (error) { return { dates: [], mySignupsDetails: [], counts: {} }; }
@@ -316,7 +315,7 @@
       const calendarDiv = document.getElementById('calendar'); calendarDiv.innerHTML = '';
       const allData = await loadMergedData();
       const availableDates = allData.dates, signupCounts = allData.counts, availableSet = new Set(availableDates);
-      myRegisteredDetails = allData.mySignupsDetails; // 關鍵新增
+      myRegisteredDetails = allData.mySignupsDetails; 
 
       if (!availableDates.length) {
         calendarDiv.innerHTML = '<div style="color:red; font-size: 1.2em; margin-top: 20px;">⚠️ 目前無可預約時段</div>';
@@ -324,7 +323,7 @@
       }
 
       const start = new Date(availableDates[0]), end = new Date(availableDates[availableDates.length - 1]);
-      const now = new Date().getTime(); // 取得目前時間戳
+      const nowTimestamp = new Date().getTime(); 
 
       for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
         for (let m = 0; m < 12; m++) {
@@ -361,18 +360,18 @@
               const label = document.createElement('div'); label.className = 'day-label'; label.textContent = "已登記";
               cell.appendChild(label);
               
-              // 關鍵新增：檢查是否在 10 分鐘內 (600,000 毫秒)
-              const diff = now - myRecord.signupTime;
-              if (diff <= 600000) {
-                const cancelBtn = document.createElement('button');
-                cancelBtn.textContent = '取消';
-                cancelBtn.style = "margin-top:4px; font-size:10px; padding:2px 6px; border-radius:4px; border:none; background:#ff5252; color:white; cursor:pointer; font-weight:bold;";
-                cancelBtn.onclick = (e) => {
-                   e.stopPropagation();
-                   handleCancel(dateStr);
-                };
-                cell.appendChild(cancelBtn);
-              }
+              // 邏輯改動：點擊「已登記」格子觸發取消彈窗
+              cell.onclick = () => {
+                const diff = new Date().getTime() - myRecord.signupTime;
+                if (diff <= 600000) { // 10 分鐘內
+                  const remainMin = Math.ceil((600000 - diff) / 60000);
+                  if (confirm(`您已預約 ${dateStr} 功率課。\n\n目前仍在 10 分鐘自主取消時限內（剩餘約 ${remainMin} 分鐘）。\n確定要取消預約並釋出名額嗎？`)) {
+                    handleCancel(dateStr);
+                  }
+                } else {
+                  alert(`您已預約 ${dateStr} 功率課。\n\n已超過 10 分鐘自主取消時限，如需請假請私訊教練。`);
+                }
+              };
             } else if (currentCount >= 6 && (dayOfWeek === 2 || dayOfWeek === 4)) {
               cell.classList.add('full');
               const label = document.createElement('div'); label.className = 'full-label'; label.textContent = "額滿";
@@ -394,10 +393,7 @@
       }
     }
 
-    // 關鍵新增：處理取消預約的函式
     async function handleCancel(dateStr) {
-      if (!confirm(`確定要取消 ${dateStr} 的預約嗎？\n(名額將會立即釋出，且同步移除日曆邀請)`)) return;
-      
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在同步移除日曆與登記⋯⋯";
       loading.style.display = 'flex';
