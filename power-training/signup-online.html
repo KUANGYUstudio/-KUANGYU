@@ -117,7 +117,7 @@
     .day.available .day-label { color: var(--online-main); }
     .day.selected { background-color: var(--online-main); color: #fff; border-color: var(--online-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(102, 187, 106, 0.4); }
     .day.selected .day-label { color: #fff; }
-    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer; } /* 讓已登記可點擊 */
+    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer; } /* 改為 pointer 代表可點擊 */
     .day.registered .day-label { color: #b0bec5; }
     .day.full { background-color: #e0e0e0; color: #666; cursor: not-allowed; border: 2px solid var(--online-main); opacity: 0.8; }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
@@ -360,7 +360,7 @@
               const label = document.createElement('div'); label.className = 'day-label'; label.textContent = "已登記";
               cell.appendChild(label);
               
-              // 邏輯改動：點擊「已登記」格子觸發取消彈窗
+              // 點擊「已登記」格子觸發取消彈窗
               cell.onclick = () => {
                 const diff = new Date().getTime() - myRecord.signupTime;
                 if (diff <= 600000) { // 10 分鐘內
