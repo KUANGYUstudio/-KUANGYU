@@ -66,7 +66,8 @@
     
     .notice-list { margin: 0; padding-left: 1.4em; }
     .notice-list li { margin-bottom: 8px; }
-    .section-label { font-weight: bold; color: var(--text-main); display: block; margin-top: 10px; margin-bottom: 4px; }
+    
+    .section-label { font-size: 18px; font-weight: bold; color: var(--text-main); display: block; margin-top: 20px; margin-bottom: 10px; margin-left: -1em; }
     .sub-item { display: block; margin-top: 2px; color: #888; font-size: 14px; }
 
     /* 同意條款區 */
@@ -103,7 +104,7 @@
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; transition: opacity 0.3s; }
 
-    /* 日曆與按鈕 */
+    /* 日曆與按鈕 (Grid 分離結構) */
     .month-title { font-weight: 800; font-size: 24px; margin: 1.5em 0 0.8em; color: var(--text-main); }
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
     .weekday-header { font-weight: bold; font-size: 16px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
@@ -182,10 +183,9 @@
         </div>
         <div class="notice-content">
             <ul class="notice-list">
-                <span class="section-label">線上課規範</span>
-                <li>課前請先檢查網路跟視訊設備，確保上課不中斷。</li>
-                <li>請提早3分鐘登入 Rouvy 和 Google Meet。<br>
-                    <span class="sub-item">（Rouvy有時效性，超過時間就會進不去喔！）</span>
+                <li>課前請確認網路與視訊設備，確保上課不中斷。</li>
+                <li>請提早3分鐘登入 Rouvy 並進入 Google Meet。<br>
+                    <span class="sub-item">（Rouvy 有時效性，時間過了就會被擋住喔！）</span>
                 </li>
                 <li>進入教室後請先關靜音，要發言時再開啟。</li>
 
@@ -204,7 +204,7 @@
     <div id="agreement-area" class="agreement-container">
         <label class="agreement-label">
             <input type="checkbox" id="agree-checkbox">
-            我已詳閱並同意上述課程規範
+            我已詳閱，並同意上述課程規範
         </label>
     </div>
 
@@ -348,6 +348,7 @@
             const dayOfWeek = new Date(dateStr).getDay();
             
             // 線上課邏輯：只開二四晚班，固定 19:30
+            // 這裡加上了 dayOfWeek === 2 || dayOfWeek === 4 的雙重檢查，確保週三不會出現
             let currentCount = 0;
             if (dayOfWeek === 2 || dayOfWeek === 4) {
                 currentCount = signupCounts[dateStr]?.online || 0;
@@ -361,7 +362,8 @@
               cell.classList.add('full');
               const label = document.createElement('div'); label.className = 'full-label'; label.textContent = "額滿";
               cell.appendChild(label);
-            } else if (availableSet.has(dateStr)) {
+            } else if (availableSet.has(dateStr) && (dayOfWeek === 2 || dayOfWeek === 4)) {
+              // 這裡加上了 (dayOfWeek === 2 || dayOfWeek === 4) 檢查，防止週三被誤開
               cell.classList.add('available');
               const label = document.createElement('div'); label.className = 'day-label'; label.textContent = "19:30";
               cell.appendChild(label);
@@ -387,7 +389,7 @@
     document.getElementById('submit-btn').addEventListener('click', async () => {
       if (!currentUser.name || !currentUser.lineId) { alert('請先進行會員驗證'); return; }
       if (!selectedDates.size) { alert('請至少選擇一個日期'); return; }
-      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱並同意上述課程規範」才能送出預約喔！'); return; }
+      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱，並同意上述課程規範」才能送出預約喔！'); return; }
 
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       isSubmitting = true; 
