@@ -214,18 +214,18 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
     const selectedDates = new Set(); 
-    let myRegisteredDates = new Set();
+    let myRegisteredDetails = []; // 關鍵新增：儲存報名細節（含時間）
     let currentUser = { name: "", lineId: "", email: "" };
     let isSubmitting = false;
 
-    // Loading 文案管理
+    // Loading 文案管理 (保留您所有的文案)
     const initialLoadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     const finishLoadingMessages = ["正在穿越時光隧道⋯⋯", "準備登陸預約畫面⋯⋯"];
     
     let msgIndex = 0;
     
     const loadingInterval = setInterval(() => {
-        if (isSubmitting) return; // 提交中不跑此循環
+        if (isSubmitting) return; 
         const textEl = document.getElementById('loading-text');
         const loadingDiv = document.getElementById('loading');
         if (textEl && loadingDiv.style.display !== 'none') {
@@ -299,23 +299,24 @@
         loadingDiv.style.display = 'none';
     }
 
+    // 更新：抓取合併資料，並接收 mySignupsDetails
     async function loadMergedData() {
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=online`);
         const data = await res.json();
         return {
           dates: data.dates || [],
-          mySignups: new Set(data.mySignups || []),
+          mySignupsDetails: data.mySignupsDetails || [], // 改用 details 以獲得時間
           counts: data.counts || {}
         };
-      } catch (error) { return { dates: [], mySignups: new Set(), counts: {} }; }
+      } catch (error) { return { dates: [], mySignupsDetails: [], counts: {} }; }
     }
 
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar'); calendarDiv.innerHTML = '';
       const allData = await loadMergedData();
-      const availableDates = allData.dates, mySignups = allData.mySignups, signupCounts = allData.counts, availableSet = new Set(availableDates);
-      myRegisteredDates = mySignups;
+      const availableDates = allData.dates, signupCounts = allData.counts, availableSet = new Set(availableDates);
+      myRegisteredDetails = allData.mySignupsDetails; // 關鍵新增
 
       if (!availableDates.length) {
         calendarDiv.innerHTML = '<div style="color:red; font-size: 1.2em; margin-top: 20px;">⚠️ 目前無可預約時段</div>';
@@ -323,6 +324,8 @@
       }
 
       const start = new Date(availableDates[0]), end = new Date(availableDates[availableDates.length - 1]);
+      const now = new Date().getTime(); // 取得目前時間戳
+
       for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
         for (let m = 0; m < 12; m++) {
           const first = new Date(y, m, 1), last = new Date(y, m + 1, 0);
@@ -346,24 +349,35 @@
             cell.appendChild(numSpan);
 
             const dayOfWeek = new Date(dateStr).getDay();
+            const myRecord = myRegisteredDetails.find(r => r.date === dateStr);
             
-            // 線上課邏輯：只開二四晚班，固定 19:30
-            // 這裡加上了 dayOfWeek === 2 || dayOfWeek === 4 的雙重檢查，確保週三不會出現
             let currentCount = 0;
             if (dayOfWeek === 2 || dayOfWeek === 4) {
                 currentCount = signupCounts[dateStr]?.online || 0;
             }
 
-            if (myRegisteredDates.has(dateStr)) {
+            if (myRecord) {
               cell.classList.add('registered');
               const label = document.createElement('div'); label.className = 'day-label'; label.textContent = "已登記";
               cell.appendChild(label);
+              
+              // 關鍵新增：檢查是否在 10 分鐘內 (600,000 毫秒)
+              const diff = now - myRecord.signupTime;
+              if (diff <= 600000) {
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = '取消';
+                cancelBtn.style = "margin-top:4px; font-size:10px; padding:2px 6px; border-radius:4px; border:none; background:#ff5252; color:white; cursor:pointer; font-weight:bold;";
+                cancelBtn.onclick = (e) => {
+                   e.stopPropagation();
+                   handleCancel(dateStr);
+                };
+                cell.appendChild(cancelBtn);
+              }
             } else if (currentCount >= 6 && (dayOfWeek === 2 || dayOfWeek === 4)) {
               cell.classList.add('full');
               const label = document.createElement('div'); label.className = 'full-label'; label.textContent = "額滿";
               cell.appendChild(label);
             } else if (availableSet.has(dateStr) && (dayOfWeek === 2 || dayOfWeek === 4)) {
-              // 這裡加上了 (dayOfWeek === 2 || dayOfWeek === 4) 檢查，防止週三被誤開
               cell.classList.add('available');
               const label = document.createElement('div'); label.className = 'day-label'; label.textContent = "19:30";
               cell.appendChild(label);
@@ -377,6 +391,28 @@
           }
           calendarDiv.appendChild(grid);
         }
+      }
+    }
+
+    // 關鍵新增：處理取消預約的函式
+    async function handleCancel(dateStr) {
+      if (!confirm(`確定要取消 ${dateStr} 的預約嗎？\n(名額將會立即釋出，且同步移除日曆邀請)`)) return;
+      
+      const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
+      loadingText.textContent = "正在同步移除日曆與登記⋯⋯";
+      loading.style.display = 'flex';
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=online`);
+        const data = await res.json();
+        loading.style.display = 'none';
+        alert(data.message);
+        if (data.status === "success") {
+          location.reload(); 
+        }
+      } catch (e) {
+        loading.style.display = 'none';
+        alert("取消失敗，請稍後再試或私訊教練");
       }
     }
 
@@ -394,18 +430,15 @@
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       isSubmitting = true; 
       
-      // 送出選課時的文案
       loadingText.textContent = "正在寫入登記中⋯⋯";
       loading.style.display = 'flex';
 
-      // 模擬寫入過程中的文案切換
       const writeTimer = setTimeout(() => {
         loadingText.textContent = "我快寫好了 等我一下⋯⋯";
       }, 3000);
 
       try {
         for (const date of selectedDates) {
-          // 線上課固定 courseType=online
           await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=online&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`);
         }
         clearTimeout(writeTimer);
