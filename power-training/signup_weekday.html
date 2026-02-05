@@ -63,7 +63,7 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
     
-    /* 注意事項區 (摺疊版) */
+    /* 課程規範區 (摺疊版) */
     .notice-box {
         text-align: left;
         background-color: #fff; 
@@ -203,7 +203,7 @@
 
     <div class="notice-box" id="notice-box" onclick="toggleNotice()">
         <div class="notice-header">
-            <div class="notice-title">注意事項</div>
+            <div class=>課程規範ˋ</div>
             <div class="notice-arrow">▼</div> 
         </div>
         <div class="notice-content">
@@ -226,7 +226,7 @@
     <div id="agreement-area" class="agreement-container">
         <label class="agreement-label">
             <input type="checkbox" id="agree-checkbox">
-            我已詳閱並同意上述注意事項
+            我已詳閱，並同意上述課程規範
         </label>
     </div>
 
@@ -269,7 +269,7 @@
         }
     }, 2000); 
 
-    // 切換注意事項展開/收合
+    // 切換課程規範展開/收合
     function toggleNotice() {
         const box = document.getElementById('notice-box');
         box.classList.toggle('open');
@@ -504,7 +504,7 @@
       }
 
       if (!document.getElementById('agree-checkbox').checked) {
-          alert('請勾選「我已詳閱並同意上述注意事項」才能送出預約喔！');
+          alert('請勾選「我已詳閱，並同意上述課程規範」才能送出預約喔！');
           return;
       }
 
