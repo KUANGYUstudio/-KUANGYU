@@ -23,14 +23,22 @@
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       background: var(--bg-color); 
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       color: var(--text-main);
       min-height: 100vh;
-      display: flex; justify-content: center; align-items: center; 
+      display: flex;
+      justify-content: center;
+      align-items: center; 
     }
     .container {
-      max-width: 800px; width: 100%; margin: 0 auto; padding: 20px;
-      box-sizing: border-box; text-align: center; position: relative; 
+      max-width: 800px; 
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+      position: relative; 
     }
     
     /* Logo 設定 */
@@ -57,21 +65,58 @@
     
     /* 課程規範區 (摺疊版) */
     .notice-box {
-        text-align: left; background-color: #fff; 
-        color: #666; border-radius: 12px;
-        border: 1px dashed #cfd8dc; font-size: 15px; 
-        line-height: 1.6; max-width: 600px;
-        margin: 0 auto 20px; overflow: hidden; 
-        cursor: pointer; transition: all 0.3s ease;
+        text-align: left;
+        background-color: #fff; 
+        color: #666; 
+        border-radius: 12px;
+        border: 1px dashed #cfd8dc; 
+        font-size: 15px; 
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto 20px; 
+        overflow: hidden; 
+        cursor: pointer;   
+        transition: all 0.3s ease;
     }
-    .notice-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background-color: #fff; }
-    .notice-title { font-size: 18px; font-weight: bold; color: var(--text-main); margin: 0; }
-    .notice-arrow { font-size: 12px; color: #999; transition: transform 0.3s ease; }
-    .notice-content { max-height: 0; opacity: 0; padding: 0 20px; transition: all 0.3s ease-out; overflow: hidden; }
+    
+    .notice-header {
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff; 
+    }
+
+    .notice-title {
+        font-size: 18px;        
+        font-weight: bold;      
+        color: var(--text-main);
+        margin: 0; 
+    }
+    
+    .notice-arrow {
+        font-size: 12px;
+        color: #999;
+        transition: transform 0.3s ease;
+    }
+    
+    .notice-content {
+        max-height: 0; 
+        opacity: 0;    
+        padding: 0 20px; 
+        transition: all 0.3s ease-out; 
+        overflow: hidden;
+    }
 
     /* 展開狀態 */
-    .notice-box.open .notice-arrow { transform: rotate(180deg); }
-    .notice-box.open .notice-content { max-height: 500px; opacity: 1; padding-bottom: 15px; }
+    .notice-box.open .notice-arrow {
+        transform: rotate(180deg); 
+    }
+    .notice-box.open .notice-content {
+        max-height: 500px; 
+        opacity: 1;
+        padding-bottom: 15px; 
+    }
     
     .notice-list { margin: 0; padding-left: 1.4em; }
     .notice-list li { margin-bottom: 4px; }
@@ -81,6 +126,29 @@
     .agreement-container { margin: 20px auto 10px; text-align: center; max-width: 260px; display: none; }
     .agreement-label { display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--text-main); cursor: pointer; user-select: none; }
     .agreement-label input { width: 18px; height: 18px; margin-right: 8px; cursor: pointer; accent-color: var(--evening-main); }
+
+    /* 美化版成功彈窗 (Modal) */
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 10000;
+    }
+    .modal-box {
+        background: white; padding: 30px; border-radius: 24px; text-align: center;
+        max-width: 320px; width: 85%; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        animation: modalShow 0.3s ease-out;
+    }
+    @keyframes modalShow {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+    .modal-icon { font-size: 55px; margin-bottom: 15px; display: block; }
+    .modal-title { font-size: 20px; font-weight: 800; color: #2c3e50; margin-bottom: 10px; }
+    .modal-btn {
+        margin-top: 20px; padding: 12px 0; border-radius: 50px; border: none;
+        background: var(--evening-main); color: white; font-weight: bold; cursor: pointer;
+        width: 100%; font-size: 16px; transition: background 0.2s;
+    }
+    .modal-btn:hover { background: var(--evening-light); }
 
     /* Loading 遮罩 */
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
@@ -127,6 +195,15 @@
   </style>
 </head>
 <body>
+  <div id="success-modal" class="modal-overlay">
+    <div class="modal-box">
+        <span class="modal-icon">✅</span>
+        <div class="modal-title">登記成功！</div>
+        <div style="color: #666; font-size: 14px;">教練收到你的預約囉</div>
+        <button class="modal-btn" onclick="closeModal()">確定</button>
+    </div>
+  </div>
+
   <div id="loading" class="loading-overlay">
     <div class="loading-spinner"></div>
     <div id="loading-text" class="loading-text">正在放下甜甜圈⋯⋯</div>
@@ -190,83 +267,111 @@
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
-    const selectedDates = new Set(), myRegisteredDates = new Set();
-    let currentUser = { name: "", lineId: "", email: "" }, isSubmitting = false;
+    const selectedDates = new Set(); 
+    let myRegisteredDates = new Set();
+    let currentUser = { name: "", lineId: "", email: "" };
+    let isSubmitting = false;
 
-    // Loading 文案循環
     const loadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     let msgIndex = 0;
-    setInterval(() => {
+    
+    const loadingInterval = setInterval(() => {
+        if (isSubmitting) return;
         const textEl = document.getElementById('loading-text');
-        if (textEl && document.getElementById('loading').style.display !== 'none' && !isSubmitting) {
-            msgIndex = (msgIndex + 1) % loadingMessages.length;
-            textEl.textContent = loadingMessages[msgIndex];
+        const loadingDiv = document.getElementById('loading');
+        if (textEl && loadingDiv.style.display !== 'none') {
+            msgIndex++;
+            if (msgIndex < loadingMessages.length) {
+                textEl.textContent = loadingMessages[msgIndex];
+            } else {
+                clearInterval(loadingInterval);
+            }
         }
     }, 2000); 
 
     function toggleNotice() { document.getElementById('notice-box').classList.toggle('open'); }
     function getParam(key) { return new URLSearchParams(window.location.search).get(key) || ''; }
 
+    // 關閉美化彈窗並跳轉
+    function closeModal() {
+        const nextUrl = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId) + '&finish=1';
+        window.location.href = nextUrl;
+    }
+
     async function initSystem() {
-        let name = getParam('name'), lineId = getParam('lineId');
+        const loadingDiv = document.getElementById('loading');
+        const loadingText = document.getElementById('loading-text');
+        loadingDiv.style.display = 'flex';
+
+        let name = getParam('name'), lineId = getParam('lineId'), finish = getParam('finish');
+
+        if (finish === '1') {
+            loadingText.textContent = "準備登陸預約畫面⋯⋯";
+        }
+
         if (name && lineId) {
-            currentUser = { name, lineId };
+            currentUser.name = name; currentUser.lineId = lineId;
             loginSuccess();
         } else {
-            document.getElementById('loading').style.display = 'none';
+            loadingDiv.style.display = 'none';
             document.getElementById('login-area').style.display = 'block';
         }
     }
 
     async function searchMember() {
-        const email = document.getElementById('member-search-email').value.trim();
-        const errorMsg = document.getElementById('login-error'), loading = document.getElementById('loading');
-        if (!email) { errorMsg.textContent = "請輸入 Email"; return; }
-        loading.style.display = 'flex';
+        const emailInput = document.getElementById('member-search-email').value.trim();
+        const errorMsg = document.getElementById('login-error'), loadingDiv = document.getElementById('loading');
+        if (!emailInput) { errorMsg.textContent = "請輸入 Email"; return; }
+        loadingDiv.style.display = 'flex';
+        document.getElementById('loading-text').textContent = "正在搜尋會員資料...";
         try {
-            const res = await fetch(`${SCRIPT_URL}?mode=search_member&email=${encodeURIComponent(email)}`);
+            const res = await fetch(`${SCRIPT_URL}?mode=search_member&email=${encodeURIComponent(emailInput)}`);
             const data = await res.json();
             if (data.found) {
-                currentUser = { name: data.name, lineId: data.lineId, email: email };
+                currentUser.name = data.name; currentUser.lineId = data.lineId; currentUser.email = emailInput;
+                errorMsg.textContent = "";
                 loginSuccess();
             } else {
-                loading.style.display = 'none';
+                loadingDiv.style.display = 'none';
                 errorMsg.textContent = "❌ 找不到此 Email，請確認是否與報名資料一致";
             }
-        } catch (e) { loading.style.display = 'none'; errorMsg.textContent = "系統連線錯誤"; }
+        } catch (e) { loadingDiv.style.display = 'none'; errorMsg.textContent = "系統連線錯誤"; }
     }
 
     async function loginSuccess() {
+        const loadingDiv = document.getElementById('loading');
         document.getElementById('login-area').style.display = 'none'; 
         document.getElementById('submit-btn').style.display = 'block'; 
         document.getElementById('agreement-area').style.display = 'block'; 
+        if(loadingDiv.style.display === 'none') loadingDiv.style.display = 'flex';
         await renderCalendar();
-        document.getElementById('loading').style.display = 'none';
+        loadingDiv.style.display = 'none';
     }
 
     async function loadMergedData() {
       try {
-        const [resEv, resEa] = await Promise.all([
+        const [resEvening, resEarly] = await Promise.all([
             fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=evening`),
             fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=early`)
         ]);
-        const dEv = await resEv.json(), dEa = await resEa.json();
+        const dataEvening = await resEvening.json(), dataEarly = await resEarly.json();
         return {
-          dates: [...new Set([...(dEv.dates || []), ...(dEa.dates || [])])].sort(),
-          mySignups: new Set([...(dEv.mySignups || []), ...(dEa.mySignups || [])]),
-          counts: dEv.counts || {}
+          dates: [...new Set([...(dataEvening.dates || []), ...(dataEarly.dates || [])])].sort(),
+          mySignups: new Set([...(dataEvening.mySignups || []), ...(dataEarly.mySignups || [])]),
+          counts: dataEvening.counts || {}
         };
-      } catch (e) { return { dates: [], mySignups: new Set(), counts: {} }; }
+      } catch (error) { return { dates: [], mySignups: new Set(), counts: {} }; }
     }
 
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar'); calendarDiv.innerHTML = '';
       const allData = await loadMergedData();
-      const availableDates = allData.dates, signupCounts = allData.counts, availableSet = new Set(availableDates);
-      allData.mySignups.forEach(d => myRegisteredDates.add(d));
+      const availableDates = allData.dates, mySignups = allData.mySignups, signupCounts = allData.counts, availableSet = new Set(availableDates);
+      myRegisteredDates = mySignups;
 
       if (!availableDates.length) {
-        calendarDiv.innerHTML = '<div style="color:red; margin-top: 20px;">⚠️ 目前無可預約時段</div>'; return;
+        calendarDiv.innerHTML = '<div style="color:red; font-size: 1.2em; margin-top: 20px;">⚠️ 目前無可預約時段</div>';
+        return;
       }
 
       const start = new Date(availableDates[0]), end = new Date(availableDates[availableDates.length - 1]);
@@ -289,22 +394,30 @@
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
             const cell = document.createElement('div'); cell.className = 'day';
+            const numSpan = document.createElement('span'); numSpan.className = 'day-number'; numSpan.textContent = d;
+            cell.appendChild(numSpan);
+
             const dayOfWeek = new Date(dateStr).getDay();
-            let info = { type: "", label: "", theme: "" };
+            let type = "", currentCount = 0, labelText = "", themeClass = "";
 
-            if (dayOfWeek === 3) info = { type: "early", label: "06:30", theme: "morning" };
-            else if (dayOfWeek === 2 || dayOfWeek === 4) info = { type: "evening", label: "19:30", theme: "evening" };
-
-            cell.innerHTML = `<span class="day-number">${d}</span>`;
-            const count = info.type === "early" ? (signupCounts[dateStr]?.morning || 0) : (signupCounts[dateStr]?.evening || 0);
+            if (dayOfWeek === 3) { 
+                type = "early"; currentCount = signupCounts[dateStr]?.morning || 0; labelText = "06:30"; themeClass = "morning";
+            } else if (dayOfWeek === 2 || dayOfWeek === 4) { 
+                type = "evening"; currentCount = signupCounts[dateStr]?.evening || 0; labelText = "19:30"; themeClass = "evening";
+            }
 
             if (myRegisteredDates.has(dateStr)) {
-              cell.classList.add('registered'); cell.innerHTML += `<div class="day-label">已登記</div>`;
-            } else if (count >= 6 && info.type) {
-              cell.classList.add('full'); cell.innerHTML += `<div class="full-label">額滿</div>`;
-            } else if (availableSet.has(dateStr) && info.type) {
-              cell.classList.add('available', info.theme);
-              cell.innerHTML += `<div class="day-label">${info.label}</div>`;
+              cell.classList.add('registered');
+              const label = document.createElement('div'); label.className = 'day-label'; label.textContent = "已登記";
+              cell.appendChild(label);
+            } else if (currentCount >= 6 && type) {
+              cell.classList.add('full');
+              const label = document.createElement('div'); label.className = 'full-label'; label.textContent = "額滿";
+              cell.appendChild(label);
+            } else if (availableSet.has(dateStr) && type) {
+              cell.classList.add('available', themeClass);
+              const label = document.createElement('div'); label.className = 'day-label'; label.textContent = labelText;
+              cell.appendChild(label);
               cell.onclick = () => {
                 if (selectedDates.has(dateStr)) { selectedDates.delete(dateStr); cell.classList.remove('selected'); }
                 else { selectedDates.add(dateStr); cell.classList.add('selected'); }
@@ -320,22 +433,29 @@
 
     function updateSubmitButton() {
         const btn = document.getElementById('submit-btn');
-        btn.textContent = selectedDates.size ? `確認送出 (${selectedDates.size}堂)` : "請先選擇日期";
-        btn.disabled = !selectedDates.size;
+        btn.textContent = selectedDates.size > 0 ? `確認送出 (${selectedDates.size}堂)` : "請先選擇日期";
+        btn.disabled = selectedDates.size === 0;
     }
 
     document.getElementById('submit-btn').addEventListener('click', async () => {
-      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選同意課程規範'); return; }
-      const btn = document.getElementById('submit-btn'), loading = document.getElementById('loading');
-      isSubmitting = true; loading.style.display = 'flex'; btn.disabled = true;
+      if (!currentUser.name || !currentUser.lineId) { alert('請先進行會員驗證'); return; }
+      if (!selectedDates.size) { alert('請至少選擇一個日期'); return; }
+      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱，並同意上述課程規範」才能送出預約喔！'); return; }
+
+      const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
+      isSubmitting = true; 
+      loadingText.textContent = "完成預約！正在穿越時光隧道⋯⋯";
+      loading.style.display = 'flex';
+
       try {
         for (const date of selectedDates) {
-          const type = new Date(date).getDay() === 3 ? "early" : "evening";
-          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${type}&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`);
+          const courseType = new Date(date).getDay() === 3 ? "early" : "evening";
+          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${courseType}&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`);
         }
-        alert('✅ 登記成功！');
-        window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId);
-      } catch (e) { isSubmitting = false; loading.style.display = 'none'; btn.disabled = false; alert('⚠️ 發生錯誤'); }
+        document.getElementById('success-modal').style.display = 'flex';
+      } catch (error) { 
+        isSubmitting = false; loading.style.display = 'none'; alert('⚠️ 發生錯誤'); 
+      }
     });
 
     initSystem();
