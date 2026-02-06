@@ -122,6 +122,14 @@
     </div>
   </div>
 
+  <div id="alert-modal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-title" id="alert-title">提示</div>
+        <div id="alert-msg" style="color: #444; font-size: 16px; line-height: 1.6; margin: 15px 0;"></div>
+        <button class="modal-btn" id="alert-btn">確定</button>
+    </div>
+  </div>
+
   <div id="loading" class="loading-overlay"><div class="loading-spinner"></div><div id="loading-text" class="loading-text">正在放下甜甜圈⋯⋯</div></div>
 
   <div class="container">
@@ -174,6 +182,23 @@
     function getParam(key) { return new URLSearchParams(window.location.search).get(key) || ''; }
     function closeModal() { window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId) + '&finish=1'; }
     function closeCancelModal() { document.getElementById('cancel-modal').style.display = 'none'; if (countdownInterval) clearInterval(countdownInterval); }
+
+    // 🔥 新增：通用訊息視窗控制函式
+    function showSystemAlert(title, message, callback) {
+        document.getElementById('alert-title').textContent = title;
+        document.getElementById('alert-msg').textContent = message;
+        
+        const btn = document.getElementById('alert-btn');
+        // 移除舊的事件監聽，防止疊加
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+
+        newBtn.onclick = () => {
+             document.getElementById('alert-modal').style.display = 'none';
+             if (callback) callback();
+        };
+        document.getElementById('alert-modal').style.display = 'flex';
+    }
 
     async function initSystem() {
         const loadingDiv = document.getElementById('loading');
@@ -287,14 +312,31 @@
       }
     }
 
+    // 🔥 修改：取消邏輯現在使用 showSystemAlert，不再用醜醜的原生 alert
     async function handleCancel(dateStr) {
       document.getElementById('loading-text').textContent = "正在取消登記⋯⋯";
       document.getElementById('loading').style.display = 'flex';
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=online`);
         const data = await res.json();
-        alert(data.message); location.reload();
-      } catch (e) { document.getElementById('loading').style.display = 'none'; }
+        
+        // 隱藏 loading
+        document.getElementById('loading').style.display = 'none';
+
+        // 使用自訂彈窗
+        showSystemAlert(
+             data.status === 'success' ? '預約調整成功' : '提示', 
+             data.message, 
+             () => {
+                 // 只有成功時才重整頁面，或者無論如何都重整確保資料正確
+                 location.reload(); 
+             }
+        );
+
+      } catch (e) { 
+        document.getElementById('loading').style.display = 'none';
+        showSystemAlert("連線錯誤", "系統連線失敗，請稍後再試。", null);
+      }
     }
 
     document.getElementById('submit-btn').addEventListener('click', async () => {
