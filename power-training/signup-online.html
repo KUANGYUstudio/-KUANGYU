@@ -133,7 +133,7 @@
 
   <div id="cancel-modal" class="modal-overlay">
     <div class="modal-box">
-        <div class="modal-title" id="cancel-modal-title">調整登記</div>
+        <div class="modal-title" id="cancel-modal-title">取消登記</div>
         <div id="cancel-modal-msg" style="color: #444; font-size: 16px; line-height: 1.8; margin: 15px 0;"></div>
         <div id="cancel-modal-footer" style="display: flex; gap: 10px;">
           <button class="modal-btn btn-gray" onclick="closeCancelModal()">先不要</button>
@@ -278,8 +278,8 @@
                   const closeBtn = document.getElementById('cancel-close-btn');
                   if (remainMs > 0) {
                     const mins = Math.floor(remainMs / 60000), secs = Math.floor((remainMs % 60000) / 1000);
-                    titleEl.textContent = "調整登記";
-                    msgEl.innerHTML = `您已登記 ${dateStr} 功率課。<br>還有 <b style="font-size: 22px; color: var(--cancel-gold);">${mins} 分 ${secs.toString().padStart(2, '0')} 秒</b> 可以修改登記喔！`;
+                    titleEl.textContent = "取消登記";
+                    msgEl.innerHTML = `您已登記 ${dateStr} 功率課。<br>還有 <b style="font-size: 22px; color: var(--cancel-gold);">${mins} 分 ${secs.toString().padStart(2, '0')} 秒</b> 可以取消登記喔！`;
                     footer.style.display = 'flex'; closeBtn.style.display = 'none';
                     document.getElementById('confirm-cancel-btn').onclick = () => { closeCancelModal(); handleCancel(dateStr); };
                   } else {
