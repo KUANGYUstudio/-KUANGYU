@@ -2,22 +2,20 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>平日功率課</title>
+  <title>線上功率課</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       🎨 配色定義 (源自 FirstClass)
+       🎨 配色定義 (依照您要求的格式)
        ========================================= */
     :root {
-      --evening-main: #00838f; 
-      --evening-light: #00acc1;
-      --evening-bg: #e0f7fa;
-      --morning-main: #ffb300; 
-      --morning-light: #ffca28;
-      --morning-bg: #fff8e1;
+      --online-main: #66bb6a; 
+      --online-light: #81c784;
+      --online-bg: #e8f5e9;
       --text-main: #2c3e50;
       --text-sub: #546e7a;
       --bg-color: #ffffff;
+      --cancel-gold: #ffa000;
     }
 
     body {
@@ -39,20 +37,18 @@
     h1 { font-size: 32px; margin: 0.1em 0 0.2em; color: var(--text-main); font-weight: 800; letter-spacing: 1px; }
 
     /* 歡迎區 */
-    .user-welcome { font-size: 18px; color: var(--evening-main); margin-bottom: 4px; font-weight: bold; min-height: 24px; }
+    .user-welcome { font-size: 18px; color: var(--online-main); margin-bottom: 4px; font-weight: bold; min-height: 24px; }
     .login-section { background-color: #fafafa; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; display: none; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; }
     .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
     .login-input-group { display: flex; gap: 8px; }
     .login-input { flex: 1; padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd; outline: none; transition: border 0.3s; }
-    .login-input:focus { border-color: var(--evening-light); }
+    .login-input:focus { border-color: var(--online-light); }
     .login-btn { padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: var(--text-main); color: white; cursor: pointer; font-weight: bold; }
     
     /* 課程時間表 */
     .schedule-box { text-align: left; display: block; margin-bottom: 15px; background: #fafafa; padding: 15px 20px; border-radius: 12px; border: 1px solid #eee; max-width: 600px; margin-left: auto; margin-right: auto; }
     .schedule-row { margin: 8px 0; font-size: 16px; color: var(--text-sub); display: flex; align-items: center; }
-    .time-badge { display: inline-block; width: 50px; text-align: center; padding: 4px 0; border-radius: 6px; font-size: 14px; margin-right: 12px; font-weight: bold; color: white; flex-shrink: 0; }
-    .badge-morning { background-color: var(--morning-light); }
-    .badge-evening { background-color: var(--evening-light); }
+    .time-badge { display: inline-block; width: 50px; text-align: center; padding: 4px 0; border-radius: 6px; font-size: 14px; margin-right: 12px; font-weight: bold; color: white; flex-shrink: 0; background-color: var(--online-main); }
     
     /* 課程規範摺疊區 */
     .notice-box {
@@ -64,325 +60,242 @@
     .notice-arrow { font-size: 12px; color: #999; transition: transform 0.3s ease; }
     .notice-content { max-height: 0; opacity: 0; padding: 0 20px; transition: all 0.3s ease-out; overflow: hidden; }
     .notice-box.open .notice-arrow { transform: rotate(180deg); }
-    .notice-box.open .notice-content { max-height: 500px; opacity: 1; padding-bottom: 15px; }
-    
+    .notice-box.open .notice-content { max-height: 800px; opacity: 1; padding-bottom: 15px; }
     .notice-list { margin: 0; padding-left: 1.4em; }
-    .notice-list li { margin-bottom: 4px; }
-    .sub-item { display: block; margin-top: 4px; margin-left: 0.5em; color: #666; }
+    .notice-list li { margin-bottom: 8px; }
+    .section-label { font-size: 18px; font-weight: bold; color: var(--text-main); display: block; margin-top: 20px; margin-bottom: 10px; margin-left: -1em; }
+    .sub-item { display: block; margin-top: 2px; color: #888; font-size: 14px; }
 
-    /* 同意條款區 */
     .agreement-container { margin: 20px auto 10px; text-align: center; max-width: 260px; display: none; }
     .agreement-label { display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--text-main); cursor: pointer; user-select: none; }
-    .agreement-label input { width: 18px; height: 18px; margin-right: 8px; cursor: pointer; accent-color: var(--evening-main); }
+    .agreement-label input { width: 18px; height: 18px; margin-right: 8px; cursor: pointer; accent-color: var(--online-main); }
 
-    /* 美化版成功彈窗 (Modal) */
-    .modal-overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 10000;
-    }
-    .modal-box {
-        background: white; padding: 30px; border-radius: 24px; text-align: center;
-        max-width: 320px; width: 85%; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-        animation: modalShow 0.3s ease-out;
-    }
-    @keyframes modalShow {
-        from { transform: scale(0.8); opacity: 0; }
-        to { transform: scale(1); opacity: 1; }
-    }
-    .modal-icon { font-size: 55px; margin-bottom: 15px; display: block; }
+    /* Modal 彈窗樣式 */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 10000; }
+    .modal-box { background: white; padding: 30px; border-radius: 24px; text-align: center; max-width: 320px; width: 85%; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: modalShow 0.3s ease-out; }
+    @keyframes modalShow { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .modal-title { font-size: 20px; font-weight: 800; color: #2c3e50; margin-bottom: 10px; }
-    .modal-btn {
-        margin-top: 20px; padding: 12px 0; border-radius: 50px; border: none;
-        background: var(--evening-main); color: white; font-weight: bold; cursor: pointer;
-        width: 100%; font-size: 16px; transition: background 0.2s;
-    }
-    .modal-btn:hover { background: var(--evening-light); }
+    .modal-btn { margin-top: 20px; padding: 12px 0; border-radius: 50px; border: none; background: var(--online-main); color: white; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: background 0.2s; }
 
-    /* Loading 遮罩 */
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-    .loading-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--evening-main); border-radius: 50%; animation: spin 1s linear infinite; }
+    .loading-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--online-main); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; transition: opacity 0.3s; }
 
-    /* 日曆與按鈕 */
+    /* =========================================
+       📅 日曆格式 (完全比照 weekday 版本)
+       ========================================= */
     .month-title { font-weight: 800; font-size: 24px; margin: 1.5em 0 0.8em; color: var(--text-main); }
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
     .weekday-header { font-weight: bold; font-size: 16px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
     .day { aspect-ratio: 1; width: 100%; font-size: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; background-color: #f7f9fa; color: #cfd8dc; cursor: default; box-sizing: border-box; transition: all 0.1s; position: relative; }
-    .day-number { font-size: 22px; font-weight: bold; margin-bottom: 2px; line-height: 1; }
+    .day-number { font-size: 22px !important; font-weight: bold; margin-bottom: 2px; line-height: 1; }
     .day-label { font-size: 12px; margin-top: 2px; font-weight: normal; line-height: 1; }
-    .day.available.evening { background-color: #fff; color: #333; border: 2px solid var(--evening-main); cursor: pointer; }
-    .day.available.evening .day-label { color: var(--evening-main); font-weight: normal; }
-    .day.selected.evening { background-color: var(--evening-main); color: #fff; border-color: var(--evening-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0, 131, 143, 0.4); }
-    .day.selected.evening .day-label { color: #fff; }
-    .day.available.morning { background-color: #fff; color: #333; border: 2px solid var(--morning-main); cursor: pointer; }
-    .day.available.morning .day-label { color: var(--morning-main); font-weight: normal; }
-    .day.selected.morning { background-color: var(--morning-main); color: #fff; border-color: var(--morning-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(255, 179, 0, 0.4); }
-    .day.selected.morning .day-label { color: #fff; }
-    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: not-allowed; }
+    
+    .day.available { background-color: #fff; color: #333; border: 2px solid var(--online-main); cursor: pointer; }
+    .day.available .day-label { color: var(--online-main); font-weight: normal; }
+    
+    .day.selected { background-color: var(--online-main) !important; color: #fff !important; border-color: var(--online-main) !important; transform: scale(1.05); box-shadow: 0 4px 10px rgba(102, 187, 106, 0.4); }
+    .day.selected .day-label { color: #fff !important; }
+
+    .day.registered.can-cancel { background-color: #f1f8e9 !important; border: 2px solid var(--online-main) !important; color: var(--online-main) !important; cursor: pointer; }
+    .day.registered.can-cancel .day-label { color: var(--online-main) !important; }
+
+    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer; }
     .day.registered .day-label { color: #b0bec5; font-weight: normal; }
-    .day.full { background-color: #e0e0e0; color: #666; cursor: not-allowed; border: 2px solid var(--evening-main); opacity: 0.8; }
+
+    .day.full { background-color: #e0e0e0; color: #666; cursor: not-allowed; border: 2px solid var(--online-main); opacity: 0.8; }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
     
-    #submit-btn { margin: 15px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--evening-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3); }
+    #submit-btn { margin: 15px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--online-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(102, 187, 106, 0.3); }
     #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; box-shadow: none; }
 
+    .btn-red { background-color: #ff5252 !important; }
+    .btn-gray { background-color: #eee !important; color: #333 !important; }
+
     @media (max-width: 750px) {
-      .container { margin: 0; padding: 15px; }
-      h1 { font-size: 26px; margin-top: 0.1em; }
-      .schedule-box { padding: 12px 15px; }
-      .notice-box { margin: 0 auto 20px; }
-      .notice-header { padding: 12px 15px; }
-      .notice-content { padding: 0 15px; }
-      .calendar-header, .calendar-grid { gap: 4px; }
-      .day { font-size: 22px; border-radius: 10px; }
-      .day-number { font-size: 18px; } 
-      .day-label { font-size: 10px; }
-      #submit-btn { font-size: 18px; max-width: 60%; }
+      .container { margin: 0; padding: 15px; } h1 { font-size: 26px; margin-top: 0.1em; }
+      .calendar-header, .calendar-grid { gap: 4px; } .day { font-size: 22px; border-radius: 10px; }
+      .day-number { font-size: 18px; } .day-label { font-size: 10px; } #submit-btn { font-size: 18px; max-width: 60%; }
     }
   </style>
 </head>
 <body>
   <div id="success-modal" class="modal-overlay">
+    <div class="modal-box"><div class="modal-title">登記成功</div><div style="color: #666; font-size: 14px;">教練收到你的預約囉</div><button class="modal-btn" onclick="closeModal()">確定</button></div>
+  </div>
+
+  <div id="cancel-modal" class="modal-overlay">
     <div class="modal-box">
-        <span class="modal-icon">✅</span>
-        <div class="modal-title">登記成功！</div>
-        <div style="color: #666; font-size: 14px;">教練收到你的預約囉</div>
-        <button class="modal-btn" onclick="closeModal()">確定</button>
+        <div class="modal-title" id="cancel-modal-title">調整登記</div>
+        <div id="cancel-modal-msg" style="color: #444; font-size: 16px; line-height: 1.8; margin: 15px 0;"></div>
+        <div id="cancel-modal-footer" style="display: flex; gap: 10px;">
+          <button class="modal-btn btn-gray" onclick="closeCancelModal()">先不要</button>
+          <button class="modal-btn btn-red" id="confirm-cancel-btn">取消登記</button>
+        </div>
+        <button id="cancel-close-btn" class="modal-btn" style="display:none;" onclick="closeCancelModal()">確定</button>
     </div>
   </div>
 
-  <div id="loading" class="loading-overlay">
-    <div class="loading-spinner"></div>
-    <div id="loading-text" class="loading-text">正在放下甜甜圈⋯⋯</div>
-  </div>
+  <div id="loading" class="loading-overlay"><div class="loading-spinner"></div><div id="loading-text" class="loading-text">正在放下甜甜圈⋯⋯</div></div>
 
   <div class="container">
     <img src="logo_icon.png" alt="光聿 Logo" class="main-logo">
-    <h1>平日功率課</h1>
+    <h1>線上功率課</h1>
     <div id="welcome-msg" class="user-welcome"></div> 
-
     <div id="login-area" class="login-section">
-        <div class="login-title">⚠️ 請驗證會員身分</div>
+        <div class="login-title">請驗證會員身分</div>
         <div style="font-size:13px; color:#666; margin-bottom:10px;">請輸入您留存的「Email」進行驗證</div>
         <div class="login-input-group">
-            <input type="email" id="member-search-email" class="login-input" placeholder="例如：example@gmail.com">
-            <button onclick="searchMember()" class="login-btn">驗證</button>
-        </div>
-        <div id="login-error" style="color:#e53935; margin-top:8px; font-size:13px;"></div>
+            <input type="email" id="member-search-email" class="login-input" placeholder="例如：example@gmail.com"><button onclick="searchMember()" class="login-btn">驗證</button>
+        </div><div id="login-error" style="color:#e53935; margin-top:8px; font-size:13px;"></div>
     </div>
-
-    <div class="schedule-box">
-        <div class="schedule-row">
-            <span class="time-badge badge-evening">晚班</span> 週二 / 週四 19:30～21:00
-        </div>
-        <div class="schedule-row">
-            <span class="time-badge badge-morning">早班</span> 週三 06:30～08:00
-        </div>
-    </div>
-
+    <div class="schedule-box"><div class="schedule-row"><span class="time-badge">晚班</span> 週二 / 週四 19:30～21:00</div></div>
     <div class="notice-box" id="notice-box" onclick="toggleNotice()">
-        <div class="notice-header">
-            <div class="notice-title">課程規範</div>
-            <div class="notice-arrow">▼</div> 
-        </div>
-        <div class="notice-content">
-            <ul class="notice-list">
-                <li>如需請假，請依時限完成取消：
-                    <span class="sub-item">- 早班：前一天 22:00 前</span>
-                    <span class="sub-item">- 晚班：當天中午 12:00 前</span>
-                </li>
-                <li>遲到不另補時，課程仍依原時段進行。</li>
-                <li>逾期取消視同上課，扣除１堂課。</li>
-                <li>若因生病或突發急事，經告知可免扣堂。</li>
-                <li>如遇天災，依行政院公告辦理。</li>
-                <li>有任何問題，請直接與教練聯繫。</li>
-            </ul>
-        </div>
+        <div class="notice-header"><div class="notice-title">課程規範</div><div class="notice-arrow">▼</div></div>
+        <div class="notice-content"><ul class="notice-list"><li>課前請確認網路與視訊設備，確保上課品質。</li><li>請提早3分鐘登入Rouvy並進入Google Meet。<br><span class="sub-item">（Rouvy 有時效性，時間過了就會被擋住喔！）</span></li><li>進入教室後請先關靜音，要發言時再開啟。</li><span class="section-label">調整規範</span><li>預約後 10 分鐘內可於系統自主調整。</li><li>超過時限如需請假，請私訊教練。</li><li style="margin-top:15px; list-style:none; color:var(--online-main); font-weight:bold;">有任何問題，請直接與教練聯繫。</li></ul></div>
     </div>
-    
     <div id="calendar"></div>
-
-    <div id="agreement-area" class="agreement-container">
-        <label class="agreement-label">
-            <input type="checkbox" id="agree-checkbox">
-            我已詳閱並同意上述課程規範
-        </label>
-    </div>
-
+    <div id="agreement-area" class="agreement-container"><label class="agreement-label"><input type="checkbox" id="agree-checkbox"> 我已詳閱，並同意上述課程規範</label></div>
     <button id="submit-btn" style="display:none;">送出選課</button>
   </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
     const selectedDates = new Set(); 
-    let myRegisteredDates = new Set();
+    let myRegisteredDetails = []; 
     let currentUser = { name: "", lineId: "", email: "" };
     let isSubmitting = false;
+    let countdownInterval = null;
 
-    // Loading 文案管理
     const initialLoadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
-    // 完成預約後的 Loading 文案
     const finishLoadingMessages = ["正在穿越時光隧道⋯⋯", "準備登陸預約畫面⋯⋯"];
-    
     let msgIndex = 0;
-    
-    // 全域計時器，負責一般 Loading 動畫
     const loadingInterval = setInterval(() => {
-        // 如果正在提交中(isSubmitting=true)，不執行這個動畫，交給提交按鈕那邊控制
-        if (isSubmitting) return;
-
+        if (isSubmitting) return; 
         const textEl = document.getElementById('loading-text');
         const loadingDiv = document.getElementById('loading');
         if (textEl && loadingDiv.style.display !== 'none') {
-            // 判斷是否為預約完成後的重整
             const finish = new URLSearchParams(window.location.search).get('finish');
             const messages = finish === '1' ? finishLoadingMessages : initialLoadingMessages;
-            
             msgIndex++;
-            if (msgIndex < messages.length) {
-                textEl.textContent = messages[msgIndex];
-            } else {
-                // 如果已經播完所有訊息，就停在最後一句
-                clearInterval(loadingInterval);
-            }
+            if (msgIndex < messages.length) textEl.textContent = messages[msgIndex];
+            else clearInterval(loadingInterval);
         }
     }, 2000); 
 
     function toggleNotice() { document.getElementById('notice-box').classList.toggle('open'); }
     function getParam(key) { return new URLSearchParams(window.location.search).get(key) || ''; }
-
-    // 關閉美化彈窗並跳轉
-    function closeModal() {
-        const nextUrl = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId) + '&finish=1';
-        window.location.href = nextUrl;
-    }
+    function closeModal() { window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId) + '&finish=1'; }
+    function closeCancelModal() { document.getElementById('cancel-modal').style.display = 'none'; if (countdownInterval) clearInterval(countdownInterval); }
 
     async function initSystem() {
         const loadingDiv = document.getElementById('loading');
-        const loadingText = document.getElementById('loading-text');
         loadingDiv.style.display = 'flex';
-
         let name = getParam('name'), lineId = getParam('lineId'), finish = getParam('finish');
-
-        // 如果是剛預約完回來的，直接顯示第一句
-        if (finish === '1') {
-            loadingText.textContent = finishLoadingMessages[0];
-        }
-
-        if (name && lineId) {
-            currentUser.name = name; currentUser.lineId = lineId;
-            loginSuccess();
-        } else {
-            loadingDiv.style.display = 'none';
-            document.getElementById('login-area').style.display = 'block';
-        }
+        if (finish === '1') { document.getElementById('loading-text').textContent = finishLoadingMessages[0]; }
+        if (name && lineId) { currentUser.name = name; currentUser.lineId = lineId; loginSuccess(); }
+        else { loadingDiv.style.display = 'none'; document.getElementById('login-area').style.display = 'block'; }
     }
 
     async function searchMember() {
         const emailInput = document.getElementById('member-search-email').value.trim();
-        const errorMsg = document.getElementById('login-error'), loadingDiv = document.getElementById('loading');
+        const errorMsg = document.getElementById('login-error');
         if (!emailInput) { errorMsg.textContent = "請輸入 Email"; return; }
-        loadingDiv.style.display = 'flex';
+        document.getElementById('loading').style.display = 'flex';
         document.getElementById('loading-text').textContent = "正在搜尋會員資料...";
         try {
             const res = await fetch(`${SCRIPT_URL}?mode=search_member&email=${encodeURIComponent(emailInput)}`);
             const data = await res.json();
-            if (data.found) {
-                currentUser.name = data.name; currentUser.lineId = data.lineId; currentUser.email = emailInput;
-                errorMsg.textContent = "";
-                loginSuccess();
-            } else {
-                loadingDiv.style.display = 'none';
-                errorMsg.textContent = "❌ 找不到此 Email，請確認是否與報名資料一致";
-            }
-        } catch (e) { loadingDiv.style.display = 'none'; errorMsg.textContent = "系統連線錯誤"; }
+            if (data.found) { currentUser.name = data.name; currentUser.lineId = data.lineId; currentUser.email = emailInput; loginSuccess(); }
+            else { document.getElementById('loading').style.display = 'none'; errorMsg.textContent = "找不到此 Email"; }
+        } catch (e) { document.getElementById('loading').style.display = 'none'; }
     }
 
     async function loginSuccess() {
-        const loadingDiv = document.getElementById('loading');
         document.getElementById('login-area').style.display = 'none'; 
         document.getElementById('submit-btn').style.display = 'block'; 
         document.getElementById('agreement-area').style.display = 'block'; 
-        if(loadingDiv.style.display === 'none') loadingDiv.style.display = 'flex';
         await renderCalendar();
-        loadingDiv.style.display = 'none';
+        document.getElementById('loading').style.display = 'none';
     }
 
     async function loadMergedData() {
       try {
-        const [resEvening, resEarly] = await Promise.all([
-            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=evening`),
-            fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=early`)
-        ]);
-        const dataEvening = await resEvening.json(), dataEarly = await resEarly.json();
-        return {
-          dates: [...new Set([...(dataEvening.dates || []), ...(dataEarly.dates || [])])].sort(),
-          mySignups: new Set([...(dataEvening.mySignups || []), ...(dataEarly.mySignups || [])]),
-          counts: dataEvening.counts || {}
-        };
-      } catch (error) { return { dates: [], mySignups: new Set(), counts: {} }; }
+        const res = await fetch(`${SCRIPT_URL}?mode=powerAllData&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=online`);
+        const data = await res.json();
+        return { dates: data.dates || [], mySignupsDetails: data.mySignupsDetails || [], counts: data.counts || {} };
+      } catch (error) { return { dates: [], mySignupsDetails: [], counts: {} }; }
     }
 
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar'); calendarDiv.innerHTML = '';
       const allData = await loadMergedData();
-      const availableDates = allData.dates, mySignups = allData.mySignups, signupCounts = allData.counts, availableSet = new Set(availableDates);
-      myRegisteredDates = mySignups;
-
-      if (!availableDates.length) {
-        calendarDiv.innerHTML = '<div style="color:red; font-size: 1.2em; margin-top: 20px;">⚠️ 目前無可預約時段</div>';
-        return;
-      }
+      const availableDates = allData.dates, signupCounts = allData.counts, availableSet = new Set(availableDates);
+      myRegisteredDetails = allData.mySignupsDetails; 
+      if (!availableDates.length) return;
 
       const start = new Date(availableDates[0]), end = new Date(availableDates[availableDates.length - 1]);
+      const nowTs = new Date().getTime(); 
+
       for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
         for (let m = 0; m < 12; m++) {
           const first = new Date(y, m, 1), last = new Date(y, m + 1, 0);
           if (last < start || first > end) continue;
-
           const title = document.createElement('div'); title.className = 'month-title'; title.textContent = `${y}年${m + 1}月`;
           calendarDiv.appendChild(title);
           const header = document.createElement('div'); header.className = 'calendar-header';
-          ['日','一','二','三','四','五','六'].forEach(d => {
-            const h = document.createElement('div'); h.className = 'weekday-header'; h.textContent = d; header.appendChild(h);
-          });
+          ['日','一','二','三','四','五','六'].forEach(d => { const h = document.createElement('div'); h.className = 'weekday-header'; h.textContent = d; header.appendChild(h); });
           calendarDiv.appendChild(header);
-
           const grid = document.createElement('div'); grid.className = 'calendar-grid';
           for (let i = 0; i < first.getDay(); i++) grid.appendChild(document.createElement('div'));
 
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
             const cell = document.createElement('div'); cell.className = 'day';
-            const numSpan = document.createElement('span'); numSpan.className = 'day-number'; numSpan.textContent = d;
-            cell.appendChild(numSpan);
-
+            cell.innerHTML = `<span class="day-number">${d}</span>`;
             const dayOfWeek = new Date(dateStr).getDay();
-            let type = "", currentCount = 0, labelText = "", themeClass = "";
+            const myRecord = myRegisteredDetails.find(r => r.date === dateStr);
+            let currentCount = (dayOfWeek === 2 || dayOfWeek === 4) ? (signupCounts[dateStr]?.online || 0) : 0;
 
-            if (dayOfWeek === 3) { 
-                type = "early"; currentCount = signupCounts[dateStr]?.morning || 0; labelText = "06:30"; themeClass = "morning";
-            } else if (dayOfWeek === 2 || dayOfWeek === 4) { 
-                type = "evening"; currentCount = signupCounts[dateStr]?.evening || 0; labelText = "19:30"; themeClass = "evening";
-            }
-
-            if (myRegisteredDates.has(dateStr)) {
+            if (myRecord) {
+              const diff = nowTs - myRecord.signupTime;
               cell.classList.add('registered');
-              const label = document.createElement('div'); label.className = 'day-label'; label.textContent = "已登記";
-              cell.appendChild(label);
-            } else if (currentCount >= 6 && type) {
-              cell.classList.add('full');
-              const label = document.createElement('div'); label.className = 'full-label'; label.textContent = "額滿";
-              cell.appendChild(label);
-            } else if (availableSet.has(dateStr) && type) {
-              cell.classList.add('available', themeClass);
-              const label = document.createElement('div'); label.className = 'day-label'; label.textContent = labelText;
-              cell.appendChild(label);
+              if (diff <= 600000) cell.classList.add('can-cancel');
+              cell.innerHTML += `<div class="day-label">已登記</div>`;
+              cell.onclick = () => {
+                const updateCancelModal = () => {
+                  const now = new Date().getTime();
+                  const remainMs = 600000 - (now - myRecord.signupTime);
+                  const msgEl = document.getElementById('cancel-modal-msg');
+                  const titleEl = document.getElementById('cancel-modal-title');
+                  const footer = document.getElementById('cancel-modal-footer');
+                  const closeBtn = document.getElementById('cancel-close-btn');
+                  if (remainMs > 0) {
+                    const mins = Math.floor(remainMs / 60000), secs = Math.floor((remainMs % 60000) / 1000);
+                    titleEl.textContent = "取消登記";
+                    msgEl.innerHTML = `您已登記 ${dateStr} 功率課。<br>還有 <b style="font-size: 22px; color: var(--cancel-gold);">${mins} 分 ${secs.toString().padStart(2, '0')} 秒</b> 可以取消登記喔！`;
+                    footer.style.display = 'flex'; closeBtn.style.display = 'none';
+                    document.getElementById('confirm-cancel-btn').onclick = () => { closeCancelModal(); handleCancel(dateStr); };
+                  } else {
+                    if (countdownInterval) clearInterval(countdownInterval);
+                    titleEl.textContent = "課程已完成登記！"; msgEl.innerHTML = `如需請假，請直接私訊教練。`;
+                    footer.style.display = 'none'; closeBtn.style.display = 'block';
+                  }
+                  document.getElementById('cancel-modal').style.display = 'flex';
+                };
+                updateCancelModal(); if (countdownInterval) clearInterval(countdownInterval);
+                countdownInterval = setInterval(updateCancelModal, 1000);
+              };
+            } else if (currentCount >= 6 && (dayOfWeek === 2 || dayOfWeek === 4)) {
+              cell.classList.add('full'); cell.innerHTML += `<div class="full-label">額滿</div>`;
+            } else if (availableSet.has(dateStr) && (dayOfWeek === 2 || dayOfWeek === 4)) {
+              cell.classList.add('available'); cell.innerHTML += `<div class="day-label">19:30</div>`;
               cell.onclick = () => {
                 if (selectedDates.has(dateStr)) { selectedDates.delete(dateStr); cell.classList.remove('selected'); }
                 else { selectedDates.add(dateStr); cell.classList.add('selected'); }
-                updateSubmitButton();
+                document.getElementById('submit-btn').textContent = selectedDates.size > 0 ? `確認送出 (${selectedDates.size}堂)` : "請先選擇日期";
+                document.getElementById('submit-btn').disabled = selectedDates.size === 0;
               };
             }
             grid.appendChild(cell);
@@ -392,41 +305,28 @@
       }
     }
 
-    function updateSubmitButton() {
-        const btn = document.getElementById('submit-btn');
-        btn.textContent = selectedDates.size > 0 ? `確認送出 (${selectedDates.size}堂)` : "請先選擇日期";
-        btn.disabled = selectedDates.size === 0;
+    async function handleCancel(dateStr) {
+      const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
+      loadingText.textContent = "正在取消登記⋯⋯";
+      loading.style.display = 'flex';
+      try {
+        const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=online`);
+        const data = await res.json();
+        alert(data.message); location.reload();
+      } catch (e) { document.getElementById('loading').style.display = 'none'; }
     }
 
     document.getElementById('submit-btn').addEventListener('click', async () => {
-      if (!currentUser.name || !currentUser.lineId) { alert('請先進行會員驗證'); return; }
-      if (!selectedDates.size) { alert('請至少選擇一個日期'); return; }
-      if (!document.getElementById('agree-checkbox').checked) { alert('請勾選「我已詳閱並同意上述課程規範」才能送出預約喔！'); return; }
-
-      const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
+      if (!currentUser.name || !selectedDates.size || !document.getElementById('agree-checkbox').checked) return;
       isSubmitting = true; 
-      
-      // 送出選課時的文案
+      const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在寫入登記中⋯⋯";
       loading.style.display = 'flex';
-
-      // 模擬寫入過程中的文案切換
-      const writeTimer = setTimeout(() => {
-        loadingText.textContent = "我快寫好了 等我一下⋯⋯";
-      }, 3000);
-
+      const writeTimer = setTimeout(() => { loadingText.textContent = "我快寫好了 等我一下⋯⋯"; }, 3000);
       try {
-        for (const date of selectedDates) {
-          const courseType = new Date(date).getDay() === 3 ? "early" : "evening";
-          await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=${courseType}&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`);
-        }
-        // 清除計時器，隱藏 Loading，跳出登記成功視窗
-        clearTimeout(writeTimer);
-        loading.style.display = 'none';
-        document.getElementById('success-modal').style.display = 'flex';
-      } catch (error) { 
-        isSubmitting = false; loading.style.display = 'none'; alert('⚠️ 發生錯誤'); 
-      }
+        for (const date of selectedDates) { await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=online&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`); }
+        clearTimeout(writeTimer); loading.style.display = 'none'; document.getElementById('success-modal').style.display = 'flex';
+      } catch (error) { isSubmitting = false; document.getElementById('loading').style.display = 'none'; }
     });
 
     initSystem();
