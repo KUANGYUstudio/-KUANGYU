@@ -70,7 +70,27 @@
     .modal-box { background: white; padding: 30px; border-radius: 24px; text-align: center; max-width: 320px; width: 85%; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: modalShow 0.3s ease-out; }
     @keyframes modalShow { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .modal-title { font-size: 20px; font-weight: 800; color: #2c3e50; margin-bottom: 10px; }
-    .modal-btn { margin-top: 20px; padding: 12px 0; border-radius: 50px; border: none; background: var(--evening-main); color: white; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: background 0.2s; }
+    
+    /* 🔥 修改處：調整按鈕寬度 */
+    .modal-btn { 
+        margin-top: 20px; 
+        padding: 12px 0; 
+        border-radius: 50px; 
+        border: none; 
+        background: var(--evening-main); 
+        color: white; 
+        font-weight: bold; 
+        cursor: pointer; 
+        
+        width: 50%;         /* 寬度改為 50% */
+        min-width: 120px;   /* 最小寬度 */
+        display: block;     /* 區塊元素 */
+        margin-left: auto;  /* 置中 */
+        margin-right: auto; /* 置中 */
+        
+        font-size: 16px; 
+        transition: background 0.2s; 
+    }
     .modal-btn:hover { background: var(--evening-light); }
 
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
@@ -121,8 +141,9 @@
     #submit-btn { margin: 15px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--evening-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3); }
     #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; box-shadow: none; }
 
-    .btn-red { background-color: #ff5252 !important; }
-    .btn-gray { background-color: #eee !important; color: #333 !important; }
+    /* 🔥 修改處：雙按鈕（取消/先不要）也需要調整 */
+    .btn-red { background-color: #ff5252 !important; width: 100% !important; min-width: auto !important; }
+    .btn-gray { background-color: #eee !important; color: #333 !important; width: 100% !important; min-width: auto !important; }
 
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; } h1 { font-size: 26px; margin-top: 0.1em; }
@@ -143,7 +164,7 @@
     <div class="modal-box">
         <div class="modal-title" id="cancel-modal-title">取消登記</div>
         <div id="cancel-modal-msg" style="color: #444; font-size: 16px; line-height: 1.8; margin: 15px 0;"></div>
-        <div id="cancel-modal-footer" style="display: flex; gap: 10px;">
+        <div id="cancel-modal-footer" style="display: flex; gap: 10px; justify-content: center;">
           <button class="modal-btn btn-gray" onclick="closeCancelModal()">先不要</button>
           <button class="modal-btn btn-red" id="confirm-cancel-btn">取消登記</button>
         </div>
@@ -364,6 +385,7 @@
         document.getElementById('loading').style.display = 'none';
 
         if (data.status === 'success') {
+             // 🔥 修改：成功時只顯示標題，內文為空
              showSystemAlert('取消成功！', '', () => { location.reload(); });
         } else {
              showSystemAlert('提示', data.message, () => { location.reload(); });
