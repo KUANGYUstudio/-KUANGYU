@@ -257,7 +257,7 @@
       const calendarDiv = document.getElementById('calendar'); calendarDiv.innerHTML = '';
       const allData = await loadMergedData();
       const availableDates = allData.dates, signupCounts = allData.counts, availableSet = new Set(availableDates);
-      myRegisteredDetails = allData.myDetails; // 確保這裡賦值正確
+      myRegisteredDetails = allData.myDetails; 
       if (!availableDates.length) return;
 
       const start = new Date(availableDates[0]), end = new Date(availableDates[availableDates.length - 1]);
@@ -290,7 +290,7 @@
               cell.classList.add('registered');
               if (diff <= 600000) cell.classList.add('can-cancel');
               cell.innerHTML += `<div class="day-label">已登記</div>`;
-              // 🔥 強制綁定點擊事件
+              // 強制綁定點擊事件
               cell.onclick = () => {
                 const updateCancelModal = () => {
                   const now = new Date().getTime();
@@ -334,7 +334,7 @@
       }
     }
 
-    // 修正後的 handleCancel：不帶 courseType，讓後端全掃
+    // 修正後的 handleCancel：仿照 Online 模式，無論如何都刷新頁面以更新狀態
     async function handleCancel(dateStr) {
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在取消登記⋯⋯";
@@ -343,11 +343,7 @@
         const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}`);
         const data = await res.json();
         alert(data.message); 
-        if (data.status === "success") {
-            location.reload();
-        } else {
-            loading.style.display = 'none'; // 失敗時手動關掉
-        }
+        location.reload(); // 統一刷新頁面，確保日曆狀態是最新的
       } catch (e) { 
         loading.style.display = 'none';
         alert("連線錯誤，請稍後再試");
