@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       🎨 配色定義 (完全保留您原本的設定)
+       🎨 配色定義 (平日班專屬：藍/黃)
        ========================================= */
     :root {
       --evening-main: #00838f; 
@@ -21,18 +21,8 @@
       --cancel-gold: #ffa000;
     }
 
-    body {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background: var(--bg-color); 
-      margin: 0; padding: 0;
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex; justify-content: center; align-items: center; 
-    }
-    .container {
-      max-width: 800px; width: 100%; margin: 0 auto; padding: 20px;
-      box-sizing: border-box; text-align: center; position: relative; 
-    }
+    body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 20px; box-sizing: border-box; text-align: center; position: relative; }
     
     .main-logo { display: block; margin: 0 auto 5px; width: 40px; height: auto; }
     @media (min-width: 751px) { .main-logo { width: 60px; margin-bottom: 10px; } }
@@ -65,7 +55,7 @@
     .notice-arrow { font-size: 12px; color: #999; transition: transform 0.3s ease; }
     .notice-content { max-height: 0; opacity: 0; padding: 0 20px; transition: all 0.3s ease-out; overflow: hidden; }
     .notice-box.open .notice-arrow { transform: rotate(180deg); }
-    .notice-box.open .notice-content { max-height: 500px; opacity: 1; padding-bottom: 15px; }
+    .notice-box.open .notice-content { max-height: 800px; opacity: 1; padding-bottom: 15px; }
     
     .notice-list { margin: 0; padding-left: 1.4em; }
     .notice-list li { margin-bottom: 4px; }
@@ -75,6 +65,7 @@
     .agreement-label { display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--text-main); cursor: pointer; user-select: none; }
     .agreement-label input { width: 18px; height: 18px; margin-right: 8px; cursor: pointer; accent-color: var(--evening-main); }
 
+    /* Modal 彈窗樣式 */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 10000; }
     .modal-box { background: white; padding: 30px; border-radius: 24px; text-align: center; max-width: 320px; width: 85%; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: modalShow 0.3s ease-out; }
     @keyframes modalShow { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -88,27 +79,40 @@
     .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; transition: opacity 0.3s; }
 
     /* =========================================
-       📅 日曆格式 (完全比照 weekday 版本)
+       📅 日曆格式 (平日版 - 22px 鎖死)
        ========================================= */
     .month-title { font-weight: 800; font-size: 24px; margin: 1.5em 0 0.8em; color: var(--text-main); }
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
     .weekday-header { font-weight: bold; font-size: 16px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
-    .day { aspect-ratio: 1; width: 100%; font-size: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; background-color: #f7f9fa; color: #cfd8dc; cursor: default; box-sizing: border-box; transition: all 0.1s; position: relative; }
-    .day-number { font-size: 22px; font-weight: bold; margin-bottom: 2px; line-height: 1; }
+    
+    .day { 
+      aspect-ratio: 1; width: 100%; 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; 
+      border-radius: 12px; background-color: #f7f9fa; color: #cfd8dc; 
+      cursor: default; box-sizing: border-box; transition: all 0.1s; position: relative; 
+    }
+    
+    /* 🔥 字體鎖死 22px */
+    .day-number { font-size: 22px !important; font-weight: bold !important; margin-bottom: 2px; line-height: 1; }
     .day-label { font-size: 12px; margin-top: 2px; font-weight: normal; line-height: 1; }
     
+    /* 狀態樣式 - 晚班 */
     .day.available.evening { background-color: #fff; color: #333; border: 2px solid var(--evening-main); cursor: pointer; }
     .day.available.evening .day-label { color: var(--evening-main); font-weight: normal; }
     .day.selected.evening { background-color: var(--evening-main); color: #fff; border-color: var(--evening-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(0, 131, 143, 0.4); }
     .day.selected.evening .day-label { color: #fff; }
+    
+    /* 狀態樣式 - 早班 */
     .day.available.morning { background-color: #fff; color: #333; border: 2px solid var(--morning-main); cursor: pointer; }
     .day.available.morning .day-label { color: var(--morning-main); font-weight: normal; }
     .day.selected.morning { background-color: var(--morning-main); color: #fff; border-color: var(--morning-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(255, 179, 0, 0.4); }
     .day.selected.morning .day-label { color: #fff; }
 
     /* 調整時限內樣式 */
-    .day.registered.can-cancel { background-color: #e0f2f1 !important; border: 2px solid var(--evening-main) !important; color: var(--evening-main) !important; cursor: pointer; }
-    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer; }
+    .day.registered.can-cancel { background-color: #e0f2f1 !important; border: 2px solid var(--evening-main) !important; color: var(--evening-main) !important; cursor: pointer !important; }
+    
+    /* 調整時限外樣式 */
+    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer !important; }
     .day.registered .day-label { color: #b0bec5; font-weight: normal; }
 
     .day.full { background-color: #e0e0e0; color: #666; cursor: not-allowed; border: 2px solid var(--evening-main); opacity: 0.8; }
@@ -122,8 +126,11 @@
 
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; } h1 { font-size: 26px; margin-top: 0.1em; }
-      .calendar-header, .calendar-grid { gap: 4px; } .day { font-size: 22px; border-radius: 10px; }
-      .day-number { font-size: 18px; } .day-label { font-size: 10px; } #submit-btn { font-size: 18px; max-width: 60%; }
+      .calendar-header, .calendar-grid { gap: 4px; } .day { border-radius: 10px; }
+      /* 手機版鎖死 */
+      .day-number { font-size: 18px !important; } 
+      .day-label { font-size: 10px; }
+      #submit-btn { font-size: 18px; max-width: 60%; }
     }
   </style>
 </head>
@@ -151,7 +158,7 @@
     <h1>平日功率課</h1>
     <div id="welcome-msg" class="user-welcome"></div> 
     <div id="login-area" class="login-section">
-        <div class="login-title">⚠️ 請驗證會員身分</div>
+        <div class="login-title">請驗證會員身分</div>
         <div style="font-size:13px; color:#666; margin-bottom:10px;">請輸入您留存的「Email」進行驗證</div>
         <div class="login-input-group">
             <input type="email" id="member-search-email" class="login-input" placeholder="例如：example@gmail.com"><button onclick="searchMember()" class="login-btn">驗證</button>
@@ -166,7 +173,7 @@
         <div class="notice-content"><ul class="notice-list"><li>如需請假，請依時限完成取消：<span class="sub-item">- 早班：前一天 22:00 前</span><span class="sub-item">- 晚班：當天中午 12:00 前</span></li><li>遲到不另補時，課程仍依原時段進行。</li><li>逾期取消視同上課，扣除１堂課。</li><li>若因生病或突發急事，經告知可免扣堂。</li><li>如遇天災，依行政院公告辦理。</li><li>有任何問題，請直接與教練聯繫。</li></ul></div>
     </div>
     <div id="calendar"></div>
-    <div id="agreement-area" class="agreement-container"><label class="agreement-label"><input type="checkbox" id="agree-checkbox"> 我已詳閱並同意上述課程規範</label></div>
+    <div id="agreement-area" class="agreement-container"><label class="agreement-label"><input type="checkbox" id="agree-checkbox"> 我已詳閱，並同意上述課程規範</label></div>
     <button id="submit-btn" style="display:none;">送出選課</button>
   </div>
 
@@ -178,7 +185,6 @@
     let isSubmitting = false;
     let countdownInterval = null;
 
-    // 🔥 完美統合：三階段問候語文案
     const initialLoadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     const finishLoadingMessages = ["正在穿越時光隧道⋯⋯", "準備登陸預約畫面⋯⋯"];
     let msgIndex = 0;
@@ -219,7 +225,7 @@
             const res = await fetch(`${SCRIPT_URL}?mode=search_member&email=${encodeURIComponent(emailInput)}`);
             const data = await res.json();
             if (data.found) { currentUser.name = data.name; currentUser.lineId = data.lineId; currentUser.email = emailInput; loginSuccess(); }
-            else { document.getElementById('loading').style.display = 'none'; errorMsg.textContent = "❌ 找不到此 Email"; }
+            else { document.getElementById('loading').style.display = 'none'; errorMsg.textContent = "找不到此 Email"; }
         } catch (e) { document.getElementById('loading').style.display = 'none'; }
     }
 
@@ -240,6 +246,7 @@
         const dEve = await resEve.json(), dMorn = await resMorn.json();
         return { 
           dates: [...new Set([...(dEve.dates || []), ...(dMorn.dates || [])])].sort(), 
+          // 關鍵點：確認這裡有接收到 details
           myDetails: [...(dEve.mySignupsDetails || []), ...(dMorn.mySignupsDetails || [])], 
           counts: dEve.counts || {} 
         };
@@ -250,7 +257,7 @@
       const calendarDiv = document.getElementById('calendar'); calendarDiv.innerHTML = '';
       const allData = await loadMergedData();
       const availableDates = allData.dates, signupCounts = allData.counts, availableSet = new Set(availableDates);
-      myRegisteredDetails = allData.myDetails; 
+      myRegisteredDetails = allData.myDetails; // 確保這裡賦值正確
       if (!availableDates.length) return;
 
       const start = new Date(availableDates[0]), end = new Date(availableDates[availableDates.length - 1]);
@@ -274,7 +281,6 @@
             cell.innerHTML = `<span class="day-number">${d}</span>`;
             const dayOfWeek = new Date(dateStr).getDay();
             const myRecord = myRegisteredDetails.find(r => r.date === dateStr);
-            
             let type = "", count = 0, lbl = "", theme = "";
             if (dayOfWeek === 3) { type = "early"; count = signupCounts[dateStr]?.morning || 0; lbl = "06:30"; theme = "morning"; }
             else if (dayOfWeek === 2 || dayOfWeek === 4) { type = "evening"; count = signupCounts[dateStr]?.evening || 0; lbl = "19:30"; theme = "evening"; }
@@ -284,12 +290,16 @@
               cell.classList.add('registered');
               if (diff <= 600000) cell.classList.add('can-cancel');
               cell.innerHTML += `<div class="day-label">已登記</div>`;
+              // 🔥 強制綁定點擊事件
               cell.onclick = () => {
                 const updateCancelModal = () => {
                   const now = new Date().getTime();
                   const remainMs = 600000 - (now - myRecord.signupTime);
-                  const msgEl = document.getElementById('cancel-modal-msg'), titleEl = document.getElementById('cancel-modal-title');
-                  const footer = document.getElementById('cancel-modal-footer'), closeBtn = document.getElementById('cancel-close-btn');
+                  const msgEl = document.getElementById('cancel-modal-msg');
+                  const titleEl = document.getElementById('cancel-modal-title');
+                  const footer = document.getElementById('cancel-modal-footer');
+                  const closeBtn = document.getElementById('cancel-close-btn');
+                  
                   if (remainMs > 0) {
                     const mins = Math.floor(remainMs / 60000), secs = Math.floor((remainMs % 60000) / 1000);
                     titleEl.textContent = "取消登記";
@@ -324,6 +334,7 @@
       }
     }
 
+    // 修正後的 handleCancel：不帶 courseType，讓後端全掃
     async function handleCancel(dateStr) {
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在取消登記⋯⋯";
@@ -331,8 +342,16 @@
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}`);
         const data = await res.json();
-        alert(data.message); location.reload();
-      } catch (e) { document.getElementById('loading').style.display = 'none'; }
+        alert(data.message); 
+        if (data.status === "success") {
+            location.reload();
+        } else {
+            loading.style.display = 'none'; // 失敗時手動關掉
+        }
+      } catch (e) { 
+        loading.style.display = 'none';
+        alert("連線錯誤，請稍後再試");
+      }
     }
 
     document.getElementById('submit-btn').addEventListener('click', async () => {
@@ -341,7 +360,6 @@
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在寫入登記中⋯⋯";
       loading.style.display = 'flex';
-      // 🔥 完美補齊：送出登記後的模擬文案
       const writeTimer = setTimeout(() => { loadingText.textContent = "我快寫好了 等我一下⋯⋯"; }, 3000);
       try {
         for (const date of selectedDates) { 
