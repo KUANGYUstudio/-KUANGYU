@@ -24,7 +24,6 @@
     @media (min-width: 751px) { .main-logo { width: 60px; margin-bottom: 10px; } }
     h1 { font-size: 32px; margin: 0.1em 0 0.2em; color: var(--text-main); font-weight: 800; letter-spacing: 1px; }
 
-    /* 歡迎與登入 */
     .user-welcome { font-size: 18px; color: var(--online-main); margin-bottom: 4px; font-weight: bold; min-height: 24px; }
     .login-section { background-color: #fafafa; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; display: none; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; }
     .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
@@ -33,7 +32,6 @@
     .login-input:focus { border-color: var(--online-light); }
     .login-btn { padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: var(--text-main); color: white; cursor: pointer; font-weight: bold; }
     
-    /* 課程表與規範 */
     .schedule-box { text-align: left; display: block; margin-bottom: 15px; background: #fafafa; padding: 15px 20px; border-radius: 12px; border: 1px solid #eee; max-width: 600px; margin-left: auto; margin-right: auto; }
     .schedule-row { margin: 8px 0; font-size: 16px; color: var(--text-sub); display: flex; align-items: center; }
     .time-badge { display: inline-block; width: 50px; text-align: center; padding: 4px 0; border-radius: 6px; font-size: 14px; margin-right: 12px; font-weight: bold; color: white; flex-shrink: 0; background-color: var(--online-main); }
@@ -44,17 +42,12 @@
     .notice-arrow { font-size: 12px; color: #999; transition: transform 0.3s ease; }
     .notice-content { max-height: 0; opacity: 0; padding: 0 20px; transition: all 0.3s ease-out; overflow: hidden; }
     .notice-box.open .notice-arrow { transform: rotate(180deg); }
-    .notice-box.open .notice-content { max-height: 800px; opacity: 1; padding-bottom: 15px; }
-    .notice-list { margin: 0; padding-left: 1.4em; }
-    .notice-list li { margin-bottom: 8px; }
-    .section-label { font-size: 18px; font-weight: bold; color: var(--text-main); display: block; margin-top: 20px; margin-bottom: 10px; margin-left: -1em; }
-    .sub-item { display: block; margin-top: 2px; color: #888; font-size: 14px; }
+    .notice-box.open .notice-content { max-height: 500px; opacity: 1; padding-bottom: 15px; }
 
     .agreement-container { margin: 20px auto 10px; text-align: center; max-width: 260px; display: none; }
     .agreement-label { display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--text-main); cursor: pointer; user-select: none; }
     .agreement-label input { width: 18px; height: 18px; margin-right: 8px; cursor: pointer; accent-color: var(--online-main); }
 
-    /* Modal 樣式 */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 10000; }
     .modal-box { background: white; padding: 30px; border-radius: 24px; text-align: center; max-width: 320px; width: 85%; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: modalShow 0.3s ease-out; }
     @keyframes modalShow { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -67,7 +60,7 @@
     .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; transition: opacity 0.3s; }
 
     /* =========================================
-       📅 日曆格式 (嚴格鎖定 Weekday 版)
+       📅 日曆格式 (嚴格比照 Weekday 版本)
        ========================================= */
     .month-title { font-weight: 800; font-size: 24px; margin: 1.5em 0 0.8em; color: var(--text-main); }
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
@@ -80,7 +73,6 @@
     .day.available { background-color: #fff; color: #333; border: 2px solid var(--online-main); cursor: pointer; }
     .day.available .day-label { color: var(--online-main); font-weight: normal; }
     
-    /* 正確的反白效果：綠底白字 */
     .day.selected { background-color: var(--online-main) !important; color: #fff !important; border-color: var(--online-main) !important; transform: scale(1.05); box-shadow: 0 4px 10px rgba(102, 187, 106, 0.4); }
     .day.selected .day-label { color: #fff !important; }
 
@@ -94,7 +86,7 @@
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
     
     #submit-btn { margin: 15px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--online-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(102, 187, 106, 0.3); }
-    #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; }
+    #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; box-shadow: none; }
 
     .btn-red { background-color: #ff5252 !important; }
     .btn-gray { background-color: #eee !important; color: #333 !important; }
@@ -113,7 +105,7 @@
 
   <div id="cancel-modal" class="modal-overlay">
     <div class="modal-box">
-        <div class="modal-title" id="cancel-modal-title">調整登記</div>
+        <div class="modal-title" id="cancel-modal-title">取消登記</div>
         <div id="cancel-modal-msg" style="color: #444; font-size: 16px; line-height: 1.8; margin: 15px 0;"></div>
         <div id="cancel-modal-footer" style="display: flex; gap: 10px;">
           <button class="modal-btn btn-gray" onclick="closeCancelModal()">先不要</button>
@@ -154,10 +146,9 @@
     let isSubmitting = false;
     let countdownInterval = null;
 
-    // 🔥 完整 Loading 文案場景分流
+    // 🔥 完整三階段 Loading 文案
     const initialLoadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     const finishLoadingMessages = ["正在穿越時光隧道⋯⋯", "準備登陸預約畫面⋯⋯"];
-    
     let msgIndex = 0;
     const loadingInterval = setInterval(() => {
         if (isSubmitting) return; 
@@ -309,10 +300,8 @@
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在寫入登記中⋯⋯";
       loading.style.display = 'flex';
-      
-      // 送出 3 秒後的溫情文案
+      // 🔥 送出登記時的模擬文案
       const writeTimer = setTimeout(() => { loadingText.textContent = "我快寫好了 等我一下⋯⋯"; }, 3000);
-      
       try {
         for (const date of selectedDates) { await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=online&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`); }
         clearTimeout(writeTimer);
