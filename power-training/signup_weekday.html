@@ -151,6 +151,14 @@
     </div>
   </div>
 
+  <div id="alert-modal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-title" id="alert-title">提示</div>
+        <div id="alert-msg" style="color: #444; font-size: 16px; line-height: 1.6; margin: 15px 0;"></div>
+        <button class="modal-btn" id="alert-btn">確定</button>
+    </div>
+  </div>
+
   <div id="loading" class="loading-overlay"><div class="loading-spinner"></div><div id="loading-text" class="loading-text">正在放下甜甜圈⋯⋯</div></div>
 
   <div class="container">
@@ -206,6 +214,21 @@
     function closeModal() { window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId) + '&finish=1'; }
     function closeCancelModal() { document.getElementById('cancel-modal').style.display = 'none'; if (countdownInterval) clearInterval(countdownInterval); }
 
+    function showSystemAlert(title, message, callback) {
+        document.getElementById('alert-title').textContent = title;
+        document.getElementById('alert-msg').textContent = message;
+        
+        const btn = document.getElementById('alert-btn');
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+
+        newBtn.onclick = () => {
+             document.getElementById('alert-modal').style.display = 'none';
+             if (callback) callback();
+        };
+        document.getElementById('alert-modal').style.display = 'flex';
+    }
+
     async function initSystem() {
         const loadingDiv = document.getElementById('loading');
         loadingDiv.style.display = 'flex';
@@ -246,7 +269,6 @@
         const dEve = await resEve.json(), dMorn = await resMorn.json();
         return { 
           dates: [...new Set([...(dEve.dates || []), ...(dMorn.dates || [])])].sort(), 
-          // 關鍵點：確認這裡有接收到 details
           myDetails: [...(dEve.mySignupsDetails || []), ...(dMorn.mySignupsDetails || [])], 
           counts: dEve.counts || {} 
         };
@@ -290,16 +312,12 @@
               cell.classList.add('registered');
               if (diff <= 600000) cell.classList.add('can-cancel');
               cell.innerHTML += `<div class="day-label">已登記</div>`;
-              // 強制綁定點擊事件
               cell.onclick = () => {
                 const updateCancelModal = () => {
                   const now = new Date().getTime();
                   const remainMs = 600000 - (now - myRecord.signupTime);
-                  const msgEl = document.getElementById('cancel-modal-msg');
-                  const titleEl = document.getElementById('cancel-modal-title');
-                  const footer = document.getElementById('cancel-modal-footer');
-                  const closeBtn = document.getElementById('cancel-close-btn');
-                  
+                  const msgEl = document.getElementById('cancel-modal-msg'), titleEl = document.getElementById('cancel-modal-title');
+                  const footer = document.getElementById('cancel-modal-footer'), closeBtn = document.getElementById('cancel-close-btn');
                   if (remainMs > 0) {
                     const mins = Math.floor(remainMs / 60000), secs = Math.floor((remainMs % 60000) / 1000);
                     titleEl.textContent = "取消登記";
@@ -334,7 +352,7 @@
       }
     }
 
-    // 修正後的 handleCancel：仿照 Online 模式，無論如何都刷新頁面以更新狀態
+    // 🔥 修改：成功時不顯示內文 (傳空字串)
     async function handleCancel(dateStr) {
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在取消登記⋯⋯";
@@ -342,11 +360,18 @@
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}`);
         const data = await res.json();
-        alert(data.message); 
-        location.reload(); // 統一刷新頁面，確保日曆狀態是最新的
+        
+        document.getElementById('loading').style.display = 'none';
+
+        if (data.status === 'success') {
+             showSystemAlert('取消成功！', '', () => { location.reload(); });
+        } else {
+             showSystemAlert('提示', data.message, () => { location.reload(); });
+        }
+
       } catch (e) { 
-        loading.style.display = 'none';
-        alert("連線錯誤，請稍後再試");
+        document.getElementById('loading').style.display = 'none';
+        showSystemAlert("連線錯誤", "系統連線失敗，請稍後再試。", null);
       }
     }
 
