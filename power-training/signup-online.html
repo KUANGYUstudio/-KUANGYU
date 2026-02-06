@@ -5,6 +5,9 @@
   <title>線上功率課</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* =========================================
+       🎨 配色定義 (線上課專用 - 綠色系)
+       ========================================= */
     :root {
       --online-main: #66bb6a; 
       --online-light: #81c784;
@@ -15,10 +18,22 @@
       --cancel-gold: #ffa000;
     }
 
-    body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-    .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 20px; box-sizing: border-box; text-align: center; position: relative; }
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg-color); 
+      margin: 0; padding: 0;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex; justify-content: center; align-items: center; 
+    }
+    .container {
+      max-width: 800px; width: 100%; margin: 0 auto; padding: 20px;
+      box-sizing: border-box; text-align: center; position: relative; 
+    }
+    
     .main-logo { display: block; margin: 0 auto 5px; width: 40px; height: auto; }
     @media (min-width: 751px) { .main-logo { width: 60px; margin-bottom: 10px; } }
+    
     h1 { font-size: 32px; margin: 0.1em 0 0.2em; color: var(--text-main); font-weight: 800; letter-spacing: 1px; }
 
     .user-welcome { font-size: 18px; color: var(--online-main); margin-bottom: 4px; font-weight: bold; min-height: 24px; }
@@ -33,7 +48,10 @@
     .schedule-row { margin: 8px 0; font-size: 16px; color: var(--text-sub); display: flex; align-items: center; }
     .time-badge { display: inline-block; width: 50px; text-align: center; padding: 4px 0; border-radius: 6px; font-size: 14px; margin-right: 12px; font-weight: bold; color: white; flex-shrink: 0; background-color: var(--online-main); }
     
-    .notice-box { text-align: left; background-color: #fff; color: #666; border-radius: 12px; border: 1px dashed #cfd8dc; font-size: 15px; line-height: 1.6; max-width: 600px; margin: 0 auto 20px; overflow: hidden; cursor: pointer; transition: all 0.3s ease; }
+    .notice-box {
+        text-align: left; background-color: #fff; color: #666; border-radius: 12px; border: 1px dashed #cfd8dc; 
+        font-size: 15px; line-height: 1.6; max-width: 600px; margin: 0 auto 20px; overflow: hidden; cursor: pointer; transition: all 0.3s ease;
+    }
     .notice-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background-color: #fff; }
     .notice-title { font-size: 18px; font-weight: bold; color: var(--text-main); margin: 0; }
     .notice-arrow { font-size: 12px; color: #999; transition: transform 0.3s ease; }
@@ -43,28 +61,45 @@
     .notice-list { margin: 0; padding-left: 1.4em; }
     .notice-list li { margin-bottom: 8px; }
     .section-label { font-size: 18px; font-weight: bold; color: var(--text-main); display: block; margin-top: 20px; margin-bottom: 10px; margin-left: -1em; }
+    .sub-item { display: block; margin-top: 2px; color: #888; font-size: 14px; }
 
     .agreement-container { margin: 20px auto 10px; text-align: center; max-width: 260px; display: none; }
     .agreement-label { display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--text-main); cursor: pointer; user-select: none; }
     .agreement-label input { width: 18px; height: 18px; margin-right: 8px; cursor: pointer; accent-color: var(--online-main); }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 10000; }
-    .modal-box { background: white; padding: 30px; border-radius: 24px; text-align: center; max-width: 320px; width: 85%; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: modalShow 0.3s ease-out; }
-    @keyframes modalShow { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 10000;
+    }
+    .modal-box {
+        background: white; padding: 30px; border-radius: 24px; text-align: center;
+        max-width: 320px; width: 85%; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        animation: modalShow 0.3s ease-out;
+    }
+    @keyframes modalShow {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
     .modal-title { font-size: 20px; font-weight: 800; color: #2c3e50; margin-bottom: 10px; }
-    .modal-btn { margin-top: 20px; padding: 12px 0; border-radius: 50px; border: none; background: var(--online-main); color: white; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: background 0.2s; }
+    .modal-btn {
+        margin-top: 20px; padding: 12px 0; border-radius: 50px; border: none;
+        background: var(--online-main); color: white; font-weight: bold; cursor: pointer;
+        width: 100%; font-size: 16px; transition: background 0.2s;
+    }
+    .modal-btn:hover { background: var(--online-light); }
 
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
     .loading-spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--online-main); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
+    .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; transition: opacity 0.3s; }
 
+    /* 日曆 Grid 結構 */
     .month-title { font-weight: 800; font-size: 24px; margin: 1.5em 0 0.8em; color: var(--text-main); }
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
     .weekday-header { font-weight: bold; font-size: 16px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
-    .day { aspect-ratio: 1; width: 100%; font-size: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; background-color: #f7f9fa; color: #cfd8dc; cursor: default; box-sizing: border-box; transition: all 0.1s; position: relative; }
+    .day { aspect-ratio: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; background-color: #f7f9fa; color: #cfd8dc; cursor: default; box-sizing: border-box; transition: all 0.1s; position: relative; }
     
-    /* 恢復數字大小 22px */
+    /* 🔥 鎖死數字大小 22px */
     .day-number { font-size: 22px !important; font-weight: bold; margin-bottom: 2px; line-height: 1; }
     .day-label { font-size: 12px; margin-top: 2px; font-weight: normal; line-height: 1; }
     
@@ -72,21 +107,28 @@
     .day.available .day-label { color: var(--online-main); }
     .day.selected { background-color: var(--online-main); color: #fff; border-color: var(--online-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(102, 187, 106, 0.4); }
 
+    /* 調整時限內：淺綠色背景 */
     .day.registered.can-cancel { background-color: #f1f8e9 !important; border: 2px solid var(--online-main) !important; color: var(--online-main) !important; cursor: pointer; }
-    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer; }
+    .day.registered.can-cancel .day-label { color: var(--online-main) !important; }
 
+    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer; }
+    .day.registered .day-label { color: #b0bec5; }
     .day.full { background-color: #e0e0e0; color: #666; cursor: not-allowed; border: 2px solid var(--online-main); opacity: 0.8; }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
     
     #submit-btn { margin: 15px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--online-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(102, 187, 106, 0.3); }
-    #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; }
+    #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; box-shadow: none; }
 
     .btn-red { background-color: #ff5252 !important; }
     .btn-gray { background-color: #eee !important; color: #333 !important; }
 
     @media (max-width: 750px) {
-      .container { margin: 0; padding: 15px; } h1 { font-size: 26px; }
-      .calendar-header, .calendar-grid { gap: 4px; } .day { font-size: 22px; border-radius: 10px; }
+      .container { margin: 0; padding: 15px; }
+      h1 { font-size: 26px; margin-top: 0.1em; }
+      .calendar-header, .calendar-grid { gap: 4px; }
+      /* 手機版同樣嚴格鎖定 22px */
+      .day-number { font-size: 22px !important; } 
+      .day-label { font-size: 10px; }
       #submit-btn { font-size: 18px; max-width: 60%; }
     }
   </style>
@@ -128,7 +170,7 @@
     <div class="schedule-box"><div class="schedule-row"><span class="time-badge">晚班</span> 週二 / 週四 19:30～21:00</div></div>
     <div class="notice-box" id="notice-box" onclick="toggleNotice()">
         <div class="notice-header"><div class="notice-title">課程規範</div><div class="notice-arrow">▼</div></div>
-        <div class="notice-content"><ul class="notice-list"><li>課前請確認網路與視訊設備，確保上課品質。</li><li>請提早3分鐘登入Rouvy並進入Google Meet。<br><span class="sub-item">（Rouvy 有時效性，時間過了就會被擋住喔！）</span></li><li>進入教室後請先關靜音，要發言時再開啟。</li><span class="section-label">調整規範</span><li>預約後 10 分鐘內可於系統自主調整。</li><li>超過時限如需請假，請私訊教練。</li><li style="margin-top:15px; list-style:none; color:var(--online-main); font-weight:bold;">有任何問題，請直接與教練聯繫。</li></ul></div>
+        <div class="notice-content"><ul class="notice-list"><li>課前請確認網路與視訊設備，確保上課品質。</li><li>請提早3分鐘登入Rouvy並進入Google Meet。<br><span class="sub-item">（Rouvy 有時效性，時間過了就會被擋住喔！）</span></li><li>進入教室後請先關靜音，要發言時再開啟。</li><span class="section-label">請假規範</span><li>如需請假，請盡量於課前 2 小時內完成，以利教練做課程安排。</li><li>遲到不另補時，課程仍依原時段進行。</li><li>如遇天災，依行政院公告辦理。</li><li style="margin-top:15px; list-style:none; color:var(--online-main); font-weight:bold;">有任何問題，請直接與教練聯繫。</li></ul></div>
     </div>
     <div id="calendar"></div>
     <div id="agreement-area" class="agreement-container"><label class="agreement-label"><input type="checkbox" id="agree-checkbox"> 我已詳閱，並同意上述課程規範</label></div>
@@ -143,10 +185,8 @@
     let isSubmitting = false;
     let countdownInterval = null;
 
-    // 🔥 Loading 文案邏輯：分流修正
     const initialLoadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     const finishLoadingMessages = ["正在穿越時光隧道⋯⋯", "準備登陸預約畫面⋯⋯"];
-    
     let msgIndex = 0;
     const loadingInterval = setInterval(() => {
         if (isSubmitting) return; 
@@ -154,7 +194,6 @@
         const loadingDiv = document.getElementById('loading');
         if (textEl && loadingDiv.style.display !== 'none') {
             const finish = new URLSearchParams(window.location.search).get('finish');
-            // 修正：登記完成後 (finish=1) 使用時光隧道，初始使用甜甜圈
             const messages = finish === '1' ? finishLoadingMessages : initialLoadingMessages;
             msgIndex++;
             if (msgIndex < messages.length) textEl.textContent = messages[msgIndex];
@@ -253,15 +292,14 @@
                   if (remainMs > 0) {
                     const mins = Math.floor(remainMs / 60000), secs = Math.floor((remainMs % 60000) / 1000);
                     titleEl.textContent = "調整登記";
-                    // 🔥 內文文字修正
                     msgEl.innerHTML = `您已登記 ${dateStr} 功率課。<br>還有 <b style="font-size: 22px; color: var(--cancel-gold);">${mins} 分 ${secs.toString().padStart(2, '0')} 秒</b> 可以修改登記喔！`;
                     footer.style.display = 'flex';
                     closeBtn.style.display = 'none';
                     document.getElementById('confirm-cancel-btn').onclick = () => { closeCancelModal(); handleCancel(dateStr); };
                   } else {
                     if (countdownInterval) clearInterval(countdownInterval);
-                    titleEl.textContent = "已過調整時限";
-                    msgEl.innerHTML = `預約已正式成立！<br><br>如需請假，請直接私訊教練，<br>我們將為您手動處理。`;
+                    titleEl.textContent = "課程已完成登記！";
+                    msgEl.innerHTML = `如需請假，請直接私訊教練。`;
                     footer.style.display = 'none';
                     closeBtn.style.display = 'block';
                   }
