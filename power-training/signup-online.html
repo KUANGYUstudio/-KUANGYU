@@ -60,21 +60,19 @@
     .loading-text { margin-top: 20px; font-size: 18px; color: #666; font-weight: 500; }
 
     /* =========================================
-       📅 日曆格子與字體大小 (精確鎖定 22px)
+       📅 日曆格子與字體大小 (22px 鎖死)
        ========================================= */
     .month-title { font-weight: 800; font-size: 24px; margin: 1.5em 0 0.8em; color: var(--text-main); }
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
     .weekday-header { font-weight: bold; font-size: 16px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
     .day { aspect-ratio: 1; width: 100%; font-size: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; background-color: #f7f9fa; color: #cfd8dc; cursor: default; box-sizing: border-box; transition: all 0.1s; position: relative; }
     
-    /* 🔥 字體鎖死 22px */
     .day-number { font-size: 22px !important; font-weight: bold !important; margin-bottom: 2px; line-height: 1; }
     .day-label { font-size: 12px; margin-top: 2px; font-weight: normal; line-height: 1; }
     
     .day.available { background-color: #fff; color: #333; border: 2px solid var(--online-main); cursor: pointer; }
     .day.available .day-label { color: var(--online-main); }
     
-    /* 🔥 正確的反白效果 */
     .day.selected { background-color: var(--online-main) !important; color: #fff !important; border-color: var(--online-main) !important; transform: scale(1.05); box-shadow: 0 4px 10px rgba(102, 187, 106, 0.4); }
     .day.selected .day-label { color: #fff !important; }
 
@@ -94,7 +92,6 @@
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; } h1 { font-size: 26px; }
       .calendar-header, .calendar-grid { gap: 4px; } .day { font-size: 22px; border-radius: 10px; }
-      /* 🔥 手機版字體同樣鎖死 */
       .day-number { font-size: 18px !important; } 
       .day-label { font-size: 10px; }
       #submit-btn { font-size: 18px; max-width: 60%; }
@@ -105,8 +102,7 @@
   <div id="success-modal" class="modal-overlay">
     <div class="modal-box">
         <div class="modal-title">登記成功</div>
-        <div style="color: #666; font-size: 14px;">教練收到你的預約囉</div>
-        <button class="modal-btn" onclick="closeModal()">確定</button>
+        <div style="color: #666; font-size: 14px;">教練收到你的預約囉</div><button class="modal-btn" onclick="closeModal()">確定</button>
     </div>
   </div>
 
@@ -161,7 +157,6 @@
     let isSubmitting = false;
     let countdownInterval = null;
 
-    // 🔥 完美統合文案
     const initialLoadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     const finishLoadingMessages = ["正在穿越時光隧道⋯⋯", "準備登陸預約畫面⋯⋯"];
     let msgIndex = 0;
@@ -183,13 +178,11 @@
     function closeModal() { window.location.href = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId) + '&finish=1'; }
     function closeCancelModal() { document.getElementById('cancel-modal').style.display = 'none'; if (countdownInterval) clearInterval(countdownInterval); }
 
-    // 🔥 新增：通用訊息視窗控制函式
     function showSystemAlert(title, message, callback) {
         document.getElementById('alert-title').textContent = title;
         document.getElementById('alert-msg').textContent = message;
         
         const btn = document.getElementById('alert-btn');
-        // 移除舊的事件監聽，防止疊加
         const newBtn = btn.cloneNode(true);
         btn.parentNode.replaceChild(newBtn, btn);
 
@@ -312,7 +305,7 @@
       }
     }
 
-    // 🔥 修改：取消邏輯現在使用 showSystemAlert，不再用醜醜的原生 alert
+    // 🔥 修改：成功時不顯示內文 (傳空字串)
     async function handleCancel(dateStr) {
       document.getElementById('loading-text').textContent = "正在取消登記⋯⋯";
       document.getElementById('loading').style.display = 'flex';
@@ -320,18 +313,13 @@
         const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=online`);
         const data = await res.json();
         
-        // 隱藏 loading
         document.getElementById('loading').style.display = 'none';
 
-        // 使用自訂彈窗
-        showSystemAlert(
-             data.status === 'success' ? '預約調整成功' : '提示', 
-             data.message, 
-             () => {
-                 // 只有成功時才重整頁面，或者無論如何都重整確保資料正確
-                 location.reload(); 
-             }
-        );
+        if (data.status === 'success') {
+             showSystemAlert('取消成功！', '', () => { location.reload(); });
+        } else {
+             showSystemAlert('提示', data.message, () => { location.reload(); });
+        }
 
       } catch (e) { 
         document.getElementById('loading').style.display = 'none';
@@ -345,7 +333,6 @@
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在寫入登記中⋯⋯";
       loading.style.display = 'flex';
-      // 🔥 送出登記時的模擬文案
       const writeTimer = setTimeout(() => { loadingText.textContent = "我快寫好了 等我一下⋯⋯"; }, 3000);
       try {
         for (const date of selectedDates) { await fetch(`${SCRIPT_URL}?mode=submit&date=${encodeURIComponent(date)}&courseType=online&name=${encodeURIComponent(currentUser.name)}&lineId=${encodeURIComponent(currentUser.lineId)}&email=${encodeURIComponent(currentUser.email)}`); }
