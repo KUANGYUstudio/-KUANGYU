@@ -17,6 +17,7 @@
       --text-main: #2c3e50;
       --text-sub: #546e7a;
       --bg-color: #ffffff;
+      --cancel-gold: #ffa000;
     }
 
     body {
@@ -132,6 +133,10 @@
     #submit-btn { margin: 15px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--online-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(102, 187, 106, 0.3); }
     #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; box-shadow: none; }
 
+    /* 取消專用彈窗顏色 */
+    .btn-red { background-color: #ff5252 !important; }
+    .btn-gray { background-color: #eee !important; color: #333 !important; }
+
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; }
       h1 { font-size: 26px; margin-top: 0.1em; }
@@ -154,6 +159,18 @@
         <div class="modal-title">登記成功！</div>
         <div style="color: #666; font-size: 14px;">教練收到你的預約囉</div>
         <button class="modal-btn" onclick="closeModal()">確定</button>
+    </div>
+  </div>
+
+  <div id="cancel-modal" class="modal-overlay">
+    <div class="modal-box">
+        <span class="modal-icon">⏳</span>
+        <div class="modal-title">【預約調整】</div>
+        <div id="cancel-modal-msg" style="color: #666; font-size: 15px; line-height: 1.6; margin: 15px 0;"></div>
+        <div style="display: flex; gap: 10px;">
+          <button class="modal-btn btn-gray" onclick="closeCancelModal()">先不要</button>
+          <button class="modal-btn btn-red" id="confirm-cancel-btn">確定調整</button>
+        </div>
     </div>
   </div>
 
@@ -224,8 +241,9 @@
     let myRegisteredDetails = []; 
     let currentUser = { name: "", lineId: "", email: "" };
     let isSubmitting = false;
+    let countdownInterval = null;
 
-    // Loading 文案管理 (完整保留您的 100 行邏輯關鍵處)
+    // Loading 文案管理
     const initialLoadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     const finishLoadingMessages = ["正在穿越時光隧道⋯⋯", "準備登陸預約畫面⋯⋯"];
     
@@ -254,6 +272,11 @@
     function closeModal() {
         const nextUrl = window.location.pathname + '?name=' + encodeURIComponent(currentUser.name) + '&lineId=' + encodeURIComponent(currentUser.lineId) + '&finish=1';
         window.location.href = nextUrl;
+    }
+
+    function closeCancelModal() {
+        document.getElementById('cancel-modal').style.display = 'none';
+        if (countdownInterval) clearInterval(countdownInterval);
     }
 
     async function initSystem() {
@@ -362,24 +385,35 @@
             if (myRecord) {
               const diff = nowTimestamp - myRecord.signupTime;
               cell.classList.add('registered');
-              if (diff <= 600000) cell.classList.add('can-cancel'); // 10分鐘內加上淺綠背景
+              if (diff <= 600000) cell.classList.add('can-cancel');
 
               const label = document.createElement('div'); label.className = 'day-label'; label.textContent = "已登記";
               cell.appendChild(label);
               
               cell.onclick = () => {
-                const now = new Date().getTime();
-                const remainMs = 600000 - (now - myRecord.signupTime);
+                const updateCancelModal = () => {
+                  const now = new Date().getTime();
+                  const remainMs = 600000 - (now - myRecord.signupTime);
+                  const msgEl = document.getElementById('cancel-modal-msg');
 
-                if (remainMs > 0) {
-                  const mins = Math.floor(remainMs / 60000);
-                  const secs = Math.floor((remainMs % 60000) / 1000);
-                  if (confirm(`【預約緩衝期】\n課程日期：${dateStr}\n\n目前仍在 10 分鐘自主調整時限內。\n您還剩餘約 ${mins} 分 ${secs} 秒 可以自主調整。\n\n確定要取消預約並釋出名額嗎？`)) {
-                    handleCancel(dateStr);
+                  if (remainMs > 0) {
+                    const mins = Math.floor(remainMs / 60000);
+                    const secs = Math.floor((remainMs % 60000) / 1000);
+                    msgEl.innerHTML = `您已預約 ${dateStr} 功率課。<br>目前仍在自主調整時限內：<br><b style="font-size: 20px; color: #ffa000;">剩餘 ${mins} 分 ${secs.toString().padStart(2, '0')} 秒</b>`;
+                    document.getElementById('cancel-modal').style.display = 'flex';
+                    document.getElementById('confirm-cancel-btn').onclick = () => {
+                      closeCancelModal();
+                      handleCancel(dateStr);
+                    };
+                  } else {
+                    closeCancelModal();
+                    alert(`【預約已正式成立】\n課程日期：${dateStr}\n\n已超過 10 分鐘自主調整時限。\n\n如需請假，請直接私訊教練，\n我們將手動為您處理，謝謝您的配合！`);
                   }
-                } else {
-                  alert(`【預約已正式成立】\n課程日期：${dateStr}\n\n已超過 10 分鐘自主調整時限。\n\n如需請假，請直接私訊教練，\n我們將手動為您處理，謝謝您的配合！`);
-                }
+                };
+
+                updateCancelModal();
+                if (countdownInterval) clearInterval(countdownInterval);
+                countdownInterval = setInterval(updateCancelModal, 1000);
               };
             } else if (currentCount >= 6 && (dayOfWeek === 2 || dayOfWeek === 4)) {
               cell.classList.add('full');
