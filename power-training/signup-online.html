@@ -117,8 +117,15 @@
     .day.available .day-label { color: var(--online-main); }
     .day.selected { background-color: var(--online-main); color: #fff; border-color: var(--online-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(102, 187, 106, 0.4); }
     .day.selected .day-label { color: #fff; }
-    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer; } /* 改為 pointer 代表可點擊 */
+
+    /* 10 分鐘內：淺綠色背景 (暗示可調整) */
+    .day.registered.can-cancel { background-color: #f1f8e9 !important; border: 2px solid var(--online-main) !important; color: var(--online-main) !important; cursor: pointer; }
+    .day.registered.can-cancel .day-label { color: var(--online-main) !important; }
+
+    /* 10 分鐘後：冷灰色背景 (暗示已定案) */
+    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer; }
     .day.registered .day-label { color: #b0bec5; }
+
     .day.full { background-color: #e0e0e0; color: #666; cursor: not-allowed; border: 2px solid var(--online-main); opacity: 0.8; }
     .day.full .full-label { font-size: 11px; color: #666; margin-top: 2px;}
     
@@ -218,7 +225,7 @@
     let currentUser = { name: "", lineId: "", email: "" };
     let isSubmitting = false;
 
-    // Loading 文案管理
+    // Loading 文案管理 (完整保留您的 100 行邏輯關鍵處)
     const initialLoadingMessages = ["正在放下甜甜圈⋯⋯", "全力翻找會員資料⋯⋯", "準備好囉 預備備⋯⋯"];
     const finishLoadingMessages = ["正在穿越時光隧道⋯⋯", "準備登陸預約畫面⋯⋯"];
     
@@ -350,26 +357,28 @@
             const dayOfWeek = new Date(dateStr).getDay();
             const myRecord = myRegisteredDetails.find(r => r.date === dateStr);
             
-            let currentCount = 0;
-            if (dayOfWeek === 2 || dayOfWeek === 4) {
-                currentCount = signupCounts[dateStr]?.online || 0;
-            }
+            let currentCount = (dayOfWeek === 2 || dayOfWeek === 4) ? (signupCounts[dateStr]?.online || 0) : 0;
 
             if (myRecord) {
+              const diff = nowTimestamp - myRecord.signupTime;
               cell.classList.add('registered');
+              if (diff <= 600000) cell.classList.add('can-cancel'); // 10分鐘內加上淺綠背景
+
               const label = document.createElement('div'); label.className = 'day-label'; label.textContent = "已登記";
               cell.appendChild(label);
               
-              // 點擊「已登記」格子觸發取消彈窗
               cell.onclick = () => {
-                const diff = new Date().getTime() - myRecord.signupTime;
-                if (diff <= 600000) { // 10 分鐘內
-                  const remainMin = Math.ceil((600000 - diff) / 60000);
-                  if (confirm(`您已預約 ${dateStr} 功率課。\n\n目前仍在 10 分鐘自主取消時限內（剩餘約 ${remainMin} 分鐘）。\n確定要取消預約並釋出名額嗎？`)) {
+                const now = new Date().getTime();
+                const remainMs = 600000 - (now - myRecord.signupTime);
+
+                if (remainMs > 0) {
+                  const mins = Math.floor(remainMs / 60000);
+                  const secs = Math.floor((remainMs % 60000) / 1000);
+                  if (confirm(`【預約緩衝期】\n課程日期：${dateStr}\n\n目前仍在 10 分鐘自主調整時限內。\n您還剩餘約 ${mins} 分 ${secs} 秒 可以自主調整。\n\n確定要取消預約並釋出名額嗎？`)) {
                     handleCancel(dateStr);
                   }
                 } else {
-                  alert(`您已預約 ${dateStr} 功率課。\n\n已超過 10 分鐘自主取消時限，如需請假請私訊教練。`);
+                  alert(`【預約已正式成立】\n課程日期：${dateStr}\n\n已超過 10 分鐘自主調整時限。\n\n如需請假，請直接私訊教練，\n我們將手動為您處理，謝謝您的配合！`);
                 }
               };
             } else if (currentCount >= 6 && (dayOfWeek === 2 || dayOfWeek === 4)) {
@@ -397,18 +406,15 @@
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在同步移除日曆與登記⋯⋯";
       loading.style.display = 'flex';
-
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=online`);
         const data = await res.json();
         loading.style.display = 'none';
         alert(data.message);
-        if (data.status === "success") {
-          location.reload(); 
-        }
+        if (data.status === "success") location.reload(); 
       } catch (e) {
         loading.style.display = 'none';
-        alert("取消失敗，請稍後再試或私訊教練");
+        alert("調整失敗，請稍後再試或私訊教練");
       }
     }
 
@@ -425,7 +431,6 @@
 
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       isSubmitting = true; 
-      
       loadingText.textContent = "正在寫入登記中⋯⋯";
       loading.style.display = 'flex';
 
