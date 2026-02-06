@@ -71,7 +71,7 @@
     @keyframes modalShow { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .modal-title { font-size: 20px; font-weight: 800; color: #2c3e50; margin-bottom: 10px; }
     
-    /* 🔥 修改處：調整按鈕寬度 */
+    /* 按鈕樣式 (已縮短) */
     .modal-btn { 
         margin-top: 20px; 
         padding: 12px 0; 
@@ -82,11 +82,11 @@
         font-weight: bold; 
         cursor: pointer; 
         
-        width: 50%;         /* 寬度改為 50% */
-        min-width: 120px;   /* 最小寬度 */
-        display: block;     /* 區塊元素 */
-        margin-left: auto;  /* 置中 */
-        margin-right: auto; /* 置中 */
+        width: 50%;         
+        min-width: 120px;   
+        display: block;     
+        margin-left: auto;  
+        margin-right: auto; 
         
         font-size: 16px; 
         transition: background 0.2s; 
@@ -112,7 +112,6 @@
       cursor: default; box-sizing: border-box; transition: all 0.1s; position: relative; 
     }
     
-    /* 🔥 字體鎖死 22px */
     .day-number { font-size: 22px !important; font-weight: bold !important; margin-bottom: 2px; line-height: 1; }
     .day-label { font-size: 12px; margin-top: 2px; font-weight: normal; line-height: 1; }
     
@@ -128,10 +127,23 @@
     .day.selected.morning { background-color: var(--morning-main); color: #fff; border-color: var(--morning-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(255, 179, 0, 0.4); }
     .day.selected.morning .day-label { color: #fff; }
 
-    /* 調整時限內樣式 */
-    .day.registered.can-cancel { background-color: #e0f2f1 !important; border: 2px solid var(--evening-main) !important; color: var(--evening-main) !important; cursor: pointer !important; }
+    /* 🔥 修改處：區分早晚班的可取消樣式 */
+    /* 晚班 (週二/四) - 藍色 */
+    .day.registered.can-cancel.evening { 
+        background-color: #e0f2f1 !important; 
+        border: 2px solid var(--evening-main) !important; 
+        color: var(--evening-main) !important; 
+        cursor: pointer !important; 
+    }
+    /* 早班 (週三) - 黃色 */
+    .day.registered.can-cancel.morning { 
+        background-color: #fff8e1 !important; 
+        border: 2px solid var(--morning-main) !important; 
+        color: var(--morning-main) !important; 
+        cursor: pointer !important; 
+    }
     
-    /* 調整時限外樣式 */
+    /* 調整時限外樣式 (統一灰色) */
     .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; cursor: pointer !important; }
     .day.registered .day-label { color: #b0bec5; font-weight: normal; }
 
@@ -141,14 +153,12 @@
     #submit-btn { margin: 15px auto 20px; padding: 16px 0; font-size: 20px; letter-spacing: 1px; background: var(--evening-main); color: #fff; border: none; border-radius: 50px; cursor: pointer; max-width: 260px; display: block; width: 100%; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0, 131, 143, 0.3); }
     #submit-btn:disabled { background-color: #cfd8dc; cursor: not-allowed; box-shadow: none; }
 
-    /* 🔥 修改處：雙按鈕（取消/先不要）也需要調整 */
     .btn-red { background-color: #ff5252 !important; width: 100% !important; min-width: auto !important; }
     .btn-gray { background-color: #eee !important; color: #333 !important; width: 100% !important; min-width: auto !important; }
 
     @media (max-width: 750px) {
       .container { margin: 0; padding: 15px; } h1 { font-size: 26px; margin-top: 0.1em; }
       .calendar-header, .calendar-grid { gap: 4px; } .day { border-radius: 10px; }
-      /* 手機版鎖死 */
       .day-number { font-size: 18px !important; } 
       .day-label { font-size: 10px; }
       #submit-btn { font-size: 18px; max-width: 60%; }
@@ -330,8 +340,13 @@
 
             if (myRecord) {
               const diff = nowTs - myRecord.signupTime;
-              cell.classList.add('registered');
+              
+              // 🔥 修正：同時加上 registered 以及 對應的 theme (morning/evening)
+              // 這樣 CSS 才能抓到 .day.registered.can-cancel.morning
+              cell.classList.add('registered', theme); 
+              
               if (diff <= 600000) cell.classList.add('can-cancel');
+              
               cell.innerHTML += `<div class="day-label">已登記</div>`;
               cell.onclick = () => {
                 const updateCancelModal = () => {
@@ -373,7 +388,6 @@
       }
     }
 
-    // 🔥 修改：成功時不顯示內文 (傳空字串)
     async function handleCancel(dateStr) {
       const loading = document.getElementById('loading'), loadingText = document.getElementById('loading-text');
       loadingText.textContent = "正在取消登記⋯⋯";
@@ -385,7 +399,6 @@
         document.getElementById('loading').style.display = 'none';
 
         if (data.status === 'success') {
-             // 🔥 修改：成功時只顯示標題，內文為空
              showSystemAlert('取消成功！', '', () => { location.reload(); });
         } else {
              showSystemAlert('提示', data.message, () => { location.reload(); });
