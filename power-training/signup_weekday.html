@@ -29,8 +29,9 @@
     
     h1 { font-size: 32px; margin: 0.1em 0 0.2em; color: var(--text-main); font-weight: 800; letter-spacing: 1px; }
 
-    /* 歡迎區 */
-    .user-welcome { font-size: 18px; color: var(--evening-main); margin-bottom: 4px; font-weight: bold; min-height: 24px; }
+    /* 歡迎區 - 修改處：減少底部間距，讓下方格子往上靠 */
+    .user-welcome { font-size: 18px; color: var(--evening-main); margin-bottom: 2px; font-weight: bold; min-height: 24px; }
+    
     .login-section { background-color: #fafafa; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; display: none; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; }
     .login-title { font-weight: bold; margin-bottom: 8px; color: var(--text-main); font-size: 16px; }
     .login-input-group { display: flex; gap: 8px; }
@@ -38,9 +39,24 @@
     .login-input:focus { border-color: var(--evening-light); }
     .login-btn { padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background-color: var(--text-main); color: white; cursor: pointer; font-weight: bold; }
     
-    /* 課程時間表 */
-    .schedule-box { text-align: left; display: block; margin-bottom: 15px; background: #fafafa; padding: 15px 20px; border-radius: 12px; border: 1px solid #eee; max-width: 600px; margin-left: auto; margin-right: auto; }
-    .schedule-row { margin: 8px 0; font-size: 16px; color: var(--text-sub); display: flex; align-items: center; }
+    /* 課程時間表 - 修改處：減少 padding (框框變矮)、微調 margin */
+    .schedule-box { 
+        text-align: left; 
+        display: block; 
+        margin-bottom: 15px; /* 保持與下方規範的距離不變 */
+        background: #fafafa; 
+        padding: 10px 20px;  /* 🔥 減少上下內距 (原 15px) */
+        border-radius: 12px; 
+        border: 1px solid #eee; 
+        max-width: 600px; 
+        margin-left: auto; 
+        margin-right: auto; 
+        margin-top: 5px;     /* 微調上方距離 */
+    }
+    
+    /* 修改處：減少行距 */
+    .schedule-row { margin: 5px 0; font-size: 16px; color: var(--text-sub); display: flex; align-items: center; }
+    
     .time-badge { display: inline-block; width: 50px; text-align: center; padding: 4px 0; border-radius: 6px; font-size: 14px; margin-right: 12px; font-weight: bold; color: white; flex-shrink: 0; }
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
@@ -127,15 +143,13 @@
     .day.selected.morning { background-color: var(--morning-main); color: #fff; border-color: var(--morning-main); transform: scale(1.05); box-shadow: 0 4px 10px rgba(255, 179, 0, 0.4); }
     .day.selected.morning .day-label { color: #fff; }
 
-    /* 🔥 修改處：區分早晚班的可取消樣式 */
-    /* 晚班 (週二/四) - 藍色 */
+    /* 早晚班的可取消樣式 */
     .day.registered.can-cancel.evening { 
         background-color: #e0f2f1 !important; 
         border: 2px solid var(--evening-main) !important; 
         color: var(--evening-main) !important; 
         cursor: pointer !important; 
     }
-    /* 早班 (週三) - 黃色 */
     .day.registered.can-cancel.morning { 
         background-color: #fff8e1 !important; 
         border: 2px solid var(--morning-main) !important; 
@@ -340,13 +354,8 @@
 
             if (myRecord) {
               const diff = nowTs - myRecord.signupTime;
-              
-              // 🔥 修正：同時加上 registered 以及 對應的 theme (morning/evening)
-              // 這樣 CSS 才能抓到 .day.registered.can-cancel.morning
               cell.classList.add('registered', theme); 
-              
               if (diff <= 600000) cell.classList.add('can-cancel');
-              
               cell.innerHTML += `<div class="day-label">已登記</div>`;
               cell.onclick = () => {
                 const updateCancelModal = () => {
@@ -395,15 +404,12 @@
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}`);
         const data = await res.json();
-        
         document.getElementById('loading').style.display = 'none';
-
         if (data.status === 'success') {
              showSystemAlert('取消成功！', '', () => { location.reload(); });
         } else {
              showSystemAlert('提示', data.message, () => { location.reload(); });
         }
-
       } catch (e) { 
         document.getElementById('loading').style.display = 'none';
         showSystemAlert("連線錯誤", "系統連線失敗，請稍後再試。", null);
