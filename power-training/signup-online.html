@@ -311,7 +311,7 @@
     }
 
     async function handleCancel(dateStr) {
-      document.getElementById('loading-text').textContent = "正在同步移除日曆與登記⋯⋯";
+      document.getElementById('loading-text').textContent = "正在取消登記⋯⋯";
       document.getElementById('loading').style.display = 'flex';
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(currentUser.lineId)}&courseType=online`);
