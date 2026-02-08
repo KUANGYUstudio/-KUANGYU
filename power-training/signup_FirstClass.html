@@ -184,6 +184,41 @@
         background-color: #fff;
         outline: none;
     }
+
+    /* 🔥 新增：煞車系統選擇樣式 */
+    .radio-group {
+        display: flex;
+        gap: 15px;
+    }
+    .radio-label {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        background-color: #fafafa;
+        border: 2px solid #eee;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 15px;
+        color: #555;
+    }
+    /* 隱藏原生 radio 按鈕 */
+    .radio-label input[type="radio"] {
+        display: none;
+    }
+    /* 選中狀態 */
+    .radio-label:has(input:checked) {
+        border-color: var(--evening-light);
+        background-color: var(--evening-bg);
+        color: var(--evening-main);
+        font-weight: bold;
+    }
+    /* 舊瀏覽器兼容 (Fallback) */
+    .radio-label input:checked + span {
+        font-weight: bold;
+    }
     
     /* 載入動畫 */
     .loading-overlay {
@@ -423,6 +458,19 @@
         <div class="form-group">
             <label>Email (接收日曆邀請)</label>
             <input type="email" id="guest-email" placeholder="example@gmail.com" required>
+        </div>
+        <div class="form-group">
+            <label>自行車煞車系統</label>
+            <div class="radio-group">
+                <label class="radio-label">
+                    <input type="radio" name="brake-system" value="框煞">
+                    <span>框煞 (C夾)</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="brake-system" value="碟煞">
+                    <span>碟煞 (Disc)</span>
+                </label>
+            </div>
         </div>
     </div>
 
@@ -690,13 +738,17 @@
     }
 
     document.getElementById('submit-btn').addEventListener('click', async () => {
-        const name = document.getElementById('guest-name').value.trim();
+        let name = document.getElementById('guest-name').value.trim();
         const phone = document.getElementById('guest-phone').value.trim();
         const email = document.getElementById('guest-email').value.trim();
+        
+        // 🔥 獲取煞車系統選擇
+        const brakeEl = document.querySelector('input[name="brake-system"]:checked');
+        const brake = brakeEl ? brakeEl.value : "";
 
         // 🛡️ 防呆：檢查欄位是否為空
-        if (!name || !phone || !email) {
-            showSystemAlert('提示', '請完整填寫：姓名、電話、Email');
+        if (!name || !phone || !email || !brake) {
+            showSystemAlert('提示', '請完整填寫：姓名、電話、Email 並選擇煞車系統');
             return;
         }
 
@@ -721,8 +773,11 @@
 
         let timeInfo = selectedType === "morning" ? "早班 06:30" : "晚班 19:30";
         
-        // 修改後的確認訊息，加入規範提醒
-        const confirmMsg = `【預約確認】\n\n日期：${selectedDate}\n時段：${timeInfo}\n姓名：${name}\n電話：${phone}\n費用：$660\n\n※ 規範提醒：\n1. 預約後請於 24 小時內完成匯款。\n2. 匯款後請私訊「光聿工作室」告知後五碼以保留席位。\n3. 若無故缺席，費用將不予退還。\n\n確認送出？`;
+        // 🔥 將煞車資訊合併到姓名後方，方便後端接收
+        // 例如：王大明 (碟煞)
+        const finalName = `${name} (${brake})`;
+
+        const confirmMsg = `【預約確認】\n\n日期：${selectedDate}\n時段：${timeInfo}\n姓名：${finalName}\n電話：${phone}\n煞車：${brake}\n費用：$660\n\n※ 規範提醒：\n1. 預約後請於 24 小時內完成匯款。\n2. 匯款後請私訊「光聿工作室」告知後五碼以保留席位。\n3. 若無故缺席，費用將不予退還。\n\n確認送出？`;
 
         if (!confirm(confirmMsg)) {
             return;
@@ -736,7 +791,7 @@
             const params = new URLSearchParams({
                 mode: 'trial_submit',
                 date: selectedDate,
-                name: name,
+                name: finalName, // 傳送合併後的姓名
                 phone: phone,
                 email: email
             });
