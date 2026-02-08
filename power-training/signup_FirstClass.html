@@ -53,25 +53,26 @@
     }
 
     /* =========================================
-       🔥 Logo 設定
+       🔥 Logo 設定 (統一置中，手機優先)
        ========================================= */
     .main-logo {
         display: block;
-        margin: 0 auto 5px;
-        width: 40px;
+        margin: 0 auto 5px; /* 置中，下方留一點白 */
+        width: 40px;        /* 🎯 手機版預設大小：40px */
         height: auto;
     }
 
+    /* 💻 電腦版變大 (當螢幕大於 600px 時) */
     @media (min-width: 601px) {
         .main-logo {
-            width: 60px;
+            width: 60px;     /* 🎯 電腦版大小：60px */
             margin-bottom: 10px;
         }
     }
 
     h1 {
       font-size: 28px;
-      margin: 0.1em 0 0.6em;
+      margin: 0.1em 0 0.6em; /* 配合上方 Logo，縮小間距 */
       color: #2c3e50;
       font-weight: 800;
       letter-spacing: 1px;
@@ -110,7 +111,7 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
 
-    /* === 💰 價格與優惠說明區 === */
+    /* === 💰 價格與優惠說明區 (清楚算式版) === */
     .price-info {
         background-color: var(--price-bg);
         color: var(--price-text);
@@ -142,6 +143,7 @@
         padding: 0 4px;
         border-radius: 4px;
     }
+    /* 綠色小區塊 */
     .price-example {
         margin-top: 10px;
         font-size: 13px;
@@ -150,14 +152,6 @@
         padding: 10px;
         border-radius: 8px;
         border: 1px solid #a5d6a7;
-    }
-    .payment-notice {
-        margin-top: 10px;
-        color: #d32f2f;
-        font-weight: bold;
-        font-size: 13px;
-        display: flex;
-        align-items: flex-start;
     }
 
     /* 📝 訪客資料輸入區 */
@@ -225,13 +219,13 @@
     .modal-btn { 
         margin-top: 20px; padding: 12px 0; border-radius: 50px; border: none; 
         background: var(--evening-main); color: white; font-weight: bold; cursor: pointer; 
-        width: 100%; display: block;
+        width: 50%; min-width: 120px; display: block; margin-left: auto; margin-right: auto;
         font-size: 16px; transition: background 0.2s; 
     }
     .modal-btn:hover { background: var(--evening-light); }
 
-    .btn-red { background-color: #ff5252 !important; }
-    .btn-gray { background-color: #eee !important; color: #333 !important; }
+    .btn-red { background-color: #ff5252 !important; width: 100% !important; min-width: auto !important; }
+    .btn-gray { background-color: #eee !important; color: #333 !important; width: 100% !important; min-width: auto !important; }
 
     /* 日曆樣式 */
     .month-title {
@@ -244,6 +238,9 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 8px;
+      padding: 0;
+      box-sizing: border-box;
+      max-width: 100%;
     }
     .weekday-header {
       font-weight: bold;
@@ -262,12 +259,15 @@
       border-radius: 8px; 
       background-color: #f7f9fa;
       color: #cfd8dc;
+      cursor: default;
+      box-sizing: border-box;
+      transition: all 0.1s;
       position: relative;
     }
-    .day-number { font-size: 16px; font-weight: 600; }
-    .day-label { font-size: 10px; }
+    .day-number { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+    .day-label { font-size: 10px; margin-top: 0px; font-weight: normal; }
 
-    /* === 晚班樣式 === */
+    /* === 晚班樣式 (藍色) === */
     .day.available.evening {
       background-color: #fff;
       color: #333;
@@ -279,12 +279,13 @@
     .day.selected.evening {
       background-color: var(--evening-main);
       color: #fff;
+      border-color: var(--evening-main);
       transform: scale(1.05);
       box-shadow: 0 4px 10px rgba(0, 131, 143, 0.4);
     }
     .day.selected.evening .day-label { color: #fff; }
 
-    /* === 早班樣式 === */
+    /* === 早班樣式 (黃色) === */
     .day.available.morning {
       background-color: #fff;
       color: #333;
@@ -296,21 +297,48 @@
     .day.selected.morning {
       background-color: var(--morning-main);
       color: #fff;
+      border-color: var(--morning-main);
       transform: scale(1.05);
       box-shadow: 0 4px 10px rgba(255, 179, 0, 0.4);
     }
     .day.selected.morning .day-label { color: #fff; }
     
-    .day.registered.can-cancel.evening { background-color: #e0f2f1 !important; border: 2px solid var(--evening-main) !important; color: var(--evening-main) !important; cursor: pointer !important; }
-    .day.registered.can-cancel.morning { background-color: #fff8e1 !important; border: 2px solid var(--morning-main) !important; color: var(--morning-main) !important; cursor: pointer !important; }
+    /* 調整時限內樣式 (新增) */
+    .day.registered.can-cancel.evening { 
+        background-color: #e0f2f1 !important; 
+        border: 2px solid var(--evening-main) !important; 
+        color: var(--evening-main) !important; 
+        cursor: pointer !important; 
+    }
+    .day.registered.can-cancel.morning { 
+        background-color: #fff8e1 !important; 
+        border: 2px solid var(--morning-main) !important; 
+        color: var(--morning-main) !important; 
+        cursor: pointer !important; 
+    }
     
-    .day.registered { background-color: #eceff1; color: #b0bec5; border: 2px solid #cfd8dc; }
-    .day.full { background-color: #f5f5f5; color: #bdbdbd; border: 1px dashed #e0e0e0; }
+    .day.registered {
+        background-color: #eceff1;
+        color: #b0bec5;
+        border: 2px solid #cfd8dc; 
+        cursor: not-allowed;
+    }
+    .day.registered .day-label { color: #b0bec5; }
 
+    .day.full {
+      background-color: #f5f5f5;
+      color: #bdbdbd;
+      cursor: not-allowed;
+      border: 1px dashed #e0e0e0;
+    }
+    .day.full .full-label { font-size: 10px; color: #bdbdbd; margin-top: 2px;}
+
+    /* 送出按鈕 */
     #submit-btn {
       margin: 20px auto 10px; 
       padding: 14px 0;
       font-size: 18px;
+      letter-spacing: 1px;
       background: #cfd8dc;
       color: #fff;
       border: none;
@@ -318,11 +346,14 @@
       cursor: pointer;
       width: 100%;
       font-weight: bold;
+      transition: all 0.3s;
     }
+    #submit-btn:disabled { cursor: not-allowed; }
 
     @media (max-width: 600px) {
       body { align-items: flex-start; background: #fff; } 
       .container { margin: 0; padding: 20px; box-shadow: none; border-radius: 0; }
+      h1 { font-size: 24px; }
     }
   </style>
 </head>
@@ -342,7 +373,7 @@
   <div id="alert-modal" class="modal-overlay">
     <div class="modal-box">
         <div class="modal-title" id="alert-title">提示</div>
-        <div id="alert-msg" style="color: #444; font-size: 15px; line-height: 1.6; margin: 15px 0; text-align: left;"></div>
+        <div id="alert-msg" style="color: #444; font-size: 16px; line-height: 1.6; margin: 15px 0;"></div>
         <button class="modal-btn" id="alert-btn">確定</button>
     </div>
   </div>
@@ -353,33 +384,46 @@
   </div>
 
   <div class="container">
+    
     <img src="logo_icon.png" alt="光聿 Logo" class="main-logo">
+
     <h1>光聿單堂功率體驗</h1>
     
     <div class="schedule-box">
-        <div class="schedule-row"><span class="time-badge badge-evening">晚班</span> 週二 / 週四 19:30～21:00</div>
-        <div class="schedule-row"><span class="time-badge badge-morning">早班</span> 週三 06:30～08:00</div>
+        <div class="schedule-row">
+            <span class="time-badge badge-evening">晚班</span> 週二 / 週四 19:30～21:00
+        </div>
+        <div class="schedule-row">
+            <span class="time-badge badge-morning">早班</span> 週三 06:30～08:00
+        </div>
     </div>
     
     <div class="price-info">
         <div class="price-title">單堂體驗費用 <span>$660</span></div>
         <div class="price-desc">
-            💡 <strong>購課折抵優惠：</strong><br>
-            後續購買正式課卡，本堂體驗費 <span class="price-highlight">可全額折抵</span>。<br>
+            💡 <strong>購課折抵優惠：</strong><br><br>
+            若後續購買正式課卡（10堂/20堂），本堂體驗費 <span class="price-highlight">可全額折抵</span>。<br><br>
             <div class="price-example">
-                例如：購買 10 堂方案 ($5500)<br>
-                扣除已付 $660，<strong>僅需補差額 $4840</strong>
-            </div>
-            <div class="payment-notice">
-                ⚠️ 注意：預約成功後請於 24 小時內完成匯款以保留席位。
+                例如：購買 10 堂課方案 ($5500)<br>
+                扣除已付 $660，<strong>僅需補差額 $4840</strong><br>
+                即享完整 10 堂優惠 <span style="color:#2e7d32">（含本次體驗，剩餘 9 堂）</span>
             </div>
         </div>
     </div>
 
     <div class="guest-form">
-        <div class="form-group"><label>真實姓名</label><input type="text" id="guest-name" placeholder="請輸入姓名" required></div>
-        <div class="form-group"><label>聯絡電話</label><input type="tel" id="guest-phone" placeholder="09xxxxxxxx" required></div>
-        <div class="form-group"><label>Email (接收日曆邀請)</label><input type="email" id="guest-email" placeholder="example@gmail.com" required></div>
+        <div class="form-group">
+            <label>真實姓名</label>
+            <input type="text" id="guest-name" placeholder="請輸入姓名" required>
+        </div>
+        <div class="form-group">
+            <label>聯絡電話</label>
+            <input type="tel" id="guest-phone" placeholder="09xxxxxxxx" required>
+        </div>
+        <div class="form-group">
+            <label>Email (接收日曆邀請)</label>
+            <input type="email" id="guest-email" placeholder="example@gmail.com" required>
+        </div>
     </div>
 
     <div id="calendar"></div>
@@ -387,20 +431,27 @@
   </div>
 
   <script>
+    // ⚠️⚠️⚠️ 請確認您的 GAS 網址 ⚠️⚠️⚠️
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
+
     let selectedDate = null; 
     let selectedType = ""; 
     let countdownInterval = null;
+
+    // 🔥 從 LocalStorage 讀取已報名資料 (體驗課專用)
     let myTrialSignups = JSON.parse(localStorage.getItem('myTrialSignups')) || [];
 
     function closeCancelModal() { document.getElementById('cancel-modal').style.display = 'none'; if (countdownInterval) clearInterval(countdownInterval); }
 
     function showSystemAlert(title, message, callback) {
         document.getElementById('alert-title').textContent = title;
+        // 為了支援 HTML 格式的匯款資訊，這裡改用 innerHTML
         document.getElementById('alert-msg').innerHTML = message;
+        
         const btn = document.getElementById('alert-btn');
         const newBtn = btn.cloneNode(true);
         btn.parentNode.replaceChild(newBtn, btn);
+
         newBtn.onclick = () => {
              document.getElementById('alert-modal').style.display = 'none';
              if (callback) callback();
@@ -411,9 +462,11 @@
     async function loadData() {
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=powerAllData&courseType=evening`);
-        return await res.json();
+        const data = await res.json();
+        return data;
       } catch (error) {
-        alert('無法連結伺服器');
+        console.error('載入資料錯誤:', error);
+        alert('無法連結伺服器，請稍後再試');
         return null;
       }
     }
@@ -421,23 +474,33 @@
     async function renderCalendar() {
       const calendarDiv = document.getElementById('calendar');
       const loadingDiv = document.getElementById('loading');
+      
       loadingDiv.style.display = 'flex';
       calendarDiv.innerHTML = '';
+
       const allData = await loadData();
       loadingDiv.style.display = 'none';
-      if (!allData || !allData.dates) return;
 
-      const availableSet = new Set(allData.dates);
+      if (!allData || !allData.dates || allData.dates.length === 0) {
+        calendarDiv.innerHTML = '<div style="color:red; font-size: 1.2em; margin-top: 20px;">⚠️ 目前無可預約時段</div>';
+        return;
+      }
+
+      const availableDates = allData.dates;
       const signupCounts = allData.counts || {};
-      const start = new Date(allData.dates[0]);
-      const end = new Date(allData.dates[allData.dates.length - 1]);
+      const availableSet = new Set(availableDates);
+      const nowTs = new Date().getTime();
+
+      const start = new Date(availableDates[0]);
+      const end = new Date(availableDates[availableDates.length - 1]);
 
       for (let y = start.getFullYear(); y <= end.getFullYear(); y++) {
         for (let m = 0; m < 12; m++) {
           const first = new Date(y, m, 1);
           const last = new Date(y, m + 1, 0);
+          
           if (last < start || first > end) continue; 
-
+          
           const title = document.createElement('div');
           title.className = 'month-title';
           title.textContent = `${y}年${m + 1}月`;
@@ -447,67 +510,118 @@
           header.className = 'calendar-header';
           ['日','一','二','三','四','五','六'].forEach(d => {
             const h = document.createElement('div');
-            h.className = 'weekday-header'; h.textContent = d;
+            h.className = 'weekday-header';
+            h.textContent = d;
             header.appendChild(h);
           });
           calendarDiv.appendChild(header);
 
           const grid = document.createElement('div');
           grid.className = 'calendar-grid';
-          for (let i = 0; i < first.getDay(); i++) grid.appendChild(document.createElement('div'));
+
+          for (let i = 0; i < first.getDay(); i++) {
+            grid.appendChild(document.createElement('div'));
+          }
 
           for (let d = 1; d <= last.getDate(); d++) {
             const dateStr = `${y}/${String(m + 1).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
             const cell = document.createElement('div');
             cell.className = 'day';
+            
             const numSpan = document.createElement('span');
-            numSpan.className = 'day-number'; numSpan.textContent = d;
+            numSpan.className = 'day-number';
+            numSpan.textContent = d;
             cell.appendChild(numSpan);
 
             const dayOfWeek = new Date(dateStr).getDay();
+            
+            // 檢查是否為「本機已報名」
             const myRecord = myTrialSignups.find(r => r.date === dateStr);
 
             if (myRecord) {
-                const diff = new Date().getTime() - myRecord.timestamp;
-                const theme = (dayOfWeek === 3) ? 'morning' : 'evening';
+                const diff = nowTs - myRecord.timestamp;
+                // 10分鐘內可取消
                 if (diff <= 600000) {
+                    // 根據日期判斷早晚班顏色
+                    const theme = (dayOfWeek === 3) ? 'morning' : 'evening';
                     cell.classList.add('registered', 'can-cancel', theme);
-                    const l = document.createElement('div'); l.className = 'day-label'; l.textContent = "已登記"; cell.appendChild(l);
+                    
+                    const label = document.createElement('div');
+                    label.className = 'day-label';
+                    label.textContent = "已登記";
+                    cell.appendChild(label);
+
                     cell.onclick = () => {
-                        const update = () => {
-                            const remain = 600000 - (new Date().getTime() - myRecord.timestamp);
-                            const msg = document.getElementById('cancel-modal-msg'), title = document.getElementById('cancel-modal-title');
-                            const footer = document.getElementById('cancel-modal-footer'), close = document.getElementById('cancel-close-btn');
-                            if (remain > 0) {
-                                title.textContent = "取消登記";
-                                msg.innerHTML = `您已登記 ${dateStr}。<br>還有 <b style="font-size: 20px; color: var(--cancel-gold);">${Math.floor(remain/60000)}分${Math.floor((remain%60000)/1000)}秒</b> 可取消。`;
-                                footer.style.display = 'flex'; close.style.display = 'none';
-                                document.getElementById('confirm-cancel-btn').onclick = () => { closeCancelModal(); handleCancel(dateStr, myRecord.lineId); };
-                            } else {
-                                if (countdownInterval) clearInterval(countdownInterval);
-                                title.textContent = "預約已鎖定"; msg.innerHTML = `已超過可取消時限。<br>如需請假請私訊教練。`;
-                                footer.style.display = 'none'; close.style.display = 'block';
-                            }
-                            document.getElementById('cancel-modal').style.display = 'flex';
+                        const updateCancelModal = () => {
+                          const now = new Date().getTime();
+                          const remainMs = 600000 - (now - myRecord.timestamp);
+                          const msgEl = document.getElementById('cancel-modal-msg'), titleEl = document.getElementById('cancel-modal-title');
+                          const footer = document.getElementById('cancel-modal-footer'), closeBtn = document.getElementById('cancel-close-btn');
+                          if (remainMs > 0) {
+                            const mins = Math.floor(remainMs / 60000), secs = Math.floor((remainMs % 60000) / 1000);
+                            titleEl.textContent = "取消登記";
+                            msgEl.innerHTML = `您已登記 ${dateStr} 體驗課。<br>還有 <b style="font-size: 22px; color: var(--cancel-gold);">${mins} 分 ${secs.toString().padStart(2, '0')} 秒</b> 可以取消登記喔！`;
+                            footer.style.display = 'flex'; closeBtn.style.display = 'none';
+                            document.getElementById('confirm-cancel-btn').onclick = () => { closeCancelModal(); handleCancel(dateStr, myRecord.lineId); };
+                          } else {
+                            if (countdownInterval) clearInterval(countdownInterval);
+                            titleEl.textContent = "課程已完成登記！"; msgEl.innerHTML = `如需請假，請直接私訊教練。`;
+                            footer.style.display = 'none'; closeBtn.style.display = 'block';
+                          }
+                          document.getElementById('cancel-modal').style.display = 'flex';
                         };
-                        update(); if (countdownInterval) clearInterval(countdownInterval); countdownInterval = setInterval(update, 1000);
+                        updateCancelModal(); if (countdownInterval) clearInterval(countdownInterval);
+                        countdownInterval = setInterval(updateCancelModal, 1000);
                     };
                 } else {
                     cell.classList.add('registered');
-                    const l = document.createElement('div'); l.className = 'day-label'; l.textContent = "已登記"; cell.appendChild(l);
+                    const label = document.createElement('div');
+                    label.className = 'day-label';
+                    label.textContent = "已登記";
+                    cell.appendChild(label);
                 }
+
             } else if (availableSet.has(dateStr)) {
-                let type = (dayOfWeek === 3) ? "morning" : "evening";
-                let count = signupCounts[dateStr] ? (signupCounts[dateStr][type] || 0) : 0;
-                if (count >= 6) {
+                let currentCount = 0;
+                let labelText = "";
+                let type = "";
+                let themeClass = ""; 
+
+                if (dayOfWeek === 3) { 
+                    type = "morning"; 
+                    currentCount = signupCounts[dateStr] ? (signupCounts[dateStr].morning || 0) : 0;
+                    labelText = "06:30";
+                    themeClass = "morning";
+                } else if (dayOfWeek === 2 || dayOfWeek === 4) { 
+                    type = "evening";
+                    currentCount = signupCounts[dateStr] ? (signupCounts[dateStr].evening || 0) : 0;
+                    labelText = "19:30";
+                    themeClass = "evening";
+                }
+
+                const isFull = currentCount >= 6; 
+
+                if (isFull) {
                     cell.classList.add('full');
-                    const fl = document.createElement('div'); fl.className = 'full-label'; fl.textContent = "額滿"; cell.appendChild(fl);
+                    const fullLabel = document.createElement('div');
+                    fullLabel.className = 'full-label';
+                    fullLabel.textContent = "額滿";
+                    cell.appendChild(fullLabel);
                 } else {
-                    cell.classList.add('available', type);
-                    const tl = document.createElement('div'); tl.className = 'day-label'; tl.textContent = (dayOfWeek === 3 ? "06:30" : "19:30"); cell.appendChild(tl);
-                    cell.onclick = () => handleSelection(cell, dateStr, type);
+                    cell.classList.add('available');
+                    cell.classList.add(themeClass); 
+                    
+                    const timeLabel = document.createElement('div');
+                    timeLabel.className = 'day-label';
+                    timeLabel.textContent = labelText;
+                    cell.appendChild(timeLabel);
+
+                    cell.onclick = () => {
+                        handleSelection(cell, dateStr, type, themeClass);
+                    };
                 }
             }
+
             grid.appendChild(cell);
           }
           calendarDiv.appendChild(grid);
@@ -515,33 +629,63 @@
       }
     }
 
+    // 取消函式 (Trial 專用：需要傳入當時生成的 fakeLineId)
     async function handleCancel(dateStr, fakeLineId) {
       const loadingDiv = document.getElementById('loading');
       loadingDiv.style.display = 'flex';
+      document.querySelector('.loading-text').textContent = "正在取消登記...";
+      
       try {
         const res = await fetch(`${SCRIPT_URL}?mode=cancel&date=${encodeURIComponent(dateStr)}&lineId=${encodeURIComponent(fakeLineId)}`);
         const data = await res.json();
+        
         loadingDiv.style.display = 'none';
+
         if (data.status === 'success') {
+             // 移除 LocalStorage 紀錄
              myTrialSignups = myTrialSignups.filter(r => r.date !== dateStr);
              localStorage.setItem('myTrialSignups', JSON.stringify(myTrialSignups));
+             
              showSystemAlert('取消成功！', '', () => { location.reload(); });
         } else {
              showSystemAlert('提示', data.message, () => { location.reload(); });
         }
-      } catch (e) { loadingDiv.style.display = 'none'; }
+
+      } catch (e) { 
+        loadingDiv.style.display = 'none';
+        showSystemAlert("連線錯誤", "系統連線失敗，請稍後再試。", null);
+      }
     }
 
-    function handleSelection(cell, dateStr, type) {
+    function handleSelection(cell, dateStr, type, themeClass) {
         const btn = document.getElementById('submit-btn');
+
         if (selectedDate === dateStr) {
-            selectedDate = null; selectedType = ""; cell.classList.remove('selected');
-            btn.style.backgroundColor = '#cfd8dc'; btn.textContent = "請先選擇日期"; btn.disabled = true;
+            selectedDate = null;
+            selectedType = "";
+            cell.classList.remove('selected');
+            
+            btn.style.backgroundColor = '#cfd8dc';
+            btn.textContent = "請先選擇日期";
+            btn.style.boxShadow = 'none';
+            btn.disabled = true;
         } else {
             document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
-            selectedDate = dateStr; selectedType = type; cell.classList.add('selected');
-            btn.disabled = false; btn.textContent = "確認預約";
-            btn.style.backgroundColor = (type === 'morning') ? '#ffca28' : '#00acc1';
+            
+            selectedDate = dateStr;
+            selectedType = type;
+            cell.classList.add('selected');
+
+            btn.disabled = false;
+            btn.textContent = "確認預約";
+            
+            if (themeClass === 'morning') {
+                btn.style.backgroundColor = '#ffca28'; 
+                btn.style.boxShadow = '0 4px 15px rgba(255, 202, 40, 0.4)';
+            } else {
+                btn.style.backgroundColor = '#00acc1'; 
+                btn.style.boxShadow = '0 4px 15px rgba(0, 172, 193, 0.4)';
+            }
         }
     }
 
@@ -549,29 +693,68 @@
         const name = document.getElementById('guest-name').value.trim();
         const phone = document.getElementById('guest-phone').value.trim();
         const email = document.getElementById('guest-email').value.trim();
-        if (!name || !phone || !email) { showSystemAlert('提示', '請完整填寫姓名、電話、Email'); return; }
 
-        const timeInfo = selectedType === "morning" ? "早班 06:30" : "晚班 19:30";
-        const msg = `【預約確認】\n\n日期：${selectedDate}\n時段：${timeInfo}\n費用：$660\n\n※ 規範提醒：\n1. 預約後請於 24 小時內完成匯款。\n2. 匯款後請私訊後五碼以便教練保留席位。\n3. 若無故缺席，費用將不予退還。\n\n確認送出預約？`;
-        if (!confirm(msg)) return;
+        // 🛡️ 防呆：檢查欄位是否為空
+        if (!name || !phone || !email) {
+            showSystemAlert('提示', '請完整填寫：姓名、電話、Email');
+            return;
+        }
+
+        if (!selectedDate) {
+            showSystemAlert('提示', '請點選一個預約日期');
+            return;
+        }
+
+        let timeInfo = selectedType === "morning" ? "早班 06:30" : "晚班 19:30";
+        
+        // 修改後的確認訊息，加入規範提醒
+        const confirmMsg = `【預約確認】\n\n日期：${selectedDate}\n時段：${timeInfo}\n姓名：${name}\n電話：${phone}\n費用：$660\n\n※ 規範提醒：\n1. 預約後請於 24 小時內完成匯款。\n2. 匯款後請私訊「光聿工作室」告知後五碼以保留席位。\n3. 若無故缺席，費用將不予退還。\n\n確認送出？`;
+
+        if (!confirm(confirmMsg)) {
+            return;
+        }
 
         const loadingDiv = document.getElementById('loading');
         loadingDiv.style.display = 'flex';
+        document.querySelector('.loading-text').textContent = "正在預約中...";
+        
         try {
-            const params = new URLSearchParams({ mode: 'trial_submit', date: selectedDate, name, phone, email });
+            const params = new URLSearchParams({
+                mode: 'trial_submit',
+                date: selectedDate,
+                name: name,
+                phone: phone,
+                email: email
+            });
+
             const res = await fetch(`${SCRIPT_URL}?${params.toString()}`);
             const result = await res.json();
+
             loadingDiv.style.display = 'none';
+
             if (result.status === 'success') {
-                myTrialSignups.push({ date: selectedDate, lineId: "TRIAL_" + phone, timestamp: new Date().getTime() });
+                // 🔥 成功後，寫入 LocalStorage 以便後續取消
+                const fakeLineId = "TRIAL_" + phone;
+                myTrialSignups.push({
+                    date: selectedDate,
+                    lineId: fakeLineId,
+                    timestamp: new Date().getTime()
+                });
                 localStorage.setItem('myTrialSignups', JSON.stringify(myTrialSignups));
+
+                // 成功後的匯款資訊彈窗
+                const successMsg = `預約成功！系統已發送 Google Calendar 邀請至您的 Email。<br><br><b>【下一步：保留席位】</b><br>請匯款至：<b>中國信託 (822) XXXXXXXXX</b><br>金額：<b>$660</b><br><br>完成後請私訊告知後五碼，凡凡教練將為您正式確認。`;
                 
-                const successMsg = `✅ 預約申請已送出！<br><br><b>【下一步：保留席位】</b><br>請匯款至：<b>中國信託 (822) XXXXXXXXX</b><br>金額：<b>$660</b><br><br>完成後請私訊「光聿工作室」告知後五碼，凡凡教練將為您正式確認。`;
                 showSystemAlert('預約成功', successMsg, () => { location.reload(); });
             } else {
                 showSystemAlert('預約失敗', result.message);
             }
-        } catch (error) { loadingDiv.style.display = 'none'; }
+
+        } catch (error) {
+            console.error(error);
+            loadingDiv.style.display = 'none';
+            showSystemAlert('錯誤', '系統發生錯誤，請稍後再試。');
+        }
     });
 
     renderCalendar();
