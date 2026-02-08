@@ -700,6 +700,20 @@
             return;
         }
 
+        // 🎯 格式驗證：手機號碼 (09開頭且共10位)
+        const phoneReg = /^09\d{8}$/;
+        if (!phoneReg.test(phone)) {
+            showSystemAlert('格式錯誤', '手機號碼請輸入 09 開頭的 10 位數字。');
+            return;
+        }
+
+        // 🎯 格式驗證：Email
+        const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailReg.test(email)) {
+            showSystemAlert('格式錯誤', '請填寫正確的 Email 地址，以便接收日曆邀請。');
+            return;
+        }
+
         if (!selectedDate) {
             showSystemAlert('提示', '請點選一個預約日期');
             return;
