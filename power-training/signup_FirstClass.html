@@ -164,10 +164,10 @@
     .form-group { margin-bottom: 15px; }
     .form-group label {
         display: block;
-        margin-bottom: 6px;
-        font-weight: bold;
-        color: #455a64;
-        font-size: 14px;
+        margin-bottom: 8px; /* 間距加大一點 */
+        font-weight: 800;   /* 字重加粗 */
+        color: #2c3e50;     /* 顏色加深 */
+        font-size: 16px;    /* 🔥 這裡從 14px 改為 16px */
     }
     .form-group input {
         width: 100%;
@@ -190,35 +190,46 @@
         display: flex;
         gap: 15px;
     }
+    /* ✏️ 修改：優化選項按鈕外觀 */
     .radio-label {
         flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 12px;
-        background-color: #fafafa;
-        border: 2px solid #eee;
-        border-radius: 8px;
+        padding: 12px 10px;
+        background-color: #fff;      /* 改為純白背景 */
+        border: 2px solid #e0e0e0;   /* 邊框顏色微調 */
+        border-radius: 10px;         /* 圓角稍微大一點 */
         cursor: pointer;
-        transition: all 0.2s;
-        font-size: 15px;
+        transition: all 0.2s ease-in-out; /* 加入滑順過渡效果 */
+        font-size: 15px;             /* 選項維持 15px */
         color: #555;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03); /* 增加一點點基礎立體感 */
+        white-space: nowrap;
     }
+
+    /* ✨ 新增：滑鼠移上去的互動效果 */
+    .radio-label:hover {
+        border-color: var(--evening-light);
+        background-color: #f0fafa;
+        transform: translateY(-1px); /* 微微浮起 */
+    }
+    
     /* 隱藏原生 radio 按鈕 */
-    .radio-label input[type="radio"] {
-        display: none;
-    }
-    /* 選中狀態 */
+    .radio-label input[type="radio"] { display: none; } 
+
+    /* ✏️ 修改：選中狀態更明顯 */
     .radio-label:has(input:checked) {
         border-color: var(--evening-light);
         background-color: var(--evening-bg);
         color: var(--evening-main);
         font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 172, 193, 0.2); /* 選中時陰影加深加色 */
+        transform: translateY(-2px); /* 選中時浮起更高一點 */
     }
+    
     /* 舊瀏覽器兼容 */
-    .radio-label input:checked + span {
-        font-weight: bold;
-    }
+    .radio-label input:checked + span { font-weight: bold; }
     
     /* 載入動畫 */
     .loading-overlay {
