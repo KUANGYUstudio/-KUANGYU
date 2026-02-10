@@ -111,30 +111,74 @@
     .badge-morning { background-color: var(--morning-light); }
     .badge-evening { background-color: var(--evening-light); }
 
-    /* === 💰 價格與優惠說明區 (清楚算式版) === */
-    .price-info {
-        background-color: var(--price-bg);
-        color: var(--price-text);
-        padding: 20px;
+    /* === 💰 價格與說明區 (改為折疊式) === */
+    /* 容器樣式 */
+    .accordion-box {
         border-radius: 12px;
-        margin-bottom: 25px;
-        text-align: left;
-        border: 1px solid #c8e6c9;
+        margin-bottom: 15px;
+        overflow: hidden;
+        border: 1px solid #eee;
+        transition: all 0.3s;
+        text-align: left; /* 內容靠左 */
     }
-    .price-title {
+    
+    /* 標題區塊 */
+    .accordion-header {
+        padding: 15px 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        transition: background-color 0.2s;
+    }
+    
+    /* 標題文字 */
+    .accordion-title {
         font-size: 18px;
         font-weight: bold;
-        margin-bottom: 10px;
         display: flex;
         align-items: center;
-        border-bottom: 1px dashed #a5d6a7;
-        padding-bottom: 10px;
+        width: 100%;
     }
-    .price-title span { font-size: 24px; margin-left: auto; color: #1b5e20; }
-    .price-desc {
+    
+    /* 價格數字特別樣式 */
+    .accordion-title .price-tag {
+        font-size: 24px;
+        margin-left: auto;
+        color: #1b5e20;
+        margin-right: 10px;
+    }
+
+    /* 內容區塊 (預設隱藏) */
+    .accordion-content {
+        display: none;
+        padding: 0 20px 20px 20px;
+        border-top: 1px dashed rgba(0,0,0,0.1);
         font-size: 14px;
         line-height: 1.6;
-        opacity: 0.95;
+        color: #555;
+    }
+
+    /* 展開狀態 */
+    .accordion-box.active .accordion-content { display: block; }
+    .accordion-box.active .arrow { transform: rotate(180deg); }
+
+    /* 箭頭樣式 */
+    .arrow {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+        opacity: 0.6;
+    }
+
+    /* --- 💰 費用版配色 (綠色) --- */
+    .accordion-box.price-theme {
+        background-color: var(--price-bg);
+        border-color: #c8e6c9;
+        color: var(--price-text);
+    }
+    .accordion-box.price-theme .accordion-header:hover {
+        background-color: rgba(76, 175, 80, 0.05);
     }
     .price-highlight {
         font-weight: bold;
@@ -143,7 +187,6 @@
         padding: 0 4px;
         border-radius: 4px;
     }
-    /* 綠色小區塊 */
     .price-example {
         margin-top: 10px;
         font-size: 13px;
@@ -154,6 +197,16 @@
         border: 1px solid #a5d6a7;
     }
 
+    /* --- 📜 規範版配色 (藍灰色) --- */
+    .accordion-box.rules-theme {
+        background-color: #eceff1;
+        border-color: #cfd8dc;
+        color: #455a64;
+    }
+    .accordion-box.rules-theme .accordion-header:hover {
+        background-color: #e0e0e0;
+    }
+
     /* 📝 訪客資料輸入區 */
     .guest-form {
         background-color: #ffffff;
@@ -162,13 +215,16 @@
         text-align: left;
     }
     .form-group { margin-bottom: 15px; }
+    
+    /* ✏️ 修改：問題標題字體加大 (16px) */
     .form-group label {
         display: block;
-        margin-bottom: 8px; /* 間距加大一點 */
-        font-weight: 800;   /* 字重加粗 */
-        color: #2c3e50;     /* 顏色加深 */
-        font-size: 16px;    /* 🔥 這裡從 14px 改為 16px */
+        margin-bottom: 8px;
+        font-weight: 800;
+        color: #2c3e50;
+        font-size: 16px;
     }
+    
     .form-group input {
         width: 100%;
         padding: 12px 15px;
@@ -185,49 +241,46 @@
         outline: none;
     }
 
-    /* 🔥 新增：煞車系統選擇樣式 */
+    /* 🔥 新增：煞車/變速系統選擇樣式 */
     .radio-group {
         display: flex;
         gap: 15px;
     }
-    /* ✏️ 修改：優化選項按鈕外觀 */
+    /* ✏️ 修改：選項按鈕優化 (14px + 變窄) */
     .radio-label {
         flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 8px 10px;
-        background-color: #fafafa;      /* 背景 */
-        border: 2px solid #e0e0e0;   /* 邊框顏色微調 */
-        border-radius: 10px;         /* 圓角稍微大一點 */
+        padding: 8px 10px; /* 上下變窄 */
+        background-color: #fff;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
         cursor: pointer;
-        transition: all 0.2s ease-in-out; /* 加入滑順過渡效果 */
-        font-size: 14px;             /* 選項維持 14px */
+        transition: all 0.2s ease-in-out;
+        font-size: 14px; /* 字體 14px */
         color: #555;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.03); /* 增加一點點基礎立體感 */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         white-space: nowrap;
     }
-
-    /* ✨ 新增：滑鼠移上去的互動效果 */
     .radio-label:hover {
         border-color: var(--evening-light);
         background-color: #f0fafa;
-        transform: translateY(-1px); /* 微微浮起 */
+        transform: translateY(-1px);
     }
     
     /* 隱藏原生 radio 按鈕 */
-    .radio-label input[type="radio"] { display: none; } 
-
-    /* ✏️ 修改：選中狀態更明顯 */
+    .radio-label input[type="radio"] { display: none; }
+    
+    /* 選中狀態 */
     .radio-label:has(input:checked) {
         border-color: var(--evening-light);
         background-color: var(--evening-bg);
         color: var(--evening-main);
         font-weight: bold;
-        box-shadow: 0 4px 10px rgba(0, 172, 193, 0.2); /* 選中時陰影加深加色 */
-        transform: translateY(-2px); /* 選中時浮起更高一點 */
+        box-shadow: 0 4px 10px rgba(0, 172, 193, 0.2);
+        transform: translateY(-2px);
     }
-    
     /* 舊瀏覽器兼容 */
     .radio-label input:checked + span { font-weight: bold; }
     
@@ -444,15 +497,42 @@
         </div>
     </div>
     
-    <div class="price-info">
-        <div class="price-title">單堂體驗費用 <span>$660</span></div>
-        <div class="price-desc">
-            💡 <strong>購課折抵優惠：</strong><br><br>
-            若後續購買正式課卡（10堂/20堂），本堂體驗費 <span class="price-highlight">可全額折抵</span>。<br><br>
-            <div class="price-example">
-                例如：購買 10 堂課方案 ($5500)<br>
-                扣除已付 $660，<strong>僅需補差額 $4840</strong><br>
-                即享完整 10 堂優惠 <span style="color:#2e7d32">（含本次體驗，剩餘 9 堂）</span>
+    <div class="accordion-box price-theme">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-title">
+                單堂體驗費用 <span class="price-tag">$660</span>
+            </div>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="accordion-content">
+            <div style="margin-top: 15px;">
+                💡 <strong>購課折抵優惠：</strong><br><br>
+                若後續購買正式課卡（10堂/20堂），本堂體驗費 <span class="price-highlight">可全額折抵</span>。<br><br>
+                <div class="price-example">
+                    例如：購買 10 堂課方案 ($5500)<br>
+                    扣除已付 $660，<strong>僅需補差額 $4840</strong><br>
+                    即享完整 10 堂優惠 <span style="color:#2e7d32">（含本次體驗，剩餘 9 堂）</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-box rules-theme">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-title">
+                課堂規範 <span style="font-size: 14px; font-weight: normal; margin-left: 10px; opacity: 0.7;">(初次請詳閱)</span>
+            </div>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="accordion-content">
+            <div style="margin-top: 15px;">
+                <ul style="padding-left: 20px; margin: 0;">
+                    <li>請穿著適合運動的服裝與運動鞋。</li>
+                    <li>建議攜帶水壺與毛巾。</li>
+                    <li>課程開始前 10 分鐘開放入場。</li>
+                    <li>若有心血管疾病或身體不適，請務必提前告知教練。</li>
+                    <li>為維護課程品質，請準時出席。</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -514,6 +594,12 @@
   <script>
     // ⚠️⚠️⚠️ 請確認您的 GAS 網址 ⚠️⚠️⚠️
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
+
+    // 切換折疊狀態
+    function toggleAccordion(element) {
+        const box = element.parentElement;
+        box.classList.toggle('active');
+    }
 
     let selectedDate = null; 
     let selectedType = ""; 
