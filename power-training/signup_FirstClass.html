@@ -215,7 +215,7 @@
         color: var(--evening-main);
         font-weight: bold;
     }
-    /* 舊瀏覽器兼容 (Fallback) */
+    /* 舊瀏覽器兼容 */
     .radio-label input:checked + span {
         font-weight: bold;
     }
@@ -338,7 +338,7 @@
     }
     .day.selected.morning .day-label { color: #fff; }
     
-    /* 調整時限內樣式 (新增) */
+    /* 調整時限內樣式 */
     .day.registered.can-cancel.evening { 
         background-color: #e0f2f1 !important; 
         border: 2px solid var(--evening-main) !important; 
@@ -459,6 +459,7 @@
             <label>Email (接收日曆邀請)</label>
             <input type="email" id="guest-email" placeholder="example@gmail.com" required>
         </div>
+        
         <div class="form-group">
             <label>自行車煞車系統</label>
             <div class="radio-group">
@@ -469,6 +470,27 @@
                 <label class="radio-label">
                     <input type="radio" name="brake-system" value="碟煞">
                     <span>碟煞 (Disc)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>變速</label>
+            <div class="radio-group">
+                <label class="radio-label">
+                    <input type="radio" name="gear-system" value="11速">
+                    <span>11速</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="gear-system" value="12速">
+                    <span>12速</span>
+                </label>
+                <label class="radio-label" style="min-width: 140px;">
+                    <input type="radio" name="gear-system" value="other" id="gear-other-radio">
+                    <span>其他：</span>
+                    <input type="text" id="gear-other-text" placeholder="請填寫" 
+                           style="width: 70px; margin-left: 5px; border: none; border-bottom: 1px solid #ccc; background: transparent; font-size: 15px; padding: 2px; color: #333; height: auto;"
+                           onfocus="document.getElementById('gear-other-radio').checked = true;">
                 </label>
             </div>
         </div>
@@ -493,7 +515,6 @@
 
     function showSystemAlert(title, message, callback) {
         document.getElementById('alert-title').textContent = title;
-        // 為了支援 HTML 格式的匯款資訊，這裡改用 innerHTML
         document.getElementById('alert-msg').innerHTML = message;
         
         const btn = document.getElementById('alert-btn');
@@ -590,7 +611,6 @@
                 const diff = nowTs - myRecord.timestamp;
                 // 10分鐘內可取消
                 if (diff <= 600000) {
-                    // 根據日期判斷早晚班顏色
                     const theme = (dayOfWeek === 3) ? 'morning' : 'evening';
                     cell.classList.add('registered', 'can-cancel', theme);
                     
@@ -677,7 +697,7 @@
       }
     }
 
-    // 取消函式 (Trial 專用：需要傳入當時生成的 fakeLineId)
+    // 取消函式 (Trial 專用)
     async function handleCancel(dateStr, fakeLineId) {
       const loadingDiv = document.getElementById('loading');
       loadingDiv.style.display = 'flex';
@@ -742,24 +762,38 @@
         const phone = document.getElementById('guest-phone').value.trim();
         const email = document.getElementById('guest-email').value.trim();
         
-        // 🔥 獲取煞車系統選擇
+        // 1. 獲取煞車系統
         const brakeEl = document.querySelector('input[name="brake-system"]:checked');
         const brake = brakeEl ? brakeEl.value : "";
 
-        // 🛡️ 防呆：檢查欄位是否為空
-        if (!name || !phone || !email || !brake) {
-            showSystemAlert('提示', '請完整填寫：姓名、電話、Email 並選擇煞車系統');
+        // 2. 🔥 獲取變速系統
+        const gearEl = document.querySelector('input[name="gear-system"]:checked');
+        let gear = "";
+        if (gearEl) {
+            if (gearEl.value === "other") {
+                const otherText = document.getElementById('gear-other-text').value.trim();
+                if (!otherText) {
+                    showSystemAlert('提示', '請填寫「其他」變速系統的詳細資訊');
+                    return;
+                }
+                gear = otherText;
+            } else {
+                gear = gearEl.value;
+            }
+        }
+
+        // 🛡️ 防呆：檢查欄位是否為空 (brake 和 gear 也必須有值)
+        if (!name || !phone || !email || !brake || !gear) {
+            showSystemAlert('提示', '請完整填寫：姓名、電話、Email、煞車與變速系統');
             return;
         }
 
-        // 🎯 格式驗證：手機號碼 (09開頭且共10位)
+        // 🎯 格式驗證
         const phoneReg = /^09\d{8}$/;
         if (!phoneReg.test(phone)) {
             showSystemAlert('格式錯誤', '手機號碼請輸入 09 開頭的 10 位數字。');
             return;
         }
-
-        // 🎯 格式驗證：Email
         const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailReg.test(email)) {
             showSystemAlert('格式錯誤', '請填寫正確的 Email 地址，以便接收日曆邀請。');
@@ -773,11 +807,8 @@
 
         let timeInfo = selectedType === "morning" ? "早班 06:30" : "晚班 19:30";
         
-        // 🔥 將煞車資訊合併到姓名後方，方便後端接收
-        // 例如：王大明 (碟煞)
-        const finalName = `${name} (${brake})`;
-
-        const confirmMsg = `【預約確認】\n\n日期：${selectedDate}\n時段：${timeInfo}\n姓名：${finalName}\n電話：${phone}\n煞車：${brake}\n費用：$660\n\n※ 規範提醒：\n1. 預約後請於 24 小時內完成匯款。\n2. 匯款後請私訊「光聿工作室」告知後五碼以保留席位。\n3. 若無故缺席，費用將不予退還。\n\n確認送出？`;
+        // 🔥 將煞車與變速顯示在確認視窗，但資料是獨立傳送的 (姓名保持乾淨)
+        const confirmMsg = `【預約確認】\n\n日期：${selectedDate}\n時段：${timeInfo}\n姓名：${name}\n電話：${phone}\n規格：${brake} / ${gear}\n費用：$660\n\n※ 規範提醒：\n1. 預約後請於 24 小時內完成匯款。\n2. 匯款後請私訊「光聿工作室」告知後五碼以保留席位。\n3. 若無故缺席，費用將不予退還。\n\n確認送出？`;
 
         if (!confirm(confirmMsg)) {
             return;
@@ -791,9 +822,11 @@
             const params = new URLSearchParams({
                 mode: 'trial_submit',
                 date: selectedDate,
-                name: finalName, // 傳送合併後的姓名
+                name: name,   // 姓名維持純淨
                 phone: phone,
-                email: email
+                email: email,
+                brake: brake, // 獨立傳送
+                gear: gear    // 獨立傳送
             });
 
             const res = await fetch(`${SCRIPT_URL}?${params.toString()}`);
@@ -802,7 +835,6 @@
             loadingDiv.style.display = 'none';
 
             if (result.status === 'success') {
-                // 🔥 成功後，寫入 LocalStorage 以便後續取消
                 const fakeLineId = "TRIAL_" + phone;
                 myTrialSignups.push({
                     date: selectedDate,
@@ -811,7 +843,6 @@
                 });
                 localStorage.setItem('myTrialSignups', JSON.stringify(myTrialSignups));
 
-                // 成功後的匯款資訊彈窗
                 const successMsg = `預約成功！系統已發送 Google Calendar 邀請至您的 Email。<br><br><b>【下一步：保留席位】</b><br>請匯款至：<b>中國信託 (822) XXXXXXXXX</b><br>金額：<b>$660</b><br><br>完成後請私訊告知後五碼，凡凡教練將為您正式確認。`;
                 
                 showSystemAlert('預約成功', successMsg, () => { location.reload(); });
