@@ -4,10 +4,16 @@
   <meta charset="UTF-8" />
   <title>光聿單堂功率體驗</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta property="og:title" content="光聿單堂功率體驗預約">
+  <meta property="og:description" content="歡迎預約光聿單堂功率課程，請填寫資料並選擇預約日期。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://kuangyustudio.github.io/-KUANGYU/logo_icon.png">
+
   <style>
     /* =========================================
-       🎨 配色定義
-       ========================================= */
+        🎨 配色定義
+        ========================================= */
     :root {
       /* 晚班 - 專業藍 */
       --evening-main: #00838f; 
@@ -836,7 +842,7 @@
                 });
                 localStorage.setItem('myTrialSignups', JSON.stringify(myTrialSignups));
 
-                const successMsg = `預約成功！系統已發送 Google Calendar 邀請至您的 Email。<br><br><b>【下一步：保留席位】</b><br>請匯款至：<b>中國信託 (822) XXXXXXXXX</b><br>金額：<b>$660</b><br><br>完成後請私訊告知後五碼，凡凡教練將為您正式確認。`;
+                const successMsg = `預約成功！系統已發送 Google Calendar 邀請至您的 Email。<br><br><b>【下一步：保留席位】</b><br>請匯款至：<b>中國信託 (822) XXXXXXXXX</b><br>金額：<b>$660</b><br><br>完成後請私訊告知後五碼，凡凡教練將為您正式確認.`;
                 
                 showSystemAlert('預約成功', successMsg, () => { location.reload(); });
             } else {
