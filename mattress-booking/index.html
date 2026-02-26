@@ -27,7 +27,7 @@
       padding-bottom: 30px;
     }
 
-    /* --- 修改重點 1：標題維持原本的藍綠色 (不透明) --- */
+    /* 標題區塊 */
     .header { 
       background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%);
       color: white; 
@@ -38,22 +38,18 @@
       box-shadow: 0 8px 20px rgba(0, 172, 193, 0.3);
     }
     
-    /* --- 修改重點 2：地點卡片改為「半透明粉橘色」 (呼應表單裡的桔紅色) --- */
+    /* 地點卡片 (半透明粉橘色) */
     .location-card {
-      /* 使用 RGBA 設定粉橘色 (#f4a792) 的 85% 透明度 */
       background: linear-gradient(135deg, rgba(244, 167, 146, 0.85) 0%, rgba(233, 139, 125, 0.85) 100%);
-      
-      /* 毛玻璃模糊效果 */
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.3);
-      
       color: white;
       padding: 25px 20px;
       text-align: center;
       border-radius: 25px;
-      margin: 0 20px 20px 20px; /* 緊接在 Header 下方 */
-      box-shadow: 0 4px 15px rgba(244, 167, 146, 0.2); /* 陰影也改成橘色系 */
+      margin: 0 20px 20px 20px;
+      box-shadow: 0 4px 15px rgba(244, 167, 146, 0.2);
     }
 
     .header h1 { font-size: 2em; margin-bottom: 5px; font-weight: 700; }
@@ -87,7 +83,7 @@
     .notice-section li { list-style: none; padding: 8px 0; padding-left: 24px; position: relative; color: #546e7a; font-size: 1.05em; }
     .notice-section li:before { content: "✓"; position: absolute; left: 0; color: #f4a792; font-weight: bold; }
 
-    /* 表單區塊 (維持瘦身版) */
+    /* 表單區塊 */
     .form-section { padding: 40px 30px; }
     .form-group { margin-bottom: 25px; } 
     
@@ -95,8 +91,7 @@
     .required { color: #f4a792; margin-left: 3px; }
 
     input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea { 
-      width: 100%; 
-      padding: 12px 15px;
+      width: 100%; padding: 12px 15px;
       border: 2px solid #e0f2f1; border-radius: 15px; 
       font-size: 1em; font-family: inherit; transition: all 0.3s ease; background: #fff; color: #444; box-sizing: border-box; 
     }
@@ -142,6 +137,15 @@
     }
     .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 172, 193, 0.3); }
 
+    /* 取消按鈕樣式 (紅色系) */
+    .cancel-btn {
+      width: 100%; padding: 14px;
+      background: #fff; border: 2px solid #e57373;
+      color: #e57373; border-radius: 15px; font-size: 1em; font-weight: 600;
+      cursor: pointer; transition: 0.3s; margin-top: 15px;
+    }
+    .cancel-btn:hover { background: #ffebee; }
+
     .footer { background: #fafafa; padding: 25px; text-align: center; color: #b0a09d; border-top: 1px solid #f0f0f0; border-radius: 0 0 30px 30px; font-size: 0.9em; }
     .footer a { color: #00bcd4; text-decoration: none; }
 
@@ -153,7 +157,6 @@
     .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
     .hidden { display: none; }
     
-    /* 手機版特別調整 */
     @media (max-width: 600px) { 
       body { padding: 15px; } 
       .header h1 { font-size: 1.6em; } 
@@ -212,7 +215,7 @@
           <label>Email <span class="required">*</span></label>
           <input type="email" id="email" name="email" required placeholder="your-email@example.com">
           <p style="color: #a67c52; font-size: 0.85em; margin-top: 8px;">
-            ※ 我們將透過 Email 聯繫您,並發送 Google Calendar 行事曆邀請
+            ※ 我們將透過 Email 聯繫您，並發送 Google Calendar 行事曆邀請
           </p>
         </div>
 
@@ -224,7 +227,7 @@
         <div class="form-group">
           <label>預約日期 <span class="required">*</span></label>
           <p style="color: #a67c52; font-size: 0.9em; margin-bottom: 12px; background: #fef8f0; padding: 10px 15px; border-radius: 10px; border-left: 3px solid #d4a574;">
-            💡 請先點選日期，再選擇時段
+            💡 僅開放三天後的日期預約
           </p>
           <div id="calendar-container"></div>
           <input type="hidden" id="selected-date" name="date">
@@ -311,22 +314,34 @@
         </div>
 
         <p style="font-size: 1em; color: #6b5d52; line-height: 1.8; margin-top: 20px;">
-          感謝您的預約！<br>
-          我們將於 <strong>1－2個工作天內</strong> 與您聯繫。<br><br>
-          如有任何問題，請與 <a href="https://www.facebook.com/chrisussportlife" target="_blank" style="color: #d4a574; font-weight: 600;">Chrisus Sport FB粉絲專頁</a> 聯繫，謝謝！
+          確認信已寄送至您的信箱。<br>
+          我們將於 <strong>1－2個工作天內</strong> 與您聯繫。
         </p>
+
+        <div id="cancel-section" style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ddd;">
+          <p style="font-size: 0.9em; color: #888; margin-bottom: 10px;">
+            填錯了嗎？<br>您可以在 <span id="countdown" style="color: #e57373; font-weight: bold;">10:00</span> 內取消本次預約
+          </p>
+          <button id="cancel-btn" class="cancel-btn">取消並重新填寫</button>
+        </div>
+
+        <div style="margin-top: 30px; font-size: 0.9em; color: #999;">
+          <p>聯絡電話：02 27323133</p>
+          <p>Email：chrisussport@gmail.com</p>
+        </div>
       </div>
     </div>
 
     <div class="footer">
       <p>© 2025 Chrisus Sport | 專業床墊試躺服務</p>
+      <p style="font-size: 0.8em; margin-top: 5px;">02 27323133 | chrisussport@gmail.com</p>
     </div>
   </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpA-p88R_bnjt9ZbkUjg3AafVKjlXWPriDTd71jhTeV6qKcjV4et_honBp1VLx3PN6/exec";
 
-    let selectedDate = null;
+    let currentBookingId = null; // 用來存暫時的預約 ID
 
     async function renderCalendar() {
       const container = document.getElementById('calendar-container');
@@ -444,6 +459,7 @@
       }).join('、');
     }
 
+    // --- 提交預約邏輯 ---
     document.getElementById('booking-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
@@ -490,10 +506,16 @@
         loading.style.display = 'none';
         
         if(result.success) {
+          // 儲存 Booking ID
+          currentBookingId = result.bookingId;
+
           document.getElementById('display-date').textContent = dateVal;
           document.getElementById('display-time').textContent = timeVal;
           successMsg.classList.remove('hidden');
           window.scrollTo({ top: 0, behavior: 'smooth' });
+
+          // 啟動倒數計時
+          startCountdown();
         } else { 
           alert(result.message); 
           form.style.display = 'block'; 
@@ -503,6 +525,59 @@
         alert('提交失敗，請稍後再試'); 
         loading.style.display = 'none';
         form.style.display = 'block'; 
+      }
+    });
+
+    // --- 倒數計時與取消功能 ---
+    function startCountdown() {
+      let timeLeft = 600; // 10分鐘 = 600秒
+      const countdownEl = document.getElementById('countdown');
+      const cancelSection = document.getElementById('cancel-section');
+      
+      const timer = setInterval(() => {
+        timeLeft--;
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        countdownEl.textContent = `${m}:${s < 10 ? '0'+s : s}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          cancelSection.style.display = 'none'; // 時間到，隱藏取消區塊
+        }
+      }, 1000);
+    }
+
+    // 取消按鈕點擊事件
+    document.getElementById('cancel-btn').addEventListener('click', async function() {
+      if (!confirm('確定要取消剛才的預約嗎？')) return;
+
+      const btn = this;
+      btn.textContent = '取消中...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=cancel`, {
+          method: 'POST',
+          body: JSON.stringify({ bookingId: currentBookingId })
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          alert('預約已取消，請重新填寫。');
+          // 重置畫面
+          document.getElementById('success-message').classList.add('hidden');
+          document.getElementById('booking-form').style.display = 'block';
+          btn.textContent = '取消並重新填寫';
+          btn.disabled = false;
+        } else {
+          alert('取消失敗：' + result.message);
+          btn.textContent = '取消並重新填寫';
+          btn.disabled = false;
+        }
+      } catch (e) {
+        alert('網路錯誤，無法取消');
+        btn.textContent = '取消並重新填寫';
+        btn.disabled = false;
       }
     });
 
