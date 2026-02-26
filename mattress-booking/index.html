@@ -13,7 +13,7 @@
       font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif; 
       background: linear-gradient(135deg, #f0f7f9 0%, #fdf9e8 100%); 
       min-height: 100vh; 
-      padding: 20px; /* 電腦版預設邊距 */
+      padding: 20px; 
       line-height: 1.6; 
       color: #444;
     }
@@ -27,28 +27,37 @@
       padding-bottom: 30px;
     }
 
-    /* --- 修改重點 1：色塊改為半透明毛玻璃效果 --- */
-    .header, .location-card { 
-      /* 使用 RGBA 設定 85% 透明度 */
-      background: linear-gradient(135deg, rgba(38, 198, 218, 0.85) 0%, rgba(0, 172, 193, 0.85) 100%);
-      /* 加入毛玻璃模糊效果 */
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      /* 加入細微白邊框增加層次感 */
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    /* --- 修改重點 1：標題維持原色 (不透明) --- */
+    .header { 
+      /* 改回原本實色的漸層 */
+      background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%);
       color: white; 
       padding: 30px 20px; 
       text-align: center; 
       border-radius: 25px;
       margin: 20px 20px 15px 20px;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); /* 讓卡片浮起來的陰影 */
+      /* 只有標題有比較明顯的陰影 */
+      box-shadow: 0 8px 20px rgba(0, 172, 193, 0.3);
     }
+    
+    /* --- 修改重點 2：地點卡片維持半透明毛玻璃 --- */
     .location-card {
-      margin-top: 0; /* 第二張卡片緊接在後 */
+      /* 85% 透明度 */
+      background: linear-gradient(135deg, rgba(38, 198, 218, 0.85) 0%, rgba(0, 172, 193, 0.85) 100%);
+      /* 毛玻璃模糊效果 */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      
+      color: white;
       padding: 25px 20px;
+      text-align: center;
+      border-radius: 25px;
+      margin: 0 20px 20px 20px; /* 緊接在 Header 下方 */
+      box-shadow: 0 4px 15px rgba(0, 172, 193, 0.1); /* 陰影比較輕 */
     }
 
-    .header h1 { font-size: 2em; margin-bottom: 5px; font-weight: 700; } /* 稍微縮小標題 */
+    .header h1 { font-size: 2em; margin-bottom: 5px; font-weight: 700; }
     .header p { font-size: 1.1em; opacity: 0.95; }
 
     .location-card h3 { color: white; margin-bottom: 10px; font-size: 1.2em; }
@@ -70,7 +79,7 @@
     /* 注意事項區塊 */
     .notice-section { 
       background: #f0fbfc; 
-      padding: 30px 25px; /* 稍微增加內部留白 */
+      padding: 30px 25px; 
       border-left: 5px solid #00bcd4; 
       border-radius: 0 20px 20px 0; margin: 25px 25px 0 25px; 
     }
@@ -79,18 +88,16 @@
     .notice-section li { list-style: none; padding: 8px 0; padding-left: 24px; position: relative; color: #546e7a; font-size: 1.05em; }
     .notice-section li:before { content: "✓"; position: absolute; left: 0; color: #f4a792; font-weight: bold; }
 
-    /* --- 修改重點 2：整體瘦身，減少壓迫感 --- */
+    /* 表單區塊 (維持瘦身版) */
     .form-section { padding: 40px 30px; }
-    .form-group { margin-bottom: 25px; } /* 縮小行距 */
+    .form-group { margin-bottom: 25px; } 
     
-    /* 縮小標題字體，從 1.35em 改為 1.15em */
     label, .group-title { display: block; margin-bottom: 10px; color: #455a64; font-weight: 700; font-size: 1.15em; }
     .required { color: #f4a792; margin-left: 3px; }
 
-    /* 縮小輸入框的 padding，讓它變瘦 */
     input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea { 
       width: 100%; 
-      padding: 12px 15px; /* 原本是 14px 18px */
+      padding: 12px 15px;
       border: 2px solid #e0f2f1; border-radius: 15px; 
       font-size: 1em; font-family: inherit; transition: all 0.3s ease; background: #fff; color: #444; box-sizing: border-box; 
     }
@@ -98,17 +105,17 @@
       outline: none; border-color: #00bcd4; background: white; 
       box-shadow: 0 0 0 4px rgba(0, 188, 212, 0.1); 
     }
-    textarea { height: 100px; } /* 固定 textarea 高度 */
+    textarea { height: 100px; }
 
     .radio-option, .checkbox-option { 
-      display: flex; align-items: center; padding: 10px 15px; /* 稍微縮小選項的 padding */
+      display: flex; align-items: center; padding: 10px 15px;
       background: #f9fdfd; border: 2px solid #e0f2f1; border-radius: 15px; 
       cursor: pointer; transition: all 0.3s ease; font-weight: 500; font-size: 0.95em;
     }
     .radio-option:hover, .checkbox-option:hover { background: #e0f7fa; border-color: #00bcd4; transform: translateX(3px); }
     .radio-option input, .checkbox-option input { accent-color: #00bcd4; width: 18px; height: 18px; margin-right: 10px; }
 
-    /* 日曆樣式微調 */
+    /* 日曆樣式 */
     .month-title { font-weight: bold; font-size: 1.4em; margin-top: 40px; margin-bottom: 15px; color: #e98b7d; text-align: center; }
     .weekday-header { font-weight: 700; color: #f4a792; padding: 8px 0; text-align: center; font-size: 0.9em; }
     .calendar-day { 
@@ -149,7 +156,7 @@
     
     /* 手機版特別調整 */
     @media (max-width: 600px) { 
-      body { padding: 15px; } /* 增加手機版最外圍的留白 */
+      body { padding: 15px; } 
       .header h1 { font-size: 1.6em; } 
       .header, .location-card { margin: 15px 15px 10px 15px; padding: 25px 20px; }
       .location-card { margin-top: 0; }
