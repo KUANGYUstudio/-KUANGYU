@@ -309,11 +309,19 @@
         }
         const datesByMonth = {};
         dates.forEach(dateObj => {
-          const date = new Date(dateObj.value);
-          const yearMonth = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+          // 修改處：不使用 new Date()，直接分解字串避免時區問題
+          // 假設 dateObj.value 格式為 "2025-03-01"
+          const parts = dateObj.value.split('-'); 
+          const year = parseInt(parts[0]);
+          const month = parseInt(parts[1]);
+          
+          // 組合 key 值，例如 "2025-03"
+          const yearMonth = year + '-' + String(month).padStart(2, '0');
+          
           if (!datesByMonth[yearMonth]) datesByMonth[yearMonth] = [];
           datesByMonth[yearMonth].push(dateObj.value);
         });
+        
         Object.keys(datesByMonth).sort().forEach(yearMonth => {
           const [year, month] = yearMonth.split('-');
           renderMonthCalendar(container, parseInt(year), parseInt(month), new Set(datesByMonth[yearMonth]));
@@ -323,6 +331,23 @@
         container.innerHTML = '<p style="color: #c9705f; text-align: center;">載入失敗，請重新整理頁面</p>';
       }
     }
+
+    // 自動勾選邏輯：當使用者點擊文字輸入框時，自動選中對應的 radio 或 checkbox
+    
+    // 1. 針對睡姿的其他
+    document.getElementById('sleeping-position-other-text').addEventListener('focus', function() {
+      document.getElementById('sleeping-position-other').checked = true;
+    });
+
+    // 2. 針對床墊類型的其他
+    document.getElementById('mattress-other-text').addEventListener('focus', function() {
+      document.getElementById('mattress-other').checked = true;
+    });
+
+    // 3. 針對考量重點的其他
+    document.getElementById('concern-other-text').addEventListener('focus', function() {
+      document.getElementById('concern-other').checked = true;
+    });
 
     function renderMonthCalendar(container, year, month, availableDates) {
       const section = document.createElement('div');
