@@ -41,13 +41,18 @@
 
     .notice-section { 
       background: #f0fbfc; 
-      padding: 30px 35px; 
+      /* 修改：左右留白改小 (原本35px 改成 20px)，手機看才不會那麼擠 */
+      padding: 30px 20px; 
       border-left: 5px solid #00bcd4; 
       border-radius: 0 20px 20px 0; margin: 20px 20px 0 20px; 
     }
     .notice-section h3 { color: #0097a7; margin-bottom: 20px; font-size: 1.4em; font-weight: 700; }
-    /* 加了 list-style: none; 把原本的黑點點拿掉 */
-    .notice-section li { list-style: none; padding: 10px 0; padding-left: 30px; position: relative; color: #546e7a; font-size: 1.05em; }
+    
+    /* 新增：這行很重要！把整塊清單原本的縮排歸零，字才會往左靠 */
+    .notice-section ul { padding-left: 0; margin-left: 0; }
+
+    /* 修改：list-style: none 把黑點拿掉；padding-left 改成 24px 讓字往左移 */
+    .notice-section li { list-style: none; padding: 10px 0; padding-left: 24px; position: relative; color: #546e7a; font-size: 1.05em; }
     .notice-section li:before { content: "✓"; position: absolute; left: 0; color: #f4a792; font-weight: bold; }
 
     .form-section { padding: 40px 30px; }
@@ -147,7 +152,7 @@
 
      <div class="location-box">
         <h3>📍 試躺地點</h3>
-        <p style="font-size: 1.3em; font-weight: 600; margin: 10px 0;">Chrisus Life Well<br>奎爾斯企業</p>
+        <p style="font-size: 1.1em; font-weight: 600; margin: 10px 0;">Chrisus Life Well 奎爾斯企業</p>
         
         <p style="font-size: 0.9em;">（台北市大安區臥龍街278號1樓）</p>
         
