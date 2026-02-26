@@ -6,7 +6,7 @@
   <title>床墊試躺預約 | Chrisus Sport</title>
 
 <style>
-    /* 結構不變，對調主色與強調色 */
+    /* 全域設定 */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body { 
@@ -21,40 +21,59 @@
       border-radius: 30px; 
       box-shadow: 0 10px 40px rgba(0, 188, 212, 0.1); 
       overflow: hidden; 
+      padding-bottom: 20px; /* 增加底部留白 */
     }
 
-    /* Header 改為藍綠色漸層 (原本日曆的顏色) */
+    /* --- 修改重點 1：Header 改成獨立的卡片樣式 --- */
     .header { 
       background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%); 
-      color: white; padding: 40px 30px; text-align: center; border-radius: 30px 30px 0 0; 
+      color: white; 
+      padding: 30px 20px; 
+      text-align: center; 
+      border-radius: 25px;       /* 四個角都圓圓的 */
+      margin: 20px 20px 10px 20px; /* 上右下左的距離，讓它跟邊框分開 */
     }
-    .header h1 { font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
-    .header p { font-size: 1.2em; opacity: 0.95; }
+    .header h1 { font-size: 2.2em; margin-bottom: 5px; font-weight: 700; }
+    .header p { font-size: 1.1em; opacity: 0.95; }
 
-    .location-box { 
-      background: rgba(255, 255, 255, 0.2); 
-      padding: 20px; border-radius: 20px; margin-top: 20px; 
-      backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3);
+    /* --- 修改重點 2：新增地點卡片樣式 (第二個視窗) --- */
+    .location-card {
+      background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%); /* 跟 Header 一樣的漸層 */
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+      border-radius: 25px;
+      margin: 0 20px 20px 20px; /* 接在 Header 下方 */
     }
-    .location-box h3, .location-box p, .location-box a { color: white; }
-    .location-box a { text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; }
+    .location-card h3 { color: white; margin-bottom: 10px; font-size: 1.2em; }
+    .location-card a { 
+      color: white; 
+      text-decoration: none; 
+      font-weight: 600; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 5px; 
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 0.2); /* 半透明背景按鈕 */
+      padding: 8px 20px;
+      border-radius: 20px;
+      transition: 0.3s;
+    }
+    .location-card a:hover { background: rgba(255, 255, 255, 0.3); }
 
+    /* 注意事項區塊 (已包含之前的修正) */
     .notice-section { 
       background: #f0fbfc; 
-      /* 修改：左右留白改小 (原本35px 改成 20px)，手機看才不會那麼擠 */
       padding: 30px 20px; 
       border-left: 5px solid #00bcd4; 
       border-radius: 0 20px 20px 0; margin: 20px 20px 0 20px; 
     }
     .notice-section h3 { color: #0097a7; margin-bottom: 20px; font-size: 1.4em; font-weight: 700; }
-    
-    /* 新增：這行很重要！把整塊清單原本的縮排歸零，字才會往左靠 */
     .notice-section ul { padding-left: 0; margin-left: 0; }
-
-    /* 修改：list-style: none 把黑點拿掉；padding-left 改成 24px 讓字往左移 */
     .notice-section li { list-style: none; padding: 10px 0; padding-left: 24px; position: relative; color: #546e7a; font-size: 1.05em; }
     .notice-section li:before { content: "✓"; position: absolute; left: 0; color: #f4a792; font-weight: bold; }
 
+    /* 表單區塊 */
     .form-section { padding: 40px 30px; }
     .form-group { margin-bottom: 28px; }
     label, .group-title { display: block; margin-bottom: 12px; color: #455a64; font-weight: 700; font-size: 1.35em; }
@@ -77,7 +96,7 @@
     .radio-option:hover, .checkbox-option:hover { background: #e0f7fa; border-color: #00bcd4; transform: translateX(5px); }
     .radio-option input, .checkbox-option input { accent-color: #00bcd4; width: 20px; height: 20px; margin-right: 12px; }
 
-    /* 日曆改為粉橘色系列 (原本 Header 的顏色) */
+    /* 日曆樣式 */
     .month-title { font-weight: bold; font-size: 1.5em; margin-top: 45px; margin-bottom: 15px; color: #e98b7d; text-align: center; }
     .weekday-header { font-weight: 700; color: #f4a792; padding: 8px 0; text-align: center; }
     .calendar-day { 
@@ -95,7 +114,7 @@
     .time-slot:hover { border-color: #f4a792; background: #fff2ef; }
     .time-slot.selected { background: #f4a792; color: white; border-color: #f4a792; }
 
-    /* 按鈕使用藍綠色漸層 */
+    /* 按鈕樣式 */
     .submit-btn { 
       width: 100%; padding: 18px; 
       background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%); 
@@ -108,7 +127,7 @@
     .footer { background: #fafafa; padding: 30px; text-align: center; color: #b0a09d; border-top: 1px solid #f0f0f0; border-radius: 0 0 30px 30px; }
     .footer a { color: #00bcd4; text-decoration: none; }
 
-    /* 修正 loading 樣式 */
+    /* Loading 與其他工具樣式 */
     .loading { 
       display: none; 
       text-align: center; 
@@ -136,7 +155,7 @@
     
     @media (max-width: 600px) { 
       body { padding: 10px; } 
-      .header h1 { font-size: 1.5em; } 
+      .header h1 { font-size: 1.8em; } 
       .form-section { padding: 25px 20px; } 
     }
   </style>
@@ -146,35 +165,31 @@
 </head>
 <body>
   <div class="container">
+    
     <div class="header">
       <h1>床墊試躺預約</h1>
       <p>找到最適合您的睡眠體驗</p>
-
-     <div class="location-box">
-        <h3>📍 試躺地點</h3>
-        <p style="font-size: 1.1em; font-weight: 600; margin: 10px 0;">Chrisus Life Well 奎爾斯企業</p>
-        
-        <p style="font-size: 0.9em;">（台北市大安區臥龍街278號1樓）</p>
-        
-        <a href="https://maps.app.goo.gl/BHPdFwmSCWmVrEH56" target="_blank">查看地圖 →</a>
-      </div>
     </div>
 
-   <div class="notice-section">
+    <div class="location-card">
+      <h3>📍 試躺地點</h3>
+      <p style="font-size: 1.1em; font-weight: 600; margin: 10px 0;">Chrisus Life Well 奎爾斯企業</p>
+      <p style="font-size: 0.9em;">（台北市大安區臥龍街278號1樓）</p>
+      <a href="https://maps.app.goo.gl/BHPdFwmSCWmVrEH56" target="_blank">查看地圖 →</a>
+    </div>
+
+    <div class="notice-section">
       <h3>預約注意事項</h3>
       <ul>
         <li>可預約時段：<br>
             平日 10:00-12:00、14:00-18:00<br>
             週六 14:00-18:00</li>
-            
         <li>每組試躺時間為 30 分鐘</li>
-        
         <li>我們將於 1-2 個工作天與您聯繫</li>
-        
         <li>如需更改預約，請提早告知</li>
       </ul>
     </div>
-    
+
     <div class="form-section">
       <div id="message" class="message"></div>
       
@@ -322,15 +337,10 @@
         }
         const datesByMonth = {};
         dates.forEach(dateObj => {
-          // 修改處：不使用 new Date()，直接分解字串避免時區問題
-          // 假設 dateObj.value 格式為 "2025-03-01"
           const parts = dateObj.value.split('-'); 
           const year = parseInt(parts[0]);
           const month = parseInt(parts[1]);
-          
-          // 組合 key 值，例如 "2025-03"
           const yearMonth = year + '-' + String(month).padStart(2, '0');
-          
           if (!datesByMonth[yearMonth]) datesByMonth[yearMonth] = [];
           datesByMonth[yearMonth].push(dateObj.value);
         });
@@ -345,19 +355,13 @@
       }
     }
 
-    // 自動勾選邏輯：當使用者點擊文字輸入框時，自動選中對應的 radio 或 checkbox
-    
-    // 1. 針對睡姿的其他
+    // 自動勾選邏輯
     document.getElementById('sleeping-position-other-text').addEventListener('focus', function() {
       document.getElementById('sleeping-position-other').checked = true;
     });
-
-    // 2. 針對床墊類型的其他
     document.getElementById('mattress-other-text').addEventListener('focus', function() {
       document.getElementById('mattress-other').checked = true;
     });
-
-    // 3. 針對考量重點的其他
     document.getElementById('concern-other-text').addEventListener('focus', function() {
       document.getElementById('concern-other').checked = true;
     });
@@ -382,15 +386,12 @@
         dayCell.className = 'calendar-day' + (availableDates.has(dateStr) ? ' available' : '');
         dayCell.textContent = d;
         if(availableDates.has(dateStr)) dayCell.onclick = () => {
-         document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
-         dayCell.classList.add('selected');
-         document.getElementById('selected-date').value = dateStr;
-         
-         // 新增：切換日期時，務必清空已選時段的值，避免資料混亂
-         document.getElementById('selected-time-slot').value = '';
-         
-         loadTimeSlots(dateStr);
-       };
+          document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
+          dayCell.classList.add('selected');
+          document.getElementById('selected-date').value = dateStr;
+          document.getElementById('selected-time-slot').value = '';
+          loadTimeSlots(dateStr);
+        };
         grid.appendChild(dayCell);
       }
       section.appendChild(grid);
@@ -468,12 +469,10 @@
         return; 
       }
 
-      // 取得元素參照
       const form = document.getElementById('booking-form');
       const loading = document.getElementById('loading');
       const successMsg = document.getElementById('success-message');
 
-      // 隱藏表單，顯示 loading
       form.style.display = 'none';
       loading.style.display = 'block';
 
@@ -484,7 +483,6 @@
         });
         const result = await res.json();
         
-        // 隱藏 loading
         loading.style.display = 'none';
         
         if(result.success) {
@@ -504,7 +502,6 @@
       }
     });
 
-    // 頁面載入時執行
     renderCalendar();
   </script>
 </body>
