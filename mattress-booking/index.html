@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>床墊試躺預約 | Chrisus Sport</title>
 
-<style>
+  <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body { 
@@ -17,8 +17,10 @@
       color: #444;
     }
 
+    /* 鎖定最大寬度為 600px，讓 iPad 和電腦版維持精緻的手機 APP 比例 */
     .container { 
-      max-width: 800px; margin: 0 auto; 
+      max-width: 600px; 
+      margin: 0 auto; 
       background: #ffffff; 
       border-radius: 30px; 
       box-shadow: 0 10px 40px rgba(0, 188, 212, 0.1); 
@@ -60,7 +62,7 @@
       display: inline-flex; 
       align-items: center; 
       gap: 5px; 
-      margin-top: 15px;
+      margin-top: 5px;
       background: rgba(255, 255, 255, 0.25);
       padding: 8px 20px;
       border-radius: 20px;
@@ -133,7 +135,7 @@
     .cancel-btn {
       width: 100%; padding: 14px;
       background: #fff; border: 2px solid #e57373;
-      color: #e57373; border-radius: 15px; font-size: 1em; font-weight: 600;
+      color: #e57373; border-radius: 15px; font-size: 1.05em; font-weight: 600;
       cursor: pointer; transition: 0.3s; margin-top: 5px;
     }
     .cancel-btn:hover { background: #ffebee; }
@@ -144,7 +146,9 @@
     .loading { display: none; text-align: center; padding: 40px 20px; }
     .spinner { border: 3px solid #e0f2f1; border-top: 3px solid #f4a792; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 500px; margin: 0 auto; }
+    
+    /* 鎖定日曆最大寬度，確保大螢幕不變形 */
+    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 450px; margin: 0 auto; }
     .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
     .hidden { display: none; }
 
@@ -155,15 +159,19 @@
       justify-content: center; align-items: center; backdrop-filter: blur(5px);
     }
     .modal-box {
-      background: #fff; width: 90%; max-width: 400px; padding: 30px;
+      background: #fff; width: 90%; max-width: 400px; padding: 35px 25px;
       border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       animation: popIn 0.3s ease;
     }
     @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    .modal-title { font-size: 1.3em; color: #455a64; font-weight: bold; margin-bottom: 15px; }
-    .modal-text { color: #666; margin-bottom: 25px; line-height: 1.5; font-size: 1.05em; }
+    .modal-title { font-size: 1.4em; color: #455a64; font-weight: bold; margin-bottom: 15px; }
+    .modal-text { color: #666; margin-bottom: 30px; line-height: 1.5; font-size: 1.05em; }
+    
+    /* 彈出視窗按鈕放大 */
     .modal-btn {
-      padding: 12px 25px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;
+      padding: 14px 25px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;
+      font-size: 1.15em; /* 放大字體 */
+      min-width: 120px; /* 增加按鈕寬度 */
     }
     .btn-confirm { background: #00acc1; color: white; margin-left: 10px; }
     .btn-confirm:hover { background: #00838f; }
@@ -172,6 +180,12 @@
     .btn-danger { background: #e57373; color: white; margin-left: 10px; }
     .btn-danger:hover { background: #d32f2f; }
     
+    /* 電腦與平板的優化間距 */
+    @media (min-width: 768px) { 
+      body { padding: 40px 20px; } 
+      .container { box-shadow: 0 15px 50px rgba(0, 188, 212, 0.15); }
+    }
+    
     @media (max-width: 600px) { 
       body { padding: 15px; } 
       .header h1 { font-size: 1.6em; } 
@@ -179,6 +193,7 @@
       .location-card { margin-top: 0; }
       .notice-section { margin: 20px 15px 0 15px; }
       .form-section { padding: 25px 20px; } 
+      .modal-btn { min-width: 100px; padding: 12px 15px; font-size: 1.1em; } /* 手機按鈕微調比例 */
     }
   </style>
 
@@ -337,7 +352,7 @@
             填錯了嗎？<br>您可以在 <span id="countdown" style="color: #e57373; font-weight: bold;">10:00</span> 內取消本次預約
           </p>
           <p style="font-size: 0.8em; color: #e57373; margin-bottom: 15px; font-weight: 500;">
-            (注意：關閉或重整網頁即無法在此處取消)
+            (注意：關閉網頁即失效)
           </p>
           <button id="cancel-btn" class="cancel-btn">取消並重新填寫</button>
         </div>
@@ -346,7 +361,6 @@
 
     <div class="footer">
       <p>© <span id="current-year"></span> Chrisus Sport</p>
-      <p style="font-size: 0.8em; margin-top: 5px;">02 27323133 | chrisussport@gmail.com</p>
     </div>
   </div>
 
@@ -615,7 +629,7 @@
             showMessageModal('取消成功', '您的預約已經成功取消。');
             document.getElementById('success-message').classList.add('hidden');
             document.getElementById('booking-form').style.display = 'block';
-            document.getElementById('booking-form').reset(); // 清空表單
+            document.getElementById('booking-form').reset(); 
             document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
             document.getElementById('time-slot-section').style.display = 'none';
           } else {
