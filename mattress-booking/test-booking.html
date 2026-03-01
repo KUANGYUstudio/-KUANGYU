@@ -34,6 +34,7 @@
       padding: 30px 25px; 
       border-left: 5px solid #00bcd4; 
       border-radius: 0 20px 20px 0; margin: 25px 25px 0 25px; 
+      transition: 0.3s ease; /* 加入過渡效果 */
     }
     .notice-section h3 { color: #0097a7; margin-bottom: 20px; font-size: 1.3em; font-weight: 700; }
     .notice-section ul { padding-left: 0; margin-left: 0; }
@@ -341,7 +342,8 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxawPp4K6DkE_oWK6gizh68aR01KglzpFYpH7wqtOwlPCrO_GYJeyiS2Yq5V062tX3z/exec";
+    // 🟢 請務必確認這裡填入的是您「實驗室專案」的 GAS 網址
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpA-p88R_bnjt9ZbkUjg3AafVKjlXWPriDTd71jhTeV6qKcjV4et_honBp1VLx3PN6/exec"; 
     let currentBookingId = null; 
 
     document.getElementById('current-year').textContent = new Date().getFullYear();
@@ -528,6 +530,7 @@
       const form = document.getElementById('booking-form');
       const loading = document.getElementById('loading');
       const successMsg = document.getElementById('success-message');
+      const noticeSection = document.querySelector('.notice-section'); // 選取注意事項區塊
 
       form.style.display = 'none';
       loading.style.display = 'block';
@@ -546,6 +549,10 @@
 
           document.getElementById('display-date').textContent = dateVal;
           document.getElementById('display-time').textContent = timeVal;
+          
+          // 🔥 關鍵修改：隱藏注意事項
+          noticeSection.style.display = 'none'; 
+          
           successMsg.classList.remove('hidden');
           window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -556,7 +563,7 @@
         }
       } catch (e) { 
         showMessageModal('系統錯誤', '提交失敗，請稍後再試。'); 
-        loading.style.display = 'none';
+        loading.style.display = 'none'; 
         form.style.display = 'block'; 
       }
     });
@@ -596,7 +603,11 @@
           if (result.success) {
             showMessageModal('取消成功', '您的預約已經成功取消。');
             document.getElementById('success-message').classList.add('hidden');
+            
             document.getElementById('booking-form').style.display = 'block';
+            // 🔥 關鍵修改：重新顯示注意事項
+            document.querySelector('.notice-section').style.display = 'block'; 
+            
             document.getElementById('booking-form').reset(); 
             document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
             document.getElementById('time-slot-section').style.display = 'none';
