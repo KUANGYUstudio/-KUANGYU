@@ -148,13 +148,236 @@
       renderCalendar();
     });
 
-    // ... (以下 renderCalendar, submit 等邏輯與原本相同，請直接複製過來) ...
-    // 為節省篇幅，請使用您 test-booking.html 裡面的 renderCalendar 到最後的 script 內容
-    
-    // (但在這裡我還是給您完整的 script 結尾結構以防出錯)
-    async function renderCalendar() { /* ...請複製原本的... */ }
-    document.getElementById('booking-form').addEventListener('submit', async function(e) { /* ...請複製原本的... */ });
-    // ...
-  </script>
+    async function renderCalendar() {
+      const container = document.getElementById('calendar-container');
+      container.innerHTML = '<p style="color: #a67c52; text-align: center;">載入中...</p>';
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getDates`);
+        const dates = await res.json();
+        container.innerHTML = '';
+        if (!dates || dates.length === 0) {
+          container.innerHTML = '<p style="color: #a67c52; text-align: center;">目前無可預約日期</p>';
+          return;
+        }
+        const datesByMonth = {};
+        dates.forEach(dateObj => {
+          const parts = dateObj.value.split('-'); 
+          const year = parseInt(parts[0]);
+          const month = parseInt(parts[1]);
+          const yearMonth = year + '-' + String(month).padStart(2, '0');
+          if (!datesByMonth[yearMonth]) datesByMonth[yearMonth] = [];
+          datesByMonth[yearMonth].push(dateObj.value);
+        });
+        
+        Object.keys(datesByMonth).sort().forEach(yearMonth => {
+          const [year, month] = yearMonth.split('-');
+          renderMonthCalendar(container, parseInt(year), parseInt(month), new Set(datesByMonth[yearMonth]));
+        });
+      } catch (e) {
+        container.innerHTML = '<p style="color: #c9705f; text-align: center;">載入失敗，請重新整理頁面</p>';
+      }
+    }
+
+    document.getElementById('sleeping-position-other-text').addEventListener('focus', function() {
+      document.getElementById('sleeping-position-other').checked = true;
+    });
+    document.getElementById('mattress-other-text').addEventListener('focus', function() {
+      document.getElementById('mattress-other').checked = true;
+    });
+    document.getElementById('concern-other-text').addEventListener('focus', function() {
+      document.getElementById('concern-other').checked = true;
+    });
+
+    function renderMonthCalendar(container, year, month, availableDates) {
+      const section = document.createElement('div');
+      section.innerHTML = `<div class="month-title">${year}年${month}月</div>`;
+      const header = document.createElement('div');
+      header.className = 'calendar-header';
+      ['日','一','二','三','四','五','六'].forEach(d => {
+        header.innerHTML += `<div class="weekday-header">${d}</div>`;
+      });
+      section.appendChild(header);
+      const grid = document.createElement('div');
+      grid.className = 'calendar-grid';
+      const first = new Date(year, month - 1, 1).getDay();
+      const last = new Date(year, month, 0).getDate();
+      for(let i=0; i<first; i++) grid.appendChild(document.createElement('div'));
+      for(let d=1; d<=last; d++) {
+        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const dayCell = document.createElement('div');
+        dayCell.className = 'calendar-day' + (availableDates.has(dateStr) ? ' available' : '');
+        dayCell.textContent = d;
+        if(availableDates.has(dateStr)) dayCell.onclick = () => {
+          document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
+          dayCell.classList.add('selected');
+          document.getElementById('selected-date').value = dateStr;
+          document.getElementById('selected-time-slot').value = '';
+          loadTimeSlots(dateStr);
+        };
+        grid.appendChild(dayCell);
+      }
+      section.appendChild(grid);
+      container.appendChild(section);
+    }
+
+    async function loadTimeSlots(dateStr) {
+      const container = document.getElementById('time-slots-container');
+      document.getElementById('time-slot-section').style.display = 'block';
+      container.innerHTML = '載入中...';
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getSlots&date=${encodeURIComponent(dateStr)}`);
+        const slots = await res.json();
+        container.innerHTML = '';
+        
+        if (!slots || slots.length === 0) {
+          container.innerHTML = '<p style="color: #c9705f; grid-column: 1/-1; padding: 20px;">抱歉，此日期的時段已全數約滿，請選擇其他日期。</p>';
+          return;
+        }
+
+        slots.forEach(slot => {
+          const div = document.createElement('div');
+          div.className = 'time-slot';
+          div.textContent = slot.display;
+          div.onclick = () => {
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            div.classList.add('selected');
+            document.getElementById('selected-time-slot').value = slot.time;
+          };
+          container.appendChild(div);
+        });
+      } catch (e) { 
+        container.innerHTML = '載入時段失敗，請重試'; 
+      }
+    }
+
+    function getCheckboxValues(name) {
+      const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
+      return Array.from(checked).map(cb => {
+        if(cb.value === '其他') {
+          const otherText = document.getElementById(cb.id + '-text').value;
+          return otherText ? `其他：${otherText}` : '其他';
+        }
+        return cb.value;
+      }).join('、');
+    }
+
+    document.getElementById('booking-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const mattressRadio = document.querySelector('input[name="mattress_type"]:checked');
+      let mattressVal = mattressRadio ? mattressRadio.value : '';
+      if(mattressVal === '其他') mattressVal = '其他：' + document.getElementById('mattress-other-text').value;
+
+      const dateVal = document.getElementById('selected-date').value;
+      const timeVal = document.getElementById('selected-time-slot').value;
+
+      const data = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        numberOfPeople: document.getElementById('numberOfPeople').value,
+        date: dateVal,
+        timeSlot: timeVal,
+        sleepingPosition: getCheckboxValues('sleepingPosition'),
+        mattress_type: mattressVal,
+        mainConcern: getCheckboxValues('mainConcern'),
+        sleepIssues: document.getElementById('sleepIssues').value,
+        specialRequests: document.getElementById('specialRequests').value
+      };
+
+      if(!data.date || !data.timeSlot) { 
+        showMessageModal('溫馨提醒', '請先選擇「日期」與「時段」再送出表單。'); 
+        return; 
+      }
+
+      const form = document.getElementById('booking-form');
+      const loading = document.getElementById('loading');
+      const successMsg = document.getElementById('success-message');
+
+      form.style.display = 'none';
+      loading.style.display = 'block';
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=submit`, {
+          method: 'POST',
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        
+        loading.style.display = 'none';
+        
+        if(result.success) {
+          currentBookingId = result.bookingId;
+
+          document.getElementById('display-date').textContent = dateVal;
+          document.getElementById('display-time').textContent = timeVal;
+          successMsg.classList.remove('hidden');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+
+          startCountdown();
+        } else { 
+          showMessageModal('預約失敗', result.message); 
+          form.style.display = 'block'; 
+        }
+      } catch (e) { 
+        showMessageModal('系統錯誤', '提交失敗，請稍後再試。'); 
+        loading.style.display = 'none';
+        form.style.display = 'block'; 
+      }
+    });
+
+    function startCountdown() {
+      let timeLeft = 600; 
+      const countdownEl = document.getElementById('countdown');
+      const cancelSection = document.getElementById('cancel-section');
+      cancelSection.style.display = 'block';
+      
+      const timer = setInterval(() => {
+        timeLeft--;
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        countdownEl.textContent = `${m}:${s < 10 ? '0'+s : s}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          cancelSection.style.display = 'none'; 
+        }
+      }, 1000);
+    }
+
+    document.getElementById('cancel-btn').addEventListener('click', function() {
+      showConfirmModal('確認取消', '請問確定要取消剛才的預約嗎？', async function() {
+        const btn = document.getElementById('cancel-btn');
+        btn.textContent = '處理中...';
+        btn.disabled = true;
+
+        try {
+          const res = await fetch(`${SCRIPT_URL}?action=cancel`, {
+            method: 'POST',
+            body: JSON.stringify({ bookingId: currentBookingId })
+          });
+          const result = await res.json();
+
+          if (result.success) {
+            showMessageModal('取消成功', '您的預約已經成功取消。');
+            document.getElementById('success-message').classList.add('hidden');
+            document.getElementById('booking-form').style.display = 'block';
+            document.getElementById('booking-form').reset(); 
+            document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
+            document.getElementById('time-slot-section').style.display = 'none';
+          } else {
+            showMessageModal('取消失敗', result.message);
+          }
+        } catch (e) {
+          showMessageModal('網路錯誤', '無法取消，請稍後重試。');
+        } finally {
+          btn.textContent = '取消並重新填寫';
+          btn.disabled = false;
+        }
+      });
+    });
+
+    renderCalendar();
+  </script>
 </body>
 </html>
