@@ -183,7 +183,8 @@
         </a>
       </div>
     </div>
-    <div class="notice-section">
+    
+    <div class="notice-section" id="notice-section">
       <h3>預約注意事項</h3>
       <ul>
         <li>可預約時段：<br>
@@ -342,10 +343,10 @@
   </div>
 
   <script>
-    // 🟢 請務必確認這裡填入的是您「實驗室專案」的 GAS 網址
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpA-p88R_bnjt9ZbkUjg3AafVKjlXWPriDTd71jhTeV6qKcjV4et_honBp1VLx3PN6/exec"; 
+    // 🔴 請務必確認這裡填入的是您【實驗Core】專案最新的網頁應用程式網址 (結尾是 /exec)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxawPp4K6DkE_oWK6gizh68aR01KglzpFYpH7wqtOwlPCrO_GYJeyiS2Yq5V062tX3z/exec"; 
+    
     let currentBookingId = null; 
-
     document.getElementById('current-year').textContent = new Date().getFullYear();
 
     // 自訂彈窗功能
@@ -411,7 +412,7 @@
           renderMonthCalendar(container, parseInt(year), parseInt(month), new Set(datesByMonth[yearMonth]));
         });
       } catch (e) {
-        container.innerHTML = '<p style="color: #c9705f; text-align: center;">載入失敗，請重新整理頁面</p>';
+        container.innerHTML = '<p style="color: #c9705f; text-align: center;">載入失敗，請確認網路連線或稍後重試。</p>';
       }
     }
 
@@ -530,7 +531,7 @@
       const form = document.getElementById('booking-form');
       const loading = document.getElementById('loading');
       const successMsg = document.getElementById('success-message');
-      const noticeSection = document.querySelector('.notice-section'); // 選取注意事項區塊
+      const noticeSection = document.getElementById('notice-section');
 
       form.style.display = 'none';
       loading.style.display = 'block';
@@ -550,7 +551,7 @@
           document.getElementById('display-date').textContent = dateVal;
           document.getElementById('display-time').textContent = timeVal;
           
-          // 🔥 關鍵修改：隱藏注意事項
+          // 隱藏注意事項
           noticeSection.style.display = 'none'; 
           
           successMsg.classList.remove('hidden');
@@ -605,8 +606,8 @@
             document.getElementById('success-message').classList.add('hidden');
             
             document.getElementById('booking-form').style.display = 'block';
-            // 🔥 關鍵修改：重新顯示注意事項
-            document.querySelector('.notice-section').style.display = 'block'; 
+            // 重新顯示注意事項
+            document.getElementById('notice-section').style.display = 'block'; 
             
             document.getElementById('booking-form').reset(); 
             document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
