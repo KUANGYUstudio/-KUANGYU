@@ -218,11 +218,16 @@
         <div style="display: inline-block; background: #e0f7fa; color: #006064; padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: bold; margin-bottom: 15px;">
           📍 試躺地點
         </div>
-        <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #333;">Chrisus Life Well 奎爾斯企業</h3>
-        <p style="margin: 0 0 20px 0; font-size: 15px; color: #666; font-family: sans-serif;">
-          台北市大安區臥龍街278號1樓
+        
+        <h3 id="ui-company-name" style="margin: 0 0 8px 0; font-size: 18px; color: #333;">
+          載入中...
+        </h3>
+        
+        <p id="ui-address" style="margin: 0 0 20px 0; font-size: 15px; color: #666; font-family: sans-serif;">
+          載入中...
         </p>
-        <a href="https://maps.app.goo.gl/VfBiAho8HJeCnHwW7" target="_blank" 
+        
+        <a id="ui-map-link" href="#" target="_blank" 
            style="display: inline-block; text-decoration: none; color: #00acc1; border: 1px solid #00acc1; padding: 10px 24px; border-radius: 50px; font-size: 14px; transition: all 0.2s; font-weight: 500;">
           查看地圖 →
         </a>
@@ -388,10 +393,57 @@
   </div>
 
   <script>
+    <script>
+    // 請確認這裡是您「實驗室專案」的 GAS 網址
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxawPp4K6DkE_oWK6gizh68aR01KglzpFYpH7wqtOwlPCrO_GYJeyiS2Yq5V062tX3z/exec";
+    
     let currentBookingId = null; 
 
-    document.getElementById('current-year').textContent = new Date().getFullYear();
+    // ==========================================
+    // 🟢 自動載入店家資訊 (SaaS 魔法)
+    // ==========================================
+    async function loadCompanyInfo() {
+      try {
+        // 1. 向 GAS 請求公司資訊
+        const res = await fetch(`${SCRIPT_URL}?action=getCompanyInfo`);
+        const info = await res.json();
+        
+        // 2. 更新網頁內容
+        if(info.name) {
+             document.title = `預約 | ${info.name}`; // 修改瀏覽器標題
+             document.getElementById('ui-company-name').textContent = info.name;
+        }
+        if(info.address) {
+             document.getElementById('ui-address').textContent = info.address;
+        }
+        if(info.mapUrl) {
+             document.getElementById('ui-map-link').href = info.mapUrl;
+        }
+
+        // 如果您想要連電話也自動填入 placeholder，可以加上這段
+        /*
+        const phoneInput = document.getElementById('phone');
+        if(phoneInput && info.phone) {
+             phoneInput.placeholder = `例如：${info.phone}`;
+        }
+        */
+
+      } catch (e) {
+        console.error("無法載入店家資訊", e);
+        // 失敗時的預設顯示 (或是保持原本的載入中...)
+        document.getElementById('ui-company-name').textContent = "Chrisus Life Well (載入失敗)";
+      }
+    }
+
+    // 網頁初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+      
+      loadCompanyInfo(); // <--- 執行載入店家資訊
+      renderCalendar();  // 執行載入日曆
+    });
+
+    // ... (以下保留原本的 showMessageModal 等程式碼，不要動) ...
 
     // 自訂彈窗功能
     function showMessageModal(title, text) {
