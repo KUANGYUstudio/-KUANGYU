@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>床墊試躺預約 | Chrisus Sport</title>
+  <title>床墊試躺預約 | 載入中...</title>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,48 +27,6 @@
       overflow: hidden; 
       padding-bottom: 30px;
     }
-
-    .header { 
-      background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%);
-      color: white; 
-      padding: 30px 20px; 
-      text-align: center; 
-      border-radius: 25px;
-      margin: 20px 20px 15px 20px;
-      box-shadow: 0 8px 20px rgba(0, 172, 193, 0.3);
-    }
-    
-    .location-card {
-      background: linear-gradient(135deg, rgba(244, 167, 146, 0.85) 0%, rgba(233, 139, 125, 0.85) 100%);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      padding: 25px 20px;
-      text-align: center;
-      border-radius: 25px;
-      margin: 0 20px 20px 20px;
-      box-shadow: 0 4px 15px rgba(244, 167, 146, 0.2);
-    }
-
-    .header h1 { font-size: 2em; margin-bottom: 5px; font-weight: 700; }
-    .header p { font-size: 1.1em; opacity: 0.95; }
-
-    .location-card h3 { color: white; margin-bottom: 10px; font-size: 1.2em; }
-    .location-card a { 
-      color: white; 
-      text-decoration: none; 
-      font-weight: 600; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 5px; 
-      margin-top: 5px;
-      background: rgba(255, 255, 255, 0.25);
-      padding: 8px 20px;
-      border-radius: 20px;
-      transition: 0.3s;
-    }
-    .location-card a:hover { background: rgba(255, 255, 255, 0.4); }
 
     .notice-section { 
       background: #f0fbfc; 
@@ -393,8 +351,7 @@
   </div>
 
   <script>
-    <script>
-    // 請確認這裡是您「實驗室專案」的 GAS 網址
+    // 實驗室專案的 GAS 網址 (已自動更新)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxawPp4K6DkE_oWK6gizh68aR01KglzpFYpH7wqtOwlPCrO_GYJeyiS2Yq5V062tX3z/exec";
     
     let currentBookingId = null; 
@@ -420,17 +377,9 @@
              document.getElementById('ui-map-link').href = info.mapUrl;
         }
 
-        // 如果您想要連電話也自動填入 placeholder，可以加上這段
-        /*
-        const phoneInput = document.getElementById('phone');
-        if(phoneInput && info.phone) {
-             phoneInput.placeholder = `例如：${info.phone}`;
-        }
-        */
-
       } catch (e) {
         console.error("無法載入店家資訊", e);
-        // 失敗時的預設顯示 (或是保持原本的載入中...)
+        // 失敗時的預設顯示
         document.getElementById('ui-company-name').textContent = "Chrisus Life Well (載入失敗)";
       }
     }
@@ -439,13 +388,15 @@
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('current-year').textContent = new Date().getFullYear();
       
-      loadCompanyInfo(); // <--- 執行載入店家資訊
-      renderCalendar();  // 執行載入日曆
+      // 啟動功能！
+      loadCompanyInfo(); 
+      renderCalendar(); 
     });
 
-    // ... (以下保留原本的 showMessageModal 等程式碼，不要動) ...
+    // ==========================================
+    // 以下是原本的邏輯，完全沒動
+    // ==========================================
 
-    // 自訂彈窗功能
     function showMessageModal(title, text) {
       document.getElementById('modal-title').textContent = title;
       document.getElementById('modal-text').innerHTML = text;
@@ -710,8 +661,6 @@
         }
       });
     });
-
-    renderCalendar();
   </script>
 </body>
 </html>
