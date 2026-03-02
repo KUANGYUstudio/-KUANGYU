@@ -17,7 +17,7 @@
       color: #444;
     }
 
-    /* 鎖定最大寬度為 600px，讓 iPad 和電腦版維持精緻的手機 APP 比例 */
+    /* 鎖定最大寬度為 600px */
     .container { 
       max-width: 600px; 
       margin: 0 auto; 
@@ -28,53 +28,13 @@
       padding-bottom: 30px;
     }
 
-    .header { 
-      background: linear-gradient(135deg, #26c6da 0%, #00acc1 100%);
-      color: white; 
-      padding: 30px 20px; 
-      text-align: center; 
-      border-radius: 25px;
-      margin: 20px 20px 15px 20px;
-      box-shadow: 0 8px 20px rgba(0, 172, 193, 0.3);
-    }
-    
-    .location-card {
-      background: linear-gradient(135deg, rgba(244, 167, 146, 0.85) 0%, rgba(233, 139, 125, 0.85) 100%);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      padding: 25px 20px;
-      text-align: center;
-      border-radius: 25px;
-      margin: 0 20px 20px 20px;
-      box-shadow: 0 4px 15px rgba(244, 167, 146, 0.2);
-    }
-
-    .header h1 { font-size: 2em; margin-bottom: 5px; font-weight: 700; }
-    .header p { font-size: 1.1em; opacity: 0.95; }
-
-    .location-card h3 { color: white; margin-bottom: 10px; font-size: 1.2em; }
-    .location-card a { 
-      color: white; 
-      text-decoration: none; 
-      font-weight: 600; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 5px; 
-      margin-top: 5px;
-      background: rgba(255, 255, 255, 0.25);
-      padding: 8px 20px;
-      border-radius: 20px;
-      transition: 0.3s;
-    }
-    .location-card a:hover { background: rgba(255, 255, 255, 0.4); }
-
+    /* 卡片與表單樣式 */
     .notice-section { 
       background: #f0fbfc; 
       padding: 30px 25px; 
       border-left: 5px solid #00bcd4; 
       border-radius: 0 20px 20px 0; margin: 25px 25px 0 25px; 
+      transition: 0.3s ease; /* 加入過渡效果 */
     }
     .notice-section h3 { color: #0097a7; margin-bottom: 20px; font-size: 1.3em; font-weight: 700; }
     .notice-section ul { padding-left: 0; margin-left: 0; }
@@ -147,7 +107,6 @@
     .spinner { border: 3px solid #e0f2f1; border-top: 3px solid #f4a792; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     
-    /* 鎖定日曆最大寬度，確保大螢幕不變形 */
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 450px; margin: 0 auto; }
     .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
     .hidden { display: none; }
@@ -167,11 +126,9 @@
     .modal-title { font-size: 1.4em; color: #455a64; font-weight: bold; margin-bottom: 15px; }
     .modal-text { color: #666; margin-bottom: 30px; line-height: 1.5; font-size: 1.05em; }
     
-    /* 彈出視窗按鈕放大 */
     .modal-btn {
       padding: 14px 25px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;
-      font-size: 1.15em; /* 放大字體 */
-      min-width: 120px; /* 增加按鈕寬度 */
+      font-size: 1.15em; min-width: 120px; 
     }
     .btn-confirm { background: #00acc1; color: white; margin-left: 10px; }
     .btn-confirm:hover { background: #00838f; }
@@ -180,7 +137,6 @@
     .btn-danger { background: #e57373; color: white; margin-left: 10px; }
     .btn-danger:hover { background: #d32f2f; }
     
-    /* 電腦與平板的優化間距 */
     @media (min-width: 768px) { 
       body { padding: 40px 20px; } 
       .container { box-shadow: 0 15px 50px rgba(0, 188, 212, 0.15); }
@@ -188,12 +144,7 @@
     
     @media (max-width: 600px) { 
       body { padding: 15px; } 
-      .header h1 { font-size: 1.6em; } 
-      .header, .location-card { margin: 15px 15px 10px 15px; padding: 25px 20px; }
-      .location-card { margin-top: 0; }
-      .notice-section { margin: 20px 15px 0 15px; }
-      .form-section { padding: 25px 20px; } 
-      .modal-btn { min-width: 100px; padding: 12px 15px; font-size: 1.1em; } /* 手機按鈕微調比例 */
+      .modal-btn { min-width: 100px; padding: 12px 15px; font-size: 1.1em; } 
     }
   </style>
 
@@ -203,19 +154,37 @@
 <body>
   <div class="container">
     
-    <div class="header">
-      <h1>床墊試躺預約</h1>
-      <p>找到最適合您的睡眠體驗</p>
-    </div>
+    <div style="max-width: 600px; margin: 20px auto 30px auto; background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden;">
+      
+      <div style="background: linear-gradient(135deg, #00acc1, #00838f); padding: 20px 20px; text-align: center; color: white;">
+        <h1 style="margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 1.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          床墊試躺預約
+        </h1>
+        <p style="margin: 10px 0 0 0; opacity: 0.9; font-size: 15px; font-weight: 300;">
+          找到最適合您的睡眠體驗
+        </p>
+      </div>
 
-    <div class="location-card">
-      <h3>試躺地點</h3>
-      <p style="font-size: 1.1em; font-weight: 600; margin: 10px 0;">Chrisus Life Well 奎爾斯企業</p>
-      <p style="font-size: 0.9em;">（台北市大安區臥龍街278號1樓）</p>
-      <a href="https://maps.app.goo.gl/BHPdFwmSCWmVrEH56" target="_blank">查看地圖 →</a>
+      <div style="padding: 25px 20px; text-align: center; background: #ffffff;">
+        
+        <div style="display: inline-block; background: #fff2ef; color: #f4a792; padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: bold; margin-bottom: 15px; letter-spacing: 1px;">
+          試躺地點
+        </div>
+        
+        <h3 style="margin: 0 0 8px 0; font-size: 18px; color: #333;">Chrisus Life Well 奎爾斯企業</h3>
+        
+        <p style="margin: 0 0 20px 0; font-size: 15px; color: #666; font-family: sans-serif;">
+          台北市大安區臥龍街278號1樓
+        </p>
+        
+        <a href="https://maps.app.goo.gl/VfBiAho8HJeCnHwW7" target="_blank" 
+           style="display: inline-block; text-decoration: none; color: #f4a792; border: 1px solid #f4a792; padding: 10px 24px; border-radius: 50px; font-size: 14px; transition: all 0.2s; font-weight: 500;">
+          查看地圖 →
+        </a>
+      </div>
     </div>
-
-    <div class="notice-section">
+    
+    <div class="notice-section" id="notice-section">
       <h3>預約注意事項</h3>
       <ul>
         <li>可預約時段：<br>
@@ -374,9 +343,10 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpA-p88R_bnjt9ZbkUjg3AafVKjlXWPriDTd71jhTeV6qKcjV4et_honBp1VLx3PN6/exec";
+    // 🔴 請務必確認這裡填入的是您【正式Core】專案最新的網頁應用程式網址 (結尾是 /exec)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx569KKnSsxkf3TmuQCafU9vunCuVdsNppP3uSvpTheYWWgFjzeNx5g3TwQfUhMSGzy/exec"; 
+    
     let currentBookingId = null; 
-
     document.getElementById('current-year').textContent = new Date().getFullYear();
 
     // 自訂彈窗功能
@@ -442,7 +412,7 @@
           renderMonthCalendar(container, parseInt(year), parseInt(month), new Set(datesByMonth[yearMonth]));
         });
       } catch (e) {
-        container.innerHTML = '<p style="color: #c9705f; text-align: center;">載入失敗，請重新整理頁面</p>';
+        container.innerHTML = '<p style="color: #c9705f; text-align: center;">載入失敗，請確認網路連線或稍後重試。</p>';
       }
     }
 
@@ -561,6 +531,7 @@
       const form = document.getElementById('booking-form');
       const loading = document.getElementById('loading');
       const successMsg = document.getElementById('success-message');
+      const noticeSection = document.getElementById('notice-section');
 
       form.style.display = 'none';
       loading.style.display = 'block';
@@ -579,6 +550,10 @@
 
           document.getElementById('display-date').textContent = dateVal;
           document.getElementById('display-time').textContent = timeVal;
+          
+          // 隱藏注意事項
+          noticeSection.style.display = 'none'; 
+          
           successMsg.classList.remove('hidden');
           window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -589,7 +564,7 @@
         }
       } catch (e) { 
         showMessageModal('系統錯誤', '提交失敗，請稍後再試。'); 
-        loading.style.display = 'none';
+        loading.style.display = 'none'; 
         form.style.display = 'block'; 
       }
     });
@@ -629,7 +604,11 @@
           if (result.success) {
             showMessageModal('取消成功', '您的預約已經成功取消。');
             document.getElementById('success-message').classList.add('hidden');
+            
             document.getElementById('booking-form').style.display = 'block';
+            // 重新顯示注意事項
+            document.getElementById('notice-section').style.display = 'block'; 
+            
             document.getElementById('booking-form').reset(); 
             document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
             document.getElementById('time-slot-section').style.display = 'none';
