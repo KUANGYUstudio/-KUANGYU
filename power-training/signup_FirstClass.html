@@ -517,7 +517,20 @@
     let selectedType = ""; 
     let countdownInterval = null;
 
+    // 讀取 LocalStorage
     let myTrialSignups = JSON.parse(localStorage.getItem('myTrialSignups')) || [];
+    
+    // ============================================
+    // 🔥 新增：自動清除超過 24 小時的本機報名記憶
+    // ============================================
+    const currentTs = new Date().getTime();
+    myTrialSignups = myTrialSignups.filter(record => {
+        // 保留 24 小時內 (86400000 毫秒) 的紀錄，超過的就刪除
+        return (currentTs - record.timestamp) < 86400000;
+    });
+    // 將過濾後的新陣列存回去
+    localStorage.setItem('myTrialSignups', JSON.stringify(myTrialSignups));
+    // ============================================
 
     function closeCancelModal() { document.getElementById('cancel-modal').style.display = 'none'; if (countdownInterval) clearInterval(countdownInterval); }
     
