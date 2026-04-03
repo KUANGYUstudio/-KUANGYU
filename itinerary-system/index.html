@@ -6,34 +6,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       🎨 光聿行程美學定義 (純淨版)
+       🎨 光聿行程美學定義 (22px 鎖死版)
        ========================================= */
     :root {
-      --cat-鐵人: #4169E1;    /* 深藍 */
-      --cat-自行車: #228B22;  /* 森林綠 */
-      --cat-路跑: #D2691E;    /* 磚橙 */
-      --cat-游泳: #008080;    /* 湖水藍 */
-      --cat-活動: #9932CC;    /* 紫羅蘭 */
-      --cat-旅遊: #DB7093;    /* 玫瑰粉 */
-
-      --text-main: #2c3e50;
-      --text-sub: #546e7a;
-      --bg-color: #ffffff;
-      --card-bg: #f7f9fa;
-      --brand-main: #2c3e50;
+      --cat-鐵人: #4169E1; --cat-自行車: #228B22; --cat-路跑: #D2691E;
+      --cat-游泳: #008080; --cat-活動: #9932CC; --cat-旅遊: #DB7093;
+      --text-main: #2c3e50; --text-sub: #546e7a; --bg-color: #ffffff;
+      --card-bg: #f7f9fa; --brand-main: #2c3e50;
     }
 
     body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); min-height: 100vh; }
-    
     .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 40px 20px; box-sizing: border-box; text-align: center; }
-    
-    /* 標題區塊調整 */
     .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 5px; }
     .header-subtitle { font-size: 16px; margin-bottom: 40px; color: var(--text-sub); font-weight: 400; letter-spacing: 1px; }
 
-    /* =========================================
-       📅 日曆格式 (22px 鎖死風格)
-       ========================================= */
     .month-section { margin-bottom: 40px; text-align: left; }
     .month-title { font-weight: 800; font-size: 24px; margin: 0 0 20px; color: var(--text-main); padding-left: 5px; }
     
@@ -53,66 +39,37 @@
     .day-number { font-size: 22px !important; font-weight: bold !important; margin-bottom: 2px; line-height: 1; }
     @media (max-width: 750px) { .day-number { font-size: 18px !important; } }
 
-    .day.has-event { background-color: #fff; color: #333; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .day.has-event { background-color: #fff; color: #333; cursor: pointer; border-width: 2px; }
     .day.has-event:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-    
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important; z-index: 10; }
 
-    /* =========================================
-       👇 行內展開資訊框 (In-line Detail)
-       ========================================= */
+    /* 👇 行內展開資訊框 (與日曆同排) */
     .detail-panel { 
-      grid-column: 1 / -1; 
-      background: #fff; 
-      border-radius: 16px; 
-      margin-top: 8px; 
-      margin-bottom: 8px;
-      overflow: hidden; 
-      max-height: 0; 
-      opacity: 0; 
-      transition: max-height 0.4s ease-out, opacity 0.3s ease-in, padding 0.4s ease-out; 
-      box-sizing: border-box;
-      border: 0px solid #eee;
+      grid-column: 1 / -1; background: #fff; border-radius: 16px; 
+      margin-top: 8px; margin-bottom: 8px; overflow: hidden; 
+      max-height: 0; opacity: 0; transition: all 0.4s ease; box-sizing: border-box;
     }
-    
-    .detail-panel.open { 
-      max-height: 1200px; 
-      opacity: 1; 
-      padding: 25px; 
-      border-width: 1px;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
-    }
+    .detail-panel.open { max-height: 1200px; opacity: 1; padding: 25px; border: 1px solid #eee; }
 
-    .detail-header { border-bottom: 2px solid #eee; padding-bottom: 12px; margin-bottom: 18px; text-align: left;}
-    .detail-race-name { font-size: 20px; font-weight: bold; color: var(--text-main); }
-    .detail-race-date { font-size: 14px; color: var(--text-sub); margin-top: 5px; }
+    .detail-race-name { font-size: 20px; font-weight: bold; color: var(--text-main); margin-bottom: 5px; }
+    .detail-race-date { font-size: 14px; color: var(--text-sub); margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 
-    .info-section { margin-bottom: 25px; text-align: left; }
-    .info-title { font-weight: bold; font-size: 15px; color: #7f8c8d; margin-bottom: 10px; display: flex; align-items: center; }
+    .info-section { margin-bottom: 20px; text-align: left; }
+    .info-title { font-weight: bold; font-size: 15px; color: #7f8c8d; margin-bottom: 8px; display: flex; align-items: center; }
     .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; background: #ddd; margin-right: 10px; border-radius: 3px; }
-    
-    .info-content { background: var(--card-bg); padding: 18px; border-radius: 12px; font-size: 15px; line-height: 1.8; color: #666; }
-    .info-row { margin-bottom: 6px; }
-    .info-row strong { color: #444; }
-    .price-tag { color: #e67e22; font-weight: bold; margin-left: 5px;}
+    .info-content { background: var(--card-bg); padding: 15px; border-radius: 10px; font-size: 15px; line-height: 1.8; color: #666; }
+    .price-tag { color: #e67e22; font-weight: bold; }
 
-    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-    .loading-spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--brand-main); border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .loading-text { margin-top: 15px; font-size: 16px; color: #666; }
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; }
   </style>
 </head>
 <body>
 
-  <div id="loading" class="loading-overlay">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">同步雲端行程中...</div>
-  </div>
+  <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
 
   <div class="container">
     <div class="header-title">光聿 KUANGYU</div>
     <div class="header-subtitle">行程總覽系統</div>
-    
     <div id="calendar-container"></div>
   </div>
 
@@ -129,9 +86,19 @@
       renderCalendar();
       document.getElementById('loading').style.display = 'none';
     } catch (e) {
-      document.getElementById('loading-text').textContent = "系統連線異常";
       console.error(e);
+      document.getElementById('loading').innerHTML = "資料讀取失敗，請確認 API 設定。";
     }
+  }
+
+  // 核心功能：強制統一日期格式為 YYYY-MM-DD，解決抓不到行程的問題
+  function formatDate(d) {
+    if (!d) return "";
+    const date = new Date(d);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   }
 
   function renderCalendar() {
@@ -142,38 +109,32 @@
       return;
     }
 
-    races.sort((a, b) => new Date(a['出發日期']) - new Date(b['出發日期']));
-
-    const monthMap = new Map();
-    races.forEach(race => {
-      const d = new Date(race['出發日期']);
-      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
-      if (!monthMap.has(key)) {
-        monthMap.set(key, { year: d.getFullYear(), month: d.getMonth() + 1 });
-      }
+    // 取得所有有行程的月份
+    const monthSet = new Set();
+    races.forEach(r => {
+      const d = new Date(r['出發日期']);
+      monthSet.add(`${d.getFullYear()}-${d.getMonth() + 1}`);
     });
 
-    monthMap.forEach((val, key) => {
-      renderMonth(val.year, val.month, container, races);
+    const sortedMonths = Array.from(monthSet).sort((a, b) => {
+      const [y1, m1] = a.split('-'), [y2, m2] = b.split('-');
+      return y1 !== y2 ? y1 - y2 : m1 - m2;
+    });
+
+    sortedMonths.forEach(mKey => {
+      const [y, m] = mKey.split('-');
+      renderMonth(parseInt(y), parseInt(m), container, races);
     });
   }
 
   function renderMonth(year, month, container, races) {
     const section = document.createElement('div');
     section.className = 'month-section';
-    const title = document.createElement('div');
-    title.className = 'month-title';
-    title.textContent = `${year}年${month}月`;
-    section.appendChild(title);
-
+    section.innerHTML = `<div class="month-title">${year}年${month}月</div>`;
+    
     const header = document.createElement('div');
     header.className = 'calendar-header';
-    ['日','一','二','三','四','五','六'].forEach(d => {
-      const h = document.createElement('div');
-      h.className = 'weekday-header';
-      h.textContent = d;
-      header.appendChild(h);
-    });
+    ['日','一','二','三','四','五','六'].forEach(d => header.innerHTML += `<div class="weekday-header">${d}</div>`);
     section.appendChild(header);
 
     const grid = document.createElement('div');
@@ -181,18 +142,16 @@
     const firstDay = new Date(year, month - 1, 1).getDay();
     const lastDate = new Date(year, month, 0).getDate();
 
-    for (let i = 0; i < firstDay; i++) {
-      grid.appendChild(document.createElement('div'));
-    }
+    for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
 
     for (let d = 1; d <= lastDate; d++) {
       const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const cell = document.createElement('div');
       cell.className = 'day';
-      cell.id = `day-${dateStr}`;
       cell.innerHTML = `<span class="day-number">${d}</span>`;
 
-      const event = races.find(r => r['出發日期'] === dateStr);
+      // 使用統一格式進行比對
+      const event = races.find(r => formatDate(r['出發日期']) === dateStr);
       if (event) {
         const cat = event['行程類別'];
         cell.classList.add('has-event');
@@ -211,7 +170,7 @@
   function handleDayClick(dateStr, event, cell, grid) {
     if (currentSelectedCell) {
       currentSelectedCell.classList.remove('selected');
-      currentSelectedCell.style.backgroundColor = ''; 
+      currentSelectedCell.style.backgroundColor = '';
     }
 
     if (currentSelectedCell === cell && currentOpenPanel) {
@@ -222,34 +181,30 @@
 
     currentSelectedCell = cell;
     cell.classList.add('selected');
-    const catColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${event['行程類別']}`);
-    cell.style.backgroundColor = catColor;
-    cell.style.borderColor = catColor;
+    const color = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${event['行程類別']}`);
+    cell.style.backgroundColor = color;
+    cell.style.borderColor = color;
 
-    if (currentOpenPanel) {
-      closeCurrentPanel();
-    }
+    if (currentOpenPanel) closeCurrentPanel();
 
     const panel = document.createElement('div');
     panel.className = 'detail-panel';
     panel.innerHTML = generateDetailHTML(event);
 
     const cells = Array.from(grid.children);
-    const cellIndex = cells.indexOf(cell);
-    const rowEndIndex = Math.min(cells.length - 1, cellIndex + (6 - (cellIndex % 7)));
-    const targetRowEndCell = cells[rowEndIndex];
-
-    targetRowEndCell.parentNode.insertBefore(panel, targetRowEndCell.nextSibling);
-
+    const index = cells.indexOf(cell);
+    const rowEnd = Math.min(cells.length - 1, index + (6 - (index % 7)));
+    
+    grid.insertBefore(panel, cells[rowEnd].nextSibling);
     setTimeout(() => panel.classList.add('open'), 10);
     currentOpenPanel = panel;
   }
 
   function closeCurrentPanel() {
     if (currentOpenPanel) {
-      const panelToClose = currentOpenPanel;
-      panelToClose.classList.remove('open');
-      setTimeout(() => panelToClose.remove(), 400); 
+      const p = currentOpenPanel;
+      p.classList.remove('open');
+      setTimeout(() => p.remove(), 400);
       currentOpenPanel = null;
     }
   }
@@ -257,10 +212,8 @@
   function generateDetailHTML(event) {
     const code = event['行程代碼'];
     let html = `
-      <div class="detail-header">
-        <div class="detail-race-name">${event['行程名稱']}</div>
-        <div class="detail-race-date">日期：${event['出發日期']}</div>
-      </div>
+      <div class="detail-race-name">${event['行程名稱']}</div>
+      <div class="detail-race-date">日期：${formatDate(event['出發日期'])}</div>
     `;
 
     if (event['聿凡項目'] || event['光武項目']) {
@@ -268,8 +221,8 @@
         <div class="info-section">
           <div class="info-title">參與項目</div>
           <div class="info-content">
-            <div class="info-row"><strong>聿凡：</strong>${event['聿凡項目'] || '未填寫'}</div>
-            <div class="info-row"><strong>光武：</strong>${event['光武項目'] || '未填寫'}</div>
+            <div>聿凡：${event['聿凡項目'] || '-'}</div>
+            <div>光武：${event['光武項目'] || '-'}</div>
           </div>
         </div>
       `;
@@ -279,8 +232,8 @@
     if (stays.length > 0) {
       html += `<div class="info-section"><div class="info-title">住宿資訊</div><div class="info-content">`;
       stays.forEach(s => {
-        html += `<div class="info-row">住宿地點：<strong>${s['飯店名稱']}</strong> (${s['訂房平台']})</div>`;
-        html += `<div class="info-row">費用明細：<span class="price-tag">${s['費用']}</span> (${s['付款人']}付 / ${s['狀態']})</div>`;
+        html += `<div>🏠 <strong>${s['飯店名稱']}</strong> (${s['訂房平台']})</div>`;
+        html += `<div>費用：<span class="price-tag">${s['費用']}</span> (${s['付款人']}付 / ${s['狀態']})</div>`;
       });
       html += `</div></div>`;
     }
@@ -289,21 +242,14 @@
     if (trans.length > 0) {
       html += `<div class="info-section"><div class="info-title">交通安排</div><div class="info-content">`;
       trans.forEach(t => {
-        html += `<div class="info-row">類型：<strong>${t['類型']}</strong> - ${t['班次或班機號碼']}</div>`;
-        html += `<div class="info-row">時間：${t['出發時間']} / 費用：${t['票價或油資']} (${t['付款人']}付)</div>`;
+        html += `<div>🚆 <strong>${t['類型']}</strong> - ${t['班次或班機號碼']}</div>`;
+        html += `<div>時間：${t['出發時間']} / 費用：${t['票價或油資']} (${t['付款人']}付)</div>`;
       });
       html += `</div></div>`;
     }
 
-    if (event['備註']) {
-      html += `
-        <div class="info-section">
-          <div class="info-title">注意事項</div>
-          <div class="info-content">${event['備註']}</div>
-        </div>
-      `;
-    }
-
+    if (event['備註']) html += `<div class="info-section"><div class="info-title">備註</div><div class="info-content">${event['備註']}</div></div>`;
+    
     return html;
   }
 </script>
