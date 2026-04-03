@@ -55,11 +55,11 @@
     </div>
 
     <div id="form-住宿" class="form-section">
-        <div class="input-group"><label>行程代碼 (請先至主表建立)</label><select class="code-selector" id="住宿-代碼"></select></div>
+        <div class="input-group"><label>行程代碼</label><select class="code-selector" id="住宿-代碼"></select></div>
         <div class="input-group"><label>飯店名稱</label><input type="text" id="住宿-名稱"></div>
         <div class="input-group"><label>訂房平台</label><input type="text" id="住宿-平台"></div>
         <div class="input-group"><label>費用</label><input type="number" id="住宿-費用"></div>
-        <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿</option><option>凡</option><option>光</option><option>武</option></select></div>
+        <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿凡</option><option>光武</option><option>聿</option><option>凡</option><option>光</option><option>武</option></select></div>
         <div class="input-group"><label>狀態</label><select id="住宿-狀態"><option>已付</option><option>現場付</option></select></div>
         <button class="submit-btn" onclick="submitData('住宿')">確認儲存住宿</button>
     </div>
@@ -70,7 +70,7 @@
         <div class="input-group"><label>班次或班機號碼</label><input type="text" id="交通-班次"></div>
         <div class="input-group"><label>出發時間</label><input type="text" id="交通-時間" placeholder="14:30"></div>
         <div class="input-group"><label>票價或油資</label><input type="number" id="交通-費用"></div>
-        <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿</option><option>凡</option><option>光</option><option>武</option></select></div>
+        <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿凡</option><option>光武</option><option>聿</option><option>凡</option><option>光</option><option>武</option></select></div>
         <button class="submit-btn" onclick="submitData('交通')">確認儲存交通</button>
     </div>
 
@@ -78,7 +78,7 @@
         <div class="input-group"><label>行程代碼</label><select class="code-selector" id="帳務-代碼"></select></div>
         <div class="input-group"><label>項目名稱</label><input type="text" id="帳務-名稱"></div>
         <div class="input-group"><label>金額</label><input type="number" id="帳務-金額"></div>
-        <div class="input-group"><label>付款人</label><select id="帳務-付款人"><option>聿</option><option>凡</option><option>光</option><option>武</option></select></div>
+        <div class="input-group"><label>付款人</label><select id="帳務-付款人"><option>聿凡</option><option>光武</option><option>聿</option><option>凡</option><option>光</option><option>武</option></select></div>
         <div class="input-group"><label>付款狀態</label><select id="帳務-狀態"><option>已付</option><option>未付</option></select></div>
         <div class="input-group"><label>備註</label><input type="text" id="帳務-備註"></div>
         <button class="submit-btn" onclick="submitData('帳務明細')">確認儲存帳務</button>
@@ -91,7 +91,6 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
 
-    // 啟動時自動抓取代碼
     window.onload = refreshItineraryCodes;
 
     function refreshItineraryCodes() {
@@ -99,9 +98,8 @@
         .then(res => res.json())
         .then(data => {
             const codes = data['賽事'].map(item => item['行程代碼']).filter(c => c);
-            const uniqueCodes = [...new Set(codes)]; // 去除重複
+            const uniqueCodes = [...new Set(codes)];
             const selectors = document.querySelectorAll('.code-selector');
-            
             selectors.forEach(select => {
                 select.innerHTML = '<option value="">--- 請選擇行程 ---</option>';
                 uniqueCodes.forEach(code => {
@@ -126,7 +124,6 @@
         let eventCode = "";
         const statusDiv = document.getElementById('status');
         
-        // 抓取代碼（賽事分頁抓 input，其他抓 select）
         if (sheetName === '賽事') {
             eventCode = document.getElementById('賽事-代碼').value;
             rowData = [eventCode, document.getElementById('賽事-名稱').value, document.getElementById('賽事-類別').value, document.getElementById('賽事-日期').value, document.getElementById('賽事-聿凡').value, document.getElementById('賽事-光武').value, document.getElementById('賽事-報名費').value, document.getElementById('賽事-備註').value];
@@ -153,11 +150,9 @@
             statusDiv.style.background = '#d4edda';
             statusDiv.style.color = '#155724';
             statusDiv.textContent = '✅ ' + sheetName + ' 資料已入庫！';
-            
-            // 清空輸入
             if (sheetName === '賽事') {
                 document.getElementById('賽事-代碼').value = '';
-                refreshItineraryCodes(); // 剛新增完賽事，立刻刷新下拉選單
+                refreshItineraryCodes();
             }
             document.querySelectorAll('#form-' + sheetName + ' input').forEach(i => i.value = '');
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
