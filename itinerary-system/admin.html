@@ -6,9 +6,9 @@
     <title>光聿 KUANGYU - 行程管理後台</title>
     <style>
         :root {
-            --brand-main: #2c3e50;    /* 深石板藍 */
-            --brand-action: #e67e22;  /* 活力橙 */
-            --brand-bg: #f4f7f6;      /* 背景色 */
+            --brand-main: #2c3e50;
+            --brand-action: #e67e22;
+            --brand-bg: #f4f7f6;
             --brand-card: #ffffff;
             --text-dark: #34495e;
         }
@@ -59,7 +59,7 @@
         <div class="input-group"><label>飯店名稱</label><input type="text" id="住宿-名稱"></div>
         <div class="input-group"><label>訂房平台</label><input type="text" id="住宿-平台"></div>
         <div class="input-group"><label>費用</label><input type="number" id="住宿-費用"></div>
-        <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿凡</option><option>光武</option><option>聿</option><option>凡</option><option>光</option><option>武</option></select></div>
+        <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿凡</option><option>光武</option></select></div>
         <div class="input-group"><label>狀態</label><select id="住宿-狀態"><option>已付</option><option>現場付</option></select></div>
         <button class="submit-btn" onclick="submitData('住宿')">確認儲存住宿</button>
     </div>
@@ -70,7 +70,7 @@
         <div class="input-group"><label>班次或班機號碼</label><input type="text" id="交通-班次"></div>
         <div class="input-group"><label>出發時間</label><input type="text" id="交通-時間" placeholder="14:30"></div>
         <div class="input-group"><label>票價或油資</label><input type="number" id="交通-費用"></div>
-        <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿凡</option><option>光武</option><option>聿</option><option>凡</option><option>光</option><option>武</option></select></div>
+        <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿凡</option><option>光武</option></select></div>
         <button class="submit-btn" onclick="submitData('交通')">確認儲存交通</button>
     </div>
 
@@ -78,7 +78,7 @@
         <div class="input-group"><label>行程代碼</label><select class="code-selector" id="帳務-代碼"></select></div>
         <div class="input-group"><label>項目名稱</label><input type="text" id="帳務-名稱"></div>
         <div class="input-group"><label>金額</label><input type="number" id="帳務-金額"></div>
-        <div class="input-group"><label>付款人</label><select id="帳務-付款人"><option>聿凡</option><option>光武</option><option>聿</option><option>凡</option><option>光</option><option>武</option></select></div>
+        <div class="input-group"><label>付款人</label><select id="帳務-付款人"><option>聿凡</option><option>光武</option></select></div>
         <div class="input-group"><label>付款狀態</label><select id="帳務-狀態"><option>已付</option><option>未付</option></select></div>
         <div class="input-group"><label>備註</label><input type="text" id="帳務-備註"></div>
         <button class="submit-btn" onclick="submitData('帳務明細')">確認儲存帳務</button>
@@ -142,14 +142,14 @@
 
         statusDiv.style.display = 'block';
         statusDiv.style.background = '#eee';
-        statusDiv.textContent = '🚀 正在寫入雲端...';
+        statusDiv.textContent = '資料正在同步至雲端...';
         
         fetch(API_URL, { method: 'POST', body: JSON.stringify({ sheetName: sheetName, data: rowData }) })
         .then(res => res.json())
         .then(data => {
             statusDiv.style.background = '#d4edda';
             statusDiv.style.color = '#155724';
-            statusDiv.textContent = '✅ ' + sheetName + ' 資料已入庫！';
+            statusDiv.textContent = sheetName + ' 資料已成功入庫！';
             if (sheetName === '賽事') {
                 document.getElementById('賽事-代碼').value = '';
                 refreshItineraryCodes();
@@ -159,7 +159,7 @@
         })
         .catch(err => {
             statusDiv.style.background = '#f8d7da';
-            statusDiv.textContent = '❌ 儲存失敗。';
+            statusDiv.textContent = '儲存失敗，請檢查網路。';
         });
     }
 </script>
