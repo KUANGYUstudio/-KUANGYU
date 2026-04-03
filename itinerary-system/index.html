@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光聿 KUANGYU - 行程總覽</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --brand-main: #2c3e50;
+            --bg-color: #f4f7f6;
+            /* 賽事類別配色 (專業低飽和色系) */
+            --cat-ironman: #4169E1;   /* 鐵人：深藍 */
+            --cat-cycling: #228B22;   /* 自行車：森林綠 */
+            --cat-running: #D2691E;   /* 路跑：磚橙 */
+            --cat-swimming: #008080;  /* 游泳：湖水藍 */
+            --cat-activity: #9932CC;  /* 活動：紫羅蘭 */
+            --cat-travel: #DB7093;    /* 旅遊：玫瑰粉 */
+        }
+
+        body { font-family: "PingFang TC", "Heiti TC", sans-serif; background: var(--bg-color); color: var(--brand-main); margin: 0; padding: 10px; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo-title { font-weight: 800; font-size: 24px; letter-spacing: 2px; color: var(--brand-main); }
+        
+        /* 日曆樣式自定義 */
+        #calendar { margin-top: 10px; }
+        .fc-header-toolbar { margin-bottom: 20px !important; }
+        .fc-toolbar-title { font-size: 1.2em !important; font-weight: bold; }
+        .fc-button-primary { background-color: var(--brand-main) !important; border: none !important; }
+        
+        /* 彈窗樣式 (Modal) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-box { background: white; width: 90%; max-width: 450px; border-radius: 20px; overflow: hidden; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .modal-header { padding: 20px; background: var(--brand-main); color: white; position: relative; }
+        .modal-close { position: absolute; right: 15px; top: 15px; cursor: pointer; font-size: 24px; }
+        .modal-content { padding: 20px; max-height: 70vh; overflow-y: auto; }
+        
+        .detail-section { margin-bottom: 20px; border-bottom: 1px dashed #eee; padding-bottom: 15px; }
+        .detail-section:last-child { border: none; }
+        .detail-title { font-weight: bold; font-size: 16px; margin-bottom: 8px; color: var(--brand-main); display: flex; align-items: center; }
+        .detail-row { font-size: 14px; margin: 4px 0; color: #666; }
+        .price-tag { color: #e67e22; font-weight: bold; }
+
+        /* 類別顏色標籤 */
+        .fc-event { border: none !important; cursor: pointer; padding: 2px 5px; border-radius: 4px; }
+        .cat-鐵人 { background-color: var(--cat-ironman) !important; }
+        .cat-自行車 { background-color: var(--cat-cycling) !important; }
+        .cat-路跑 { background-color: var(--cat-running) !important; }
+        .cat-游泳 { background-color: var(--cat-swimming) !important; }
+        .cat-活動 { background-color: var(--cat-activity) !important; }
+        .cat-旅遊 { background-color: var(--cat-travel) !important; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo-title">光聿 KUANGYU</div>
+        <div style="font-size: 12px; color: #95a5a6; margin-top: 5px;">行程總覽系統</div>
+    </div>
+    <div id="calendar"></div>
+</div>
+
+<div id="detail-modal" class="modal-overlay" onclick="if(event.target==this) closeModal()">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="m-title" style="font-size: 18px; font-weight: bold;">賽事詳情</div>
+            <div id="m-date" style="font-size: 14px; opacity: 0.8; margin-top: 5px;"></div>
+        </div>
+        <div class="modal-content" id="m-content">
+            </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/zh-tw.js"></script>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
+    let allData = {};
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'zh-tw',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,listMonth'
+            },
+            events: function(fetchInfo, successCallback, failureCallback) {
+                fetch(API_URL)
+                    .then(res => res.json())
+                    .then(data => {
+                        allData = data;
+                        const events = data['賽事'].map(item => ({
+                            title: item['行程名稱'],
+                            start: item['出發日期'],
+                            className: 'cat-' + item['行程類別'],
+                            extendedProps: item
+                        }));
+                        successCallback(events);
+                    })
+                    .catch(err => failureCallback(err));
+            },
+            eventClick: function(info) {
+                showDetail(info.event.extendedProps);
+            }
+        });
+        calendar.render();
+    });
+
+    function showDetail(item) {
+        const code = item['行程代碼'];
+        document.getElementById('m-title').textContent = item['行程名稱'];
+        document.getElementById('m-date').textContent = '出發日期：' + item['出發日期'];
+        
+        let html = '';
+        
+        // 1. 賽事項目與備註
+        html += `<div class="detail-section">
+            <div class="detail-title">賽事資訊</div>
+            <div class="detail-row">聿凡項目：${item['聿凡項目'] || '無'}</div>
+            <div class="detail-row">光武項目：${item['光武項目'] || '無'}</div>
+            <div class="detail-row">備註：${item['備註'] || '-'}</div>
+        </div>`;
+
+        // 2. 住宿資訊
+        const stays = allData['住宿'].filter(s => s['行程代碼'] === code);
+        if(stays.length > 0) {
+            html += `<div class="detail-section"><div class="detail-title">住宿安排</div>`;
+            stays.forEach(s => {
+                html += `<div class="detail-row">🏠 ${s['飯店名稱']} (${s['訂房平台']})</div>`;
+                html += `<div class="detail-row">費用：<span class="price-tag">${s['費用']}</span> (付款人：${s['付款人']} / ${s['狀態']})</div>`;
+            });
+            html += `</div>`;
+        }
+
+        // 3. 交通資訊
+        const trans = allData['交通'].filter(t => t['行程代碼'] === code);
+        if(trans.length > 0) {
+            html += `<div class="detail-section"><div class="detail-title">交通資訊</div>`;
+            trans.forEach(t => {
+                html += `<div class="detail-row">🚆 ${t['類型']} - ${t['班次或班機號碼']}</div>`;
+                html += `<div class="detail-row">出發時間：${t['出發時間']} / 費用：${t['票價或油資']} (${t['付款人']})</div>`;
+            });
+            html += `</div>`;
+        }
+
+        // 4. 帳務摘要
+        const bills = allData['帳務明細'].filter(b => b['行程代碼'] === code);
+        if(bills.length > 0) {
+            html += `<div class="detail-section"><div class="detail-title">雜項帳務</div>`;
+            bills.forEach(b => {
+                html += `<div class="detail-row">💰 ${b['項目名稱']}：${b['金額']} (${b['付款人']}付 / ${b['付款狀態']})</div>`;
+            });
+            html += `</div>`;
+        }
+
+        document.getElementById('m-content').innerHTML = html;
+        document.getElementById('detail-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('detail-modal').style.display = 'none';
+    }
+</script>
+</body>
+</html>
