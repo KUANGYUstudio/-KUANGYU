@@ -5,9 +5,10 @@
   <title>光聿 KUANGYU - 行程總覽</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* =========================================<br>       🎨 光聿行程美學定義 (沿用原本 UI 質感)<br>       ========================================= */
+    /* =========================================
+       🎨 光聿行程美學定義 (純淨版)
+       ========================================= */
     :root {
-      /* 賽事類別配色 (專業色系) */
       --cat-鐵人: #4169E1;    /* 深藍 */
       --cat-自行車: #228B22;  /* 森林綠 */
       --cat-路跑: #D2691E;    /* 磚橙 */
@@ -19,25 +20,22 @@
       --text-sub: #546e7a;
       --bg-color: #ffffff;
       --card-bg: #f7f9fa;
-      --brand-main: #2c3e50; /* 使用深色作為主色調，區分工作 */
+      --brand-main: #2c3e50;
     }
 
     body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); min-height: 100vh; }
     
-    /* 為了讓展開效果順暢，我們不用 flex centered body，改用標準布局 */
-    .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 20px 20px 40px; box-sizing: border-box; text-align: center; }
+    .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 40px 20px; box-sizing: border-box; text-align: center; }
     
-    .logo-area { text-align: center; margin-bottom: 20px; margin-top: 10px; }
-    .main-logo { display: inline-block; width: 40px; height: auto; vertical-align: middle; margin-right: 10px;}
-    @media (min-width: 751px) { .main-logo { width: 50px; } }
-    
-    .logo-text { display: inline-block; font-size: 26px; font-weight: 800; color: var(--text-main); vertical-align: middle; letter-spacing: 2px; }
+    /* 標題區塊調整 */
+    .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 5px; }
+    .header-subtitle { font-size: 16px; margin-bottom: 40px; color: var(--text-sub); font-weight: 400; letter-spacing: 1px; }
 
-    h1 { font-size: 18px; margin: 0 0 30px; color: var(--text-sub); font-weight: 400; letter-spacing: 1px; }
-
-    /* =========================================<br>       📅 日曆格式 (沿用 22px 鎖死風格)<br>       ========================================= */
-    .month-section { margin-bottom: 30px; text-align: left; }
-    .month-title { font-weight: 800; font-size: 24px; margin: 0 0 15px; color: var(--text-main); padding-left: 5px; }
+    /* =========================================
+       📅 日曆格式 (22px 鎖死風格)
+       ========================================= */
+    .month-section { margin-bottom: 40px; text-align: left; }
+    .month-title { font-weight: 800; font-size: 24px; margin: 0 0 20px; color: var(--text-main); padding-left: 5px; }
     
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
     @media (max-width: 750px) { .calendar-header, .calendar-grid { gap: 4px; } }
@@ -49,29 +47,28 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center; 
       border-radius: 12px; background-color: var(--card-bg); color: #cfd8dc; 
       cursor: default; box-sizing: border-box; transition: all 0.2s; position: relative; 
-      border: 2px solid transparent; /* 預留邊框空間，防止抖動 */
+      border: 2px solid transparent;
     }
     
-    /* 沿用原本的 22px 鎖死數字 */
     .day-number { font-size: 22px !important; font-weight: bold !important; margin-bottom: 2px; line-height: 1; }
     @media (max-width: 750px) { .day-number { font-size: 18px !important; } }
 
-    /* 有行程的日期樣式 - 加上類別顏色邊框 */
     .day.has-event { background-color: #fff; color: #333; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
     .day.has-event:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
     
-    /* 被選取的日期樣式 - 變為實心顏色 */
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important; z-index: 10; }
 
-    /* =========================================<br>       👇 行內展開資訊框 (In-line Detail)<br>       ========================================= */
+    /* =========================================
+       👇 行內展開資訊框 (In-line Detail)
+       ========================================= */
     .detail-panel { 
-      grid-column: 1 / -1; /* 跨越整排 7 格 */
+      grid-column: 1 / -1; 
       background: #fff; 
       border-radius: 16px; 
       margin-top: 8px; 
       margin-bottom: 8px;
       overflow: hidden; 
-      max-height: 0; /* 預設折疊 */
+      max-height: 0; 
       opacity: 0; 
       transition: max-height 0.4s ease-out, opacity 0.3s ease-in, padding 0.4s ease-out; 
       box-sizing: border-box;
@@ -79,27 +76,26 @@
     }
     
     .detail-panel.open { 
-      max-height: 1000px; /* 足夠大的高度讓內容展現 */
+      max-height: 1200px; 
       opacity: 1; 
-      padding: 20px; 
+      padding: 25px; 
       border-width: 1px;
       box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
     }
 
-    .detail-header { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; text-align: left;}
-    .detail-race-name { font-size: 18px; font-weight: bold; color: var(--text-main); }
-    .detail-race-date { font-size: 14px; color: var(--text-sub); margin-top: 3px; }
+    .detail-header { border-bottom: 2px solid #eee; padding-bottom: 12px; margin-bottom: 18px; text-align: left;}
+    .detail-race-name { font-size: 20px; font-weight: bold; color: var(--text-main); }
+    .detail-race-date { font-size: 14px; color: var(--text-sub); margin-top: 5px; }
 
-    .info-section { margin-bottom: 20px; text-align: left; }
-    .info-title { font-weight: bold; font-size: 15px; color: #7f8c8d; margin-bottom: 8px; display: flex; align-items: center; }
-    .info-title::before { content: ''; display: inline-block; width: 6px; height: 15px; background: #ddd; margin-right: 8px; border-radius: 3px; }
+    .info-section { margin-bottom: 25px; text-align: left; }
+    .info-title { font-weight: bold; font-size: 15px; color: #7f8c8d; margin-bottom: 10px; display: flex; align-items: center; }
+    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; background: #ddd; margin-right: 10px; border-radius: 3px; }
     
-    .info-content { background: var(--card-bg); padding: 15px; border-radius: 10px; font-size: 14px; line-height: 1.6; color: #666; }
-    .info-row { margin-bottom: 5px; }
+    .info-content { background: var(--card-bg); padding: 18px; border-radius: 12px; font-size: 15px; line-height: 1.8; color: #666; }
+    .info-row { margin-bottom: 6px; }
     .info-row strong { color: #444; }
     .price-tag { color: #e67e22; font-weight: bold; margin-left: 5px;}
 
-    /* 載入中動畫 */
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
     .loading-spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--brand-main); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -110,25 +106,20 @@
 
   <div id="loading" class="loading-overlay">
     <div class="loading-spinner"></div>
-    <div class="loading-text">正在同步雲端行程...</div>
+    <div class="loading-text">同步雲端行程中...</div>
   </div>
 
   <div class="container">
-    <div class="logo-area">
-        <img src="https://kuangyustudio.github.io/-KUANGYU/logo_icon.png" alt="光聿 Logo" class="main-logo">
-        <div class="logo-text">光聿 KUANGYU</div>
-    </div>
-    <h1>行程總覽系統</h1>
+    <div class="header-title">光聿 KUANGYU</div>
+    <div class="header-subtitle">行程總覽系統</div>
     
-    <div id="calendar-container">
-        </div>
+    <div id="calendar-container"></div>
   </div>
 
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
   let dbData = {};
 
-  // 1. 初始化，抓取資料
   window.onload = initSystem;
 
   async function initSystem() {
@@ -138,12 +129,11 @@
       renderCalendar();
       document.getElementById('loading').style.display = 'none';
     } catch (e) {
-      document.getElementById('loading-text').textContent = "連線失敗，請檢查網路或 API 設定。";
+      document.getElementById('loading-text').textContent = "系統連線異常";
       console.error(e);
     }
   }
 
-  // 2. 渲染日曆
   function renderCalendar() {
     const container = document.getElementById('calendar-container');
     const races = dbData['賽事'];
@@ -152,10 +142,8 @@
       return;
     }
 
-    // 將賽事依日期排序
     races.sort((a, b) => new Date(a['出發日期']) - new Date(b['出發日期']));
 
-    // 取得所有需要顯示的月份
     const monthMap = new Map();
     races.forEach(race => {
       const d = new Date(race['出發日期']);
@@ -165,7 +153,6 @@
       }
     });
 
-    // 依序生成月份日曆
     monthMap.forEach((val, key) => {
       renderMonth(val.year, val.month, container, races);
     });
@@ -174,14 +161,11 @@
   function renderMonth(year, month, container, races) {
     const section = document.createElement('div');
     section.className = 'month-section';
-    
-    // 月份標題
     const title = document.createElement('div');
     title.className = 'month-title';
     title.textContent = `${year}年${month}月`;
     section.appendChild(title);
 
-    // 星期表頭
     const header = document.createElement('div');
     header.className = 'calendar-header';
     ['日','一','二','三','四','五','六'].forEach(d => {
@@ -192,19 +176,15 @@
     });
     section.appendChild(header);
 
-    // 日期網格
     const grid = document.createElement('div');
     grid.className = 'calendar-grid';
-    
     const firstDay = new Date(year, month - 1, 1).getDay();
     const lastDate = new Date(year, month, 0).getDate();
 
-    // 填充空白格子
     for (let i = 0; i < firstDay; i++) {
       grid.appendChild(document.createElement('div'));
     }
 
-    // 生成日期格子
     for (let d = 1; d <= lastDate; d++) {
       const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const cell = document.createElement('div');
@@ -212,15 +192,11 @@
       cell.id = `day-${dateStr}`;
       cell.innerHTML = `<span class="day-number">${d}</span>`;
 
-      // 檢查當天是否有賽事
       const event = races.find(r => r['出發日期'] === dateStr);
       if (event) {
         const cat = event['行程類別'];
         cell.classList.add('has-event');
-        // 沿用 UI 風格，使用類別顏色作為邊框
         cell.style.borderColor = `var(--cat-${cat})`;
-        
-        // 點擊事件：處理行內展開
         cell.onclick = () => handleDayClick(dateStr, event, cell, grid);
       }
       grid.appendChild(cell);
@@ -229,56 +205,43 @@
     container.appendChild(section);
   }
 
-  // =========================================
-  // 🚀 核心邏輯：行內展開 (In-line Accordion)
-  // =========================================
   let currentOpenPanel = null;
   let currentSelectedCell = null;
 
   function handleDayClick(dateStr, event, cell, grid) {
-    // 1. 處理日期格子的選取狀態 (selected 色塊)
     if (currentSelectedCell) {
       currentSelectedCell.classList.remove('selected');
-      currentSelectedCell.style.backgroundColor = ''; // 恢復白色
+      currentSelectedCell.style.backgroundColor = ''; 
     }
 
-    // 如果點擊的是同一個已選取的日期，則關閉並結束
     if (currentSelectedCell === cell && currentOpenPanel) {
       closeCurrentPanel();
       currentSelectedCell = null;
       return;
     }
 
-    // 設為新選取日期，變為實心顏色
     currentSelectedCell = cell;
     cell.classList.add('selected');
     const catColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${event['行程類別']}`);
     cell.style.backgroundColor = catColor;
     cell.style.borderColor = catColor;
 
-    // 2. 處理資訊框展開
-    // 先關閉舊的
     if (currentOpenPanel) {
       closeCurrentPanel();
     }
 
-    // 建立新的資訊框
     const panel = document.createElement('div');
     panel.className = 'detail-panel';
     panel.innerHTML = generateDetailHTML(event);
 
-    // **關鍵：找出該格子所在的排數尾端**
     const cells = Array.from(grid.children);
     const cellIndex = cells.indexOf(cell);
     const rowEndIndex = Math.min(cells.length - 1, cellIndex + (6 - (cellIndex % 7)));
     const targetRowEndCell = cells[rowEndIndex];
 
-    // 將資訊框插入到該排最後一個格子的後面
     targetRowEndCell.parentNode.insertBefore(panel, targetRowEndCell.nextSibling);
 
-    // 觸發動畫 (需稍微延遲讓 DOM 渲染)
     setTimeout(() => panel.classList.add('open'), 10);
-    
     currentOpenPanel = panel;
   }
 
@@ -286,62 +249,56 @@
     if (currentOpenPanel) {
       const panelToClose = currentOpenPanel;
       panelToClose.classList.remove('open');
-      // 動態結束後移除 DOM
       setTimeout(() => panelToClose.remove(), 400); 
       currentOpenPanel = null;
     }
   }
 
-  // 生成詳情 HTML 内容
   function generateDetailHTML(event) {
     const code = event['行程代碼'];
     let html = `
       <div class="detail-header">
         <div class="detail-race-name">${event['行程名稱']}</div>
-        <div class="detail-race-date">出發日期：${event['出發日期']}</div>
+        <div class="detail-race-date">日期：${event['出發日期']}</div>
       </div>
     `;
 
-    // 1. 賽事項目
     if (event['聿凡項目'] || event['光武項目']) {
       html += `
         <div class="info-section">
-          <div class="info-title">賽事項目</div>
+          <div class="info-title">參與項目</div>
           <div class="info-content">
-            <div class="info-row"><strong>聿凡：</strong>${event['聿凡項目'] || '無'}</div>
-            <div class="info-row"><strong>光武：</strong>${event['光武項目'] || '無'}</div>
+            <div class="info-row"><strong>聿凡：</strong>${event['聿凡項目'] || '未填寫'}</div>
+            <div class="info-row"><strong>光武：</strong>${event['光武項目'] || '未填寫'}</div>
           </div>
         </div>
       `;
     }
 
-    // 2. 住宿紀錄
     const stays = dbData['住宿'].filter(s => s['行程代碼'] === code);
     if (stays.length > 0) {
-      html += `<div class="info-section"><div class="info-title">住宿安排</div><div class="info-content">`;
+      html += `<div class="info-section"><div class="info-title">住宿資訊</div><div class="info-content">`;
       stays.forEach(s => {
-        html += `<div class="info-row">🏠 <strong>${s['飯店名稱']}</strong> (${s['訂房平台']})</div>`;
-        html += `<div class="info-row">費用：<span class="price-tag">${s['費用']}</span> (${s['付款人']}付 / ${s['狀態']})</div>`;
+        html += `<div class="info-row">住宿地點：<strong>${s['飯店名稱']}</strong> (${s['訂房平台']})</div>`;
+        html += `<div class="info-row">費用明細：<span class="price-tag">${s['費用']}</span> (${s['付款人']}付 / ${s['狀態']})</div>`;
       });
       html += `</div></div>`;
     }
 
-    // 3. 交通紀錄
     const trans = dbData['交通'].filter(t => t['行程代碼'] === code);
     if (trans.length > 0) {
-      html += `<div class="info-section"><div class="info-title">交通資訊</div><div class="info-content">`;
+      html += `<div class="info-section"><div class="info-title">交通安排</div><div class="info-content">`;
       trans.forEach(t => {
-        html += `<div class="info-row">🚆 <strong>${t['類型']}</strong> - ${t['班次或班機號碼']}</div>`;
-        html += `<div class="info-row">出發：${t['出發時間']} / 費用：${t['票價或油資']} (${t['付款人']}付)</div>`;
+        html += `<div class="info-row">類型：<strong>${t['類型']}</strong> - ${t['班次或班機號碼']}</div>`;
+        html += `<div class="info-row">時間：${t['出發時間']} / 費用：${t['票價或油資']} (${t['付款人']}付)</div>`;
       });
       html += `</div></div>`;
     }
 
-    // 4. 備註
     if (event['備註']) {
       html += `
         <div class="info-section">
-          <div class="info-title">備註</div>
+          <div class="info-title">注意事項</div>
           <div class="info-content">${event['備註']}</div>
         </div>
       `;
