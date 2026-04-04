@@ -27,7 +27,6 @@
         .input-group input:focus { border-color: var(--brand-action); box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
         .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--brand-action); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3); transition: 0.3s; }
         .status-msg { display: none; text-align: center; margin-top: 15px; font-size: 14px; font-weight: bold; padding: 10px; border-radius: 10px; }
-        .refresh-notice { font-size: 11px; color: #95a5a6; margin-top: 5px; text-align: right; }
     </style>
 </head>
 <body>
@@ -36,31 +35,39 @@
     <div class="logo-text">KUANGYU ADMIN</div>
     
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('賽事', this)">賽事主表</button>
+        <button class="tab-btn active" onclick="switchTab('行程', this)">行程主表</button>
         <button class="tab-btn" onclick="switchTab('住宿', this)">住宿紀錄</button>
         <button class="tab-btn" onclick="switchTab('交通', this)">交通紀錄</button>
         <button class="tab-btn" onclick="switchTab('帳務明細', this)">帳務明細</button>
     </div>
 
-    <div id="form-賽事" class="form-section active">
-        <div class="input-group"><label>行程代碼 (例如：20260403_台東賽)</label><input type="text" id="賽事-代碼"></div>
-        <div class="input-group"><label>行程名稱</label><input type="text" id="賽事-名稱"></div>
-        <div class="input-group"><label>行程類別</label><select id="賽事-類別"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option></select></div>
-        <div class="input-group"><label>出發日期</label><input type="date" id="賽事-日期"></div>
-        <div class="input-group"><label>聿凡項目</label><input type="text" id="賽事-聿凡"></div>
-        <div class="input-group"><label>光武項目</label><input type="text" id="賽事-光武"></div>
-        <div class="input-group"><label>報名費總額</label><input type="number" id="賽事-報名費"></div>
-        <div class="input-group"><label>備註</label><input type="text" id="賽事-備註"></div>
-        <button class="submit-btn" onclick="submitData('賽事')">確認儲存賽事</button>
+    <div id="form-行程" class="form-section active">
+        <div class="input-group"><label>行程代碼</label><input type="text" id="行程-代碼" placeholder="例如：20260403_台東賽"></div>
+        <div class="input-group"><label>行程名稱</label><input type="text" id="行程-名稱"></div>
+        <div class="input-group"><label>行程類別</label><select id="行程-類別"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option></select></div>
+        <div class="input-group"><label>日期</label><input type="date" id="行程-日期"></div>
+        <div class="input-group"><label>行程連結</label><input type="url" id="行程-連結"></div>
+        <div class="input-group"><label>聿凡項目</label><input type="text" id="行程-聿凡"></div>
+        <div class="input-group"><label>光武項目</label><input type="text" id="行程-光武"></div>
+        <div class="input-group"><label>報名費總額</label><input type="number" id="行程-報名費"></div>
+        <div class="input-group"><label>報名費付款人</label><select id="行程-付款人"><option>聿凡</option><option>光武</option></select></div>
+        <div class="input-group"><label>付款方式</label><input type="text" id="行程-方式" placeholder="例如：刷卡、現金"></div>
+        <div class="input-group"><label>狀態</label><select id="行程-狀態"><option>已付</option><option>未付</option></select></div>
+        <div class="input-group"><label>備註</label><input type="text" id="行程-備註"></div>
+        <button class="submit-btn" onclick="submitData('行程')">確認儲存行程</button>
     </div>
 
     <div id="form-住宿" class="form-section">
         <div class="input-group"><label>行程代碼</label><select class="code-selector" id="住宿-代碼"></select></div>
-        <div class="input-group"><label>飯店名稱</label><input type="text" id="住宿-名稱"></div>
+        <div class="input-group"><label>飯店名稱</label><input type="text" id="住宿-飯店"></div>
+        <div class="input-group"><label>入住日期</label><input type="date" id="住宿-入住"></div>
+        <div class="input-group"><label>退房日期</label><input type="date" id="住宿-退房"></div>
         <div class="input-group"><label>訂房平台</label><input type="text" id="住宿-平台"></div>
         <div class="input-group"><label>費用</label><input type="number" id="住宿-費用"></div>
         <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿凡</option><option>光武</option></select></div>
+        <div class="input-group"><label>付款方式</label><input type="text" id="住宿-方式" placeholder="例如：刷卡、現金"></div>
         <div class="input-group"><label>狀態</label><select id="住宿-狀態"><option>已付</option><option>現場付</option></select></div>
+        <div class="input-group"><label>連結</label><input type="url" id="住宿-連結"></div>
         <button class="submit-btn" onclick="submitData('住宿')">確認儲存住宿</button>
     </div>
 
@@ -68,7 +75,9 @@
         <div class="input-group"><label>行程代碼</label><select class="code-selector" id="交通-代碼"></select></div>
         <div class="input-group"><label>類型</label><select id="交通-類型"><option>自駕</option><option>火車</option><option>班機</option></select></div>
         <div class="input-group"><label>班次或班機號碼</label><input type="text" id="交通-班次"></div>
-        <div class="input-group"><label>出發時間</label><input type="text" id="交通-時間" placeholder="14:30"></div>
+        <div class="input-group"><label>出發日期</label><input type="date" id="交通-日期"></div>
+        <div class="input-group"><label>出發時間</label><input type="text" id="交通-出發" placeholder="08:30"></div>
+        <div class="input-group"><label>抵達時間</label><input type="text" id="交通-抵達" placeholder="10:45"></div>
         <div class="input-group"><label>票價或油資</label><input type="number" id="交通-費用"></div>
         <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿凡</option><option>光武</option></select></div>
         <button class="submit-btn" onclick="submitData('交通')">確認儲存交通</button>
@@ -76,7 +85,7 @@
 
     <div id="form-帳務明細" class="form-section">
         <div class="input-group"><label>行程代碼</label><select class="code-selector" id="帳務-代碼"></select></div>
-        <div class="input-group"><label>項目名稱</label><input type="text" id="帳務-名稱"></div>
+        <div class="input-group"><label>項目名稱</label><input type="text" id="帳務-項目"></div>
         <div class="input-group"><label>金額</label><input type="number" id="帳務-金額"></div>
         <div class="input-group"><label>付款人</label><select id="帳務-付款人"><option>聿凡</option><option>光武</option></select></div>
         <div class="input-group"><label>付款狀態</label><select id="帳務-狀態"><option>已付</option><option>未付</option></select></div>
@@ -85,7 +94,6 @@
     </div>
 
     <div id="status" class="status-msg"></div>
-    <div class="refresh-notice">選單代碼會自動同步雲端</div>
 </div>
 
 <script>
@@ -94,18 +102,14 @@
     window.onload = refreshItineraryCodes;
 
     function refreshItineraryCodes() {
-        fetch(API_URL)
-        .then(res => res.json())
-        .then(data => {
-            const codes = data['賽事'].map(item => item['行程代碼']).filter(c => c);
+        fetch(API_URL).then(res => res.json()).then(data => {
+            const codes = data['行程'].map(item => item['行程代碼']).filter(c => c);
             const uniqueCodes = [...new Set(codes)];
-            const selectors = document.querySelectorAll('.code-selector');
-            selectors.forEach(select => {
+            document.querySelectorAll('.code-selector').forEach(select => {
                 select.innerHTML = '<option value="">--- 請選擇行程 ---</option>';
                 uniqueCodes.forEach(code => {
-                    const opt = document.createElement('option');
-                    opt.value = code;
-                    opt.textContent = code;
+                    let opt = document.createElement('option');
+                    opt.value = code; opt.textContent = code;
                     select.appendChild(opt);
                 });
             });
@@ -124,42 +128,35 @@
         let eventCode = "";
         const statusDiv = document.getElementById('status');
         
-        if (sheetName === '賽事') {
-            eventCode = document.getElementById('賽事-代碼').value;
-            rowData = [eventCode, document.getElementById('賽事-名稱').value, document.getElementById('賽事-類別').value, document.getElementById('賽事-日期').value, document.getElementById('賽事-聿凡').value, document.getElementById('賽事-光武').value, document.getElementById('賽事-報名費').value, document.getElementById('賽事-備註').value];
+        if (sheetName === '行程') {
+            eventCode = document.getElementById('行程-代碼').value;
+            rowData = [eventCode, document.getElementById('行程-名稱').value, document.getElementById('行程-類別').value, document.getElementById('行程-日期').value, document.getElementById('行程-連結').value, document.getElementById('行程-聿凡').value, document.getElementById('行程-光武').value, document.getElementById('行程-報名費').value, document.getElementById('行程-付款人').value, document.getElementById('行程-方式').value, document.getElementById('行程-狀態').value, document.getElementById('行程-備註').value];
         } else if (sheetName === '住宿') {
             eventCode = document.getElementById('住宿-代碼').value;
-            rowData = [eventCode, document.getElementById('住宿-名稱').value, document.getElementById('住宿-平台').value, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-狀態').value];
+            rowData = [eventCode, document.getElementById('住宿-飯店').value, document.getElementById('住宿-入住').value, document.getElementById('住宿-退房').value, document.getElementById('住宿-平台').value, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-方式').value, document.getElementById('住宿-狀態').value, document.getElementById('住宿-連結').value];
         } else if (sheetName === '交通') {
             eventCode = document.getElementById('交通-代碼').value;
-            rowData = [eventCode, document.getElementById('交通-類型').value, document.getElementById('交通-班次').value, document.getElementById('交通-時間').value, document.getElementById('交通-費用').value, document.getElementById('交通-付款人').value];
+            rowData = [eventCode, document.getElementById('交通-類型').value, document.getElementById('交通-班次').value, document.getElementById('交通-日期').value, document.getElementById('交通-出發').value, document.getElementById('交通-抵達').value, document.getElementById('交通-費用').value, document.getElementById('交通-付款人').value];
         } else if (sheetName === '帳務明細') {
             eventCode = document.getElementById('帳務-代碼').value;
-            rowData = [eventCode, document.getElementById('帳務-名稱').value, document.getElementById('帳務-金額').value, document.getElementById('帳務-付款人').value, document.getElementById('帳務-狀態').value, document.getElementById('帳務-備註').value];
+            rowData = [eventCode, document.getElementById('帳務-項目').value, document.getElementById('帳務-金額').value, document.getElementById('帳務-付款人').value, document.getElementById('帳務-狀態').value, document.getElementById('帳務-備註').value];
         }
 
-        if (!eventCode) { alert("請選擇或輸入行程代碼！"); return; }
-
+        if (!eventCode) { alert("行程代碼不能空白！"); return; }
+        
         statusDiv.style.display = 'block';
         statusDiv.style.background = '#eee';
-        statusDiv.textContent = '資料正在同步至雲端...';
+        statusDiv.textContent = '正在同步資料到雲端...';
         
         fetch(API_URL, { method: 'POST', body: JSON.stringify({ sheetName: sheetName, data: rowData }) })
-        .then(res => res.json())
-        .then(data => {
-            statusDiv.style.background = '#d4edda';
-            statusDiv.style.color = '#155724';
+        .then(res => res.json()).then(data => {
+            statusDiv.style.background = '#d4edda'; statusDiv.style.color = '#155724';
             statusDiv.textContent = sheetName + ' 資料已成功入庫！';
-            if (sheetName === '賽事') {
-                document.getElementById('賽事-代碼').value = '';
-                refreshItineraryCodes();
-            }
+            if (sheetName === '行程') refreshItineraryCodes();
             document.querySelectorAll('#form-' + sheetName + ' input').forEach(i => i.value = '');
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
-        })
-        .catch(err => {
-            statusDiv.style.background = '#f8d7da';
-            statusDiv.textContent = '儲存失敗，請檢查網路。';
+        }).catch(err => {
+            statusDiv.style.background = '#f8d7da'; statusDiv.textContent = '儲存失敗，請檢查網路。';
         });
     }
 </script>
