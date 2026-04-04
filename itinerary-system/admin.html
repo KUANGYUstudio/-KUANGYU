@@ -1,164 +1,318 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>光聿 KUANGYU - 行程管理後台</title>
-    <style>
-        :root {
-            --brand-main: #2c3e50;
-            --brand-action: #e67e22;
-            --brand-bg: #f4f7f6;
-            --brand-card: #ffffff;
-            --text-dark: #34495e;
-        }
-        body { font-family: "PingFang TC", "Heiti TC", sans-serif; background: var(--brand-bg); color: var(--text-dark); margin: 0; padding: 15px; }
-        .container { max-width: 500px; margin: 0 auto; background: var(--brand-card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .logo-text { text-align: center; font-weight: 800; font-size: 22px; color: var(--brand-main); margin-bottom: 20px; letter-spacing: 2px; }
-        .tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 25px; }
-        .tab-btn { padding: 12px; background: #ebf0f1; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: bold; color: #7f8c8d; transition: 0.3s; }
-        .tab-btn.active { background: var(--brand-main); color: #fff; transform: translateY(-2px); }
-        .form-section { display: none; }
-        .form-section.active { display: block; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .input-group { margin-bottom: 18px; }
-        .input-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: var(--brand-main); }
-        .input-group input, .input-group select { width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; background: #fff; }
-        .input-group input:focus { border-color: var(--brand-action); box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
-        .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--brand-action); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3); transition: 0.3s; }
-        .status-msg { display: none; text-align: center; margin-top: 15px; font-size: 14px; font-weight: bold; padding: 10px; border-radius: 10px; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>光聿 KUANGYU - 行程總覽</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* -----------------------------------------
+       🎨 光聿行程美學定義 (22px 鎖死風格)
+       ----------------------------------------- */
+    :root {
+      --cat-鐵人: #4169E1; --cat-自行車: #228B22; --cat-路跑: #D2691E;
+      --cat-游泳: #008080; --cat-活動: #9932CC; --cat-旅遊: #DB7093;
+      --text-main: #2c3e50; --text-sub: #546e7a; --bg-color: #ffffff;
+      --card-bg: #f7f9fa; --brand-main: #2c3e50;
+    }
+
+    body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); min-height: 100vh; }
+    .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 40px 20px; box-sizing: border-box; text-align: center; }
+    
+    .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 5px; }
+    .header-subtitle { font-size: 16px; margin-bottom: 40px; color: var(--text-sub); font-weight: 400; letter-spacing: 1px; }
+
+    /* 日曆佈局 */
+    .month-section { margin-bottom: 40px; text-align: left; }
+    .month-title { font-weight: 800; font-size: 24px; margin: 0 0 20px; color: var(--text-main); padding-left: 5px; }
+    
+    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
+    @media (max-width: 750px) { .calendar-header, .calendar-grid { gap: 4px; } }
+
+    .weekday-header { font-weight: bold; font-size: 16px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
+    
+    /* 日期格子 */
+    .day { 
+      aspect-ratio: 1; width: 100%; 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; 
+      border-radius: 12px; background-color: var(--card-bg); color: #cfd8dc; 
+      cursor: default; box-sizing: border-box; transition: all 0.2s; position: relative; 
+      border: 2px solid transparent;
+    }
+    .day-number { font-size: 22px !important; font-weight: bold !important; margin-bottom: 2px; line-height: 1; }
+    @media (max-width: 750px) { .day-number { font-size: 18px !important; } }
+
+    .day.has-event { background-color: #fff; color: #333; cursor: pointer; border-width: 2px; }
+    .day.has-event:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important; z-index: 10; }
+
+    /* 行內展開資訊框 */
+    .detail-panel { 
+      grid-column: 1 / -1; background: #fff; border-radius: 16px; 
+      margin-top: 8px; margin-bottom: 8px; overflow: hidden; 
+      max-height: 0; opacity: 0; transition: all 0.4s ease; box-sizing: border-box;
+    }
+    .detail-panel.open { max-height: 2000px; opacity: 1; padding: 25px; border: 1px solid #eee; }
+
+    .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 20px; }
+    .detail-race-name { font-size: 22px; font-weight: bold; color: var(--text-main); }
+    .link-btn { font-size: 13px; padding: 6px 12px; background: #e0f2f1; color: #00838f; border-radius: 20px; text-decoration: none; font-weight: bold; }
+    .link-btn:hover { background: #b2dfdb; }
+
+    /* 資訊區塊模組 */
+    .info-section { margin-bottom: 25px; text-align: left; }
+    .info-title { font-weight: bold; font-size: 16px; color: #7f8c8d; margin-bottom: 10px; display: flex; align-items: center; }
+    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; background: #ddd; margin-right: 10px; border-radius: 3px; }
+    
+    .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; line-height: 1.6; color: #555; }
+    .info-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+    .info-row.highlight { font-weight: bold; color: #333; margin-bottom: 8px; }
+    .price-tag { color: #e67e22; font-weight: bold; }
+    .status-tag { font-size: 12px; padding: 2px 6px; border-radius: 4px; background: #eee; color: #666; margin-left: 5px; }
+    .status-tag.paid { background: #d4edda; color: #155724; }
+
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="logo-text">KUANGYU ADMIN</div>
-    
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('行程', this)">行程主表</button>
-        <button class="tab-btn" onclick="switchTab('住宿', this)">住宿紀錄</button>
-        <button class="tab-btn" onclick="switchTab('交通', this)">交通紀錄</button>
-        <button class="tab-btn" onclick="switchTab('帳務明細', this)">帳務明細</button>
-    </div>
+  <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
 
-    <div id="form-行程" class="form-section active">
-        <div class="input-group"><label>行程代碼</label><input type="text" id="行程-代碼" placeholder="例如：20260403_台東賽"></div>
-        <div class="input-group"><label>行程名稱</label><input type="text" id="行程-名稱"></div>
-        <div class="input-group"><label>行程類別</label><select id="行程-類別"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option></select></div>
-        <div class="input-group"><label>日期</label><input type="date" id="行程-日期"></div>
-        <div class="input-group"><label>行程連結</label><input type="url" id="行程-連結"></div>
-        <div class="input-group"><label>聿凡項目</label><input type="text" id="行程-聿凡"></div>
-        <div class="input-group"><label>光武項目</label><input type="text" id="行程-光武"></div>
-        <div class="input-group"><label>報名費總額</label><input type="number" id="行程-報名費"></div>
-        <div class="input-group"><label>報名費付款人</label><select id="行程-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款方式</label><input type="text" id="行程-方式" placeholder="例如：刷卡、現金"></div>
-        <div class="input-group"><label>狀態</label><select id="行程-狀態"><option>已付</option><option>未付</option></select></div>
-        <div class="input-group"><label>備註</label><input type="text" id="行程-備註"></div>
-        <button class="submit-btn" onclick="submitData('行程')">確認儲存行程</button>
-    </div>
-
-    <div id="form-住宿" class="form-section">
-        <div class="input-group"><label>行程代碼</label><select class="code-selector" id="住宿-代碼"></select></div>
-        <div class="input-group"><label>飯店名稱</label><input type="text" id="住宿-飯店"></div>
-        <div class="input-group"><label>入住日期</label><input type="date" id="住宿-入住"></div>
-        <div class="input-group"><label>退房日期</label><input type="date" id="住宿-退房"></div>
-        <div class="input-group"><label>訂房平台</label><input type="text" id="住宿-平台"></div>
-        <div class="input-group"><label>費用</label><input type="number" id="住宿-費用"></div>
-        <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款方式</label><input type="text" id="住宿-方式" placeholder="例如：刷卡、現金"></div>
-        <div class="input-group"><label>狀態</label><select id="住宿-狀態"><option>已付</option><option>現場付</option></select></div>
-        <div class="input-group"><label>連結</label><input type="url" id="住宿-連結"></div>
-        <button class="submit-btn" onclick="submitData('住宿')">確認儲存住宿</button>
-    </div>
-
-    <div id="form-交通" class="form-section">
-        <div class="input-group"><label>行程代碼</label><select class="code-selector" id="交通-代碼"></select></div>
-        <div class="input-group"><label>類型</label><select id="交通-類型"><option>自駕</option><option>火車</option><option>班機</option></select></div>
-        <div class="input-group"><label>班次或班機號碼</label><input type="text" id="交通-班次"></div>
-        <div class="input-group"><label>出發日期</label><input type="date" id="交通-日期"></div>
-        <div class="input-group"><label>出發時間</label><input type="text" id="交通-出發" placeholder="08:30"></div>
-        <div class="input-group"><label>抵達時間</label><input type="text" id="交通-抵達" placeholder="10:45"></div>
-        <div class="input-group"><label>票價或油資</label><input type="number" id="交通-費用"></div>
-        <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <button class="submit-btn" onclick="submitData('交通')">確認儲存交通</button>
-    </div>
-
-    <div id="form-帳務明細" class="form-section">
-        <div class="input-group"><label>行程代碼</label><select class="code-selector" id="帳務-代碼"></select></div>
-        <div class="input-group"><label>項目名稱</label><input type="text" id="帳務-項目"></div>
-        <div class="input-group"><label>金額</label><input type="number" id="帳務-金額"></div>
-        <div class="input-group"><label>付款人</label><select id="帳務-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款狀態</label><select id="帳務-狀態"><option>已付</option><option>未付</option></select></div>
-        <div class="input-group"><label>備註</label><input type="text" id="帳務-備註"></div>
-        <button class="submit-btn" onclick="submitData('帳務明細')">確認儲存帳務</button>
-    </div>
-
-    <div id="status" class="status-msg"></div>
-</div>
+  <div class="container">
+    <div class="header-title">光聿 KUANGYU</div>
+    <div class="header-subtitle">行程總覽系統</div>
+    <div id="calendar-container"></div>
+  </div>
 
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
+  let dbData = {};
 
-    window.onload = refreshItineraryCodes;
+  window.onload = initSystem;
 
-    function refreshItineraryCodes() {
-        fetch(API_URL).then(res => res.json()).then(data => {
-            const codes = data['行程'].map(item => item['行程代碼']).filter(c => c);
-            const uniqueCodes = [...new Set(codes)];
-            document.querySelectorAll('.code-selector').forEach(select => {
-                select.innerHTML = '<option value="">--- 請選擇行程 ---</option>';
-                uniqueCodes.forEach(code => {
-                    let opt = document.createElement('option');
-                    opt.value = code; opt.textContent = code;
-                    select.appendChild(opt);
-                });
-            });
-        });
+  async function initSystem() {
+    try {
+      const res = await fetch(API_URL);
+      dbData = await res.json();
+      renderCalendar();
+      document.getElementById('loading').style.display = 'none';
+    } catch (e) {
+      console.error(e);
+      document.getElementById('loading').innerHTML = "資料讀取失敗，請確認網路連線。";
+    }
+  }
+
+  // 日期格式化：確保比對時不會出錯
+  function formatDate(d) {
+    if (!d) return "";
+    const date = new Date(d);
+    if (isNaN(date.getTime())) return "";
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  // 實用工具：判斷值是否為空
+  function hasValue(val) {
+    return val !== "" && val !== null && val !== undefined;
+  }
+
+  function renderCalendar() {
+    const container = document.getElementById('calendar-container');
+    const races = dbData['行程']; // 注意：這裡改抓「行程」分頁
+    if (!races || races.length === 0) {
+      container.innerHTML = '<div style="color:#999; margin-top:50px;">目前尚無行程紀錄</div>';
+      return;
     }
 
-    function switchTab(tabName, btn) {
-        document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById('form-' + tabName).classList.add('active');
-        btn.classList.add('active');
+    const monthSet = new Set();
+    races.forEach(r => {
+      const dStr = formatDate(r['日期']);
+      if(dStr) monthSet.add(dStr.substring(0, 7)); // 取得 YYYY-MM
+    });
+
+    const sortedMonths = Array.from(monthSet).sort();
+    sortedMonths.forEach(mKey => {
+      const [y, m] = mKey.split('-');
+      renderMonth(parseInt(y), parseInt(m), container, races);
+    });
+  }
+
+  function renderMonth(year, month, container, races) {
+    const section = document.createElement('div');
+    section.className = 'month-section';
+    section.innerHTML = `<div class="month-title">${year}年${month}月</div>`;
+    
+    const header = document.createElement('div');
+    header.className = 'calendar-header';
+    ['日','一','二','三','四','五','六'].forEach(d => header.innerHTML += `<div class="weekday-header">${d}</div>`);
+    section.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'calendar-grid';
+    const firstDay = new Date(year, month - 1, 1).getDay();
+    const lastDate = new Date(year, month, 0).getDate();
+
+    for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
+
+    for (let d = 1; d <= lastDate; d++) {
+      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const cell = document.createElement('div');
+      cell.className = 'day';
+      cell.innerHTML = `<span class="day-number">${d}</span>`;
+
+      // 比對「行程」分頁的「日期」欄位
+      const event = races.find(r => formatDate(r['日期']) === dateStr);
+      if (event) {
+        const cat = event['行程類別'];
+        cell.classList.add('has-event');
+        cell.style.borderColor = `var(--cat-${cat})`;
+        cell.onclick = () => handleDayClick(dateStr, event, cell, grid);
+      }
+      grid.appendChild(cell);
+    }
+    section.appendChild(grid);
+    container.appendChild(section);
+  }
+
+  let currentOpenPanel = null;
+  let currentSelectedCell = null;
+
+  function handleDayClick(dateStr, event, cell, grid) {
+    if (currentSelectedCell) {
+      currentSelectedCell.classList.remove('selected');
+      currentSelectedCell.style.backgroundColor = '';
+    }
+    if (currentSelectedCell === cell && currentOpenPanel) {
+      closeCurrentPanel();
+      currentSelectedCell = null;
+      return;
     }
 
-    function submitData(sheetName) {
-        let rowData = [];
-        let eventCode = "";
-        const statusDiv = document.getElementById('status');
+    currentSelectedCell = cell;
+    cell.classList.add('selected');
+    const color = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${event['行程類別']}`);
+    cell.style.backgroundColor = color;
+    cell.style.borderColor = color;
+
+    if (currentOpenPanel) closeCurrentPanel();
+
+    const panel = document.createElement('div');
+    panel.className = 'detail-panel';
+    panel.innerHTML = generateDetailHTML(event);
+
+    const cells = Array.from(grid.children);
+    const index = cells.indexOf(cell);
+    const rowEnd = Math.min(cells.length - 1, index + (6 - (index % 7)));
+    
+    grid.insertBefore(panel, cells[rowEnd].nextSibling);
+    setTimeout(() => panel.classList.add('open'), 10);
+    currentOpenPanel = panel;
+  }
+
+  function closeCurrentPanel() {
+    if (currentOpenPanel) {
+      const p = currentOpenPanel;
+      p.classList.remove('open');
+      setTimeout(() => p.remove(), 400);
+      currentOpenPanel = null;
+    }
+  }
+
+  // 生成 HTML 內容（動態判斷是否顯示）
+  function generateDetailHTML(event) {
+    const code = event['行程代碼'];
+    
+    // Header 區塊
+    let html = `<div class="detail-header">
+                  <div>
+                    <div class="detail-race-name">${event['行程名稱']}</div>
+                  </div>`;
+    if (hasValue(event['行程連結'])) {
+        html += `<a href="${event['行程連結']}" target="_blank" class="link-btn">前往簡章 ↗</a>`;
+    }
+    html += `</div>`;
+
+    // 1. 報名與項目區塊
+    let hasSignupInfo = hasValue(event['聿凡項目']) || hasValue(event['光武項目']) || hasValue(event['報名費總額']);
+    if (hasSignupInfo) {
+      html += `<div class="info-section"><div class="info-title">賽事與報名</div><div class="info-card">`;
+      if (hasValue(event['聿凡項目'])) html += `<div><strong>聿凡：</strong> ${event['聿凡項目']}</div>`;
+      if (hasValue(event['光武項目'])) html += `<div><strong>光武：</strong> ${event['光武項目']}</div>`;
+      if (hasValue(event['報名費總額'])) {
+          let statusClass = event['狀態'] === '已付' ? 'paid' : '';
+          html += `<div style="margin-top:8px; border-top:1px dashed #ddd; padding-top:8px;">
+                     報名費總額：<span class="price-tag">$${event['報名費總額']}</span> 
+                     <span style="font-size:13px; color:#888;">(${event['付款人'] || '未定'} / ${event['付款方式'] || '-'})</span>
+                     <span class="status-tag ${statusClass}">${event['狀態'] || '狀態未定'}</span>
+                   </div>`;
+      }
+      html += `</div></div>`;
+    }
+
+    // 2. 住宿區塊
+    const stays = dbData['住宿'].filter(s => s['行程代碼'] === code);
+    if (stays.length > 0) {
+      html += `<div class="info-section"><div class="info-title">住宿資訊</div>`;
+      stays.forEach(s => {
+        html += `<div class="info-card">
+                  <div class="info-row highlight">
+                    <span>🏨 ${s['飯店名稱']}</span>`;
+        if (hasValue(s['連結'])) html += `<a href="${s['連結']}" target="_blank" style="font-size:12px; color:#00838f; text-decoration:none;">查看地圖 ↗</a>`;
+        html += ` </div>`;
         
-        if (sheetName === '行程') {
-            eventCode = document.getElementById('行程-代碼').value;
-            rowData = [eventCode, document.getElementById('行程-名稱').value, document.getElementById('行程-類別').value, document.getElementById('行程-日期').value, document.getElementById('行程-連結').value, document.getElementById('行程-聿凡').value, document.getElementById('行程-光武').value, document.getElementById('行程-報名費').value, document.getElementById('行程-付款人').value, document.getElementById('行程-方式').value, document.getElementById('行程-狀態').value, document.getElementById('行程-備註').value];
-        } else if (sheetName === '住宿') {
-            eventCode = document.getElementById('住宿-代碼').value;
-            rowData = [eventCode, document.getElementById('住宿-飯店').value, document.getElementById('住宿-入住').value, document.getElementById('住宿-退房').value, document.getElementById('住宿-平台').value, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-方式').value, document.getElementById('住宿-狀態').value, document.getElementById('住宿-連結').value];
-        } else if (sheetName === '交通') {
-            eventCode = document.getElementById('交通-代碼').value;
-            rowData = [eventCode, document.getElementById('交通-類型').value, document.getElementById('交通-班次').value, document.getElementById('交通-日期').value, document.getElementById('交通-出發').value, document.getElementById('交通-抵達').value, document.getElementById('交通-費用').value, document.getElementById('交通-付款人').value];
-        } else if (sheetName === '帳務明細') {
-            eventCode = document.getElementById('帳務-代碼').value;
-            rowData = [eventCode, document.getElementById('帳務-項目').value, document.getElementById('帳務-金額').value, document.getElementById('帳務-付款人').value, document.getElementById('帳務-狀態').value, document.getElementById('帳務-備註').value];
+        let dateStr = "";
+        if (hasValue(s['入住日期']) && hasValue(s['退房日期'])) {
+            dateStr = `${formatDate(s['入住日期']).substring(5)} ~ ${formatDate(s['退房日期']).substring(5)}`;
         }
-
-        if (!eventCode) { alert("行程代碼不能空白！"); return; }
         
-        statusDiv.style.display = 'block';
-        statusDiv.style.background = '#eee';
-        statusDiv.textContent = '正在同步資料到雲端...';
+        html += `<div class="info-row"><span>日期：</span><span>${dateStr || '-'}</span></div>`;
+        if(hasValue(s['訂房平台'])) html += `<div class="info-row"><span>平台：</span><span>${s['訂房平台']}</span></div>`;
         
-        fetch(API_URL, { method: 'POST', body: JSON.stringify({ sheetName: sheetName, data: rowData }) })
-        .then(res => res.json()).then(data => {
-            statusDiv.style.background = '#d4edda'; statusDiv.style.color = '#155724';
-            statusDiv.textContent = sheetName + ' 資料已成功入庫！';
-            if (sheetName === '行程') refreshItineraryCodes();
-            document.querySelectorAll('#form-' + sheetName + ' input').forEach(i => i.value = '');
-            setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
-        }).catch(err => {
-            statusDiv.style.background = '#f8d7da'; statusDiv.textContent = '儲存失敗，請檢查網路。';
-        });
+        if (hasValue(s['費用'])) {
+            let statusClass = s['狀態'] === '已付' ? 'paid' : '';
+            html += `<div style="margin-top:8px; border-top:1px dashed #ddd; padding-top:8px;" class="info-row">
+                       <span>費用：<span class="price-tag">$${s['費用']}</span></span>
+                       <span style="font-size:13px; color:#888;">${s['付款人'] || '未定'} / ${s['付款方式'] || '-'} <span class="status-tag ${statusClass}">${s['狀態'] || '狀態未定'}</span></span>
+                     </div>`;
+        }
+        html += `</div>`;
+      });
+      html += `</div>`;
     }
+
+    // 3. 交通區塊
+    const trans = dbData['交通'].filter(t => t['行程代碼'] === code);
+    if (trans.length > 0) {
+      html += `<div class="info-section"><div class="info-title">交通安排</div>`;
+      trans.forEach(t => {
+        html += `<div class="info-card">
+                   <div class="info-row highlight">🚆 ${t['類型']} ${hasValue(t['班次或班機號碼']) ? '- ' + t['班次或班機號碼'] : ''}</div>`;
+        
+        if(hasValue(t['出發日期'])) html += `<div class="info-row"><span>日期：</span><span>${formatDate(t['出發日期'])}</span></div>`;
+        
+        let timeStr = "";
+        if(hasValue(t['出發時間']) || hasValue(t['抵達時間'])) {
+             timeStr = `${t['出發時間'] || '--:--'} ➡️ ${t['抵達時間'] || '--:--'}`;
+        }
+        if(timeStr) html += `<div class="info-row"><span>時間：</span><span>${timeStr}</span></div>`;
+
+        if (hasValue(t['票價或油資'])) {
+            let statusClass = t['狀態'] === '已付' ? 'paid' : '';
+            html += `<div style="margin-top:8px; border-top:1px dashed #ddd; padding-top:8px;" class="info-row">
+                       <span>費用：<span class="price-tag">$${t['票價或油資']}</span></span>
+                       <span style="font-size:13px; color:#888;">${t['付款人'] || '未定'} / ${t['付款方式'] || '-'} <span class="status-tag ${statusClass}">${t['狀態'] || '狀態未定'}</span></span>
+                     </div>`;
+        }
+        html += `</div>`;
+      });
+      html += `</div>`;
+    }
+
+    // 4. 備註區塊
+    if (hasValue(event['備註'])) {
+      html += `<div class="info-section"><div class="info-title">備註</div><div class="info-card">${event['備註']}</div></div>`;
+    }
+    
+    return html;
+  }
 </script>
 </body>
 </html>
