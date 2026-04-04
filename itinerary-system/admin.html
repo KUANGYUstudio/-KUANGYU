@@ -104,7 +104,12 @@
     window.onload = refreshItineraryCodes;
 
     function refreshItineraryCodes() {
-        fetch(API_URL).then(res => res.json()).then(data => {
+        const fetchUrl = API_URL + "?t=" + new Date().getTime(); // 強制清除暫存
+        fetch(fetchUrl).then(res => res.json()).then(data => {
+            if (!data['行程']) {
+                console.error("找不到 '行程' 資料，請確認 Apps Script 已發佈新版本。");
+                return;
+            }
             const codes = data['行程'].map(item => item['行程代碼']).filter(c => c);
             const uniqueCodes = [...new Set(codes)];
             document.querySelectorAll('.code-selector').forEach(select => {
@@ -115,7 +120,7 @@
                     select.appendChild(opt);
                 });
             });
-        }).catch(err => console.error("無法讀取行程代碼，請確認 Apps Script 已發佈新版本。"));
+        }).catch(err => console.error("連線錯誤：", err));
     }
 
     function switchTab(tabName, btn) {
