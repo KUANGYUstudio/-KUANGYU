@@ -91,7 +91,8 @@
 
   async function initSystem() {
     try {
-      const res = await fetch(API_URL);
+      const fetchUrl = API_URL + "?t=" + new Date().getTime();
+      const res = await fetch(fetchUrl);
       dbData = await res.json();
       renderCalendar();
       document.getElementById('loading').style.display = 'none';
@@ -220,7 +221,6 @@
   function generateDetailHTML(event) {
     const code = event['行程代碼'];
     
-    // Header 區塊
     let html = `<div class="detail-header">
                   <div>
                     <div class="detail-race-name">${event['行程名稱']}</div>
@@ -231,7 +231,6 @@
     }
     html += `</div>`;
 
-    // 1. 報名與項目區塊
     let hasSignup = hasVal(event['聿凡項目']) || hasVal(event['光武項目']) || hasVal(event['報名費總額']);
     if (hasSignup) {
       html += `<div class="info-section"><div class="info-title">賽事與報名</div><div class="info-card">`;
@@ -248,8 +247,7 @@
       html += `</div></div>`;
     }
 
-    // 2. 住宿區塊
-    const stays = dbData['住宿'].filter(s => s['行程代碼'] === code);
+    const stays = dbData['住宿'] ? dbData['住宿'].filter(s => s['行程代碼'] === code) : [];
     if (stays.length > 0) {
       html += `<div class="info-section"><div class="info-title">住宿資訊</div>`;
       stays.forEach(s => {
@@ -278,8 +276,7 @@
       html += `</div>`;
     }
 
-    // 3. 交通區塊
-    const trans = dbData['交通'].filter(t => t['行程代碼'] === code);
+    const trans = dbData['交通'] ? dbData['交通'].filter(t => t['行程代碼'] === code) : [];
     if (trans.length > 0) {
       html += `<div class="info-section"><div class="info-title">交通安排</div>`;
       trans.forEach(t => {
@@ -306,8 +303,7 @@
       html += `</div>`;
     }
 
-    // 4. 帳務明細區塊
-    const bills = dbData['帳務明細'].filter(b => b['行程代碼'] === code);
+    const bills = dbData['帳務明細'] ? dbData['帳務明細'].filter(b => b['行程代碼'] === code) : [];
     if (bills.length > 0) {
       html += `<div class="info-section"><div class="info-title">帳務明細</div>`;
       bills.forEach(b => {
@@ -330,7 +326,6 @@
       html += `</div>`;
     }
 
-    // 5. 備註區塊
     if (hasVal(event['備註'])) {
       html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card">${event['備註']}</div></div>`;
     }
