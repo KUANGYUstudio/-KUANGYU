@@ -24,7 +24,7 @@
         .input-group { margin-bottom: 18px; }
         .input-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: var(--brand-main); }
         .input-group input, .input-group select { width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; background: #fff; }
-        .input-group input:focus { border-color: var(--brand-action); box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
+        .input-group input:focus, .input-group select:focus { border-color: var(--brand-action); box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
         .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--brand-action); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3); transition: 0.3s; }
         .status-msg { display: none; text-align: center; margin-top: 15px; font-size: 14px; font-weight: bold; padding: 10px; border-radius: 10px; }
     </style>
@@ -62,7 +62,18 @@
         <div class="input-group"><label>飯店名稱</label><input type="text" id="住宿-飯店"></div>
         <div class="input-group"><label>入住日期</label><input type="date" id="住宿-入住"></div>
         <div class="input-group"><label>退房日期</label><input type="date" id="住宿-退房"></div>
-        <div class="input-group"><label>訂房平台</label><input type="text" id="住宿-平台"></div>
+        <div class="input-group">
+            <label>訂房平台</label>
+            <select id="住宿-平台" onchange="togglePlatformInput()">
+                <option value="Agoda">Agoda</option>
+                <option value="Booking.com">Booking.com</option>
+                <option value="Trip.com">Trip.com</option>
+                <option value="易遊網">易遊網</option>
+                <option value="官方網站">官方網站</option>
+                <option value="其他">其他</option>
+            </select>
+            <input type="text" id="住宿-平台-其他" placeholder="請自行填寫平台名稱" style="display: none; margin-top: 8px;">
+        </div>
         <div class="input-group"><label>費用</label><input type="number" id="住宿-費用"></div>
         <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿凡</option><option>光武</option></select></div>
         <div class="input-group"><label>付款方式</label><input type="text" id="住宿-方式" placeholder="例如：刷卡、現金"></div>
@@ -131,6 +142,16 @@
         btn.classList.add('active');
     }
 
+    function togglePlatformInput() {
+        const select = document.getElementById('住宿-平台');
+        const otherInput = document.getElementById('住宿-平台-其他');
+        if (select.value === '其他') {
+            otherInput.style.display = 'block';
+        } else {
+            otherInput.style.display = 'none';
+        }
+    }
+
     function submitData(sheetName) {
         let rowData = [];
         let eventCode = "";
@@ -141,8 +162,11 @@
             rowData = [eventCode, document.getElementById('行程-名稱').value, document.getElementById('行程-類別').value, document.getElementById('行程-日期').value, document.getElementById('行程-連結').value, document.getElementById('行程-聿凡').value, document.getElementById('行程-光武').value, document.getElementById('行程-報名費').value, document.getElementById('行程-付款人').value, document.getElementById('行程-方式').value, document.getElementById('行程-狀態').value, document.getElementById('行程-備註').value];
         } else if (sheetName === '住宿') {
             eventCode = document.getElementById('住宿-代碼').value;
-            // 這裡將住宿備註欄位的值加入陣列的最後面
-            rowData = [eventCode, document.getElementById('住宿-飯店').value, document.getElementById('住宿-入住').value, document.getElementById('住宿-退房').value, document.getElementById('住宿-平台').value, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-方式').value, document.getElementById('住宿-狀態').value, document.getElementById('住宿-連結').value, document.getElementById('住宿-備註').value];
+            let platformVal = document.getElementById('住宿-平台').value;
+            if (platformVal === '其他') {
+                platformVal = document.getElementById('住宿-平台-其他').value;
+            }
+            rowData = [eventCode, document.getElementById('住宿-飯店').value, document.getElementById('住宿-入住').value, document.getElementById('住宿-退房').value, platformVal, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-方式').value, document.getElementById('住宿-狀態').value, document.getElementById('住宿-連結').value, document.getElementById('住宿-備註').value];
         } else if (sheetName === '交通') {
             eventCode = document.getElementById('交通-代碼').value;
             rowData = [eventCode, document.getElementById('交通-類型').value, document.getElementById('交通-班次').value, document.getElementById('交通-日期').value, document.getElementById('交通-出發').value, document.getElementById('交通-抵達').value, document.getElementById('交通-費用').value, document.getElementById('交通-付款人').value, document.getElementById('交通-方式').value, document.getElementById('交通-狀態').value];
@@ -162,7 +186,14 @@
             statusDiv.style.background = '#d4edda'; statusDiv.style.color = '#155724';
             statusDiv.textContent = sheetName + ' 資料已成功入庫！';
             if (sheetName === '行程') refreshItineraryCodes();
+            
+            // 成功後清空欄位
             document.querySelectorAll('#form-' + sheetName + ' input').forEach(i => i.value = '');
+            if (sheetName === '住宿') {
+                document.getElementById('住宿-平台').selectedIndex = 0;
+                document.getElementById('住宿-平台-其他').style.display = 'none';
+            }
+            
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
         }).catch(err => {
             statusDiv.style.background = '#f8d7da'; statusDiv.textContent = '儲存失敗，請檢查網路。';
