@@ -170,7 +170,7 @@
             rowData = [eventCode, document.getElementById('住宿-飯店').value, document.getElementById('住宿-入住').value, document.getElementById('住宿-退房').value, platformVal, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-方式').value, document.getElementById('住宿-狀態').value, document.getElementById('住宿-連結').value, document.getElementById('住宿-備註').value];
         } else if (sheetName === '交通') {
             eventCode = document.getElementById('交通-代碼').value;
-            rowData = [eventCode, document.getElementById('交通-類型').value, document.getElementById('交通-班次').value, document.getElementById('交通-日期').value, document.getElementById('交通-出發').value, document.getElementById('交通-抵達').value, document.getElementById('交通-費用').value, document.getElementById('交通-付款人').value, document.getElementById('交通-方式').value, document.getElementById('交通-狀態').value];
+            rowData = [eventCode, document.getElementById('交通-類型').value, document.getElementById('交通-去程').value, document.getElementById('交通-回程').value, document.getElementById('交通-日期').value, document.getElementById('交通-出發').value, document.getElementById('交通-抵達').value, document.getElementById('交通-費用').value, document.getElementById('交通-付款人').value, document.getElementById('交通-方式').value, document.getElementById('交通-狀態').value];
         } else if (sheetName === '帳務明細') {
             eventCode = document.getElementById('帳務-代碼').value;
             rowData = [eventCode, document.getElementById('帳務-項目').value, document.getElementById('帳務-金額').value, document.getElementById('帳務-付款人').value, document.getElementById('帳務-狀態').value, document.getElementById('帳務-備註').value];
@@ -188,7 +188,6 @@
             statusDiv.textContent = sheetName + ' 資料已成功入庫！';
             if (sheetName === '行程') refreshItineraryCodes();
             
-            // 成功後清空欄位
             document.querySelectorAll('#form-' + sheetName + ' input').forEach(i => i.value = '');
             if (sheetName === '住宿') {
                 document.getElementById('住宿-平台').selectedIndex = 0;
