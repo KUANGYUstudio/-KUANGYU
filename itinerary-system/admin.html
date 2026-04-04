@@ -68,6 +68,7 @@
         <div class="input-group"><label>付款方式</label><input type="text" id="住宿-方式" placeholder="例如：刷卡、現金"></div>
         <div class="input-group"><label>狀態</label><select id="住宿-狀態"><option>已付</option><option>現場付</option></select></div>
         <div class="input-group"><label>連結</label><input type="url" id="住宿-連結"></div>
+        <div class="input-group"><label>備註</label><input type="text" id="住宿-備註" placeholder="請輸入住宿備註"></div>
         <button class="submit-btn" onclick="submitData('住宿')">確認儲存住宿</button>
     </div>
 
@@ -104,7 +105,7 @@
     window.onload = refreshItineraryCodes;
 
     function refreshItineraryCodes() {
-        const fetchUrl = API_URL + "?t=" + new Date().getTime(); // 強制清除暫存
+        const fetchUrl = API_URL + "?t=" + new Date().getTime(); 
         fetch(fetchUrl).then(res => res.json()).then(data => {
             if (!data['行程']) {
                 console.error("找不到 '行程' 資料，請確認 Apps Script 已發佈新版本。");
@@ -140,7 +141,8 @@
             rowData = [eventCode, document.getElementById('行程-名稱').value, document.getElementById('行程-類別').value, document.getElementById('行程-日期').value, document.getElementById('行程-連結').value, document.getElementById('行程-聿凡').value, document.getElementById('行程-光武').value, document.getElementById('行程-報名費').value, document.getElementById('行程-付款人').value, document.getElementById('行程-方式').value, document.getElementById('行程-狀態').value, document.getElementById('行程-備註').value];
         } else if (sheetName === '住宿') {
             eventCode = document.getElementById('住宿-代碼').value;
-            rowData = [eventCode, document.getElementById('住宿-飯店').value, document.getElementById('住宿-入住').value, document.getElementById('住宿-退房').value, document.getElementById('住宿-平台').value, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-方式').value, document.getElementById('住宿-狀態').value, document.getElementById('住宿-連結').value];
+            // 這裡將住宿備註欄位的值加入陣列的最後面
+            rowData = [eventCode, document.getElementById('住宿-飯店').value, document.getElementById('住宿-入住').value, document.getElementById('住宿-退房').value, document.getElementById('住宿-平台').value, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-方式').value, document.getElementById('住宿-狀態').value, document.getElementById('住宿-連結').value, document.getElementById('住宿-備註').value];
         } else if (sheetName === '交通') {
             eventCode = document.getElementById('交通-代碼').value;
             rowData = [eventCode, document.getElementById('交通-類型').value, document.getElementById('交通-班次').value, document.getElementById('交通-日期').value, document.getElementById('交通-出發').value, document.getElementById('交通-抵達').value, document.getElementById('交通-費用').value, document.getElementById('交通-付款人').value, document.getElementById('交通-方式').value, document.getElementById('交通-狀態').value];
