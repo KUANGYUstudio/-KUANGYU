@@ -35,9 +35,9 @@
     <div class="logo-text">KUANGYU ADMIN</div>
     
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('行程', this)">行程主表</button>
-        <button class="tab-btn" onclick="switchTab('住宿', this)">住宿紀錄</button>
-        <button class="tab-btn" onclick="switchTab('交通', this)">交通紀錄</button>
+        <button class="tab-btn active" onclick="switchTab('行程', this)">行程</button>
+        <button class="tab-btn" onclick="switchTab('住宿', this)">住宿</button>
+        <button class="tab-btn" onclick="switchTab('交通', this)">交通</button>
         <button class="tab-btn" onclick="switchTab('帳務明細', this)">帳務明細</button>
     </div>
 
@@ -115,7 +115,7 @@
                     select.appendChild(opt);
                 });
             });
-        });
+        }).catch(err => console.error("無法讀取行程代碼，請確認 Apps Script 已發佈新版本。"));
     }
 
     function switchTab(tabName, btn) {
