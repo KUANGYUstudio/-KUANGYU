@@ -43,22 +43,32 @@
     .day.has-event:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important; z-index: 10; }
 
-    /* 👇 行內展開資訊框 (與日曆同排) */
+    /* 👇 行內展開資訊框 */
     .detail-panel { 
       grid-column: 1 / -1; background: #fff; border-radius: 16px; 
       margin-top: 8px; margin-bottom: 8px; overflow: hidden; 
-      max-height: 0; opacity: 0; transition: all 0.4s ease; box-sizing: border-box;
+      max-height: 0; opacity: 0; transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease; box-sizing: border-box;
     }
-    .detail-panel.open { max-height: 1200px; opacity: 1; padding: 25px; border: 1px solid #eee; }
+    .detail-panel.open { max-height: 2500px; opacity: 1; padding: 25px; border: 1px solid #eee; }
 
-    .detail-race-name { font-size: 20px; font-weight: bold; color: var(--text-main); margin-bottom: 5px; }
-    .detail-race-date { font-size: 14px; color: var(--text-sub); margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 20px; }
+    .detail-race-name { font-size: 22px; font-weight: bold; color: var(--text-main); }
+    .detail-race-date { font-size: 14px; color: var(--text-sub); margin-top: 4px; }
+    .link-btn { font-size: 13px; padding: 6px 12px; background: #e0f2f1; color: #00838f; border-radius: 20px; text-decoration: none; font-weight: bold; }
+    .link-btn:hover { background: #b2dfdb; }
 
-    .info-section { margin-bottom: 20px; text-align: left; }
-    .info-title { font-weight: bold; font-size: 15px; color: #7f8c8d; margin-bottom: 8px; display: flex; align-items: center; }
+    /* 資訊區塊模組 */
+    .info-section { margin-bottom: 25px; text-align: left; }
+    .info-title { font-weight: bold; font-size: 16px; color: #7f8c8d; margin-bottom: 10px; display: flex; align-items: center; }
     .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; background: #ddd; margin-right: 10px; border-radius: 3px; }
-    .info-content { background: var(--card-bg); padding: 15px; border-radius: 10px; font-size: 15px; line-height: 1.8; color: #666; }
+    
+    .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; line-height: 1.6; color: #555; }
+    .info-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+    .info-row.highlight { font-weight: bold; color: #333; margin-bottom: 8px; }
     .price-tag { color: #e67e22; font-weight: bold; }
+    
+    .status-tag { font-size: 12px; padding: 2px 6px; border-radius: 4px; background: #eee; color: #666; margin-left: 5px; }
+    .status-tag.paid { background: #d4edda; color: #155724; }
 
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; }
   </style>
@@ -91,36 +101,36 @@
     }
   }
 
-  // 核心功能：強制統一日期格式為 YYYY-MM-DD，解決抓不到行程的問題
   function formatDate(d) {
     if (!d) return "";
     const date = new Date(d);
+    if (isNaN(date.getTime())) return "";
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${y}-${m}-${day}`;
   }
 
+  // 檢查是否有填寫內容
+  function hasVal(val) {
+    return val !== "" && val !== null && val !== undefined;
+  }
+
   function renderCalendar() {
     const container = document.getElementById('calendar-container');
-    const races = dbData['賽事'];
+    const races = dbData['行程']; // 修正：已改成抓取「行程」分頁
     if (!races || races.length === 0) {
       container.innerHTML = '<div style="color:#999; margin-top:50px;">目前尚無行程紀錄</div>';
       return;
     }
 
-    // 取得所有有行程的月份
     const monthSet = new Set();
     races.forEach(r => {
-      const d = new Date(r['出發日期']);
-      monthSet.add(`${d.getFullYear()}-${d.getMonth() + 1}`);
+      const dStr = formatDate(r['日期']);
+      if(dStr) monthSet.add(dStr.substring(0, 7));
     });
 
-    const sortedMonths = Array.from(monthSet).sort((a, b) => {
-      const [y1, m1] = a.split('-'), [y2, m2] = b.split('-');
-      return y1 !== y2 ? y1 - y2 : m1 - m2;
-    });
-
+    const sortedMonths = Array.from(monthSet).sort();
     sortedMonths.forEach(mKey => {
       const [y, m] = mKey.split('-');
       renderMonth(parseInt(y), parseInt(m), container, races);
@@ -150,8 +160,8 @@
       cell.className = 'day';
       cell.innerHTML = `<span class="day-number">${d}</span>`;
 
-      // 使用統一格式進行比對
-      const event = races.find(r => formatDate(r['出發日期']) === dateStr);
+      // 修正：比對「行程」分頁的「日期」欄位
+      const event = races.find(r => formatDate(r['日期']) === dateStr);
       if (event) {
         const cat = event['行程類別'];
         cell.classList.add('has-event');
@@ -211,44 +221,97 @@
 
   function generateDetailHTML(event) {
     const code = event['行程代碼'];
-    let html = `
-      <div class="detail-race-name">${event['行程名稱']}</div>
-      <div class="detail-race-date">日期：${formatDate(event['出發日期'])}</div>
-    `;
+    
+    // Header 區塊
+    let html = `<div class="detail-header">
+                  <div>
+                    <div class="detail-race-name">${event['行程名稱']}</div>
+                    <div class="detail-race-date">日期：${formatDate(event['日期'])}</div>
+                  </div>`;
+    if (hasVal(event['行程連結'])) {
+        html += `<a href="${event['行程連結']}" target="_blank" class="link-btn">前往簡章 ↗</a>`;
+    }
+    html += `</div>`;
 
-    if (event['聿凡項目'] || event['光武項目']) {
-      html += `
-        <div class="info-section">
-          <div class="info-title">參與項目</div>
-          <div class="info-content">
-            <div>聿凡：${event['聿凡項目'] || '-'}</div>
-            <div>光武：${event['光武項目'] || '-'}</div>
-          </div>
-        </div>
-      `;
+    // 1. 報名與項目區塊
+    let hasSignup = hasVal(event['聿凡項目']) || hasVal(event['光武項目']) || hasVal(event['報名費總額']);
+    if (hasSignup) {
+      html += `<div class="info-section"><div class="info-title">賽事與報名</div><div class="info-card">`;
+      if (hasVal(event['聿凡項目'])) html += `<div><strong>聿凡：</strong> ${event['聿凡項目']}</div>`;
+      if (hasVal(event['光武項目'])) html += `<div><strong>光武：</strong> ${event['光武項目']}</div>`;
+      if (hasVal(event['報名費總額'])) {
+          let statusClass = event['狀態'] === '已付' ? 'paid' : '';
+          html += `<div style="margin-top:8px; border-top:1px dashed #ddd; padding-top:8px;">
+                     報名費總額：<span class="price-tag">$${event['報名費總額']}</span> 
+                     <span style="font-size:13px; color:#888;">(${event['付款人'] || '未定'} / ${event['付款方式'] || '-'})</span>
+                     <span class="status-tag ${statusClass}">${event['狀態'] || '狀態未定'}</span>
+                   </div>`;
+      }
+      html += `</div></div>`;
     }
 
+    // 2. 住宿區塊
     const stays = dbData['住宿'].filter(s => s['行程代碼'] === code);
     if (stays.length > 0) {
-      html += `<div class="info-section"><div class="info-title">住宿資訊</div><div class="info-content">`;
+      html += `<div class="info-section"><div class="info-title">住宿資訊</div>`;
       stays.forEach(s => {
-        html += `<div>🏠 <strong>${s['飯店名稱']}</strong> (${s['訂房平台']})</div>`;
-        html += `<div>費用：<span class="price-tag">${s['費用']}</span> (${s['付款人']}付 / ${s['狀態']})</div>`;
+        html += `<div class="info-card">
+                  <div class="info-row highlight">
+                    <span>🏨 ${s['飯店名稱']}</span>`;
+        if (hasVal(s['連結'])) html += `<a href="${s['連結']}" target="_blank" style="font-size:12px; color:#00838f; text-decoration:none;">查看 ↗</a>`;
+        html += ` </div>`;
+        
+        let dateStr = "";
+        if (hasVal(s['入住日期']) && hasVal(s['退房日期'])) {
+            dateStr = `${formatDate(s['入住日期']).substring(5)} ~ ${formatDate(s['退房日期']).substring(5)}`;
+        }
+        if(dateStr) html += `<div class="info-row"><span>日期：</span><span>${dateStr}</span></div>`;
+        if(hasVal(s['訂房平台'])) html += `<div class="info-row"><span>平台：</span><span>${s['訂房平台']}</span></div>`;
+        
+        if (hasVal(s['費用'])) {
+            let statusClass = s['狀態'] === '已付' ? 'paid' : '';
+            html += `<div style="margin-top:8px; border-top:1px dashed #ddd; padding-top:8px;" class="info-row">
+                       <span>費用：<span class="price-tag">$${s['費用']}</span></span>
+                       <span style="font-size:13px; color:#888;">${s['付款人'] || '未定'} / ${s['付款方式'] || '-'} <span class="status-tag ${statusClass}">${s['狀態'] || '狀態未定'}</span></span>
+                     </div>`;
+        }
+        html += `</div>`;
       });
-      html += `</div></div>`;
+      html += `</div>`;
     }
 
+    // 3. 交通區塊
     const trans = dbData['交通'].filter(t => t['行程代碼'] === code);
     if (trans.length > 0) {
-      html += `<div class="info-section"><div class="info-title">交通安排</div><div class="info-content">`;
+      html += `<div class="info-section"><div class="info-title">交通安排</div>`;
       trans.forEach(t => {
-        html += `<div>🚆 <strong>${t['類型']}</strong> - ${t['班次或班機號碼']}</div>`;
-        html += `<div>時間：${t['出發時間']} / 費用：${t['票價或油資']} (${t['付款人']}付)</div>`;
+        html += `<div class="info-card">
+                   <div class="info-row highlight">🚆 ${t['類型']} ${hasVal(t['班次或班機號碼']) ? '- ' + t['班次或班機號碼'] : ''}</div>`;
+        
+        if(hasVal(t['出發日期'])) html += `<div class="info-row"><span>日期：</span><span>${formatDate(t['出發日期']).substring(5)}</span></div>`;
+        
+        let timeStr = "";
+        if(hasVal(t['出發時間']) || hasVal(t['抵達時間'])) {
+             timeStr = `${t['出發時間'] || '--:--'} ➡️ ${t['抵達時間'] || '--:--'}`;
+        }
+        if(timeStr) html += `<div class="info-row"><span>時間：</span><span>${timeStr}</span></div>`;
+
+        if (hasVal(t['票價或油資'])) {
+            let statusClass = t['狀態'] === '已付' ? 'paid' : '';
+            html += `<div style="margin-top:8px; border-top:1px dashed #ddd; padding-top:8px;" class="info-row">
+                       <span>費用：<span class="price-tag">$${t['票價或油資']}</span></span>
+                       <span style="font-size:13px; color:#888;">${t['付款人'] || '未定'} / ${t['付款方式'] || '-'} <span class="status-tag ${statusClass}">${t['狀態'] || '狀態未定'}</span></span>
+                     </div>`;
+        }
+        html += `</div>`;
       });
-      html += `</div></div>`;
+      html += `</div>`;
     }
 
-    if (event['備註']) html += `<div class="info-section"><div class="info-title">備註</div><div class="info-content">${event['備註']}</div></div>`;
+    // 4. 備註區塊
+    if (hasVal(event['備註'])) {
+      html += `<div class="info-section"><div class="info-title">備註</div><div class="info-card">${event['備註']}</div></div>`;
+    }
     
     return html;
   }
