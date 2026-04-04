@@ -267,7 +267,6 @@
     const guangWu = getVal(event, '光武項目');
     const fee = getVal(event, '報名費總額');
 
-    // 動態判斷標題
     let sectionTitle = (cat === "旅遊" || cat === "活動") ? "行程與報名" : "賽事與報名";
 
     let hasSignup = hasVal(yuFan) || hasVal(guangWu) || hasVal(fee);
@@ -332,9 +331,15 @@
     if (trans.length > 0) {
       html += `<div class="info-section"><div class="info-title">交通安排</div>`;
       trans.forEach(t => {
-        const flight = getVal(t, '班次或班機號碼');
+        const outFlight = getVal(t, '去程班次／航班');
+        const inFlight = getVal(t, '回程班次／航班');
+        
+        let flightText = "";
+        if (hasVal(outFlight)) flightText += `去：${outFlight} `;
+        if (hasVal(inFlight)) flightText += `回：${inFlight}`;
+        
         html += `<div class="info-card trans-card">
-                   <div class="info-row highlight">[交通] ${getVal(t, '類型') || '-'} ${hasVal(flight) ? '- ' + flight : ''}</div>`;
+                   <div class="info-row highlight">[交通] ${getVal(t, '類型') || '-'} ${flightText ? '- ' + flightText : ''}</div>`;
         
         const tDate = getVal(t, '出發日期');
         if(hasVal(tDate)) html += `<div class="info-row"><span>日期：</span><span>${formatDate(tDate).substring(5)}</span></div>`;
