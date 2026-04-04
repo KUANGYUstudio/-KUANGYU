@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       🎨 光聿行程美學定義 (22px 鎖死版)
+       光聿行程美學定義 (22px 鎖死版)
        ========================================= */
     :root {
       --cat-鐵人: #4169E1; --cat-自行車: #228B22; --cat-路跑: #D2691E;
@@ -43,7 +43,7 @@
     .day.has-event:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important; z-index: 10; }
 
-    /* 👇 行內展開資訊框 */
+    /* 行內展開資訊框 */
     .detail-panel { 
       grid-column: 1 / -1; background: #fff; border-radius: 16px; 
       margin-top: 8px; margin-bottom: 8px; overflow: hidden; 
@@ -111,14 +111,13 @@
     return `${y}-${m}-${day}`;
   }
 
-  // 檢查是否有填寫內容
   function hasVal(val) {
     return val !== "" && val !== null && val !== undefined;
   }
 
   function renderCalendar() {
     const container = document.getElementById('calendar-container');
-    const races = dbData['行程']; // 修正：已改成抓取「行程」分頁
+    const races = dbData['行程'];
     if (!races || races.length === 0) {
       container.innerHTML = '<div style="color:#999; margin-top:50px;">目前尚無行程紀錄</div>';
       return;
@@ -160,7 +159,6 @@
       cell.className = 'day';
       cell.innerHTML = `<span class="day-number">${d}</span>`;
 
-      // 修正：比對「行程」分頁的「日期」欄位
       const event = races.find(r => formatDate(r['日期']) === dateStr);
       if (event) {
         const cat = event['行程類別'];
@@ -229,7 +227,7 @@
                     <div class="detail-race-date">日期：${formatDate(event['日期'])}</div>
                   </div>`;
     if (hasVal(event['行程連結'])) {
-        html += `<a href="${event['行程連結']}" target="_blank" class="link-btn">前往簡章 ↗</a>`;
+        html += `<a href="${event['行程連結']}" target="_blank" class="link-btn">前往簡章 >></a>`;
     }
     html += `</div>`;
 
@@ -257,8 +255,8 @@
       stays.forEach(s => {
         html += `<div class="info-card">
                   <div class="info-row highlight">
-                    <span>🏨 ${s['飯店名稱']}</span>`;
-        if (hasVal(s['連結'])) html += `<a href="${s['連結']}" target="_blank" style="font-size:12px; color:#00838f; text-decoration:none;">查看 ↗</a>`;
+                    <span>[住宿] ${s['飯店名稱']}</span>`;
+        if (hasVal(s['連結'])) html += `<a href="${s['連結']}" target="_blank" style="font-size:12px; color:#00838f; text-decoration:none;">查看地圖 >></a>`;
         html += ` </div>`;
         
         let dateStr = "";
@@ -286,13 +284,13 @@
       html += `<div class="info-section"><div class="info-title">交通安排</div>`;
       trans.forEach(t => {
         html += `<div class="info-card">
-                   <div class="info-row highlight">🚆 ${t['類型']} ${hasVal(t['班次或班機號碼']) ? '- ' + t['班次或班機號碼'] : ''}</div>`;
+                   <div class="info-row highlight">[交通] ${t['類型']} ${hasVal(t['班次或班機號碼']) ? '- ' + t['班次或班機號碼'] : ''}</div>`;
         
         if(hasVal(t['出發日期'])) html += `<div class="info-row"><span>日期：</span><span>${formatDate(t['出發日期']).substring(5)}</span></div>`;
         
         let timeStr = "";
         if(hasVal(t['出發時間']) || hasVal(t['抵達時間'])) {
-             timeStr = `${t['出發時間'] || '--:--'} ➡️ ${t['抵達時間'] || '--:--'}`;
+             timeStr = `${t['出發時間'] || '--:--'} 到 ${t['抵達時間'] || '--:--'}`;
         }
         if(timeStr) html += `<div class="info-row"><span>時間：</span><span>${timeStr}</span></div>`;
 
@@ -308,9 +306,33 @@
       html += `</div>`;
     }
 
-    // 4. 備註區塊
+    // 4. 帳務明細區塊
+    const bills = dbData['帳務明細'].filter(b => b['行程代碼'] === code);
+    if (bills.length > 0) {
+      html += `<div class="info-section"><div class="info-title">帳務明細</div>`;
+      bills.forEach(b => {
+        html += `<div class="info-card">
+                   <div class="info-row highlight">[帳務] ${b['項目名稱']}</div>`;
+        
+        if (hasVal(b['金額'])) {
+            let statusClass = b['付款狀態'] === '已付' ? 'paid' : '';
+            html += `<div class="info-row">
+                       <span>金額：<span class="price-tag">$${b['金額']}</span></span>
+                       <span style="font-size:13px; color:#888;">${b['付款人'] || '未定'} <span class="status-tag ${statusClass}">${b['付款狀態'] || '狀態未定'}</span></span>
+                     </div>`;
+        }
+        
+        if (hasVal(b['備註'])) {
+            html += `<div style="margin-top:5px; font-size:13px; color:#666;">備註：${b['備註']}</div>`;
+        }
+        html += `</div>`;
+      });
+      html += `</div>`;
+    }
+
+    // 5. 備註區塊
     if (hasVal(event['備註'])) {
-      html += `<div class="info-section"><div class="info-title">備註</div><div class="info-card">${event['備註']}</div></div>`;
+      html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card">${event['備註']}</div></div>`;
     }
     
     return html;
