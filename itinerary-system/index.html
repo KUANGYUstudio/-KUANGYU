@@ -308,6 +308,13 @@
                        <span style="font-size:13px; color:#888;">${getVal(s, '付款人') || '未定'} / ${getVal(s, '付款方式') || '-'} <span class="status-tag ${statusClass}">${sStatus || '狀態未定'}</span></span>
                      </div>`;
         }
+
+        // --- 備註功能 ---
+        const sNote = getVal(s, '備註');
+        if (hasVal(sNote)) {
+            html += `<div style="margin-top:5px; font-size:13px; color:#666;">備註：${sNote}</div>`;
+        }
+
         html += `</div>`;
       });
       html += `</div>`;
