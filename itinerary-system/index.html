@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (22px 鎖死版)
+       光聿行程美學定義
        ========================================= */
     :root {
       --cat-鐵人: #4169E1; --cat-自行車: #228B22; --cat-路跑: #D2691E;
@@ -43,7 +43,6 @@
     .day.has-event:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important; z-index: 10; }
 
-    /* 行內展開資訊框 */
     .detail-panel { 
       grid-column: 1 / -1; background: #fff; border-radius: 16px; 
       margin-top: 8px; margin-bottom: 8px; overflow: hidden; 
@@ -57,12 +56,20 @@
     .link-btn { font-size: 13px; padding: 6px 12px; background: #e0f2f1; color: #00838f; border-radius: 20px; text-decoration: none; font-weight: bold; }
     .link-btn:hover { background: #b2dfdb; }
 
-    /* 資訊區塊模組 */
     .info-section { margin-bottom: 25px; text-align: left; }
     .info-title { font-weight: bold; font-size: 16px; color: #7f8c8d; margin-bottom: 10px; display: flex; align-items: center; }
     .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; background: #ddd; margin-right: 10px; border-radius: 3px; }
     
     .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; line-height: 1.6; color: #555; }
+    
+    /* 顏色區分設計 */
+    .info-card.race-card { border-left: 5px solid #3498db; }
+    .info-card.stay-card { border-left: 5px solid #e67e22; }
+    .info-card.trans-card { border-left: 5px solid #2ecc71; }
+    .info-card.bill-card { border-left: 5px solid #9b59b6; }
+    .info-card.note-card { border-left: 5px solid #95a5a6; }
+
+    /* 緊湊靠左對齊 */
     .info-row { display: flex; justify-content: flex-start; align-items: baseline; gap: 8px; margin-bottom: 6px; }
     .info-row.highlight { font-weight: bold; color: #333; margin-bottom: 8px; }
     .price-tag { color: #e67e22; font-weight: bold; }
@@ -97,7 +104,6 @@
       const res = await fetch(fetchUrl);
       dbData = await res.json();
       
-      // 防呆檢查：確保有抓到「行程」資料
       if (!dbData['行程']) {
           document.getElementById('loading-text').innerHTML = "找不到「行程」資料！<br><br>請確認：<br>1. Google Sheets 分頁名稱是「行程」<br>2. Apps Script 有重新部署為「新版本」";
           return;
@@ -111,7 +117,6 @@
     }
   }
 
-  // 萬無一失的取值工具 (避免欄位名稱有空白)
   function getVal(obj, keyName) {
       if(!obj) return undefined;
       const key = Object.keys(obj).find(k => k.trim() === keyName);
@@ -246,6 +251,7 @@
 
   function generateDetailHTML(event) {
     const code = getVal(event, '行程代碼');
+    const cat = getVal(event, '行程類別');
     
     let html = `<div class="detail-header">
                   <div>
@@ -261,9 +267,12 @@
     const guangWu = getVal(event, '光武項目');
     const fee = getVal(event, '報名費總額');
 
+    // 動態判斷標題
+    let sectionTitle = (cat === "旅遊" || cat === "活動") ? "行程與報名" : "賽事與報名";
+
     let hasSignup = hasVal(yuFan) || hasVal(guangWu) || hasVal(fee);
     if (hasSignup) {
-      html += `<div class="info-section"><div class="info-title">賽事與報名</div><div class="info-card">`;
+      html += `<div class="info-section"><div class="info-title">${sectionTitle}</div><div class="info-card race-card">`;
       if (hasVal(yuFan)) html += `<div><strong>聿凡：</strong> ${yuFan}</div>`;
       if (hasVal(guangWu)) html += `<div><strong>光武：</strong> ${guangWu}</div>`;
       if (hasVal(fee)) {
@@ -282,9 +291,9 @@
     if (stays.length > 0) {
       html += `<div class="info-section"><div class="info-title">住宿資訊</div>`;
       stays.forEach(s => {
-        html += `<div class="info-card">
+        html += `<div class="info-card stay-card">
                   <div class="info-row highlight">
-                    <span>[住宿] ${getVal(s, '飯店名稱') || '-'}</span>`;
+                    <span>${getVal(s, '飯店名稱') || '-'}</span>`;
         if (hasVal(getVal(s, '連結'))) html += `<a href="${getVal(s, '連結')}" target="_blank" style="font-size:12px; color:#00838f; text-decoration:none;">查看地圖 >></a>`;
         html += ` </div>`;
         
@@ -309,7 +318,6 @@
                      </div>`;
         }
 
-        // --- 備註功能 ---
         const sNote = getVal(s, '備註');
         if (hasVal(sNote)) {
             html += `<div style="margin-top:5px; font-size:13px; color:#666;">備註：${sNote}</div>`;
@@ -325,7 +333,7 @@
       html += `<div class="info-section"><div class="info-title">交通安排</div>`;
       trans.forEach(t => {
         const flight = getVal(t, '班次或班機號碼');
-        html += `<div class="info-card">
+        html += `<div class="info-card trans-card">
                    <div class="info-row highlight">[交通] ${getVal(t, '類型') || '-'} ${hasVal(flight) ? '- ' + flight : ''}</div>`;
         
         const tDate = getVal(t, '出發日期');
@@ -357,7 +365,7 @@
     if (bills.length > 0) {
       html += `<div class="info-section"><div class="info-title">帳務明細</div>`;
       bills.forEach(b => {
-        html += `<div class="info-card">
+        html += `<div class="info-card bill-card">
                    <div class="info-row highlight">[帳務] ${getVal(b, '項目名稱') || '-'}</div>`;
         
         const bFee = getVal(b, '金額');
@@ -381,7 +389,7 @@
 
     const eNote = getVal(event, '備註');
     if (hasVal(eNote)) {
-      html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card">${eNote}</div></div>`;
+      html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card note-card">${eNote}</div></div>`;
     }
     
     return html;
