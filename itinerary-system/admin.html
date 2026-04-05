@@ -60,7 +60,7 @@
     </div>
 
     <div id="form-住宿" class="form-section">
-        <div class="input-group"><label>行程代碼</label><select class="code-selector" id="住宿-代碼" onchange="autoFillDate('住宿', this.value)"></select></div>
+        <div class="input-group"><label>行程代碼</label><select class="code-selector" id="住宿-代碼"></select></div>
         <div class="input-group"><label>飯店名稱</label><input type="text" id="住宿-飯店"></div>
         
         <div class="group-box">
@@ -97,7 +97,7 @@
     </div>
 
     <div id="form-交通" class="form-section">
-        <div class="input-group"><label>行程代碼</label><select class="code-selector" id="交通-代碼" onchange="autoFillDate('交通', this.value)"></select></div>
+        <div class="input-group"><label>行程代碼</label><select class="code-selector" id="交通-代碼"></select></div>
         <div class="input-group"><label>類型</label><select id="交通-類型"><option>自駕</option><option>火車</option><option>飛機</option></select></div>
         
         <div class="group-box">
@@ -138,7 +138,6 @@
 
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
-    let itineraryData = [];
 
     window.onload = refreshItineraryCodes;
 
@@ -146,8 +145,7 @@
         const fetchUrl = API_URL + "?t=" + new Date().getTime(); 
         fetch(fetchUrl).then(res => res.json()).then(data => {
             if (!data['行程']) return;
-            itineraryData = data['行程'];
-            const codes = itineraryData.map(item => item['行程代碼']).filter(c => c);
+            const codes = data['行程'].map(item => item['行程代碼']).filter(c => c);
             const uniqueCodes = [...new Set(codes)];
             document.querySelectorAll('.code-selector').forEach(select => {
                 select.innerHTML = '<option value="">--- 請選擇行程 ---</option>';
@@ -158,25 +156,6 @@
                 });
             });
         }).catch(err => console.error("連線錯誤：", err));
-    }
-
-    // 智慧連動日期填寫邏輯
-    function autoFillDate(type, code) {
-        if (!code) return;
-        const match = itineraryData.find(item => item['行程代碼'] === code);
-        if (match && match['日期']) {
-            // 將試算表的日期轉為 input 接受的格式 YYYY-MM-DD
-            let rawDate = match['日期'];
-            let dateObj = new Date(rawDate);
-            if (!isNaN(dateObj.getTime())) {
-                let formatted = dateObj.toISOString().split('T')[0];
-                if (type === '住宿') {
-                    document.getElementById('住宿-入住日期').value = formatted;
-                } else if (type === '交通') {
-                    document.getElementById('交通-出發日期').value = formatted;
-                }
-            }
-        }
     }
 
     function switchTab(tabName, btn) {
@@ -222,7 +201,7 @@
         fetch(API_URL, { method: 'POST', body: JSON.stringify({ sheetName: sheetName, data: rowData }) })
         .then(res => res.json()).then(data => {
             statusDiv.style.background = '#d4edda'; statusDiv.style.color = '#155724';
-            statusDiv.textContent = sheetName + ' 資料已成功入庫！';
+            statusDiv.textContent = sheetName + ' 資料已成功儲存！';
             if (sheetName === '行程') refreshItineraryCodes();
             
             document.querySelectorAll('#form-' + sheetName + ' input[type="text"], #form-' + sheetName + ' input[type="number"], #form-' + sheetName + ' input[type="date"], #form-' + sheetName + ' input[type="url"]').forEach(i => i.value = '');
