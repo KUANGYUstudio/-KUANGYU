@@ -171,7 +171,6 @@
       let m = method !== undefined && hasVal(method) ? String(method).trim() : null;
       let s = hasVal(status) ? String(status).trim() : '-';
 
-      // 相容舊資料，若欄位還是「無」，自動轉為「-」
       if (p === '無') p = '-';
       if (m === '無') m = '-';
       if (s === '無') s = '-';
@@ -352,14 +351,36 @@
         if (hasVal(getVal(s, '連結'))) html += `<a href="${getVal(s, '連結')}" target="_blank" style="font-size:12px; background:#e0f2f1; color:#00838f; padding:4px 10px; border-radius:15px; text-decoration:none; font-weight:bold; min-width:auto;">查看地圖 >></a>`;
         html += ` </div>`;
         
+        // === 入住資訊拆分與格式優化 ===
         const inDate = getVal(s, '入住日期');
+        const inTime = getVal(s, '入住時間');
+        let inStr = "";
+        
         if (hasVal(inDate)) {
-            html += `<div class="info-row"><span>入住日期</span><span>${formatDate(inDate).substring(5)}</span></div>`;
+            inStr += formatDate(inDate).substring(5);
+        }
+        if (hasVal(inTime)) {
+            if (inStr) inStr += " | ";
+            inStr += inTime;
+        }
+        if (inStr.trim()) {
+            html += `<div class="info-row"><span>入住資訊</span><span>${inStr.trim()}</span></div>`;
         }
 
+        // === 退房資訊拆分與格式優化 ===
         const outDate = getVal(s, '退房日期');
+        const outTime = getVal(s, '退房時間');
+        let outStr = "";
+        
         if (hasVal(outDate)) {
-            html += `<div class="info-row"><span>退房日期</span><span>${formatDate(outDate).substring(5)}</span></div>`;
+            outStr += formatDate(outDate).substring(5);
+        }
+        if (hasVal(outTime)) {
+            if (outStr) outStr += " | ";
+            outStr += outTime;
+        }
+        if (outStr.trim()) {
+            html += `<div class="info-row"><span>退房資訊</span><span>${outStr.trim()}</span></div>`;
         }
         
         const platform = getVal(s, '訂房平台');
