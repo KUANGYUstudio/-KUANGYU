@@ -11,6 +11,7 @@
     :root {
       --cat-鐵人: #4169E1; --cat-自行車: #228B22; --cat-路跑: #D2691E;
       --cat-游泳: #008080; --cat-活動: #9932CC; --cat-旅遊: #DB7093;
+      --cat-移地訓練: #16A085;
       --text-main: #2c3e50; --text-sub: #546e7a; --bg-color: #ffffff;
       --card-bg: #f7f9fa; --brand-main: #2c3e50;
     }
@@ -68,7 +69,6 @@
     .info-card.bill-card { border-left: 5px solid #9b59b6; }
     .info-card.note-card { border-left: 5px solid #95a5a6; }
 
-    /* 1. 垂直對齊與淡化標籤 */
     .info-row { display: flex; justify-content: flex-start; align-items: baseline; gap: 12px; margin-bottom: 8px; }
     .info-row.highlight { font-weight: bold; margin-bottom: 12px; }
     
@@ -83,7 +83,6 @@
         flex: 1; 
     }
 
-    /* 2. 費用區塊的左右分離 */
     .price-row { 
         display: flex; 
         justify-content: space-between; 
@@ -163,6 +162,47 @@
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${y}-${m}-${day}`;
+  }
+
+  function renderPriceRow(feeLabel, feeVal, payer, method, status) {
+      if (!hasVal(feeVal)) return '';
+
+      let p = hasVal(payer) ? String(payer).trim() : '';
+      let m = method !== undefined && hasVal(method) ? String(method).trim() : null;
+      let s = hasVal(status) ? String(status).trim() : '';
+
+      let pmText = "";
+      if (m === null) {
+          if (p === '無' || p === '-') pmText = '-';
+          else pmText = p || '未定';
+      } else {
+          let pIsNone = (p === '無' || p === '-');
+          let mIsNone = (m === '無' || m === '-');
+          
+          if (pIsNone && mIsNone) pmText = '-';
+          else if (pIsNone) pmText = m || '-';
+          else if (mIsNone) pmText = p || '未定';
+          else pmText = `${p || '未定'} / ${m || '-'}`;
+      }
+
+      let statusHtml = '';
+      if (s === '無' || s === '-') {
+          statusHtml = '';
+      } else {
+          let sText = s || '狀態未定';
+          let statusClass = s === '已付' ? 'paid' : '';
+          statusHtml = `<span class="status-tag ${statusClass}">${sText}</span>`;
+      }
+
+      let extraStyle = feeLabel === '金額' ? 'style="margin-top:0; border-top:none; padding-top:0;"' : '';
+
+      return `<div class="price-row" ${extraStyle}>
+                 <div class="price-amount"><span style="color:#7f8c8d;">${feeLabel}</span><span class="price-tag">$${feeVal}</span></div>
+                 <div class="payment-details">
+                     <span>${pmText}</span>
+                     ${statusHtml}
+                 </div>
+               </div>`;
   }
 
   function renderCalendar() {
@@ -291,7 +331,7 @@
     const guangWu = getVal(event, '光武項目');
     const fee = getVal(event, '報名費總額');
 
-    let sectionTitle = (cat === "旅遊" || cat === "活動") ? "行程與報名" : "賽事與報名";
+    let sectionTitle = (cat === "旅遊" || cat === "活動" || cat === "移地訓練") ? "行程與報名" : "賽事與報名";
 
     let hasSignup = hasVal(yuFan) || hasVal(guangWu) || hasVal(fee);
     if (hasSignup) {
@@ -301,15 +341,7 @@
       if (hasVal(guangWu)) html += `<div class="info-row"><span>光武</span><span>${guangWu}</span></div>`;
       
       if (hasVal(fee)) {
-          const status = getVal(event, '狀態');
-          let statusClass = status === '已付' ? 'paid' : '';
-          html += `<div class="price-row">
-                     <div class="price-amount"><span style="color:#7f8c8d;">費用</span><span class="price-tag">$${fee}</span></div>
-                     <div class="payment-details">
-                         <span>${getVal(event, '付款人') || '未定'} / ${getVal(event, '付款方式') || '-'}</span>
-                         <span class="status-tag ${statusClass}">${status || '狀態未定'}</span>
-                     </div>
-                   </div>`;
+          html += renderPriceRow('費用', fee, getVal(event, '付款人'), getVal(event, '付款方式'), getVal(event, '狀態'));
       }
       html += `</div></div>`;
     }
@@ -320,7 +352,7 @@
       stays.forEach(s => {
         html += `<div class="info-card stay-card">
                   <div class="info-row highlight" style="justify-content: space-between;">
-                    <span style="color:#333; font-size:16px;">${getVal(s, '飯店名稱') || '-'}</span>`;
+                    <span style="color:#333; font-size:16px; text-align:left;">${getVal(s, '飯店名稱') || '-'}</span>`;
         if (hasVal(getVal(s, '連結'))) html += `<a href="${getVal(s, '連結')}" target="_blank" style="font-size:12px; background:#e0f2f1; color:#00838f; padding:4px 10px; border-radius:15px; text-decoration:none; font-weight:bold; min-width:auto;">查看地圖 >></a>`;
         html += ` </div>`;
         
@@ -339,15 +371,7 @@
         
         const sFee = getVal(s, '費用');
         if (hasVal(sFee)) {
-            const sStatus = getVal(s, '狀態');
-            let statusClass = sStatus === '已付' ? 'paid' : '';
-            html += `<div class="price-row">
-                       <div class="price-amount"><span style="color:#7f8c8d;">費用</span><span class="price-tag">$${sFee}</span></div>
-                       <div class="payment-details">
-                           <span>${getVal(s, '付款人') || '未定'} / ${getVal(s, '付款方式') || '-'}</span>
-                           <span class="status-tag ${statusClass}">${sStatus || '狀態未定'}</span>
-                       </div>
-                     </div>`;
+            html += renderPriceRow('費用', sFee, getVal(s, '付款人'), getVal(s, '付款方式'), getVal(s, '狀態'));
         }
 
         const sNote = getVal(s, '備註');
@@ -365,9 +389,8 @@
       html += `<div class="info-section"><div class="info-title">交通安排</div>`;
       trans.forEach(t => {
         html += `<div class="info-card trans-card">
-                   <div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px;">${getVal(t, '類型') || '-'}</span></div>`;
+                   <div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px; text-align:left;">${getVal(t, '類型') || '-'}</span></div>`;
         
-        // === 去程資訊拆分與格式優化 ===
         const outDate = getVal(t, '出發日期');
         const outDep = getVal(t, '去程出發時間');
         const outArr = getVal(t, '去程抵達時間');
@@ -391,7 +414,6 @@
             html += `<div class="info-row"><span>去程班次</span><span>${outFlight}</span></div>`;
         }
 
-        // === 回程資訊拆分與格式優化 ===
         const inDate = getVal(t, '回程日期');
         const inDep = getVal(t, '回程出發時間');
         const inArr = getVal(t, '回程抵達時間');
@@ -417,15 +439,7 @@
 
         const tFee = getVal(t, '票價或油資');
         if (hasVal(tFee)) {
-            const tStatus = getVal(t, '狀態');
-            let statusClass = tStatus === '已付' ? 'paid' : '';
-            html += `<div class="price-row">
-                       <div class="price-amount"><span style="color:#7f8c8d;">費用</span><span class="price-tag">$${tFee}</span></div>
-                       <div class="payment-details">
-                           <span>${getVal(t, '付款人') || '未定'} / ${getVal(t, '付款方式') || '-'}</span>
-                           <span class="status-tag ${statusClass}">${tStatus || '狀態未定'}</span>
-                       </div>
-                     </div>`;
+            html += renderPriceRow('費用', tFee, getVal(t, '付款人'), getVal(t, '付款方式'), getVal(t, '狀態'));
         }
         html += `</div>`;
       });
@@ -437,19 +451,11 @@
       html += `<div class="info-section"><div class="info-title">帳務明細</div>`;
       bills.forEach(b => {
         html += `<div class="info-card bill-card">
-                   <div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px;">${getVal(b, '項目名稱') || '-'}</span></div>`;
+                   <div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px; text-align:left;">${getVal(b, '項目名稱') || '-'}</span></div>`;
         
         const bFee = getVal(b, '金額');
         if (hasVal(bFee)) {
-            const bStatus = getVal(b, '付款狀態');
-            let statusClass = bStatus === '已付' ? 'paid' : '';
-            html += `<div class="price-row" style="margin-top:0; border-top:none; padding-top:0;">
-                       <div class="price-amount"><span style="color:#7f8c8d;">金額</span><span class="price-tag">$${bFee}</span></div>
-                       <div class="payment-details">
-                           <span>${getVal(b, '付款人') || '未定'}</span>
-                           <span class="status-tag ${statusClass}">${bStatus || '狀態未定'}</span>
-                       </div>
-                     </div>`;
+            html += renderPriceRow('金額', bFee, getVal(b, '付款人'), undefined, getVal(b, '付款狀態'));
         }
         
         const bNote = getVal(b, '備註');
