@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (新增月份快捷跳轉版)
+       光聿行程美學定義 (質感白底色條 + 導覽列整合版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -25,8 +25,8 @@
       --cat-旅遊: var(--brand-yellow);
       --cat-移地訓練: var(--brand-green);
 
-      --text-main: #2c3e50; --text-sub: #546e7a; --bg-color: #ffffff;
-      --card-bg: #f7f9fa; --brand-main: #2c3e50;
+      --text-main: #2c3e50; --text-sub: #546e7a; --bg-color: #fcfcfc;
+      --card-bg: #ffffff; --brand-main: #2c3e50;
     }
 
     body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); min-height: 100vh; }
@@ -38,13 +38,14 @@
 
     .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
     .top-btns { display: flex; gap: 10px; align-items: center; }
-    .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
     
     .view-switcher { background: #eee; border-radius: 20px; padding: 3px; display: flex; gap: 2px; }
-    .view-btn { border: none; padding: 6px 15px; border-radius: 17px; cursor: pointer; font-size: 12px; font-weight: bold; color: #7f8c8d; background: transparent; }
+    .view-btn { border: none; padding: 6px 15px; border-radius: 17px; cursor: pointer; font-size: 12px; font-weight: bold; color: #7f8c8d; background: transparent; transition: 0.3s; }
     .view-btn.active { background: #fff; color: var(--brand-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-    #acc-panel { display: none; background: #f8f9fa; border-radius: 20px; padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; animation: fadeIn 0.3s ease; }
+    /* 帳務總覽 */
+    #acc-panel { display: none; background: #fff; border-radius: 20px; padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; animation: fadeIn 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .acc-grand-banner { background: var(--brand-main); color: #fff; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2); }
     .acc-grand-label { font-size: 13px; opacity: 0.8; margin-bottom: 5px; }
     .acc-grand-val { font-size: 28px; font-weight: 900; letter-spacing: 1px; color: #fff; }
@@ -53,8 +54,8 @@
     .acc-title::before { content: ''; display: inline-block; width: 4px; height: 14px; background: var(--brand-main); margin-right: 8px; border-radius: 2px; }
     
     .acc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
-    .acc-card { background: #fff; padding: 12px 15px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border: 1px solid #eee;}
-    .acc-label { font-size: 12px; color: #7f8c8d; font-weight: bold; }
+    .acc-card { background: #fafafa; padding: 12px 15px; border-radius: 12px; border: 1px solid #f0f0f0;}
+    .acc-label { font-size: 12px; color: #7f8c8d; font-weight: bold; margin-bottom: 4px;}
     .acc-val { font-size: 15px; font-weight: 800; color: var(--brand-main); }
     
     .acc-tabs { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
@@ -74,7 +75,7 @@
     .view-container { display: none; text-align: left; }
     .view-container.active { display: block; }
 
-    /* 月份快捷導覽樣式 */
+    /* 月份快捷導覽列 */
     .month-nav-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; flex-wrap: wrap; }
     .month-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #ddd; background: #fff; color: #7f8c8d; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
     .month-nav-btn.has-data { border-color: var(--brand-main); color: var(--brand-main); }
@@ -85,31 +86,30 @@
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
     .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
     
-    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #cfd8dc; transition: all 0.2s ease; font-size: 18px; position: relative; border: 1px solid #eaeaea; }
+    /* ⭕️ 日曆格子：恢復外框線，不使用點點 */
+    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #cfd8dc; transition: 0.2s ease; font-size: 18px; position: relative; border: 2px solid transparent; }
     .day-number { position: relative; z-index: 2; }
     
-    .day.has-event { background-color: #fff; color: #333; cursor: pointer; font-weight: 600; border-color: transparent; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
-    .day.has-event::after { content: ''; position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; border-radius: 50%; background-color: var(--event-color, #ccc); }
+    .day.has-event { background-color: #fff; color: #333; cursor: pointer; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-width: 2px; }
     
-    .day.selected { background-color: var(--brand-main) !important; color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; z-index: 10; border-color: transparent; }
-    .day.selected::after { display: none; }
+    /* ⭕️ 點擊狀態：填滿外框的顏色 */
+    .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; z-index: 10; border-color: transparent !important; }
 
-    .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eaeaea; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.02); position: relative; overflow: hidden; }
-    .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.06); border-color: #ddd; }
-    .list-item::before { content: ''; position: absolute; left: 0; top: 15px; bottom: 15px; width: 4px; border-radius: 0 4px 4px 0; background-color: var(--item-color, #ddd); }
+    .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eee; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.02); border-left: 6px solid #ddd; }
+    .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.06); }
     
     .list-date { min-width: 50px; text-align: center; }
-    .list-date .m { font-size: 11px; color: #95a5a6; display: block; text-transform: uppercase; letter-spacing: 1px;}
+    .list-date .m { font-size: 11px; color: #95a5a6; display: block; letter-spacing: 1px;}
     .list-date .d { font-size: 22px; font-weight: 800; color: var(--brand-main); }
     .list-name { font-size: 17px; font-weight: bold; color: var(--brand-main); flex: 1; }
     
     .list-countdown { text-align: right; min-width: 80px; font-size: 13px; font-weight: bold; color: var(--text-main); }
     .list-countdown-days { font-size: 18px; font-weight: 900; color: var(--brand-pink); margin: 0 3px; }
 
-    .detail-panel { grid-column: 1 / -1; background: transparent; border-radius: 16px; margin: 10px 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.4s ease; box-sizing: border-box; width: 100%; }
+    .detail-panel { grid-column: 1 / -1; background: transparent; border-radius: 16px; margin: 10px 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; width: 100%; }
     .detail-panel.open { max-height: 8000px; opacity: 1; margin-bottom: 30px; text-align: left; overflow: visible; }
     
-    .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #eaeaea; padding-bottom: 15px; margin-bottom: 20px; padding-top: 10px;}
+    .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px; padding-top: 10px;}
     .detail-race-name { font-size: 24px; font-weight: 800; color: var(--text-main); }
     
     .link-btn { font-size: 13px; padding: 6px 14px; background: var(--action-button-bg); color: var(--action-button-color); border-radius: 20px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.2s; }
@@ -117,21 +117,19 @@
 
     .info-section { margin-bottom: 25px; }
     .info-title { font-weight: bold; font-size: 15px; color: var(--text-sub); margin-bottom: 12px; display: flex; align-items: center; letter-spacing: 0.5px;}
-    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; }
-    
-    .info-card { background: #fff; padding: 18px; border-radius: 14px; margin-bottom: 12px; font-size: 14px; line-height: 1.6; color: #333; border: 1px solid #eaeaea; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; background: #ddd;}
     
     .title-race::before { background: var(--brand-blue); }
-    .card-race { background-color: #f0f8ff; border-color: #e3f2fd; }
-    
     .title-stay::before { background: var(--brand-yellow); }
-    .card-stay { background-color: #fffde7; border-color: #fff9c4; }
-    
     .title-trans::before { background: var(--brand-green); }
-    .card-trans { background-color: #e0f2f1; border-color: #b2dfdb; } 
-    
     .title-bill::before { background: var(--brand-pink); }
-    .card-bill { background-color: #fce4ec; border-color: #f8bbd0; }
+    
+    /* ⭕️ 卡片：恢復乾淨白底＋左側色條 */
+    .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; line-height: 1.6; color: #333; border-left: 5px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+    .card-race { border-left-color: var(--brand-blue); }
+    .card-stay { border-left-color: var(--brand-yellow); }
+    .card-trans { border-left-color: var(--brand-green); }
+    .card-bill { border-left-color: var(--brand-pink); }
 
     .info-row { display: flex; gap: 12px; margin-bottom: 10px; align-items: baseline; }
     .info-row > span:first-child { color: #7f8c8d; min-width: 70px; text-align: left; font-weight: 500;}
@@ -404,7 +402,7 @@
     monthKeys.forEach(mKey => {
       const [y, m] = mKey.split('-');
       const section = document.createElement('div'); section.className = 'month-section';
-      section.id = 'month-section-' + mKey; // 設定 ID 提供錨點跳轉
+      section.id = 'month-section-' + mKey;
       section.innerHTML = `<div class="month-title">${y}年${m}月</div><div class="calendar-header">${['日','一','二','三','四','五','六'].map(d => `<div class="weekday-header">${d}</div>`).join('')}</div>`;
       const grid = document.createElement('div'); grid.className = 'calendar-grid';
       const firstDay = new Date(y, m-1, 1).getDay(), lastDate = new Date(y, m, 0).getDate();
@@ -415,7 +413,8 @@
         if (event) {
           const cat = getVal(event, '行程類別');
           cell.classList.add('has-event'); 
-          cell.style.setProperty('--event-color', `var(--cat-${cat})`);
+          // 恢復外框線
+          cell.style.borderColor = `var(--cat-${cat})`;
           cell.onclick = () => handleDayClick(event, cell, grid);
         }
         grid.appendChild(cell);
@@ -443,7 +442,7 @@
           }
 
           const item = document.createElement('div'); item.className = 'list-item'; 
-          item.style.setProperty('--item-color', `var(--cat-${cat})`);
+          item.style.borderLeftColor = `var(--cat-${cat})`;
           item.innerHTML = `<div class="list-date"><span class="m">${eDate.getMonth()+1}月</span><span class="d">${eDate.getDate()}</span></div><div class="list-name">${getVal(event, '行程名稱')}</div><div class="list-countdown">${countdownHtml}</div>`;
           item.onclick = () => handleListClick(event, item);
           container.appendChild(item);
@@ -456,6 +455,10 @@
     if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
     if (currentSelectedEl) { currentSelectedEl.classList.remove('selected'); currentSelectedEl.style.backgroundColor = ''; }
     currentSelectedEl = cell; cell.classList.add('selected');
+    
+    // 點擊填滿外框色
+    const category = getVal(event, '行程類別');
+    cell.style.backgroundColor = `var(--cat-${category})`;
     
     if (currentOpenPanel) currentOpenPanel.remove();
     const panel = document.createElement('div'); panel.className = 'detail-panel'; panel.innerHTML = generateDetailHTML(event);
@@ -487,7 +490,7 @@
     html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'));
     
     if(getVal(event,'備註')) {
-        html += `<div style="margin-top:12px; font-size:13px; color:#546e7a; background:rgba(255,255,255,0.6); padding:10px; border-radius:8px;">備註：${getVal(event,'備註')}</div>`;
+        html += `<div style="margin-top:12px; font-size:13px; color:#666; border-top: 1px dashed #ddd; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
     }
     html += `</div></div>`;
 
@@ -495,12 +498,12 @@
     if(stays.length > 0) {
       html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
       stays.forEach(s => {
-        html += `<div class="info-card card-stay"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-weight:bold;font-size:16px; color:var(--brand-main);">${getVal(s,'飯店名稱')}</span>${getVal(s,'連結')?`<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#fff;border:1px solid #e0e0e0;color:var(--text-sub);padding:4px 10px;border-radius:15px;text-decoration:none;font-weight:bold;box-shadow:0 1px 3px rgba(0,0,0,0.05);">地圖 >></a>`:''}</div>`;
+        html += `<div class="info-card card-stay"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>${getVal(s,'連結')?`<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>`:''}</div>`;
         if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
         if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房時間</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
         if(getVal(s,'訂房平台')) html += `<div class="info-row"><span>平台</span><span>${getVal(s,'訂房平台')}</span></div>`;
         html += renderPriceRow('費用', getVal(s,'費用'), getVal(s,'付款人'), getVal(s,'付款方式'), getVal(s,'狀態'));
-        if(getVal(s,'備註')) html += `<div style="margin-top:10px; font-size:13px; color:#546e7a; background:rgba(255,255,255,0.6); padding:10px; border-radius:8px;">備註：${getVal(s,'備註')}</div>`;
+        if(getVal(s,'備註')) html += `<div style="margin-top:8px; font-size:12px; color:#666;">備註：${getVal(s,'備註')}</div>`;
         html += `</div>`;
       });
       html += `</div>`;
@@ -510,7 +513,7 @@
     if(trans.length > 0) {
       html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
       trans.forEach(t => {
-        html += `<div class="info-card card-trans"><div style="font-weight:bold;margin-bottom:10px;font-size:16px; color:var(--brand-main);">${getVal(t,'類型')}</div>`;
+        html += `<div class="info-card card-trans"><div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>`;
         
         const goB = getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機') || getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班');
         const goD = getVal(t,'出發日期');
@@ -524,7 +527,7 @@
         const bkD = getVal(t,'回程日期');
         const bkS = getVal(t,'回程出發時間');
         const bkA = getVal(t,'回程抵達時間');
-        if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:12px;"><span>飛機號碼</span><span>${bkB}</span></div>`;
+        if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>飛機號碼</span><span>${bkB}</span></div>`;
         if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
         if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
         
@@ -537,8 +540,8 @@
     if(bills.length > 0) {
       html += `<div class="info-section"><div class="info-title title-bill">其他帳務</div>`;
       bills.forEach(b => {
-        html += `<div class="info-card card-bill"><div style="font-weight:bold;margin-bottom:8px; color:var(--brand-main);">${getVal(b,'項目名稱')}</div>${renderPriceRow('金額', getVal(b,'金額'), getVal(b,'付款人'), undefined, getVal(b,'付款狀態'))}`;
-        if(getVal(b,'備註')) html += `<div style="font-size:13px;color:#546e7a;margin-top:10px; background:rgba(255,255,255,0.6); padding:10px; border-radius:8px;">備註：${getVal(b,'備註')}</div>`;
+        html += `<div class="info-card card-bill"><div style="font-weight:bold;margin-bottom:8px;">${getVal(b,'項目名稱')}</div>${renderPriceRow('金額', getVal(b,'金額'), getVal(b,'付款人'), undefined, getVal(b,'付款狀態'))}`;
+        if(getVal(b,'備註')) html += `<div style="font-size:12px;color:#666;margin-top:5px;">備註：${getVal(b,'備註')}</div>`;
         html += `</div>`;
       });
       html += `</div>`;
