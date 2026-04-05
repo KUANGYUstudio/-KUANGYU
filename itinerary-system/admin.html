@@ -53,7 +53,7 @@
         <div class="input-group"><label>光武項目</label><input type="text" id="行程-光武"></div>
         <div class="input-group"><label>報名費總額</label><input type="number" id="行程-報名費"></div>
         <div class="input-group"><label>報名費付款人</label><select id="行程-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款方式</label><input type="text" id="行程-方式" placeholder="例如：刷卡、現金"></div>
+        <div class="input-group"><label>付款方式</label><select id="行程-方式"><option>現金</option><option>刷卡</option></select></div>
         <div class="input-group"><label>狀態</label><select id="行程-狀態"><option>已付</option><option>未付</option></select></div>
         <div class="input-group"><label>備註</label><input type="text" id="行程-備註"></div>
         <button class="submit-btn" onclick="submitData('行程')">確認儲存行程</button>
@@ -78,7 +78,7 @@
         </div>
         <div class="input-group"><label>費用</label><input type="number" id="住宿-費用"></div>
         <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款方式</label><input type="text" id="住宿-方式" placeholder="例如：刷卡、現金"></div>
+        <div class="input-group"><label>付款方式</label><select id="住宿-方式"><option>現金</option><option>刷卡</option></select></div>
         <div class="input-group"><label>狀態</label><select id="住宿-狀態"><option>已付</option><option>現場付</option></select></div>
         <div class="input-group"><label>連結</label><input type="url" id="住宿-連結"></div>
         <div class="input-group"><label>備註</label><input type="text" id="住宿-備註" placeholder="請輸入住宿備註"></div>
@@ -87,7 +87,7 @@
 
     <div id="form-交通" class="form-section">
         <div class="input-group"><label>行程代碼</label><select class="code-selector" id="交通-代碼"></select></div>
-        <div class="input-group"><label>類型</label><select id="交通-類型"><option>自駕</option><option>火車</option><option>班機</option></select></div>
+        <div class="input-group"><label>類型</label><select id="交通-類型"><option>自駕</option><option>火車</option><option>飛機</option></select></div>
         
         <div class="group-box">
             <div class="group-title">去程資訊</div>
@@ -107,7 +107,7 @@
 
         <div class="input-group"><label>票價或油資</label><input type="number" id="交通-費用"></div>
         <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款方式</label><input type="text" id="交通-方式" placeholder="例如：刷卡、現金"></div>
+        <div class="input-group"><label>付款方式</label><select id="交通-方式"><option>現金</option><option>刷卡</option></select></div>
         <div class="input-group"><label>狀態</label><select id="交通-狀態"><option>已付</option><option>現場付</option></select></div>
         <button class="submit-btn" onclick="submitData('交通')">確認儲存交通</button>
     </div>
@@ -208,11 +208,19 @@
             statusDiv.textContent = sheetName + ' 資料已成功入庫！';
             if (sheetName === '行程') refreshItineraryCodes();
             
-            document.querySelectorAll('#form-' + sheetName + ' input').forEach(i => i.value = '');
+            // 清除文字輸入框
+            document.querySelectorAll('#form-' + sheetName + ' input[type="text"], #form-' + sheetName + ' input[type="number"], #form-' + sheetName + ' input[type="date"], #form-' + sheetName + ' input[type="url"]').forEach(i => i.value = '');
+            
             if (sheetName === '住宿') {
                 document.getElementById('住宿-平台').selectedIndex = 0;
                 document.getElementById('住宿-平台-其他').style.display = 'none';
+                document.getElementById('住宿-方式').selectedIndex = 0;
+            } else if (sheetName === '交通') {
+                document.getElementById('交通-方式').selectedIndex = 0;
+            } else if (sheetName === '行程') {
+                document.getElementById('行程-方式').selectedIndex = 0;
             }
+
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
         }).catch(err => {
             statusDiv.style.background = '#f8d7da'; statusDiv.textContent = '儲存失敗，請檢查網路。';
