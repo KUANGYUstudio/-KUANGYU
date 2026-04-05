@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (進階排版優化版)
+       光聿行程美學定義 (帳務加強優化版)
        ========================================= */
     :root {
       --cat-鐵人: #4169E1; --cat-自行車: #228B22; --cat-路跑: #D2691E;
@@ -17,467 +17,233 @@
     }
 
     body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); min-height: 100vh; }
-    .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 40px 20px; box-sizing: border-box; text-align: center; }
+    .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 30px 20px; box-sizing: border-box; text-align: center; }
     .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 5px; }
-    .header-subtitle { font-size: 16px; margin-bottom: 40px; color: var(--text-sub); font-weight: 400; letter-spacing: 1px; }
+    .header-subtitle { font-size: 16px; margin-bottom: 20px; color: var(--text-sub); font-weight: 400; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .refresh-btn { cursor: pointer; font-size: 12px; background: #e0f2f1; color: #00838f; padding: 4px 10px; border-radius: 15px; font-weight: bold; }
 
+    /* 頂部功能區 */
+    .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
+    .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    
+    /* 年度帳務面板 */
+    #acc-panel { display: none; background: #f8f9fa; border-radius: 20px; padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; animation: fadeIn 0.3s ease; }
+    .acc-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; color: var(--brand-main); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+    .acc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+    .acc-card { background: #fff; padding: 12px 15px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+    .acc-label { font-size: 12px; color: #7f8c8d; font-weight: bold; display: block; }
+    .acc-val { font-size: 18px; font-weight: 800; color: var(--brand-main); }
+    
+    /* 篩選器 */
+    .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; font-weight: bold; color: #7f8c8d; cursor: pointer; transition: 0.3s; }
+    .filter-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); }
+
+    /* 日曆樣式 */
     .month-section { margin-bottom: 40px; text-align: left; }
     .month-title { font-weight: 800; font-size: 24px; margin: 0 0 20px; color: var(--text-main); padding-left: 5px; }
-    
-    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
-    @media (max-width: 750px) { .calendar-header, .calendar-grid { gap: 4px; } }
-
+    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
     .weekday-header { font-weight: bold; font-size: 16px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
-    
-    .day { 
-      aspect-ratio: 1; width: 100%; 
-      display: flex; flex-direction: column; align-items: center; justify-content: center; 
-      border-radius: 12px; background-color: var(--card-bg); color: #cfd8dc; 
-      cursor: default; box-sizing: border-box; transition: all 0.2s; position: relative; 
-      border: 2px solid transparent;
-    }
-    
-    .day-number { font-size: 22px !important; font-weight: bold !important; margin-bottom: 2px; line-height: 1; }
-    @media (max-width: 750px) { .day-number { font-size: 18px !important; } }
-
-    .day.has-event { background-color: #fff; color: #333; cursor: pointer; border-width: 2px; }
-    .day.has-event:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 12px; background-color: var(--card-bg); color: #cfd8dc; transition: 0.2s; border: 2px solid transparent; }
+    .day.has-event { background-color: #fff; color: #333; cursor: pointer; border-width: 2px; font-weight: bold; }
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important; z-index: 10; }
 
-    .detail-panel { 
-      grid-column: 1 / -1; background: #fff; border-radius: 16px; 
-      margin-top: 8px; margin-bottom: 8px; overflow: hidden; 
-      max-height: 0; opacity: 0; transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease; box-sizing: border-box;
-    }
-    .detail-panel.open { max-height: 2500px; opacity: 1; padding: 25px; border: 1px solid #eee; }
-
-    .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 20px; }
-    .detail-race-name { font-size: 22px; font-weight: bold; color: var(--text-main); }
-    .detail-race-date { font-size: 14px; color: var(--text-sub); margin-top: 4px; }
-    .link-btn { font-size: 13px; padding: 6px 12px; background: #e0f2f1; color: #00838f; border-radius: 20px; text-decoration: none; font-weight: bold; }
-    .link-btn:hover { background: #b2dfdb; }
-
-    .info-section { margin-bottom: 25px; text-align: left; }
-    .info-title { font-weight: bold; font-size: 16px; color: #7f8c8d; margin-bottom: 10px; display: flex; align-items: center; }
-    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; background: #ddd; margin-right: 10px; border-radius: 3px; }
+    /* 詳情面板 */
+    .detail-panel { grid-column: 1 / -1; background: #fff; border-radius: 16px; margin: 8px 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; }
+    .detail-panel.open { max-height: 3000px; opacity: 1; padding: 25px; border: 1px solid #eee; }
+    .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 5px solid #ddd; }
     
-    .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; line-height: 1.6; color: #333; }
-    
-    .info-card.race-card { border-left: 5px solid #3498db; }
-    .info-card.stay-card { border-left: 5px solid #e67e22; }
-    .info-card.trans-card { border-left: 5px solid #2ecc71; }
-    .info-card.bill-card { border-left: 5px solid #9b59b6; }
-    .info-card.note-card { border-left: 5px solid #95a5a6; }
-
-    .info-row { display: flex; justify-content: flex-start; align-items: baseline; gap: 12px; margin-bottom: 8px; }
-    .info-row.highlight { font-weight: bold; margin-bottom: 12px; }
-    
-    .info-row:not(.highlight) > span:first-child { 
-        color: #7f8c8d; 
-        min-width: 65px; 
-        text-align: center; 
-    }
-    
-    .info-row:not(.highlight) > span:last-child {
-        color: #2c3e50;
-        flex: 1; 
-    }
-
-    .price-row { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        margin-top: 12px; 
-        border-top: 1px dashed #ddd; 
-        padding-top: 12px; 
-    }
-    
-    .price-amount { display: flex; align-items: center; gap: 8px; }
-    .price-tag { color: #e67e22; font-weight: bold; font-size: 16px; }
-    
-    .payment-details { font-size: 13px; color: #888; display: flex; align-items: center; gap: 6px; }
-
-    .status-tag { font-size: 12px; padding: 3px 8px; border-radius: 6px; background: #eee; color: #666; font-weight: bold; }
-    .status-tag.paid { background: #d4edda; color: #155724; }
+    /* 本場結算卡片 */
+    .event-settle-card { background: #fff8f0; border: 2px solid #ff9f43; padding: 15px; border-radius: 15px; margin-top: 25px; display: flex; justify-content: space-between; align-items: center; }
+    .settle-label { font-weight: 800; color: #d35400; font-size: 16px; }
+    .settle-val { font-size: 22px; font-weight: 900; color: #d35400; }
 
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
-  <div id="loading" class="loading-overlay">
-      <div id="loading-text" style="text-align: center; line-height: 1.6;">正在讀取光聿行程資料...</div>
-  </div>
+  <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
 
   <div class="container">
     <div class="header-title">光聿 KUANGYU</div>
-    <div class="header-subtitle">行程總覽系統</div>
+    <div class="header-subtitle">行程總覽系統 <span class="refresh-btn" onclick="location.reload()">↻ 重新整理</span></div>
+
+    <div class="action-bar">
+      <button class="acc-toggle-btn" onclick="toggleAccPanel()">帳務明細總覽</button>
+      <div id="filter-bar" class="filter-bar"></div>
+    </div>
+
+    <div id="acc-panel">
+      <div class="acc-title">年度分類統計</div>
+      <div id="acc-cat-grid" class="acc-grid"></div>
+      <div class="acc-title" style="margin-top:20px;">年度項目統計</div>
+      <div id="acc-item-grid" class="acc-grid"></div>
+      <div class="event-settle-card" style="background: #ebf0f1; border-color: var(--brand-main);">
+        <div class="settle-label" style="color: var(--brand-main);">篩選範圍總開支</div>
+        <div id="acc-grand-total" class="settle-val" style="color: var(--brand-main);">$0</div>
+      </div>
+    </div>
+
     <div id="calendar-container"></div>
   </div>
 
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
   let dbData = {};
+  let currentFilter = '全部';
 
   window.onload = initSystem;
 
   async function initSystem() {
     try {
-      const fetchUrl = API_URL + "?t=" + new Date().getTime();
-      const res = await fetch(fetchUrl);
+      const res = await fetch(API_URL + "?t=" + new Date().getTime());
       dbData = await res.json();
-      
-      if (!dbData['行程']) {
-          document.getElementById('loading-text').innerHTML = "找不到「行程」資料！<br><br>請確認：<br>1. Google Sheets 分頁名稱是「行程」<br>2. Apps Script 有重新部署為「新版本」";
-          return;
-      }
-      
+      renderFilters();
       renderCalendar();
       document.getElementById('loading').style.display = 'none';
     } catch (e) {
-      console.error(e);
-      document.getElementById('loading-text').innerHTML = "資料讀取失敗，請確認 API 設定與網路連線。";
+      document.getElementById('loading').innerHTML = "讀取失敗，請重新整理";
     }
   }
 
-  function getVal(obj, keyName) {
-      if(!obj) return undefined;
-      const key = Object.keys(obj).find(k => k.trim() === keyName);
-      return key ? obj[key] : undefined;
+  function toggleAccPanel() {
+    const panel = document.getElementById('acc-panel');
+    const isVisible = panel.style.display === 'block';
+    panel.style.display = isVisible ? 'none' : 'block';
+    if (!isVisible) calculateYearlyAccounting();
   }
 
-  function hasVal(val) {
-    return val !== "" && val !== null && val !== undefined;
+  function calculateYearlyAccounting() {
+    let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+    let catTotals = {}, itemTotals = { '報名費': 0, '住宿': 0, '交通': 0, '雜項': 0 }, grandTotal = 0;
+
+    races.forEach(r => {
+      const code = getVal(r, '行程代碼'), cat = getVal(r, '行程類別');
+      const eventSum = calculateEventTotal(code);
+      
+      catTotals[cat] = (catTotals[cat] || 0) + eventSum;
+      grandTotal += eventSum;
+
+      // 項目加總
+      itemTotals['報名費'] += parseFloat(getVal(r, '報名費總額')) || 0;
+      dbData['住宿'].filter(s => getVal(s,'行程代碼')===code).forEach(s => itemTotals['住宿'] += parseFloat(getVal(s,'費用')) || 0);
+      dbData['交通'].filter(t => getVal(t,'行程代碼')===code).forEach(t => itemTotals['交通'] += parseFloat(getVal(t,'票價或油資')) || 0);
+      dbData['帳務明細'].filter(b => getVal(b,'行程代碼')===code).forEach(b => itemTotals['雜項'] += parseFloat(getVal(b,'金額')) || 0);
+    });
+
+    // 渲染 UI
+    const catGrid = document.getElementById('acc-cat-grid'); catGrid.innerHTML = '';
+    Object.entries(catTotals).forEach(([k, v]) => catGrid.innerHTML += `<div class="acc-card"><label>${k}</label><span class="acc-val">$${v.toLocaleString()}</span></div>`);
+    
+    const itemGrid = document.getElementById('acc-item-grid'); itemGrid.innerHTML = '';
+    Object.entries(itemTotals).forEach(([k, v]) => itemGrid.innerHTML += `<div class="acc-card"><label>${k}總計</label><span class="acc-val">$${v.toLocaleString()}</span></div>`);
+    
+    document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
   }
 
-  function formatDate(d) {
-    if (!d) return "";
-    if (typeof d === 'string') {
-        const match = d.match(/(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
-        if (match) return `${match[1]}-${match[2].padStart(2, '0')}-${match[3].padStart(2, '0')}`;
-    }
-    const date = new Date(d);
-    if (isNaN(date.getTime())) return "";
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
+  function calculateEventTotal(code) {
+    let sum = 0;
+    const race = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
+    if (race) sum += parseFloat(getVal(race, '報名費總額')) || 0;
+    dbData['住宿'].filter(s => getVal(s, '行程代碼') === code).forEach(s => sum += parseFloat(getVal(s, '費用')) || 0);
+    dbData['交通'].filter(t => getVal(t, '行程代碼') === code).forEach(t => sum += parseFloat(getVal(t, '票價或油資')) || 0);
+    dbData['帳務明細'].filter(b => getVal(b, '行程代碼') === code).forEach(b => sum += parseFloat(getVal(b, '金額')) || 0);
+    return sum;
   }
 
-  function renderPriceRow(feeLabel, feeVal, payer, method, status) {
-      if (!hasVal(feeVal)) return '';
+  function renderFilters() {
+    const bar = document.getElementById('filter-bar');
+    const cats = ['全部', ...new Set(dbData['行程'].map(r => getVal(r, '行程類別')).filter(c => c))];
+    bar.innerHTML = '';
+    cats.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = `filter-btn ${c === currentFilter ? 'active' : ''}`;
+      btn.textContent = c;
+      btn.onclick = () => { currentFilter = c; renderFilters(); renderCalendar(); if(document.getElementById('acc-panel').style.display === 'block') calculateYearlyAccounting(); };
+      bar.appendChild(btn);
+    });
+  }
 
-      let p = hasVal(payer) ? String(payer).trim() : '-';
-      let m = method !== undefined && hasVal(method) ? String(method).trim() : null;
-      let s = hasVal(status) ? String(status).trim() : '-';
-
-      if (p === '無') p = '-';
-      if (m === '無') m = '-';
-      if (s === '無') s = '-';
-
-      let pmText = "";
-      if (m === null) {
-          pmText = p; 
-      } else {
-          if (p === '-' && m === '-') {
-              pmText = '-';
-          } else {
-              pmText = `${p} / ${m}`;
-          }
-      }
-
-      let statusClass = s === '已付' ? 'paid' : '';
-      let statusHtml = `<span class="status-tag ${statusClass}">${s}</span>`;
-
-      let extraStyle = feeLabel === '金額' ? 'style="margin-top:0; border-top:none; padding-top:0;"' : '';
-
-      return `<div class="price-row" ${extraStyle}>
-                 <div class="price-amount"><span style="color:#7f8c8d;">${feeLabel}</span><span class="price-tag">$${feeVal}</span></div>
-                 <div class="payment-details">
-                     <span>${pmText}</span>
-                     ${statusHtml}
-                 </div>
-               </div>`;
+  function getVal(obj, key) { return obj[Object.keys(obj).find(k => k.trim() === key)]; }
+  function formatDate(d) { 
+    const date = new Date(d); 
+    return isNaN(date.getTime()) ? "" : `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
   }
 
   function renderCalendar() {
-    const container = document.getElementById('calendar-container');
-    const races = dbData['行程'];
-    if (!races || races.length === 0) {
-      container.innerHTML = '<div style="color:#999; margin-top:50px;">目前尚無行程紀錄</div>';
-      return;
-    }
+    const container = document.getElementById('calendar-container'); container.innerHTML = '';
+    let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+    const monthKeys = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].sort();
 
-    const monthSet = new Set();
-    races.forEach(r => {
-      const dStr = formatDate(getVal(r, '日期'));
-      if(dStr) monthSet.add(dStr.substring(0, 7));
-    });
-
-    if (monthSet.size === 0) {
-      container.innerHTML = '<div style="color:#999; margin-top:50px;">找不到有效的日期格式</div>';
-      return;
-    }
-
-    const sortedMonths = Array.from(monthSet).sort();
-    sortedMonths.forEach(mKey => {
+    monthKeys.forEach(mKey => {
       const [y, m] = mKey.split('-');
-      renderMonth(parseInt(y), parseInt(m), container, races);
+      const section = document.createElement('div'); section.className = 'month-section';
+      section.innerHTML = `<div class="month-title">${y}年${m}月</div><div class="calendar-header">${['日','一','二','三','四','五','六'].map(d => `<div class="weekday-header">${d}</div>`).join('')}</div>`;
+      const grid = document.createElement('div'); grid.className = 'calendar-grid';
+      const firstDay = new Date(y, m-1, 1).getDay(), lastDate = new Date(y, m, 0).getDate();
+      for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
+      for (let d = 1; d <= lastDate; d++) {
+        const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`, cell = document.createElement('div'); cell.className = 'day'; cell.innerHTML = d;
+        const event = races.find(r => formatDate(getVal(r, '日期')) === dStr);
+        if (event) {
+          cell.classList.add('has-event'); cell.style.borderColor = `var(--cat-${getVal(event, '行程類別')})`;
+          cell.onclick = () => handleDayClick(event, cell, grid);
+        }
+        grid.appendChild(cell);
+      }
+      section.appendChild(grid); container.appendChild(section);
     });
   }
 
-  function renderMonth(year, month, container, races) {
-    const section = document.createElement('div');
-    section.className = 'month-section';
-    section.innerHTML = `<div class="month-title">${year}年${month}月</div>`;
-    
-    const header = document.createElement('div');
-    header.className = 'calendar-header';
-    ['日','一','二','三','四','五','六'].forEach(d => header.innerHTML += `<div class="weekday-header">${d}</div>`);
-    section.appendChild(header);
+  let currentOpenPanel = null, currentSelectedCell = null;
 
-    const grid = document.createElement('div');
-    grid.className = 'calendar-grid';
-    const firstDay = new Date(year, month - 1, 1).getDay();
-    const lastDate = new Date(year, month, 0).getDate();
-
-    for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
-
-    for (let d = 1; d <= lastDate; d++) {
-      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-      const cell = document.createElement('div');
-      cell.className = 'day';
-      cell.innerHTML = `<span class="day-number">${d}</span>`;
-
-      const event = races.find(r => formatDate(getVal(r, '日期')) === dateStr);
-      if (event) {
-        const cat = getVal(event, '行程類別') ? String(getVal(event, '行程類別')).trim() : '';
-        cell.classList.add('has-event');
-        if(cat) cell.style.borderColor = `var(--cat-${cat})`;
-        cell.onclick = () => handleDayClick(dateStr, event, cell, grid);
-      }
-      grid.appendChild(cell);
-    }
-    section.appendChild(grid);
-    container.appendChild(section);
-  }
-
-  let currentOpenPanel = null;
-  let currentSelectedCell = null;
-
-  function handleDayClick(dateStr, event, cell, grid) {
-    if (currentSelectedCell) {
-      currentSelectedCell.classList.remove('selected');
-      currentSelectedCell.style.backgroundColor = '';
-    }
-
-    if (currentSelectedCell === cell && currentOpenPanel) {
-      closeCurrentPanel();
-      currentSelectedCell = null;
-      return;
-    }
-
-    currentSelectedCell = cell;
-    cell.classList.add('selected');
-    const cat = getVal(event, '行程類別') ? String(getVal(event, '行程類別')).trim() : '';
-    const color = cat ? getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`) : '#333';
+  function handleDayClick(event, cell, grid) {
+    if (currentSelectedCell) { currentSelectedCell.classList.remove('selected'); currentSelectedCell.style.backgroundColor = ''; }
+    if (currentSelectedCell === cell && currentOpenPanel) { currentOpenPanel.remove(); currentOpenPanel = null; currentSelectedCell = null; return; }
+    currentSelectedCell = cell; cell.classList.add('selected');
+    const color = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${getVal(event, '行程類別')}`);
     cell.style.backgroundColor = color;
-    cell.style.borderColor = color;
-
-    if (currentOpenPanel) closeCurrentPanel();
-
-    const panel = document.createElement('div');
-    panel.className = 'detail-panel';
-    panel.innerHTML = generateDetailHTML(event);
-
-    const cells = Array.from(grid.children);
-    const index = cells.indexOf(cell);
-    const rowEnd = Math.min(cells.length - 1, index + (6 - (index % 7)));
-    
-    grid.insertBefore(panel, cells[rowEnd].nextSibling);
-    setTimeout(() => panel.classList.add('open'), 10);
-    currentOpenPanel = panel;
-  }
-
-  function closeCurrentPanel() {
-    if (currentOpenPanel) {
-      const p = currentOpenPanel;
-      p.classList.remove('open');
-      setTimeout(() => p.remove(), 400);
-      currentOpenPanel = null;
-    }
+    if (currentOpenPanel) currentOpenPanel.remove();
+    const panel = document.createElement('div'); panel.className = 'detail-panel'; panel.innerHTML = generateDetailHTML(event);
+    const cells = Array.from(grid.children), idx = cells.indexOf(cell), rowEnd = Math.min(cells.length - 1, idx + (6 - (idx % 7)));
+    grid.insertBefore(panel, cells[rowEnd].nextSibling); setTimeout(() => panel.classList.add('open'), 10); currentOpenPanel = panel;
   }
 
   function generateDetailHTML(event) {
-    const code = getVal(event, '行程代碼');
-    const cat = getVal(event, '行程類別');
+    const code = getVal(event, '行程代碼'), cat = getVal(event, '行程類別');
+    let html = `<div style="display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding-bottom:15px;margin-bottom:20px;"><div><div style="font-size:22px;font-weight:bold;">${getVal(event, '行程名稱')}</div><div style="font-size:14px;color:#7f8c8d;">日期：${formatDate(getVal(event, '日期'))}</div></div>${getVal(event,'行程連結')?`<a href="${getVal(event,'行程連結')}" target="_blank" style="font-size:13px;padding:6px 12px;background:#e0f2f1;color:#00838f;border-radius:20px;text-decoration:none;font-weight:bold;">簡章 >></a>`:''}</div>`;
     
-    let html = `<div class="detail-header">
-                  <div>
-                    <div class="detail-race-name">${getVal(event, '行程名稱') || '未命名行程'}</div>
-                    <div class="detail-race-date">日期：${formatDate(getVal(event, '日期'))}</div>
-                  </div>`;
-    if (hasVal(getVal(event, '行程連結'))) {
-        html += `<a href="${getVal(event, '行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>`;
-    }
-    html += `</div>`;
+    // 報名與賽事
+    const yu = getVal(event,'聿凡項目'), gu = getVal(event,'光武項目'), f = getVal(event,'報名費總額');
+    html += `<div class="info-section"><div class="info-title">報名資訊</div><div class="info-card" style="border-left-color:#3498db;">${yu?`<div>聿凡：${yu}</div>`:''}${gu?`<div>光武：${gu}</div>`:''}<div>費用：$${f} (${getVal(event,'付款人')}/${getVal(event,'狀態')})</div></div></div>`;
 
-    const yuFan = getVal(event, '聿凡項目');
-    const guangWu = getVal(event, '光武項目');
-    const fee = getVal(event, '報名費總額');
-
-    let sectionTitle = (cat === "旅遊" || cat === "活動" || cat === "移地訓練") ? "行程與報名" : "賽事與報名";
-
-    let hasSignup = hasVal(yuFan) || hasVal(guangWu) || hasVal(fee);
-    if (hasSignup) {
-      html += `<div class="info-section"><div class="info-title">${sectionTitle}</div><div class="info-card race-card">`;
-      
-      if (hasVal(yuFan)) html += `<div class="info-row"><span>聿凡</span><span>${yuFan}</span></div>`;
-      if (hasVal(guangWu)) html += `<div class="info-row"><span>光武</span><span>${guangWu}</span></div>`;
-      
-      if (hasVal(fee)) {
-          html += renderPriceRow('費用', fee, getVal(event, '付款人'), getVal(event, '付款方式'), getVal(event, '狀態'));
-      }
-      html += `</div></div>`;
-    }
-
-    const stays = dbData['住宿'] ? dbData['住宿'].filter(s => getVal(s, '行程代碼') === code) : [];
-    if (stays.length > 0) {
-      html += `<div class="info-section"><div class="info-title">住宿資訊</div>`;
-      stays.forEach(s => {
-        html += `<div class="info-card stay-card">
-                  <div class="info-row highlight" style="justify-content: space-between;">
-                    <span style="color:#333; font-size:16px; text-align:left;">${getVal(s, '飯店名稱') || '-'}</span>`;
-        if (hasVal(getVal(s, '連結'))) html += `<a href="${getVal(s, '連結')}" target="_blank" style="font-size:12px; background:#e0f2f1; color:#00838f; padding:4px 10px; border-radius:15px; text-decoration:none; font-weight:bold; min-width:auto;">查看地圖 >></a>`;
-        html += ` </div>`;
-        
-        const inDate = getVal(s, '入住日期');
-        const inTime = getVal(s, '入住時間');
-        let inStr = "";
-        
-        if (hasVal(inDate)) {
-            inStr += formatDate(inDate).substring(5);
-        }
-        if (hasVal(inTime)) {
-            if (inStr) inStr += " | ";
-            inStr += inTime;
-        }
-        if (inStr.trim()) {
-            html += `<div class="info-row"><span>入住資訊</span><span>${inStr.trim()}</span></div>`;
-        }
-
-        const outDate = getVal(s, '退房日期');
-        const outTime = getVal(s, '退房時間');
-        let outStr = "";
-        
-        if (hasVal(outDate)) {
-            outStr += formatDate(outDate).substring(5);
-        }
-        if (hasVal(outTime)) {
-            if (outStr) outStr += " | ";
-            outStr += outTime;
-        }
-        if (outStr.trim()) {
-            html += `<div class="info-row"><span>退房資訊</span><span>${outStr.trim()}</span></div>`;
-        }
-        
-        const platform = getVal(s, '訂房平台');
-        if(hasVal(platform)) html += `<div class="info-row"><span>平台</span><span>${platform}</span></div>`;
-        
-        const sFee = getVal(s, '費用');
-        if (hasVal(sFee)) {
-            html += renderPriceRow('費用', sFee, getVal(s, '付款人'), getVal(s, '付款方式'), getVal(s, '狀態'));
-        }
-
-        const sNote = getVal(s, '備註');
-        if (hasVal(sNote)) {
-            html += `<div style="margin-top:8px; font-size:13px; color:#666;">備註：${sNote}</div>`;
-        }
-
+    // 住宿、交通、帳務 (簡化顯示)
+    const stays = dbData['住宿'].filter(s => getVal(s, '行程代碼') === code);
+    if(stays.length) {
+        html += `<div class="info-section"><div class="info-title">住宿</div>`;
+        stays.forEach(s => html += `<div class="info-card" style="border-left-color:#e67e22;"><b>${getVal(s,'飯店名稱')}</b><br>${formatDate(getVal(s,'入住日期')).substring(5)} 入住 | $${getVal(s,'費用')} (${getVal(s,'狀態')})</div>`);
         html += `</div>`;
-      });
-      html += `</div>`;
     }
 
-    const trans = dbData['交通'] ? dbData['交通'].filter(t => getVal(t, '行程代碼') === code) : [];
-    if (trans.length > 0) {
-      html += `<div class="info-section"><div class="info-title">交通安排</div>`;
-      trans.forEach(t => {
-        html += `<div class="info-card trans-card">
-                   <div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px; text-align:left;">${getVal(t, '類型') || '-'}</span></div>`;
-        
-        // === 去程資訊排版 ===
-        const outFlight = getVal(t, '去程班次 / 航班') || getVal(t, '去程班次/航班') || getVal(t, '去程班次／航班');
-        if (hasVal(outFlight)) {
-            html += `<div class="info-row"><span>去程班次</span><span>${outFlight}</span></div>`;
-        }
-
-        const outDate = getVal(t, '出發日期');
-        const outDep = getVal(t, '去程出發時間');
-        const outArr = getVal(t, '去程抵達時間');
-        
-        if (hasVal(outDate)) {
-            html += `<div class="info-row"><span>日期時間</span><span>${formatDate(outDate).substring(5)}</span></div>`;
-            if (hasVal(outDep) || hasVal(outArr)) {
-                html += `<div class="info-row"><span></span><span>${outDep || '--:--'} 出發 - ${outArr || '--:--'} 抵達</span></div>`;
-            }
-        } else if (hasVal(outDep) || hasVal(outArr)) {
-            html += `<div class="info-row"><span>日期時間</span><span>${outDep || '--:--'} 出發 - ${outArr || '--:--'} 抵達</span></div>`;
-        }
-
-        // === 回程資訊排版 ===
-        const inFlight = getVal(t, '回程班次 / 航班') || getVal(t, '回程班次/航班') || getVal(t, '回程班次／航班');
-        if (hasVal(inFlight)) {
-            html += `<div class="info-row"><span>回程班次</span><span>${inFlight}</span></div>`;
-        }
-
-        const inDate = getVal(t, '回程日期');
-        const inDep = getVal(t, '回程出發時間');
-        const inArr = getVal(t, '回程抵達時間');
-        
-        if (hasVal(inDate)) {
-            html += `<div class="info-row"><span>日期時間</span><span>${formatDate(inDate).substring(5)}</span></div>`;
-            if (hasVal(inDep) || hasVal(inArr)) {
-                html += `<div class="info-row"><span></span><span>${inDep || '--:--'} 出發 - ${inArr || '--:--'} 抵達</span></div>`;
-            }
-        } else if (hasVal(inDep) || hasVal(inArr)) {
-            html += `<div class="info-row"><span>日期時間</span><span>${inDep || '--:--'} 出發 - ${inArr || '--:--'} 抵達</span></div>`;
-        }
-
-        const tFee = getVal(t, '票價或油資');
-        if (hasVal(tFee)) {
-            html += renderPriceRow('費用', tFee, getVal(t, '付款人'), getVal(t, '付款方式'), getVal(t, '狀態'));
-        }
+    const trans = dbData['交通'].filter(t => getVal(t, '行程代碼') === code);
+    if(trans.length) {
+        html += `<div class="info-section"><div class="info-title">交通</div>`;
+        trans.forEach(t => html += `<div class="info-card" style="border-left-color:#2ecc71;"><b>${getVal(t,'類型')}</b><br>${getVal(t,'去程')||'自駕'} | $${getVal(t,'票價或油資')}</div>`);
         html += `</div>`;
-      });
-      html += `</div>`;
     }
 
-    const bills = dbData['帳務明細'] ? dbData['帳務明細'].filter(b => getVal(b, '行程代碼') === code) : [];
-    if (bills.length > 0) {
-      html += `<div class="info-section"><div class="info-title">帳務明細</div>`;
-      bills.forEach(b => {
-        html += `<div class="info-card bill-card">
-                   <div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px; text-align:left;">${getVal(b, '項目名稱') || '-'}</span></div>`;
-        
-        const bFee = getVal(b, '金額');
-        if (hasVal(bFee)) {
-            html += renderPriceRow('金額', bFee, getVal(b, '付款人'), undefined, getVal(b, '付款狀態'));
-        }
-        
-        const bNote = getVal(b, '備註');
-        if (hasVal(bNote)) {
-            html += `<div style="margin-top:8px; font-size:13px; color:#666;">備註：${bNote}</div>`;
-        }
+    const bills = dbData['帳務明細'].filter(b => getVal(b, '行程代碼') === code);
+    if(bills.length) {
+        html += `<div class="info-section"><div class="info-title">雜項明細</div>`;
+        bills.forEach(b => html += `<div class="info-card" style="border-left-color:#9b59b6;">${getVal(b,'項目名稱')}：$${getVal(b,'金額')}</div>`);
         html += `</div>`;
-      });
-      html += `</div>`;
     }
 
-    const eNote = getVal(event, '備註');
-    if (hasVal(eNote)) {
-      html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card note-card">${eNote}</div></div>`;
-    }
+    // 本場行程結算
+    const total = calculateEventTotal(code);
+    html += `<div class="event-settle-card"><div class="settle-label">本場行程結算</div><div class="settle-val">$${total.toLocaleString()}</div></div>`;
     
     return html;
   }
