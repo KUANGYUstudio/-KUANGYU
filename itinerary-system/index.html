@@ -17,9 +17,21 @@
     }
 
     body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); min-height: 100vh; }
-    .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 40px 20px; box-sizing: border-box; text-align: center; }
+    .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 30px 20px; box-sizing: border-box; text-align: center; }
     .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 5px; }
-    .header-subtitle { font-size: 16px; margin-bottom: 40px; color: var(--text-sub); font-weight: 400; letter-spacing: 1px; }
+    .header-subtitle { font-size: 16px; margin-bottom: 20px; color: var(--text-sub); font-weight: 400; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; }
+
+    /* 儀表板樣式 */
+    .dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; padding: 0 5px; }
+    .dash-card { background: #fff; border: 1px solid #eee; border-radius: 15px; padding: 15px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+    .dash-label { font-size: 12px; color: #7f8c8d; font-weight: bold; margin-bottom: 5px; }
+    .dash-value { font-size: 20px; font-weight: 800; color: var(--brand-main); }
+    .dash-value.alert { color: #e67e22; }
+
+    /* 篩選器樣式 */
+    .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 30px; padding: 0 5px; }
+    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; color: #7f8c8d; transition: 0.3s; }
+    .filter-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); }
 
     .month-section { margin-bottom: 40px; text-align: left; }
     .month-title { font-weight: 800; font-size: 24px; margin: 0 0 20px; color: var(--text-main); padding-left: 5px; }
@@ -111,13 +123,31 @@
 
   <div class="container">
     <div class="header-title">光聿 KUANGYU</div>
-    <div class="header-subtitle">行程總覽系統</div>
+    <div class="header-subtitle">
+        行程總覽系統 
+        <span onclick="location.reload()" style="cursor:pointer; font-size:12px; background:#e0f2f1; color:#00838f; padding:4px 10px; border-radius:15px; margin-left:10px; font-weight:bold; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">↻ 重新整理</span>
+    </div>
+
+    <div class="dashboard">
+        <div class="dash-card">
+            <div class="dash-label">行程總預算</div>
+            <div id="total-budget" class="dash-value">$0</div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-label">尚待支付總額</div>
+            <div id="unpaid-sum" class="dash-value alert">$0</div>
+        </div>
+    </div>
+
+    <div id="filter-container" class="filter-bar"></div>
+
     <div id="calendar-container"></div>
   </div>
 
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
   let dbData = {};
+  let currentFilter = '全部';
 
   window.onload = initSystem;
 
@@ -128,16 +158,64 @@
       dbData = await res.json();
       
       if (!dbData['行程']) {
-          document.getElementById('loading-text').innerHTML = "找不到「行程」資料！<br><br>請確認：<br>1. Google Sheets 分頁名稱是「行程」<br>2. Apps Script 有重新部署為「新版本」";
+          document.getElementById('loading-text').innerHTML = "資料讀取異常";
           return;
       }
       
-      renderCalendar();
+      renderDashboard(); // 計算財務狀況
+      renderFilters(); // 產生類別按鈕
+      renderCalendar(); // 畫出日曆
       document.getElementById('loading').style.display = 'none';
     } catch (e) {
       console.error(e);
       document.getElementById('loading-text').innerHTML = "資料讀取失敗，請確認 API 設定與網路連線。";
     }
+  }
+
+  // 計算全站財務數據
+  function renderDashboard() {
+      let totalBudget = 0;
+      let unpaidSum = 0;
+
+      const sheets = ['行程', '住宿', '交通', '帳務明細'];
+      const feeKeys = ['報名費總額', '費用', '票價或油資', '金額'];
+      const statusKeys = ['狀態', '狀態', '狀態', '付款狀態'];
+
+      sheets.forEach((name, idx) => {
+          if (dbData[name]) {
+              dbData[name].forEach(row => {
+                  let f = parseFloat(getVal(row, feeKeys[idx])) || 0;
+                  let s = getVal(row, statusKeys[idx]);
+                  totalBudget += f;
+                  if (s !== '已付' && s !== '現場付' && s !== '-' && s !== '無' && f > 0) {
+                      unpaidSum += f;
+                  }
+              });
+          }
+      });
+
+      document.getElementById('total-budget').textContent = '$' + totalBudget.toLocaleString();
+      document.getElementById('unpaid-sum').textContent = '$' + unpaidSum.toLocaleString();
+  }
+
+  // 產生篩選按鈕
+  function renderFilters() {
+      const container = document.getElementById('filter-container');
+      const races = dbData['行程'];
+      const categories = ['全部', ...new Set(races.map(r => getVal(r, '行程類別')).filter(c => c))];
+      
+      container.innerHTML = '';
+      categories.forEach(cat => {
+          const btn = document.createElement('button');
+          btn.className = `filter-btn ${cat === currentFilter ? 'active' : ''}`;
+          btn.textContent = cat;
+          btn.onclick = () => {
+              currentFilter = cat;
+              renderFilters();
+              renderCalendar();
+          };
+          container.appendChild(btn);
+      });
   }
 
   function getVal(obj, keyName) {
@@ -166,45 +244,28 @@
 
   function renderPriceRow(feeLabel, feeVal, payer, method, status) {
       if (!hasVal(feeVal)) return '';
-
       let p = hasVal(payer) ? String(payer).trim() : '-';
       let m = method !== undefined && hasVal(method) ? String(method).trim() : null;
       let s = hasVal(status) ? String(status).trim() : '-';
-
-      if (p === '無') p = '-';
-      if (m === '無') m = '-';
-      if (s === '無') s = '-';
-
-      let pmText = "";
-      if (m === null) {
-          pmText = p; 
-      } else {
-          if (p === '-' && m === '-') {
-              pmText = '-';
-          } else {
-              pmText = `${p} / ${m}`;
-          }
-      }
-
+      if (p === '無') p = '-'; if (m === '無') m = '-'; if (s === '無') s = '-';
+      let pmText = m === null ? p : (p === '-' && m === '-' ? '-' : `${p} / ${m}`);
       let statusClass = s === '已付' ? 'paid' : '';
       let statusHtml = `<span class="status-tag ${statusClass}">${s}</span>`;
-
       let extraStyle = feeLabel === '金額' ? 'style="margin-top:0; border-top:none; padding-top:0;"' : '';
-
-      return `<div class="price-row" ${extraStyle}>
-                 <div class="price-amount"><span style="color:#7f8c8d;">${feeLabel}</span><span class="price-tag">$${feeVal}</span></div>
-                 <div class="payment-details">
-                     <span>${pmText}</span>
-                     ${statusHtml}
-                 </div>
-               </div>`;
+      return `<div class="price-row" ${extraStyle}><div class="price-amount"><span style="color:#7f8c8d;">${feeLabel}</span><span class="price-tag">$${feeVal}</span></div><div class="payment-details"><span>${pmText}</span>${statusHtml}</div></div>`;
   }
 
   function renderCalendar() {
     const container = document.getElementById('calendar-container');
-    const races = dbData['行程'];
+    let races = dbData['行程'];
+    
+    // 套用篩選
+    if (currentFilter !== '全部') {
+        races = races.filter(r => getVal(r, '行程類別') === currentFilter);
+    }
+
     if (!races || races.length === 0) {
-      container.innerHTML = '<div style="color:#999; margin-top:50px;">目前尚無行程紀錄</div>';
+      container.innerHTML = '<div style="color:#999; margin-top:50px;">查無此類別的行程</div>';
       return;
     }
 
@@ -214,12 +275,8 @@
       if(dStr) monthSet.add(dStr.substring(0, 7));
     });
 
-    if (monthSet.size === 0) {
-      container.innerHTML = '<div style="color:#999; margin-top:50px;">找不到有效的日期格式</div>';
-      return;
-    }
-
     const sortedMonths = Array.from(monthSet).sort();
+    container.innerHTML = '';
     sortedMonths.forEach(mKey => {
       const [y, m] = mKey.split('-');
       renderMonth(parseInt(y), parseInt(m), container, races);
@@ -240,15 +297,12 @@
     grid.className = 'calendar-grid';
     const firstDay = new Date(year, month - 1, 1).getDay();
     const lastDate = new Date(year, month, 0).getDate();
-
     for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
-
     for (let d = 1; d <= lastDate; d++) {
       const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
       const cell = document.createElement('div');
       cell.className = 'day';
       cell.innerHTML = `<span class="day-number">${d}</span>`;
-
       const event = races.find(r => formatDate(getVal(r, '日期')) === dateStr);
       if (event) {
         const cat = getVal(event, '行程類別') ? String(getVal(event, '行程類別')).trim() : '';
@@ -266,78 +320,44 @@
   let currentSelectedCell = null;
 
   function handleDayClick(dateStr, event, cell, grid) {
-    if (currentSelectedCell) {
-      currentSelectedCell.classList.remove('selected');
-      currentSelectedCell.style.backgroundColor = '';
-    }
-
-    if (currentSelectedCell === cell && currentOpenPanel) {
-      closeCurrentPanel();
-      currentSelectedCell = null;
-      return;
-    }
-
+    if (currentSelectedCell) { currentSelectedCell.classList.remove('selected'); currentSelectedCell.style.backgroundColor = ''; }
+    if (currentSelectedCell === cell && currentOpenPanel) { closeCurrentPanel(); currentSelectedCell = null; return; }
     currentSelectedCell = cell;
     cell.classList.add('selected');
     const cat = getVal(event, '行程類別') ? String(getVal(event, '行程類別')).trim() : '';
     const color = cat ? getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`) : '#333';
-    cell.style.backgroundColor = color;
-    cell.style.borderColor = color;
-
+    cell.style.backgroundColor = color; cell.style.borderColor = color;
     if (currentOpenPanel) closeCurrentPanel();
-
     const panel = document.createElement('div');
     panel.className = 'detail-panel';
     panel.innerHTML = generateDetailHTML(event);
-
     const cells = Array.from(grid.children);
     const index = cells.indexOf(cell);
     const rowEnd = Math.min(cells.length - 1, index + (6 - (index % 7)));
-    
     grid.insertBefore(panel, cells[rowEnd].nextSibling);
     setTimeout(() => panel.classList.add('open'), 10);
     currentOpenPanel = panel;
   }
 
-  function closeCurrentPanel() {
-    if (currentOpenPanel) {
-      const p = currentOpenPanel;
-      p.classList.remove('open');
-      setTimeout(() => p.remove(), 400);
-      currentOpenPanel = null;
-    }
-  }
+  function closeCurrentPanel() { if (currentOpenPanel) { const p = currentOpenPanel; p.classList.remove('open'); setTimeout(() => p.remove(), 400); currentOpenPanel = null; } }
 
   function generateDetailHTML(event) {
     const code = getVal(event, '行程代碼');
     const cat = getVal(event, '行程類別');
-    
-    let html = `<div class="detail-header">
-                  <div>
-                    <div class="detail-race-name">${getVal(event, '行程名稱') || '未命名行程'}</div>
-                    <div class="detail-race-date">日期：${formatDate(getVal(event, '日期'))}</div>
-                  </div>`;
-    if (hasVal(getVal(event, '行程連結'))) {
-        html += `<a href="${getVal(event, '行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>`;
-    }
+    let html = `<div class="detail-header"><div><div class="detail-race-name">${getVal(event, '行程名稱') || '未命名行程'}</div><div class="detail-race-date">日期：${formatDate(getVal(event, '日期'))}</div></div>`;
+    if (hasVal(getVal(event, '行程連結'))) { html += `<a href="${getVal(event, '行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>`; }
     html += `</div>`;
 
     const yuFan = getVal(event, '聿凡項目');
     const guangWu = getVal(event, '光武項目');
     const fee = getVal(event, '報名費總額');
-
     let sectionTitle = (cat === "旅遊" || cat === "活動" || cat === "移地訓練") ? "行程與報名" : "賽事與報名";
 
-    let hasSignup = hasVal(yuFan) || hasVal(guangWu) || hasVal(fee);
-    if (hasSignup) {
+    if (hasVal(yuFan) || hasVal(guangWu) || hasVal(fee)) {
       html += `<div class="info-section"><div class="info-title">${sectionTitle}</div><div class="info-card race-card">`;
-      
       if (hasVal(yuFan)) html += `<div class="info-row"><span>聿凡</span><span>${yuFan}</span></div>`;
       if (hasVal(guangWu)) html += `<div class="info-row"><span>光武</span><span>${guangWu}</span></div>`;
-      
-      if (hasVal(fee)) {
-          html += renderPriceRow('費用', fee, getVal(event, '付款人'), getVal(event, '付款方式'), getVal(event, '狀態'));
-      }
+      if (hasVal(fee)) html += renderPriceRow('費用', fee, getVal(event, '付款人'), getVal(event, '付款方式'), getVal(event, '狀態'));
       html += `</div></div>`;
     }
 
@@ -345,55 +365,23 @@
     if (stays.length > 0) {
       html += `<div class="info-section"><div class="info-title">住宿資訊</div>`;
       stays.forEach(s => {
-        html += `<div class="info-card stay-card">
-                  <div class="info-row highlight" style="justify-content: space-between;">
-                    <span style="color:#333; font-size:16px; text-align:left;">${getVal(s, '飯店名稱') || '-'}</span>`;
+        html += `<div class="info-card stay-card"><div class="info-row highlight" style="justify-content: space-between;"><span style="color:#333; font-size:16px; text-align:left;">${getVal(s, '飯店名稱') || '-'}</span>`;
         if (hasVal(getVal(s, '連結'))) html += `<a href="${getVal(s, '連結')}" target="_blank" style="font-size:12px; background:#e0f2f1; color:#00838f; padding:4px 10px; border-radius:15px; text-decoration:none; font-weight:bold; min-width:auto;">查看地圖 >></a>`;
         html += ` </div>`;
-        
-        const inDate = getVal(s, '入住日期');
-        const inTime = getVal(s, '入住時間');
-        let inStr = "";
-        
-        if (hasVal(inDate)) {
-            inStr += formatDate(inDate).substring(5);
-        }
-        if (hasVal(inTime)) {
-            if (inStr) inStr += " | ";
-            inStr += inTime;
-        }
-        if (inStr.trim()) {
-            html += `<div class="info-row"><span>入住資訊</span><span>${inStr.trim()}</span></div>`;
-        }
-
-        const outDate = getVal(s, '退房日期');
-        const outTime = getVal(s, '退房時間');
-        let outStr = "";
-        
-        if (hasVal(outDate)) {
-            outStr += formatDate(outDate).substring(5);
-        }
-        if (hasVal(outTime)) {
-            if (outStr) outStr += " | ";
-            outStr += outTime;
-        }
-        if (outStr.trim()) {
-            html += `<div class="info-row"><span>退房資訊</span><span>${outStr.trim()}</span></div>`;
-        }
-        
+        const inDate = getVal(s, '入住日期'), inTime = getVal(s, '入住時間');
+        let inStr = hasVal(inDate) ? formatDate(inDate).substring(5) : "";
+        if (hasVal(inTime)) inStr += (inStr ? " | " : "") + inTime;
+        if (inStr.trim()) html += `<div class="info-row"><span>入住資訊</span><span>${inStr.trim()}</span></div>`;
+        const outDate = getVal(s, '退房日期'), outTime = getVal(s, '退房時間');
+        let outStr = hasVal(outDate) ? formatDate(outDate).substring(5) : "";
+        if (hasVal(outTime)) outStr += (outStr ? " | " : "") + outTime;
+        if (outStr.trim()) html += `<div class="info-row"><span>退房資訊</span><span>${outStr.trim()}</span></div>`;
         const platform = getVal(s, '訂房平台');
         if(hasVal(platform)) html += `<div class="info-row"><span>平台</span><span>${platform}</span></div>`;
-        
         const sFee = getVal(s, '費用');
-        if (hasVal(sFee)) {
-            html += renderPriceRow('費用', sFee, getVal(s, '付款人'), getVal(s, '付款方式'), getVal(s, '狀態'));
-        }
-
+        if (hasVal(sFee)) html += renderPriceRow('費用', sFee, getVal(s, '付款人'), getVal(s, '付款方式'), getVal(s, '狀態'));
         const sNote = getVal(s, '備註');
-        if (hasVal(sNote)) {
-            html += `<div style="margin-top:8px; font-size:13px; color:#666;">備註：${sNote}</div>`;
-        }
-
+        if (hasVal(sNote)) html += `<div style="margin-top:8px; font-size:13px; color:#666;">備註：${sNote}</div>`;
         html += `</div>`;
       });
       html += `</div>`;
@@ -403,51 +391,19 @@
     if (trans.length > 0) {
       html += `<div class="info-section"><div class="info-title">交通安排</div>`;
       trans.forEach(t => {
-        html += `<div class="info-card trans-card">
-                   <div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px; text-align:left;">${getVal(t, '類型') || '-'}</span></div>`;
-        
-        // === 去程資訊排版 ===
-        const outFlight = getVal(t, '去程班次 / 航班') || getVal(t, '去程班次/航班') || getVal(t, '去程班次／航班');
-        if (hasVal(outFlight)) {
-            html += `<div class="info-row"><span>去程班次</span><span>${outFlight}</span></div>`;
-        }
-
-        const outDate = getVal(t, '出發日期');
-        const outDep = getVal(t, '去程出發時間');
-        const outArr = getVal(t, '去程抵達時間');
-        
-        if (hasVal(outDate)) {
-            html += `<div class="info-row"><span>日期時間</span><span>${formatDate(outDate).substring(5)}</span></div>`;
-            if (hasVal(outDep) || hasVal(outArr)) {
-                html += `<div class="info-row"><span></span><span>${outDep || '--:--'} 出發 - ${outArr || '--:--'} 抵達</span></div>`;
-            }
-        } else if (hasVal(outDep) || hasVal(outArr)) {
-            html += `<div class="info-row"><span>日期時間</span><span>${outDep || '--:--'} 出發 - ${outArr || '--:--'} 抵達</span></div>`;
-        }
-
-        // === 回程資訊排版 ===
-        const inFlight = getVal(t, '回程班次 / 航班') || getVal(t, '回程班次/航班') || getVal(t, '回程班次／航班');
-        if (hasVal(inFlight)) {
-            html += `<div class="info-row"><span>回程班次</span><span>${inFlight}</span></div>`;
-        }
-
-        const inDate = getVal(t, '回程日期');
-        const inDep = getVal(t, '回程出發時間');
-        const inArr = getVal(t, '回程抵達時間');
-        
-        if (hasVal(inDate)) {
-            html += `<div class="info-row"><span>日期時間</span><span>${formatDate(inDate).substring(5)}</span></div>`;
-            if (hasVal(inDep) || hasVal(inArr)) {
-                html += `<div class="info-row"><span></span><span>${inDep || '--:--'} 出發 - ${inArr || '--:--'} 抵達</span></div>`;
-            }
-        } else if (hasVal(inDep) || hasVal(inArr)) {
-            html += `<div class="info-row"><span>日期時間</span><span>${inDep || '--:--'} 出發 - ${inArr || '--:--'} 抵達</span></div>`;
-        }
-
+        html += `<div class="info-card trans-card"><div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px; text-align:left;">${getVal(t, '類型') || '-'}</span></div>`;
+        const outFlight = getVal(t, '去程班次 / 航班') || getVal(t, '去程班次/航班');
+        if (hasVal(outFlight)) html += `<div class="info-row"><span>去程班次</span><span>${outFlight}</span></div>`;
+        const outDate = getVal(t, '出發日期'), outDep = getVal(t, '去程出發時間'), outArr = getVal(t, '去程抵達時間');
+        if (hasVal(outDate)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(outDate).substring(5)}</span></div>`;
+        if (hasVal(outDep) || hasVal(outArr)) html += `<div class="info-row"><span></span><span>${outDep || '--:--'} 出發 - ${outArr || '--:--'} 抵達</span></div>`;
+        const inFlight = getVal(t, '回程班次 / 航班') || getVal(t, '回程班次/航班');
+        if (hasVal(inFlight)) html += `<div class="info-row"><span>回程班次</span><span>${inFlight}</span></div>`;
+        const inDate = getVal(t, '回程日期'), inDep = getVal(t, '回程出發時間'), inArr = getVal(t, '回程抵達時間');
+        if (hasVal(inDate)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(inDate).substring(5)}</span></div>`;
+        if (hasVal(inDep) || hasVal(inArr)) html += `<div class="info-row"><span></span><span>${inDep || '--:--'} 出發 - ${inArr || '--:--'} 抵達</span></div>`;
         const tFee = getVal(t, '票價或油資');
-        if (hasVal(tFee)) {
-            html += renderPriceRow('費用', tFee, getVal(t, '付款人'), getVal(t, '付款方式'), getVal(t, '狀態'));
-        }
+        if (hasVal(tFee)) html += renderPriceRow('費用', tFee, getVal(t, '付款人'), getVal(t, '付款方式'), getVal(t, '狀態'));
         html += `</div>`;
       });
       html += `</div>`;
@@ -457,28 +413,18 @@
     if (bills.length > 0) {
       html += `<div class="info-section"><div class="info-title">帳務明細</div>`;
       bills.forEach(b => {
-        html += `<div class="info-card bill-card">
-                   <div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px; text-align:left;">${getVal(b, '項目名稱') || '-'}</span></div>`;
-        
+        html += `<div class="info-card bill-card"><div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px; text-align:left;">${getVal(b, '項目名稱') || '-'}</span></div>`;
         const bFee = getVal(b, '金額');
-        if (hasVal(bFee)) {
-            html += renderPriceRow('金額', bFee, getVal(b, '付款人'), undefined, getVal(b, '付款狀態'));
-        }
-        
+        if (hasVal(bFee)) html += renderPriceRow('金額', bFee, getVal(b, '付款人'), undefined, getVal(b, '付款狀態'));
         const bNote = getVal(b, '備註');
-        if (hasVal(bNote)) {
-            html += `<div style="margin-top:8px; font-size:13px; color:#666;">備註：${bNote}</div>`;
-        }
+        if (hasVal(bNote)) html += `<div style="margin-top:8px; font-size:13px; color:#666;">備註：${bNote}</div>`;
         html += `</div>`;
       });
       html += `</div>`;
     }
 
     const eNote = getVal(event, '備註');
-    if (hasVal(eNote)) {
-      html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card note-card">${eNote}</div></div>`;
-    }
-    
+    if (hasVal(eNote)) { html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card note-card">${eNote}</div></div>`; }
     return html;
   }
 </script>
