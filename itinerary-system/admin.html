@@ -27,6 +27,8 @@
         .input-group input:focus, .input-group select:focus { border-color: var(--brand-action); box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
         .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--brand-action); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3); transition: 0.3s; }
         .status-msg { display: none; text-align: center; margin-top: 15px; font-size: 14px; font-weight: bold; padding: 10px; border-radius: 10px; }
+        .group-box { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #e1e5ea; margin-bottom: 18px; }
+        .group-title { font-weight: bold; color: var(--brand-action); margin-bottom: 12px; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -86,11 +88,23 @@
     <div id="form-交通" class="form-section">
         <div class="input-group"><label>行程代碼</label><select class="code-selector" id="交通-代碼"></select></div>
         <div class="input-group"><label>類型</label><select id="交通-類型"><option>自駕</option><option>火車</option><option>班機</option></select></div>
-        <div class="input-group"><label>去程班次／航班</label><input type="text" id="交通-去程"></div>
-        <div class="input-group"><label>回程班次／航班</label><input type="text" id="交通-回程"></div>
-        <div class="input-group"><label>出發日期</label><input type="date" id="交通-日期"></div>
-        <div class="input-group"><label>出發時間</label><input type="text" id="交通-出發" placeholder="08:30"></div>
-        <div class="input-group"><label>抵達時間</label><input type="text" id="交通-抵達" placeholder="10:45"></div>
+        
+        <div class="group-box">
+            <div class="group-title">去程資訊</div>
+            <div class="input-group"><label>出發日期</label><input type="date" id="交通-出發日期"></div>
+            <div class="input-group"><label>去程班次 / 航班</label><input type="text" id="交通-去程"></div>
+            <div class="input-group"><label>去程出發時間</label><input type="text" id="交通-去程出發" placeholder="例如 08:30"></div>
+            <div class="input-group" style="margin-bottom: 0;"><label>去程抵達時間</label><input type="text" id="交通-去程抵達" placeholder="例如 10:45"></div>
+        </div>
+
+        <div class="group-box">
+            <div class="group-title">回程資訊</div>
+            <div class="input-group"><label>回程日期</label><input type="date" id="交通-回程日期"></div>
+            <div class="input-group"><label>回程班次 / 航班</label><input type="text" id="交通-回程"></div>
+            <div class="input-group"><label>回程出發時間</label><input type="text" id="交通-回程出發" placeholder="例如 14:30"></div>
+            <div class="input-group" style="margin-bottom: 0;"><label>回程抵達時間</label><input type="text" id="交通-回程抵達" placeholder="例如 16:45"></div>
+        </div>
+
         <div class="input-group"><label>票價或油資</label><input type="number" id="交通-費用"></div>
         <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿凡</option><option>光武</option></select></div>
         <div class="input-group"><label>付款方式</label><input type="text" id="交通-方式" placeholder="例如：刷卡、現金"></div>
@@ -119,10 +133,7 @@
     function refreshItineraryCodes() {
         const fetchUrl = API_URL + "?t=" + new Date().getTime(); 
         fetch(fetchUrl).then(res => res.json()).then(data => {
-            if (!data['行程']) {
-                console.error("找不到 '行程' 資料，請確認 Apps Script 已發佈新版本。");
-                return;
-            }
+            if (!data['行程']) return;
             const codes = data['行程'].map(item => item['行程代碼']).filter(c => c);
             const uniqueCodes = [...new Set(codes)];
             document.querySelectorAll('.code-selector').forEach(select => {
@@ -146,11 +157,7 @@
     function togglePlatformInput() {
         const select = document.getElementById('住宿-平台');
         const otherInput = document.getElementById('住宿-平台-其他');
-        if (select.value === '其他') {
-            otherInput.style.display = 'block';
-        } else {
-            otherInput.style.display = 'none';
-        }
+        otherInput.style.display = select.value === '其他' ? 'block' : 'none';
     }
 
     function submitData(sheetName) {
@@ -164,13 +171,26 @@
         } else if (sheetName === '住宿') {
             eventCode = document.getElementById('住宿-代碼').value;
             let platformVal = document.getElementById('住宿-平台').value;
-            if (platformVal === '其他') {
-                platformVal = document.getElementById('住宿-平台-其他').value;
-            }
+            if (platformVal === '其他') platformVal = document.getElementById('住宿-平台-其他').value;
             rowData = [eventCode, document.getElementById('住宿-飯店').value, document.getElementById('住宿-入住').value, document.getElementById('住宿-退房').value, platformVal, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-方式').value, document.getElementById('住宿-狀態').value, document.getElementById('住宿-連結').value, document.getElementById('住宿-備註').value];
         } else if (sheetName === '交通') {
             eventCode = document.getElementById('交通-代碼').value;
-            rowData = [eventCode, document.getElementById('交通-類型').value, document.getElementById('交通-去程').value, document.getElementById('交通-回程').value, document.getElementById('交通-日期').value, document.getElementById('交通-出發').value, document.getElementById('交通-抵達').value, document.getElementById('交通-費用').value, document.getElementById('交通-付款人').value, document.getElementById('交通-方式').value, document.getElementById('交通-狀態').value];
+            rowData = [
+                eventCode, 
+                document.getElementById('交通-類型').value, 
+                document.getElementById('交通-出發日期').value,
+                document.getElementById('交通-去程').value, 
+                document.getElementById('交通-去程出發').value, 
+                document.getElementById('交通-去程抵達').value,
+                document.getElementById('交通-回程日期').value,
+                document.getElementById('交通-回程').value, 
+                document.getElementById('交通-回程出發').value, 
+                document.getElementById('交通-回程抵達').value,
+                document.getElementById('交通-費用').value, 
+                document.getElementById('交通-付款人').value, 
+                document.getElementById('交通-方式').value, 
+                document.getElementById('交通-狀態').value
+            ];
         } else if (sheetName === '帳務明細') {
             eventCode = document.getElementById('帳務-代碼').value;
             rowData = [eventCode, document.getElementById('帳務-項目').value, document.getElementById('帳務-金額').value, document.getElementById('帳務-付款人').value, document.getElementById('帳務-狀態').value, document.getElementById('帳務-備註').value];
@@ -193,7 +213,6 @@
                 document.getElementById('住宿-平台').selectedIndex = 0;
                 document.getElementById('住宿-平台-其他').style.display = 'none';
             }
-            
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
         }).catch(err => {
             statusDiv.style.background = '#f8d7da'; statusDiv.textContent = '儲存失敗，請檢查網路。';
