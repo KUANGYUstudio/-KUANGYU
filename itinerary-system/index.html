@@ -69,17 +69,18 @@
     .info-card.note-card { border-left: 5px solid #95a5a6; }
 
     /* 1. 垂直對齊與淡化標籤 */
-    .info-row { display: flex; justify-content: flex-start; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+    .info-row { display: flex; justify-content: flex-start; align-items: baseline; gap: 12px; margin-bottom: 8px; }
     .info-row.highlight { font-weight: bold; margin-bottom: 12px; }
     
-    .info-row > span:first-child { 
+    /* 修正劈腿問題：只針對非 highlight 的一般標籤作用 */
+    .info-row:not(.highlight) > span:first-child { 
         color: #7f8c8d; 
-        min-width: 45px; 
+        min-width: 65px; /* 加寬以容納四個字 */
         text-align: justify; 
         text-align-last: justify;
     }
     
-    .info-row > span:last-child {
+    .info-row:not(.highlight) > span:last-child {
         color: #2c3e50;
         flex: 1; 
     }
@@ -298,14 +299,14 @@
     if (hasSignup) {
       html += `<div class="info-section"><div class="info-title">${sectionTitle}</div><div class="info-card race-card">`;
       
-      if (hasVal(yuFan)) html += `<div class="info-row"><span>聿凡：</span><span>${yuFan}</span></div>`;
-      if (hasVal(guangWu)) html += `<div class="info-row"><span>光武：</span><span>${guangWu}</span></div>`;
+      if (hasVal(yuFan)) html += `<div class="info-row"><span>聿凡</span><span>${yuFan}</span></div>`;
+      if (hasVal(guangWu)) html += `<div class="info-row"><span>光武</span><span>${guangWu}</span></div>`;
       
       if (hasVal(fee)) {
           const status = getVal(event, '狀態');
           let statusClass = status === '已付' ? 'paid' : '';
           html += `<div class="price-row">
-                     <div class="price-amount"><span style="color:#7f8c8d;">費用：</span><span class="price-tag">$${fee}</span></div>
+                     <div class="price-amount"><span style="color:#7f8c8d;">費用</span><span class="price-tag">$${fee}</span></div>
                      <div class="payment-details">
                          <span>${getVal(event, '付款人') || '未定'} / ${getVal(event, '付款方式') || '-'}</span>
                          <span class="status-tag ${statusClass}">${status || '狀態未定'}</span>
@@ -325,23 +326,25 @@
         if (hasVal(getVal(s, '連結'))) html += `<a href="${getVal(s, '連結')}" target="_blank" style="font-size:12px; background:#e0f2f1; color:#00838f; padding:4px 10px; border-radius:15px; text-decoration:none; font-weight:bold; min-width:auto;">查看地圖 >></a>`;
         html += ` </div>`;
         
-        let dateStr = "";
         const inDate = getVal(s, '入住日期');
-        const outDate = getVal(s, '退房日期');
-        if (hasVal(inDate) && hasVal(outDate)) {
-            dateStr = `${formatDate(inDate).substring(5)} ~ ${formatDate(outDate).substring(5)}`;
+        if (hasVal(inDate)) {
+            html += `<div class="info-row"><span>入住日期</span><span>${formatDate(inDate).substring(5)}</span></div>`;
         }
-        if(dateStr) html += `<div class="info-row"><span>日期：</span><span>${dateStr}</span></div>`;
+
+        const outDate = getVal(s, '退房日期');
+        if (hasVal(outDate)) {
+            html += `<div class="info-row"><span>退房日期</span><span>${formatDate(outDate).substring(5)}</span></div>`;
+        }
         
         const platform = getVal(s, '訂房平台');
-        if(hasVal(platform)) html += `<div class="info-row"><span>平台：</span><span>${platform}</span></div>`;
+        if(hasVal(platform)) html += `<div class="info-row"><span>平台</span><span>${platform}</span></div>`;
         
         const sFee = getVal(s, '費用');
         if (hasVal(sFee)) {
             const sStatus = getVal(s, '狀態');
             let statusClass = sStatus === '已付' ? 'paid' : '';
             html += `<div class="price-row">
-                       <div class="price-amount"><span style="color:#7f8c8d;">費用：</span><span class="price-tag">$${sFee}</span></div>
+                       <div class="price-amount"><span style="color:#7f8c8d;">費用</span><span class="price-tag">$${sFee}</span></div>
                        <div class="payment-details">
                            <span>${getVal(s, '付款人') || '未定'} / ${getVal(s, '付款方式') || '-'}</span>
                            <span class="status-tag ${statusClass}">${sStatus || '狀態未定'}</span>
@@ -374,7 +377,7 @@
         if (hasVal(outDate)) outStr += formatDate(outDate).substring(5) + " ";
         if (hasVal(outFlight)) outStr += outFlight + " ";
         if (hasVal(outDep) || hasVal(outArr)) outStr += `(${outDep || '--:--'} - ${outArr || '--:--'})`;
-        if (outStr.trim()) html += `<div class="info-row"><span>去程：</span><span>${outStr.trim()}</span></div>`;
+        if (outStr.trim()) html += `<div class="info-row"><span>去程</span><span>${outStr.trim()}</span></div>`;
 
         const inDate = getVal(t, '回程日期');
         const inFlight = getVal(t, '回程班次 / 航班') || getVal(t, '回程班次/航班') || getVal(t, '回程班次／航班');
@@ -384,14 +387,14 @@
         if (hasVal(inDate)) inStr += formatDate(inDate).substring(5) + " ";
         if (hasVal(inFlight)) inStr += inFlight + " ";
         if (hasVal(inDep) || hasVal(inArr)) inStr += `(${inDep || '--:--'} - ${inArr || '--:--'})`;
-        if (inStr.trim()) html += `<div class="info-row"><span>回程：</span><span>${inStr.trim()}</span></div>`;
+        if (inStr.trim()) html += `<div class="info-row"><span>回程</span><span>${inStr.trim()}</span></div>`;
 
         const tFee = getVal(t, '票價或油資');
         if (hasVal(tFee)) {
             const tStatus = getVal(t, '狀態');
             let statusClass = tStatus === '已付' ? 'paid' : '';
             html += `<div class="price-row">
-                       <div class="price-amount"><span style="color:#7f8c8d;">費用：</span><span class="price-tag">$${tFee}</span></div>
+                       <div class="price-amount"><span style="color:#7f8c8d;">費用</span><span class="price-tag">$${tFee}</span></div>
                        <div class="payment-details">
                            <span>${getVal(t, '付款人') || '未定'} / ${getVal(t, '付款方式') || '-'}</span>
                            <span class="status-tag ${statusClass}">${tStatus || '狀態未定'}</span>
@@ -415,7 +418,7 @@
             const bStatus = getVal(b, '付款狀態');
             let statusClass = bStatus === '已付' ? 'paid' : '';
             html += `<div class="price-row" style="margin-top:0; border-top:none; padding-top:0;">
-                       <div class="price-amount"><span style="color:#7f8c8d;">金額：</span><span class="price-tag">$${bFee}</span></div>
+                       <div class="price-amount"><span style="color:#7f8c8d;">金額</span><span class="price-tag">$${bFee}</span></div>
                        <div class="payment-details">
                            <span>${getVal(b, '付款人') || '未定'}</span>
                            <span class="status-tag ${statusClass}">${bStatus || '狀態未定'}</span>
