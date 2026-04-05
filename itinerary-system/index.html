@@ -331,10 +331,11 @@
     if (trans.length > 0) {
       html += `<div class="info-section"><div class="info-title">交通安排</div>`;
       trans.forEach(t => {
+        // 移除了交通標題前方的 [交通] 文字
         html += `<div class="info-card trans-card">
-                   <div class="info-row highlight">[交通] ${getVal(t, '類型') || '-'}</div>`;
+                   <div class="info-row highlight">${getVal(t, '類型') || '-'}</div>`;
         
-        // 抓取去程資料
+        // 去程資料組合，並優化時間顯示格式
         const outDate = getVal(t, '出發日期');
         const outFlight = getVal(t, '去程班次 / 航班') || getVal(t, '去程班次/航班') || getVal(t, '去程班次／航班');
         const outDep = getVal(t, '去程出發時間');
@@ -342,10 +343,10 @@
         let outStr = "";
         if (hasVal(outDate)) outStr += formatDate(outDate).substring(5) + " ";
         if (hasVal(outFlight)) outStr += outFlight + " ";
-        if (hasVal(outDep) || hasVal(outArr)) outStr += `(${outDep || '--:--'} 到 ${outArr || '--:--'})`;
+        if (hasVal(outDep) || hasVal(outArr)) outStr += `(${outDep || '--:--'} - ${outArr || '--:--'})`;
         if (outStr.trim()) html += `<div class="info-row"><span>去程：</span><span>${outStr.trim()}</span></div>`;
 
-        // 抓取回程資料
+        // 回程資料組合，並優化時間顯示格式
         const inDate = getVal(t, '回程日期');
         const inFlight = getVal(t, '回程班次 / 航班') || getVal(t, '回程班次/航班') || getVal(t, '回程班次／航班');
         const inDep = getVal(t, '回程出發時間');
@@ -353,7 +354,7 @@
         let inStr = "";
         if (hasVal(inDate)) inStr += formatDate(inDate).substring(5) + " ";
         if (hasVal(inFlight)) inStr += inFlight + " ";
-        if (hasVal(inDep) || hasVal(inArr)) inStr += `(${inDep || '--:--'} 到 ${inArr || '--:--'})`;
+        if (hasVal(inDep) || hasVal(inArr)) inStr += `(${inDep || '--:--'} - ${inArr || '--:--'})`;
         if (inStr.trim()) html += `<div class="info-row"><span>回程：</span><span>${inStr.trim()}</span></div>`;
 
         const tFee = getVal(t, '票價或油資');
