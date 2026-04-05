@@ -6,16 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (原汁原味質感回歸版)
+       光聿行程美學定義 (資訊 100% 精確校對版)
        ========================================= */
     :root {
-      /* 品牌核心色 */
       --brand-blue: #1e88e5;
       --brand-pink: #f06292;
       --brand-yellow: #ffb74d;
       --brand-green: #2ecc71;
       
-      /* 藍綠色按鈕 */
       --action-button-color: #00838f;
       --action-button-bg: #e0f2f1;
 
@@ -61,11 +59,10 @@
     .view-container { display: none; text-align: left; }
     .view-container.active { display: block; }
 
-    .month-title { font-weight: 800; font-size: 22px; margin: 40px 0 20px; padding-left: 5px; }
+    .month-title { font-weight: 800; font-size: 22px; margin: 40px 0 20px; color: var(--text-main); padding-left: 5px; }
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
     .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
     
-    /* 日曆回歸原本的粗邊框與填滿設計 */
     .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: var(--card-bg); color: #cfd8dc; transition: 0.2s; border: 2px solid transparent; font-size: 18px; position: relative; }
     .day-number { position: relative; z-index: 2; }
     .day.has-event { background-color: #fff; color: #333; cursor: pointer; border-width: 2px; font-weight: 600; }
@@ -95,7 +92,6 @@
     .title-trans::before { background: var(--brand-green); }
     .title-bill::before { background: var(--brand-pink); }
 
-    /* 卡片回歸原本的乾淨白底＋左側色條 */
     .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; line-height: 1.6; color: #333; border-left: 5px solid #ddd; }
     .card-race { border-left-color: var(--brand-blue); }
     .card-stay { border-left-color: var(--brand-yellow); }
@@ -230,7 +226,19 @@
     });
   }
 
-  function getVal(obj, key) { if(!obj) return ""; return obj[Object.keys(obj).find(k => k.trim() === key)] || ""; }
+  // 強制破解 Google Sheets 欄位空格與符號問題的方法
+  function getVal(obj, key) { 
+    if(!obj) return ""; 
+    // 1. 精確匹配
+    const exactKey = Object.keys(obj).find(k => k.trim() === key);
+    if(exactKey) return obj[exactKey];
+    
+    // 2. 暴力破解匹配 (去除所有空白、統一斜線)
+    const cleanKeyToFind = key.replace(/\s+/g, '').replace('／', '/');
+    const fuzzyKey = Object.keys(obj).find(k => k.replace(/\s+/g, '').replace('／', '/') === cleanKeyToFind);
+    return fuzzyKey ? obj[fuzzyKey] : "";
+  }
+
   function hasVal(v) { return v !== "" && v !== null && v !== undefined && v !== 0 && v !== "0"; }
   function formatDate(d) { const date = new Date(d); return isNaN(date.getTime()) ? "" : `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
 
@@ -256,8 +264,7 @@
         const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`, cell = document.createElement('div'); cell.className = 'day'; cell.innerHTML = `<span class="day-number">${d}</span>`;
         const event = races.find(r => formatDate(getVal(r, '日期')) === dStr);
         if (event) {
-          cell.classList.add('has-event'); 
-          cell.style.borderColor = 'var(--cat-' + getVal(event, '行程類別') + ')';
+          cell.classList.add('has-event'); cell.style.borderColor = 'var(--cat-' + getVal(event, '行程類別') + ')';
           cell.onclick = () => handleDayClick(event, cell, grid);
         }
         grid.appendChild(cell);
@@ -288,11 +295,8 @@
     if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
     if (currentSelectedEl) { currentSelectedEl.classList.remove('selected'); currentSelectedEl.style.backgroundColor = ''; }
     currentSelectedEl = cell; cell.classList.add('selected');
-    
-    // 日曆點擊後：維持跟外框一致的顏色
     const category = getVal(event, '行程類別');
     cell.style.backgroundColor = 'var(--cat-' + category + ')';
-    
     if (currentOpenPanel) currentOpenPanel.remove();
     const panel = document.createElement('div'); panel.className = 'detail-panel'; panel.innerHTML = generateDetailHTML(event);
     const cells = Array.from(grid.children), idx = cells.indexOf(cell), rowEnd = Math.min(cells.length - 1, idx + (6 - (idx % 7)));
@@ -317,11 +321,13 @@
     const code = getVal(event, '行程代碼'), cat = getVal(event, '行程類別');
     let html = `<div class="detail-header"><div><div class="detail-race-name">${getVal(event, '行程名稱')}</div><div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div></div>${getVal(event,'行程連結')?`<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>`:''}</div>`;
     
+    // 報名資訊
     html += `<div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
     if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
     if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
     html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態')) + `</div></div>`;
 
+    // 住宿資訊
     const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
     if(stays.length > 0) {
       html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
@@ -337,12 +343,14 @@
       html += `</div>`;
     }
 
+    // 交通安排
     const trans = (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code);
     if(trans.length > 0) {
       html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
       trans.forEach(t => {
         html += `<div class="info-card card-trans"><div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>`;
         
+        // 透過修改後的 getVal 確保必定抓得到班機號碼
         const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班');
         const goD = getVal(t,'出發日期');
         const goS = getVal(t,'去程出發時間');
@@ -364,6 +372,7 @@
       html += `</div>`;
     }
 
+    // 其他帳務
     const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
     if(bills.length > 0) {
       html += `<div class="info-section"><div class="info-title title-bill">其他帳務</div>`;
