@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (資訊 100% 完整版)
+       光聿行程美學定義 (資訊 100% 完全校對版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -34,13 +34,12 @@
     .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 5px; }
     .header-subtitle { font-size: 16px; margin-bottom: 20px; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 10px; }
     
-    /* 藍綠色重新整理按鈕 */
     .refresh-btn { cursor: pointer; font-size: 14px; background: var(--action-button-bg); color: var(--action-button-color); padding: 5px 8px; border-radius: 50%; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .refresh-btn:hover { background: #b2dfdb; }
 
     .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
     .top-btns { display: flex; gap: 10px; align-items: center; }
-    .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 13px; }
+    .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     
     .view-switcher { background: #eee; border-radius: 20px; padding: 3px; display: flex; gap: 2px; }
     .view-btn { border: none; padding: 6px 15px; border-radius: 17px; cursor: pointer; font-size: 12px; font-weight: bold; color: #7f8c8d; background: transparent; }
@@ -83,22 +82,23 @@
     .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 20px; }
     .detail-race-name { font-size: 22px; font-weight: bold; color: var(--text-main); }
     
-    /* 藍綠色前往簡章按鈕 */
     .link-btn { font-size: 13px; padding: 6px 14px; background: var(--action-button-bg); color: var(--action-button-color); border-radius: 20px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.2s; }
 
     .info-section { margin-bottom: 25px; }
     .info-title { font-weight: bold; font-size: 16px; color: #7f8c8d; margin-bottom: 10px; display: flex; align-items: center; }
-    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; }
+    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; background: #ddd; }
     
+    /* 配色邏輯 */
+    .title-race::before { background: var(--brand-blue); }
+    .title-stay::before { background: var(--brand-yellow); }
+    .title-trans::before { background: var(--brand-green); }
+    .title-bill::before { background: var(--brand-pink); }
+
     .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; line-height: 1.6; color: #333; border-left: 5px solid #ddd; }
-    
-    /* 區塊配色回歸 */
-    .title-race::before, .card-race { background-color: var(--brand-blue) !important; border-left-color: var(--brand-blue) !important; }
-    .title-stay::before, .card-stay { background-color: var(--brand-yellow) !important; border-left-color: var(--brand-yellow) !important; }
-    .title-trans::before, .card-trans { background-color: var(--brand-green) !important; border-left-color: var(--brand-green) !important; }
-    .title-bill::before, .card-bill { background-color: var(--brand-pink) !important; border-left-color: var(--brand-pink) !important; }
-    
-    .info-card { background: var(--card-bg) !important; } /* 強制背景為淺灰 */
+    .card-race { border-left-color: var(--brand-blue); }
+    .card-stay { border-left-color: var(--brand-yellow); }
+    .card-trans { border-left-color: var(--brand-green); }
+    .card-bill { border-left-color: var(--brand-pink); }
 
     .info-row { display: flex; gap: 12px; margin-bottom: 8px; align-items: baseline; }
     .info-row > span:first-child { color: #7f8c8d; min-width: 65px; text-align: center; }
@@ -165,7 +165,7 @@
       renderMain();
       document.getElementById('loading').style.display = 'none';
     } catch (e) {
-      document.getElementById('loading').innerHTML = "連線失敗，請稍後再試";
+      document.getElementById('loading').innerHTML = "讀取失敗，請確認網路連線";
     }
   }
 
@@ -182,33 +182,33 @@
   function renderMain() { if (currentView === 'cal') renderCalendar(); else renderList(); }
 
   function toggleAccPanel() {
-    const p = document.getElementById('acc-panel');
-    const isVisible = p.style.display === 'block';
-    p.style.display = isVisible ? 'none' : 'block';
+    const panel = document.getElementById('acc-panel');
+    const isVisible = panel.style.display === 'block';
+    panel.style.display = isVisible ? 'none' : 'block';
     if (!isVisible) calculateAccounting();
   }
 
   function calculateAccounting() {
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
-    let catTotals = {}, itemTotals = { '報名費': 0, '住宿': 0, '交通': 0, '雜項': 0 }, grandTotal = 0;
+    let catTotals = {}, itemTotals = { '報名費': 0, '住宿': 0, '交通': 0, '其他': 0 }, grandTotal = 0;
     races.forEach(r => {
       const code = getVal(r, '行程代碼'), cat = getVal(r, '行程類別'), sum = calculateEventTotal(code);
       catTotals[cat] = (catTotals[cat] || 0) + sum; grandTotal += sum;
       itemTotals['報名費'] += parseFloat(getVal(r, '報名費總額')) || 0;
       (dbData['住宿']||[]).filter(s => getVal(s,'行程代碼')===code).forEach(s => itemTotals['住宿'] += parseFloat(getVal(s,'費用')) || 0);
       (dbData['交通']||[]).filter(t => getVal(t,'行程代碼')===code).forEach(t => itemTotals['交通'] += parseFloat(getVal(t,'票價或油資')) || 0);
-      (dbData['帳務明細']||[]).filter(b => getVal(b,'行程代碼')===code).forEach(b => itemTotals['雜項'] += parseFloat(getVal(b,'金額')) || 0);
+      (dbData['帳務明細']||[]).filter(b => getVal(b,'行程代碼')===code).forEach(b => itemTotals['其他'] += parseFloat(getVal(b,'金額')) || 0);
     });
-    const cGrid = document.getElementById('acc-cat-grid'); cGrid.innerHTML = '';
-    Object.entries(catTotals).forEach(([k, v]) => cGrid.innerHTML += `<div class="acc-card"><label>${k}</label><span class="acc-val">$${v.toLocaleString()}</span></div>`);
-    const iGrid = document.getElementById('acc-item-grid'); iGrid.innerHTML = '';
-    Object.entries(itemTotals).forEach(([k, v]) => iGrid.innerHTML += `<div class="acc-card"><label>${k}總結</label><span class="acc-val">$${v.toLocaleString()}</span></div>`);
+    const catGrid = document.getElementById('acc-cat-grid'); catGrid.innerHTML = '';
+    Object.entries(catTotals).forEach(([k, v]) => catGrid.innerHTML += `<div class="acc-card"><label>${k}</label><span class="acc-val">$${v.toLocaleString()}</span></div>`);
+    const itemGrid = document.getElementById('acc-item-grid'); itemGrid.innerHTML = '';
+    Object.entries(itemTotals).forEach(([k, v]) => itemGrid.innerHTML += `<div class="acc-card"><label>${k}總結</label><span class="acc-val">$${v.toLocaleString()}</span></div>`);
     document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
   }
 
   function calculateEventTotal(code) {
-    let sum = 0; const r = dbData['行程'].find(i => getVal(i, '行程代碼') === code);
-    if (r) sum += parseFloat(getVal(r, '報名費總額')) || 0;
+    let sum = 0; const race = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
+    if (race) sum += parseFloat(getVal(race, '報名費總額')) || 0;
     (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code).forEach(s => sum += parseFloat(getVal(s, '費用')) || 0);
     (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code).forEach(t => sum += parseFloat(getVal(t, '票價或油資')) || 0);
     (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code).forEach(b => sum += parseFloat(getVal(b, '金額')) || 0);
@@ -243,6 +243,7 @@
     const container = document.getElementById('calendar-container'); container.innerHTML = '';
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
     const monthKeys = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].sort();
+
     monthKeys.forEach(mKey => {
       const [y, m] = mKey.split('-');
       const section = document.createElement('div'); section.className = 'month-section';
@@ -287,7 +288,7 @@
     if (currentSelectedEl) { currentSelectedEl.classList.remove('selected'); currentSelectedEl.style.backgroundColor = ''; }
     currentSelectedEl = cell; cell.classList.add('selected');
     
-    // 直接設定外框色作為背景色
+    // 修正點擊底色：直接抓取外框色
     const category = getVal(event, '行程類別');
     cell.style.backgroundColor = 'var(--cat-' + category + ')';
     
@@ -315,19 +316,18 @@
     const code = getVal(event, '行程代碼'), cat = getVal(event, '行程類別');
     let html = `<div class="detail-header"><div><div class="detail-race-name">${getVal(event, '行程名稱')}</div><div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div></div>${getVal(event,'行程連結')?`<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>`:''}</div>`;
     
-    // 報名資訊
+    // 報名資訊 (修正欄位讀取與配色)
     html += `<div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
     if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
     if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
-    // 修正欄位 key：報名費總額, 付款人, 付款方式, 狀態
     html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態')) + `</div></div>`;
 
-    // 住宿資訊
+    // 住宿資訊 (修正標題與格式)
     const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
     if(stays.length > 0) {
       html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
       stays.forEach(s => {
-        html += `<div class="info-card card-stay"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>${getVal(s,'連結')?`<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>`:''}</div>`;
+        html += `<div class="info-card card-stay"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>${getVal(s,'連結')?`<a href="${getVal(s,'連結')}" target="_blank" style="font-size:11px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>`:''}</div>`;
         if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
         if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房時間</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
         if(getVal(s,'訂房平台')) html += `<div class="info-row"><span>平台</span><span>${getVal(s,'訂房平台')}</span></div>`;
@@ -338,32 +338,34 @@
       html += `</div>`;
     }
 
-    // 交通安排
+    // 交通安排 (完全回歸航班號碼與去回程格式)
     const trans = (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code);
     if(trans.length > 0) {
       html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
       trans.forEach(t => {
         html += `<div class="info-card card-trans"><div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>`;
         
-        // 去程
-        const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班');
+        // 去程資訊
+        const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班') || getVal(t,'去程班次／航班');
         const goD = getVal(t,'出發日期');
         const goS = getVal(t,'去程出發時間');
         const goA = getVal(t,'去程抵達時間');
+        if(hasVal(goB) || hasVal(goD) || hasVal(goS) || hasVal(goA)) {
+            if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span>${goB}</span></div>`;
+            if(hasVal(goD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(goD).substring(5)}</span></div>`;
+            if(hasVal(goS) || hasVal(goA)) html += `<div class="info-row"><span></span><span>${goS||'--:--'}出發－${goA||'--:--'}抵達</span></div>`;
+        }
         
-        if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span>${goB}</span></div>`;
-        if(hasVal(goD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(goD).substring(5)}</span></div>`;
-        if(hasVal(goS) || hasVal(goA)) html += `<div class="info-row"><span></span><span>${goS||'--:--'}出發－${goA||'--:--'}抵達</span></div>`;
-        
-        // 回程
-        const bkB = getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班');
+        // 回程資訊
+        const bkB = getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班') || getVal(t,'回程班次／航班');
         const bkD = getVal(t,'回程日期');
         const bkS = getVal(t,'回程出發時間');
         const bkA = getVal(t,'回程抵達時間');
-        
-        if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span>${bkB}</span></div>`;
-        if(hasVal(bkD)) html += `<div class="info-row" style="margin-top:2px;"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
-        if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
+        if(hasVal(bkB) || hasVal(bkD) || hasVal(bkS) || hasVal(bkA)) {
+            if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span>${bkB}</span></div>`;
+            if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
+            if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
+        }
         
         html += renderPriceRow('費用', getVal(t,'費用'), getVal(t,'付款人'), getVal(t,'付款方式'), getVal(t,'狀態')) + `</div>`;
       });
@@ -375,14 +377,12 @@
     if(bills.length > 0) {
       html += `<div class="info-section"><div class="info-title title-bill">其他帳務</div>`;
       bills.forEach(b => {
-        html += `<div class="info-card card-bill"><div style="font-weight:bold;margin-bottom:8px;">${getVal(b,'項目名稱')}</div>${renderPriceRow('金額', getVal(b,'金額'), getVal(b,'付款人'), undefined, getVal(b,'付款狀態'))}`;
-        if(getVal(b,'備註')) html += `<div style="font-size:12px;color:#666;margin-top:5px;">備註：${getVal(b,'備註')}</div>`;
-        html += `</div>`;
+        html += `<div class="info-card card-bill"><div style="font-weight:bold;margin-bottom:8px;">${getVal(b,'項目名稱')}</div>${renderPriceRow('金額', getVal(b,'金額'), getVal(b,'付款人'), undefined, getVal(b,'付款狀態'))}${getVal(b,'備註')?`<div style="font-size:13px;color:#666;margin-top:8px;">備註：${getVal(b,'備註')}</div>`:''}</div>`;
       });
       html += `</div>`;
     }
 
-    if(getVal(event,'備註')) html += `<div class="info-section"><div class="info-title">備註</div><div class="info-card" style="border-left-color:#95a5a6;">${getVal(event,'備註')}</div></div>`;
+    if(getVal(event,'備註')) html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card" style="border-left-color:#95a5a6;">${getVal(event,'備註')}</div></div>`;
     html += `<div class="event-settle-card"><div style="font-weight:bold; color:var(--brand-pink); font-size:13px;">本場行程結算</div><div style="font-size:18px; font-weight:900; color:var(--brand-pink);">$${calculateEventTotal(code).toLocaleString()}</div></div>`;
     return html;
   }
