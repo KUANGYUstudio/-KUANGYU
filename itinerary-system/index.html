@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (資訊完整版 + 結算瘦身)
+       光聿行程美學定義 (精緻視覺優化版)
        ========================================= */
     :root {
       --cat-鐵人: #4169E1; --cat-自行車: #228B22; --cat-路跑: #D2691E;
@@ -36,22 +36,28 @@
     
     /* 篩選器 */
     .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; font-weight: bold; color: #7f8c8d; cursor: pointer; }
+    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; font-weight: bold; color: #7f8c8d; cursor: pointer; transition: 0.3s; }
     .filter-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); }
 
-    /* 日曆樣式 */
+    /* 日曆樣式 (精緻化) */
     .month-section { margin-bottom: 40px; text-align: left; }
     .month-title { font-weight: 800; font-size: 24px; margin: 0 0 20px; color: var(--text-main); padding-left: 5px; }
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-    .weekday-header { font-weight: bold; font-size: 16px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
-    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 12px; background-color: var(--card-bg); color: #cfd8dc; transition: 0.2s; border: 2px solid transparent; }
-    .day-number { font-size: 22px; font-weight: bold; }
-    .day.has-event { background-color: #fff; color: #333; cursor: pointer; border-width: 2px; }
+    .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
+    
+    .day { 
+      aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
+      border-radius: 14px; background-color: var(--card-bg); color: #cfd8dc; 
+      transition: 0.2s; border: 2px solid transparent; 
+      font-size: 18px; font-weight: 400; /* 預設字體細一點、小一點 */
+    }
+    
+    .day.has-event { background-color: #fff; color: #333; cursor: pointer; border-width: 2px; font-weight: 600; }
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important; z-index: 10; }
 
     /* 詳情面板樣式 */
     .detail-panel { grid-column: 1 / -1; background: #fff; border-radius: 16px; margin: 8px 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; }
-    .detail-panel.open { max-height: 3000px; opacity: 1; padding: 25px; border: 1px solid #eee; text-align: left; }
+    .detail-panel.open { max-height: 4000px; opacity: 1; padding: 25px; border: 1px solid #eee; text-align: left; }
     .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 20px; }
     .detail-race-name { font-size: 22px; font-weight: bold; color: var(--text-main); }
     .detail-race-date { font-size: 14px; color: var(--text-sub); margin-top: 4px; }
@@ -69,7 +75,7 @@
     .status-tag { font-size: 12px; padding: 3px 8px; border-radius: 6px; background: #eee; color: #666; font-weight: bold; }
     .status-tag.paid { background: #d4edda; color: #155724; }
 
-    /* 本場行程結算 (瘦身優化版) */
+    /* 本場行程結算 */
     .event-settle-card { background: #fff8f0; border: 1.5px solid #ff9f43; padding: 10px 15px; border-radius: 12px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
     .settle-label { font-weight: bold; color: #d35400; font-size: 14px; }
     .settle-val { font-size: 18px; font-weight: 900; color: #d35400; }
@@ -201,7 +207,7 @@
       const firstDay = new Date(y, m-1, 1).getDay(), lastDate = new Date(y, m, 0).getDate();
       for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
       for (let d = 1; d <= lastDate; d++) {
-        const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`, cell = document.createElement('div'); cell.className = 'day'; cell.innerHTML = `<span class="day-number">${d}</span>`;
+        const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`, cell = document.createElement('div'); cell.className = 'day'; cell.innerHTML = d;
         const event = races.find(r => formatDate(getVal(r, '日期')) === dStr);
         if (event) {
           cell.classList.add('has-event'); cell.style.borderColor = `var(--cat-${getVal(event, '行程類別')})`;
@@ -286,7 +292,7 @@
 
     if(getVal(event,'備註')) html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card" style="border-left-color:#95a5a6;">${getVal(event,'備註')}</div></div>`;
 
-    // 本場行程結算 (已瘦身)
+    // 本場行程結算 (瘦身優化版)
     const total = calculateEventTotal(code);
     html += `<div class="event-settle-card"><div class="settle-label">本場行程結算</div><div class="settle-val">$${total.toLocaleString()}</div></div>`;
     
