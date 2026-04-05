@@ -46,15 +46,15 @@
     <div id="form-行程" class="form-section active">
         <div class="input-group"><label>行程代碼</label><input type="text" id="行程-代碼" placeholder="例如：20260403_台東賽"></div>
         <div class="input-group"><label>行程名稱</label><input type="text" id="行程-名稱"></div>
-        <div class="input-group"><label>行程類別</label><select id="行程-類別"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option></select></div>
+        <div class="input-group"><label>行程類別</label><select id="行程-類別"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
         <div class="input-group"><label>日期</label><input type="date" id="行程-日期"></div>
         <div class="input-group"><label>行程連結</label><input type="url" id="行程-連結"></div>
         <div class="input-group"><label>聿凡項目</label><input type="text" id="行程-聿凡"></div>
         <div class="input-group"><label>光武項目</label><input type="text" id="行程-光武"></div>
         <div class="input-group"><label>報名費總額</label><input type="number" id="行程-報名費"></div>
-        <div class="input-group"><label>報名費付款人</label><select id="行程-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款方式</label><select id="行程-方式"><option>現金</option><option>刷卡</option></select></div>
-        <div class="input-group"><label>狀態</label><select id="行程-狀態"><option>已付</option><option>未付</option></select></div>
+        <div class="input-group"><label>報名費付款人</label><select id="行程-付款人"><option>聿凡</option><option>光武</option><option>無</option><option>-</option></select></div>
+        <div class="input-group"><label>付款方式</label><select id="行程-方式"><option>現金</option><option>刷卡</option><option>無</option><option>-</option></select></div>
+        <div class="input-group"><label>狀態</label><select id="行程-狀態"><option>已付</option><option>未付</option><option>無</option><option>-</option></select></div>
         <div class="input-group"><label>備註</label><input type="text" id="行程-備註"></div>
         <button class="submit-btn" onclick="submitData('行程')">確認儲存行程</button>
     </div>
@@ -77,9 +77,9 @@
             <input type="text" id="住宿-平台-其他" placeholder="請自行填寫平台名稱" style="display: none; margin-top: 8px;">
         </div>
         <div class="input-group"><label>費用</label><input type="number" id="住宿-費用"></div>
-        <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款方式</label><select id="住宿-方式"><option>現金</option><option>刷卡</option></select></div>
-        <div class="input-group"><label>狀態</label><select id="住宿-狀態"><option>已付</option><option>現場付</option></select></div>
+        <div class="input-group"><label>付款人</label><select id="住宿-付款人"><option>聿凡</option><option>光武</option><option>無</option><option>-</option></select></div>
+        <div class="input-group"><label>付款方式</label><select id="住宿-方式"><option>現金</option><option>刷卡</option><option>無</option><option>-</option></select></div>
+        <div class="input-group"><label>狀態</label><select id="住宿-狀態"><option>已付</option><option>現場付</option><option>無</option><option>-</option></select></div>
         <div class="input-group"><label>連結</label><input type="url" id="住宿-連結"></div>
         <div class="input-group"><label>備註</label><input type="text" id="住宿-備註" placeholder="請輸入住宿備註"></div>
         <button class="submit-btn" onclick="submitData('住宿')">確認儲存住宿</button>
@@ -106,9 +106,9 @@
         </div>
 
         <div class="input-group"><label>票價或油資</label><input type="number" id="交通-費用"></div>
-        <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款方式</label><select id="交通-方式"><option>現金</option><option>刷卡</option></select></div>
-        <div class="input-group"><label>狀態</label><select id="交通-狀態"><option>已付</option><option>現場付</option></select></div>
+        <div class="input-group"><label>付款人</label><select id="交通-付款人"><option>聿凡</option><option>光武</option><option>無</option><option>-</option></select></div>
+        <div class="input-group"><label>付款方式</label><select id="交通-方式"><option>現金</option><option>刷卡</option><option>無</option><option>-</option></select></div>
+        <div class="input-group"><label>狀態</label><select id="交通-狀態"><option>已付</option><option>現場付</option><option>無</option><option>-</option></select></div>
         <button class="submit-btn" onclick="submitData('交通')">確認儲存交通</button>
     </div>
 
@@ -116,8 +116,8 @@
         <div class="input-group"><label>行程代碼</label><select class="code-selector" id="帳務-代碼"></select></div>
         <div class="input-group"><label>項目名稱</label><input type="text" id="帳務-項目"></div>
         <div class="input-group"><label>金額</label><input type="number" id="帳務-金額"></div>
-        <div class="input-group"><label>付款人</label><select id="帳務-付款人"><option>聿凡</option><option>光武</option></select></div>
-        <div class="input-group"><label>付款狀態</label><select id="帳務-狀態"><option>已付</option><option>未付</option></select></div>
+        <div class="input-group"><label>付款人</label><select id="帳務-付款人"><option>聿凡</option><option>光武</option><option>無</option><option>-</option></select></div>
+        <div class="input-group"><label>付款狀態</label><select id="帳務-狀態"><option>已付</option><option>未付</option><option>無</option><option>-</option></select></div>
         <div class="input-group"><label>備註</label><input type="text" id="帳務-備註"></div>
         <button class="submit-btn" onclick="submitData('帳務明細')">確認儲存帳務</button>
     </div>
@@ -208,16 +208,24 @@
             statusDiv.textContent = sheetName + ' 資料已成功入庫！';
             if (sheetName === '行程') refreshItineraryCodes();
             
-            // 成功後清空欄位並重設選單
             document.querySelectorAll('#form-' + sheetName + ' input[type="text"], #form-' + sheetName + ' input[type="number"], #form-' + sheetName + ' input[type="date"], #form-' + sheetName + ' input[type="url"]').forEach(i => i.value = '');
             if (sheetName === '住宿') {
                 document.getElementById('住宿-平台').selectedIndex = 0;
                 document.getElementById('住宿-平台-其他').style.display = 'none';
                 document.getElementById('住宿-方式').selectedIndex = 0;
+                document.getElementById('住宿-付款人').selectedIndex = 0;
+                document.getElementById('住宿-狀態').selectedIndex = 0;
             } else if (sheetName === '交通') {
                 document.getElementById('交通-方式').selectedIndex = 0;
+                document.getElementById('交通-付款人').selectedIndex = 0;
+                document.getElementById('交通-狀態').selectedIndex = 0;
             } else if (sheetName === '行程') {
                 document.getElementById('行程-方式').selectedIndex = 0;
+                document.getElementById('行程-付款人').selectedIndex = 0;
+                document.getElementById('行程-狀態').selectedIndex = 0;
+            } else if (sheetName === '帳務明細') {
+                document.getElementById('帳務-付款人').selectedIndex = 0;
+                document.getElementById('帳務-狀態').selectedIndex = 0;
             }
 
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
