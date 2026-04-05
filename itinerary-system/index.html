@@ -72,11 +72,10 @@
     .info-row { display: flex; justify-content: flex-start; align-items: baseline; gap: 12px; margin-bottom: 8px; }
     .info-row.highlight { font-weight: bold; margin-bottom: 12px; }
     
-    /* 修正劈腿問題：改為置中對齊 */
     .info-row:not(.highlight) > span:first-child { 
         color: #7f8c8d; 
-        min-width: 65px; /* 加寬以容納四個字 */
-        text-align: center; /* 讓文字乖乖置中，不劈腿 */
+        min-width: 65px; 
+        text-align: center; 
     }
     
     .info-row:not(.highlight) > span:last-child {
@@ -368,29 +367,53 @@
         html += `<div class="info-card trans-card">
                    <div class="info-row highlight" style="margin-bottom:8px;"><span style="color:#333; font-size:16px;">${getVal(t, '類型') || '-'}</span></div>`;
         
-        // === 去程資訊拆分 ===
+        // === 去程資訊拆分與格式優化 ===
         const outDate = getVal(t, '出發日期');
         const outDep = getVal(t, '去程出發時間');
         const outArr = getVal(t, '去程抵達時間');
         let outTimeStr = "";
-        if (hasVal(outDate)) outTimeStr += formatDate(outDate).substring(5) + " ";
-        if (hasVal(outDep) || hasVal(outArr)) outTimeStr += `${outDep || '--:--'} - ${outArr || '--:--'}`;
-        if (outTimeStr.trim()) html += `<div class="info-row"><span>去程時間</span><span>${outTimeStr.trim()}</span></div>`;
+        
+        if (hasVal(outDate)) {
+            outTimeStr += formatDate(outDate).substring(5);
+        }
+        
+        if (hasVal(outDep) || hasVal(outArr)) {
+            if (outTimeStr) outTimeStr += " | ";
+            outTimeStr += `${outDep || '--:--'} 出發 - ${outArr || '--:--'} 抵達`;
+        }
+        
+        if (outTimeStr.trim()) {
+            html += `<div class="info-row"><span>去程時間</span><span>${outTimeStr.trim()}</span></div>`;
+        }
 
         const outFlight = getVal(t, '去程班次 / 航班') || getVal(t, '去程班次/航班') || getVal(t, '去程班次／航班');
-        if (hasVal(outFlight)) html += `<div class="info-row"><span>去程班次</span><span>${outFlight}</span></div>`;
+        if (hasVal(outFlight)) {
+            html += `<div class="info-row"><span>去程班次</span><span>${outFlight}</span></div>`;
+        }
 
-        // === 回程資訊拆分 ===
+        // === 回程資訊拆分與格式優化 ===
         const inDate = getVal(t, '回程日期');
         const inDep = getVal(t, '回程出發時間');
         const inArr = getVal(t, '回程抵達時間');
         let inTimeStr = "";
-        if (hasVal(inDate)) inTimeStr += formatDate(inDate).substring(5) + " ";
-        if (hasVal(inDep) || hasVal(inArr)) inTimeStr += `${inDep || '--:--'} - ${inArr || '--:--'}`;
-        if (inTimeStr.trim()) html += `<div class="info-row"><span>回程時間</span><span>${inTimeStr.trim()}</span></div>`;
+        
+        if (hasVal(inDate)) {
+            inTimeStr += formatDate(inDate).substring(5);
+        }
+        
+        if (hasVal(inDep) || hasVal(inArr)) {
+            if (inTimeStr) inTimeStr += " | ";
+            inTimeStr += `${inDep || '--:--'} 出發 - ${inArr || '--:--'} 抵達`;
+        }
+        
+        if (inTimeStr.trim()) {
+            html += `<div class="info-row"><span>回程時間</span><span>${inTimeStr.trim()}</span></div>`;
+        }
 
         const inFlight = getVal(t, '回程班次 / 航班') || getVal(t, '回程班次/航班') || getVal(t, '回程班次／航班');
-        if (hasVal(inFlight)) html += `<div class="info-row"><span>回程班次</span><span>${inFlight}</span></div>`;
+        if (hasVal(inFlight)) {
+            html += `<div class="info-row"><span>回程班次</span><span>${inFlight}</span></div>`;
+        }
 
         const tFee = getVal(t, '票價或油資');
         if (hasVal(tFee)) {
