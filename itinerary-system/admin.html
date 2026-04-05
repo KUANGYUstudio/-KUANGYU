@@ -208,9 +208,8 @@
             statusDiv.textContent = sheetName + ' 資料已成功入庫！';
             if (sheetName === '行程') refreshItineraryCodes();
             
-            // 清除文字輸入框
+            // 成功後清空欄位並重設選單
             document.querySelectorAll('#form-' + sheetName + ' input[type="text"], #form-' + sheetName + ' input[type="number"], #form-' + sheetName + ' input[type="date"], #form-' + sheetName + ' input[type="url"]').forEach(i => i.value = '');
-            
             if (sheetName === '住宿') {
                 document.getElementById('住宿-平台').selectedIndex = 0;
                 document.getElementById('住宿-平台-其他').style.display = 'none';
