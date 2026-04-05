@@ -167,32 +167,28 @@
   function renderPriceRow(feeLabel, feeVal, payer, method, status) {
       if (!hasVal(feeVal)) return '';
 
-      let p = hasVal(payer) ? String(payer).trim() : '';
+      let p = hasVal(payer) ? String(payer).trim() : '-';
       let m = method !== undefined && hasVal(method) ? String(method).trim() : null;
-      let s = hasVal(status) ? String(status).trim() : '';
+      let s = hasVal(status) ? String(status).trim() : '-';
+
+      // 相容舊資料，若欄位還是「無」，自動轉為「-」
+      if (p === '無') p = '-';
+      if (m === '無') m = '-';
+      if (s === '無') s = '-';
 
       let pmText = "";
       if (m === null) {
-          if (p === '無' || p === '-') pmText = '-';
-          else pmText = p || '未定';
+          pmText = p; 
       } else {
-          let pIsNone = (p === '無' || p === '-');
-          let mIsNone = (m === '無' || m === '-');
-          
-          if (pIsNone && mIsNone) pmText = '-';
-          else if (pIsNone) pmText = m || '-';
-          else if (mIsNone) pmText = p || '未定';
-          else pmText = `${p || '未定'} / ${m || '-'}`;
+          if (p === '-' && m === '-') {
+              pmText = '-';
+          } else {
+              pmText = `${p} / ${m}`;
+          }
       }
 
-      let statusHtml = '';
-      if (s === '無' || s === '-') {
-          statusHtml = '';
-      } else {
-          let sText = s || '狀態未定';
-          let statusClass = s === '已付' ? 'paid' : '';
-          statusHtml = `<span class="status-tag ${statusClass}">${sText}</span>`;
-      }
+      let statusClass = s === '已付' ? 'paid' : '';
+      let statusHtml = `<span class="status-tag ${statusClass}">${s}</span>`;
 
       let extraStyle = feeLabel === '金額' ? 'style="margin-top:0; border-top:none; padding-top:0;"' : '';
 
