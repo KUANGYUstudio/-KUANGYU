@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (精緻視覺優化版)
+       光聿行程美學定義 (資訊完整回歸版)
        ========================================= */
     :root {
       --cat-鐵人: #4169E1; --cat-自行車: #228B22; --cat-路跑: #D2691E;
@@ -20,64 +20,57 @@
     .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 30px 20px; box-sizing: border-box; text-align: center; }
     .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 5px; }
     .header-subtitle { font-size: 16px; margin-bottom: 20px; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 10px; }
-    
-    /* 精緻化重新整理按鈕 */
-    .refresh-btn { 
-      cursor: pointer; 
-      font-size: 14px; /* 稍微放大符號 */
-      background: #e0f2f1; 
-      color: #00838f; 
-      padding: 5px 8px; /* 調整為更接近圓形 */
-      border-radius: 50%; /* 變成圓形 */
-      font-weight: bold; 
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-    .refresh-btn:hover { background: #b2dfdb; }
+    .refresh-btn { cursor: pointer; font-size: 14px; background: #e0f2f1; color: #00838f; padding: 5px 8px; border-radius: 50%; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
 
     /* 頂部功能區 */
     .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
-    .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .top-btns { display: flex; gap: 10px; align-items: center; }
+    .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 13px; }
     
+    .view-switcher { background: #eee; border-radius: 20px; padding: 3px; display: flex; gap: 2px; }
+    .view-btn { border: none; padding: 6px 15px; border-radius: 17px; cursor: pointer; font-size: 12px; font-weight: bold; color: #7f8c8d; background: transparent; transition: 0.3s; }
+    .view-btn.active { background: #fff; color: var(--brand-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
     /* 年度帳務面板 */
     #acc-panel { display: none; background: #f8f9fa; border-radius: 20px; padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; animation: fadeIn 0.3s ease; }
     .acc-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; color: var(--brand-main); border-bottom: 2px solid #eee; padding-bottom: 10px; }
     .acc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
     .acc-card { background: #fff; padding: 12px 15px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-    .acc-label { font-size: 12px; color: #7f8c8d; font-weight: bold; display: block; }
-    .acc-val { font-size: 18px; font-weight: 800; color: var(--brand-main); }
+    .acc-label { font-size: 11px; color: #7f8c8d; font-weight: bold; display: block; }
+    .acc-val { font-size: 16px; font-weight: 800; color: var(--brand-main); }
     
     /* 篩選器 */
     .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; font-weight: bold; color: #7f8c8d; cursor: pointer; transition: 0.3s; }
+    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; font-weight: bold; color: #7f8c8d; cursor: pointer; }
     .filter-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); }
 
-    /* 日曆樣式 (精緻化) */
-    .month-section { margin-bottom: 40px; text-align: left; }
-    .month-title { font-weight: 800; font-size: 24px; margin: 0 0 20px; color: var(--text-main); padding-left: 5px; }
+    /* 容器控制 */
+    .view-container { display: none; text-align: left; }
+    .view-container.active { display: block; }
+
+    /* 日曆與清單 */
+    .month-section { margin-bottom: 40px; }
+    .month-title { font-weight: 800; font-size: 22px; margin: 0 0 20px; color: var(--text-main); padding-left: 5px; }
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
     .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
-    
-    .day { 
-      aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
-      border-radius: 14px; background-color: var(--card-bg); color: #cfd8dc; 
-      transition: 0.2s; border: 2px solid transparent; 
-      font-size: 18px; font-weight: 400;
-    }
-    
+    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: var(--card-bg); color: #cfd8dc; transition: 0.2s; border: 2px solid transparent; font-size: 18px; }
     .day.has-event { background-color: #fff; color: #333; cursor: pointer; border-width: 2px; font-weight: 600; }
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important; z-index: 10; }
 
-    /* 詳情面板樣式 */
-    .detail-panel { grid-column: 1 / -1; background: #fff; border-radius: 16px; margin: 8px 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; }
-    .detail-panel.open { max-height: 4000px; opacity: 1; padding: 25px; border: 1px solid #eee; text-align: left; }
+    .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eee; transition: 0.2s; border-left: 6px solid #ddd; }
+    .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .list-date { min-width: 50px; text-align: center; }
+    .list-date .m { font-size: 12px; color: #7f8c8d; display: block; }
+    .list-date .d { font-size: 22px; font-weight: 800; color: var(--brand-main); }
+    .list-info { flex: 1; }
+    .list-name { font-size: 17px; font-weight: bold; color: var(--brand-main); margin-bottom: 2px; }
+
+    /* 詳情面板 */
+    .detail-panel { grid-column: 1 / -1; background: #fff; border-radius: 16px; margin: 8px 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; width: 100%; }
+    .detail-panel.open { max-height: 4000px; opacity: 1; padding: 25px; border: 1px solid #eee; margin-bottom: 20px; text-align: left; }
     .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 20px; }
     .detail-race-name { font-size: 22px; font-weight: bold; color: var(--text-main); }
-    .detail-race-date { font-size: 14px; color: var(--text-sub); margin-top: 4px; }
-    .link-btn { font-size: 13px; padding: 6px 12px; background: #e0f2f1; color: #00838f; border-radius: 20px; text-decoration: none; font-weight: bold; }
+    .detail-race-date { font-size: 14px; color: var(--text-sub); }
 
     .info-section { margin-bottom: 25px; }
     .info-title { font-weight: bold; font-size: 16px; color: #7f8c8d; margin-bottom: 10px; display: flex; align-items: center; }
@@ -86,15 +79,13 @@
     .info-row { display: flex; gap: 12px; margin-bottom: 8px; align-items: baseline; }
     .info-row > span:first-child { color: #7f8c8d; min-width: 65px; text-align: center; }
     .info-row > span:last-child { color: #2c3e50; flex: 1; }
+    
     .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #ddd; padding-top: 12px; margin-top: 12px; }
     .price-tag { color: #e67e22; font-weight: bold; font-size: 16px; }
-    .status-tag { font-size: 12px; padding: 3px 8px; border-radius: 6px; background: #eee; color: #666; font-weight: bold; }
+    .status-tag { font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #eee; color: #666; font-weight: bold; }
     .status-tag.paid { background: #d4edda; color: #155724; }
-
-    /* 本場行程結算 */
+    
     .event-settle-card { background: #fff8f0; border: 1.5px solid #ff9f43; padding: 10px 15px; border-radius: 12px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
-    .settle-label { font-weight: bold; color: #d35400; font-size: 14px; }
-    .settle-val { font-size: 18px; font-weight: 900; color: #d35400; }
 
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -109,7 +100,13 @@
     <div class="header-subtitle">行程總覽系統 <span class="refresh-btn" onclick="location.reload()">↻</span></div>
 
     <div class="action-bar">
-      <button class="acc-toggle-btn" onclick="toggleAccPanel()">帳務明細總覽</button>
+      <div class="top-btns">
+          <button class="acc-toggle-btn" onclick="toggleAccPanel()">帳務明細總覽</button>
+          <div class="view-switcher">
+              <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
+              <button id="btn-list" class="view-btn" onclick="switchView('list')">清單</button>
+          </div>
+      </div>
       <div id="filter-bar" class="filter-bar"></div>
     </div>
 
@@ -119,18 +116,20 @@
       <div class="acc-title" style="margin-top:20px;">年度項目統計</div>
       <div id="acc-item-grid" class="acc-grid"></div>
       <div class="event-settle-card" style="background: #ebf0f1; border-color: var(--brand-main); margin-top:20px;">
-        <div class="settle-label" style="color: var(--brand-main);">篩選範圍總支出</div>
-        <div id="acc-grand-total" class="settle-val" style="color: var(--brand-main);">$0</div>
+        <div style="font-weight:bold; color:var(--brand-main); font-size:14px;">篩選範圍總支出</div>
+        <div id="acc-grand-total" style="font-size:18px; font-weight:900; color:var(--brand-main);">$0</div>
       </div>
     </div>
 
-    <div id="calendar-container"></div>
+    <div id="cal-view" class="view-container active"><div id="calendar-container"></div></div>
+    <div id="list-view" class="view-container"><div id="list-container"></div></div>
   </div>
 
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
   let dbData = {};
   let currentFilter = '全部';
+  let currentView = 'cal';
 
   window.onload = initSystem;
 
@@ -139,11 +138,26 @@
       const res = await fetch(API_URL + "?t=" + new Date().getTime());
       dbData = await res.json();
       renderFilters();
-      renderCalendar();
+      renderMain();
       document.getElementById('loading').style.display = 'none';
     } catch (e) {
       document.getElementById('loading').innerHTML = "讀取失敗，請確認網路連線";
     }
+  }
+
+  function switchView(view) {
+      currentView = view;
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-' + view).classList.add('active');
+      document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
+      document.getElementById(view + '-view').classList.add('active');
+      closeCurrentPanel();
+      renderMain();
+  }
+
+  function renderMain() {
+      if (currentView === 'cal') renderCalendar();
+      else renderList();
   }
 
   function toggleAccPanel() {
@@ -156,19 +170,14 @@
   function calculateAccounting() {
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
     let catTotals = {}, itemTotals = { '報名費': 0, '住宿': 0, '交通': 0, '其他': 0 }, grandTotal = 0;
-
     races.forEach(r => {
-      const code = getVal(r, '行程代碼'), cat = getVal(r, '行程類別');
-      const eventSum = calculateEventTotal(code);
-      catTotals[cat] = (catTotals[cat] || 0) + eventSum;
-      grandTotal += eventSum;
-
+      const code = getVal(r, '行程代碼'), cat = getVal(r, '行程類別'), eventSum = calculateEventTotal(code);
+      catTotals[cat] = (catTotals[cat] || 0) + eventSum; grandTotal += eventSum;
       itemTotals['報名費'] += parseFloat(getVal(r, '報名費總額')) || 0;
       (dbData['住宿']||[]).filter(s => getVal(s,'行程代碼')===code).forEach(s => itemTotals['住宿'] += parseFloat(getVal(s,'費用')) || 0);
       (dbData['交通']||[]).filter(t => getVal(t,'行程代碼')===code).forEach(t => itemTotals['交通'] += parseFloat(getVal(t,'票價或油資')) || 0);
       (dbData['帳務明細']||[]).filter(b => getVal(b,'行程代碼')===code).forEach(b => itemTotals['其他'] += parseFloat(getVal(b,'金額')) || 0);
     });
-
     const catGrid = document.getElementById('acc-cat-grid'); catGrid.innerHTML = '';
     Object.entries(catTotals).forEach(([k, v]) => catGrid.innerHTML += `<div class="acc-card"><label>${k}</label><span class="acc-val">$${v.toLocaleString()}</span></div>`);
     const itemGrid = document.getElementById('acc-item-grid'); itemGrid.innerHTML = '';
@@ -177,8 +186,7 @@
   }
 
   function calculateEventTotal(code) {
-    let sum = 0;
-    const race = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
+    let sum = 0; const race = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
     if (race) sum += parseFloat(getVal(race, '報名費總額')) || 0;
     (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code).forEach(s => sum += parseFloat(getVal(s, '費用')) || 0);
     (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code).forEach(t => sum += parseFloat(getVal(t, '票價或油資')) || 0);
@@ -194,7 +202,7 @@
       const btn = document.createElement('button');
       btn.className = `filter-btn ${c === currentFilter ? 'active' : ''}`;
       btn.textContent = c;
-      btn.onclick = () => { currentFilter = c; renderFilters(); renderCalendar(); if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); };
+      btn.onclick = () => { currentFilter = c; renderFilters(); renderMain(); if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); };
       bar.appendChild(btn);
     });
   }
@@ -214,7 +222,6 @@
     const container = document.getElementById('calendar-container'); container.innerHTML = '';
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
     const monthKeys = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].sort();
-
     monthKeys.forEach(mKey => {
       const [y, m] = mKey.split('-');
       const section = document.createElement('div'); section.className = 'month-section';
@@ -235,30 +242,57 @@
     });
   }
 
-  let currentOpenPanel = null, currentSelectedCell = null;
+  function renderList() {
+      const container = document.getElementById('list-container'); container.innerHTML = '';
+      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+      races.sort((a, b) => new Date(getVal(a, '日期')) - new Date(getVal(b, '日期')));
+      races.forEach(event => {
+          const date = new Date(getVal(event, '日期')); const cat = getVal(event, '行程類別');
+          const item = document.createElement('div'); item.className = 'list-item'; item.style.borderLeftColor = `var(--cat-${cat})`;
+          item.innerHTML = `<div class="list-date"><span class="m">${date.getMonth()+1}月</span><span class="d">${date.getDate()}</span></div><div class="list-info"><div class="list-name">${getVal(event, '行程名稱')}</div><div style="font-size:12px;color:#999;">${cat}</div></div>`;
+          item.onclick = () => handleListClick(event, item, container);
+          container.appendChild(item);
+      });
+  }
+
+  let currentOpenPanel = null, currentSelectedEl = null;
 
   function handleDayClick(event, cell, grid) {
-    if (currentSelectedCell) { currentSelectedCell.classList.remove('selected'); currentSelectedCell.style.backgroundColor = ''; }
-    if (currentSelectedCell === cell && currentOpenPanel) { currentOpenPanel.remove(); currentOpenPanel = null; currentSelectedCell = null; return; }
-    currentSelectedCell = cell; cell.classList.add('selected');
-    const color = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${getVal(event, '行程類別')}`);
-    cell.style.backgroundColor = color; if (currentOpenPanel) currentOpenPanel.remove();
+    if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
+    if (currentSelectedEl) { currentSelectedEl.classList.remove('selected'); currentSelectedEl.style.backgroundColor = ''; }
+    currentSelectedEl = cell; cell.classList.add('selected');
+    cell.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${getVal(event, '行程類別')}`);
+    if (currentOpenPanel) currentOpenPanel.remove();
     const panel = document.createElement('div'); panel.className = 'detail-panel'; panel.innerHTML = generateDetailHTML(event);
     const cells = Array.from(grid.children), idx = cells.indexOf(cell), rowEnd = Math.min(cells.length - 1, idx + (6 - (idx % 7)));
     grid.insertBefore(panel, cells[rowEnd].nextSibling); setTimeout(() => panel.classList.add('open'), 10); currentOpenPanel = panel;
+  }
+
+  function handleListClick(event, item, container) {
+      if (currentSelectedEl === item && currentOpenPanel) { closeCurrentPanel(); return; }
+      if (currentOpenPanel) currentOpenPanel.remove();
+      currentSelectedEl = item;
+      const panel = document.createElement('div'); panel.className = 'detail-panel'; panel.innerHTML = generateDetailHTML(event);
+      item.parentNode.insertBefore(panel, item.nextSibling);
+      setTimeout(() => panel.classList.add('open'), 10);
+      currentOpenPanel = panel;
+  }
+
+  function closeCurrentPanel() {
+      if (currentOpenPanel) { currentOpenPanel.remove(); currentOpenPanel = null;
+          if (currentSelectedEl) { currentSelectedEl.classList.remove('selected'); currentSelectedEl.style.backgroundColor = ''; currentSelectedEl = null; }
+      }
   }
 
   function generateDetailHTML(event) {
     const code = getVal(event, '行程代碼'), cat = getVal(event, '行程類別');
     let html = `<div class="detail-header"><div><div class="detail-race-name">${getVal(event, '行程名稱')}</div><div class="detail-race-date">日期：${formatDate(getVal(event, '日期'))}</div></div>${getVal(event,'行程連結')?`<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>`:''}</div>`;
     
-    // 報名資訊
     const yu = getVal(event, '聿凡項目'), gu = getVal(event, '光武項目'), fee = getVal(event, '報名費總額');
     if (hasVal(yu) || hasVal(gu) || hasVal(fee)) {
       html += `<div class="info-section"><div class="info-title">報名資訊</div><div class="info-card" style="border-left-color:#3498db;">${yu?`<div class="info-row"><span>聿凡</span><span>${yu}</span></div>`:''}${gu?`<div class="info-row"><span>光武</span><span>${gu}</span></div>`:''}${renderPriceRow('費用', fee, getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'))}</div></div>`;
     }
 
-    // 住宿資訊
     const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
     if(stays.length > 0) {
       html += `<div class="info-section"><div class="info-title">住宿資訊</div>`;
@@ -268,12 +302,14 @@
         if(hasVal(inD)) html += `<div class="info-row"><span>入住資訊</span><span>${formatDate(inD).substring(5)}${inT?' | '+inT:''}</span></div>`;
         if(hasVal(outD)) html += `<div class="info-row"><span>退房資訊</span><span>${formatDate(outD).substring(5)}${outT?' | '+outT:''}</span></div>`;
         if(getVal(s,'訂房平台')) html += `<div class="info-row"><span>平台</span><span>${getVal(s,'訂房平台')}</span></div>`;
-        html += renderPriceRow('費用', getVal(s,'費用'), getVal(s,'付款人'), getVal(s,'付款方式'), getVal(s,'狀態')) + `</div>`;
+        html += renderPriceRow('費用', getVal(s,'費用'), getVal(s,'付款人'), getVal(s,'付款方式'), getVal(s,'狀態'));
+        const sNote = getVal(s, '備註');
+        if (hasVal(sNote)) html += `<div style="margin-top:8px; font-size:13px; color:#666;">備註：${sNote}</div>`;
+        html += `</div>`;
       });
       html += `</div>`;
     }
 
-    // 交通安排
     const trans = (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code);
     if(trans.length > 0) {
       html += `<div class="info-section"><div class="info-title">交通安排</div>`;
@@ -296,7 +332,6 @@
       html += `</div>`;
     }
 
-    // 帳務明細
     const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
     if(bills.length > 0) {
       html += `<div class="info-section"><div class="info-title">額外帳務</div>`;
@@ -305,13 +340,9 @@
       });
       html += `</div>`;
     }
-
     if(getVal(event,'備註')) html += `<div class="info-section"><div class="info-title">行程備註</div><div class="info-card" style="border-left-color:#95a5a6;">${getVal(event,'備註')}</div></div>`;
-
-    // 本場行程結算 (瘦身優化版)
     const total = calculateEventTotal(code);
-    html += `<div class="event-settle-card"><div class="settle-label">本場行程結算</div><div class="settle-val">$${total.toLocaleString()}</div></div>`;
-    
+    html += `<div class="event-settle-card"><div style="font-weight:bold; color:#d35400; font-size:14px;">本場行程結算</div><div style="font-size:18px; font-weight:900; color:#d35400;">$${total.toLocaleString()}</div></div>`;
     return html;
   }
 </script>
