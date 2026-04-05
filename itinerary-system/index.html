@@ -331,26 +331,30 @@
     if (trans.length > 0) {
       html += `<div class="info-section"><div class="info-title">交通安排</div>`;
       trans.forEach(t => {
-        const outFlight = getVal(t, '去程班次／航班');
-        const inFlight = getVal(t, '回程班次／航班');
-        
-        let flightText = "";
-        if (hasVal(outFlight)) flightText += `去：${outFlight} `;
-        if (hasVal(inFlight)) flightText += `回：${inFlight}`;
-        
         html += `<div class="info-card trans-card">
-                   <div class="info-row highlight">[交通] ${getVal(t, '類型') || '-'} ${flightText ? '- ' + flightText : ''}</div>`;
+                   <div class="info-row highlight">[交通] ${getVal(t, '類型') || '-'}</div>`;
         
-        const tDate = getVal(t, '出發日期');
-        if(hasVal(tDate)) html += `<div class="info-row"><span>日期：</span><span>${formatDate(tDate).substring(5)}</span></div>`;
-        
-        let timeStr = "";
-        const tOut = getVal(t, '出發時間');
-        const tIn = getVal(t, '抵達時間');
-        if(hasVal(tOut) || hasVal(tIn)) {
-             timeStr = `${tOut || '--:--'} 到 ${tIn || '--:--'}`;
-        }
-        if(timeStr) html += `<div class="info-row"><span>時間：</span><span>${timeStr}</span></div>`;
+        // 抓取去程資料
+        const outDate = getVal(t, '出發日期');
+        const outFlight = getVal(t, '去程班次 / 航班') || getVal(t, '去程班次/航班') || getVal(t, '去程班次／航班');
+        const outDep = getVal(t, '去程出發時間');
+        const outArr = getVal(t, '去程抵達時間');
+        let outStr = "";
+        if (hasVal(outDate)) outStr += formatDate(outDate).substring(5) + " ";
+        if (hasVal(outFlight)) outStr += outFlight + " ";
+        if (hasVal(outDep) || hasVal(outArr)) outStr += `(${outDep || '--:--'} 到 ${outArr || '--:--'})`;
+        if (outStr.trim()) html += `<div class="info-row"><span>去程：</span><span>${outStr.trim()}</span></div>`;
+
+        // 抓取回程資料
+        const inDate = getVal(t, '回程日期');
+        const inFlight = getVal(t, '回程班次 / 航班') || getVal(t, '回程班次/航班') || getVal(t, '回程班次／航班');
+        const inDep = getVal(t, '回程出發時間');
+        const inArr = getVal(t, '回程抵達時間');
+        let inStr = "";
+        if (hasVal(inDate)) inStr += formatDate(inDate).substring(5) + " ";
+        if (hasVal(inFlight)) inStr += inFlight + " ";
+        if (hasVal(inDep) || hasVal(inArr)) inStr += `(${inDep || '--:--'} 到 ${inArr || '--:--'})`;
+        if (inStr.trim()) html += `<div class="info-row"><span>回程：</span><span>${inStr.trim()}</span></div>`;
 
         const tFee = getVal(t, '票價或油資');
         if (hasVal(tFee)) {
