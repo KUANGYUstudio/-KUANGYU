@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (月份獨立篩選版)
+       光聿行程美學定義 (質感白底色條 + 導覽列整合版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -33,7 +33,7 @@
     .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 30px 20px; box-sizing: border-box; text-align: center; }
     
     .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .refresh-btn { cursor: pointer; font-size: 13px; background: var(--action-button-bg); color: var(--action-button-color); padding: 5px 10px; border-radius: 15px; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .refresh-btn { cursor: pointer; font-size: 14px; background: var(--action-button-bg); color: var(--action-button-color); padding: 5px 8px; border-radius: 50%; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .refresh-btn:hover { background: #b2dfdb; }
 
     .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
@@ -44,6 +44,7 @@
     .view-btn { border: none; padding: 6px 15px; border-radius: 17px; cursor: pointer; font-size: 12px; font-weight: bold; color: #7f8c8d; background: transparent; transition: 0.3s; }
     .view-btn.active { background: #fff; color: var(--brand-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
+    /* 帳務總覽 */
     #acc-panel { display: none; background: #fff; border-radius: 20px; padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; animation: fadeIn 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .acc-grand-banner { background: var(--brand-main); color: #fff; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2); }
     .acc-grand-label { font-size: 13px; opacity: 0.8; margin-bottom: 5px; }
@@ -79,7 +80,6 @@
     .month-nav-btn.has-data { border-color: var(--brand-main); color: var(--brand-main); }
     .month-nav-btn.has-data:hover { background: var(--brand-main); color: #fff; }
     .month-nav-btn.no-data { opacity: 0.3; cursor: default; }
-    /* 新增：被選中的月份按鈕樣式 */
     .month-nav-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); opacity: 1 !important; }
 
     .past-toggle-btn { text-align: center; color: #7f8c8d; font-size: 13px; cursor: pointer; margin-bottom: 20px; font-weight: bold; background: #f0f0f0; padding: 10px; border-radius: 20px; transition: 0.2s; }
@@ -149,7 +149,7 @@
   <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
 
   <div class="container">
-    <div class="header-title">行程小助理 <span class="refresh-btn" onclick="location.reload()">[ 重整 ]</span></div>
+    <div class="header-title">行程小助理 <span class="refresh-btn" onclick="location.reload()">↻</span></div>
 
     <div class="action-bar">
       <div class="top-btns">
@@ -203,7 +203,6 @@
   let currentView = 'cal';
   let showPastList = false;
   
-  // 新增：紀錄目前選中的月份 (用於日曆過濾)
   let selectedMonthFilter = null;
 
   let accDetailsData = { '報名費': [], '住宿': [], '交通': [], '其他': [] };
@@ -392,7 +391,6 @@
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
     const monthKeys = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].sort();
     
-    // 生成 1 到 12 月份導覽按鈕
     for (let i = 1; i <= 12; i++) {
         const mStr = String(i).padStart(2, '0');
         const targetKey = monthKeys.find(key => key.endsWith('-' + mStr));
@@ -400,7 +398,6 @@
         
         btn.className = 'month-nav-btn ' + (targetKey ? 'has-data' : 'no-data');
         
-        // 若該月已被選中，加上 active 樣式
         if (selectedMonthFilter === targetKey && targetKey) {
             btn.classList.add('active');
         }
@@ -408,7 +405,6 @@
         btn.textContent = i;
         
         if (targetKey) {
-            // 過去的月份且未被選中時，呈現半透明
             if (targetKey < currentMonthKey && selectedMonthFilter !== targetKey) {
                 btn.style.opacity = '0.4';
                 btn.title = "點擊顯示過去行程";
@@ -416,9 +412,9 @@
             
             btn.onclick = () => {
                 if (selectedMonthFilter === targetKey) {
-                    selectedMonthFilter = null; // 再次點擊，取消選取恢復預設
+                    selectedMonthFilter = null;
                 } else {
-                    selectedMonthFilter = targetKey; // 點擊選取該月
+                    selectedMonthFilter = targetKey;
                 }
                 renderCalendar();
             };
@@ -427,15 +423,14 @@
     }
 
     monthKeys.forEach(mKey => {
-      // 判斷是否應該渲染這個月份
       let shouldShow = false;
       if (selectedMonthFilter) {
-          shouldShow = (mKey === selectedMonthFilter); // 若有篩選，只顯示選中的月份
+          shouldShow = (mKey === selectedMonthFilter);
       } else {
-          shouldShow = (mKey >= currentMonthKey); // 沒篩選時，預設顯示未來與當下月份
+          shouldShow = (mKey >= currentMonthKey);
       }
       
-      if (!shouldShow) return; // 不符合條件的月份直接不渲染
+      if (!shouldShow) return;
 
       const [y, m] = mKey.split('-');
       const section = document.createElement('div'); section.className = 'month-section';
@@ -473,8 +468,8 @@
       if (pastRaces.length > 0) {
           const toggleBtn = document.createElement('div');
           toggleBtn.className = 'past-toggle-btn';
-          // 使用純文字箭頭取代 Emoji
-          toggleBtn.textContent = showPastList ? '^ 收起歷史行程 ^' : `v 顯示歷史行程 (${pastRaces.length}筆) v`;
+          // 使用實心三角形純文字符號
+          toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示歷史行程 (${pastRaces.length}筆) ▼`;
           toggleBtn.onclick = () => {
               showPastList = !showPastList;
               renderList();
