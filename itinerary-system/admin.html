@@ -183,10 +183,39 @@
             eventCode = document.getElementById('住宿-代碼').value;
             let platformVal = document.getElementById('住宿-平台').value;
             if (platformVal === '其他') platformVal = document.getElementById('住宿-平台-其他').value;
-            rowData = [eventCode, document.getElementById('住宿-飯店').value, document.getElementById('住宿-入住日期').value, document.getElementById('住宿-入住時間').value, document.getElementById('住宿-退房日期').value, document.getElementById('住宿-退房時間').value, platformVal, document.getElementById('住宿-費用').value, document.getElementById('住宿-付款人').value, document.getElementById('住宿-方式').value, document.getElementById('住宿-狀態').value, document.getElementById('住宿-連結').value, document.getElementById('住宿-備註').value];
+            rowData = [
+                eventCode, 
+                document.getElementById('住宿-飯店').value, 
+                document.getElementById('住宿-入住日期').value, 
+                document.getElementById('住宿-入住時間').value,
+                document.getElementById('住宿-退房日期').value,
+                document.getElementById('住宿-退房時間').value,
+                platformVal, 
+                document.getElementById('住宿-費用').value, 
+                document.getElementById('住宿-付款人').value, 
+                document.getElementById('住宿-方式').value, 
+                document.getElementById('住宿-狀態').value, 
+                document.getElementById('住宿-連結').value, 
+                document.getElementById('住宿-備註').value
+            ];
         } else if (sheetName === '交通') {
             eventCode = document.getElementById('交通-代碼').value;
-            rowData = [eventCode, document.getElementById('交通-類型').value, document.getElementById('交通-出發日期').value, document.getElementById('交通-去程').value, document.getElementById('交通-去程出發').value, document.getElementById('交通-去程抵達').value, document.getElementById('交通-回程日期').value, document.getElementById('交通-回程').value, document.getElementById('交通-回程出發').value, document.getElementById('交通-回程抵達').value, document.getElementById('交通-費用').value, document.getElementById('交通-付款人').value, document.getElementById('交通-方式').value, document.getElementById('交通-狀態').value];
+            rowData = [
+                eventCode, 
+                document.getElementById('交通-類型').value, 
+                document.getElementById('交通-出發日期').value,
+                document.getElementById('交通-去程').value, 
+                document.getElementById('交通-去程出發').value, 
+                document.getElementById('交通-去程抵達').value,
+                document.getElementById('交通-回程日期').value,
+                document.getElementById('交通-回程').value, 
+                document.getElementById('交通-回程出發').value, 
+                document.getElementById('交通-回程抵達').value,
+                document.getElementById('交通-費用').value, 
+                document.getElementById('交通-付款人').value, 
+                document.getElementById('交通-方式').value, 
+                document.getElementById('交通-狀態').value
+            ];
         } else if (sheetName === '帳務明細') {
             eventCode = document.getElementById('帳務-代碼').value;
             rowData = [eventCode, document.getElementById('帳務-項目').value, document.getElementById('帳務-金額').value, document.getElementById('帳務-付款人').value, document.getElementById('帳務-狀態').value, document.getElementById('帳務-備註').value];
@@ -201,7 +230,7 @@
         fetch(API_URL, { method: 'POST', body: JSON.stringify({ sheetName: sheetName, data: rowData }) })
         .then(res => res.json()).then(data => {
             statusDiv.style.background = '#d4edda'; statusDiv.style.color = '#155724';
-            statusDiv.textContent = sheetName + ' 資料已成功儲存！';
+            statusDiv.textContent = sheetName + ' 資料已成功入庫！';
             if (sheetName === '行程') refreshItineraryCodes();
             
             document.querySelectorAll('#form-' + sheetName + ' input[type="text"], #form-' + sheetName + ' input[type="number"], #form-' + sheetName + ' input[type="date"], #form-' + sheetName + ' input[type="url"]').forEach(i => i.value = '');
