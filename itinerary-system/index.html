@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (點擊隱藏過去行程版)
+       光聿行程美學定義 (純文字無Emoji版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -33,7 +33,7 @@
     .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 30px 20px; box-sizing: border-box; text-align: center; }
     
     .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-    .refresh-btn { cursor: pointer; font-size: 14px; background: var(--action-button-bg); color: var(--action-button-color); padding: 5px 8px; border-radius: 50%; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .refresh-btn { cursor: pointer; font-size: 13px; background: var(--action-button-bg); color: var(--action-button-color); padding: 5px 10px; border-radius: 15px; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .refresh-btn:hover { background: #b2dfdb; }
 
     .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
@@ -44,7 +44,6 @@
     .view-btn { border: none; padding: 6px 15px; border-radius: 17px; cursor: pointer; font-size: 12px; font-weight: bold; color: #7f8c8d; background: transparent; transition: 0.3s; }
     .view-btn.active { background: #fff; color: var(--brand-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-    /* 帳務總覽 */
     #acc-panel { display: none; background: #fff; border-radius: 20px; padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; animation: fadeIn 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .acc-grand-banner { background: var(--brand-main); color: #fff; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2); }
     .acc-grand-label { font-size: 13px; opacity: 0.8; margin-bottom: 5px; }
@@ -75,14 +74,12 @@
     .view-container { display: none; text-align: left; }
     .view-container.active { display: block; }
 
-    /* 月份快捷導覽列 */
     .month-nav-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; flex-wrap: wrap; }
     .month-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #ddd; background: #fff; color: #7f8c8d; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
     .month-nav-btn.has-data { border-color: var(--brand-main); color: var(--brand-main); }
     .month-nav-btn.has-data:hover { background: var(--brand-main); color: #fff; }
     .month-nav-btn.no-data { opacity: 0.3; cursor: default; }
 
-    /* 過去行程開關按鈕 */
     .past-toggle-btn { text-align: center; color: #7f8c8d; font-size: 13px; cursor: pointer; margin-bottom: 20px; font-weight: bold; background: #f0f0f0; padding: 10px; border-radius: 20px; transition: 0.2s; }
     .past-toggle-btn:hover { background: #e0e0e0; color: var(--brand-main); }
 
@@ -139,7 +136,7 @@
     .status-tag { font-size: 11px; padding: 3px 8px; border-radius: 6px; background: rgba(0,0,0,0.05); color: #666; font-weight: bold; }
     .status-tag.paid { background: #e8f5e9; color: #2e7d32; }
     
-    .event-settle-card { background: #fff; border: 1.5px solid var(--brand-pink); padding: 10px 16px; border-radius: 12px; display: inline-flex; align-items: baseline; gap: 12px; box-shadow: 0 4px 10px rgba(240, 98, 146, 0.1);}
+    .event-settle-card { background: #fff4f7; border: 1.5px solid var(--brand-pink); padding: 10px 16px; border-radius: 12px; display: inline-flex; align-items: baseline; gap: 12px; box-shadow: 0 4px 10px rgba(240, 98, 146, 0.1);}
 
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -150,7 +147,7 @@
   <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
 
   <div class="container">
-    <div class="header-title">行程小助理 <span class="refresh-btn" onclick="location.reload()">↻</span></div>
+    <div class="header-title">行程小助理 <span class="refresh-btn" onclick="location.reload()">[ 重整 ]</span></div>
 
     <div class="action-bar">
       <div class="top-btns">
@@ -202,7 +199,7 @@
   let dbData = {};
   let currentFilter = '全部';
   let currentView = 'cal';
-  let showPastList = false; // 控制清單模式是否顯示過去行程
+  let showPastList = false;
 
   let accDetailsData = { '報名費': [], '住宿': [], '交通': [], '其他': [] };
   let currentAccTab = '報名費';
@@ -390,7 +387,6 @@
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
     const monthKeys = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].sort();
     
-    // 生成月份導覽圈圈，點擊過去月份可展開/收起
     for (let i = 1; i <= 12; i++) {
         const mStr = String(i).padStart(2, '0');
         const targetKey = monthKeys.find(key => key.endsWith('-' + mStr));
@@ -400,7 +396,6 @@
         btn.textContent = i;
         
         if (targetKey) {
-            // 如果是過去的月份，加上半透明樣式提示
             if (targetKey < currentMonthKey) {
                 btn.style.opacity = '0.4';
                 btn.title = "點擊顯示/隱藏過去行程";
@@ -410,7 +405,6 @@
                 const target = document.getElementById('month-section-' + targetKey);
                 if (target) {
                     if (targetKey < currentMonthKey) {
-                        // 點擊隱藏的過去月份：切換顯示狀態並滑動
                         if (target.style.display === 'none') {
                             target.style.display = 'block';
                             btn.style.opacity = '1';
@@ -421,7 +415,6 @@
                             btn.style.opacity = '0.4';
                         }
                     } else {
-                        // 未來的月份：直接滑動
                         const yOffset = target.getBoundingClientRect().top + window.pageYOffset - 20;
                         window.scrollTo({top: yOffset, behavior: 'smooth'});
                     }
@@ -436,7 +429,6 @@
       const section = document.createElement('div'); section.className = 'month-section';
       section.id = 'month-section-' + mKey;
       
-      // 預設隱藏過去的月份
       if (mKey < currentMonthKey) {
           section.style.display = 'none';
       }
@@ -467,23 +459,20 @@
       
       const today = new Date(); today.setHours(0, 0, 0, 0);
       
-      // 分離過去與未來的行程
       const pastRaces = races.filter(r => new Date(getVal(r, '日期')) < today);
       const futureRaces = races.filter(r => new Date(getVal(r, '日期')) >= today);
       
-      // 如果有過去的行程，增加一顆開關按鈕
       if (pastRaces.length > 0) {
           const toggleBtn = document.createElement('div');
           toggleBtn.className = 'past-toggle-btn';
-          toggleBtn.textContent = showPastList ? '⬆ 收起歷史行程 ⬆' : `⬇ 顯示歷史行程 (${pastRaces.length}筆) ⬇`;
+          toggleBtn.textContent = showPastList ? '^ 收起歷史行程 ^' : `v 顯示歷史行程 (${pastRaces.length}筆) v`;
           toggleBtn.onclick = () => {
               showPastList = !showPastList;
-              renderList(); // 重新渲染清單
+              renderList();
           };
           container.appendChild(toggleBtn);
       }
 
-      // 決定要渲染哪些行程
       const racesToRender = showPastList ? races : futureRaces;
       
       if (racesToRender.length === 0) {
@@ -580,20 +569,19 @@
       trans.forEach(t => {
         html += `<div class="info-card card-trans"><div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>`;
         
-        // 修正：航班號碼
-        const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班') || getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機');
+        const goB = getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機') || getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班');
         const goD = getVal(t,'出發日期');
         const goS = getVal(t,'去程出發時間');
         const goA = getVal(t,'去程抵達時間');
-        if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span>${goB}</span></div>`;
+        if(hasVal(goB)) html += `<div class="info-row"><span>飛機號碼</span><span>${goB}</span></div>`;
         if(hasVal(goD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(goD).substring(5)}</span></div>`;
         if(hasVal(goS) || hasVal(goA)) html += `<div class="info-row"><span></span><span>${goS||'--:--'}出發－${goA||'--:--'}抵達</span></div>`;
         
-        const bkB = getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班') || getVal(t,'回程班次 / 飛機') || getVal(t,'回程班次/飛機');
+        const bkB = getVal(t,'回程班次 / 飛機') || getVal(t,'回程班次/飛機') || getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班');
         const bkD = getVal(t,'回程日期');
         const bkS = getVal(t,'回程出發時間');
         const bkA = getVal(t,'回程抵達時間');
-        if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span>${bkB}</span></div>`;
+        if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>飛機號碼</span><span>${bkB}</span></div>`;
         if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
         if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
         
