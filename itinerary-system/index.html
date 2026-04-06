@@ -1,1348 +1,1309 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <title>光聿 KUANGYU - 行程小助理</title>
-  <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=行+程&background=e0f2f1&color=00838f&size=180&bold=true">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    /* =========================================
-       光聿行程美學定義 (旗艦版：柔和粉彩 + 全域編輯 + 黃金三角)
-       ========================================= */
-    :root {
-      --cat-鐵人: #64b5f6; 
-      --cat-自行車: #81c784; 
-      --cat-路跑: #ff8a65; 
-      --cat-游泳: #4dd0e1; 
-      --cat-活動: #f06292; 
-      --cat-旅遊: #ffd54f; 
-      --cat-移地訓練: #ba68c8; 
+  <meta charset="UTF-8" />
+  <title>光聿 KUANGYU - 行程小助理</title>
+  <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=行+程&background=e0f2f1&color=00838f&size=180&bold=true">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* =========================================
+       光聿行程美學定義 (旗艦版：柔和粉彩 + 全域編輯 + 黃金三角)
+       ========================================= */
+    :root {
+      --cat-鐵人: #64b5f6; 
+      --cat-自行車: #81c784; 
+      --cat-路跑: #ff8a65; 
+      --cat-游泳: #4dd0e1; 
+      --cat-活動: #f06292; 
+      --cat-旅遊: #ffd54f; 
+      --cat-移地訓練: #ba68c8; 
 
-      --text-main: #2c3e50; 
-      --text-sub: #546e7a; 
-      --bg-color: #fcfcfc;
-      --card-bg: #ffffff; 
-      --brand-main: #2c3e50;
-      
-      --nav-active: #546e7a; 
-      --coin-gold: #e5c07b; 
-      --settle-pink: #e07a5f;
-      --action-button-color: #78909c; 
-      --action-button-bg: #eceff1;
-    }
+      --text-main: #2c3e50; 
+      --text-sub: #546e7a; 
+      --bg-color: #fcfcfc;
+      --card-bg: #ffffff; 
+      --brand-main: #2c3e50;
+      
+      --nav-active: #546e7a; 
+      --coin-gold: #e5c07b; 
+      --settle-pink: #e07a5f;
+      --action-button-color: #78909c; 
+      --action-button-bg: #eceff1;
+    }
 
-    body { 
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
-        background: var(--bg-color); 
-        margin: 0; 
-        padding: 0; 
-        color: var(--text-main); 
-        min-height: 100vh; 
-    }
-    
-    .container { 
-        max-width: 800px; 
-        width: 100%; 
-        margin: 0 auto; 
-        padding: 30px 20px; 
-        box-sizing: border-box; 
-        text-align: center; 
-    }
-    
-    .header-title { 
-        font-size: 26px; 
-        font-weight: 800; 
-        color: var(--brand-main); 
-        letter-spacing: 2px; 
-        margin-bottom: 20px; 
-    }
-
-    /* 置頂區塊 - 黃金三角排版 */
-    .sticky-controls {
-        position: sticky; 
-        top: 0; 
-        background: rgba(252, 252, 252, 0.95);
-        backdrop-filter: blur(10px); 
-        z-index: 100; 
-        padding: 15px 0 10px 0;
-        border-bottom: 1px solid rgba(0,0,0,0.03); 
-        margin-bottom: 25px;
-    }
-
-    .nav-wrapper { 
-        display: flex; 
-        align-items: center; 
-        justify-content: space-between; 
-        width: 100%; 
-        max-width: 450px; 
-        margin: 0 auto 0px; /* 移除原本的 margin-bottom，交由 action-bar 控制 */
-        padding: 0 10px; 
-        box-sizing: border-box; 
-    }
-    
-    /* 🎯 修復 5：兩側工具小按鈕，尺寸與中間的 $ 一致 (38px) */
-    .tool-btn { 
-        width: 38px; 
-        height: 38px; 
-        border-radius: 50%; 
-        background: var(--action-button-bg); 
-        color: var(--action-button-color); 
-        border: none; 
-        font-size: 18px; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        cursor: pointer; 
-        transition: 0.2s; 
-        font-weight: bold;
-    }
-    
-    .tool-btn.active { 
-        background: var(--settle-pink); 
-        color: #fff; 
-        box-shadow: 0 4px 10px rgba(224, 122, 95, 0.3); 
-    }
-
-    /* 🎯 修復 4：控制導覽列與過濾器的上下間距 */
-    .action-bar { 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        margin-bottom: 25px; /* 加大這裡的間距，讓兩排不再擁擠 */
-    }
-
-    /* 中央核心控制區 */
-    .center-nav { 
-        display: flex; 
-        align-items: center; 
-        gap: 10px; 
-        background: #f0f0f0; 
-        padding: 4px 8px; 
-        border-radius: 25px; 
-    }
-    
-    .acc-toggle-btn { 
-        background: #fff; 
-        color: var(--coin-gold); 
-        border: none; 
-        width: 38px; 
-        height: 38px; 
-        border-radius: 50%; 
-        font-weight: 900; 
-        cursor: pointer; 
-        font-size: 18px; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-        transition: 0.2s; 
-    }
-    
-    .acc-toggle-btn.active { 
-        background: var(--coin-gold); 
-        color: #fff; 
-    }
-
-    .view-switcher { display: flex; gap: 4px; }
-    
-    .view-btn { 
-        border: none; 
-        padding: 6px 14px; 
-        border-radius: 17px; 
-        cursor: pointer; 
-        font-size: 13px; 
-        font-weight: bold; 
-        color: #7f8c8d; 
-        background: transparent; 
-        transition: 0.3s; 
-    }
-    
-    .view-btn.active { 
-        background: #fff; 
-        color: var(--brand-main); 
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-    }
-
-    /* 過濾器與年月排版 */
-    .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }
-    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 13px; font-weight: bold; color: #78909c; cursor: pointer; transition: 0.2s; }
-    .filter-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); }
-    
-    .year-nav-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
-    .year-nav-btn { padding: 4px 14px; border-radius: 15px; background: #f0f0f0; color: #7f8c8d; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    .year-nav-btn.active { background: var(--nav-active); color: #fff; }
-    
-    .month-nav-container { display: grid; grid-template-columns: repeat(6, 36px); gap: 10px 8px; justify-content: center; padding-bottom: 5px; }
-    .month-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #eceff1; background: #fff; color: #b0bec5; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; box-sizing: border-box; }
-    .month-nav-btn.has-data { border-color: var(--nav-active); color: var(--nav-active); }
-    .month-nav-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-
-    /* 🎯 修復 1：日曆框框與滿版顏色切換 */
-    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-    .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #90a4ae; padding-bottom: 10px; }
-    
-    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; box-sizing: border-box; }
-    .day-number { position: relative; z-index: 2; }
-    
-    /* 有行程的日子：平常是透明底、彩色邊框、深色字 */
-    .day.has-event { background-color: transparent; color: #2c3e50; cursor: pointer; font-weight: bold; border-width: 2px; border-style: solid; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
-    
-    .day.has-expense { cursor: pointer; font-weight: 600; color: #2c3e50; }
-    .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: #cfd8dc; }
-    
-    /* 被點擊展開的日子：變成實心滿版、白色字 */
-    .day.selected { color: #fff !important; transform: scale(1.05); z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; border-color: transparent !important; }
-    .day.has-expense.selected { background-color: #b0bec5; } 
-    .day.selected::after { background-color: transparent !important; } 
-    
-    .month-title { font-weight: 800; font-size: 22px; margin: 20px 0 15px; text-align: left; color: var(--brand-main); }
-    
-    /* 🎯 修復 6：清單日期對齊與展開間距 */
-    .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eceff1; transition: 0.2s; border-left: 6px solid #cfd8dc; text-align: left; }
-    .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.06); }
-    .list-date { text-align: center; min-width: 45px; }
-    .list-date .m { font-size: 11px; color: #7f8c8d; display: block; text-align: center; }
-    .list-date .d { font-size: 22px; font-weight: 800; color: var(--brand-main); display: block; text-align: center; line-height: 1.1; }
-    .list-name { font-size: 17px; font-weight: bold; color: var(--brand-main); flex: 1; }
-    .list-countdown-days { font-size: 18px; font-weight: 900; color: var(--settle-pink); margin: 0 3px; }
-
-    /* 面板與卡片 */
-    .detail-panel { grid-column: 1 / -1; background: transparent; border-radius: 16px; margin: 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; width: 100%; }
-    .detail-panel.open { max-height: 8000px; opacity: 1; margin-top: -6px; margin-bottom: 25px; text-align: left; overflow: visible; }
-    .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; margin-bottom: 20px; }
-    .detail-race-name { font-size: 22px; font-weight: 800; color: var(--brand-main); }
-    .link-btn { font-size: 12px; padding: 6px 14px; background: var(--action-button-bg); color: var(--action-button-color); border-radius: 20px; text-decoration: none; font-weight: bold; }
-    
-    .info-section { margin-bottom: 20px; }
-    .info-title { font-weight: bold; font-size: 14px; color: var(--text-sub); margin-bottom: 10px; display: flex; align-items: center; }
-    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; background: #eceff1;}
-    
-    /* 🎯 修復 2：找回資訊卡片的漂亮分類顏色 */
-    .title-race::before { background: var(--cat-鐵人); }
-    .card-race { border-left-color: var(--cat-鐵人) !important; }
-    .title-stay::before { background: var(--cat-旅遊); }
-    .card-stay { border-left-color: var(--cat-旅遊) !important; }
-    .title-trans::before { background: var(--cat-自行車); }
-    .card-trans { border-left-color: var(--cat-自行車) !important; }
-    .title-bill::before { background: var(--settle-pink); }
-    .card-bill { border-left-color: var(--settle-pink) !important; }
-
-    .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; border-left: 5px solid #eceff1; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-    .info-row { display: flex; gap: 12px; margin-bottom: 8px; }
-    .info-row > span:first-child { color: #7f8c8d; min-width: 70px; font-weight: 500;}
-    .info-row > span:last-child { color: var(--text-main); flex: 1; font-weight: 500;}
-    
-    .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #f5f5f5; padding-top: 10px; margin-top: 10px; }
-    .price-tag { color: var(--settle-pink); font-weight: 800; font-size: 16px; }
-
-    /* 狀態標籤 */
-    .status-tag { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-left: 8px; display: inline-block; }
-    .status-paid { background: #e8f5e9; color: #2e7d32; }
-    .status-onsite { background: #f5f5f5; color: #616161; }
-    .status-unpaid { background: #ffebee; color: #c62828; }
-
-    /* 行程結算區塊 */
-    .event-settle-card { border: 1.5px solid var(--settle-pink); border-radius: 12px; padding: 10px 20px; display: flex; align-items: center; gap: 15px; background: #fff; margin-top: 15px; }
-
-    /* 管理模式按鈕 */
-    .edit-controls { display: none; gap: 12px; margin-top: 12px; justify-content: flex-end; border-top: 1px dashed #f0f0f0; padding-top: 12px; }
-    body.edit-mode-on .edit-controls { display: flex; }
-    .circle-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; color: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.15); border: none; font-weight: bold; transition: 0.2s;}
-    .circle-btn:active { transform: scale(0.9); }
-    .edit-btn { background: #90a4ae; }
-    .del-btn { background: var(--settle-pink); }
-
-    /* 高質感自定義彈窗 UI (警告視窗與編輯視窗) */
-    .modal-overlay { 
-        display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
-        background:rgba(44, 62, 80, 0.6); z-index:9999; align-items:center; 
-        justify-content:center; backdrop-filter: blur(5px); 
-    }
-    .modal-content { 
-        background:#fff; width:85%; max-width:350px; border-radius:28px; 
-        padding:30px; box-sizing:border-box; text-align:center; 
-        box-shadow: 0 15px 40px rgba(0,0,0,0.2); animation: popScale 0.3s ease; 
-    }
-    @keyframes popScale { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    
-    .confirm-icon { 
-        width: 60px; height: 60px; background: #fff5f5; color: #e53935; border-radius: 50%; 
-        display: flex; align-items: center; justify-content: center; font-size: 28px; 
-        margin: 0 auto 20px; border: 2px solid #ffcdd2; font-weight: bold; 
-    }
-    .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
-    .modal-btn { flex: 1; padding: 14px; border-radius: 16px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; }
-    .btn-cancel { background: #f5f5f5; color: #78909c; }
-    .btn-danger { background: #e53935; color: #fff; }
-
-    /* 編輯視窗專用 Body */
-    .modal-body { max-height: 60vh; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 5px; }
-    .edit-input-group { margin-bottom: 15px; }
-    .edit-input-group label { font-size: 12px; color: var(--text-sub); font-weight: bold; display:block; margin-bottom:5px; }
-    .edit-input { width: 100%; padding: 12px; border: 1.5px solid #dcdde1; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: #fcfcfc; transition: 0.3s;}
-    .edit-input:focus { outline: none; border-color: var(--nav-active); background: #fff; }
-
-    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #90a4ae; font-weight: bold;}
-    
-    .view-container { display: none; text-align: left; }
-    .view-container.active { display: block; }
-
-    /* 🎯 修復：帳務總覽面板專屬 UI (完美還原圖片) */
-    .acc-card { background: #f8f9fa; border: 1px solid #eceff1; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-    .acc-label { font-weight: bold; }
-    .acc-val { font-weight: 800; color: var(--brand-main); }
+    body { 
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+        background: var(--bg-color); 
+        margin: 0; 
+        padding: 0; 
+        color: var(--text-main); 
+        min-height: 100vh; 
+    }
     
-    .acc-tab-btn {
-        padding: 8px 16px;
-        border-radius: 20px;
-        background: #f0f0f0;
-        color: #7f8c8d;
-        font-size: 13px;
-        border: none;
+    .container { 
+        max-width: 800px; 
+        width: 100%; 
+        margin: 0 auto; 
+        padding: 30px 20px; 
+        box-sizing: border-box; 
+        text-align: center; 
+    }
+    
+    .header-title { 
+        font-size: 26px; 
+        font-weight: 800; 
+        color: var(--brand-main); 
+        letter-spacing: 2px; 
+        margin-bottom: 20px; 
+    }
+
+    /* 置頂區塊 - 黃金三角排版 */
+    .sticky-controls {
+        position: sticky; 
+        top: 0; 
+        background: rgba(252, 252, 252, 0.95);
+        backdrop-filter: blur(10px); 
+        z-index: 100; 
+        padding: 15px 0 10px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.03); 
+        margin-bottom: 25px;
+    }
+
+    .nav-wrapper { 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        width: 100%; 
+        max-width: 450px; 
+        margin: 0 auto 0px; /* 移除原本的 margin-bottom，交由 action-bar 控制 */
+        padding: 0 10px; 
+        box-sizing: border-box; 
+    }
+    
+    /* 🎯 修復 5：兩側工具小按鈕，尺寸與中間的 $ 一致 (38px) */
+    .tool-btn { 
+        width: 38px; 
+        height: 38px; 
+        border-radius: 50%; 
+        background: var(--action-button-bg); 
+        color: var(--action-button-color); 
+        border: none; 
+        font-size: 18px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        cursor: pointer; 
+        transition: 0.2s; 
         font-weight: bold;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-    .acc-tab-btn.active {
-        background: var(--nav-active);
-        color: #fff;
-        box-shadow: 0 4px 10px rgba(84, 110, 122, 0.2);
     }
     
-    .acc-detail-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 20px;
-        border-bottom: 1px solid #f5f5f5;
-        background: #fff;
-        transition: 0.2s;
+    .tool-btn.active { 
+        background: var(--settle-pink); 
+        color: #fff; 
+        box-shadow: 0 4px 10px rgba(224, 122, 95, 0.3); 
     }
-    .acc-detail-item:last-child { border-bottom: none; }
-    .acc-detail-item:hover { background: #fafafa; }
-    .acc-detail-name { font-size: 15px; font-weight: bold; color: var(--text-main); }
-    .acc-detail-amount { font-size: 16px; font-weight: 900; color: var(--settle-pink); }
-  </style>
+
+    /* 🎯 修復 4：控制導覽列與過濾器的上下間距 */
+    .action-bar { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        margin-bottom: 25px; /* 加大這裡的間距，讓兩排不再擁擠 */
+    }
+
+    /* 中央核心控制區 */
+    .center-nav { 
+        display: flex; 
+        align-items: center; 
+        gap: 10px; 
+        background: #f0f0f0; 
+        padding: 4px 8px; 
+        border-radius: 25px; 
+    }
+    
+    .acc-toggle-btn { 
+        background: #fff; 
+        color: var(--coin-gold); 
+        border: none; 
+        width: 38px; 
+        height: 38px; 
+        border-radius: 50%; 
+        font-weight: 900; 
+        cursor: pointer; 
+        font-size: 18px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+        transition: 0.2s; 
+    }
+    
+    .acc-toggle-btn.active { 
+        background: var(--coin-gold); 
+        color: #fff; 
+    }
+
+    .view-switcher { display: flex; gap: 4px; }
+    
+    .view-btn { 
+        border: none; 
+        padding: 6px 14px; 
+        border-radius: 17px; 
+        cursor: pointer; 
+        font-size: 13px; 
+        font-weight: bold; 
+        color: #7f8c8d; 
+        background: transparent; 
+        transition: 0.3s; 
+    }
+    
+    .view-btn.active { 
+        background: #fff; 
+        color: var(--brand-main); 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    }
+
+    /* 過濾器與年月排版 */
+    .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }
+    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 13px; font-weight: bold; color: #78909c; cursor: pointer; transition: 0.2s; }
+    .filter-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); }
+    
+    .year-nav-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+    .year-nav-btn { padding: 4px 14px; border-radius: 15px; background: #f0f0f0; color: #7f8c8d; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .year-nav-btn.active { background: var(--nav-active); color: #fff; }
+    
+    .month-nav-container { display: grid; grid-template-columns: repeat(6, 36px); gap: 10px 8px; justify-content: center; padding-bottom: 5px; }
+    .month-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #eceff1; background: #fff; color: #b0bec5; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; box-sizing: border-box; }
+    .month-nav-btn.has-data { border-color: var(--nav-active); color: var(--nav-active); }
+    .month-nav-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    /* 🎯 修復 1：日曆框框與滿版顏色切換 */
+    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #90a4ae; padding-bottom: 10px; }
+    
+    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; box-sizing: border-box; }
+    .day-number { position: relative; z-index: 2; }
+    
+    /* 有行程的日子：平常是透明底、彩色邊框、深色字 */
+    .day.has-event { background-color: transparent; color: #2c3e50; cursor: pointer; font-weight: bold; border-width: 2px; border-style: solid; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+    
+    .day.has-expense { cursor: pointer; font-weight: 600; color: #2c3e50; }
+    .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: #cfd8dc; }
+    
+    /* 被點擊展開的日子：變成實心滿版、白色字 */
+    .day.selected { color: #fff !important; transform: scale(1.05); z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; border-color: transparent !important; }
+    .day.has-expense.selected { background-color: #b0bec5; } 
+    .day.selected::after { background-color: transparent !important; } 
+    
+    .month-title { font-weight: 800; font-size: 22px; margin: 20px 0 15px; text-align: left; color: var(--brand-main); }
+    
+    /* 🎯 修復 6：清單日期對齊與展開間距 */
+    .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eceff1; transition: 0.2s; border-left: 6px solid #cfd8dc; text-align: left; }
+    .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.06); }
+    .list-date { text-align: center; min-width: 45px; }
+    .list-date .m { font-size: 11px; color: #7f8c8d; display: block; text-align: center; }
+    .list-date .d { font-size: 22px; font-weight: 800; color: var(--brand-main); display: block; text-align: center; line-height: 1.1; }
+    .list-name { font-size: 17px; font-weight: bold; color: var(--brand-main); flex: 1; }
+    .list-countdown-days { font-size: 18px; font-weight: 900; color: var(--settle-pink); margin: 0 3px; }
+
+    /* 面板與卡片 */
+    .detail-panel { grid-column: 1 / -1; background: transparent; border-radius: 16px; margin: 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; width: 100%; }
+    .detail-panel.open { max-height: 8000px; opacity: 1; margin-top: -6px; margin-bottom: 25px; text-align: left; overflow: visible; }
+    .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; margin-bottom: 20px; }
+    .detail-race-name { font-size: 22px; font-weight: 800; color: var(--brand-main); }
+    .link-btn { font-size: 12px; padding: 6px 14px; background: var(--action-button-bg); color: var(--action-button-color); border-radius: 20px; text-decoration: none; font-weight: bold; }
+    
+    .info-section { margin-bottom: 20px; }
+    .info-title { font-weight: bold; font-size: 14px; color: var(--text-sub); margin-bottom: 10px; display: flex; align-items: center; }
+    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; background: #eceff1;}
+    
+    /* 🎯 修復 2：找回資訊卡片的漂亮分類顏色 */
+    .title-race::before { background: var(--cat-鐵人); }
+    .card-race { border-left-color: var(--cat-鐵人) !important; }
+    .title-stay::before { background: var(--cat-旅遊); }
+    .card-stay { border-left-color: var(--cat-旅遊) !important; }
+    .title-trans::before { background: var(--cat-自行車); }
+    .card-trans { border-left-color: var(--cat-自行車) !important; }
+    .title-bill::before { background: var(--settle-pink); }
+    .card-bill { border-left-color: var(--settle-pink) !important; }
+
+    .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; border-left: 5px solid #eceff1; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+    .info-row { display: flex; gap: 12px; margin-bottom: 8px; }
+    .info-row > span:first-child { color: #7f8c8d; min-width: 70px; font-weight: 500;}
+    .info-row > span:last-child { color: var(--text-main); flex: 1; font-weight: 500;}
+    
+    .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #f5f5f5; padding-top: 10px; margin-top: 10px; }
+    .price-tag { color: var(--settle-pink); font-weight: 800; font-size: 16px; }
+
+    /* 狀態標籤 */
+    .status-tag { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-left: 8px; display: inline-block; }
+    .status-paid { background: #e8f5e9; color: #2e7d32; }
+    .status-onsite { background: #f5f5f5; color: #616161; }
+    .status-unpaid { background: #ffebee; color: #c62828; }
+
+    /* 行程結算區塊 */
+    .event-settle-card { border: 1.5px solid var(--settle-pink); border-radius: 12px; padding: 10px 20px; display: flex; align-items: center; gap: 15px; background: #fff; margin-top: 15px; }
+
+    /* 管理模式按鈕 */
+    .edit-controls { display: none; gap: 12px; margin-top: 12px; justify-content: flex-end; border-top: 1px dashed #f0f0f0; padding-top: 12px; }
+    body.edit-mode-on .edit-controls { display: flex; }
+    .circle-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; color: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.15); border: none; font-weight: bold; transition: 0.2s;}
+    .circle-btn:active { transform: scale(0.9); }
+    .edit-btn { background: #90a4ae; }
+    .del-btn { background: var(--settle-pink); }
+
+    /* 高質感自定義彈窗 UI (警告視窗與編輯視窗) */
+    .modal-overlay { 
+        display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+        background:rgba(44, 62, 80, 0.6); z-index:9999; align-items:center; 
+        justify-content:center; backdrop-filter: blur(5px); 
+    }
+    .modal-content { 
+        background:#fff; width:85%; max-width:350px; border-radius:28px; 
+        padding:30px; box-sizing:border-box; text-align:center; 
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2); animation: popScale 0.3s ease; 
+    }
+    @keyframes popScale { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    
+    .confirm-icon { 
+        width: 60px; height: 60px; background: #fff5f5; color: #e53935; border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center; font-size: 28px; 
+        margin: 0 auto 20px; border: 2px solid #ffcdd2; font-weight: bold; 
+    }
+    .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+    .modal-btn { flex: 1; padding: 14px; border-radius: 16px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .btn-cancel { background: #f5f5f5; color: #78909c; }
+    .btn-danger { background: #e53935; color: #fff; }
+
+    /* 編輯視窗專用 Body */
+    .modal-body { max-height: 60vh; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 5px; }
+    .edit-input-group { margin-bottom: 15px; }
+    .edit-input-group label { font-size: 12px; color: var(--text-sub); font-weight: bold; display:block; margin-bottom:5px; }
+    .edit-input { width: 100%; padding: 12px; border: 1.5px solid #dcdde1; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: #fcfcfc; transition: 0.3s;}
+    .edit-input:focus { outline: none; border-color: var(--nav-active); background: #fff; }
+
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #90a4ae; font-weight: bold;}
+    
+    .view-container { display: none; text-align: left; }
+    .view-container.active { display: block; }
+  </style>
 </head>
 <body>
 
-  <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
+  <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
 
-  <div class="container">
-    <div class="header-title">行程小助理</div>
+  <div class="container">
+    <div class="header-title">行程小助理</div>
 
-    <div class="sticky-controls">
-        <div class="action-bar">
-            <div class="nav-wrapper">
-                <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
-                <div class="center-nav">
-                    <button id="acc-panel-btn" class="acc-toggle-btn" onclick="toggleAccPanel()">$</button>
-                    <div class="view-switcher" style="padding: 0; border-radius: 20px;">
-                        <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
-                        <button id="btn-list" class="view-btn" onclick="switchView('list')">清單</button>
-                    </div>
-                </div>
-                <button class="tool-btn" onclick="location.reload()">↻</button>
-            </div>
-        </div>
-        
-        <div id="filter-bar" class="filter-bar"></div>
-        <div id="year-nav" class="year-nav-container"></div>
-        <div id="month-nav" class="month-nav-container"></div>
-    </div>
+    <div class="sticky-controls">
+        <div class="action-bar">
+            <div class="nav-wrapper">
+                <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
+                <div class="center-nav">
+                    <button id="acc-panel-btn" class="acc-toggle-btn" onclick="toggleAccPanel()">$</button>
+                    <div class="view-switcher" style="padding: 0; border-radius: 20px;">
+                        <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
+                        <button id="btn-list" class="view-btn" onclick="switchView('list')">清單</button>
+                    </div>
+                </div>
+                <button class="tool-btn" onclick="location.reload()">↻</button>
+            </div>
+        </div>
+        
+        <div id="filter-bar" class="filter-bar"></div>
+        <div id="year-nav" class="year-nav-container"></div>
+        <div id="month-nav" class="month-nav-container"></div>
+    </div>
 
-    <div id="acc-panel" style="display:none; text-align:left; background:#fff; padding:25px; border-radius:20px; margin-bottom:30px; border:1px solid #eceff1; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
-      <div style="background:var(--brand-main); color:#fff; padding:20px; border-radius:16px; text-align:center; margin-bottom:25px; box-shadow: 0 8px 20px rgba(44, 62, 80, 0.2);">
-        <div id="acc-grand-label-dynamic" style="font-size:13px; opacity:0.8; margin-bottom:5px; font-weight:bold;">篩選範圍總支出</div>
-        <div id="acc-grand-total" style="font-size:36px; font-weight:900; letter-spacing:1px;">$0</div>
-      </div>
-      <div style="position: relative; height: 180px; margin-bottom: 25px;"><canvas id="expenseChart"></canvas></div>
-      <div id="dynamic-cat-legend" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px;"></div>
-      <div id="acc-tabs" style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;"></div>
-      <div id="acc-detail-list" style="background:#fff; border-radius:12px; border:1px solid #eceff1; overflow:hidden;"></div>
-    </div>
+    <div id="acc-panel" style="display:none; text-align:left; background:#fff; padding:25px; border-radius:20px; margin-bottom:30px; border:1px solid #eceff1; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
+      <div style="background:var(--brand-main); color:#fff; padding:20px; border-radius:16px; text-align:center; margin-bottom:25px;">
+        <div id="acc-grand-label-dynamic" style="font-size:12px; opacity:0.8; margin-bottom:5px;">篩選範圍總支出</div>
+        <div id="acc-grand-total" style="font-size:32px; font-weight:900;">$0</div>
+      </div>
+      <div style="position: relative; height: 180px; margin-bottom: 25px;"><canvas id="expenseChart"></canvas></div>
+      <div id="dynamic-cat-legend" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px;"></div>
+      <div id="acc-tabs" style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;"></div>
+      <div id="acc-detail-list" style="background:#fff; border-radius:12px; border:1px solid #eceff1; overflow:hidden;"></div>
+    </div>
 
-    <div id="cal-view" class="view-container active"><div id="calendar-container"></div></div>
-    <div id="list-view" class="view-container"><div id="list-container"></div></div>
-  </div>
+    <div id="cal-view" class="view-container active"><div id="calendar-container"></div></div>
+    <div id="list-view" class="view-container"><div id="list-container"></div></div>
+  </div>
 
-  <div id="confirm-modal" class="modal-overlay">
-      <div class="modal-content">
-          <div class="confirm-icon">!</div>
-          <div style="font-weight:800; font-size:18px; margin-bottom:10px; color: var(--brand-main);">確定要刪除嗎？</div>
-          <div id="confirm-desc" style="font-size:14px; color:#78909c; line-height:1.6;">刪除後資料將無法恢復。</div>
-          <div class="modal-actions">
-              <button class="modal-btn btn-cancel" onclick="closeConfirmModal()">取消</button>
-              <button id="confirm-delete-btn" class="modal-btn btn-danger" onclick="doDelete()">確定刪除</button>
-          </div>
-      </div>
-  </div>
+  <div id="confirm-modal" class="modal-overlay">
+      <div class="modal-content">
+          <div class="confirm-icon">!</div>
+          <div style="font-weight:800; font-size:18px; margin-bottom:10px; color: var(--brand-main);">確定要刪除嗎？</div>
+          <div id="confirm-desc" style="font-size:14px; color:#78909c; line-height:1.6;">刪除後資料將無法恢復。</div>
+          <div class="modal-actions">
+              <button class="modal-btn btn-cancel" onclick="closeConfirmModal()">取消</button>
+              <button id="confirm-delete-btn" class="modal-btn btn-danger" onclick="doDelete()">確定刪除</button>
+          </div>
+      </div>
+  </div>
 
-  <div id="edit-modal" class="modal-overlay">
-      <div class="modal-content" style="max-width: 400px; text-align: left;">
-          <h3 style="margin:0 0 20px 0; color:var(--brand-main); display: flex; justify-content: space-between; align-items: center;">
-              <span id="edit-modal-title">編輯資料</span>
-              <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeEditModal()">×</span>
-          </h3>
-          <input type="hidden" id="edit-sheetName">
-          <input type="hidden" id="edit-rowIndex">
-          <div id="dynamic-edit-form" class="modal-body"></div>
-          <button onclick="saveDynamicEdit()" style="width:100%; padding:16px; border-radius:15px; border:none; background:var(--nav-active); color:#fff; font-weight:bold; font-size:17px; cursor:pointer; transition: 0.2s;">儲存修改</button>
-      </div>
-  </div>
+  <div id="edit-modal" class="modal-overlay">
+      <div class="modal-content" style="max-width: 400px; text-align: left;">
+          <h3 style="margin:0 0 20px 0; color:var(--brand-main); display: flex; justify-content: space-between; align-items: center;">
+              <span id="edit-modal-title">編輯資料</span>
+              <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeEditModal()">×</span>
+          </h3>
+          <input type="hidden" id="edit-sheetName">
+          <input type="hidden" id="edit-rowIndex">
+          <div id="dynamic-edit-form" class="modal-body"></div>
+          <button onclick="saveDynamicEdit()" style="width:100%; padding:16px; border-radius:15px; border:none; background:var(--nav-active); color:#fff; font-weight:bold; font-size:17px; cursor:pointer; transition: 0.2s;">儲存修改</button>
+      </div>
+  </div>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
-  let dbData = {};
-  let currentFilter = '全部';
-  let currentView = 'cal';
-  let showPastList = false;
-  let selectedMonthFilter = null;
-  let displayYear = new Date().getFullYear();
-  let isEditMode = false;
+  const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
+  let dbData = {};
+  let currentFilter = '全部';
+  let currentView = 'cal';
+  let showPastList = false;
+  let selectedMonthFilter = null;
+  let displayYear = new Date().getFullYear();
+  let isEditMode = false;
 
-  let accDetailsData = {};
-  let currentAccTab = '';
-  let expenseChartInstance = null; 
-  
-  let deleteTargetSheet = '';
-  let deleteTargetRowIndex = null;
+  let accDetailsData = {};
+  let currentAccTab = '';
+  let expenseChartInstance = null; 
+  
+  let deleteTargetSheet = '';
+  let deleteTargetRowIndex = null;
 
-  const categoryColors = { 
-      '報名費': '#64b5f6', 
-      '住宿': '#ffd54f', 
-      '交通': '#81c784', 
-      '飲食': '#ff8a65', 
-      '購物': '#ba68c8', 
-      '採買': '#4dd0e1', 
-      '娛樂': '#f06292', 
-      '其他': '#b0bec5' 
-  };
-  
-  function getColorForCategory(cat) { 
-      return categoryColors[cat] || '#cfd8dc'; 
-  }
+  const categoryColors = { 
+      '報名費': '#64b5f6', 
+      '住宿': '#ffd54f', 
+      '交通': '#81c784', 
+      '飲食': '#ff8a65', 
+      '購物': '#ba68c8', 
+      '採買': '#4dd0e1', 
+      '娛樂': '#f06292', 
+      '其他': '#b0bec5' 
+  };
+  
+  function getColorForCategory(cat) { 
+      return categoryColors[cat] || '#cfd8dc'; 
+  }
 
-  const sheetHeaders = {
-      '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '報名費付款人', '付款方式', '狀態', '備註'],
-      '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註'],
-      '交通': ['行程代碼', '類型', '出發日期', '去程班次 / 航班', '去程出發時間', '去程抵達時間', '回程日期', '回程班次 / 航班', '回程出發時間', '回程抵達時間', '票價或油資', '付款人', '付款方式', '狀態'],
-      '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註']
-  };
+  const sheetHeaders = {
+      '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '報名費付款人', '付款方式', '狀態', '備註'],
+      '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註'],
+      '交通': ['行程代碼', '類型', '出發日期', '去程班次 / 航班', '去程出發時間', '去程抵達時間', '回程日期', '回程班次 / 航班', '回程出發時間', '回程抵達時間', '票價或油資', '付款人', '付款方式', '狀態'],
+      '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註']
+  };
 
-  const selectOptions = {
-      '行程類別': ['鐵人','自行車','路跑','游泳','活動','旅遊','移地訓練'],
-      '類別': ['飲食','交通','購物','採買','娛樂','其他'],
-      '報名費付款人': ['聿凡','光武','-'], 
-      '付款人': ['聿凡','光武','-'], 
-      '付款方式': ['現金','刷卡','-'], 
-      '狀態': ['已付','未付','現場付','-'], 
-      '訂房平台': ['Agoda','Booking.com','Trip.com','易遊網','官方網站','其他'], 
-      '類型': ['自駕','火車','飛機']
-  };
+  const selectOptions = {
+      '行程類別': ['鐵人','自行車','路跑','游泳','活動','旅遊','移地訓練'],
+      '類別': ['飲食','交通','購物','採買','娛樂','其他'],
+      '報名費付款人': ['聿凡','光武','-'], 
+      '付款人': ['聿凡','光武','-'], 
+      '付款方式': ['現金','刷卡','-'], 
+      '狀態': ['已付','未付','現場付','-'], 
+      '訂房平台': ['Agoda','Booking.com','Trip.com','易遊網','官方網站','其他'], 
+      '類型': ['自駕','火車','飛機']
+  };
 
-  window.onload = initSystem;
+  window.onload = initSystem;
 
-  async function initSystem() {
-    const cachedData = localStorage.getItem('kuangyu_dbData');
-    if (cachedData) {
-        dbData = JSON.parse(cachedData);
-        renderFilters();
-        renderMain();
-        document.getElementById('loading').style.display = 'none';
-    }
+  async function initSystem() {
+    const cachedData = localStorage.getItem('kuangyu_dbData');
+    if (cachedData) {
+        dbData = JSON.parse(cachedData);
+        renderFilters();
+        renderMain();
+        document.getElementById('loading').style.display = 'none';
+    }
 
-    try {
-      const res = await fetch(API_URL + "?t=" + new Date().getTime());
-      const freshData = await res.json();
-      dbData = freshData;
-      localStorage.setItem('kuangyu_dbData', JSON.stringify(freshData));
-      
-      renderFilters();
-      renderMain();
-      if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
-      document.getElementById('loading').style.display = 'none';
-    } catch (e) {
-      if (!cachedData) {
-          document.getElementById('loading').innerHTML = "資料連線失敗，請檢查網路連線。";
-      }
-    }
-  }
+    try {
+      const res = await fetch(API_URL + "?t=" + new Date().getTime());
+      const freshData = await res.json();
+      dbData = freshData;
+      localStorage.setItem('kuangyu_dbData', JSON.stringify(freshData));
+      
+      renderFilters();
+      renderMain();
+      if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+      document.getElementById('loading').style.display = 'none';
+    } catch (e) {
+      if (!cachedData) {
+          document.getElementById('loading').innerHTML = "資料連線失敗，請檢查網路連線。";
+      }
+    }
+  }
 
-  function toggleEditMode() {
-      isEditMode = !isEditMode;
-      const btn = document.getElementById('mode-toggle-btn');
-      if (isEditMode) {
-          document.body.classList.add('edit-mode-on');
-          btn.classList.add('active');
-      } else {
-          document.body.classList.remove('edit-mode-on');
-          btn.classList.remove('active');
-      }
-  }
+  function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const btn = document.getElementById('mode-toggle-btn');
+      if (isEditMode) {
+          document.body.classList.add('edit-mode-on');
+          btn.classList.add('active');
+      } else {
+          document.body.classList.remove('edit-mode-on');
+          btn.classList.remove('active');
+      }
+  }
 
-  function showConfirmDelete(sheetName, rowIndex, e) {
-      if(e) e.stopPropagation();
-      deleteTargetSheet = sheetName;
-      deleteTargetRowIndex = rowIndex;
-      document.getElementById('confirm-desc').innerHTML = `確定要刪除這筆【${sheetName}】資料嗎？<br><span style="color:#e53935; font-size:12px;">(⚠️ 刪除後無法復原)</span>`;
-      document.getElementById('confirm-modal').style.display = 'flex';
-  }
+  function showConfirmDelete(sheetName, rowIndex, e) {
+      if(e) e.stopPropagation();
+      deleteTargetSheet = sheetName;
+      deleteTargetRowIndex = rowIndex;
+      document.getElementById('confirm-desc').innerHTML = `確定要刪除這筆【${sheetName}】資料嗎？<br><span style="color:#e53935; font-size:12px;">(⚠️ 刪除後無法復原)</span>`;
+      document.getElementById('confirm-modal').style.display = 'flex';
+  }
 
-  function closeConfirmModal() {
-      document.getElementById('confirm-modal').style.display = 'none';
-  }
+  function closeConfirmModal() {
+      document.getElementById('confirm-modal').style.display = 'none';
+  }
 
-  async function doDelete() {
-      closeConfirmModal();
-      document.getElementById('loading').style.display = 'flex';
-      document.getElementById('loading').innerHTML = '正在刪除資料...';
-      
-      try {
-          await fetch(API_URL, { 
-              method: 'POST', 
-              body: JSON.stringify({ action: 'delete', sheetName: deleteTargetSheet, rowIndex: deleteTargetRowIndex }) 
-          });
-          localStorage.removeItem('kuangyu_dbData');
-          location.reload();
-      } catch (err) {
-          alert('刪除失敗，請檢查網路連線！');
-          document.getElementById('loading').style.display = 'none';
-      }
-  }
+  async function doDelete() {
+      closeConfirmModal();
+      document.getElementById('loading').style.display = 'flex';
+      document.getElementById('loading').innerHTML = '正在刪除資料...';
+      
+      try {
+          await fetch(API_URL, { 
+              method: 'POST', 
+              body: JSON.stringify({ action: 'delete', sheetName: deleteTargetSheet, rowIndex: deleteTargetRowIndex }) 
+          });
+          localStorage.removeItem('kuangyu_dbData');
+          location.reload();
+      } catch (err) {
+          alert('刪除失敗，請檢查網路連線！');
+          document.getElementById('loading').style.display = 'none';
+      }
+  }
 
-  function openEditModal(sheetName, rowIndex, e) {
-      if(e) e.stopPropagation();
-      const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
-      if(!rowData) return;
+  function openEditModal(sheetName, rowIndex, e) {
+      if(e) e.stopPropagation();
+      const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
+      if(!rowData) return;
 
-      const headers = sheetHeaders[sheetName];
-      const formBody = document.getElementById('dynamic-edit-form');
-      formBody.innerHTML = '';
-      
-      headers.forEach((h, idx) => {
-          const val = rowData[h] || '';
-          let inputHtml = '';
-          
-          if(selectOptions[h]) {
-              const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
-              inputHtml = `<select id="edit-field-${idx}" class="edit-input">${opts}</select>`;
-          } else if(h.includes('日期')) {
-              const dVal = formatDate(val);
-              inputHtml = `<input type="date" id="edit-field-${idx}" class="edit-input" value="${dVal}">`;
-          } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
-              inputHtml = `<input type="number" id="edit-field-${idx}" class="edit-input" value="${val}">`;
-          } else if(h === '行程代碼') {
-              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
-          } else {
-              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
-          }
+      const headers = sheetHeaders[sheetName];
+      const formBody = document.getElementById('dynamic-edit-form');
+      formBody.innerHTML = '';
+      
+      headers.forEach((h, idx) => {
+          const val = rowData[h] || '';
+          let inputHtml = '';
+          
+          if(selectOptions[h]) {
+              const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
+              inputHtml = `<select id="edit-field-${idx}" class="edit-input">${opts}</select>`;
+          } else if(h.includes('日期')) {
+              const dVal = formatDate(val);
+              inputHtml = `<input type="date" id="edit-field-${idx}" class="edit-input" value="${dVal}">`;
+          } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
+              inputHtml = `<input type="number" id="edit-field-${idx}" class="edit-input" value="${val}">`;
+          } else if(h === '行程代碼') {
+              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
+          } else {
+              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
+          }
 
-          formBody.innerHTML += `
-              <div class="edit-input-group">
-                  <label>${h}</label>
-                  ${inputHtml}
-              </div>
-          `;
-      });
+          formBody.innerHTML += `
+              <div class="edit-input-group">
+                  <label>${h}</label>
+                  ${inputHtml}
+              </div>
+          `;
+      });
 
-      document.getElementById('edit-sheetName').value = sheetName;
-      document.getElementById('edit-rowIndex').value = rowIndex;
-      document.getElementById('edit-modal-title').textContent = `編輯${sheetName}`;
-      document.getElementById('edit-modal').style.display = 'flex';
-  }
+      document.getElementById('edit-sheetName').value = sheetName;
+      document.getElementById('edit-rowIndex').value = rowIndex;
+      document.getElementById('edit-modal-title').textContent = `編輯${sheetName}`;
+      document.getElementById('edit-modal').style.display = 'flex';
+  }
 
-  function closeEditModal() {
-      document.getElementById('edit-modal').style.display = 'none';
-  }
+  function closeEditModal() {
+      document.getElementById('edit-modal').style.display = 'none';
+  }
 
-  async function saveDynamicEdit() {
-      const sheetName = document.getElementById('edit-sheetName').value;
-      const rowIndex = parseInt(document.getElementById('edit-rowIndex').value);
-      const headers = sheetHeaders[sheetName];
-      const rowData = headers.map((h, idx) => document.getElementById(`edit-field-${idx}`).value);
-      
-      if(sheetName === '帳務明細') {
-          if(!rowData[1] || !rowData[4]) { alert("日期與金額不能空白！"); return; }
-      } else {
-          if(!rowData[0]) { alert("行程代碼不能空白！"); return; }
-      }
+  async function saveDynamicEdit() {
+      const sheetName = document.getElementById('edit-sheetName').value;
+      const rowIndex = parseInt(document.getElementById('edit-rowIndex').value);
+      const headers = sheetHeaders[sheetName];
+      const rowData = headers.map((h, idx) => document.getElementById(`edit-field-${idx}`).value);
+      
+      if(sheetName === '帳務明細') {
+          if(!rowData[1] || !rowData[4]) { alert("日期與金額不能空白！"); return; }
+      } else {
+          if(!rowData[0]) { alert("行程代碼不能空白！"); return; }
+      }
 
-      document.getElementById('edit-modal').style.display = 'none';
-      document.getElementById('loading').style.display = 'flex';
-      document.getElementById('loading').innerHTML = '正在儲存修改...';
-      
-      try {
-          await fetch(API_URL, {
-              method: 'POST',
-              body: JSON.stringify({ action: 'update', sheetName: sheetName, rowIndex: rowIndex, data: rowData })
-          });
-          localStorage.removeItem('kuangyu_dbData'); 
-          location.reload();
-      } catch (err) {
-          alert('修改失敗，請檢查網路連線！');
-          document.getElementById('loading').style.display = 'none';
-      }
-  }
+      document.getElementById('edit-modal').style.display = 'none';
+      document.getElementById('loading').style.display = 'flex';
+      document.getElementById('loading').innerHTML = '正在儲存修改...';
+      
+      try {
+          await fetch(API_URL, {
+              method: 'POST',
+              body: JSON.stringify({ action: 'update', sheetName: sheetName, rowIndex: rowIndex, data: rowData })
+          });
+          localStorage.removeItem('kuangyu_dbData'); 
+          location.reload();
+      } catch (err) {
+          alert('修改失敗，請檢查網路連線！');
+          document.getElementById('loading').style.display = 'none';
+      }
+  }
 
-  function getVal(obj, key) { 
-      if(!obj) return ""; 
-      const exactKey = Object.keys(obj).find(k => k.trim() === key);
-      if(exactKey) return obj[exactKey];
-      const cleanKeyToFind = key.replace(/\s+/g, '').replace('／', '/');
-      const fuzzyKey = Object.keys(obj).find(k => k.replace(/\s+/g, '').replace('／', '/') === cleanKeyToFind);
-      return fuzzyKey ? obj[fuzzyKey] : "";
-  }
+  function getVal(obj, key) { 
+      if(!obj) return ""; 
+      const exactKey = Object.keys(obj).find(k => k.trim() === key);
+      if(exactKey) return obj[exactKey];
+      const cleanKeyToFind = key.replace(/\s+/g, '').replace('／', '/');
+      const fuzzyKey = Object.keys(obj).find(k => k.replace(/\s+/g, '').replace('／', '/') === cleanKeyToFind);
+      return fuzzyKey ? obj[fuzzyKey] : "";
+  }
 
-  function hasVal(v) { return v !== "" && v !== null && v !== undefined && v !== 0 && v !== "0"; }
+  function hasVal(v) { return v !== "" && v !== null && v !== undefined && v !== 0 && v !== "0"; }
 
-  function formatDate(d) { 
-      const date = new Date(d); 
-      return isNaN(date.getTime()) ? "" : `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; 
-  }
+  function formatDate(d) { 
+      const date = new Date(d); 
+      return isNaN(date.getTime()) ? "" : `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; 
+  }
 
-  function switchPanelTab(btn, tabId) {
-      const panel = btn.closest('.detail-panel');
-      panel.querySelectorAll('.panel-view-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      panel.querySelectorAll('.panel-tab-content').forEach(c => c.style.display = 'none');
-      panel.querySelector('#' + tabId).style.display = 'block';
-  }
+  function switchPanelTab(btn, tabId) {
+      const panel = btn.closest('.detail-panel');
+      panel.querySelectorAll('.panel-view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      panel.querySelectorAll('.panel-tab-content').forEach(c => c.style.display = 'none');
+      panel.querySelector('#' + tabId).style.display = 'block';
+  }
 
-  function switchView(view) {
-      currentView = view;
-      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('btn-' + view).classList.add('active');
-      document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
-      document.getElementById(view + '-view').classList.add('active');
-      closeCurrentPanel();
-      renderMain();
-  }
+  function switchView(view) {
+      currentView = view;
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-' + view).classList.add('active');
+      document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
+      document.getElementById(view + '-view').classList.add('active');
+      closeCurrentPanel();
+      renderMain();
+  }
 
-  function renderMain() { 
-      renderMonthNav(); 
-      if (currentView === 'cal') { renderCalendar(); } else { renderList(); }
-  }
+  function renderMain() { 
+      renderMonthNav(); 
+      if (currentView === 'cal') { renderCalendar(); } else { renderList(); }
+  }
 
-  function toggleAccPanel() {
-      const panel = document.getElementById('acc-panel');
-      const btn = document.getElementById('acc-panel-btn');
-      const isVisible = panel.style.display === 'block';
-      panel.style.display = isVisible ? 'none' : 'block';
-      if (!isVisible) { btn.classList.add('active'); calculateAccounting(); } 
-      else { btn.classList.remove('active'); }
-  }
+  function toggleAccPanel() {
+      const panel = document.getElementById('acc-panel');
+      const btn = document.getElementById('acc-panel-btn');
+      const isVisible = panel.style.display === 'block';
+      panel.style.display = isVisible ? 'none' : 'block';
+      if (!isVisible) { btn.classList.add('active'); calculateAccounting(); } 
+      else { btn.classList.remove('active'); }
+  }
 
-  function calculateAccounting() {
-      let allExpenses = [];
-      const races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+  function calculateAccounting() {
+      let allExpenses = [];
+      const races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
 
-      const expensesByCode = { '住宿': {}, '交通': {}, '帳務明細': {} };
-      ['住宿', '交通', '帳務明細'].forEach(sheet => {
-          (dbData[sheet]||[]).forEach(row => {
-              const code = getVal(row, '行程代碼');
-              if (code) {
-                  if (!expensesByCode[sheet][code]) expensesByCode[sheet][code] = [];
-                  expensesByCode[sheet][code].push(row);
-              }
-          });
-      });
+      const expensesByCode = { '住宿': {}, '交通': {}, '帳務明細': {} };
+      ['住宿', '交通', '帳務明細'].forEach(sheet => {
+          (dbData[sheet]||[]).forEach(row => {
+              const code = getVal(row, '行程代碼');
+              if (code) {
+                  if (!expensesByCode[sheet][code]) expensesByCode[sheet][code] = [];
+                  expensesByCode[sheet][code].push(row);
+              }
+          });
+      });
 
-      races.forEach(r => {
-          const code = getVal(r, '行程代碼');
-          const rDate = formatDate(getVal(r, '日期'));
-          const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: getVal(r, '行程名稱') });
-          
-          (expensesByCode['住宿'][code] || []).forEach(s => {
-              const fee = parseFloat(getVal(s,'費用')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || getVal(r, '行程名稱') });
-          });
-          
-          (expensesByCode['交通'][code] || []).forEach(t => {
-              const fee = parseFloat(getVal(t,'票價或油資')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, category: '交通', amount: fee, name: getVal(t,'類型') || getVal(r, '行程名稱') });
-          });
-          
-          (expensesByCode['帳務明細'][code] || []).forEach(b => {
-              const fee = parseFloat(getVal(b,'金額')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || getVal(r, '行程名稱') });
-          });
-      });
+      races.forEach(r => {
+          const code = getVal(r, '行程代碼');
+          const rDate = formatDate(getVal(r, '日期'));
+          const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
+          if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: getVal(r, '行程名稱') });
+          
+          (expensesByCode['住宿'][code] || []).forEach(s => {
+              const fee = parseFloat(getVal(s,'費用')) || 0;
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || getVal(r, '行程名稱') });
+          });
+          
+          (expensesByCode['交通'][code] || []).forEach(t => {
+              const fee = parseFloat(getVal(t,'票價或油資')) || 0;
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, category: '交通', amount: fee, name: getVal(t,'類型') || getVal(r, '行程名稱') });
+          });
+          
+          (expensesByCode['帳務明細'][code] || []).forEach(b => {
+              const fee = parseFloat(getVal(b,'金額')) || 0;
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || getVal(r, '行程名稱') });
+          });
+      });
 
-      if (currentFilter === '全部') {
-          (dbData['帳務明細']||[]).forEach(b => {
-              const code = getVal(b, '行程代碼');
-              if (!code || code.trim() === '') {
-                  const fee = parseFloat(getVal(b,'金額')) || 0;
-                  if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')), category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳' });
-              }
-          });
-      }
+      if (currentFilter === '全部') {
+          (dbData['帳務明細']||[]).forEach(b => {
+              const code = getVal(b, '行程代碼');
+              if (!code || code.trim() === '') {
+                  const fee = parseFloat(getVal(b,'金額')) || 0;
+                  if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')), category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳' });
+              }
+          });
+      }
 
-      const now = new Date();
-      const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-      
-      let filteredExpenses = allExpenses.filter(e => {
-          if (!e.date) return false;
-          const eMonth = e.date.substring(0, 7);
-          if (selectedMonthFilter) return eMonth === selectedMonthFilter;
-          else return eMonth >= currentMonthKey;
-      });
+      const now = new Date();
+      const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      
+      let filteredExpenses = allExpenses.filter(e => {
+          if (!e.date) return false;
+          const eMonth = e.date.substring(0, 7);
+          if (selectedMonthFilter) return eMonth === selectedMonthFilter;
+          else return eMonth >= currentMonthKey;
+      });
 
-      document.getElementById('acc-grand-label-dynamic').textContent = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月 總支出` : `本月與未來 總支出`;
+      document.getElementById('acc-grand-label-dynamic').textContent = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月 總支出` : `本月與未來 總支出`;
 
-      let categoryTotals = {};
-      let grandTotal = 0;
-      accDetailsData = {}; 
+      let categoryTotals = {};
+      let grandTotal = 0;
+      accDetailsData = {}; 
 
-      filteredExpenses.forEach(e => {
-          let cat = e.category;
-          if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
-          categoryTotals[cat] += e.amount;
-          grandTotal += e.amount;
-          accDetailsData[cat].push({ name: e.name, amount: e.amount });
-      });
+      filteredExpenses.forEach(e => {
+          let cat = e.category;
+          if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
+          categoryTotals[cat] += e.amount;
+          grandTotal += e.amount;
+          accDetailsData[cat].push({ name: e.name, amount: e.amount });
+      });
 
-      document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
-      let sortedCats = Object.keys(categoryTotals).sort((a,b) => categoryTotals[b] - categoryTotals[a]);
-      const pGrid = document.getElementById('dynamic-cat-legend'); 
-      pGrid.innerHTML = '';
-      
-      let chartLabels = []; let chartData = []; let chartColors = [];
+      document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
+      let sortedCats = Object.keys(categoryTotals).sort((a,b) => categoryTotals[b] - categoryTotals[a]);
+      const pGrid = document.getElementById('dynamic-cat-legend'); 
+      pGrid.innerHTML = '';
+      
+      let chartLabels = []; let chartData = []; let chartColors = [];
 
-      sortedCats.forEach(k => {
-          const val = categoryTotals[k]; 
-          const pct = grandTotal === 0 ? 0 : (val / grandTotal) * 100;
-          const color = getColorForCategory(k);
-          chartLabels.push(k); chartData.push(val); chartColors.push(color);
+      sortedCats.forEach(k => {
+          const val = categoryTotals[k]; 
+          const pct = grandTotal === 0 ? 0 : (val / grandTotal) * 100;
+          const color = getColorForCategory(k);
+          chartLabels.push(k); chartData.push(val); chartColors.push(color);
 
-          /* 🎯 完美套用分類列表卡片的樣式類別 */
-          pGrid.innerHTML += `
-              <div class="acc-card" style="display:flex; justify-content:space-between; align-items:center; padding: 12px 15px;">
-                  <div style="display:flex; align-items:center; gap: 10px;">
-                      <div style="width:12px; height:12px; border-radius:50%; background:${color};"></div>
-                      <span class="acc-label" style="color:var(--text-main); font-size:14px;">${k}</span>
-                  </div>
-                  <div style="text-align:right;">
-                      <div class="acc-val" style="font-size:15px;">$${val.toLocaleString()}</div>
-                      <div style="font-size:11px; color:#b0bec5; font-weight:bold; margin-top: 2px;">${pct.toFixed(1)}%</div>
-                  </div>
-              </div>`;
-      });
+          pGrid.innerHTML += `
+              <div class="acc-card" style="display:flex; justify-content:space-between; align-items:center; padding: 10px 15px;">
+                  <div style="display:flex; align-items:center; gap: 8px;">
+                      <div style="width:10px; height:10px; border-radius:50%; background:${color};"></div>
+                      <span class="acc-label" style="color:var(--text-main); font-size:13px;">${k}</span>
+                  </div>
+                  <div style="text-align:right;">
+                      <div class="acc-val" style="font-size:14px;">$${val.toLocaleString()}</div>
+                      <div style="font-size:10px; color:#b0bec5; font-weight:bold;">${pct.toFixed(1)}%</div>
+                  </div>
+              </div>`;
+      });
 
-      const tabsContainer = document.getElementById('acc-tabs'); 
-      tabsContainer.innerHTML = '';
-      
-      if (sortedCats.length === 0) {
-          tabsContainer.innerHTML = '<div style="font-size:13px; color:#999; padding: 10px;">無資料</div>';
-          document.getElementById('acc-detail-list').innerHTML = '';
-      } else {
-          sortedCats.forEach((cat, index) => {
-              const btn = document.createElement('button');
-              btn.className = `acc-tab-btn ${index === 0 ? 'active' : ''}`;
-              btn.textContent = cat;
-              btn.onclick = () => switchAccTab(cat);
-              tabsContainer.appendChild(btn);
-          });
-          currentAccTab = sortedCats[0]; 
-          renderAccDetailsList();
-      }
-      renderDoughnutChart(chartLabels, chartData, chartColors);
-  }
+      const tabsContainer = document.getElementById('acc-tabs'); 
+      tabsContainer.innerHTML = '';
+      
+      if (sortedCats.length === 0) {
+          tabsContainer.innerHTML = '<div style="font-size:13px; color:#999; padding: 10px;">無資料</div>';
+          document.getElementById('acc-detail-list').innerHTML = '';
+      } else {
+          sortedCats.forEach((cat, index) => {
+              const btn = document.createElement('button');
+              btn.className = `acc-tab-btn ${index === 0 ? 'active' : ''}`;
+              btn.textContent = cat;
+              btn.onclick = () => switchAccTab(cat);
+              tabsContainer.appendChild(btn);
+          });
+          currentAccTab = sortedCats[0]; 
+          renderAccDetailsList();
+      }
+      renderDoughnutChart(chartLabels, chartData, chartColors);
+  }
 
-  function renderDoughnutChart(labels, data, colors) {
-      const ctx = document.getElementById('expenseChart').getContext('2d');
-      if (expenseChartInstance) expenseChartInstance.destroy();
-      
-      if (data.length === 0) {
-          expenseChartInstance = new Chart(ctx, { 
-              type: 'doughnut', 
-              data: { labels: ['無資料'], datasets: [{ data: [1], backgroundColor: ['#f5f5f5'], borderWidth: 0 }] }, 
-              options: { cutout: '80%', plugins: { legend: { display: false }, tooltip: { enabled: false } } } 
-          });
-          return;
-      }
-      
-      expenseChartInstance = new Chart(ctx, { 
-          type: 'doughnut', 
-          data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 3, borderColor: '#fff', hoverOffset: 4 }] }, 
-          options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(69, 90, 100, 0.9)', padding: 12, bodyFont: {size: 14, weight: 'bold'}, callbacks: { label: (c) => ` ${c.label}：$${c.parsed.toLocaleString()}` } } } } 
-      });
-  }
+  function renderDoughnutChart(labels, data, colors) {
+      const ctx = document.getElementById('expenseChart').getContext('2d');
+      if (expenseChartInstance) expenseChartInstance.destroy();
+      
+      if (data.length === 0) {
+          expenseChartInstance = new Chart(ctx, { 
+              type: 'doughnut', 
+              data: { labels: ['無資料'], datasets: [{ data: [1], backgroundColor: ['#f5f5f5'], borderWidth: 0 }] }, 
+              options: { cutout: '80%', plugins: { legend: { display: false }, tooltip: { enabled: false } } } 
+          });
+          return;
+      }
+      
+      expenseChartInstance = new Chart(ctx, { 
+          type: 'doughnut', 
+          data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 3, borderColor: '#fff', hoverOffset: 4 }] }, 
+          options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(69, 90, 100, 0.9)', padding: 12, callbacks: { label: (c) => ` ${c.label}：$${c.parsed.toLocaleString()}` } } } } 
+      });
+  }
 
-  function switchAccTab(tabName) {
-      currentAccTab = tabName;
-      document.querySelectorAll('.acc-tab-btn').forEach(b => {
-          if(b.textContent === tabName) b.classList.add('active');
-          else b.classList.remove('active');
-      });
-      renderAccDetailsList();
-  }
+  function switchAccTab(tabName) {
+      currentAccTab = tabName;
+      document.querySelectorAll('.acc-tab-btn').forEach(b => {
+          if(b.textContent === tabName) b.classList.add('active');
+          else b.classList.remove('active');
+      });
+      renderAccDetailsList();
+  }
 
-  function renderAccDetailsList() {
-      const listContainer = document.getElementById('acc-detail-list'); 
-      listContainer.innerHTML = '';
-      const items = accDetailsData[currentAccTab] || [];
-      if (items.length === 0) { 
-          /* 🎯 避免空值文字樣式跑掉 */
-          listContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#cfd8dc; font-weight:bold;">無支出紀錄</div>'; 
-          return; 
-      }
-      items.forEach(item => { 
-          /* 🎯 完美套用清單排版類別 */
-          listContainer.innerHTML += `
-              <div class="acc-detail-item">
-                  <div class="acc-detail-name">${item.name}</div>
-                  <div class="acc-detail-amount">$${item.amount.toLocaleString()}</div>
-              </div>`; 
-      });
-  }
+  function renderAccDetailsList() {
+      const listContainer = document.getElementById('acc-detail-list'); 
+      listContainer.innerHTML = '';
+      const items = accDetailsData[currentAccTab] || [];
+      if (items.length === 0) { 
+          listContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#cfd8dc;">無支出紀錄</div>'; 
+          return; 
+      }
+      items.forEach(item => { 
+          listContainer.innerHTML += `
+              <div class="acc-detail-item">
+                  <div class="acc-detail-name">${item.name}</div>
+                  <div class="acc-detail-amount">$${item.amount.toLocaleString()}</div>
+              </div>`; 
+      });
+  }
 
-  function calculateEventTotal(code) {
-      let sum = 0; 
-      const race = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
-      if (race) sum += parseFloat(getVal(race, '報名費總額')) || 0;
-      
-      (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code).forEach(s => sum += parseFloat(getVal(s, '費用')) || 0);
-      (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code).forEach(t => sum += parseFloat(getVal(t, '票價或油資')) || 0);
-      (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code).forEach(b => sum += parseFloat(getVal(b, '金額')) || 0);
-      
-      return sum;
-  }
+  function calculateEventTotal(code) {
+      let sum = 0; 
+      const race = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
+      if (race) sum += parseFloat(getVal(race, '報名費總額')) || 0;
+      
+      (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code).forEach(s => sum += parseFloat(getVal(s, '費用')) || 0);
+      (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code).forEach(t => sum += parseFloat(getVal(t, '票價或油資')) || 0);
+      (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code).forEach(b => sum += parseFloat(getVal(b, '金額')) || 0);
+      
+      return sum;
+  }
 
-  function renderFilters() {
-      const bar = document.getElementById('filter-bar');
-      const cats = ['全部', ...new Set(dbData['行程'].map(r => getVal(r, '行程類別')).filter(c => c))];
-      bar.innerHTML = '';
-      
-      cats.forEach(c => {
-          const btn = document.createElement('button');
-          btn.className = `filter-btn ${c === currentFilter ? 'active' : ''}`;
-          btn.textContent = c;
-          btn.onclick = () => { 
-              currentFilter = c; renderFilters(); renderMain(); 
-              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
-          };
-          bar.appendChild(btn);
-      });
-  }
+  function renderFilters() {
+      const bar = document.getElementById('filter-bar');
+      const cats = ['全部', ...new Set(dbData['行程'].map(r => getVal(r, '行程類別')).filter(c => c))];
+      bar.innerHTML = '';
+      
+      cats.forEach(c => {
+          const btn = document.createElement('button');
+          btn.className = `filter-btn ${c === currentFilter ? 'active' : ''}`;
+          btn.textContent = c;
+          btn.onclick = () => { 
+              currentFilter = c; renderFilters(); renderMain(); 
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+          };
+          bar.appendChild(btn);
+      });
+  }
 
-  function renderMonthNav() {
-      const yearContainer = document.getElementById('year-nav');
-      const navContainer = document.getElementById('month-nav');
-      yearContainer.innerHTML = ''; navContainer.innerHTML = '';
-      
-      const now = new Date(); 
-      const currentY = now.getFullYear(); 
-      const currentM = now.getMonth() + 1;
-      const currentMonthKey = `${currentY}-${String(currentM).padStart(2, '0')}`;
-      
-      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
-      const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
-      
-      if (currentFilter === '全部') { 
-          (dbData['帳務明細']||[]).forEach(b => { 
-              const bDate = formatDate(getVal(b, '日期')); 
-              if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); 
-          }); 
-      }
-      
-      const uniqueMonthKeysWithData = [...new Set(monthKeysWithData)].sort();
-      let uniqueYears = [...new Set(uniqueMonthKeysWithData.map(k => parseInt(k.substring(0, 4))))].sort((a, b) => a - b);
-      
-      if (!uniqueYears.includes(currentY)) {
-          uniqueYears.push(currentY);
-          uniqueYears.sort((a, b) => a - b);
-      }
+  function renderMonthNav() {
+      const yearContainer = document.getElementById('year-nav');
+      const navContainer = document.getElementById('month-nav');
+      yearContainer.innerHTML = ''; navContainer.innerHTML = '';
+      
+      const now = new Date(); 
+      const currentY = now.getFullYear(); 
+      const currentM = now.getMonth() + 1;
+      const currentMonthKey = `${currentY}-${String(currentM).padStart(2, '0')}`;
+      
+      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+      const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
+      
+      if (currentFilter === '全部') { 
+          (dbData['帳務明細']||[]).forEach(b => { 
+              const bDate = formatDate(getVal(b, '日期')); 
+              if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); 
+          }); 
+      }
+      
+      const uniqueMonthKeysWithData = [...new Set(monthKeysWithData)].sort();
+      let uniqueYears = [...new Set(uniqueMonthKeysWithData.map(k => parseInt(k.substring(0, 4))))].sort((a, b) => a - b);
+      
+      if (!uniqueYears.includes(currentY)) {
+          uniqueYears.push(currentY);
+          uniqueYears.sort((a, b) => a - b);
+      }
 
-      uniqueYears.forEach(y => {
-          const btn = document.createElement('div');
-          btn.className = 'year-nav-btn ' + (y === displayYear ? 'active' : '');
-          btn.textContent = y + ' 年';
-          btn.onclick = () => { 
-              displayYear = y; selectedMonthFilter = null; renderMain(); 
-              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
-          };
-          yearContainer.appendChild(btn);
-      });
+      uniqueYears.forEach(y => {
+          const btn = document.createElement('div');
+          btn.className = 'year-nav-btn ' + (y === displayYear ? 'active' : '');
+          btn.textContent = y + ' 年';
+          btn.onclick = () => { 
+              displayYear = y; selectedMonthFilter = null; renderMain(); 
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+          };
+          yearContainer.appendChild(btn);
+      });
 
-      for (let i = 1; i <= 12; i++) {
-          const mStr = String(i).padStart(2, '0'); 
-          const mKey = `${displayYear}-${mStr}`;
-          const hasData = uniqueMonthKeysWithData.includes(mKey);
-          
-          const btn = document.createElement('div'); 
-          btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
-          if (selectedMonthFilter === mKey) btn.classList.add('active');
-          btn.textContent = i;
-          
-          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) btn.style.opacity = '0.4';
-          
-          if (hasData) { 
-              btn.onclick = () => { 
-                  selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
-                  renderMain(); 
-                  if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
-              }; 
-          }
-          navContainer.appendChild(btn);
-      }
-  }
+      for (let i = 1; i <= 12; i++) {
+          const mStr = String(i).padStart(2, '0'); 
+          const mKey = `${displayYear}-${mStr}`;
+          const hasData = uniqueMonthKeysWithData.includes(mKey);
+          
+          const btn = document.createElement('div'); 
+          btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
+          if (selectedMonthFilter === mKey) btn.classList.add('active');
+          btn.textContent = i;
+          
+          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) btn.style.opacity = '0.4';
+          
+          if (hasData) { 
+              btn.onclick = () => { 
+                  selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
+                  renderMain(); 
+                  if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+              }; 
+          }
+          navContainer.appendChild(btn);
+      }
+  }
 
-  function renderPriceRow(label, val, payer, method, state) {
-      if(!hasVal(val) && !hasVal(payer)) return '';
-      let p = payer || '-', m = method || '-';
-      let pm = (m === undefined || !hasVal(m)) ? p : (p==='-' && m==='-' ? '-' : `${p} / ${m}`);
+  function renderPriceRow(label, val, payer, method, state) {
+      if(!hasVal(val) && !hasVal(payer)) return '';
+      let p = payer || '-', m = method || '-';
+      let pm = (m === undefined || !hasVal(m)) ? p : (p==='-' && m==='-' ? '-' : `${p} / ${m}`);
 
-      let stateHtml = '';
-      if (state) {
-          if (state === '已付') stateHtml = `<span class="status-tag status-paid">已付</span>`;
-          else if (state === '現場付') stateHtml = `<span class="status-tag status-onsite">現場付</span>`;
-          else if (state === '未付') stateHtml = `<span class="status-tag status-unpaid">未付</span>`;
-          else stateHtml = `<span class="status-tag status-onsite">${state}</span>`;
-      }
+      let stateHtml = '';
+      if (state) {
+          if (state === '已付') stateHtml = `<span class="status-tag status-paid">已付</span>`;
+          else if (state === '現場付') stateHtml = `<span class="status-tag status-onsite">現場付</span>`;
+          else if (state === '未付') stateHtml = `<span class="status-tag status-unpaid">未付</span>`;
+          else stateHtml = `<span class="status-tag status-onsite">${state}</span>`;
+      }
 
-      return `
-          <div class="price-row">
-              <div><span style="color:#7f8c8d;">${label}</span> <span class="price-tag">$${val || 0}</span></div>
-              <div style="font-size:12px;color:#888;display:flex;align-items:center;">
-                  ${pm} ${stateHtml}
-              </div>
-          </div>
-      `;
-  }
+      return `
+          <div class="price-row">
+              <div><span style="color:#7f8c8d;">${label}</span> <span class="price-tag">$${val || 0}</span></div>
+              <div style="font-size:12px;color:#888;display:flex;align-items:center;">
+                  ${pm} ${stateHtml}
+              </div>
+          </div>
+      `;
+  }
 
-  function renderCalendar() {
-      const container = document.getElementById('calendar-container'); 
-      container.innerHTML = '';
-      
-      const now = new Date(); 
-      const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-      
-      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
-      
-      let eventMap = {}; 
-      let allDatesWithData = [];
-      races.forEach(r => { 
-          const d = formatDate(getVal(r, '日期')); 
-          if (d) { eventMap[d] = r; allDatesWithData.push(d); } 
-      });
+  function renderCalendar() {
+      const container = document.getElementById('calendar-container'); 
+      container.innerHTML = '';
+      
+      const now = new Date(); 
+      const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      
+      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+      
+      let eventMap = {}; 
+      let allDatesWithData = [];
+      races.forEach(r => { 
+          const d = formatDate(getVal(r, '日期')); 
+          if (d) { eventMap[d] = r; allDatesWithData.push(d); } 
+      });
 
-      let dailyExpenseMap = {};
-      if (currentFilter === '全部') {
-          (dbData['帳務明細']||[]).forEach(b => { 
-              const d = formatDate(getVal(b, '日期')); 
-              if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
-          });
-      }
+      let dailyExpenseMap = {};
+      if (currentFilter === '全部') {
+          (dbData['帳務明細']||[]).forEach(b => { 
+              const d = formatDate(getVal(b, '日期')); 
+              if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
+          });
+      }
 
-      const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
-      let hasRenderedAny = false;
+      const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
+      let hasRenderedAny = false;
 
-      monthKeysToRender.forEach(mKey => {
-          let shouldShow = false;
-          if (selectedMonthFilter) { shouldShow = (mKey === selectedMonthFilter); } 
-          else { shouldShow = (mKey.startsWith(displayYear)) && (mKey >= currentMonthKey); }
-          
-          if (!shouldShow) return;
-          hasRenderedAny = true;
-          
-          const [y, m] = mKey.split('-');
-          const section = document.createElement('div'); 
-          section.className = 'month-section'; 
-          section.id = 'month-section-' + mKey;
-          
-          section.innerHTML = `
-              <div class="month-title">${y}年${m}月</div>
-              <div class="calendar-header">
-                  ${['日','一','二','三','四','五','六'].map(d => `<div class="weekday-header">${d}</div>`).join('')}
-              </div>
-          `;
-          
-          const grid = document.createElement('div'); 
-          grid.className = 'calendar-grid';
-          
-          const firstDay = new Date(y, m-1, 1).getDay(); 
-          const lastDate = new Date(y, m, 0).getDate();
-          
-          for (let i = 0; i < firstDay; i++) { grid.appendChild(document.createElement('div')); }
-          
-          for (let d = 1; d <= lastDate; d++) {
-              const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
-              const cell = document.createElement('div'); 
-              cell.className = 'day'; 
-              cell.innerHTML = `<span class="day-number">${d}</span>`;
-              
-              const event = eventMap[dStr]; 
-              const hasDailyExpense = dailyExpenseMap[dStr];
-              
-              if (event) {
-                  const cat = getVal(event, '行程類別'); 
-                  cell.classList.add('has-event');
-                  // 🎯 修復 1：平常只顯示邊框
-                  const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
-                  cell.style.borderColor = pastelColor || '#cfd8dc';
-                  cell.dataset.color = pastelColor || '#cfd8dc'; // 存起來給點擊時使用
-                  cell.onclick = () => handleDayClick(event, cell, grid, dStr);
-              } else if (hasDailyExpense) {
-                  cell.classList.add('has-expense'); 
-                  cell.onclick = () => handleDayClick(null, cell, grid, dStr);
-              }
-              grid.appendChild(cell);
-          }
-          
-          section.appendChild(grid); 
-          container.appendChild(section);
-      });
+      monthKeysToRender.forEach(mKey => {
+          let shouldShow = false;
+          if (selectedMonthFilter) { shouldShow = (mKey === selectedMonthFilter); } 
+          else { shouldShow = (mKey.startsWith(displayYear)) && (mKey >= currentMonthKey); }
+          
+          if (!shouldShow) return;
+          hasRenderedAny = true;
+          
+          const [y, m] = mKey.split('-');
+          const section = document.createElement('div'); 
+          section.className = 'month-section'; 
+          section.id = 'month-section-' + mKey;
+          
+          section.innerHTML = `
+              <div class="month-title">${y}年${m}月</div>
+              <div class="calendar-header">
+                  ${['日','一','二','三','四','五','六'].map(d => `<div class="weekday-header">${d}</div>`).join('')}
+              </div>
+          `;
+          
+          const grid = document.createElement('div'); 
+          grid.className = 'calendar-grid';
+          
+          const firstDay = new Date(y, m-1, 1).getDay(); 
+          const lastDate = new Date(y, m, 0).getDate();
+          
+          for (let i = 0; i < firstDay; i++) { grid.appendChild(document.createElement('div')); }
+          
+          for (let d = 1; d <= lastDate; d++) {
+              const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
+              const cell = document.createElement('div'); 
+              cell.className = 'day'; 
+              cell.innerHTML = `<span class="day-number">${d}</span>`;
+              
+              const event = eventMap[dStr]; 
+              const hasDailyExpense = dailyExpenseMap[dStr];
+              
+              if (event) {
+                  const cat = getVal(event, '行程類別'); 
+                  cell.classList.add('has-event');
+                  // 🎯 修復 1：平常只顯示邊框
+                  const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
+                  cell.style.borderColor = pastelColor || '#cfd8dc';
+                  cell.dataset.color = pastelColor || '#cfd8dc'; // 存起來給點擊時使用
+                  cell.onclick = () => handleDayClick(event, cell, grid, dStr);
+              } else if (hasDailyExpense) {
+                  cell.classList.add('has-expense'); 
+                  cell.onclick = () => handleDayClick(null, cell, grid, dStr);
+              }
+              grid.appendChild(cell);
+          }
+          
+          section.appendChild(grid); 
+          container.appendChild(section);
+      });
 
-      if (!hasRenderedAny) {
-          container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">此區間目前沒有排定行程<br><span style="font-size:13px; font-weight:normal;">請切換上方「年份」或「月份」查看</span></div>';
-      }
-  }
+      if (!hasRenderedAny) {
+          container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">此區間目前沒有排定行程<br><span style="font-size:13px; font-weight:normal;">請切換上方「年份」或「月份」查看</span></div>';
+      }
+  }
 
-  function renderList() {
-      const container = document.getElementById('list-container'); 
-      container.innerHTML = '';
-      
-      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
-      races.sort((a, b) => new Date(getVal(a, '日期')) - new Date(getVal(b, '日期')));
-      
-      const today = new Date(); 
-      today.setHours(0, 0, 0, 0);
-      
-      const pastRaces = races.filter(r => new Date(getVal(r, '日期')) < today && formatDate(getVal(r, '日期')).startsWith(displayYear));
-      const futureRaces = races.filter(r => new Date(getVal(r, '日期')) >= today && formatDate(getVal(r, '日期')).startsWith(displayYear));
-      
-      let racesToRender = [];
-      if (selectedMonthFilter) {
-          racesToRender = races.filter(r => formatDate(getVal(r, '日期')).startsWith(selectedMonthFilter));
-      } else {
-          racesToRender = showPastList ? races.filter(r => formatDate(getVal(r, '日期')).startsWith(displayYear)) : futureRaces;
-          if (pastRaces.length > 0) {
-              const toggleBtn = document.createElement('div'); 
-              toggleBtn.className = 'past-toggle-btn';
-              toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示 ${displayYear} 歷史行程 (${pastRaces.length}筆) ▼`;
-              toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
-              container.appendChild(toggleBtn);
-          }
-      }
+  function renderList() {
+      const container = document.getElementById('list-container'); 
+      container.innerHTML = '';
+      
+      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+      races.sort((a, b) => new Date(getVal(a, '日期')) - new Date(getVal(b, '日期')));
+      
+      const today = new Date(); 
+      today.setHours(0, 0, 0, 0);
+      
+      const pastRaces = races.filter(r => new Date(getVal(r, '日期')) < today && formatDate(getVal(r, '日期')).startsWith(displayYear));
+      const futureRaces = races.filter(r => new Date(getVal(r, '日期')) >= today && formatDate(getVal(r, '日期')).startsWith(displayYear));
+      
+      let racesToRender = [];
+      if (selectedMonthFilter) {
+          racesToRender = races.filter(r => formatDate(getVal(r, '日期')).startsWith(selectedMonthFilter));
+      } else {
+          racesToRender = showPastList ? races.filter(r => formatDate(getVal(r, '日期')).startsWith(displayYear)) : futureRaces;
+          if (pastRaces.length > 0) {
+              const toggleBtn = document.createElement('div'); 
+              toggleBtn.className = 'past-toggle-btn';
+              toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示 ${displayYear} 歷史行程 (${pastRaces.length}筆) ▼`;
+              toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
+              container.appendChild(toggleBtn);
+          }
+      }
 
-      if (racesToRender.length === 0) {
-          const emptyMsg = document.createElement('div'); 
-          emptyMsg.style.cssText = "padding:40px; text-align:center; color:#95a5a6; font-size:15px; font-weight:bold;"; 
-          emptyMsg.textContent = "此區間目前沒有行程資料"; 
-          container.appendChild(emptyMsg); 
-          return;
-      }
-      
-      racesToRender.forEach(event => {
-          const eDate = new Date(getVal(event, '日期')); 
-          const cat = getVal(event, '行程類別');
-          const daysDiff = Math.ceil((eDate - today) / (1000 * 60 * 60 * 24));
-          
-          let countdownHtml = daysDiff > 0 ? `<span style="font-weight:bold; font-size:13px; color:var(--text-main);">還有<span class="list-countdown-days">${daysDiff}</span>天</span>` : (daysDiff === 0 ? `<span style="font-weight:bold; font-size:14px; color:var(--text-main);">今天</span>` : `<span style="font-weight:bold; font-size:13px; color:#bbb;">已結束</span>`);
-          
-          const item = document.createElement('div'); 
-          item.className = 'list-item'; 
-          const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
-          item.style.borderLeftColor = pastelColor || '#cfd8dc';
-          
-          // 🎯 修復 6：清單日期文字置中對齊
-          item.innerHTML = `
-              <div class="list-date">
-                  <span class="m">${eDate.getMonth()+1}月</span>
-                  <span class="d">${eDate.getDate()}</span>
-              </div>
-              <div class="list-name">${getVal(event, '行程名稱')}</div>
-              <div class="list-countdown">${countdownHtml}</div>
-          `;
-          item.onclick = () => handleListClick(event, item); 
-          container.appendChild(item);
-      });
-  }
+      if (racesToRender.length === 0) {
+          const emptyMsg = document.createElement('div'); 
+          emptyMsg.style.cssText = "padding:40px; text-align:center; color:#95a5a6; font-size:15px; font-weight:bold;"; 
+          emptyMsg.textContent = "此區間目前沒有行程資料"; 
+          container.appendChild(emptyMsg); 
+          return;
+      }
+      
+      racesToRender.forEach(event => {
+          const eDate = new Date(getVal(event, '日期')); 
+          const cat = getVal(event, '行程類別');
+          const daysDiff = Math.ceil((eDate - today) / (1000 * 60 * 60 * 24));
+          
+          let countdownHtml = daysDiff > 0 ? `<span style="font-weight:bold; font-size:13px; color:var(--text-main);">還有<span class="list-countdown-days">${daysDiff}</span>天</span>` : (daysDiff === 0 ? `<span style="font-weight:bold; font-size:14px; color:var(--text-main);">今天</span>` : `<span style="font-weight:bold; font-size:13px; color:#bbb;">已結束</span>`);
+          
+          const item = document.createElement('div'); 
+          item.className = 'list-item'; 
+          const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
+          item.style.borderLeftColor = pastelColor || '#cfd8dc';
+          
+          // 🎯 修復 6：清單日期文字置中對齊
+          item.innerHTML = `
+              <div class="list-date">
+                  <span class="m">${eDate.getMonth()+1}月</span>
+                  <span class="d">${eDate.getDate()}</span>
+              </div>
+              <div class="list-name">${getVal(event, '行程名稱')}</div>
+              <div class="list-countdown">${countdownHtml}</div>
+          `;
+          item.onclick = () => handleListClick(event, item); 
+          container.appendChild(item);
+      });
+  }
 
-  let currentOpenPanel = null, currentSelectedEl = null;
+  let currentOpenPanel = null, currentSelectedEl = null;
 
-  function handleDayClick(event, cell, grid, dStr) {
-      if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
-      
-      if (currentSelectedEl) { 
-          currentSelectedEl.classList.remove('selected'); 
-          // 🎯 修復 1：取消點擊時，恢復為透明背景色 (保留邊框)
-          if(currentSelectedEl.classList.contains('has-event')) {
-              currentSelectedEl.style.backgroundColor = 'transparent';
-          }
-      }
-      
-      currentSelectedEl = cell; 
-      cell.classList.add('selected');
-      
-      if (event) { 
-          // 🎯 修復 1：點擊時，套用滿版底色
-          cell.style.backgroundColor = cell.dataset.color;
-      }
-      
-      if (currentOpenPanel) currentOpenPanel.remove();
-      const panel = document.createElement('div'); 
-      panel.className = 'detail-panel'; 
-      panel.innerHTML = generateDetailHTML(event, dStr);
-      
-      const cells = Array.from(grid.children); 
-      const idx = cells.indexOf(cell); 
-      const rowEnd = Math.min(cells.length - 1, idx + (6 - (idx % 7)));
-      
-      grid.insertBefore(panel, cells[rowEnd].nextSibling); 
-      setTimeout(() => panel.classList.add('open'), 10); 
-      currentOpenPanel = panel;
-  }
+  function handleDayClick(event, cell, grid, dStr) {
+      if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
+      
+      if (currentSelectedEl) { 
+          currentSelectedEl.classList.remove('selected'); 
+          // 🎯 修復 1：取消點擊時，恢復為透明背景色 (保留邊框)
+          if(currentSelectedEl.classList.contains('has-event')) {
+              currentSelectedEl.style.backgroundColor = 'transparent';
+          }
+      }
+      
+      currentSelectedEl = cell; 
+      cell.classList.add('selected');
+      
+      if (event) { 
+          // 🎯 修復 1：點擊時，套用滿版底色
+          cell.style.backgroundColor = cell.dataset.color;
+      }
+      
+      if (currentOpenPanel) currentOpenPanel.remove();
+      const panel = document.createElement('div'); 
+      panel.className = 'detail-panel'; 
+      panel.innerHTML = generateDetailHTML(event, dStr);
+      
+      const cells = Array.from(grid.children); 
+      const idx = cells.indexOf(cell); 
+      const rowEnd = Math.min(cells.length - 1, idx + (6 - (idx % 7)));
+      
+      grid.insertBefore(panel, cells[rowEnd].nextSibling); 
+      setTimeout(() => panel.classList.add('open'), 10); 
+      currentOpenPanel = panel;
+  }
 
-  function handleListClick(event, item) {
-      if (currentSelectedEl === item && currentOpenPanel) { closeCurrentPanel(); return; }
-      if (currentOpenPanel) currentOpenPanel.remove();
-      
-      currentSelectedEl = item; 
-      const dStr = formatDate(getVal(event, '日期'));
-      const panel = document.createElement('div'); 
-      panel.className = 'detail-panel'; 
-      panel.innerHTML = generateDetailHTML(event, dStr);
-      
-      item.parentNode.insertBefore(panel, item.nextSibling); 
-      setTimeout(() => panel.classList.add('open'), 10); 
-      currentOpenPanel = panel;
-  }
+  function handleListClick(event, item) {
+      if (currentSelectedEl === item && currentOpenPanel) { closeCurrentPanel(); return; }
+      if (currentOpenPanel) currentOpenPanel.remove();
+      
+      currentSelectedEl = item; 
+      const dStr = formatDate(getVal(event, '日期'));
+      const panel = document.createElement('div'); 
+      panel.className = 'detail-panel'; 
+      panel.innerHTML = generateDetailHTML(event, dStr);
+      
+      item.parentNode.insertBefore(panel, item.nextSibling); 
+      setTimeout(() => panel.classList.add('open'), 10); 
+      currentOpenPanel = panel;
+  }
 
-  function closeCurrentPanel() {
-      if (currentOpenPanel) { 
-          currentOpenPanel.remove(); 
-          currentOpenPanel = null;
-          if (currentSelectedEl) { 
-              currentSelectedEl.classList.remove('selected'); 
-              if(currentSelectedEl.classList.contains('has-event')){
-                  currentSelectedEl.style.backgroundColor = 'transparent';
-              }
-              currentSelectedEl = null; 
-          }
-      }
-  }
+  function closeCurrentPanel() {
+      if (currentOpenPanel) { 
+          currentOpenPanel.remove(); 
+          currentOpenPanel = null;
+          if (currentSelectedEl) { 
+              currentSelectedEl.classList.remove('selected'); 
+              if(currentSelectedEl.classList.contains('has-event')){
+                  currentSelectedEl.style.backgroundColor = 'transparent';
+              }
+              currentSelectedEl = null; 
+          }
+      }
+  }
 
-  function generateReceiptHTML(bills) {
-      if (bills.length === 0) return `<div style="text-align:center; color:#95a5a6; font-size:13px; padding:20px;">無帳務明細</div>`;
-      
-      const grouped = {};
-      bills.forEach(b => {
-          const d = formatDate(getVal(b, '日期')) || '未填寫日期';
-          if (!grouped[d]) grouped[d] = [];
-          grouped[d].push(b);
-      });
-      
-      let html = `<div style="background:#fff; border-radius:12px; border:1px solid #eee; padding:15px; margin-bottom:15px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">`;
-      let total = 0;
-      
-      Object.keys(grouped).sort().forEach(dateKey => {
-          html += `<div style="font-weight:bold; color:var(--brand-main); margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:14px; margin-top:10px;">${dateKey}</div>`;
-          grouped[dateKey].forEach(b => {
-              const cat = getVal(b, '類別') || '其他'; 
-              const item = getVal(b, '項目') || '未命名項目'; 
-              const pay = getVal(b, '付款方式') || '未填寫'; 
-              const amt = parseFloat(getVal(b, '金額')) || 0; 
-              const memo = getVal(b, '備註');
-              total += amt;
-              
-              const safeCode = (getVal(b, '行程代碼') || '').replace(/'/g, "\\'");
-              const safeDate = (getVal(b, '日期') || '').replace(/'/g, "\\'");
-              const safeCat = cat.replace(/'/g, "\\'");
-              const safeItem = item.replace(/'/g, "\\'");
-              const safePay = pay.replace(/'/g, "\\'");
-              const safeMemo = (memo || '').replace(/'/g, "\\'");
+  function generateReceiptHTML(bills) {
+      if (bills.length === 0) return `<div style="text-align:center; color:#95a5a6; font-size:13px; padding:20px;">無帳務明細</div>`;
+      
+      const grouped = {};
+      bills.forEach(b => {
+          const d = formatDate(getVal(b, '日期')) || '未填寫日期';
+          if (!grouped[d]) grouped[d] = [];
+          grouped[d].push(b);
+      });
+      
+      let html = `<div style="background:#fff; border-radius:12px; border:1px solid #eee; padding:15px; margin-bottom:15px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">`;
+      let total = 0;
+      
+      Object.keys(grouped).sort().forEach(dateKey => {
+          html += `<div style="font-weight:bold; color:var(--brand-main); margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:14px; margin-top:10px;">${dateKey}</div>`;
+          grouped[dateKey].forEach(b => {
+              const cat = getVal(b, '類別') || '其他'; 
+              const item = getVal(b, '項目') || '未命名項目'; 
+              const pay = getVal(b, '付款方式') || '未填寫'; 
+              const amt = parseFloat(getVal(b, '金額')) || 0; 
+              const memo = getVal(b, '備註');
+              total += amt;
+              
+              const safeCode = (getVal(b, '行程代碼') || '').replace(/'/g, "\\'");
+              const safeDate = (getVal(b, '日期') || '').replace(/'/g, "\\'");
+              const safeCat = cat.replace(/'/g, "\\'");
+              const safeItem = item.replace(/'/g, "\\'");
+              const safePay = pay.replace(/'/g, "\\'");
+              const safeMemo = (memo || '').replace(/'/g, "\\'");
 
-              html += `
-                  <div style="display:flex; flex-direction:column; padding: 12px 0; border-bottom: 1px dashed #f5f5f5;">
-                      <div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; font-size: 14px; align-items: center;">
-                          <div style="color:#fff; font-size:10px; background:${getColorForCategory(cat)}; padding:2px 8px; border-radius:10px; white-space: nowrap; font-weight:bold;">${cat}</div>
-                          <div style="color:#2c3e50; font-weight: 500;">${item}</div>
-                          <div style="font-size:12px; color:#aaa; white-space: nowrap;">${pay}</div>
-                          <div style="font-weight:bold; color:var(--settle-pink); text-align: right; min-width: 60px;">$${amt.toLocaleString()}</div>
-                      </div>
-                      ${memo ? `<div style="font-size: 12px; color: #95a5a6; margin-top: 4px; padding-left: 45px;">備註：${memo}</div>` : ''}
-                      
-                      <div class="edit-controls">
-                          <button class="circle-btn edit-btn" onclick="openEditModal('帳務明細', ${b['_rowIndex']}, event)">✎</button>
-                          <button class="circle-btn del-btn" onclick="showConfirmDelete('帳務明細', ${b['_rowIndex']}, event)">✖</button>
-                      </div>
-                  </div>
-              `;
-          });
-      });
-      
-      html += `
-          <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:900; color:var(--brand-main); margin-top:15px; padding-top:10px; border-top:2px solid #eee;">
-              <div>總計</div>
-              <div>$${total.toLocaleString()}</div>
-          </div>
-      </div>`;
-      
-      return html;
-  }
+              html += `
+                  <div style="display:flex; flex-direction:column; padding: 12px 0; border-bottom: 1px dashed #f5f5f5;">
+                      <div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; font-size: 14px; align-items: center;">
+                          <div style="color:#fff; font-size:10px; background:${getColorForCategory(cat)}; padding:2px 8px; border-radius:10px; white-space: nowrap; font-weight:bold;">${cat}</div>
+                          <div style="color:#2c3e50; font-weight: 500;">${item}</div>
+                          <div style="font-size:12px; color:#aaa; white-space: nowrap;">${pay}</div>
+                          <div style="font-weight:bold; color:var(--settle-pink); text-align: right; min-width: 60px;">$${amt.toLocaleString()}</div>
+                      </div>
+                      ${memo ? `<div style="font-size: 12px; color: #95a5a6; margin-top: 4px; padding-left: 45px;">備註：${memo}</div>` : ''}
+                      
+                      <div class="edit-controls">
+                          <button class="circle-btn edit-btn" onclick="openEditModal('帳務明細', ${b['_rowIndex']}, event)">✎</button>
+                          <button class="circle-btn del-btn" onclick="showConfirmDelete('帳務明細', ${b['_rowIndex']}, event)">✖</button>
+                      </div>
+                  </div>
+              `;
+          });
+      });
+      
+      html += `
+          <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:900; color:var(--brand-main); margin-top:15px; padding-top:10px; border-top:2px solid #eee;">
+              <div>總計</div>
+              <div>$${total.toLocaleString()}</div>
+          </div>
+      </div>`;
+      
+      return html;
+  }
 
-  function generateDetailHTML(event, dateStr) {
-      if (!event) {
-          let html = `
-              <div class="detail-header" style="margin-bottom:10px; padding-bottom:5px; border-bottom:none;">
-                  <div>
-                      <div class="detail-race-name">日常帳務</div>
-                      <div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${dateStr}</div>
-                  </div>
-              </div>
-          `;
-          const dailyBills = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dateStr);
-          html += generateReceiptHTML(dailyBills);
-          return html;
-      }
-      
-      const code = getVal(event, '行程代碼');
-      const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
-      
-      let html = `
-      <div class="detail-header" style="flex-direction:column; gap:10px; align-items: flex-start;">
-          <div style="display:flex; justify-content:space-between; width:100%; align-items:baseline;">
-              <div>
-                  <div class="detail-race-name">${getVal(event, '行程名稱')}</div>
-                  <div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div>
-              </div>
-              ${getVal(event,'行程連結') ? `<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">簡章 >></a>` : ''}
-          </div>
-          <div class="edit-controls" style="width:100%; border:none; margin:0; padding:0;">
-              <button class="circle-btn edit-btn" onclick="openEditModal('行程', ${event['_rowIndex']}, event)">✎</button>
-              <button class="circle-btn del-btn" onclick="showConfirmDelete('行程', ${event['_rowIndex']}, event)">✖</button>
-          </div>
-      </div>`;
-      
-      html += `
-      <div class="view-switcher" style="margin-bottom: 20px; width: fit-content; border-radius: 20px;">
-          <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
-          <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
-      </div>`;
-      
-      html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
-      
-      /* 🎯 修復 2：加上 card-race 保證邊線顏色 */
-      html += `<div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
-      
-      if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
-      if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
-      
-      html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'));
-      
-      if(getVal(event,'備註')) {
-          html += `<div style="margin-top:12px; font-size:13px; color:#666; border-top: 1px dashed #ddd; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
-      }
-      html += `</div></div>`;
-      
-      const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
-      if(stays.length > 0) {
-          html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
-          stays.forEach(s => {
-              /* 🎯 修復 2：加上 card-stay 保證邊線顏色 */
-              html += `
-                  <div class="info-card card-stay">
-                      <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-                          <span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>
-                          ${getVal(s,'連結') ? `<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>` : ''}
-                      </div>`;
-              if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
-              if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房時間</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
-              if(getVal(s,'訂房平台')) html += `<div class="info-row"><span>平台</span><span>${getVal(s,'訂房平台')}</span></div>`;
-              
-              html += renderPriceRow('費用', getVal(s,'費用'), getVal(s,'付款人'), getVal(s,'付款方式'), getVal(s,'狀態'));
-              
-              if(getVal(s,'備註')) html += `<div style="margin-top:8px; font-size:12px; color:#666;">備註：${getVal(s,'備註')}</div>`;
-              
-              html += `
-                  <div class="edit-controls">
-                      <button class="circle-btn edit-btn" onclick="openEditModal('住宿', ${s['_rowIndex']}, event)">✎</button>
-                      <button class="circle-btn del-btn" onclick="showConfirmDelete('住宿', ${s['_rowIndex']}, event)">✖</button>
-                  </div>
-              `;
-              html += `</div>`;
-          });
-          html += `</div>`;
-      }
-      
-      const trans = (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code);
-      if(trans.length > 0) {
-          html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
-          trans.forEach(t => {
-              /* 🎯 修復 2：加上 card-trans 保證邊線顏色 */
-              html += `
-                  <div class="info-card card-trans">
-                      <div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>
-              `;
-              
-              const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班') || getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機');
-              const goD = getVal(t,'出發日期'); 
-              const goS = getVal(t,'去程出發時間'); 
-              const goA = getVal(t,'去程抵達時間');
-              
-              if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span>${goB}</span></div>`;
-              if(hasVal(goD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(goD).substring(5)}</span></div>`;
-              if(hasVal(goS) || hasVal(goA)) html += `<div class="info-row"><span></span><span>${goS||'--:--'}出發－${goA||'--:--'}抵達</span></div>`;
-              
-              const bkB = getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班') || getVal(t,'回程班次 / 飛機') || getVal(t,'回程班次/飛機');
-              const bkD = getVal(t,'回程日期'); 
-              const bkS = getVal(t,'回程出發時間'); 
-              const bkA = getVal(t,'回程抵達時間');
-              
-              if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span>${bkB}</span></div>`;
-              if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
-              if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
-              
-              html += renderPriceRow('費用', getVal(t,'票價或油資'), getVal(t,'付款人'), getVal(t,'付款方式'), getVal(t,'狀態'));
-              
-              html += `
-                  <div class="edit-controls">
-                      <button class="circle-btn edit-btn" onclick="openEditModal('交通', ${t['_rowIndex']}, event)">✎</button>
-                      <button class="circle-btn del-btn" onclick="showConfirmDelete('交通', ${t['_rowIndex']}, event)">✖</button>
-                  </div>
-              `;
-              html += `</div>`;
-          });
-          html += `</div>`;
-      }
-      
-      /* 🎯 修復 3：找回消失的「其他帳務（分類總結）」區塊 */
-      if(bills.length > 0) {
-          const sums = {}; 
-          bills.forEach(b => { 
-              const c = getVal(b, '類別') || '其他'; 
-              sums[c] = (sums[c] || 0) + (parseFloat(getVal(b, '金額')) || 0); 
-          });
-          
-          html += `<div class="info-section"><div class="info-title title-bill">其他帳務 (分類總結)</div><div class="info-card card-bill">`;
-          Object.keys(sums).forEach(c => {
-              html += `
-              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; align-items:center;">
-                  <span style="color:#546e7a; font-weight:bold;">${c}</span>
-                  <span style="font-weight:900; color:var(--brand-main);">$${sums[c].toLocaleString()}</span>
-              </div>`;
-          });
-          html += `</div></div>`;
-      }
-      
-      html += `
-          <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
-              <div class="event-settle-card">
-                  <div style="font-weight:bold; color:var(--settle-pink); font-size:13px;">本場行程結算</div>
-                  <div style="font-size:20px; font-weight:900; color:var(--settle-pink);">$${calculateEventTotal(code).toLocaleString()}</div>
-              </div>
-          </div>
-      </div>`;
-      
-      html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">${generateReceiptHTML(bills)}</div>`;
-      
-      return html;
-  }
+  function generateDetailHTML(event, dateStr) {
+      if (!event) {
+          let html = `
+              <div class="detail-header" style="margin-bottom:10px; padding-bottom:5px; border-bottom:none;">
+                  <div>
+                      <div class="detail-race-name">日常帳務</div>
+                      <div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${dateStr}</div>
+                  </div>
+              </div>
+          `;
+          const dailyBills = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dateStr);
+          html += generateReceiptHTML(dailyBills);
+          return html;
+      }
+      
+      const code = getVal(event, '行程代碼');
+      const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
+      
+      let html = `
+      <div class="detail-header" style="flex-direction:column; gap:10px; align-items: flex-start;">
+          <div style="display:flex; justify-content:space-between; width:100%; align-items:baseline;">
+              <div>
+                  <div class="detail-race-name">${getVal(event, '行程名稱')}</div>
+                  <div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div>
+              </div>
+              ${getVal(event,'行程連結') ? `<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">簡章 >></a>` : ''}
+          </div>
+          <div class="edit-controls" style="width:100%; border:none; margin:0; padding:0;">
+              <button class="circle-btn edit-btn" onclick="openEditModal('行程', ${event['_rowIndex']}, event)">✎</button>
+              <button class="circle-btn del-btn" onclick="showConfirmDelete('行程', ${event['_rowIndex']}, event)">✖</button>
+          </div>
+      </div>`;
+      
+      html += `
+      <div class="view-switcher" style="margin-bottom: 20px; width: fit-content; border-radius: 20px;">
+          <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
+          <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
+      </div>`;
+      
+      html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
+      
+      /* 🎯 修復 2：加上 card-race 保證邊線顏色 */
+      html += `<div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
+      
+      if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
+      if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
+      
+      html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'));
+      
+      if(getVal(event,'備註')) {
+          html += `<div style="margin-top:12px; font-size:13px; color:#666; border-top: 1px dashed #ddd; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
+      }
+      html += `</div></div>`;
+      
+      const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
+      if(stays.length > 0) {
+          html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
+          stays.forEach(s => {
+              /* 🎯 修復 2：加上 card-stay 保證邊線顏色 */
+              html += `
+                  <div class="info-card card-stay">
+                      <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+                          <span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>
+                          ${getVal(s,'連結') ? `<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>` : ''}
+                      </div>`;
+              if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
+              if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房時間</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
+              if(getVal(s,'訂房平台')) html += `<div class="info-row"><span>平台</span><span>${getVal(s,'訂房平台')}</span></div>`;
+              
+              html += renderPriceRow('費用', getVal(s,'費用'), getVal(s,'付款人'), getVal(s,'付款方式'), getVal(s,'狀態'));
+              
+              if(getVal(s,'備註')) html += `<div style="margin-top:8px; font-size:12px; color:#666;">備註：${getVal(s,'備註')}</div>`;
+              
+              html += `
+                  <div class="edit-controls">
+                      <button class="circle-btn edit-btn" onclick="openEditModal('住宿', ${s['_rowIndex']}, event)">✎</button>
+                      <button class="circle-btn del-btn" onclick="showConfirmDelete('住宿', ${s['_rowIndex']}, event)">✖</button>
+                  </div>
+              `;
+              html += `</div>`;
+          });
+          html += `</div>`;
+      }
+      
+      const trans = (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code);
+      if(trans.length > 0) {
+          html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
+          trans.forEach(t => {
+              /* 🎯 修復 2：加上 card-trans 保證邊線顏色 */
+              html += `
+                  <div class="info-card card-trans">
+                      <div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>
+              `;
+              
+              const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班') || getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機');
+              const goD = getVal(t,'出發日期'); 
+              const goS = getVal(t,'去程出發時間'); 
+              const goA = getVal(t,'去程抵達時間');
+              
+              if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span>${goB}</span></div>`;
+              if(hasVal(goD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(goD).substring(5)}</span></div>`;
+              if(hasVal(goS) || hasVal(goA)) html += `<div class="info-row"><span></span><span>${goS||'--:--'}出發－${goA||'--:--'}抵達</span></div>`;
+              
+              const bkB = getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班') || getVal(t,'回程班次 / 飛機') || getVal(t,'回程班次/飛機');
+              const bkD = getVal(t,'回程日期'); 
+              const bkS = getVal(t,'回程出發時間'); 
+              const bkA = getVal(t,'回程抵達時間');
+              
+              if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span>${bkB}</span></div>`;
+              if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
+              if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
+              
+              html += renderPriceRow('費用', getVal(t,'票價或油資'), getVal(t,'付款人'), getVal(t,'付款方式'), getVal(t,'狀態'));
+              
+              html += `
+                  <div class="edit-controls">
+                      <button class="circle-btn edit-btn" onclick="openEditModal('交通', ${t['_rowIndex']}, event)">✎</button>
+                      <button class="circle-btn del-btn" onclick="showConfirmDelete('交通', ${t['_rowIndex']}, event)">✖</button>
+                  </div>
+              `;
+              html += `</div>`;
+          });
+          html += `</div>`;
+      }
+      
+      /* 🎯 修復 3：找回消失的「其他帳務（分類總結）」區塊 */
+      if(bills.length > 0) {
+          const sums = {}; 
+          bills.forEach(b => { 
+              const c = getVal(b, '類別') || '其他'; 
+              sums[c] = (sums[c] || 0) + (parseFloat(getVal(b, '金額')) || 0); 
+          });
+          
+          html += `<div class="info-section"><div class="info-title title-bill">其他帳務 (分類總結)</div><div class="info-card card-bill">`;
+          Object.keys(sums).forEach(c => {
+              html += `
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; align-items:center;">
+                  <span style="color:#546e7a; font-weight:bold;">${c}</span>
+                  <span style="font-weight:900; color:var(--brand-main);">$${sums[c].toLocaleString()}</span>
+              </div>`;
+          });
+          html += `</div></div>`;
+      }
+      
+      html += `
+          <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
+              <div class="event-settle-card">
+                  <div style="font-weight:bold; color:var(--settle-pink); font-size:13px;">本場行程結算</div>
+                  <div style="font-size:20px; font-weight:900; color:var(--settle-pink);">$${calculateEventTotal(code).toLocaleString()}</div>
+              </div>
+          </div>
+      </div>`;
+      
+      html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">${generateReceiptHTML(bills)}</div>`;
+      
+      return html;
+  }
 </script>
 </body>
 </html>
