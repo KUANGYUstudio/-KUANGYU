@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>光聿 KUANGYU - 行程管理後台</title>
-    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=後+台&background=2c3e50&color=fff&size=180&bold=true">
     <style>
         :root {
             --brand-main: #2c3e50;
@@ -13,17 +12,14 @@
             --brand-card: #ffffff;
             --text-dark: #34495e;
             
-            /* 新增：重整按鈕的莫蘭迪色系 */
             --action-button-color: #546e7a;
             --action-button-bg: #eceff1;
         }
         body { font-family: "PingFang TC", "Heiti TC", sans-serif; background: var(--brand-bg); color: var(--text-dark); margin: 0; padding: 15px; }
         .container { max-width: 500px; margin: 0 auto; background: var(--brand-card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); box-sizing: border-box; }
         
-        /* 標題與重整按鈕的排版 */
         .logo-text { text-align: center; font-weight: 800; font-size: 22px; color: var(--brand-main); margin-bottom: 20px; letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         
-        /* 光聿質感重整按鈕 */
         .refresh-btn { cursor: pointer; font-size: 14px; background: var(--action-button-bg); color: var(--action-button-color); padding: 5px 8px; border-radius: 50%; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
         .refresh-btn:hover { background: #cfd8dc; }
 
@@ -33,16 +29,33 @@
         .form-section { display: none; }
         .form-section.active { display: block; animation: slideUp 0.4s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
         .input-group { margin-bottom: 18px; text-align: left;}
         .input-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: var(--brand-main); padding-left: 3px;}
-        .input-group input, .input-group select { width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; background: #fff; font-family: inherit;}
         
-        /* 【關鍵修正】強制讓手機版的日期輸入框乖乖聽話，不超出寬度 */
+        /* 統一所有輸入框的高度與樣式 */
+        .input-group input, .input-group select { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1.5px solid #dcdde1; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            box-sizing: border-box; 
+            outline: none; 
+            transition: 0.3s; 
+            background: #fff; 
+            font-family: inherit;
+            min-height: 52px; 
+        }
+        
+        /* 強制覆蓋蘋果日期選擇器的預設外觀 */
         .input-group input[type="date"] {
             -webkit-appearance: none;
+            appearance: none;
             width: 100%; 
             display: block;
             box-sizing: border-box; 
+            min-height: 52px;
         }
 
         .input-group input:focus, .input-group select:focus { border-color: var(--brand-action); box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
