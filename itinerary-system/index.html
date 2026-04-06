@@ -914,19 +914,45 @@
           const hasData = uniqueMonthKeysWithData.includes(mKey);
           
           const btn = document.createElement('div'); 
-          btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
-          if (selectedMonthFilter === mKey) btn.classList.add('active');
-          btn.textContent = i;
+          btn.className = 'month-nav-btn';
           
-          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) btn.style.opacity = '0.4';
+          // 🎯 修改 1：開放所有的月份都可以點擊
+          btn.onclick = () => { 
+              selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
+              renderMain(); 
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+          }; 
           
-          if (hasData) { 
-              btn.onclick = () => { 
-                  selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
-                  renderMain(); 
-                  if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
-              }; 
+          if (selectedMonthFilter === mKey) {
+              btn.classList.add('active');
+          } else {
+              // 🎯 修改 2：重新調配看得清楚的深淺灰色
+              if (mKey < currentMonthKey) {
+                  // 已經過去的月份
+                  if (hasData) {
+                      btn.style.color = "#90a4ae"; // 過期有活動 (稍深的灰藍)
+                      btn.style.borderColor = "#cfd8dc";
+                      btn.style.background = "#fff";
+                  } else {
+                      btn.style.color = "#b0bec5"; // 過期沒活動 (稍淺的灰色)
+                      btn.style.borderColor = "#eceff1";
+                      btn.style.background = "#fafafa";
+                  }
+              } else {
+                  // 本月與未來的月份
+                  if (hasData) {
+                      btn.style.color = "var(--nav-active)"; // 未來有活動 (主色)
+                      btn.style.borderColor = "var(--nav-active)";
+                      btn.style.background = "#fff";
+                  } else {
+                      btn.style.color = "#90a4ae"; // 未來沒活動 (清楚的灰藍色)
+                      btn.style.borderColor = "#e0e0e0";
+                      btn.style.background = "#fff";
+                  }
+              }
           }
+          
+          btn.textContent = i;
           navContainer.appendChild(btn);
       }
   }
@@ -964,29 +990,35 @@
       let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
       
       let eventMap = {}; 
-      let allDatesWithData = [];
       races.forEach(r => { 
           const d = formatDate(getVal(r, '日期')); 
-          if (d) { eventMap[d] = r; allDatesWithData.push(d); } 
+          if (d) { eventMap[d] = r; } 
       });
 
       let dailyExpenseMap = {};
       if (currentFilter === '全部') {
           (dbData['帳務明細']||[]).forEach(b => { 
               const d = formatDate(getVal(b, '日期')); 
-              if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
+              if (d) { dailyExpenseMap[d] = true; } 
           });
       }
 
-      const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
+      // 🎯 修改 3：強制只顯示「本月起算的未來 12 個月」
+      let monthKeysToRender = [];
+      if (selectedMonthFilter) {
+          // 有點擊月份按鈕，就只顯示那一個月
+          monthKeysToRender = [selectedMonthFilter];
+      } else {
+          // 沒點擊，就動態產生未來 12 個月
+          for (let i = 0; i < 12; i++) {
+              const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+              monthKeysToRender.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
+          }
+      }
+      
       let hasRenderedAny = false;
 
       monthKeysToRender.forEach(mKey => {
-          let shouldShow = false;
-          if (selectedMonthFilter) { shouldShow = (mKey === selectedMonthFilter); } 
-          else { shouldShow = (mKey.startsWith(displayYear)) && (mKey >= currentMonthKey); }
-          
-          if (!shouldShow) return;
           hasRenderedAny = true;
           
           const [y, m] = mKey.split('-');
@@ -1018,18 +1050,19 @@
               const event = eventMap[dStr]; 
               const hasDailyExpense = dailyExpenseMap[dStr];
               
+              // 🎯 修改 4：只有有活動或記帳的日子，才可以點擊！
               if (event) {
                   const cat = getVal(event, '行程類別'); 
                   cell.classList.add('has-event');
-                  // 🎯 修復 1：平常只顯示邊框
                   const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
                   cell.style.borderColor = pastelColor || '#cfd8dc';
-                  cell.dataset.color = pastelColor || '#cfd8dc'; // 存起來給點擊時使用
+                  cell.dataset.color = pastelColor || '#cfd8dc'; 
                   cell.onclick = () => handleDayClick(event, cell, grid, dStr);
               } else if (hasDailyExpense) {
                   cell.classList.add('has-expense'); 
                   cell.onclick = () => handleDayClick(null, cell, grid, dStr);
               }
+              
               grid.appendChild(cell);
           }
           
