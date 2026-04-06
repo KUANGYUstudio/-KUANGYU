@@ -3,39 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <title>光聿 KUANGYU - 行程小助理</title>
-  <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=行+程&background=e0f2f1&color=00838f&size=180&bold=true">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* =========================================
-       光聿行程美學定義 (柔和繽紛粉彩版 + 月份雙排固定)
+       光聿行程美學定義 (柔和繽紛粉彩版 + 極速運算 + 前台編輯)
        ========================================= */
     :root {
-      /* 馬卡龍粉彩活動類別色：清晰且柔和 */
-      --cat-鐵人: #64b5f6; /* 柔和天藍 */
-      --cat-自行車: #81c784; /* 柔和草綠 */
-      --cat-路跑: #ff8a65; /* 珊瑚橘粉 */
-      --cat-游泳: #4dd0e1; /* 湖水青綠 */
-      --cat-活動: #f06292; /* 玫瑰淺粉 */
-      --cat-旅遊: #ffd54f; /* 陽光暖黃 */
-      --cat-移地訓練: #ba68c8; /* 薰衣草紫 */
+      --cat-鐵人: #64b5f6; 
+      --cat-自行車: #81c784; 
+      --cat-路跑: #ff8a65; 
+      --cat-游泳: #4dd0e1; 
+      --cat-活動: #f06292; 
+      --cat-旅遊: #ffd54f; 
+      --cat-移地訓練: #ba68c8; 
 
-      /* 系統基礎色：維持乾淨對比 */
       --text-main: #2c3e50; 
       --text-sub: #546e7a; 
       --bg-color: #fcfcfc;
       --card-bg: #ffffff; 
       --brand-main: #2c3e50;
       
-      /* 導覽色：沉穩的藍灰，襯托粉彩色的鮮明 */
       --nav-active: #546e7a; 
-      
-      /* 金幣色：提升明亮度 */
       --coin-gold: #e5c07b;
-      
-      /* 結算色：柔和紅 */
       --settle-pink: #e07a5f;
-      
       --action-button-color: #00838f;
       --action-button-bg: #e0f2f1;
     }
@@ -91,7 +82,6 @@
     .year-nav-btn { padding: 4px 14px; border-radius: 15px; background: #f0f0f0; color: #7f8c8d; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
     .year-nav-btn.active { background: var(--nav-active); color: #fff; }
 
-    /* 全新月份排版：強制 6 欄網格，自動分為兩列 */
     .month-nav-container { 
         display: grid; 
         grid-template-columns: repeat(6, 36px); 
@@ -188,6 +178,21 @@
 
     .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #7f8c8d; font-weight: bold;}
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 控制按鈕樣式 */
+    .action-badge {
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 10px;
+        background: #f0f0f0;
+        color: #7f8c8d;
+        cursor: pointer;
+        margin-left: 6px;
+        transition: 0.2s;
+        font-weight: bold;
+    }
+    .action-badge:hover { background: #e0e0e0; color: var(--brand-main); }
+    .action-badge.del:hover { background: #ffebee; color: #c62828; }
   </style>
 </head>
 <body>
@@ -236,6 +241,39 @@
     </div>
   </div>
 
+  <div id="edit-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+      <div style="background:#fff; width:90%; max-width:400px; border-radius:20px; padding:25px; box-sizing:border-box; text-align:left;">
+          <h3 style="margin-top:0; color:var(--brand-main); display:flex; justify-content:space-between;">
+              編輯帳務
+              <span style="cursor:pointer; color:#aaa; font-size:24px; line-height:1;" onclick="closeEditModal()">×</span>
+          </h3>
+          <input type="hidden" id="edit-rowIndex">
+          <input type="hidden" id="edit-code">
+          
+          <div style="margin-bottom:12px;"><label style="font-size:13px; color:var(--text-sub); font-weight:bold;">日期</label><br><input type="date" id="edit-date" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box; font-family:inherit;"></div>
+          
+          <div style="margin-bottom:12px;"><label style="font-size:13px; color:var(--text-sub); font-weight:bold;">類別</label><br>
+              <select id="edit-cat" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box; font-family:inherit;">
+                  <option>飲食</option><option>交通</option><option>購物</option><option>採買</option><option>娛樂</option><option>其他</option>
+              </select>
+          </div>
+          
+          <div style="margin-bottom:12px;"><label style="font-size:13px; color:var(--text-sub); font-weight:bold;">項目</label><br><input type="text" id="edit-item" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box; font-family:inherit;"></div>
+          
+          <div style="margin-bottom:12px;"><label style="font-size:13px; color:var(--text-sub); font-weight:bold;">金額</label><br><input type="number" id="edit-amt" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box; font-family:inherit;"></div>
+          
+          <div style="margin-bottom:12px;"><label style="font-size:13px; color:var(--text-sub); font-weight:bold;">付款方式</label><br>
+              <select id="edit-pay" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box; font-family:inherit;">
+                  <option>現金</option><option>刷卡</option><option>-</option>
+              </select>
+          </div>
+          
+          <div style="margin-bottom:20px;"><label style="font-size:13px; color:var(--text-sub); font-weight:bold;">備註</label><br><input type="text" id="edit-memo" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box; font-family:inherit;"></div>
+          
+          <button onclick="saveEdit()" style="width:100%; padding:14px; border-radius:12px; border:none; background:var(--settle-pink); color:#fff; font-weight:bold; font-size:16px; cursor:pointer;">儲存修改</button>
+      </div>
+  </div>
+
 <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
   let dbData = {};
@@ -249,7 +287,6 @@
   let currentAccTab = '';
   let expenseChartInstance = null; 
 
-  /* 柔和繽紛粉彩分類色 */
   const categoryColors = {
       '報名費': '#64b5f6', 
       '住宿': '#ffd54f',   
@@ -264,27 +301,18 @@
 
   window.onload = initSystem;
 
-  /* =========================================================
-     終極優化：導入 LocalStorage 快取技術，實現畫面「瞬間秒開」
-     ========================================================= */
   async function initSystem() {
-    // 1. 先嘗試從瀏覽器記憶體拿上次存的資料
     const cachedData = localStorage.getItem('kuangyu_dbData');
-    
     if (cachedData) {
-        // 如果有舊資料，直接畫出畫面，並瞬間關閉讀取動畫
         dbData = JSON.parse(cachedData);
         renderFilters();
         renderMain();
         document.getElementById('loading').style.display = 'none';
     }
 
-    // 2. 背景偷偷向 Google 討要最新的資料
     try {
       const res = await fetch(API_URL + "?t=" + new Date().getTime());
       const freshData = await res.json();
-      
-      // 3. 最新資料回來了！把它存進記憶體，並無聲無息地替換畫面
       dbData = freshData;
       localStorage.setItem('kuangyu_dbData', JSON.stringify(freshData));
       
@@ -292,15 +320,86 @@
       renderMain();
       if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
       
-      // 確保第一次開啟網頁（沒暫存）的人也能關閉讀取畫面
       document.getElementById('loading').style.display = 'none';
     } catch (e) {
       if (!cachedData) {
-          // 如果連不上網路且沒有舊資料，才顯示錯誤
           document.getElementById('loading').innerHTML = "資料連線失敗，請檢查網路連線。";
       }
     }
   }
+
+  // === 資料異動功能 (刪除與編輯) ===
+  async function deleteItem(sheetName, rowIndex, e) {
+      if(e) e.stopPropagation();
+      if(!confirm(`確定要刪除這筆${sheetName}資料嗎？\n(刪除後無法復原)`)) return;
+      
+      document.getElementById('loading').style.display = 'flex';
+      document.getElementById('loading').innerHTML = '正在刪除資料...';
+      
+      try {
+          await fetch(API_URL, {
+              method: 'POST',
+              body: JSON.stringify({ action: 'delete', sheetName: sheetName, rowIndex: rowIndex })
+          });
+          localStorage.removeItem('kuangyu_dbData');
+          location.reload();
+      } catch (err) {
+          alert('刪除失敗，請檢查網路連線！');
+          document.getElementById('loading').style.display = 'none';
+      }
+  }
+
+  function openEditModal(rowIndex, code, date, cat, item, amt, pay, memo, e) {
+      if(e) e.stopPropagation();
+      document.getElementById('edit-rowIndex').value = rowIndex;
+      document.getElementById('edit-code').value = code || '';
+      document.getElementById('edit-date').value = date;
+      document.getElementById('edit-cat').value = cat;
+      document.getElementById('edit-item').value = item;
+      document.getElementById('edit-amt').value = amt;
+      document.getElementById('edit-pay').value = pay;
+      document.getElementById('edit-memo').value = memo || '';
+      document.getElementById('edit-modal').style.display = 'flex';
+  }
+
+  function closeEditModal() {
+      document.getElementById('edit-modal').style.display = 'none';
+  }
+
+  async function saveEdit() {
+      const rowIndex = document.getElementById('edit-rowIndex').value;
+      const rowData = [
+          document.getElementById('edit-code').value,
+          document.getElementById('edit-date').value,
+          document.getElementById('edit-cat').value,
+          document.getElementById('edit-item').value,
+          document.getElementById('edit-amt').value,
+          document.getElementById('edit-pay').value,
+          document.getElementById('edit-memo').value
+      ];
+      
+      if(!rowData[1] || !rowData[4]) {
+          alert("日期與金額不能空白！");
+          return;
+      }
+      
+      document.getElementById('edit-modal').style.display = 'none';
+      document.getElementById('loading').style.display = 'flex';
+      document.getElementById('loading').innerHTML = '正在儲存修改...';
+      
+      try {
+          await fetch(API_URL, {
+              method: 'POST',
+              body: JSON.stringify({ action: 'update', sheetName: '帳務明細', rowIndex: parseInt(rowIndex), data: rowData })
+          });
+          localStorage.removeItem('kuangyu_dbData');
+          location.reload();
+      } catch (err) {
+          alert('修改失敗，請檢查網路連線！');
+          document.getElementById('loading').style.display = 'none';
+      }
+  }
+  // ===============================
 
   window.switchPanelTab = function(btn, tabId) {
       const panel = btn.closest('.detail-panel');
@@ -336,7 +435,6 @@
     let allExpenses = [];
     const races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
 
-    // 建立預先分組的 Hash Map，大幅減少迴圈運算量
     const expensesByCode = { '住宿': {}, '交通': {}, '帳務明細': {} };
     ['住宿', '交通', '帳務明細'].forEach(sheet => {
         (dbData[sheet]||[]).forEach(row => {
@@ -861,13 +959,25 @@
               const memo = getVal(b, '備註');
               total += amt;
               
+              // 處理單雙引號，避免 HTML 壞掉
+              const safeCode = (getVal(b, '行程代碼') || '').replace(/'/g, "\\'");
+              const safeDate = (getVal(b, '日期') || '').replace(/'/g, "\\'");
+              const safeCat = cat.replace(/'/g, "\\'");
+              const safeItem = item.replace(/'/g, "\\'");
+              const safePay = pay.replace(/'/g, "\\'");
+              const safeMemo = (memo || '').replace(/'/g, "\\'");
+
               html += `<div style="padding: 10px 0; border-bottom: 1px dashed #f5f5f5;">`;
               html += `
-              <div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; font-size: 14px; align-items: center;">
+              <div style="display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 8px; font-size: 14px; align-items: center;">
                   <div style="color:#fff; font-size:10px; background:${getColorForCategory(cat)}; padding:2px 8px; border-radius:10px; white-space: nowrap; font-weight:bold;">${cat}</div>
                   <div style="color:#2c3e50; font-weight: 500;">${item}</div>
                   <div style="font-size:12px; color:#aaa; white-space: nowrap;">${pay}</div>
                   <div style="font-weight:bold; color:var(--settle-pink); text-align: right; min-width: 60px;">$${amt.toLocaleString()}</div>
+                  <div style="display:flex; gap:6px; margin-left:4px;">
+                      <div class="action-badge" onclick="openEditModal(${b['_rowIndex']}, '${safeCode}', '${safeDate}', '${safeCat}', '${safeItem}', ${amt}, '${safePay}', '${safeMemo}', event)">編輯</div>
+                      <div class="action-badge del" onclick="deleteItem('帳務明細', ${b['_rowIndex']}, event)">刪除</div>
+                  </div>
               </div>`;
               
               if (memo) {
@@ -906,7 +1016,10 @@
     let html = `
     <div class="detail-header">
         <div>
-            <div class="detail-race-name">${getVal(event, '行程名稱')}</div>
+            <div class="detail-race-name" style="display:flex; align-items:center;">
+                ${getVal(event, '行程名稱')}
+                <div class="action-badge del" style="margin-left:12px;" onclick="deleteItem('行程', ${event['_rowIndex']}, event)">刪除此行程</div>
+            </div>
             <div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div>
         </div>
         ${getVal(event,'行程連結') ? `<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>` : ''}
@@ -936,7 +1049,10 @@
         html += `
         <div class="info-card card-stay">
             <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-                <span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>
+                <span style="font-weight:bold;font-size:16px; display:flex; align-items:center;">
+                    ${getVal(s,'飯店名稱')}
+                    <div class="action-badge del" onclick="deleteItem('住宿', ${s['_rowIndex']}, event)">刪除</div>
+                </span>
                 ${getVal(s,'連結') ? `<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>` : ''}
             </div>`;
         if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
@@ -953,7 +1069,12 @@
     if(trans.length > 0) {
       html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
       trans.forEach(t => {
-        html += `<div class="info-card card-trans"><div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>`;
+        html += `
+        <div class="info-card card-trans">
+            <div style="font-weight:bold;margin-bottom:10px;font-size:16px; display:flex; align-items:center;">
+                ${getVal(t,'類型')}
+                <div class="action-badge del" onclick="deleteItem('交通', ${t['_rowIndex']}, event)">刪除</div>
+            </div>`;
         const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班') || getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機');
         const goD = getVal(t,'出發日期'); 
         const goS = getVal(t,'去程出發時間'); 
