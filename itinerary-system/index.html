@@ -142,7 +142,20 @@
         color: #fff; 
     }
 
-    .view-switcher { display: flex; gap: 4px; }
+    /* 🎯 還原完美的膠囊開關樣式 (參考 image_0.png) */
+.view-switcher {
+    display: flex;
+    gap: 4px;
+    background-color: #f0f0f0; /* 淺灰色膠囊底色 */
+    padding: 4px 8px; /* 增加內部 padding，讓按鈕看起來被包在裡面 */
+    border-radius: 25px; /* 膠囊圓角 */
+    width: fit-content; /* 寬度剛好包住按鈕 */
+}
+
+/* 2. 在 CSS 中加上一個專門針對面板內切換器的 margin，取代原本在 JS 裡的行內樣式 */
+.panel-view-switcher {
+    margin-bottom: 20px;
+}
     
     .view-btn { 
         border: none; 
@@ -1246,10 +1259,11 @@
           </div>
       </div>`;
       
-      html += `
-      <div class="view-switcher" style="margin-bottom: 20px; width: fit-content; border-radius: 20px;">
-          <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
-          <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
+      /* 替換為新代碼： */
+     html += `
+      <div class="view-switcher panel-view-switcher">
+               <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
+               <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
       </div>`;
       
       html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
