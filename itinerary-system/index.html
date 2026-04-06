@@ -50,26 +50,15 @@
         text-align: center; 
     }
     
-    /* =========================================
-       🚀 優化：標題與系統工具列整合 (黃金三角)
-       ========================================= */
-    .header-wrapper {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding: 0 5px;
-    }
-    
     .header-title { 
         font-size: 26px; 
         font-weight: 800; 
         color: var(--brand-main); 
         letter-spacing: 2px; 
-        margin: 0; /* 移除底部 margin，因為已經用 header-wrapper 控管 */
+        margin-bottom: 20px; 
     }
 
-    /* 置頂區塊 */
+    /* 置頂區塊 - 黃金三角排版 */
     .sticky-controls {
         position: sticky; 
         top: 0; 
@@ -81,40 +70,32 @@
         margin-bottom: 25px;
     }
 
-    /* 置頂區塊內的排列 */
     .nav-wrapper { 
         display: flex; 
         align-items: center; 
         justify-content: space-between; 
         width: 100%; 
         max-width: 450px; 
-        margin: 0 auto 15px; 
+        margin: 0 auto 0px; /* 移除原本的 margin-bottom，交由 action-bar 控制 */
         padding: 0 10px; 
         box-sizing: border-box; 
     }
     
-    /* 兩側工具小按鈕 (編輯) */
+    /* 🎯 修復 5：兩側工具小按鈕，尺寸與中間的 $ 一致 (38px) */
     .tool-btn { 
-        width: 36px; 
-        height: 36px; 
+        width: 38px; 
+        height: 38px; 
         border-radius: 50%; 
         background: var(--action-button-bg); 
         color: var(--action-button-color); 
         border: none; 
-        font-size: 16px; 
-        font-weight: bold;
+        font-size: 18px; 
         display: flex; 
         align-items: center; 
         justify-content: center; 
         cursor: pointer; 
         transition: 0.2s; 
-    }
-    
-    /* 🚀 優化：重新整理按鈕加大 */
-    .tool-btn.refresh-btn-lg {
-        width: 42px;
-        height: 42px;
-        font-size: 20px;
+        font-weight: bold;
     }
     
     .tool-btn.active { 
@@ -122,17 +103,23 @@
         color: #fff; 
         box-shadow: 0 4px 10px rgba(224, 122, 95, 0.3); 
     }
-    .tool-btn:hover { filter: brightness(0.95); }
+
+    /* 🎯 修復 4：控制導覽列與過濾器的上下間距 */
+    .action-bar { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        margin-bottom: 25px; /* 加大這裡的間距，讓兩排不再擁擠 */
+    }
 
     /* 中央核心控制區 */
     .center-nav { 
-        display: inline-flex; 
+        display: flex; 
         align-items: center; 
         gap: 10px; 
         background: #f0f0f0; 
-        padding: 6px 10px; 
-        border-radius: 30px; 
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        padding: 4px 8px; 
+        border-radius: 25px; 
     }
     
     .acc-toggle-btn { 
@@ -148,7 +135,7 @@
         display: flex; 
         align-items: center; 
         justify-content: center; 
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
         transition: 0.2s; 
     }
     
@@ -157,25 +144,12 @@
         color: #fff; 
     }
 
-    /* 🚀 優化：修復資訊面板切換按鈕失去圓角的問題 */
-    .view-switcher { 
-        display: flex; 
-        gap: 4px; 
-        background: #f0f0f0; /* 預設給他灰色底色和圓角 */
-        padding: 4px; 
-        border-radius: 20px;
-    }
-    
-    /* 讓最頂部的中央導覽列切換器保持透明，完美融入 center-nav 膠囊 */
-    .center-nav .view-switcher {
-        background: transparent;
-        padding: 0;
-    }
+    .view-switcher { display: flex; gap: 4px; }
     
     .view-btn { 
         border: none; 
-        padding: 8px 18px; 
-        border-radius: 20px; 
+        padding: 6px 14px; 
+        border-radius: 17px; 
         cursor: pointer; 
         font-size: 13px; 
         font-weight: bold; 
@@ -187,7 +161,7 @@
     .view-btn.active { 
         background: #fff; 
         color: var(--brand-main); 
-        box-shadow: 0 2px 6px rgba(0,0,0,0.06); 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
     }
 
     /* 過濾器與年月排版 */
@@ -204,31 +178,38 @@
     .month-nav-btn.has-data { border-color: var(--nav-active); color: var(--nav-active); }
     .month-nav-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-    /* 日曆與清單 */
+    /* 🎯 修復 1：日曆框框與滿版顏色切換 */
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
     .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #90a4ae; padding-bottom: 10px; }
     
-    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; }
+    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; box-sizing: border-box; }
     .day-number { position: relative; z-index: 2; }
-    .day.has-event { color: #fff; cursor: pointer; font-weight: bold; text-shadow: 0 1px 3px rgba(0,0,0,0.15); box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: none;}
+    
+    /* 有行程的日子：平常是透明底、彩色邊框、深色字 */
+    .day.has-event { background-color: transparent; color: #2c3e50; cursor: pointer; font-weight: bold; border-width: 2px; border-style: solid; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+    
     .day.has-expense { cursor: pointer; font-weight: 600; color: #2c3e50; }
     .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: #cfd8dc; }
-    .day.selected { transform: scale(1.05); z-index: 10; border-color: transparent !important; box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important;}
-    .day.has-expense.selected { background-color: #b0bec5; color: #fff;} 
+    
+    /* 被點擊展開的日子：變成實心滿版、白色字 */
+    .day.selected { color: #fff !important; transform: scale(1.05); z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; border-color: transparent !important; }
+    .day.has-expense.selected { background-color: #b0bec5; } 
     .day.selected::after { background-color: transparent !important; } 
     
     .month-title { font-weight: 800; font-size: 22px; margin: 20px 0 15px; text-align: left; color: var(--brand-main); }
     
+    /* 🎯 修復 6：清單日期對齊與展開間距 */
     .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eceff1; transition: 0.2s; border-left: 6px solid #cfd8dc; text-align: left; }
     .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.06); }
-    .list-date .m { font-size: 11px; color: #7f8c8d; display: block; }
-    .list-date .d { font-size: 22px; font-weight: 800; color: var(--brand-main); }
+    .list-date { text-align: center; min-width: 45px; }
+    .list-date .m { font-size: 11px; color: #7f8c8d; display: block; text-align: center; }
+    .list-date .d { font-size: 22px; font-weight: 800; color: var(--brand-main); display: block; text-align: center; line-height: 1.1; }
     .list-name { font-size: 17px; font-weight: bold; color: var(--brand-main); flex: 1; }
     .list-countdown-days { font-size: 18px; font-weight: 900; color: var(--settle-pink); margin: 0 3px; }
 
     /* 面板與卡片 */
-    .detail-panel { grid-column: 1 / -1; background: transparent; border-radius: 16px; margin: 10px 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; width: 100%; }
-    .detail-panel.open { max-height: 8000px; opacity: 1; margin-bottom: 30px; text-align: left; overflow: visible; }
+    .detail-panel { grid-column: 1 / -1; background: transparent; border-radius: 16px; margin: 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; width: 100%; }
+    .detail-panel.open { max-height: 8000px; opacity: 1; margin-top: -6px; margin-bottom: 25px; text-align: left; overflow: visible; }
     .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; margin-bottom: 20px; }
     .detail-race-name { font-size: 22px; font-weight: 800; color: var(--brand-main); }
     .link-btn { font-size: 12px; padding: 6px 14px; background: var(--action-button-bg); color: var(--action-button-color); border-radius: 20px; text-decoration: none; font-weight: bold; }
@@ -237,6 +218,16 @@
     .info-title { font-weight: bold; font-size: 14px; color: var(--text-sub); margin-bottom: 10px; display: flex; align-items: center; }
     .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; background: #eceff1;}
     
+    /* 🎯 修復 2：找回資訊卡片的漂亮分類顏色 */
+    .title-race::before { background: var(--cat-鐵人); }
+    .card-race { border-left-color: var(--cat-鐵人) !important; }
+    .title-stay::before { background: var(--cat-旅遊); }
+    .card-stay { border-left-color: var(--cat-旅遊) !important; }
+    .title-trans::before { background: var(--cat-自行車); }
+    .card-trans { border-left-color: var(--cat-自行車) !important; }
+    .title-bill::before { background: var(--settle-pink); }
+    .card-bill { border-left-color: var(--settle-pink) !important; }
+
     .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; border-left: 5px solid #eceff1; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
     .info-row { display: flex; gap: 12px; margin-bottom: 8px; }
     .info-row > span:first-child { color: #7f8c8d; min-width: 70px; font-weight: 500;}
@@ -262,49 +253,28 @@
     .edit-btn { background: #90a4ae; }
     .del-btn { background: var(--settle-pink); }
 
-    /* =========================================
-       🚀 高質感自定義彈窗 UI (警告視窗與編輯視窗)
-       ========================================= */
+    /* 高質感自定義彈窗 UI (警告視窗與編輯視窗) */
     .modal-overlay { 
-        display:none; 
-        position:fixed; 
-        top:0; left:0; 
-        width:100%; height:100%; 
-        background:rgba(44, 62, 80, 0.6); 
-        z-index:9999; 
-        align-items:center; 
-        justify-content:center; 
-        backdrop-filter: blur(5px); 
+        display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+        background:rgba(44, 62, 80, 0.6); z-index:9999; align-items:center; 
+        justify-content:center; backdrop-filter: blur(5px); 
     }
-    
     .modal-content { 
-        background:#fff; 
-        width:85%; 
-        max-width:350px; 
-        border-radius:28px; 
-        padding:30px; 
-        box-sizing:border-box; 
-        text-align:center; 
-        box-shadow: 0 15px 40px rgba(0,0,0,0.2); 
-        animation: popScale 0.3s ease; 
+        background:#fff; width:85%; max-width:350px; border-radius:28px; 
+        padding:30px; box-sizing:border-box; text-align:center; 
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2); animation: popScale 0.3s ease; 
     }
     @keyframes popScale { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     
     .confirm-icon { 
-        width: 60px; height: 60px; 
-        background: #fff5f5; 
-        color: #e53935; 
-        border-radius: 50%; 
-        display: flex; align-items: center; justify-content: center; 
-        font-size: 28px; margin: 0 auto 20px; 
-        border: 2px solid #ffcdd2; 
-        font-weight: bold; 
+        width: 60px; height: 60px; background: #fff5f5; color: #e53935; border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center; font-size: 28px; 
+        margin: 0 auto 20px; border: 2px solid #ffcdd2; font-weight: bold; 
     }
-    
     .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
     .modal-btn { flex: 1; padding: 14px; border-radius: 16px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; }
     .btn-cancel { background: #f5f5f5; color: #78909c; }
-    .btn-danger { background: #e53935; color: #fff; box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2);}
+    .btn-danger { background: #e53935; color: #fff; }
 
     /* 編輯視窗專用 Body */
     .modal-body { max-height: 60vh; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 5px; }
@@ -324,20 +294,20 @@
   <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
 
   <div class="container">
-    <div class="header-wrapper">
-        <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
-        <h1 class="header-title">行程小助理</h1>
-        <button class="tool-btn refresh-btn-lg" onclick="location.reload()">↻</button>
-    </div>
+    <div class="header-title">行程小助理</div>
 
     <div class="sticky-controls">
         <div class="action-bar">
-            <div class="center-nav">
-                <button id="acc-panel-btn" class="acc-toggle-btn" onclick="toggleAccPanel()">$</button>
-                <div class="view-switcher">
-                    <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
-                    <button id="btn-list" class="view-btn" onclick="switchView('list')">清單</button>
+            <div class="nav-wrapper">
+                <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
+                <div class="center-nav">
+                    <button id="acc-panel-btn" class="acc-toggle-btn" onclick="toggleAccPanel()">$</button>
+                    <div class="view-switcher" style="padding: 0; border-radius: 20px;">
+                        <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
+                        <button id="btn-list" class="view-btn" onclick="switchView('list')">清單</button>
+                    </div>
                 </div>
+                <button class="tool-btn" onclick="location.reload()">↻</button>
             </div>
         </div>
         
@@ -400,7 +370,6 @@
   let currentAccTab = '';
   let expenseChartInstance = null; 
   
-  // 記錄準備刪除的目標
   let deleteTargetSheet = '';
   let deleteTargetRowIndex = null;
 
@@ -477,12 +446,10 @@
       }
   }
 
-  // --- 高質感刪除視窗邏輯 ---
   function showConfirmDelete(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
       deleteTargetSheet = sheetName;
       deleteTargetRowIndex = rowIndex;
-      
       document.getElementById('confirm-desc').innerHTML = `確定要刪除這筆【${sheetName}】資料嗎？<br><span style="color:#e53935; font-size:12px;">(⚠️ 刪除後無法復原)</span>`;
       document.getElementById('confirm-modal').style.display = 'flex';
   }
@@ -499,11 +466,7 @@
       try {
           await fetch(API_URL, { 
               method: 'POST', 
-              body: JSON.stringify({ 
-                  action: 'delete', 
-                  sheetName: deleteTargetSheet, 
-                  rowIndex: deleteTargetRowIndex 
-              }) 
+              body: JSON.stringify({ action: 'delete', sheetName: deleteTargetSheet, rowIndex: deleteTargetRowIndex }) 
           });
           localStorage.removeItem('kuangyu_dbData');
           location.reload();
@@ -513,7 +476,6 @@
       }
   }
 
-  // --- 萬用編輯表單邏輯 ---
   function openEditModal(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
       const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
@@ -563,7 +525,6 @@
       const sheetName = document.getElementById('edit-sheetName').value;
       const rowIndex = parseInt(document.getElementById('edit-rowIndex').value);
       const headers = sheetHeaders[sheetName];
-      
       const rowData = headers.map((h, idx) => document.getElementById(`edit-field-${idx}`).value);
       
       if(sheetName === '帳務明細') {
@@ -589,7 +550,6 @@
       }
   }
 
-  // --- 核心資料處理與顯示邏輯 ---
   function getVal(obj, key) { 
       if(!obj) return ""; 
       const exactKey = Object.keys(obj).find(k => k.trim() === key);
@@ -599,9 +559,7 @@
       return fuzzyKey ? obj[fuzzyKey] : "";
   }
 
-  function hasVal(v) { 
-      return v !== "" && v !== null && v !== undefined && v !== 0 && v !== "0"; 
-  }
+  function hasVal(v) { return v !== "" && v !== null && v !== undefined && v !== 0 && v !== "0"; }
 
   function formatDate(d) { 
       const date = new Date(d); 
@@ -628,26 +586,16 @@
 
   function renderMain() { 
       renderMonthNav(); 
-      if (currentView === 'cal') {
-          renderCalendar(); 
-      } else {
-          renderList(); 
-      }
+      if (currentView === 'cal') { renderCalendar(); } else { renderList(); }
   }
 
   function toggleAccPanel() {
       const panel = document.getElementById('acc-panel');
       const btn = document.getElementById('acc-panel-btn');
       const isVisible = panel.style.display === 'block';
-      
       panel.style.display = isVisible ? 'none' : 'block';
-      
-      if (!isVisible) {
-          btn.classList.add('active');
-          calculateAccounting();
-      } else {
-          btn.classList.remove('active');
-      }
+      if (!isVisible) { btn.classList.add('active'); calculateAccounting(); } 
+      else { btn.classList.remove('active'); }
   }
 
   function calculateAccounting() {
@@ -769,9 +717,7 @@
 
   function renderDoughnutChart(labels, data, colors) {
       const ctx = document.getElementById('expenseChart').getContext('2d');
-      if (expenseChartInstance) {
-          expenseChartInstance.destroy();
-      }
+      if (expenseChartInstance) expenseChartInstance.destroy();
       
       if (data.length === 0) {
           expenseChartInstance = new Chart(ctx, { 
@@ -784,23 +730,8 @@
       
       expenseChartInstance = new Chart(ctx, { 
           type: 'doughnut', 
-          data: { 
-              labels: labels, 
-              datasets: [{ data: data, backgroundColor: colors, borderWidth: 3, borderColor: '#fff', hoverOffset: 4 }] 
-          }, 
-          options: { 
-              responsive: true, 
-              maintainAspectRatio: false, 
-              cutout: '75%', 
-              plugins: { 
-                  legend: { display: false }, 
-                  tooltip: { 
-                      backgroundColor: 'rgba(69, 90, 100, 0.9)', 
-                      padding: 12, 
-                      callbacks: { label: (c) => ` ${c.label}：$${c.parsed.toLocaleString()}` } 
-                  } 
-              } 
-          } 
+          data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 3, borderColor: '#fff', hoverOffset: 4 }] }, 
+          options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(69, 90, 100, 0.9)', padding: 12, callbacks: { label: (c) => ` ${c.label}：$${c.parsed.toLocaleString()}` } } } } 
       });
   }
 
@@ -817,12 +748,10 @@
       const listContainer = document.getElementById('acc-detail-list'); 
       listContainer.innerHTML = '';
       const items = accDetailsData[currentAccTab] || [];
-      
       if (items.length === 0) { 
           listContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#cfd8dc;">無支出紀錄</div>'; 
           return; 
       }
-      
       items.forEach(item => { 
           listContainer.innerHTML += `
               <div class="acc-detail-item">
@@ -854,9 +783,7 @@
           btn.className = `filter-btn ${c === currentFilter ? 'active' : ''}`;
           btn.textContent = c;
           btn.onclick = () => { 
-              currentFilter = c; 
-              renderFilters(); 
-              renderMain(); 
+              currentFilter = c; renderFilters(); renderMain(); 
               if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
           };
           bar.appendChild(btn);
@@ -866,8 +793,7 @@
   function renderMonthNav() {
       const yearContainer = document.getElementById('year-nav');
       const navContainer = document.getElementById('month-nav');
-      yearContainer.innerHTML = ''; 
-      navContainer.innerHTML = '';
+      yearContainer.innerHTML = ''; navContainer.innerHTML = '';
       
       const now = new Date(); 
       const currentY = now.getFullYear(); 
@@ -897,9 +823,7 @@
           btn.className = 'year-nav-btn ' + (y === displayYear ? 'active' : '');
           btn.textContent = y + ' 年';
           btn.onclick = () => { 
-              displayYear = y; 
-              selectedMonthFilter = null; 
-              renderMain(); 
+              displayYear = y; selectedMonthFilter = null; renderMain(); 
               if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
           };
           yearContainer.appendChild(btn);
@@ -913,12 +837,9 @@
           const btn = document.createElement('div'); 
           btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
           if (selectedMonthFilter === mKey) btn.classList.add('active');
-          
           btn.textContent = i;
           
-          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) {
-              btn.style.opacity = '0.4';
-          }
+          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) btn.style.opacity = '0.4';
           
           if (hasData) { 
               btn.onclick = () => { 
@@ -983,11 +904,8 @@
 
       monthKeysToRender.forEach(mKey => {
           let shouldShow = false;
-          if (selectedMonthFilter) {
-              shouldShow = (mKey === selectedMonthFilter);
-          } else {
-              shouldShow = (mKey.startsWith(displayYear)) && (mKey >= currentMonthKey);
-          }
+          if (selectedMonthFilter) { shouldShow = (mKey === selectedMonthFilter); } 
+          else { shouldShow = (mKey.startsWith(displayYear)) && (mKey >= currentMonthKey); }
           
           if (!shouldShow) return;
           hasRenderedAny = true;
@@ -1010,9 +928,7 @@
           const firstDay = new Date(y, m-1, 1).getDay(); 
           const lastDate = new Date(y, m, 0).getDate();
           
-          for (let i = 0; i < firstDay; i++) {
-              grid.appendChild(document.createElement('div'));
-          }
+          for (let i = 0; i < firstDay; i++) { grid.appendChild(document.createElement('div')); }
           
           for (let d = 1; d <= lastDate; d++) {
               const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
@@ -1026,8 +942,10 @@
               if (event) {
                   const cat = getVal(event, '行程類別'); 
                   cell.classList.add('has-event');
+                  // 🎯 修復 1：平常只顯示邊框
                   const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
-                  cell.style.backgroundColor = pastelColor || '#cfd8dc';
+                  cell.style.borderColor = pastelColor || '#cfd8dc';
+                  cell.dataset.color = pastelColor || '#cfd8dc'; // 存起來給點擊時使用
                   cell.onclick = () => handleDayClick(event, cell, grid, dStr);
               } else if (hasDailyExpense) {
                   cell.classList.add('has-expense'); 
@@ -1092,6 +1010,7 @@
           const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
           item.style.borderLeftColor = pastelColor || '#cfd8dc';
           
+          // 🎯 修復 6：清單日期文字置中對齊
           item.innerHTML = `
               <div class="list-date">
                   <span class="m">${eDate.getMonth()+1}月</span>
@@ -1109,14 +1028,21 @@
 
   function handleDayClick(event, cell, grid, dStr) {
       if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
-      if (currentSelectedEl) { currentSelectedEl.classList.remove('selected'); currentSelectedEl.style.backgroundColor = ''; }
+      
+      if (currentSelectedEl) { 
+          currentSelectedEl.classList.remove('selected'); 
+          // 🎯 修復 1：取消點擊時，恢復為透明背景色 (保留邊框)
+          if(currentSelectedEl.classList.contains('has-event')) {
+              currentSelectedEl.style.backgroundColor = 'transparent';
+          }
+      }
       
       currentSelectedEl = cell; 
       cell.classList.add('selected');
       
-      const category = event ? getVal(event, '行程類別') : null;
-      if (category) { 
-          cell.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${category}`).trim(); 
+      if (event) { 
+          // 🎯 修復 1：點擊時，套用滿版底色
+          cell.style.backgroundColor = cell.dataset.color;
       }
       
       if (currentOpenPanel) currentOpenPanel.remove();
@@ -1154,7 +1080,9 @@
           currentOpenPanel = null;
           if (currentSelectedEl) { 
               currentSelectedEl.classList.remove('selected'); 
-              currentSelectedEl.style.backgroundColor = ''; 
+              if(currentSelectedEl.classList.contains('has-event')){
+                  currentSelectedEl.style.backgroundColor = 'transparent';
+              }
               currentSelectedEl = null; 
           }
       }
@@ -1253,12 +1181,14 @@
       </div>`;
       
       html += `
-      <div class="view-switcher" style="margin-bottom: 20px; width: fit-content;">
+      <div class="view-switcher" style="margin-bottom: 20px; width: fit-content; border-radius: 20px;">
           <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
           <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
       </div>`;
       
       html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
+      
+      /* 🎯 修復 2：加上 card-race 保證邊線顏色 */
       html += `<div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
       
       if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
@@ -1275,6 +1205,7 @@
       if(stays.length > 0) {
           html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
           stays.forEach(s => {
+              /* 🎯 修復 2：加上 card-stay 保證邊線顏色 */
               html += `
                   <div class="info-card card-stay">
                       <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
@@ -1304,6 +1235,7 @@
       if(trans.length > 0) {
           html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
           trans.forEach(t => {
+              /* 🎯 修復 2：加上 card-trans 保證邊線顏色 */
               html += `
                   <div class="info-card card-trans">
                       <div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>
@@ -1338,6 +1270,25 @@
               html += `</div>`;
           });
           html += `</div>`;
+      }
+      
+      /* 🎯 修復 3：找回消失的「其他帳務（分類總結）」區塊 */
+      if(bills.length > 0) {
+          const sums = {}; 
+          bills.forEach(b => { 
+              const c = getVal(b, '類別') || '其他'; 
+              sums[c] = (sums[c] || 0) + (parseFloat(getVal(b, '金額')) || 0); 
+          });
+          
+          html += `<div class="info-section"><div class="info-title title-bill">其他帳務 (分類總結)</div><div class="info-card card-bill">`;
+          Object.keys(sums).forEach(c => {
+              html += `
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; align-items:center;">
+                  <span style="color:#546e7a; font-weight:bold;">${c}</span>
+                  <span style="font-weight:900; color:var(--brand-main);">$${sums[c].toLocaleString()}</span>
+              </div>`;
+          });
+          html += `</div></div>`;
       }
       
       html += `
