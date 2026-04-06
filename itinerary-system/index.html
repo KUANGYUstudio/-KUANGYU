@@ -76,12 +76,11 @@
         justify-content: space-between; 
         width: 100%; 
         max-width: 450px; 
-        margin: 0 auto 0px; /* 移除原本的 margin-bottom，交由 action-bar 控制 */
+        margin: 0 auto 0px; 
         padding: 0 10px; 
         box-sizing: border-box; 
     }
     
-    /* 🎯 修復 5：兩側工具小按鈕，尺寸與中間的 $ 一致 (38px) */
     .tool-btn { 
         width: 38px; 
         height: 38px; 
@@ -104,12 +103,11 @@
         box-shadow: 0 4px 10px rgba(224, 122, 95, 0.3); 
     }
 
-    /* 🎯 修復 4：控制導覽列與過濾器的上下間距 */
     .action-bar { 
         display: flex; 
         flex-direction: column; 
         align-items: center; 
-        margin-bottom: 25px; /* 加大這裡的間距，讓兩排不再擁擠 */
+        margin-bottom: 25px; 
     }
 
     /* 中央核心控制區 */
@@ -178,27 +176,23 @@
     .month-nav-btn.has-data { border-color: var(--nav-active); color: var(--nav-active); }
     .month-nav-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-    /* 🎯 修復 1：日曆框框與滿版顏色切換 */
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
     .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #90a4ae; padding-bottom: 10px; }
     
     .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; box-sizing: border-box; }
     .day-number { position: relative; z-index: 2; }
     
-    /* 有行程的日子：平常是透明底、彩色邊框、深色字 */
     .day.has-event { background-color: transparent; color: #2c3e50; cursor: pointer; font-weight: bold; border-width: 2px; border-style: solid; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
     
     .day.has-expense { cursor: pointer; font-weight: 600; color: #2c3e50; }
     .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: #cfd8dc; }
     
-    /* 被點擊展開的日子：變成實心滿版、白色字 */
     .day.selected { color: #fff !important; transform: scale(1.05); z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; border-color: transparent !important; }
     .day.has-expense.selected { background-color: #b0bec5; } 
     .day.selected::after { background-color: transparent !important; } 
     
     .month-title { font-weight: 800; font-size: 22px; margin: 20px 0 15px; text-align: left; color: var(--brand-main); }
     
-    /* 🎯 修復 6：清單日期對齊與展開間距 */
     .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eceff1; transition: 0.2s; border-left: 6px solid #cfd8dc; text-align: left; }
     .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.06); }
     .list-date { text-align: center; min-width: 45px; }
@@ -218,7 +212,6 @@
     .info-title { font-weight: bold; font-size: 14px; color: var(--text-sub); margin-bottom: 10px; display: flex; align-items: center; }
     .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; background: #eceff1;}
     
-    /* 🎯 修復 2：找回資訊卡片的漂亮分類顏色 */
     .title-race::before { background: var(--cat-鐵人); }
     .card-race { border-left-color: var(--cat-鐵人) !important; }
     .title-stay::before { background: var(--cat-旅遊); }
@@ -287,6 +280,64 @@
     
     .view-container { display: none; text-align: left; }
     .view-container.active { display: block; }
+
+    /* 🎯 帳務總覽面板專屬 UI (完美還原圖片樣式) */
+    .acc-card { 
+        background: #f8f9fa; 
+        border: 1px solid #eceff1; 
+        border-radius: 12px; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+    }
+    .acc-label { 
+        font-weight: bold; 
+    }
+    .acc-val { 
+        font-weight: 800; 
+        color: var(--brand-main); 
+    }
+    
+    .acc-tab-btn {
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: #f0f0f0;
+        color: #7f8c8d;
+        font-size: 13px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .acc-tab-btn.active {
+        background: var(--nav-active);
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(84, 110, 122, 0.2);
+    }
+    
+    .acc-detail-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f5f5f5;
+        background: #fff;
+        transition: 0.2s;
+    }
+    .acc-detail-item:last-child { 
+        border-bottom: none; 
+    }
+    .acc-detail-item:hover { 
+        background: #fafafa; 
+    }
+    .acc-detail-name { 
+        font-size: 15px; 
+        font-weight: bold; 
+        color: var(--text-main); 
+    }
+    .acc-detail-amount { 
+        font-size: 16px; 
+        font-weight: 900; 
+        color: var(--settle-pink); 
+    }
   </style>
 </head>
 <body>
