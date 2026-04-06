@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (雙軌記帳整合版)
+       光聿行程美學定義 (帳務明細對齊優化版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -218,7 +218,6 @@
     }
   }
 
-  // 面板分頁切換邏輯
   window.switchPanelTab = function(btn, tabId) {
       const panel = btn.closest('.detail-panel');
       panel.querySelectorAll('.panel-view-btn').forEach(b => b.classList.remove('active'));
@@ -255,13 +254,11 @@
     races.forEach(r => {
       const code = getVal(r, '行程代碼');
       const raceName = getVal(r, '行程名稱');
-
       const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
       if (regFee > 0) {
         itemTotals['報名費'] += regFee;
         accDetailsData['報名費'].push({ name: raceName, amount: regFee });
       }
-
       (dbData['住宿']||[]).filter(s => getVal(s,'行程代碼')===code).forEach(s => {
         const fee = parseFloat(getVal(s,'費用')) || 0;
         if (fee > 0) {
@@ -269,7 +266,6 @@
           accDetailsData['住宿'].push({ name: getVal(s,'飯店名稱') || raceName, amount: fee });
         }
       });
-
       (dbData['交通']||[]).filter(t => getVal(t,'行程代碼')===code).forEach(t => {
         const fee = parseFloat(getVal(t,'票價或油資')) || 0;
         if (fee > 0) {
@@ -277,12 +273,11 @@
           accDetailsData['交通'].push({ name: getVal(t,'類型') || raceName, amount: fee });
         }
       });
-
       (dbData['帳務明細']||[]).filter(b => getVal(b,'行程代碼')===code).forEach(b => {
         const fee = parseFloat(getVal(b,'金額')) || 0;
         if (fee > 0) {
           itemTotals['其他'] += fee;
-          accDetailsData['其他'].push({ name: getVal(b,'項目名稱') || raceName, amount: fee });
+          accDetailsData['其他'].push({ name: getVal(b,'項目') || raceName, amount: fee });
         }
       });
     });
@@ -385,43 +380,31 @@
   function renderCalendar() {
     const container = document.getElementById('calendar-container'); container.innerHTML = '';
     const navContainer = document.getElementById('month-nav'); navContainer.innerHTML = '';
-    
     const now = new Date();
     const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-    
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
     const monthKeys = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].sort();
-    
     for (let i = 1; i <= 12; i++) {
         const mStr = String(i).padStart(2, '0');
         const targetKey = monthKeys.find(key => key.endsWith('-' + mStr));
         const btn = document.createElement('div');
-        
         btn.className = 'month-nav-btn ' + (targetKey ? 'has-data' : 'no-data');
         if (selectedMonthFilter === targetKey && targetKey) btn.classList.add('active');
         btn.textContent = i;
-        
         if (targetKey) {
             if (targetKey < currentMonthKey && selectedMonthFilter !== targetKey) {
-                btn.style.opacity = '0.4';
-                btn.title = "點擊顯示過去行程";
+                btn.style.opacity = '0.4'; btn.title = "點擊顯示過去行程";
             }
-            btn.onclick = () => {
-                selectedMonthFilter = (selectedMonthFilter === targetKey) ? null : targetKey;
-                renderCalendar();
-            };
+            btn.onclick = () => { selectedMonthFilter = (selectedMonthFilter === targetKey) ? null : targetKey; renderCalendar(); };
         }
         navContainer.appendChild(btn);
     }
-
     monthKeys.forEach(mKey => {
       let shouldShow = selectedMonthFilter ? (mKey === selectedMonthFilter) : (mKey >= currentMonthKey);
       if (!shouldShow) return;
-
       const [y, m] = mKey.split('-');
       const section = document.createElement('div'); section.className = 'month-section';
       section.id = 'month-section-' + mKey;
-      
       section.innerHTML = `<div class="month-title">${y}年${m}月</div><div class="calendar-header">${['日','一','二','三','四','五','六'].map(d => `<div class="weekday-header">${d}</div>`).join('')}</div>`;
       const grid = document.createElement('div'); grid.className = 'calendar-grid';
       const firstDay = new Date(y, m-1, 1).getDay(), lastDate = new Date(y, m, 0).getDate();
@@ -429,19 +412,14 @@
       for (let d = 1; d <= lastDate; d++) {
         const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
         const cell = document.createElement('div'); cell.className = 'day'; cell.innerHTML = `<span class="day-number">${d}</span>`;
-        
         const event = races.find(r => formatDate(getVal(r, '日期')) === dStr);
-        // 日常帳務判斷 (沒有綁定行程代碼的花費)
         const dailyExpenses = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dStr && (!getVal(b, '行程代碼') || getVal(b, '行程代碼').trim() === ''));
-
         if (event) {
           const cat = getVal(event, '行程類別');
-          cell.classList.add('has-event'); 
-          cell.style.borderColor = `var(--cat-${cat})`;
+          cell.classList.add('has-event'); cell.style.borderColor = `var(--cat-${cat})`;
           cell.onclick = () => handleDayClick(event, cell, grid, dStr);
         } else if (dailyExpenses.length > 0) {
-          cell.classList.add('has-event'); 
-          cell.style.borderColor = '#cfd8dc'; // 灰色外框代表純記帳日
+          cell.classList.add('has-event'); cell.style.borderColor = '#cfd8dc';
           cell.onclick = () => handleDayClick(null, cell, grid, dStr);
         }
         grid.appendChild(cell);
@@ -454,11 +432,9 @@
       const container = document.getElementById('list-container'); container.innerHTML = '';
       let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
       races.sort((a, b) => new Date(getVal(a, '日期')) - new Date(getVal(b, '日期')));
-      
       const today = new Date(); today.setHours(0, 0, 0, 0);
       const pastRaces = races.filter(r => new Date(getVal(r, '日期')) < today);
       const futureRaces = races.filter(r => new Date(getVal(r, '日期')) >= today);
-      
       if (pastRaces.length > 0) {
           const toggleBtn = document.createElement('div');
           toggleBtn.className = 'past-toggle-btn';
@@ -466,35 +442,20 @@
           toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
           container.appendChild(toggleBtn);
       }
-
       const racesToRender = showPastList ? races : futureRaces;
-      
       if (racesToRender.length === 0) {
           const emptyMsg = document.createElement('div');
           emptyMsg.style.cssText = "padding:40px; text-align:center; color:#95a5a6; font-size:15px; font-weight:bold;";
           emptyMsg.textContent = "目前沒有行程資料";
-          container.appendChild(emptyMsg);
-          return;
+          container.appendChild(emptyMsg); return;
       }
-
       racesToRender.forEach(event => {
           const eDate = new Date(getVal(event, '日期')); const cat = getVal(event, '行程類別');
           const daysDiff = Math.ceil((eDate - today) / (1000 * 60 * 60 * 24));
-          
-          let countdownHtml = "";
-          if (daysDiff > 0) {
-              countdownHtml = `<span style="font-weight:bold; font-size:13px; color:var(--text-main);">還有<span class="list-countdown-days">${daysDiff}</span>天</span>`;
-          } else if (daysDiff === 0) {
-              countdownHtml = `<span style="font-weight:bold; font-size:14px; color:var(--text-main);">今天</span>`;
-          } else {
-              countdownHtml = `<span style="font-weight:bold; font-size:13px; color:#bbb;">已結束</span>`;
-          }
-
-          const item = document.createElement('div'); item.className = 'list-item'; 
-          item.style.borderLeftColor = `var(--cat-${cat})`;
+          let countdownHtml = daysDiff > 0 ? `<span style="font-weight:bold; font-size:13px; color:var(--text-main);">還有<span class="list-countdown-days">${daysDiff}</span>天</span>` : (daysDiff === 0 ? `<span style="font-weight:bold; font-size:14px; color:var(--text-main);">今天</span>` : `<span style="font-weight:bold; font-size:13px; color:#bbb;">已結束</span>`);
+          const item = document.createElement('div'); item.className = 'list-item'; item.style.borderLeftColor = `var(--cat-${cat})`;
           item.innerHTML = `<div class="list-date"><span class="m">${eDate.getMonth()+1}月</span><span class="d">${eDate.getDate()}</span></div><div class="list-name">${getVal(event, '行程名稱')}</div><div class="list-countdown">${countdownHtml}</div>`;
-          item.onclick = () => handleListClick(event, item);
-          container.appendChild(item);
+          item.onclick = () => handleListClick(event, item); container.appendChild(item);
       });
   }
 
@@ -504,10 +465,8 @@
     if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
     if (currentSelectedEl) { currentSelectedEl.classList.remove('selected'); currentSelectedEl.style.backgroundColor = ''; }
     currentSelectedEl = cell; cell.classList.add('selected');
-    
     const category = event ? getVal(event, '行程類別') : null;
     cell.style.backgroundColor = category ? `var(--cat-${category})` : '#95a5a6';
-    
     if (currentOpenPanel) currentOpenPanel.remove();
     const panel = document.createElement('div'); panel.className = 'detail-panel'; panel.innerHTML = generateDetailHTML(event, dStr);
     const cells = Array.from(grid.children), idx = cells.indexOf(cell), rowEnd = Math.min(cells.length - 1, idx + (6 - (idx % 7)));
@@ -529,7 +488,7 @@
       }
   }
 
-  // 產生單據式明細表 HTML
+  // 生成格點式明細表 HTML
   function generateReceiptHTML(bills) {
       if (bills.length === 0) return `<div style="text-align:center; color:#95a5a6; font-size:13px; padding:20px;">無帳務明細</div>`;
       const grouped = {};
@@ -541,16 +500,20 @@
       let html = `<div style="background:#fff; border-radius:12px; border:1px solid #eee; padding:15px; margin-bottom:15px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">`;
       let total = 0;
       Object.keys(grouped).sort().forEach(dateKey => {
-          html += `<div style="font-weight:bold; color:var(--brand-main); margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:14px; margin-top:10px;">[ ${dateKey} ]</div>`;
+          // 移除日期旁的方括號
+          html += `<div style="font-weight:bold; color:var(--brand-main); margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:14px; margin-top:10px;">${dateKey}</div>`;
           grouped[dateKey].forEach(b => {
               const cat = getVal(b, '類別') || '其他';
               const item = getVal(b, '項目') || '未命名項目';
               const pay = getVal(b, '付款方式') || '未填寫';
               const amt = parseFloat(getVal(b, '金額')) || 0;
               total += amt;
-              html += `<div style="display:flex; justify-content:space-between; font-size:14px; padding:8px 0; border-bottom:1px dashed #f5f5f5; align-items:center;">
-                  <div style="color:#546e7a; line-height:1.4;"><span style="color:#7f8c8d; font-size:12px; margin-right:5px; background:#f0f0f0; padding:2px 6px; border-radius:10px;">${cat}</span><br/>${item} <span style="font-size:12px; color:#aaa; margin-left:5px;">｜ ${pay}</span></div>
-                  <div style="font-weight:bold; color:var(--brand-pink);">$${amt.toLocaleString()}</div>
+              // 使用 Grid 確保對齊：類別、項目、付款方式、金額
+              html += `<div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; font-size: 14px; padding: 10px 0; border-bottom: 1px dashed #f5f5f5; align-items: center;">
+                  <div style="color:#7f8c8d; font-size:11px; background:#f5f5f5; padding:2px 8px; border-radius:10px; white-space: nowrap; font-weight:bold;">${cat}</div>
+                  <div style="color:#2c3e50; font-weight: 500;">${item}</div>
+                  <div style="font-size:12px; color:#aaa; white-space: nowrap;">${pay}</div>
+                  <div style="font-weight:bold; color:var(--brand-pink); text-align: right; min-width: 60px;">$${amt.toLocaleString()}</div>
               </div>`;
           });
       });
@@ -562,37 +525,25 @@
 
   function generateDetailHTML(event, dateStr) {
     if (!event) {
-        // 日常記帳模式 (無行程代碼)
         let html = `<div class="detail-header" style="margin-bottom:10px; padding-bottom:5px; border-bottom:none;"><div><div class="detail-race-name">日常帳務</div><div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${dateStr}</div></div></div>`;
         const dailyBills = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dateStr && (!getVal(b, '行程代碼') || getVal(b, '行程代碼').trim() === ''));
         html += generateReceiptHTML(dailyBills);
         return html;
     }
-
-    // 賽事行程雙軌模式
     const code = getVal(event, '行程代碼'), cat = getVal(event, '行程類別');
     const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
-    
     let html = `<div class="detail-header"><div><div class="detail-race-name">${getVal(event, '行程名稱')}</div><div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div></div>${getVal(event,'行程連結')?`<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>`:''}</div>`;
-    
-    // 雙切換按鈕
     html += `<div class="view-switcher" style="margin-bottom: 20px; width: fit-content; background: #f0f0f0;">
                 <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
                 <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
              </div>`;
-
-    // --- Tab 1: 行程資訊 ---
     html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
-    
     html += `<div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
     if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
     if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
     html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'));
-    if(getVal(event,'備註')) {
-        html += `<div style="margin-top:12px; font-size:13px; color:#666; border-top: 1px dashed #ddd; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
-    }
+    if(getVal(event,'備註')) html += `<div style="margin-top:12px; font-size:13px; color:#666; border-top: 1px dashed #ddd; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
     html += `</div></div>`;
-
     const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
     if(stays.length > 0) {
       html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
@@ -607,23 +558,18 @@
       });
       html += `</div>`;
     }
-
     const trans = (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code);
     if(trans.length > 0) {
       html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
       trans.forEach(t => {
         html += `<div class="info-card card-trans"><div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>`;
-        const goB = getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機') || getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班');
-        const goD = getVal(t,'出發日期');
-        const goS = getVal(t,'去程出發時間');
-        const goA = getVal(t,'去程抵達時間');
+        const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班') || getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機');
+        const goD = getVal(t,'出發日期'); const goS = getVal(t,'去程出發時間'); const goA = getVal(t,'去程抵達時間');
         if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span>${goB}</span></div>`;
         if(hasVal(goD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(goD).substring(5)}</span></div>`;
         if(hasVal(goS) || hasVal(goA)) html += `<div class="info-row"><span></span><span>${goS||'--:--'}出發－${goA||'--:--'}抵達</span></div>`;
-        const bkB = getVal(t,'回程班次 / 飛機') || getVal(t,'回程班次/飛機') || getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班');
-        const bkD = getVal(t,'回程日期');
-        const bkS = getVal(t,'回程出發時間');
-        const bkA = getVal(t,'回程抵達時間');
+        const bkB = getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班') || getVal(t,'回程班次 / 飛機') || getVal(t,'回程班次/飛機');
+        const bkD = getVal(t,'回程日期'); const bkS = getVal(t,'回程出發時間'); const bkA = getVal(t,'回程抵達時間');
         if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span>${bkB}</span></div>`;
         if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
         if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
@@ -631,14 +577,8 @@
       });
       html += `</div>`;
     }
-
-    // 分類總結
     if(bills.length > 0) {
-      const sums = {};
-      bills.forEach(b => {
-          const c = getVal(b, '類別') || '其他';
-          sums[c] = (sums[c] || 0) + (parseFloat(getVal(b, '金額')) || 0);
-      });
+      const sums = {}; bills.forEach(b => { const c = getVal(b, '類別') || '其他'; sums[c] = (sums[c] || 0) + (parseFloat(getVal(b, '金額')) || 0); });
       html += `<div class="info-section"><div class="info-title title-bill">其他帳務 (分類總結)</div><div class="info-card card-bill">`;
       Object.keys(sums).forEach(c => {
           html += `<div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; align-items:center;">
@@ -648,21 +588,15 @@
       });
       html += `</div></div>`;
     }
-
     html += `<div style="display: flex; justify-content: flex-end; margin-top: 5px;">
                 <div class="event-settle-card">
                     <div style="font-weight:bold; color:var(--brand-pink); font-size:13px;">本場行程結算</div>
                     <div style="font-size:18px; font-weight:900; color:var(--brand-pink);">$${calculateEventTotal(code).toLocaleString()}</div>
                 </div>
-             </div>`;
-    
-    html += `</div>`; // End Tab 1
-
-    // --- Tab 2: 帳務明細 ---
+             </div></div>`;
     html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">`;
     html += generateReceiptHTML(bills);
-    html += `</div>`; // End Tab 2
-
+    html += `</div>`;
     return html;
   }
 </script>
