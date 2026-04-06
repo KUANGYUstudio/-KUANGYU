@@ -11,16 +11,20 @@
             --brand-bg: #f4f7f6;
             --brand-card: #ffffff;
             --text-dark: #34495e;
-            --action-button-color: #00838f;
-            --action-button-bg: #e0f2f1;
+            
+            /* 新增：重整按鈕的莫蘭迪色系 */
+            --action-button-color: #546e7a;
+            --action-button-bg: #eceff1;
         }
         body { font-family: "PingFang TC", "Heiti TC", sans-serif; background: var(--brand-bg); color: var(--text-dark); margin: 0; padding: 15px; }
-        .container { max-width: 500px; margin: 0 auto; background: var(--brand-card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .container { max-width: 500px; margin: 0 auto; background: var(--brand-card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); box-sizing: border-box; }
         
-        /* 標題與重整按鈕排版 */
+        /* 標題與重整按鈕的排版 */
         .logo-text { text-align: center; font-weight: 800; font-size: 22px; color: var(--brand-main); margin-bottom: 20px; letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        /* 光聿質感重整按鈕 */
         .refresh-btn { cursor: pointer; font-size: 14px; background: var(--action-button-bg); color: var(--action-button-color); padding: 5px 8px; border-radius: 50%; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
-        .refresh-btn:hover { background: #b2dfdb; }
+        .refresh-btn:hover { background: #cfd8dc; }
 
         .tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 25px; }
         .tab-btn { padding: 12px; background: #ebf0f1; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: bold; color: #7f8c8d; transition: 0.3s; }
@@ -28,11 +32,20 @@
         .form-section { display: none; }
         .form-section.active { display: block; animation: slideUp 0.4s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .input-group { margin-bottom: 18px; }
-        .input-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: var(--brand-main); }
-        .input-group input, .input-group select { width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; background: #fff; font-family: inherit; }
+        .input-group { margin-bottom: 18px; text-align: left;}
+        .input-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: var(--brand-main); padding-left: 3px;}
+        .input-group input, .input-group select { width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; background: #fff; font-family: inherit;}
+        
+        /* 【關鍵修正】強制讓手機版的日期輸入框乖乖聽話，不超出寬度 */
+        .input-group input[type="date"] {
+            -webkit-appearance: none;
+            width: 100%; 
+            display: block;
+            box-sizing: border-box; 
+        }
+
         .input-group input:focus, .input-group select:focus { border-color: var(--brand-action); box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
-        .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--brand-action); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3); transition: 0.3s; }
+        .submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--brand-action); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3); transition: 0.3s; font-family: inherit;}
         .status-msg { display: none; text-align: center; margin-top: 15px; font-size: 14px; font-weight: bold; padding: 10px; border-radius: 10px; }
         .group-box { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #e1e5ea; margin-bottom: 18px; }
         .group-title { font-weight: bold; color: var(--brand-action); margin-bottom: 12px; font-size: 14px; }
@@ -42,7 +55,7 @@
 
 <div class="container">
     <div class="logo-text">
-        KUANGYU ADMIN 
+        KUANGYU ADMIN
         <span class="refresh-btn" onclick="location.reload()">↻</span>
     </div>
     
@@ -145,6 +158,7 @@
                 <option>飲食</option>
                 <option>交通</option>
                 <option>購物</option>
+                <option>採買</option>
                 <option>娛樂</option>
                 <option>其他</option>
             </select>
