@@ -175,16 +175,39 @@
     .month-nav-btn.has-data { border-color: var(--nav-active); color: var(--nav-active); }
     .month-nav-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-    /* 日曆與清單 */
-    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-    .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #90a4ae; padding-bottom: 10px; }
+    /* =========================================
+       日曆與清單 (已更新為截圖的扁平圓形樣式)
+       ========================================= */
+    .calendar-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 8px; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .weekday-header { font-weight: bold; font-size: 14px; text-align: center; color: #cfd8dc; padding-bottom: 8px; }
     
-    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #cfd8dc; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; }
-    .day.has-event { background-color: #fff; color: #2c3e50; cursor: pointer; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-width: 2px; }
+    .day { 
+        aspect-ratio: 1; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        border-radius: 50%; 
+        background-color: #f4f5f7; 
+        color: #cfd8dc; 
+        transition: 0.2s; 
+        font-size: 16px; 
+        font-weight: 600;
+        position: relative; 
+        border: 2px solid transparent; 
+        box-sizing: border-box; 
+    }
+    .day.has-event { 
+        background-color: #fff; 
+        color: #2c3e50; 
+        cursor: pointer; 
+        font-weight: 700; 
+        box-shadow: none; 
+    }
     .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: #cfd8dc; }
     .day.selected { color: #fff !important; transform: scale(1.05); z-index: 10; border-color: transparent !important; }
     
-    .month-title { font-weight: 800; font-size: 22px; margin: 20px 0 15px; text-align: left; color: var(--brand-main); }
+    .month-title { font-weight: 800; font-size: 20px; margin: 25px 0 15px 5px; text-align: left; color: var(--brand-main); }
     
     .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eceff1; transition: 0.2s; border-left: 6px solid #cfd8dc; text-align: left; }
     .list-date .d { font-size: 22px; font-weight: 800; color: var(--brand-main); }
