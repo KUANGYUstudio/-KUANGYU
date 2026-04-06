@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (帳務明細對齊 + 日常記帳點點版)
+       光聿行程美學定義 (帳務明細對齊 + 低調點點版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -94,14 +94,14 @@
     /* 賽事行程：維持彩色外框 */
     .day.has-event { background-color: #fff; color: #333; cursor: pointer; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-width: 2px; }
     
-    /* 日常帳務：乾淨的點點設計 */
+    /* 日常帳務：低調點點設計 */
     .day.has-expense { cursor: pointer; font-weight: 600; color: #333; }
     .day.has-expense:hover { background-color: #f5f5f5; }
-    .day.has-expense::after { content: ''; position: absolute; bottom: 6px; width: 5px; height: 5px; border-radius: 50%; background-color: #95a5a6; transition: 0.2s; }
+    .day.has-expense::after { content: ''; position: absolute; bottom: 3px; /* 移到最靠下 */ width: 5px; height: 5px; border-radius: 50%; background-color: #dcdcdc; /* 顏色更淡 */ transition: 0.2s; }
     
     /* 共用選中狀態 */
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; z-index: 10; border-color: transparent !important; }
-    .day.has-expense.selected { background-color: #95a5a6; } /* 選中純帳務日的底色 */
+    .day.has-expense.selected { background-color: #bdc3c7; } /* 選中純帳務日的底色，比原本淡一點 */
     .day.selected::after { background-color: #fff !important; } /* 選中時點點變白 */
 
     .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eee; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.02); border-left: 6px solid #ddd; }
@@ -431,7 +431,6 @@
           cell.classList.add('has-event'); cell.style.borderColor = `var(--cat-${cat})`;
           cell.onclick = () => handleDayClick(event, cell, grid, dStr);
         } else if (dailyExpenses.length > 0) {
-          // 純日常記帳：改為乾淨的點點標記，取代灰色外框
           cell.classList.add('has-expense');
           cell.onclick = () => handleDayClick(null, cell, grid, dStr);
         }
@@ -479,7 +478,6 @@
     if (currentSelectedEl) { currentSelectedEl.classList.remove('selected'); currentSelectedEl.style.backgroundColor = ''; }
     currentSelectedEl = cell; cell.classList.add('selected');
     
-    // 如果是賽事，填滿對應顏色；如果是純點點的日常帳務，填滿質感灰
     const category = event ? getVal(event, '行程類別') : null;
     if (category) {
         cell.style.backgroundColor = `var(--cat-${category})`;
