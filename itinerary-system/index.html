@@ -367,7 +367,7 @@
             <div id="year-nav" class="year-nav-container"></div>
             <div id="month-nav" class="month-nav-container"></div>
         </div>
-        <div onclick="toggleNavArea()" id="nav-toggle-btn" style="text-align:center; color:#b0bec5; font-size:12px; font-weight:bold; cursor:pointer; padding-top:5px; margin-bottom:-5px; letter-spacing:1px;">▲ 收起面板</div>
+        <div onclick="toggleNavArea()" id="nav-toggle-btn" style="text-align:right; padding-right:10px; color:#b0bec5; font-size:16px; font-weight:bold; cursor:pointer; padding-top:5px; margin-bottom:-5px;">▲</div>
     </div>
 
     <div id="acc-panel" style="display:none; text-align:left; background:#fff; padding:25px; border-radius:20px; margin-bottom:30px; border:1px solid #eceff1; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
@@ -493,10 +493,10 @@
       const btn = document.getElementById('nav-toggle-btn');
       if (area.style.display === 'none') {
           area.style.display = 'block';
-          btn.textContent = '▲ 收起面板';
+          btn.textContent = '▲';
       } else {
           area.style.display = 'none';
-          btn.textContent = '▼ 展開面板';
+          btn.textContent = '▼';
       }
   }
 
