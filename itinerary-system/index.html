@@ -920,13 +920,14 @@
           
           if (mKey < currentMonthKey && selectedMonthFilter !== mKey) btn.style.opacity = '0.4';
           
-          if (hasData) { 
-              btn.onclick = () => { 
-                  selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
-                  renderMain(); 
-                  if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
-              }; 
-          }
+          // 現在不管該月份有沒有資料，都會綁定點擊篩選的功能
+          btn.onclick = () => { 
+              selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
+              renderMain(); 
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+          }; 
+          // --- 修改重點結束 ---
+
           navContainer.appendChild(btn);
       }
   }
