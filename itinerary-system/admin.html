@@ -145,11 +145,9 @@
         <div class="input-group">
             <label>付款方式</label>
             <select id="帳務-方式">
-                <option>共同現金</option>
-                <option>聿凡－台新卡</option>
-                <option>光武－富邦卡</option>
-                <option>LINE Pay</option>
-                <option>其他</option>
+                <option>現金</option>
+                <option>刷卡</option>
+                <option>-</option>
             </select>
         </div>
         <div class="input-group"><label>備註</label><input type="text" id="帳務-備註" placeholder="可選填"></div>
@@ -171,7 +169,6 @@
             const codes = data['行程'].map(item => item['行程代碼']).filter(c => c);
             const uniqueCodes = [...new Set(codes)];
             document.querySelectorAll('.code-selector').forEach(select => {
-                // 根據表單不同，顯示不同的提示文字
                 const isAccounting = select.id === '帳務-代碼';
                 select.innerHTML = `<option value="">${isAccounting ? '--- 日常記帳免選 ---' : '--- 請選擇行程 ---'}</option>`;
                 uniqueCodes.forEach(code => {
@@ -242,7 +239,7 @@
                 document.getElementById('交通-狀態').value
             ];
         } else if (sheetName === '帳務明細') {
-            eventCode = document.getElementById('帳務-代碼').value; // 日常記帳可以空白
+            eventCode = document.getElementById('帳務-代碼').value; 
             rowData = [
                 eventCode, 
                 document.getElementById('帳務-日期').value, 
@@ -254,7 +251,6 @@
             ];
         }
 
-        // 邏輯防呆檢查
         if (sheetName !== '帳務明細' && !eventCode) { 
             alert("行程代碼不能空白！"); 
             return; 
@@ -274,7 +270,6 @@
             statusDiv.textContent = sheetName + ' 資料已成功入庫！';
             if (sheetName === '行程') refreshItineraryCodes();
             
-            // 清空輸入框
             document.querySelectorAll('#form-' + sheetName + ' input[type="text"], #form-' + sheetName + ' input[type="number"], #form-' + sheetName + ' input[type="date"], #form-' + sheetName + ' input[type="url"]').forEach(i => i.value = '');
             if (sheetName === '住宿') {
                 document.getElementById('住宿-平台').selectedIndex = 0;
