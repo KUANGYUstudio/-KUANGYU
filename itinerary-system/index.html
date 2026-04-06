@@ -179,10 +179,10 @@
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
     .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #90a4ae; padding-bottom: 10px; }
     
-    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; box-sizing: border-box; }
+    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: #f4f6f8; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; box-sizing: border-box; }
     .day-number { position: relative; z-index: 2; }
     
-    .day.has-event { background-color: transparent; color: #2c3e50; cursor: pointer; font-weight: bold; border-width: 2px; border-style: solid; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+    .day.has-event { background-color: #f4f6f8; color: #2c3e50; cursor: pointer; font-weight: bold; border-width: 2px; border-style: solid; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
     
     .day.has-expense { cursor: pointer; font-weight: 600; color: #2c3e50; }
     .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: #cfd8dc; }
@@ -1084,7 +1084,7 @@
           currentSelectedEl.classList.remove('selected'); 
           // 🎯 修復 1：取消點擊時，恢復為透明背景色 (保留邊框)
           if(currentSelectedEl.classList.contains('has-event')) {
-              currentSelectedEl.style.backgroundColor = 'transparent';
+              currentSelectedEl.style.backgroundColor = '';
           }
       }
       
