@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* =========================================
-       光聿行程美學定義 (全動態圓環圖表 + 雙軌記帳版)
+       光聿行程美學定義 (月份置頂 + 跨年度動態引擎版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -33,11 +33,22 @@
     body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); min-height: 100vh; }
     .container { max-width: 800px; width: 100%; margin: 0 auto; padding: 30px 20px; box-sizing: border-box; text-align: center; }
     
-    .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .header-title { font-size: 28px; font-weight: 800; color: var(--text-main); letter-spacing: 2px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .refresh-btn { cursor: pointer; font-size: 14px; background: var(--action-button-bg); color: var(--action-button-color); padding: 5px 8px; border-radius: 50%; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .refresh-btn:hover { background: #b2dfdb; }
 
-    .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
+    /* --- 全新置頂控制區 (吸附在頂部) --- */
+    .sticky-controls {
+        position: sticky;
+        top: 0;
+        background: var(--bg-color);
+        z-index: 100;
+        padding: 10px 0 5px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        margin-bottom: 25px;
+    }
+
+    .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 15px; }
     .top-btns { display: flex; gap: 10px; align-items: center; }
     .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.2s; }
     .acc-toggle-btn:hover { background: #1a252f; }
@@ -46,6 +57,18 @@
     .view-btn { border: none; padding: 6px 15px; border-radius: 17px; cursor: pointer; font-size: 12px; font-weight: bold; color: #7f8c8d; background: transparent; transition: 0.3s; }
     .view-btn.active { background: #fff; color: var(--brand-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
+    .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; font-weight: bold; color: #7f8c8d; cursor: pointer; transition: 0.2s; }
+    .filter-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); }
+
+    .month-nav-container { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding-bottom: 5px; }
+    .month-nav-btn { min-width: 36px; height: 36px; border-radius: 18px; border: 1px solid #ddd; background: #fff; color: #7f8c8d; font-size: 15px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s; box-sizing: border-box; }
+    .month-nav-btn.has-data { border-color: var(--brand-main); color: var(--brand-main); }
+    .month-nav-btn.has-data:hover { background: var(--brand-main); color: #fff; }
+    .month-nav-btn.no-data { opacity: 0.3; cursor: default; }
+    .month-nav-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); opacity: 1 !important; transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    /* --- 其他美學定義 --- */
     #acc-panel { display: none; background: #fff; border-radius: 20px; padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; animation: fadeIn 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .acc-grand-banner { background: var(--brand-main); color: #fff; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2); }
     .acc-grand-label { font-size: 13px; opacity: 0.8; margin-bottom: 5px; }
@@ -70,19 +93,8 @@
     .acc-detail-name { color: var(--text-main); font-weight: bold; }
     .acc-detail-amount { color: var(--brand-main); font-weight: 900; }
 
-    .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; font-weight: bold; color: #7f8c8d; cursor: pointer; transition: 0.2s; }
-    .filter-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); }
-
     .view-container { display: none; text-align: left; }
     .view-container.active { display: block; }
-
-    .month-nav-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; flex-wrap: wrap; }
-    .month-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #ddd; background: #fff; color: #7f8c8d; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-    .month-nav-btn.has-data { border-color: var(--brand-main); color: var(--brand-main); }
-    .month-nav-btn.has-data:hover { background: var(--brand-main); color: #fff; }
-    .month-nav-btn.no-data { opacity: 0.3; cursor: default; }
-    .month-nav-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); opacity: 1 !important; transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
     .past-toggle-btn { text-align: center; color: #7f8c8d; font-size: 13px; cursor: pointer; margin-bottom: 20px; font-weight: bold; background: #f0f0f0; padding: 10px; border-radius: 20px; transition: 0.2s; }
     .past-toggle-btn:hover { background: #e0e0e0; color: var(--brand-main); }
@@ -94,15 +106,11 @@
     .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #cfd8dc; transition: 0.2s ease; font-size: 18px; position: relative; border: 2px solid transparent; }
     .day-number { position: relative; z-index: 2; }
     
-    /* 賽事行程：維持彩色外框 */
     .day.has-event { background-color: #fff; color: #333; cursor: pointer; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-width: 2px; }
-    
-    /* 日常帳務：低調點點設計 */
     .day.has-expense { cursor: pointer; font-weight: 600; color: #333; }
     .day.has-expense:hover { background-color: #f5f5f5; }
     .day.has-expense::after { content: ''; position: absolute; bottom: 3px; width: 5px; height: 5px; border-radius: 50%; background-color: #dcdcdc; transition: 0.2s; }
     
-    /* 共用選中狀態 */
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; z-index: 10; border-color: transparent !important; }
     .day.has-expense.selected { background-color: #bdc3c7; } 
     .day.selected::after { background-color: #fff !important; } 
@@ -162,15 +170,18 @@
   <div class="container">
     <div class="header-title">行程小助理 <span class="refresh-btn" onclick="location.reload()">↻</span></div>
 
-    <div class="action-bar">
-      <div class="top-btns">
-          <button class="acc-toggle-btn" onclick="toggleAccPanel()">帳務總覽</button>
-          <div class="view-switcher">
-              <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
-              <button id="btn-list" class="view-btn" onclick="switchView('list')">清單</button>
+    <div class="sticky-controls">
+        <div class="action-bar">
+          <div class="top-btns">
+              <button class="acc-toggle-btn" onclick="toggleAccPanel()">帳務總覽</button>
+              <div class="view-switcher">
+                  <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
+                  <button id="btn-list" class="view-btn" onclick="switchView('list')">清單</button>
+              </div>
           </div>
-      </div>
-      <div id="filter-bar" class="filter-bar"></div>
+          <div id="filter-bar" class="filter-bar"></div>
+        </div>
+        <div id="month-nav" class="month-nav-container"></div>
     </div>
 
     <div id="acc-panel">
@@ -187,17 +198,13 @@
       <div id="dynamic-cat-legend" class="acc-grid"></div>
 
       <div class="acc-title" style="margin-top:20px;">分類明細清單</div>
-      <div class="acc-tabs" id="acc-tabs">
-         </div>
+      <div class="acc-tabs" id="acc-tabs"></div>
       <div id="acc-detail-list" class="acc-detail-container"></div>
-      
     </div>
 
     <div id="cal-view" class="view-container active">
-        <div id="month-nav" class="month-nav-container"></div>
         <div id="calendar-container"></div>
     </div>
-    
     <div id="list-view" class="view-container"><div id="list-container"></div></div>
   </div>
 
@@ -211,22 +218,13 @@
 
   let accDetailsData = {};
   let currentAccTab = '';
-  let expenseChartInstance = null; // 儲存圖表實例以便更新
+  let expenseChartInstance = null; 
 
-  // 定義質感的分類顏色庫
   const categoryColors = {
-      '報名費': '#1e88e5', // 藍
-      '住宿': '#ffb74d',   // 黃
-      '交通': '#2ecc71',   // 綠
-      '飲食': '#f06292',   // 粉
-      '購物': '#9b59b6',   // 紫
-      '票券': '#34495e',   // 藏青
-      '娛樂': '#e67e22',   // 橘
-      '其他': '#95a5a6'    // 灰
+      '報名費': '#1e88e5', '住宿': '#ffb74d', '交通': '#2ecc71', '飲食': '#f06292',
+      '購物': '#9b59b6', '票券': '#34495e', '娛樂': '#e67e22', '其他': '#95a5a6'
   };
-  function getColorForCategory(cat) {
-      return categoryColors[cat] || '#bdc3c7'; // 預設淺灰
-  }
+  function getColorForCategory(cat) { return categoryColors[cat] || '#bdc3c7'; }
 
   window.onload = initSystem;
 
@@ -260,7 +258,10 @@
       renderMain();
   }
 
-  function renderMain() { if (currentView === 'cal') renderCalendar(); else renderList(); }
+  function renderMain() { 
+      renderMonthNav(); // 動態更新置頂的月份選單
+      if (currentView === 'cal') renderCalendar(); else renderList(); 
+  }
 
   function toggleAccPanel() {
     const panel = document.getElementById('acc-panel');
@@ -269,36 +270,29 @@
     if (!isVisible) calculateAccounting();
   }
 
-  // --- 核心邏輯：動態抓取與重組所有開銷 ---
   function calculateAccounting() {
     let allExpenses = [];
     const races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
 
-    // 1. 抓取所有有綁定「行程代碼」的花費
     races.forEach(r => {
       const code = getVal(r, '行程代碼');
       const rDate = formatDate(getVal(r, '日期'));
-      
       const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
       if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: getVal(r, '行程名稱') });
-
       (dbData['住宿']||[]).filter(s => getVal(s,'行程代碼')===code).forEach(s => {
         const fee = parseFloat(getVal(s,'費用')) || 0;
         if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || getVal(r, '行程名稱') });
       });
-
       (dbData['交通']||[]).filter(t => getVal(t,'行程代碼')===code).forEach(t => {
         const fee = parseFloat(getVal(t,'票價或油資')) || 0;
         if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, category: '交通', amount: fee, name: getVal(t,'類型') || getVal(r, '行程名稱') });
       });
-
       (dbData['帳務明細']||[]).filter(b => getVal(b,'行程代碼')===code).forEach(b => {
         const fee = parseFloat(getVal(b,'金額')) || 0;
         if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || getVal(r, '行程名稱') });
       });
     });
 
-    // 2. 若沒篩選特定賽事類型，則額外抓取「日常記帳」（無綁定行程代碼）
     if (currentFilter === '全部') {
         (dbData['帳務明細']||[]).filter(b => !getVal(b, '行程代碼') || getVal(b, '行程代碼').trim() === '').forEach(b => {
             const fee = parseFloat(getVal(b,'金額')) || 0;
@@ -306,7 +300,6 @@
         });
     }
 
-    // 3. 依據上方點擊的月份進行篩選
     const now = new Date();
     const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     let filteredExpenses = allExpenses.filter(e => {
@@ -315,14 +308,12 @@
         if (selectedMonthFilter) {
             return eMonth === selectedMonthFilter;
         } else {
-            return eMonth >= currentMonthKey; // 預設顯示本月與未來
+            return eMonth >= currentMonthKey;
         }
     });
 
-    // 更新頂部標題
     document.getElementById('acc-grand-label-dynamic').textContent = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月 總支出` : `本月與未來 總支出`;
 
-    // 4. 進行數據加總
     let categoryTotals = {};
     let grandTotal = 0;
     accDetailsData = {}; 
@@ -340,7 +331,6 @@
 
     document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
 
-    // 5. 排序類別 (金額高到低) 並渲染圖例
     let sortedCats = Object.keys(categoryTotals).sort((a,b) => categoryTotals[b] - categoryTotals[a]);
     const pGrid = document.getElementById('dynamic-cat-legend');
     pGrid.innerHTML = '';
@@ -372,7 +362,6 @@
       `;
     });
 
-    // 6. 動態生成分類清單的 Tab 按鈕
     const tabsContainer = document.getElementById('acc-tabs');
     tabsContainer.innerHTML = '';
     if (sortedCats.length === 0) {
@@ -390,11 +379,9 @@
         renderAccDetailsList();
     }
 
-    // 7. 渲染 Chart.js 圓環圖
     renderDoughnutChart(chartLabels, chartData, chartColors);
   }
 
-  // --- Chart.js 圓環圖渲染器 ---
   function renderDoughnutChart(labels, data, colors) {
       const ctx = document.getElementById('expenseChart').getContext('2d');
       if (expenseChartInstance) {
@@ -402,7 +389,6 @@
       }
 
       if (data.length === 0) {
-          // 若無資料，畫一個灰色的空心圓
           expenseChartInstance = new Chart(ctx, {
               type: 'doughnut',
               data: { labels: ['無資料'], datasets: [{ data: [1], backgroundColor: ['#f5f5f5'], borderWidth: 0 }] },
@@ -426,9 +412,9 @@
           options: {
               responsive: true,
               maintainAspectRatio: false,
-              cutout: '70%', // 圓環中空比例
+              cutout: '70%',
               plugins: {
-                  legend: { display: false }, // 關閉預設圖例，使用我們自訂的 HTML 圖例
+                  legend: { display: false },
                   tooltip: {
                       backgroundColor: 'rgba(44, 62, 80, 0.9)',
                       padding: 12,
@@ -502,6 +488,90 @@
     });
   }
 
+  // --- 跨年份動態月份引擎 ---
+  function renderMonthNav() {
+      const navContainer = document.getElementById('month-nav');
+      navContainer.innerHTML = '';
+      
+      const now = new Date();
+      const currentY = now.getFullYear();
+      const currentM = now.getMonth() + 1;
+      const currentMonthKey = `${currentY}-${String(currentM).padStart(2, '0')}`;
+
+      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+      const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
+      
+      if (currentFilter === '全部') {
+          (dbData['帳務明細']||[]).forEach(b => {
+              const bDate = formatDate(getVal(b, '日期'));
+              if (bDate) monthKeysWithData.push(bDate.substring(0, 7));
+          });
+      }
+      const uniqueMonthKeysWithData = [...new Set(monthKeysWithData)].sort();
+
+      // 計算最遠日期的邊界
+      let maxD = new Date(now);
+      uniqueMonthKeysWithData.forEach(k => {
+          const d = new Date(k + '-01');
+          if (d > maxD) maxD = d;
+      });
+      const maxY = maxD.getFullYear();
+      const maxM = maxD.getMonth() + 1;
+
+      let keysToShow = [];
+      // 加入過去有資料的月份
+      keysToShow.push(...uniqueMonthKeysWithData.filter(k => k < currentMonthKey));
+
+      // 連續推算到未來的最遠月份
+      let y = currentY;
+      let m = currentM;
+      while (y < maxY || (y === maxY && m <= maxM)) {
+          keysToShow.push(`${y}-${String(m).padStart(2, '0')}`);
+          m++;
+          if (m > 12) { m = 1; y++; }
+      }
+      
+      // 防呆：如果未來都沒資料，至少保留當前月
+      if (keysToShow.length === 0 || !keysToShow.includes(currentMonthKey)) {
+           keysToShow.push(currentMonthKey);
+      }
+
+      keysToShow = [...new Set(keysToShow)].sort();
+
+      keysToShow.forEach(mKey => {
+          const [yStr, mStr] = mKey.split('-');
+          const targetY = parseInt(yStr);
+          const targetM = parseInt(mStr);
+          const hasData = uniqueMonthKeysWithData.includes(mKey);
+
+          const btn = document.createElement('div');
+          btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
+          if (selectedMonthFilter === mKey) btn.classList.add('active');
+
+          // 若為不同年份，將形狀改為膠囊並加上年份
+          if (targetY !== currentY) {
+              btn.textContent = `${yStr.substring(2)}/${targetM}`;
+              btn.style.width = 'auto';
+              btn.style.padding = '0 12px';
+          } else {
+              btn.textContent = targetM;
+              btn.style.padding = '0';
+              btn.style.width = '36px';
+          }
+
+          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) {
+              btn.style.opacity = '0.4';
+          }
+
+          btn.onclick = () => { 
+              selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
+              renderMain();
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+          };
+          navContainer.appendChild(btn);
+      });
+  }
+
   function getVal(obj, key) { 
     if(!obj) return ""; 
     const exactKey = Object.keys(obj).find(k => k.trim() === key);
@@ -523,36 +593,25 @@
 
   function renderCalendar() {
     const container = document.getElementById('calendar-container'); container.innerHTML = '';
-    const navContainer = document.getElementById('month-nav'); navContainer.innerHTML = '';
     const now = new Date();
     const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
-    const monthKeys = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].sort();
     
-    for (let i = 1; i <= 12; i++) {
-        const mStr = String(i).padStart(2, '0');
-        const targetKey = monthKeys.find(key => key.endsWith('-' + mStr));
-        const btn = document.createElement('div');
-        btn.className = 'month-nav-btn ' + (targetKey ? 'has-data' : 'no-data');
-        if (selectedMonthFilter === targetKey && targetKey) btn.classList.add('active');
-        btn.textContent = i;
-        if (targetKey) {
-            if (targetKey < currentMonthKey && selectedMonthFilter !== targetKey) {
-                btn.style.opacity = '0.4'; btn.title = "點擊顯示過去行程";
-            }
-            btn.onclick = () => { 
-                selectedMonthFilter = (selectedMonthFilter === targetKey) ? null : targetKey; 
-                renderCalendar();
-                // 點擊月份時，如果帳務面板開著，就同步更新圖表與數據
-                if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
-            };
-        }
-        navContainer.appendChild(btn);
+    let allDatesWithData = races.map(r => formatDate(getVal(r, '日期'))).filter(k=>k);
+    if (currentFilter === '全部') {
+        (dbData['帳務明細']||[]).forEach(b => {
+            const bDate = formatDate(getVal(b, '日期'));
+            if (bDate) allDatesWithData.push(bDate);
+        });
     }
-    
-    monthKeys.forEach(mKey => {
+    const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))];
+    if (!monthKeysToRender.includes(currentMonthKey)) monthKeysToRender.push(currentMonthKey);
+    monthKeysToRender.sort();
+
+    monthKeysToRender.forEach(mKey => {
       let shouldShow = selectedMonthFilter ? (mKey === selectedMonthFilter) : (mKey >= currentMonthKey);
       if (!shouldShow) return;
+      
       const [y, m] = mKey.split('-');
       const section = document.createElement('div'); section.className = 'month-section';
       section.id = 'month-section-' + mKey;
@@ -560,7 +619,6 @@
       const grid = document.createElement('div'); grid.className = 'calendar-grid';
       const firstDay = new Date(y, m-1, 1).getDay(), lastDate = new Date(y, m, 0).getDate();
       for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
-      
       for (let d = 1; d <= lastDate; d++) {
         const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
         const cell = document.createElement('div'); cell.className = 'day'; cell.innerHTML = `<span class="day-number">${d}</span>`;
@@ -586,22 +644,32 @@
       let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
       races.sort((a, b) => new Date(getVal(a, '日期')) - new Date(getVal(b, '日期')));
       const today = new Date(); today.setHours(0, 0, 0, 0);
+      
       const pastRaces = races.filter(r => new Date(getVal(r, '日期')) < today);
       const futureRaces = races.filter(r => new Date(getVal(r, '日期')) >= today);
-      if (pastRaces.length > 0) {
-          const toggleBtn = document.createElement('div');
-          toggleBtn.className = 'past-toggle-btn';
-          toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示歷史行程 (${pastRaces.length}筆) ▼`;
-          toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
-          container.appendChild(toggleBtn);
+      
+      let racesToRender = [];
+      if (selectedMonthFilter) {
+          racesToRender = races.filter(r => formatDate(getVal(r, '日期')).startsWith(selectedMonthFilter));
+      } else {
+          racesToRender = showPastList ? races : futureRaces;
+          
+          if (pastRaces.length > 0) {
+              const toggleBtn = document.createElement('div');
+              toggleBtn.className = 'past-toggle-btn';
+              toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示歷史行程 (${pastRaces.length}筆) ▼`;
+              toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
+              container.appendChild(toggleBtn);
+          }
       }
-      const racesToRender = showPastList ? races : futureRaces;
+
       if (racesToRender.length === 0) {
           const emptyMsg = document.createElement('div');
           emptyMsg.style.cssText = "padding:40px; text-align:center; color:#95a5a6; font-size:15px; font-weight:bold;";
           emptyMsg.textContent = "目前沒有行程資料";
           container.appendChild(emptyMsg); return;
       }
+      
       racesToRender.forEach(event => {
           const eDate = new Date(getVal(event, '日期')); const cat = getVal(event, '行程類別');
           const daysDiff = Math.ceil((eDate - today) / (1000 * 60 * 60 * 24));
