@@ -185,7 +185,7 @@
     .day.has-event { background-color: #ffffff; color: #2c3e50; cursor: pointer; font-weight: bold; border-width: 2px; border-style: solid; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
     
     .day.has-expense { cursor: pointer; font-weight: 600; color: #2c3e50; }
-    .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: #cfd8dc; }
+    .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: var(--coin-gold); }
     
     .day.selected { color: #fff !important; transform: scale(1.05); z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; border-color: transparent !important; }
     .day.has-expense.selected { background-color: #b0bec5; } 
@@ -1297,7 +1297,7 @@
               const goS = getVal(t,'去程出發時間'); 
               const goA = getVal(t,'去程抵達時間');
               
-              if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span>${goB}</span></div>`;
+              if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span><span style="background: #eceff1; color: #546e7a; padding: 2px 8px; border-radius: 6px; font-family: monospace; font-weight: bold; letter-spacing: 0.5px;">${goB}</span></span></div>`;
               if(hasVal(goD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(goD).substring(5)}</span></div>`;
               if(hasVal(goS) || hasVal(goA)) html += `<div class="info-row"><span></span><span>${goS||'--:--'}出發－${goA||'--:--'}抵達</span></div>`;
               
@@ -1306,7 +1306,7 @@
               const bkS = getVal(t,'回程出發時間'); 
               const bkA = getVal(t,'回程抵達時間');
               
-              if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span>${bkB}</span></div>`;
+              if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span><span style="background: #eceff1; color: #546e7a; padding: 2px 8px; border-radius: 6px; font-family: monospace; font-weight: bold; letter-spacing: 0.5px;">${bkB}</span></span></div>`;
               if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
               if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
               
