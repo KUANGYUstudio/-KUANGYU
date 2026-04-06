@@ -124,12 +124,35 @@
     </div>
 
     <div id="form-帳務明細" class="form-section">
-        <div class="input-group"><label>行程代碼</label><select class="code-selector" id="帳務-代碼"></select></div>
-        <div class="input-group"><label>項目名稱</label><input type="text" id="帳務-項目"></div>
+        <div class="input-group">
+            <label>行程代碼 (日常記帳免填)</label>
+            <select class="code-selector" id="帳務-代碼"></select>
+        </div>
+        <div class="input-group"><label>日期</label><input type="date" id="帳務-日期"></div>
+        <div class="input-group">
+            <label>類別</label>
+            <select id="帳務-類別">
+                <option>飲食</option>
+                <option>交通</option>
+                <option>購物</option>
+                <option>票券</option>
+                <option>娛樂</option>
+                <option>其他</option>
+            </select>
+        </div>
+        <div class="input-group"><label>項目</label><input type="text" id="帳務-項目" placeholder="例如：晚餐、伴手禮"></div>
         <div class="input-group"><label>金額</label><input type="number" id="帳務-金額"></div>
-        <div class="input-group"><label>付款人</label><select id="帳務-付款人"><option>聿凡</option><option>光武</option><option>-</option></select></div>
-        <div class="input-group"><label>付款狀態</label><select id="帳務-狀態"><option>已付</option><option>未付</option><option>-</option></select></div>
-        <div class="input-group"><label>備註</label><input type="text" id="帳務-備註"></div>
+        <div class="input-group">
+            <label>付款方式</label>
+            <select id="帳務-方式">
+                <option>共同現金</option>
+                <option>聿凡－台新卡</option>
+                <option>光武－富邦卡</option>
+                <option>LINE Pay</option>
+                <option>其他</option>
+            </select>
+        </div>
+        <div class="input-group"><label>備註</label><input type="text" id="帳務-備註" placeholder="可選填"></div>
         <button class="submit-btn" onclick="submitData('帳務明細')">確認儲存帳務</button>
     </div>
 
@@ -148,7 +171,9 @@
             const codes = data['行程'].map(item => item['行程代碼']).filter(c => c);
             const uniqueCodes = [...new Set(codes)];
             document.querySelectorAll('.code-selector').forEach(select => {
-                select.innerHTML = '<option value="">--- 請選擇行程 ---</option>';
+                // 根據表單不同，顯示不同的提示文字
+                const isAccounting = select.id === '帳務-代碼';
+                select.innerHTML = `<option value="">${isAccounting ? '--- 日常記帳免選 ---' : '--- 請選擇行程 ---'}</option>`;
                 uniqueCodes.forEach(code => {
                     let opt = document.createElement('option');
                     opt.value = code; opt.textContent = code;
@@ -217,11 +242,27 @@
                 document.getElementById('交通-狀態').value
             ];
         } else if (sheetName === '帳務明細') {
-            eventCode = document.getElementById('帳務-代碼').value;
-            rowData = [eventCode, document.getElementById('帳務-項目').value, document.getElementById('帳務-金額').value, document.getElementById('帳務-付款人').value, document.getElementById('帳務-狀態').value, document.getElementById('帳務-備註').value];
+            eventCode = document.getElementById('帳務-代碼').value; // 日常記帳可以空白
+            rowData = [
+                eventCode, 
+                document.getElementById('帳務-日期').value, 
+                document.getElementById('帳務-類別').value, 
+                document.getElementById('帳務-項目').value, 
+                document.getElementById('帳務-金額').value, 
+                document.getElementById('帳務-方式').value, 
+                document.getElementById('帳務-備註').value
+            ];
         }
 
-        if (!eventCode) { alert("行程代碼不能空白！"); return; }
+        // 邏輯防呆檢查
+        if (sheetName !== '帳務明細' && !eventCode) { 
+            alert("行程代碼不能空白！"); 
+            return; 
+        }
+        if (sheetName === '帳務明細') {
+            if (!document.getElementById('帳務-日期').value) { alert("日期不能空白！"); return; }
+            if (!document.getElementById('帳務-金額').value) { alert("金額不能空白！"); return; }
+        }
         
         statusDiv.style.display = 'block';
         statusDiv.style.background = '#eee';
@@ -233,6 +274,7 @@
             statusDiv.textContent = sheetName + ' 資料已成功入庫！';
             if (sheetName === '行程') refreshItineraryCodes();
             
+            // 清空輸入框
             document.querySelectorAll('#form-' + sheetName + ' input[type="text"], #form-' + sheetName + ' input[type="number"], #form-' + sheetName + ' input[type="date"], #form-' + sheetName + ' input[type="url"]').forEach(i => i.value = '');
             if (sheetName === '住宿') {
                 document.getElementById('住宿-平台').selectedIndex = 0;
@@ -249,8 +291,9 @@
                 document.getElementById('行程-付款人').selectedIndex = 0;
                 document.getElementById('行程-狀態').selectedIndex = 0;
             } else if (sheetName === '帳務明細') {
-                document.getElementById('帳務-付款人').selectedIndex = 0;
-                document.getElementById('帳務-狀態').selectedIndex = 0;
+                document.getElementById('帳務-代碼').selectedIndex = 0;
+                document.getElementById('帳務-類別').selectedIndex = 0;
+                document.getElementById('帳務-方式').selectedIndex = 0;
             }
 
             setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
