@@ -959,36 +959,42 @@
       container.innerHTML = '';
       
       const now = new Date(); 
-      const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1; // 1-12
       
       let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
       
       let eventMap = {}; 
-      let allDatesWithData = [];
       races.forEach(r => { 
           const d = formatDate(getVal(r, '日期')); 
-          if (d) { eventMap[d] = r; allDatesWithData.push(d); } 
+          if (d) { eventMap[d] = r; } 
       });
 
       let dailyExpenseMap = {};
       if (currentFilter === '全部') {
           (dbData['帳務明細']||[]).forEach(b => { 
               const d = formatDate(getVal(b, '日期')); 
-              if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
+              if (d) { dailyExpenseMap[d] = true; } 
           });
       }
 
-      const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
-      let hasRenderedAny = false;
+      // --- 修改邏輯開始：建立未來 12 個月的清單 ---
+      let monthKeysToRender = [];
+      if (selectedMonthFilter) {
+          // 如果使用者在導覽列點選了特定月份，只顯示該月
+          monthKeysToRender = [selectedMonthFilter];
+      } else {
+          // 否則顯示從「當月」開始的未來 12 個月
+          for (let i = 0; i < 12; i++) {
+              let targetDate = new Date(currentYear, currentMonth - 1 + i, 1);
+              let y = targetDate.getFullYear();
+              let m = String(targetDate.getMonth() + 1).padStart(2, '0');
+              monthKeysToRender.push(`${y}-${m}`);
+          }
+      }
+      // --- 修改邏輯結束 ---
 
       monthKeysToRender.forEach(mKey => {
-          let shouldShow = false;
-          if (selectedMonthFilter) { shouldShow = (mKey === selectedMonthFilter); } 
-          else { shouldShow = (mKey.startsWith(displayYear)) && (mKey >= currentMonthKey); }
-          
-          if (!shouldShow) return;
-          hasRenderedAny = true;
-          
           const [y, m] = mKey.split('-');
           const section = document.createElement('div'); 
           section.className = 'month-section'; 
@@ -1021,10 +1027,9 @@
               if (event) {
                   const cat = getVal(event, '行程類別'); 
                   cell.classList.add('has-event');
-                  // 🎯 修復 1：平常只顯示邊框
                   const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
                   cell.style.borderColor = pastelColor || '#cfd8dc';
-                  cell.dataset.color = pastelColor || '#cfd8dc'; // 存起來給點擊時使用
+                  cell.dataset.color = pastelColor || '#cfd8dc';
                   cell.onclick = () => handleDayClick(event, cell, grid, dStr);
               } else if (hasDailyExpense) {
                   cell.classList.add('has-expense'); 
@@ -1036,10 +1041,6 @@
           section.appendChild(grid); 
           container.appendChild(section);
       });
-
-      if (!hasRenderedAny) {
-          container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">此區間目前沒有排定行程<br><span style="font-size:13px; font-weight:normal;">請切換上方「年份」或「月份」查看</span></div>';
-      }
   }
 
   function renderList() {
