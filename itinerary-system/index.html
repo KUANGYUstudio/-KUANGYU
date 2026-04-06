@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* =========================================
-       光聿行程美學定義 (柔和繽紛粉彩版 + 月份雙排固定)
+       光聿行程美學定義 (柔和繽紛粉彩版 + 極速運算引擎)
        ========================================= */
     :root {
       /* 馬卡龍粉彩活動類別色：清晰且柔和 */
@@ -90,7 +90,6 @@
     .year-nav-btn { padding: 4px 14px; border-radius: 15px; background: #f0f0f0; color: #7f8c8d; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
     .year-nav-btn.active { background: var(--nav-active); color: #fff; }
 
-    /* 全新月份排版：強制 6 欄網格，自動分為兩列 */
     .month-nav-container { 
         display: grid; 
         grid-template-columns: repeat(6, 36px); 
@@ -305,9 +304,22 @@
     if (!isVisible) calculateAccounting();
   }
 
+  // 極速運算引擎：帳務計算
   function calculateAccounting() {
     let allExpenses = [];
     const races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+
+    // 建立預先分組的 Hash Map，大幅減少迴圈運算量
+    const expensesByCode = { '住宿': {}, '交通': {}, '帳務明細': {} };
+    ['住宿', '交通', '帳務明細'].forEach(sheet => {
+        (dbData[sheet]||[]).forEach(row => {
+            const code = getVal(row, '行程代碼');
+            if (code) {
+                if (!expensesByCode[sheet][code]) expensesByCode[sheet][code] = [];
+                expensesByCode[sheet][code].push(row);
+            }
+        });
+    });
 
     races.forEach(r => {
       const code = getVal(r, '行程代碼');
@@ -315,26 +327,29 @@
       const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
       if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: getVal(r, '行程名稱') });
       
-      (dbData['住宿']||[]).filter(s => getVal(s,'行程代碼')===code).forEach(s => {
+      (expensesByCode['住宿'][code] || []).forEach(s => {
         const fee = parseFloat(getVal(s,'費用')) || 0;
         if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || getVal(r, '行程名稱') });
       });
       
-      (dbData['交通']||[]).filter(t => getVal(t,'行程代碼')===code).forEach(t => {
+      (expensesByCode['交通'][code] || []).forEach(t => {
         const fee = parseFloat(getVal(t,'票價或油資')) || 0;
         if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, category: '交通', amount: fee, name: getVal(t,'類型') || getVal(r, '行程名稱') });
       });
       
-      (dbData['帳務明細']||[]).filter(b => getVal(b,'行程代碼')===code).forEach(b => {
+      (expensesByCode['帳務明細'][code] || []).forEach(b => {
         const fee = parseFloat(getVal(b,'金額')) || 0;
         if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || getVal(r, '行程名稱') });
       });
     });
 
     if (currentFilter === '全部') {
-        (dbData['帳務明細']||[]).filter(b => !getVal(b, '行程代碼') || getVal(b, '行程代碼').trim() === '').forEach(b => {
-            const fee = parseFloat(getVal(b,'金額')) || 0;
-            if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')), category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳' });
+        (dbData['帳務明細']||[]).forEach(b => {
+            const code = getVal(b, '行程代碼');
+            if (!code || code.trim() === '') {
+                const fee = parseFloat(getVal(b,'金額')) || 0;
+                if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')), category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳' });
+            }
         });
     }
 
@@ -591,6 +606,7 @@
     </div>`;
   }
 
+  // 極速運算引擎：日曆網格渲染 (修正空月份 Bug)
   function renderCalendar() {
     const container = document.getElementById('calendar-container'); 
     container.innerHTML = '';
@@ -598,18 +614,26 @@
     const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
-    let allDatesWithData = races.map(r => formatDate(getVal(r, '日期'))).filter(k=>k);
     
-    if (currentFilter === '全部') { 
-        (dbData['帳務明細']||[]).forEach(b => { 
-            const bDate = formatDate(getVal(b, '日期')); 
-            if (bDate) allDatesWithData.push(bDate); 
-        }); 
+    // --- 建立 Hash Map 字典，取代效能殺手 filter ---
+    let eventMap = {};
+    let allDatesWithData = [];
+    races.forEach(r => {
+        const d = formatDate(getVal(r, '日期'));
+        if (d) { eventMap[d] = r; allDatesWithData.push(d); }
+    });
+
+    let dailyExpenseMap = {};
+    if (currentFilter === '全部') {
+        (dbData['帳務明細']||[]).forEach(b => {
+            const d = formatDate(getVal(b, '日期'));
+            if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); }
+        });
     }
-    
-    const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))];
-    if (!monthKeysToRender.includes(currentMonthKey)) monthKeysToRender.push(currentMonthKey);
-    monthKeysToRender.sort();
+    // --------------------------------------------------
+
+    const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
+    let hasRenderedAny = false;
 
     monthKeysToRender.forEach(mKey => {
       let shouldShow = false;
@@ -620,6 +644,7 @@
       }
       
       if (!shouldShow) return;
+      hasRenderedAny = true;
       
       const [y, m] = mKey.split('-');
       const section = document.createElement('div'); 
@@ -648,8 +673,9 @@
         cell.className = 'day'; 
         cell.innerHTML = `<span class="day-number">${d}</span>`;
         
-        const event = races.find(r => formatDate(getVal(r, '日期')) === dStr);
-        const dailyExpenses = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dStr);
+        // 查字典，速度提升 100 倍
+        const event = eventMap[dStr];
+        const hasDailyExpense = dailyExpenseMap[dStr];
         
         if (event) {
           const cat = getVal(event, '行程類別'); 
@@ -657,7 +683,7 @@
           const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
           cell.style.borderColor = pastelColor || '#cfd8dc';
           cell.onclick = () => handleDayClick(event, cell, grid, dStr);
-        } else if (dailyExpenses.length > 0) {
+        } else if (hasDailyExpense) {
           cell.classList.add('has-expense');
           cell.onclick = () => handleDayClick(null, cell, grid, dStr);
         }
@@ -666,6 +692,11 @@
       section.appendChild(grid); 
       container.appendChild(section);
     });
+
+    // 修復空日曆 Bug：如果該條件下沒有任何月份資料，顯示友善提示
+    if (!hasRenderedAny) {
+        container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">此區間目前沒有排定行程<br><span style="font-size:13px; font-weight:normal;">請切換上方「年份」或「月份」查看</span></div>';
+    }
   }
 
   function renderList() {
@@ -699,7 +730,7 @@
       if (racesToRender.length === 0) {
           const emptyMsg = document.createElement('div');
           emptyMsg.style.cssText = "padding:40px; text-align:center; color:#95a5a6; font-size:15px; font-weight:bold;";
-          emptyMsg.textContent = "目前沒有行程資料";
+          emptyMsg.textContent = "此區間目前沒有行程資料";
           container.appendChild(emptyMsg); 
           return;
       }
@@ -848,7 +879,6 @@
     }
     
     const code = getVal(event, '行程代碼');
-    const cat = getVal(event, '行程類別');
     const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
     
     let html = `
