@@ -911,51 +911,44 @@
       for (let i = 1; i <= 12; i++) {
           const mStr = String(i).padStart(2, '0'); 
           const mKey = `${displayYear}-${mStr}`;
+          // 這裡的 hasData 已經綁定了上方篩選器，我們不動它！
           const hasData = uniqueMonthKeysWithData.includes(mKey);
           
           const btn = document.createElement('div'); 
-          btn.className = 'month-nav-btn';
+          btn.className = 'month-nav-btn'; 
+          btn.textContent = i;
           
-          // 🎯 修改 1：開放所有的月份都可以點擊
+          if (selectedMonthFilter === mKey) {
+              btn.classList.add('active');
+          } else {
+              // 🎯 依照你的要求設定三種顏色，並拿掉太淡的透明度
+              if (hasData) {
+                  if (mKey < currentMonthKey) {
+                      // 1. 已經過期的活動月份：比較淺的灰色
+                      btn.style.color = "#90a4ae"; 
+                      btn.style.borderColor = "#cfd8dc";
+                      btn.style.background = "#fff";
+                  } else {
+                      // 2. 當月與未來的活動月份：有活動的現在顏色
+                      btn.classList.add('has-data');
+                  }
+              } else {
+                  // 3. 沒有活動的月份：更淺的灰色
+                  btn.style.color = "#cfd8dc"; 
+                  btn.style.borderColor = "#f0f0f0";
+                  btn.style.background = "#fafafa";
+              }
+          }
+          
+          // 🎯 讓沒有活動的月份也可以點選 (拿掉 if(hasData) 的限制)
           btn.onclick = () => { 
               selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
               renderMain(); 
               if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
           }; 
           
-          if (selectedMonthFilter === mKey) {
-              btn.classList.add('active');
-          } else {
-              // 🎯 修改 2：重新調配看得清楚的深淺灰色
-              if (mKey < currentMonthKey) {
-                  // 已經過去的月份
-                  if (hasData) {
-                      btn.style.color = "#90a4ae"; // 過期有活動 (稍深的灰藍)
-                      btn.style.borderColor = "#cfd8dc";
-                      btn.style.background = "#fff";
-                  } else {
-                      btn.style.color = "#b0bec5"; // 過期沒活動 (稍淺的灰色)
-                      btn.style.borderColor = "#eceff1";
-                      btn.style.background = "#fafafa";
-                  }
-              } else {
-                  // 本月與未來的月份
-                  if (hasData) {
-                      btn.style.color = "var(--nav-active)"; // 未來有活動 (主色)
-                      btn.style.borderColor = "var(--nav-active)";
-                      btn.style.background = "#fff";
-                  } else {
-                      btn.style.color = "#90a4ae"; // 未來沒活動 (清楚的灰藍色)
-                      btn.style.borderColor = "#e0e0e0";
-                      btn.style.background = "#fff";
-                  }
-              }
-          }
-          
-          btn.textContent = i;
           navContainer.appendChild(btn);
       }
-  }
 
   function renderPriceRow(label, val, payer, method, state) {
       if(!hasVal(val) && !hasVal(payer)) return '';
