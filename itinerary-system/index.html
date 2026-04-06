@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     /* =========================================
-       光聿行程美學定義 (帳務明細對齊優化版)
+       光聿行程美學定義 (帳務明細對齊 + 日期格子聯動版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -413,7 +413,8 @@
         const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
         const cell = document.createElement('div'); cell.className = 'day'; cell.innerHTML = `<span class="day-number">${d}</span>`;
         const event = races.find(r => formatDate(getVal(r, '日期')) === dStr);
-        const dailyExpenses = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dStr && (!getVal(b, '行程代碼') || getVal(b, '行程代碼').trim() === ''));
+        // 解除限制：只要該日期有任何花費（無論有無綁定行程代碼），都算作有日常帳務
+        const dailyExpenses = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dStr);
         if (event) {
           const cat = getVal(event, '行程類別');
           cell.classList.add('has-event'); cell.style.borderColor = `var(--cat-${cat})`;
@@ -488,7 +489,6 @@
       }
   }
 
-  // 生成格點式明細表 HTML
   function generateReceiptHTML(bills) {
       if (bills.length === 0) return `<div style="text-align:center; color:#95a5a6; font-size:13px; padding:20px;">無帳務明細</div>`;
       const grouped = {};
@@ -500,21 +500,27 @@
       let html = `<div style="background:#fff; border-radius:12px; border:1px solid #eee; padding:15px; margin-bottom:15px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">`;
       let total = 0;
       Object.keys(grouped).sort().forEach(dateKey => {
-          // 移除日期旁的方括號
           html += `<div style="font-weight:bold; color:var(--brand-main); margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:14px; margin-top:10px;">${dateKey}</div>`;
           grouped[dateKey].forEach(b => {
               const cat = getVal(b, '類別') || '其他';
               const item = getVal(b, '項目') || '未命名項目';
               const pay = getVal(b, '付款方式') || '未填寫';
               const amt = parseFloat(getVal(b, '金額')) || 0;
+              const memo = getVal(b, '備註');
               total += amt;
-              // 使用 Grid 確保對齊：類別、項目、付款方式、金額
-              html += `<div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; font-size: 14px; padding: 10px 0; border-bottom: 1px dashed #f5f5f5; align-items: center;">
+              
+              html += `<div style="padding: 10px 0; border-bottom: 1px dashed #f5f5f5;">`;
+              html += `<div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; font-size: 14px; align-items: center;">
                   <div style="color:#7f8c8d; font-size:11px; background:#f5f5f5; padding:2px 8px; border-radius:10px; white-space: nowrap; font-weight:bold;">${cat}</div>
                   <div style="color:#2c3e50; font-weight: 500;">${item}</div>
                   <div style="font-size:12px; color:#aaa; white-space: nowrap;">${pay}</div>
                   <div style="font-weight:bold; color:var(--brand-pink); text-align: right; min-width: 60px;">$${amt.toLocaleString()}</div>
               </div>`;
+              
+              if (memo) {
+                  html += `<div style="font-size: 12px; color: #95a5a6; margin-top: 4px; padding-left: 50px;">備註：${memo}</div>`;
+              }
+              html += `</div>`;
           });
       });
       html += `<div style="display:flex; justify-content:space-between; font-size:16px; font-weight:900; color:var(--brand-main); margin-top:15px; padding-top:10px; border-top:2px solid #eee;">
@@ -526,7 +532,8 @@
   function generateDetailHTML(event, dateStr) {
     if (!event) {
         let html = `<div class="detail-header" style="margin-bottom:10px; padding-bottom:5px; border-bottom:none;"><div><div class="detail-race-name">日常帳務</div><div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${dateStr}</div></div></div>`;
-        const dailyBills = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dateStr && (!getVal(b, '行程代碼') || getVal(b, '行程代碼').trim() === ''));
+        // 解除限制：在純記帳視窗中，抓取該日期所有的花費紀錄（包含有綁定賽事的）
+        const dailyBills = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dateStr);
         html += generateReceiptHTML(dailyBills);
         return html;
     }
