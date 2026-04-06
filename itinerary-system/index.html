@@ -50,15 +50,24 @@
         text-align: center; 
     }
     
+    /* 🚀 優化：標題與系統工具列整合 (黃金三角) */
+    .header-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 0 5px;
+    }
+    
     .header-title { 
         font-size: 26px; 
         font-weight: 800; 
         color: var(--brand-main); 
         letter-spacing: 2px; 
-        margin-bottom: 20px; 
+        margin: 0;
     }
 
-    /* 置頂區塊 - 黃金三角排版 */
+    /* 置頂區塊 */
     .sticky-controls {
         position: sticky; 
         top: 0; 
@@ -81,20 +90,28 @@
         box-sizing: border-box; 
     }
     
-    /* 兩側工具小按鈕 */
+    /* 兩側工具小按鈕 (編輯) */
     .tool-btn { 
-        width: 32px; 
-        height: 32px; 
+        width: 36px; 
+        height: 36px; 
         border-radius: 50%; 
         background: var(--action-button-bg); 
         color: var(--action-button-color); 
         border: none; 
-        font-size: 14px; 
+        font-size: 16px; 
+        font-weight: bold;
         display: flex; 
         align-items: center; 
         justify-content: center; 
         cursor: pointer; 
         transition: 0.2s; 
+    }
+    
+    /* 🚀 優化：重新整理按鈕加大 */
+    .tool-btn.refresh-btn-lg {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
     }
     
     .tool-btn.active { 
@@ -105,28 +122,29 @@
 
     /* 中央核心控制區 */
     .center-nav { 
-        display: flex; 
+        display: inline-flex; 
         align-items: center; 
         gap: 10px; 
         background: #f0f0f0; 
-        padding: 4px 8px; 
-        border-radius: 25px; 
+        padding: 6px 10px; 
+        border-radius: 30px; 
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
     }
     
     .acc-toggle-btn { 
         background: #fff; 
         color: var(--coin-gold); 
         border: none; 
-        width: 34px; 
-        height: 34px; 
+        width: 38px; 
+        height: 38px; 
         border-radius: 50%; 
         font-weight: 900; 
         cursor: pointer; 
-        font-size: 16px; 
+        font-size: 18px; 
         display: flex; 
         align-items: center; 
         justify-content: center; 
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
         transition: 0.2s; 
     }
     
@@ -135,14 +153,14 @@
         color: #fff; 
     }
 
-    .view-switcher { display: flex; gap: 4px; }
+    .view-switcher { display: flex; gap: 4px; background: transparent;}
     
     .view-btn { 
         border: none; 
-        padding: 6px 14px; 
-        border-radius: 17px; 
+        padding: 8px 18px; 
+        border-radius: 20px; 
         cursor: pointer; 
-        font-size: 12px; 
+        font-size: 13px; 
         font-weight: bold; 
         color: #7f8c8d; 
         background: transparent; 
@@ -152,7 +170,7 @@
     .view-btn.active { 
         background: #fff; 
         color: var(--brand-main); 
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06); 
     }
 
     /* 過濾器與年月排版 */
@@ -173,14 +191,19 @@
     .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
     .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #90a4ae; padding-bottom: 10px; }
     
-    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #cfd8dc; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; }
-    .day.has-event { background-color: #fff; color: #2c3e50; cursor: pointer; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-width: 2px; }
+    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: transparent; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; }
+    .day-number { position: relative; z-index: 2; }
+    .day.has-event { color: #fff; cursor: pointer; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.05); border: none; text-shadow: 0 1px 3px rgba(0,0,0,0.15);}
+    .day.has-expense { cursor: pointer; font-weight: 600; color: #2c3e50; }
     .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: #cfd8dc; }
-    .day.selected { color: #fff !important; transform: scale(1.05); z-index: 10; border-color: transparent !important; }
+    .day.selected { transform: scale(1.05); z-index: 10; border-color: transparent !important; box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; }
+    .day.has-expense.selected { background-color: #b0bec5; color: #fff;} 
+    .day.selected::after { background-color: transparent !important; } 
     
     .month-title { font-weight: 800; font-size: 22px; margin: 20px 0 15px; text-align: left; color: var(--brand-main); }
     
     .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eceff1; transition: 0.2s; border-left: 6px solid #cfd8dc; text-align: left; }
+    .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.06); }
     .list-date .d { font-size: 22px; font-weight: 800; color: var(--brand-main); }
     .list-name { font-size: 17px; font-weight: bold; color: var(--brand-main); flex: 1; }
     .list-countdown-days { font-size: 18px; font-weight: 900; color: var(--settle-pink); margin: 0 3px; }
@@ -252,7 +275,7 @@
     .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
     .modal-btn { flex: 1; padding: 14px; border-radius: 16px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; }
     .btn-cancel { background: #f5f5f5; color: #78909c; }
-    .btn-danger { background: #e53935; color: #fff; }
+    .btn-danger { background: #e53935; color: #fff; box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2);}
 
     /* 編輯視窗專用 Body */
     .modal-body { max-height: 60vh; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 5px; }
@@ -272,12 +295,14 @@
   <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
 
   <div class="container">
-    <div class="header-title">行程小助理</div>
+    <div class="header-wrapper">
+        <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
+        <h1 class="header-title">行程小助理</h1>
+        <button class="tool-btn refresh-btn-lg" onclick="location.reload()">↻</button>
+    </div>
 
     <div class="sticky-controls">
-        <div class="nav-wrapper">
-            <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
-            
+        <div class="action-bar">
             <div class="center-nav">
                 <button id="acc-panel-btn" class="acc-toggle-btn" onclick="toggleAccPanel()">$</button>
                 <div class="view-switcher">
@@ -285,8 +310,6 @@
                     <button id="btn-list" class="view-btn" onclick="switchView('list')">清單</button>
                 </div>
             </div>
-            
-            <button class="tool-btn" onclick="location.reload()">↻</button>
         </div>
         
         <div id="filter-bar" class="filter-bar"></div>
@@ -955,7 +978,7 @@
                   const cat = getVal(event, '行程類別'); 
                   cell.classList.add('has-event');
                   const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
-                  cell.style.borderColor = pastelColor || '#cfd8dc';
+                  cell.style.backgroundColor = pastelColor || '#cfd8dc';
                   cell.onclick = () => handleDayClick(event, cell, grid, dStr);
               } else if (hasDailyExpense) {
                   cell.classList.add('has-expense'); 
@@ -1111,6 +1134,13 @@
               const memo = getVal(b, '備註');
               total += amt;
               
+              const safeCode = (getVal(b, '行程代碼') || '').replace(/'/g, "\\'");
+              const safeDate = (getVal(b, '日期') || '').replace(/'/g, "\\'");
+              const safeCat = cat.replace(/'/g, "\\'");
+              const safeItem = item.replace(/'/g, "\\'");
+              const safePay = pay.replace(/'/g, "\\'");
+              const safeMemo = (memo || '').replace(/'/g, "\\'");
+
               html += `
                   <div style="display:flex; flex-direction:column; padding: 12px 0; border-bottom: 1px dashed #f5f5f5;">
                       <div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; font-size: 14px; align-items: center;">
@@ -1159,27 +1189,25 @@
       const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
       
       let html = `
-          <div class="detail-header" style="flex-direction:column; gap:10px;">
-              <div style="display:flex; justify-content:space-between; width:100%; align-items:baseline;">
-                  <div>
-                      <div class="detail-race-name">${getVal(event, '行程名稱')}</div>
-                      <div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div>
-                  </div>
-                  ${getVal(event,'行程連結') ? `<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">簡章 >></a>` : ''}
+      <div class="detail-header" style="flex-direction:column; gap:10px; align-items: flex-start;">
+          <div style="display:flex; justify-content:space-between; width:100%; align-items:baseline;">
+              <div>
+                  <div class="detail-race-name">${getVal(event, '行程名稱')}</div>
+                  <div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div>
               </div>
-              <div class="edit-controls" style="width:100%; border-top:none; padding-top:0; margin-top:0;">
-                  <button class="circle-btn edit-btn" onclick="openEditModal('行程', ${event['_rowIndex']}, event)">✎</button>
-                  <button class="circle-btn del-btn" onclick="showConfirmDelete('行程', ${event['_rowIndex']}, event)">✖</button>
-              </div>
+              ${getVal(event,'行程連結') ? `<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">簡章 >></a>` : ''}
           </div>
-      `;
+          <div class="edit-controls" style="width:100%; border:none; margin:0; padding:0;">
+              <button class="circle-btn edit-btn" onclick="openEditModal('行程', ${event['_rowIndex']}, event)">✎</button>
+              <button class="circle-btn del-btn" onclick="showConfirmDelete('行程', ${event['_rowIndex']}, event)">✖</button>
+          </div>
+      </div>`;
       
       html += `
-          <div class="view-switcher" style="margin-bottom: 20px; width: fit-content; background: #f0f0f0;">
-              <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
-              <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
-          </div>
-      `;
+      <div class="view-switcher" style="margin-bottom: 20px; width: fit-content; background: #f0f0f0;">
+          <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
+          <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
+      </div>`;
       
       html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
       html += `<div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
@@ -1203,8 +1231,7 @@
                       <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
                           <span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>
                           ${getVal(s,'連結') ? `<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>` : ''}
-                      </div>
-              `;
+                      </div>`;
               if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
               if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房時間</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
               if(getVal(s,'訂房平台')) html += `<div class="info-row"><span>平台</span><span>${getVal(s,'訂房平台')}</span></div>`;
@@ -1280,5 +1307,3 @@
 </script>
 </body>
 </html>
-
-
