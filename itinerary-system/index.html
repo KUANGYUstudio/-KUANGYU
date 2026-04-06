@@ -915,18 +915,32 @@
           
           const btn = document.createElement('div'); 
           btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
-          if (selectedMonthFilter === mKey) btn.classList.add('active');
           btn.textContent = i;
           
-          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) btn.style.opacity = '0.4';
+          // --- 顏色層次調整開始 ---
+          if (!hasData) {
+              // 1. 沒有行程：最淺色 (透明度降至 30%)
+              btn.style.opacity = '0.3';
+          } else if (mKey < currentMonthKey) {
+              // 2. 過期行程：深一點點的色 (透明度降至 60%)
+              btn.style.opacity = '0.6';
+          } else {
+              // 3. 未來行程 (包含本月)：正常飽和度 (完全不透明 100%)
+              btn.style.opacity = '1';
+          }
+
+          // 額外保護機制：如果這個月份剛好是被點擊選中的狀態，強制恢復 100% 飽和度並套用高光樣式
+          if (selectedMonthFilter === mKey) {
+              btn.classList.add('active');
+              btn.style.opacity = '1';
+          }
+          // --- 顏色層次調整結束 ---
           
-          // 現在不管該月份有沒有資料，都會綁定點擊篩選的功能
           btn.onclick = () => { 
               selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
               renderMain(); 
               if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
           }; 
-          // --- 修改重點結束 ---
 
           navContainer.appendChild(btn);
       }
