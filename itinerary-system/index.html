@@ -121,7 +121,7 @@
     .view-container { display: none; text-align: left; }
     .view-container.active { display: block; }
 
-    /* 補回日曆網格排版設定 */
+    /* 修復：補回日曆網格排版設定 */
     .past-toggle-btn { text-align: center; color: #90a4ae; font-size: 13px; cursor: pointer; margin-bottom: 20px; font-weight: bold; background: #f5f5f5; padding: 10px; border-radius: 20px; transition: 0.2s; }
     .past-toggle-btn:hover { background: #eceff1; color: var(--brand-main); }
 
@@ -238,16 +238,10 @@
   let currentAccTab = '';
   let expenseChartInstance = null; 
 
-  /* 莫蘭迪帳務分類色，加入「採買」 */
+  /* 莫蘭迪帳務分類色，已加入「採買」 */
   const categoryColors = {
-      '報名費': '#8294C4', 
-      '住宿': '#E1D4BB', 
-      '交通': '#7A9D96', 
-      '飲食': '#D5A4A4',
-      '購物': '#ACB1D6', 
-      '採買': '#A7BEA9', 
-      '娛樂': '#967E76', 
-      '其他': '#A8A8A8'
+      '報名費': '#8294C4', '住宿': '#E1D4BB', '交通': '#7A9D96', '飲食': '#D5A4A4',
+      '購物': '#ACB1D6', '採買': '#A7BEA9', '娛樂': '#967E76', '其他': '#A8A8A8'
   };
   function getColorForCategory(cat) { return categoryColors[cat] || '#cfd8dc'; }
 
@@ -330,8 +324,11 @@
     let filteredExpenses = allExpenses.filter(e => {
         if (!e.date) return false;
         const eMonth = e.date.substring(0, 7);
-        if (selectedMonthFilter) return eMonth === selectedMonthFilter;
-        else return eMonth >= currentMonthKey;
+        if (selectedMonthFilter) {
+            return eMonth === selectedMonthFilter;
+        } else {
+            return eMonth >= currentMonthKey;
+        }
     });
 
     document.getElementById('acc-grand-label-dynamic').textContent = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月 總支出` : `本月與未來 總支出`;
@@ -342,39 +339,52 @@
 
     filteredExpenses.forEach(e => {
         let cat = e.category;
-        if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
+        if (!categoryTotals[cat]) {
+            categoryTotals[cat] = 0;
+            accDetailsData[cat] = [];
+        }
         categoryTotals[cat] += e.amount;
         grandTotal += e.amount;
         accDetailsData[cat].push({ name: e.name, amount: e.amount });
     });
 
     document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
+
     let sortedCats = Object.keys(categoryTotals).sort((a,b) => categoryTotals[b] - categoryTotals[a]);
-    const pGrid = document.getElementById('dynamic-cat-legend'); pGrid.innerHTML = '';
+    const pGrid = document.getElementById('dynamic-cat-legend');
+    pGrid.innerHTML = '';
     
-    let chartLabels = []; let chartData = []; let chartColors = [];
+    let chartLabels = [];
+    let chartData = [];
+    let chartColors = [];
 
     sortedCats.forEach(k => {
-      const val = categoryTotals[k]; const pct = grandTotal === 0 ? 0 : (val / grandTotal) * 100;
+      const val = categoryTotals[k];
+      const pct = grandTotal === 0 ? 0 : (val / grandTotal) * 100;
       const color = getColorForCategory(k);
-      chartLabels.push(k); chartData.push(val); chartColors.push(color);
+      
+      chartLabels.push(k);
+      chartData.push(val);
+      chartColors.push(color);
 
       pGrid.innerHTML += `
         <div class="acc-card" style="display:flex; justify-content:space-between; align-items:center; padding: 10px 15px;">
             <div style="display:flex; align-items:center; gap: 8px;">
-                <div style="width:10px; height:10px; border-radius:50%; background:${color};"></div>
-                <span class="acc-label" style="color:var(--text-main); font-size:13px;">${k}</span>
+                <div style="width:12px; height:12px; border-radius:3px; background:${color};"></div>
+                <span class="acc-label" style="margin:0; font-size:13px; color:var(--text-main);">${k}</span>
             </div>
             <div style="text-align:right;">
-                <div class="acc-val" style="font-size:14px;">$${val.toLocaleString()}</div>
-                <div style="font-size:10px; color:#b0bec5; font-weight:bold;">${pct.toFixed(1)}%</div>
+                <div class="acc-val" style="font-size:15px; margin-bottom:2px;">$${val.toLocaleString()}</div>
+                <div style="font-size:11px; color:#aaa; font-weight:bold;">${pct.toFixed(1)}%</div>
             </div>
-        </div>`;
+        </div>
+      `;
     });
 
-    const tabsContainer = document.getElementById('acc-tabs'); tabsContainer.innerHTML = '';
+    const tabsContainer = document.getElementById('acc-tabs');
+    tabsContainer.innerHTML = '';
     if (sortedCats.length === 0) {
-        tabsContainer.innerHTML = '<div style="font-size:13px; color:#999; padding: 10px;">無資料</div>';
+        tabsContainer.innerHTML = '<div style="font-size:13px; color:#999; padding: 10px;">該時段無支出資料</div>';
         document.getElementById('acc-detail-list').innerHTML = '';
     } else {
         sortedCats.forEach((cat, index) => {
@@ -384,19 +394,63 @@
             btn.onclick = () => switchAccTab(cat);
             tabsContainer.appendChild(btn);
         });
-        currentAccTab = sortedCats[0]; renderAccDetailsList();
+        currentAccTab = sortedCats[0];
+        renderAccDetailsList();
     }
+
     renderDoughnutChart(chartLabels, chartData, chartColors);
   }
 
   function renderDoughnutChart(labels, data, colors) {
       const ctx = document.getElementById('expenseChart').getContext('2d');
-      if (expenseChartInstance) expenseChartInstance.destroy();
+      if (expenseChartInstance) {
+          expenseChartInstance.destroy();
+      }
+
       if (data.length === 0) {
-          expenseChartInstance = new Chart(ctx, { type: 'doughnut', data: { labels: ['無資料'], datasets: [{ data: [1], backgroundColor: ['#f5f5f5'], borderWidth: 0 }] }, options: { cutout: '80%', plugins: { legend: { display: false }, tooltip: { enabled: false } } } });
+          expenseChartInstance = new Chart(ctx, {
+              type: 'doughnut',
+              data: { labels: ['無資料'], datasets: [{ data: [1], backgroundColor: ['#f5f5f5'], borderWidth: 0 }] },
+              options: { cutout: '75%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+          });
           return;
       }
-      expenseChartInstance = new Chart(ctx, { type: 'doughnut', data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 3, borderColor: '#fff', hoverOffset: 4 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(69, 90, 100, 0.9)', padding: 12, callbacks: { label: (c) => ` ${c.label}：$${c.parsed.toLocaleString()}` } } } } });
+
+      expenseChartInstance = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+              labels: labels,
+              datasets: [{
+                  data: data,
+                  backgroundColor: colors,
+                  borderWidth: 3,
+                  borderColor: '#ffffff',
+                  hoverOffset: 6
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: '70%',
+              plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                      backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                      padding: 12,
+                      titleFont: { size: 14, family: "'Helvetica Neue', sans-serif" },
+                      bodyFont: { size: 14, weight: 'bold' },
+                      callbacks: {
+                          label: function(context) {
+                              let label = context.label || '';
+                              if (label) label += '：';
+                              if (context.parsed !== null) label += '$' + context.parsed.toLocaleString();
+                              return label;
+                          }
+                      }
+                  }
+              }
+          }
+      });
   }
 
   function switchAccTab(tabName) {
@@ -409,10 +463,21 @@
   }
 
   function renderAccDetailsList() {
-      const listContainer = document.getElementById('acc-detail-list'); listContainer.innerHTML = '';
+      const listContainer = document.getElementById('acc-detail-list');
+      listContainer.innerHTML = '';
       const items = accDetailsData[currentAccTab] || [];
-      if (items.length === 0) { listContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#cfd8dc;">無支出紀錄</div>'; return; }
-      items.forEach(item => { listContainer.innerHTML += `<div class="acc-detail-item"><div class="acc-detail-name">${item.name}</div><div class="acc-detail-amount">$${item.amount.toLocaleString()}</div></div>`; });
+      if (items.length === 0) {
+          listContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#95a5a6; font-size:13px; font-weight:bold;">此分類目前無支出紀錄</div>';
+          return;
+      }
+      items.forEach(item => {
+          listContainer.innerHTML += `
+              <div class="acc-detail-item">
+                  <div class="acc-detail-name">${item.name}</div>
+                  <div class="acc-detail-amount">$${item.amount.toLocaleString()}</div>
+              </div>
+          `;
+      });
   }
 
   function calculateEventTotal(code) {
@@ -432,7 +497,12 @@
       const btn = document.createElement('button');
       btn.className = `filter-btn ${c === currentFilter ? 'active' : ''}`;
       btn.textContent = c;
-      btn.onclick = () => { currentFilter = c; renderFilters(); renderMain(); if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); };
+      btn.onclick = () => { 
+          currentFilter = c; 
+          renderFilters(); 
+          renderMain(); 
+          if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+      };
       bar.appendChild(btn);
     });
   }
@@ -440,13 +510,25 @@
   function renderMonthNav() {
       const yearContainer = document.getElementById('year-nav');
       const navContainer = document.getElementById('month-nav');
-      yearContainer.innerHTML = ''; navContainer.innerHTML = '';
-      const now = new Date(); const currentY = now.getFullYear(); const currentM = now.getMonth() + 1;
+      yearContainer.innerHTML = '';
+      navContainer.innerHTML = '';
+      
+      const now = new Date();
+      const currentY = now.getFullYear();
+      const currentM = now.getMonth() + 1;
       const currentMonthKey = `${currentY}-${String(currentM).padStart(2, '0')}`;
+
       let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
       const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
-      if (currentFilter === '全部') { (dbData['帳務明細']||[]).forEach(b => { const bDate = formatDate(getVal(b, '日期')); if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); }); }
+      
+      if (currentFilter === '全部') {
+          (dbData['帳務明細']||[]).forEach(b => {
+              const bDate = formatDate(getVal(b, '日期'));
+              if (bDate) monthKeysWithData.push(bDate.substring(0, 7));
+          });
+      }
       const uniqueMonthKeysWithData = [...new Set(monthKeysWithData)].sort();
+
       let uniqueYears = [...new Set(uniqueMonthKeysWithData.map(k => parseInt(k.substring(0, 4))))];
       if (!uniqueYears.includes(currentY)) uniqueYears.push(currentY);
       uniqueYears.sort((a, b) => a - b);
@@ -455,18 +537,37 @@
           const btn = document.createElement('div');
           btn.className = 'year-nav-btn ' + (y === displayYear ? 'active' : '');
           btn.textContent = y + ' 年';
-          btn.onclick = () => { displayYear = y; selectedMonthFilter = null; renderMain(); if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); };
+          btn.onclick = () => {
+              displayYear = y;
+              selectedMonthFilter = null; 
+              renderMain();
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+          };
           yearContainer.appendChild(btn);
       });
 
       for (let i = 1; i <= 12; i++) {
-          const mStr = String(i).padStart(2, '0'); const mKey = `${displayYear}-${mStr}`;
+          const mStr = String(i).padStart(2, '0');
+          const mKey = `${displayYear}-${mStr}`;
           const hasData = uniqueMonthKeysWithData.includes(mKey);
-          const btn = document.createElement('div'); btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
+
+          const btn = document.createElement('div');
+          btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
           if (selectedMonthFilter === mKey) btn.classList.add('active');
+
           btn.textContent = i;
-          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) btn.style.opacity = '0.4';
-          if (hasData) { btn.onclick = () => { selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; renderMain(); if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); }; }
+
+          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) {
+              btn.style.opacity = '0.4';
+          }
+
+          if (hasData) {
+              btn.onclick = () => { 
+                  selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
+                  renderMain();
+                  if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+              };
+          }
           navContainer.appendChild(btn);
       }
   }
@@ -487,24 +588,39 @@
     if(!hasVal(val) && !hasVal(payer)) return '';
     let p = payer || '-', m = method || '-';
     let pm = (m === undefined || !hasVal(m)) ? p : (p==='-' && m==='-' ? '-' : `${p} / ${m}`);
-    return `<div class="price-row"><div><span style="color:#90a4ae;">${label}</span> <span class="price-tag">$${val || 0}</span></div><div style="font-size:12px;color:#b0bec5;">${pm}</div></div>`;
+    return `<div class="price-row"><div><span style="color:#7f8c8d;">${label}</span> <span class="price-tag">$${val || 0}</span></div><div style="font-size:12px;color:#888;">${pm}</div></div>`;
   }
 
   function renderCalendar() {
     const container = document.getElementById('calendar-container'); container.innerHTML = '';
-    const now = new Date(); const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const now = new Date();
+    const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+    
     let allDatesWithData = races.map(r => formatDate(getVal(r, '日期'))).filter(k=>k);
-    if (currentFilter === '全部') { (dbData['帳務明細']||[]).forEach(b => { const bDate = formatDate(getVal(b, '日期')); if (bDate) allDatesWithData.push(bDate); }); }
+    if (currentFilter === '全部') {
+        (dbData['帳務明細']||[]).forEach(b => {
+            const bDate = formatDate(getVal(b, '日期'));
+            if (bDate) allDatesWithData.push(bDate);
+        });
+    }
     const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))];
     if (!monthKeysToRender.includes(currentMonthKey)) monthKeysToRender.push(currentMonthKey);
     monthKeysToRender.sort();
 
     monthKeysToRender.forEach(mKey => {
-      let shouldShow = selectedMonthFilter ? (mKey === selectedMonthFilter) : (mKey.startsWith(displayYear) && mKey >= currentMonthKey);
+      let shouldShow = false;
+      if (selectedMonthFilter) {
+          shouldShow = (mKey === selectedMonthFilter);
+      } else {
+          shouldShow = (mKey.startsWith(displayYear)) && (mKey >= currentMonthKey);
+      }
+      
       if (!shouldShow) return;
+      
       const [y, m] = mKey.split('-');
       const section = document.createElement('div'); section.className = 'month-section';
+      section.id = 'month-section-' + mKey;
       section.innerHTML = `<div class="month-title">${y}年${m}月</div><div class="calendar-header">${['日','一','二','三','四','五','六'].map(d => `<div class="weekday-header">${d}</div>`).join('')}</div>`;
       const grid = document.createElement('div'); grid.className = 'calendar-grid';
       const firstDay = new Date(y, m-1, 1).getDay(), lastDate = new Date(y, m, 0).getDate();
@@ -514,13 +630,17 @@
         const cell = document.createElement('div'); cell.className = 'day'; cell.innerHTML = `<span class="day-number">${d}</span>`;
         const event = races.find(r => formatDate(getVal(r, '日期')) === dStr);
         const dailyExpenses = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dStr);
+        
         if (event) {
-          const cat = getVal(event, '行程類別'); cell.classList.add('has-event');
+          const cat = getVal(event, '行程類別');
+          cell.classList.add('has-event'); 
+          // 取莫蘭迪色外框
           const morandiColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
           cell.style.borderColor = morandiColor || '#cfd8dc';
           cell.onclick = () => handleDayClick(event, cell, grid, dStr);
         } else if (dailyExpenses.length > 0) {
-          cell.classList.add('has-expense'); cell.onclick = () => handleDayClick(null, cell, grid, dStr);
+          cell.classList.add('has-expense');
+          cell.onclick = () => handleDayClick(null, cell, grid, dStr);
         }
         grid.appendChild(cell);
       }
@@ -533,16 +653,40 @@
       let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
       races.sort((a, b) => new Date(getVal(a, '日期')) - new Date(getVal(b, '日期')));
       const today = new Date(); today.setHours(0, 0, 0, 0);
-      let racesToRender = selectedMonthFilter ? races.filter(r => formatDate(getVal(r, '日期')).startsWith(selectedMonthFilter)) : races.filter(r => formatDate(getVal(r, '日期')).startsWith(displayYear) && new Date(getVal(r, '日期')) >= today);
-      if (racesToRender.length === 0) { container.innerHTML = '<div style="padding:40px; text-align:center; color:#cfd8dc; font-weight:bold;">目前沒有行程資料</div>'; return; }
+      
+      const pastRaces = races.filter(r => new Date(getVal(r, '日期')) < today && formatDate(getVal(r, '日期')).startsWith(displayYear));
+      const futureRaces = races.filter(r => new Date(getVal(r, '日期')) >= today && formatDate(getVal(r, '日期')).startsWith(displayYear));
+      
+      let racesToRender = [];
+      if (selectedMonthFilter) {
+          racesToRender = races.filter(r => formatDate(getVal(r, '日期')).startsWith(selectedMonthFilter));
+      } else {
+          racesToRender = showPastList ? races.filter(r => formatDate(getVal(r, '日期')).startsWith(displayYear)) : futureRaces;
+          
+          if (pastRaces.length > 0) {
+              const toggleBtn = document.createElement('div');
+              toggleBtn.className = 'past-toggle-btn';
+              toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示 ${displayYear} 歷史行程 (${pastRaces.length}筆) ▼`;
+              toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
+              container.appendChild(toggleBtn);
+          }
+      }
+
+      if (racesToRender.length === 0) {
+          const emptyMsg = document.createElement('div');
+          emptyMsg.style.cssText = "padding:40px; text-align:center; color:#95a5a6; font-size:15px; font-weight:bold;";
+          emptyMsg.textContent = "目前沒有行程資料";
+          container.appendChild(emptyMsg); return;
+      }
+      
       racesToRender.forEach(event => {
           const eDate = new Date(getVal(event, '日期')); const cat = getVal(event, '行程類別');
           const daysDiff = Math.ceil((eDate - today) / (1000 * 60 * 60 * 24));
-          let countdownHtml = daysDiff > 0 ? `還有<span class="list-countdown-days">${daysDiff}</span>天` : (daysDiff === 0 ? `今天` : `已結束`);
-          const item = document.createElement('div'); item.className = 'list-item';
+          let countdownHtml = daysDiff > 0 ? `<span style="font-weight:bold; font-size:13px; color:var(--text-main);">還有<span class="list-countdown-days">${daysDiff}</span>天</span>` : (daysDiff === 0 ? `<span style="font-weight:bold; font-size:14px; color:var(--text-main);">今天</span>` : `<span style="font-weight:bold; font-size:13px; color:#bbb;">已結束</span>`);
+          const item = document.createElement('div'); item.className = 'list-item'; 
           const morandiColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
           item.style.borderLeftColor = morandiColor || '#cfd8dc';
-          item.innerHTML = `<div class="list-date"><span class="m">${eDate.getMonth()+1}月</span><span class="d">${eDate.getDate()}</span></div><div class="list-name">${getVal(event, '行程名稱')}</div><div style="font-size:13px; font-weight:bold;">${countdownHtml}</div>`;
+          item.innerHTML = `<div class="list-date"><span class="m">${eDate.getMonth()+1}月</span><span class="d">${eDate.getDate()}</span></div><div class="list-name">${getVal(event, '行程名稱')}</div><div class="list-countdown">${countdownHtml}</div>`;
           item.onclick = () => handleListClick(event, item); container.appendChild(item);
       });
   }
@@ -553,8 +697,12 @@
     if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
     if (currentSelectedEl) { currentSelectedEl.classList.remove('selected'); currentSelectedEl.style.backgroundColor = ''; }
     currentSelectedEl = cell; cell.classList.add('selected');
+    
     const category = event ? getVal(event, '行程類別') : null;
-    if (category) { cell.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${category}`).trim(); }
+    if (category) {
+        cell.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${category}`).trim();
+    }
+    
     if (currentOpenPanel) currentOpenPanel.remove();
     const panel = document.createElement('div'); panel.className = 'detail-panel'; panel.innerHTML = generateDetailHTML(event, dStr);
     const cells = Array.from(grid.children), idx = cells.indexOf(cell), rowEnd = Math.min(cells.length - 1, idx + (6 - (idx % 7)));
@@ -564,7 +712,8 @@
   function handleListClick(event, item) {
       if (currentSelectedEl === item && currentOpenPanel) { closeCurrentPanel(); return; }
       if (currentOpenPanel) currentOpenPanel.remove();
-      currentSelectedEl = item; const dStr = formatDate(getVal(event, '日期'));
+      currentSelectedEl = item;
+      const dStr = formatDate(getVal(event, '日期'));
       const panel = document.createElement('div'); panel.className = 'detail-panel'; panel.innerHTML = generateDetailHTML(event, dStr);
       item.parentNode.insertBefore(panel, item.nextSibling); setTimeout(() => panel.classList.add('open'), 10); currentOpenPanel = panel;
   }
@@ -576,54 +725,76 @@
   }
 
   function generateReceiptHTML(bills) {
-      if (bills.length === 0) return `<div style="text-align:center; color:#cfd8dc; padding:20px;">無帳務明細</div>`;
-      const grouped = {}; bills.forEach(b => { const d = formatDate(getVal(b, '日期')) || '未填日期'; if (!grouped[d]) grouped[d] = []; grouped[d].push(b); });
-      let html = `<div style="background:#fff; border-radius:12px; border:1px solid #eceff1; padding:15px; margin-bottom:15px;">`;
+      if (bills.length === 0) return `<div style="text-align:center; color:#95a5a6; font-size:13px; padding:20px;">無帳務明細</div>`;
+      const grouped = {};
+      bills.forEach(b => {
+          const d = formatDate(getVal(b, '日期')) || '未填寫日期';
+          if (!grouped[d]) grouped[d] = [];
+          grouped[d].push(b);
+      });
+      let html = `<div style="background:#fff; border-radius:12px; border:1px solid #eee; padding:15px; margin-bottom:15px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">`;
       let total = 0;
       Object.keys(grouped).sort().forEach(dateKey => {
-          html += `<div style="font-weight:bold; color:var(--brand-main); margin-bottom:8px; border-bottom:1px solid #f5f5f5; padding-bottom:5px; font-size:14px; margin-top:10px;">${dateKey}</div>`;
+          html += `<div style="font-weight:bold; color:var(--brand-main); margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:14px; margin-top:10px;">${dateKey}</div>`;
           grouped[dateKey].forEach(b => {
-              const cat = getVal(b, '類別') || '其他'; const item = getVal(b, '項目') || '未命名';
-              const pay = getVal(b, '付款方式') || '-'; const amt = parseFloat(getVal(b, '金額')) || 0; const memo = getVal(b, '備註');
+              const cat = getVal(b, '類別') || '其他';
+              const item = getVal(b, '項目') || '未命名項目';
+              const pay = getVal(b, '付款方式') || '未填寫';
+              const amt = parseFloat(getVal(b, '金額')) || 0;
+              const memo = getVal(b, '備註');
               total += amt;
-              html += `<div style="padding: 10px 0; border-bottom: 1px dashed #f5f5f5;"><div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; font-size: 14px; align-items: center;">
+              
+              html += `<div style="padding: 10px 0; border-bottom: 1px dashed #f5f5f5;">`;
+              html += `<div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; font-size: 14px; align-items: center;">
                   <div style="color:#fff; font-size:10px; background:${getColorForCategory(cat)}; padding:2px 8px; border-radius:10px; white-space: nowrap; font-weight:bold;">${cat}</div>
-                  <div style="color:var(--text-main); font-weight: 500;">${item}</div>
-                  <div style="font-size:12px; color:#b0bec5; white-space: nowrap;">${pay}</div>
-                  <div style="font-weight:bold; color:var(--brand-main); text-align: right; min-width: 60px;">$${amt.toLocaleString()}</div>
-              </div>${memo?`<div style="font-size: 12px; color: #b0bec5; margin-top: 4px; padding-left: 45px;">備註：${memo}</div>`:''}</div>`;
+                  <div style="color:#2c3e50; font-weight: 500;">${item}</div>
+                  <div style="font-size:12px; color:#aaa; white-space: nowrap;">${pay}</div>
+                  <div style="font-weight:bold; color:var(--settle-pink); text-align: right; min-width: 60px;">$${amt.toLocaleString()}</div>
+              </div>`;
+              
+              if (memo) {
+                  html += `<div style="font-size: 12px; color: #95a5a6; margin-top: 4px; padding-left: 45px;">備註：${memo}</div>`;
+              }
+              html += `</div>`;
           });
       });
-      html += `<div style="display:flex; justify-content:space-between; font-size:16px; font-weight:900; color:var(--brand-main); margin-top:15px; padding-top:10px; border-top:2px solid #eceff1;"><div>總計</div><div>$${total.toLocaleString()}</div></div></div>`;
+      html += `<div style="display:flex; justify-content:space-between; font-size:16px; font-weight:900; color:var(--brand-main); margin-top:15px; padding-top:10px; border-top:2px solid #eee;">
+          <div>總計</div><div>$${total.toLocaleString()}</div>
+      </div></div>`;
       return html;
   }
 
   function generateDetailHTML(event, dateStr) {
     if (!event) {
-        let html = `<div class="detail-header" style="border:none;"><div><div class="detail-race-name">日常帳務</div><div style="font-size:14px;color:#90a4ae;margin-top:4px;">日期：${dateStr}</div></div></div>`;
+        let html = `<div class="detail-header" style="margin-bottom:10px; padding-bottom:5px; border-bottom:none;"><div><div class="detail-race-name">日常帳務</div><div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${dateStr}</div></div></div>`;
         const dailyBills = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dateStr);
-        html += generateReceiptHTML(dailyBills); return html;
+        html += generateReceiptHTML(dailyBills);
+        return html;
     }
-    const code = getVal(event, '行程代碼'); const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
-    let html = `<div class="detail-header"><div><div class="detail-race-name">${getVal(event, '行程名稱')}</div><div style="font-size:14px;color:#90a4ae;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div></div>${getVal(event,'行程連結')?`<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>`:''}</div>`;
-    html += `<div class="view-switcher" style="margin-bottom: 20px; width: fit-content; background: #eceff1;">
+    const code = getVal(event, '行程代碼'), cat = getVal(event, '行程類別');
+    const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
+    let html = `<div class="detail-header"><div><div class="detail-race-name">${getVal(event, '行程名稱')}</div><div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${formatDate(getVal(event, '日期'))}</div></div>${getVal(event,'行程連結')?`<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">前往簡章 >></a>`:''}</div>`;
+    html += `<div class="view-switcher" style="margin-bottom: 20px; width: fit-content; background: #f0f0f0;">
                 <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
                 <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
              </div>`;
-    html += `<div id="tab-info" class="panel-tab-content" style="display:block;"><div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
+    html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
+    html += `<div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
     if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
     if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
     html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'));
-    if(getVal(event,'備註')) html += `<div style="margin-top:12px; font-size:13px; color:#90a4ae; border-top: 1px dashed #f5f5f5; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
+    if(getVal(event,'備註')) html += `<div style="margin-top:12px; font-size:13px; color:#666; border-top: 1px dashed #ddd; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
     html += `</div></div>`;
     const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
     if(stays.length > 0) {
       html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
       stays.forEach(s => {
-        html += `<div class="info-card card-stay"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>${getVal(s,'連結')?`<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#eceff1;color:#546e7a;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>`:''}</div>`;
-        if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住日期</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
-        if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房日期</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
+        html += `<div class="info-card card-stay"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>${getVal(s,'連結')?`<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>`:''}</div>`;
+        if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
+        if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房時間</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
+        if(getVal(s,'訂房平台')) html += `<div class="info-row"><span>平台</span><span>${getVal(s,'訂房平台')}</span></div>`;
         html += renderPriceRow('費用', getVal(s,'費用'), getVal(s,'付款人'), getVal(s,'付款方式'));
+        if(getVal(s,'備註')) html += `<div style="margin-top:8px; font-size:12px; color:#666;">備註：${getVal(s,'備註')}</div>`;
         html += `</div>`;
       });
       html += `</div>`;
@@ -633,10 +804,16 @@
       html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
       trans.forEach(t => {
         html += `<div class="info-card card-trans"><div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>`;
-        const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班');
-        const goD = getVal(t,'出發日期'); const goS = getVal(t,'去程出發時間');
-        if(hasVal(goB)) html += `<div class="info-row"><span>航班/班次</span><span>${goB}</span></div>`;
-        if(hasVal(goD)) html += `<div class="info-row"><span>時間</span><span>${formatDate(goD).substring(5)} ${goS||''}</span></div>`;
+        const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班') || getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機');
+        const goD = getVal(t,'出發日期'); const goS = getVal(t,'去程出發時間'); const goA = getVal(t,'去程抵達時間');
+        if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span>${goB}</span></div>`;
+        if(hasVal(goD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(goD).substring(5)}</span></div>`;
+        if(hasVal(goS) || hasVal(goA)) html += `<div class="info-row"><span></span><span>${goS||'--:--'}出發－${goA||'--:--'}抵達</span></div>`;
+        const bkB = getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班') || getVal(t,'回程班次 / 飛機') || getVal(t,'回程班次/飛機');
+        const bkD = getVal(t,'回程日期'); const bkS = getVal(t,'回程出發時間'); const bkA = getVal(t,'回程抵達時間');
+        if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span>${bkB}</span></div>`;
+        if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
+        if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
         html += renderPriceRow('費用', getVal(t,'票價或油資'), getVal(t,'付款人'), getVal(t,'付款方式')) + `</div>`;
       });
       html += `</div>`;
@@ -644,11 +821,23 @@
     if(bills.length > 0) {
       const sums = {}; bills.forEach(b => { const c = getVal(b, '類別') || '其他'; sums[c] = (sums[c] || 0) + (parseFloat(getVal(b, '金額')) || 0); });
       html += `<div class="info-section"><div class="info-title title-bill">其他帳務 (分類總結)</div><div class="info-card card-bill">`;
-      Object.keys(sums).forEach(c => { html += `<div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; align-items:center;"><span style="color:var(--text-sub); font-weight:bold;">${c}</span><span style="font-weight:900; color:var(--brand-main);">$${sums[c].toLocaleString()}</span></div>`; });
+      Object.keys(sums).forEach(c => {
+          html += `<div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; align-items:center;">
+              <span style="color:#546e7a; font-weight:bold;">${c}</span>
+              <span style="font-weight:900; color:var(--brand-main);">$${sums[c].toLocaleString()}</span>
+          </div>`;
+      });
       html += `</div></div>`;
     }
-    html += `<div style="display: flex; justify-content: flex-end; margin-top: 5px;"><div class="event-settle-card"><div style="font-weight:bold; color:var(--settle-pink); font-size:13px;">本場行程結算</div><div style="font-size:20px; font-weight:900; color:var(--settle-pink);">$${calculateEventTotal(code).toLocaleString()}</div></div></div></div>`;
-    html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">${generateReceiptHTML(bills)}</div>`;
+    html += `<div style="display: flex; justify-content: flex-end; margin-top: 5px;">
+                <div class="event-settle-card">
+                    <div style="font-weight:bold; color:var(--settle-pink); font-size:13px;">本場行程結算</div>
+                    <div style="font-size:18px; font-weight:900; color:var(--settle-pink);">$${calculateEventTotal(code).toLocaleString()}</div>
+                </div>
+             </div></div>`;
+    html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">`;
+    html += generateReceiptHTML(bills);
+    html += `</div>`;
     return html;
   }
 </script>
