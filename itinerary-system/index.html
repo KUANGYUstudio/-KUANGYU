@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* =========================================
-       光聿行程美學定義 (月份置頂 + 跨年度動態引擎版)
+       光聿行程美學定義 (雙層年月快選 + 跨年引擎版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -37,7 +37,7 @@
     .refresh-btn { cursor: pointer; font-size: 14px; background: var(--action-button-bg); color: var(--action-button-color); padding: 5px 8px; border-radius: 50%; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; transition: background 0.2s; }
     .refresh-btn:hover { background: #b2dfdb; }
 
-    /* --- 全新置頂控制區 (吸附在頂部) --- */
+    /* 霸氣置頂區 */
     .sticky-controls {
         position: sticky;
         top: 0;
@@ -61,14 +61,20 @@
     .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; font-weight: bold; color: #7f8c8d; cursor: pointer; transition: 0.2s; }
     .filter-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); }
 
+    /* 年份與月份雙層導覽 */
+    .year-nav-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+    .year-nav-btn { padding: 4px 14px; border-radius: 15px; background: #f0f0f0; color: #7f8c8d; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .year-nav-btn:hover { background: #e0e0e0; color: var(--brand-main); }
+    .year-nav-btn.active { background: var(--brand-main); color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
     .month-nav-container { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding-bottom: 5px; }
-    .month-nav-btn { min-width: 36px; height: 36px; border-radius: 18px; border: 1px solid #ddd; background: #fff; color: #7f8c8d; font-size: 15px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s; box-sizing: border-box; }
+    .month-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #ddd; background: #fff; color: #7f8c8d; font-size: 15px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
     .month-nav-btn.has-data { border-color: var(--brand-main); color: var(--brand-main); }
     .month-nav-btn.has-data:hover { background: var(--brand-main); color: #fff; }
     .month-nav-btn.no-data { opacity: 0.3; cursor: default; }
     .month-nav-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); opacity: 1 !important; transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-    /* --- 其他美學定義 --- */
+    /* --- 其他面板與元件 --- */
     #acc-panel { display: none; background: #fff; border-radius: 20px; padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; animation: fadeIn 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .acc-grand-banner { background: var(--brand-main); color: #fff; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2); }
     .acc-grand-label { font-size: 13px; opacity: 0.8; margin-bottom: 5px; }
@@ -181,6 +187,8 @@
           </div>
           <div id="filter-bar" class="filter-bar"></div>
         </div>
+        
+        <div id="year-nav" class="year-nav-container"></div>
         <div id="month-nav" class="month-nav-container"></div>
     </div>
 
@@ -215,6 +223,9 @@
   let currentView = 'cal';
   let showPastList = false;
   let selectedMonthFilter = null;
+  
+  // 新增：目前顯示的年份，預設為今年
+  let displayYear = new Date().getFullYear();
 
   let accDetailsData = {};
   let currentAccTab = '';
@@ -259,7 +270,7 @@
   }
 
   function renderMain() { 
-      renderMonthNav(); // 動態更新置頂的月份選單
+      renderMonthNav(); // 每次畫面更新時，重繪年份與月份選單
       if (currentView === 'cal') renderCalendar(); else renderList(); 
   }
 
@@ -488,9 +499,11 @@
     });
   }
 
-  // --- 跨年份動態月份引擎 ---
+  // --- 全新：雙層年份與月份導覽引擎 ---
   function renderMonthNav() {
+      const yearContainer = document.getElementById('year-nav');
       const navContainer = document.getElementById('month-nav');
+      yearContainer.innerHTML = '';
       navContainer.innerHTML = '';
       
       const now = new Date();
@@ -509,67 +522,51 @@
       }
       const uniqueMonthKeysWithData = [...new Set(monthKeysWithData)].sort();
 
-      // 計算最遠日期的邊界
-      let maxD = new Date(now);
-      uniqueMonthKeysWithData.forEach(k => {
-          const d = new Date(k + '-01');
-          if (d > maxD) maxD = d;
+      // 計算擁有的年份 (確保至少包含今年)
+      let uniqueYears = [...new Set(uniqueMonthKeysWithData.map(k => parseInt(k.substring(0, 4))))];
+      if (!uniqueYears.includes(currentY)) uniqueYears.push(currentY);
+      uniqueYears.sort((a, b) => a - b);
+
+      // 渲染年份選擇器
+      uniqueYears.forEach(y => {
+          const btn = document.createElement('div');
+          btn.className = 'year-nav-btn ' + (y === displayYear ? 'active' : '');
+          btn.textContent = y + ' 年';
+          btn.onclick = () => {
+              displayYear = y;
+              selectedMonthFilter = null; // 切換年份時，重置月份篩選回到該年的預設全覽
+              renderMain();
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+          };
+          yearContainer.appendChild(btn);
       });
-      const maxY = maxD.getFullYear();
-      const maxM = maxD.getMonth() + 1;
 
-      let keysToShow = [];
-      // 加入過去有資料的月份
-      keysToShow.push(...uniqueMonthKeysWithData.filter(k => k < currentMonthKey));
-
-      // 連續推算到未來的最遠月份
-      let y = currentY;
-      let m = currentM;
-      while (y < maxY || (y === maxY && m <= maxM)) {
-          keysToShow.push(`${y}-${String(m).padStart(2, '0')}`);
-          m++;
-          if (m > 12) { m = 1; y++; }
-      }
-      
-      // 防呆：如果未來都沒資料，至少保留當前月
-      if (keysToShow.length === 0 || !keysToShow.includes(currentMonthKey)) {
-           keysToShow.push(currentMonthKey);
-      }
-
-      keysToShow = [...new Set(keysToShow)].sort();
-
-      keysToShow.forEach(mKey => {
-          const [yStr, mStr] = mKey.split('-');
-          const targetY = parseInt(yStr);
-          const targetM = parseInt(mStr);
+      // 渲染下方固定的 1-12 月份圈圈
+      for (let i = 1; i <= 12; i++) {
+          const mStr = String(i).padStart(2, '0');
+          const mKey = `${displayYear}-${mStr}`;
           const hasData = uniqueMonthKeysWithData.includes(mKey);
 
           const btn = document.createElement('div');
           btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
           if (selectedMonthFilter === mKey) btn.classList.add('active');
 
-          // 若為不同年份，將形狀改為膠囊並加上年份
-          if (targetY !== currentY) {
-              btn.textContent = `${yStr.substring(2)}/${targetM}`;
-              btn.style.width = 'auto';
-              btn.style.padding = '0 12px';
-          } else {
-              btn.textContent = targetM;
-              btn.style.padding = '0';
-              btn.style.width = '36px';
-          }
+          btn.textContent = i;
 
+          // 讓過去的月份呈現半透明 (如果沒有被選中的話)
           if (mKey < currentMonthKey && selectedMonthFilter !== mKey) {
               btn.style.opacity = '0.4';
           }
 
-          btn.onclick = () => { 
-              selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
-              renderMain();
-              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
-          };
+          if (hasData) {
+              btn.onclick = () => { 
+                  selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
+                  renderMain();
+                  if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+              };
+          }
           navContainer.appendChild(btn);
-      });
+      }
   }
 
   function getVal(obj, key) { 
@@ -609,7 +606,15 @@
     monthKeysToRender.sort();
 
     monthKeysToRender.forEach(mKey => {
-      let shouldShow = selectedMonthFilter ? (mKey === selectedMonthFilter) : (mKey >= currentMonthKey);
+      // 根據目前選擇的年份或月份來決定要不要渲染該日曆區塊
+      let shouldShow = false;
+      if (selectedMonthFilter) {
+          shouldShow = (mKey === selectedMonthFilter);
+      } else {
+          // 若無選擇特定月份，只顯示 displayYear 且大於等於現在的月份
+          shouldShow = (mKey.startsWith(displayYear)) && (mKey >= currentMonthKey);
+      }
+      
       if (!shouldShow) return;
       
       const [y, m] = mKey.split('-');
@@ -645,19 +650,19 @@
       races.sort((a, b) => new Date(getVal(a, '日期')) - new Date(getVal(b, '日期')));
       const today = new Date(); today.setHours(0, 0, 0, 0);
       
-      const pastRaces = races.filter(r => new Date(getVal(r, '日期')) < today);
-      const futureRaces = races.filter(r => new Date(getVal(r, '日期')) >= today);
+      const pastRaces = races.filter(r => new Date(getVal(r, '日期')) < today && formatDate(getVal(r, '日期')).startsWith(displayYear));
+      const futureRaces = races.filter(r => new Date(getVal(r, '日期')) >= today && formatDate(getVal(r, '日期')).startsWith(displayYear));
       
       let racesToRender = [];
       if (selectedMonthFilter) {
           racesToRender = races.filter(r => formatDate(getVal(r, '日期')).startsWith(selectedMonthFilter));
       } else {
-          racesToRender = showPastList ? races : futureRaces;
+          racesToRender = showPastList ? races.filter(r => formatDate(getVal(r, '日期')).startsWith(displayYear)) : futureRaces;
           
           if (pastRaces.length > 0) {
               const toggleBtn = document.createElement('div');
               toggleBtn.className = 'past-toggle-btn';
-              toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示歷史行程 (${pastRaces.length}筆) ▼`;
+              toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示 ${displayYear} 歷史行程 (${pastRaces.length}筆) ▼`;
               toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
               container.appendChild(toggleBtn);
           }
