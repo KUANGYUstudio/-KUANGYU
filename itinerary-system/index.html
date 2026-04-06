@@ -7,7 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* =========================================
-       光聿行程美學定義 (柔和繽紛粉彩版 + 極速運算引擎)
+       光聿行程美學定義 (柔和繽紛粉彩版 + 月份雙排固定)
        ========================================= */
     :root {
       /* 馬卡龍粉彩活動類別色：清晰且柔和 */
@@ -90,6 +90,7 @@
     .year-nav-btn { padding: 4px 14px; border-radius: 15px; background: #f0f0f0; color: #7f8c8d; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
     .year-nav-btn.active { background: var(--nav-active); color: #fff; }
 
+    /* 全新月份排版：強制 6 欄網格，自動分為兩列 */
     .month-nav-container { 
         display: grid; 
         grid-template-columns: repeat(6, 36px); 
@@ -184,7 +185,7 @@
     
     .event-settle-card { background: #fafafa; border: 1.5px solid var(--settle-pink); padding: 10px 16px; border-radius: 12px; display: inline-flex; align-items: baseline; gap: 12px;}
 
-    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #7f8c8d; font-weight: bold;}
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
@@ -262,15 +263,41 @@
 
   window.onload = initSystem;
 
+  /* =========================================================
+     終極優化：導入 LocalStorage 快取技術，實現畫面「瞬間秒開」
+     ========================================================= */
   async function initSystem() {
+    // 1. 先嘗試從瀏覽器記憶體拿上次存的資料
+    const cachedData = localStorage.getItem('kuangyu_dbData');
+    
+    if (cachedData) {
+        // 如果有舊資料，直接畫出畫面，並瞬間關閉讀取動畫
+        dbData = JSON.parse(cachedData);
+        renderFilters();
+        renderMain();
+        document.getElementById('loading').style.display = 'none';
+    }
+
+    // 2. 背景偷偷向 Google 討要最新的資料
     try {
       const res = await fetch(API_URL + "?t=" + new Date().getTime());
-      dbData = await res.json();
+      const freshData = await res.json();
+      
+      // 3. 最新資料回來了！把它存進記憶體，並無聲無息地替換畫面
+      dbData = freshData;
+      localStorage.setItem('kuangyu_dbData', JSON.stringify(freshData));
+      
       renderFilters();
       renderMain();
+      if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+      
+      // 確保第一次開啟網頁（沒暫存）的人也能關閉讀取畫面
       document.getElementById('loading').style.display = 'none';
     } catch (e) {
-      document.getElementById('loading').innerHTML = "資料連線失敗";
+      if (!cachedData) {
+          // 如果連不上網路且沒有舊資料，才顯示錯誤
+          document.getElementById('loading').innerHTML = "資料連線失敗，請檢查網路連線。";
+      }
     }
   }
 
@@ -304,7 +331,6 @@
     if (!isVisible) calculateAccounting();
   }
 
-  // 極速運算引擎：帳務計算
   function calculateAccounting() {
     let allExpenses = [];
     const races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
@@ -606,7 +632,6 @@
     </div>`;
   }
 
-  // 極速運算引擎：日曆網格渲染 (修正空月份 Bug)
   function renderCalendar() {
     const container = document.getElementById('calendar-container'); 
     container.innerHTML = '';
@@ -615,7 +640,6 @@
     
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
     
-    // --- 建立 Hash Map 字典，取代效能殺手 filter ---
     let eventMap = {};
     let allDatesWithData = [];
     races.forEach(r => {
@@ -630,7 +654,6 @@
             if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); }
         });
     }
-    // --------------------------------------------------
 
     const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
     let hasRenderedAny = false;
@@ -673,7 +696,6 @@
         cell.className = 'day'; 
         cell.innerHTML = `<span class="day-number">${d}</span>`;
         
-        // 查字典，速度提升 100 倍
         const event = eventMap[dStr];
         const hasDailyExpense = dailyExpenseMap[dStr];
         
@@ -693,7 +715,6 @@
       container.appendChild(section);
     });
 
-    // 修復空日曆 Bug：如果該條件下沒有任何月份資料，顯示友善提示
     if (!hasRenderedAny) {
         container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">此區間目前沒有排定行程<br><span style="font-size:13px; font-weight:normal;">請切換上方「年份」或「月份」查看</span></div>';
     }
