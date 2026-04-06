@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <title>光聿 KUANGYU - 行程小助理</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* =========================================
-       光聿行程美學定義 (帳務明細對齊 + 低調點點版)
+       光聿行程美學定義 (全動態圓環圖表 + 雙軌記帳版)
        ========================================= */
     :root {
       --brand-blue: #1e88e5;
@@ -38,22 +39,24 @@
 
     .action-bar { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; }
     .top-btns { display: flex; gap: 10px; align-items: center; }
-    .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .acc-toggle-btn { background: var(--brand-main); color: #fff; border: none; padding: 10px 20px; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.2s; }
+    .acc-toggle-btn:hover { background: #1a252f; }
     
     .view-switcher { background: #eee; border-radius: 20px; padding: 3px; display: flex; gap: 2px; }
     .view-btn { border: none; padding: 6px 15px; border-radius: 17px; cursor: pointer; font-size: 12px; font-weight: bold; color: #7f8c8d; background: transparent; transition: 0.3s; }
     .view-btn.active { background: #fff; color: var(--brand-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
     #acc-panel { display: none; background: #fff; border-radius: 20px; padding: 25px; margin-bottom: 30px; text-align: left; border: 1px solid #eee; animation: fadeIn 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-    .acc-grand-banner { background: var(--brand-main); color: #fff; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2); }
+    .acc-grand-banner { background: var(--brand-main); color: #fff; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2); }
     .acc-grand-label { font-size: 13px; opacity: 0.8; margin-bottom: 5px; }
-    .acc-grand-val { font-size: 28px; font-weight: 900; letter-spacing: 1px; color: #fff; }
+    .acc-grand-val { font-size: 32px; font-weight: 900; letter-spacing: 1px; color: #fff; }
 
     .acc-title { font-size: 16px; font-weight: 800; margin-bottom: 15px; color: var(--brand-main); display: flex; align-items: center;}
     .acc-title::before { content: ''; display: inline-block; width: 4px; height: 14px; background: var(--brand-main); margin-right: 8px; border-radius: 2px; }
     
     .acc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
-    .acc-card { background: #fafafa; padding: 12px 15px; border-radius: 12px; border: 1px solid #f0f0f0;}
+    .acc-card { background: #fafafa; padding: 12px 15px; border-radius: 12px; border: 1px solid #f0f0f0; transition: 0.2s;}
+    .acc-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.03); }
     .acc-label { font-size: 12px; color: #7f8c8d; font-weight: bold; margin-bottom: 4px;}
     .acc-val { font-size: 15px; font-weight: 800; color: var(--brand-main); }
     
@@ -79,7 +82,7 @@
     .month-nav-btn.has-data { border-color: var(--brand-main); color: var(--brand-main); }
     .month-nav-btn.has-data:hover { background: var(--brand-main); color: #fff; }
     .month-nav-btn.no-data { opacity: 0.3; cursor: default; }
-    .month-nav-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); opacity: 1 !important; }
+    .month-nav-btn.active { background: var(--brand-main); color: #fff; border-color: var(--brand-main); opacity: 1 !important; transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
     .past-toggle-btn { text-align: center; color: #7f8c8d; font-size: 13px; cursor: pointer; margin-bottom: 20px; font-weight: bold; background: #f0f0f0; padding: 10px; border-radius: 20px; transition: 0.2s; }
     .past-toggle-btn:hover { background: #e0e0e0; color: var(--brand-main); }
@@ -97,12 +100,12 @@
     /* 日常帳務：低調點點設計 */
     .day.has-expense { cursor: pointer; font-weight: 600; color: #333; }
     .day.has-expense:hover { background-color: #f5f5f5; }
-    .day.has-expense::after { content: ''; position: absolute; bottom: 3px; /* 移到最靠下 */ width: 5px; height: 5px; border-radius: 50%; background-color: #dcdcdc; /* 顏色更淡 */ transition: 0.2s; }
+    .day.has-expense::after { content: ''; position: absolute; bottom: 3px; width: 5px; height: 5px; border-radius: 50%; background-color: #dcdcdc; transition: 0.2s; }
     
     /* 共用選中狀態 */
     .day.selected { color: #fff !important; transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; z-index: 10; border-color: transparent !important; }
-    .day.has-expense.selected { background-color: #bdc3c7; } /* 選中純帳務日的底色，比原本淡一點 */
-    .day.selected::after { background-color: #fff !important; } /* 選中時點點變白 */
+    .day.has-expense.selected { background-color: #bdc3c7; } 
+    .day.selected::after { background-color: #fff !important; } 
 
     .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eee; transition: 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.02); border-left: 6px solid #ddd; }
     .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.06); }
@@ -172,28 +175,22 @@
 
     <div id="acc-panel">
       <div class="acc-grand-banner">
-        <div class="acc-grand-label">篩選範圍總支出</div>
+        <div id="acc-grand-label-dynamic" class="acc-grand-label">篩選範圍總支出</div>
         <div id="acc-grand-total" class="acc-grand-val">$0</div>
       </div>
 
-      <div class="acc-title">支出佔比</div>
-      <div id="acc-progress-grid" class="acc-grid"></div>
-
-      <div class="acc-title" style="margin-top:10px;">分類明細清單</div>
-      <div class="acc-tabs" id="acc-tabs">
-         <button class="acc-tab-btn active" onclick="switchAccTab('報名費')">報名費</button>
-         <button class="acc-tab-btn" onclick="switchAccTab('住宿')">住宿</button>
-         <button class="acc-tab-btn" onclick="switchAccTab('交通')">交通</button>
-         <button class="acc-tab-btn" onclick="switchAccTab('其他')">其他</button>
+      <div style="position: relative; height: 200px; margin-bottom: 25px;">
+        <canvas id="expenseChart"></canvas>
       </div>
+
+      <div class="acc-title">自動分類佔比</div>
+      <div id="dynamic-cat-legend" class="acc-grid"></div>
+
+      <div class="acc-title" style="margin-top:20px;">分類明細清單</div>
+      <div class="acc-tabs" id="acc-tabs">
+         </div>
       <div id="acc-detail-list" class="acc-detail-container"></div>
       
-      <div style="display: flex; justify-content: flex-end; margin-top:20px;">
-          <div class="event-settle-card" style="background: #ebf0f1; border-color: var(--brand-main); box-shadow: none;">
-            <div style="font-weight:bold; color:var(--brand-main); font-size:13px;">年度範圍總支出</div>
-            <div id="acc-grand-total-static" style="font-size:18px; font-weight:900; color:var(--brand-main);">$0</div>
-          </div>
-      </div>
     </div>
 
     <div id="cal-view" class="view-container active">
@@ -212,8 +209,24 @@
   let showPastList = false;
   let selectedMonthFilter = null;
 
-  let accDetailsData = { '報名費': [], '住宿': [], '交通': [], '其他': [] };
-  let currentAccTab = '報名費';
+  let accDetailsData = {};
+  let currentAccTab = '';
+  let expenseChartInstance = null; // 儲存圖表實例以便更新
+
+  // 定義質感的分類顏色庫
+  const categoryColors = {
+      '報名費': '#1e88e5', // 藍
+      '住宿': '#ffb74d',   // 黃
+      '交通': '#2ecc71',   // 綠
+      '飲食': '#f06292',   // 粉
+      '購物': '#9b59b6',   // 紫
+      '票券': '#34495e',   // 藏青
+      '娛樂': '#e67e22',   // 橘
+      '其他': '#95a5a6'    // 灰
+  };
+  function getColorForCategory(cat) {
+      return categoryColors[cat] || '#bdc3c7'; // 預設淺灰
+  }
 
   window.onload = initSystem;
 
@@ -256,68 +269,183 @@
     if (!isVisible) calculateAccounting();
   }
 
+  // --- 核心邏輯：動態抓取與重組所有開銷 ---
   function calculateAccounting() {
-    let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
-    let itemTotals = { '報名費': 0, '住宿': 0, '交通': 0, '其他': 0 };
-    let grandTotal = 0;
-    accDetailsData = { '報名費': [], '住宿': [], '交通': [], '其他': [] };
+    let allExpenses = [];
+    const races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
 
+    // 1. 抓取所有有綁定「行程代碼」的花費
     races.forEach(r => {
       const code = getVal(r, '行程代碼');
-      const raceName = getVal(r, '行程名稱');
+      const rDate = formatDate(getVal(r, '日期'));
+      
       const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-      if (regFee > 0) {
-        itemTotals['報名費'] += regFee;
-        accDetailsData['報名費'].push({ name: raceName, amount: regFee });
-      }
+      if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: getVal(r, '行程名稱') });
+
       (dbData['住宿']||[]).filter(s => getVal(s,'行程代碼')===code).forEach(s => {
         const fee = parseFloat(getVal(s,'費用')) || 0;
-        if (fee > 0) {
-          itemTotals['住宿'] += fee;
-          accDetailsData['住宿'].push({ name: getVal(s,'飯店名稱') || raceName, amount: fee });
-        }
+        if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || getVal(r, '行程名稱') });
       });
+
       (dbData['交通']||[]).filter(t => getVal(t,'行程代碼')===code).forEach(t => {
         const fee = parseFloat(getVal(t,'票價或油資')) || 0;
-        if (fee > 0) {
-          itemTotals['交通'] += fee;
-          accDetailsData['交通'].push({ name: getVal(t,'類型') || raceName, amount: fee });
-        }
+        if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, category: '交通', amount: fee, name: getVal(t,'類型') || getVal(r, '行程名稱') });
       });
+
       (dbData['帳務明細']||[]).filter(b => getVal(b,'行程代碼')===code).forEach(b => {
         const fee = parseFloat(getVal(b,'金額')) || 0;
-        if (fee > 0) {
-          itemTotals['其他'] += fee;
-          accDetailsData['其他'].push({ name: getVal(b,'項目') || raceName, amount: fee });
-        }
+        if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || getVal(r, '行程名稱') });
       });
     });
 
-    grandTotal = itemTotals['報名費'] + itemTotals['住宿'] + itemTotals['交通'] + itemTotals['其他'];
-    const formattedTotal = '$' + grandTotal.toLocaleString();
-    document.getElementById('acc-grand-total').textContent = formattedTotal;
-    document.getElementById('acc-grand-total-static').textContent = formattedTotal;
+    // 2. 若沒篩選特定賽事類型，則額外抓取「日常記帳」（無綁定行程代碼）
+    if (currentFilter === '全部') {
+        (dbData['帳務明細']||[]).filter(b => !getVal(b, '行程代碼') || getVal(b, '行程代碼').trim() === '').forEach(b => {
+            const fee = parseFloat(getVal(b,'金額')) || 0;
+            if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')), category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳' });
+        });
+    }
 
-    const pGrid = document.getElementById('acc-progress-grid');
+    // 3. 依據上方點擊的月份進行篩選
+    const now = new Date();
+    const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    let filteredExpenses = allExpenses.filter(e => {
+        if (!e.date) return false;
+        const eMonth = e.date.substring(0, 7);
+        if (selectedMonthFilter) {
+            return eMonth === selectedMonthFilter;
+        } else {
+            return eMonth >= currentMonthKey; // 預設顯示本月與未來
+        }
+    });
+
+    // 更新頂部標題
+    document.getElementById('acc-grand-label-dynamic').textContent = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月 總支出` : `本月與未來 總支出`;
+
+    // 4. 進行數據加總
+    let categoryTotals = {};
+    let grandTotal = 0;
+    accDetailsData = {}; 
+
+    filteredExpenses.forEach(e => {
+        let cat = e.category;
+        if (!categoryTotals[cat]) {
+            categoryTotals[cat] = 0;
+            accDetailsData[cat] = [];
+        }
+        categoryTotals[cat] += e.amount;
+        grandTotal += e.amount;
+        accDetailsData[cat].push({ name: e.name, amount: e.amount });
+    });
+
+    document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
+
+    // 5. 排序類別 (金額高到低) 並渲染圖例
+    let sortedCats = Object.keys(categoryTotals).sort((a,b) => categoryTotals[b] - categoryTotals[a]);
+    const pGrid = document.getElementById('dynamic-cat-legend');
     pGrid.innerHTML = '';
-    const colors = { '報名費': 'var(--brand-blue)', '住宿': 'var(--brand-yellow)', '交通': 'var(--brand-green)', '其他': 'var(--brand-pink)' };
+    
+    let chartLabels = [];
+    let chartData = [];
+    let chartColors = [];
 
-    Object.keys(itemTotals).forEach(k => {
-      const val = itemTotals[k];
+    sortedCats.forEach(k => {
+      const val = categoryTotals[k];
       const pct = grandTotal === 0 ? 0 : (val / grandTotal) * 100;
+      const color = getColorForCategory(k);
+      
+      chartLabels.push(k);
+      chartData.push(val);
+      chartColors.push(color);
+
       pGrid.innerHTML += `
-        <div class="acc-card">
-          <div style="display:flex; justify-content:space-between; margin-bottom:8px; align-items:baseline;">
-            <span class="acc-label">${k}</span>
-            <span class="acc-val">$${val.toLocaleString()}</span>
-          </div>
-          <div style="width:100%; background:#f0f0f0; height:6px; border-radius:3px; overflow:hidden;">
-            <div style="width:${pct}%; background:${colors[k]}; height:100%; border-radius:3px;"></div>
-          </div>
+        <div class="acc-card" style="display:flex; justify-content:space-between; align-items:center; padding: 10px 15px;">
+            <div style="display:flex; align-items:center; gap: 8px;">
+                <div style="width:12px; height:12px; border-radius:3px; background:${color};"></div>
+                <span class="acc-label" style="margin:0; font-size:13px; color:var(--text-main);">${k}</span>
+            </div>
+            <div style="text-align:right;">
+                <div class="acc-val" style="font-size:15px; margin-bottom:2px;">$${val.toLocaleString()}</div>
+                <div style="font-size:11px; color:#aaa; font-weight:bold;">${pct.toFixed(1)}%</div>
+            </div>
         </div>
       `;
     });
-    renderAccDetailsList();
+
+    // 6. 動態生成分類清單的 Tab 按鈕
+    const tabsContainer = document.getElementById('acc-tabs');
+    tabsContainer.innerHTML = '';
+    if (sortedCats.length === 0) {
+        tabsContainer.innerHTML = '<div style="font-size:13px; color:#999; padding: 10px;">該時段無支出資料</div>';
+        document.getElementById('acc-detail-list').innerHTML = '';
+    } else {
+        sortedCats.forEach((cat, index) => {
+            const btn = document.createElement('button');
+            btn.className = `acc-tab-btn ${index === 0 ? 'active' : ''}`;
+            btn.textContent = cat;
+            btn.onclick = () => switchAccTab(cat);
+            tabsContainer.appendChild(btn);
+        });
+        currentAccTab = sortedCats[0];
+        renderAccDetailsList();
+    }
+
+    // 7. 渲染 Chart.js 圓環圖
+    renderDoughnutChart(chartLabels, chartData, chartColors);
+  }
+
+  // --- Chart.js 圓環圖渲染器 ---
+  function renderDoughnutChart(labels, data, colors) {
+      const ctx = document.getElementById('expenseChart').getContext('2d');
+      if (expenseChartInstance) {
+          expenseChartInstance.destroy();
+      }
+
+      if (data.length === 0) {
+          // 若無資料，畫一個灰色的空心圓
+          expenseChartInstance = new Chart(ctx, {
+              type: 'doughnut',
+              data: { labels: ['無資料'], datasets: [{ data: [1], backgroundColor: ['#f5f5f5'], borderWidth: 0 }] },
+              options: { cutout: '75%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+          });
+          return;
+      }
+
+      expenseChartInstance = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+              labels: labels,
+              datasets: [{
+                  data: data,
+                  backgroundColor: colors,
+                  borderWidth: 3,
+                  borderColor: '#ffffff',
+                  hoverOffset: 6
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: '70%', // 圓環中空比例
+              plugins: {
+                  legend: { display: false }, // 關閉預設圖例，使用我們自訂的 HTML 圖例
+                  tooltip: {
+                      backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                      padding: 12,
+                      titleFont: { size: 14, family: "'Helvetica Neue', sans-serif" },
+                      bodyFont: { size: 14, weight: 'bold' },
+                      callbacks: {
+                          label: function(context) {
+                              let label = context.label || '';
+                              if (label) label += '：';
+                              if (context.parsed !== null) label += '$' + context.parsed.toLocaleString();
+                              return label;
+                          }
+                      }
+                  }
+              }
+          }
+      });
   }
 
   function switchAccTab(tabName) {
@@ -364,7 +492,12 @@
       const btn = document.createElement('button');
       btn.className = `filter-btn ${c === currentFilter ? 'active' : ''}`;
       btn.textContent = c;
-      btn.onclick = () => { currentFilter = c; renderFilters(); renderMain(); if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); };
+      btn.onclick = () => { 
+          currentFilter = c; 
+          renderFilters(); 
+          renderMain(); 
+          if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+      };
       bar.appendChild(btn);
     });
   }
@@ -395,6 +528,7 @@
     const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
     const monthKeys = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].sort();
+    
     for (let i = 1; i <= 12; i++) {
         const mStr = String(i).padStart(2, '0');
         const targetKey = monthKeys.find(key => key.endsWith('-' + mStr));
@@ -406,10 +540,16 @@
             if (targetKey < currentMonthKey && selectedMonthFilter !== targetKey) {
                 btn.style.opacity = '0.4'; btn.title = "點擊顯示過去行程";
             }
-            btn.onclick = () => { selectedMonthFilter = (selectedMonthFilter === targetKey) ? null : targetKey; renderCalendar(); };
+            btn.onclick = () => { 
+                selectedMonthFilter = (selectedMonthFilter === targetKey) ? null : targetKey; 
+                renderCalendar();
+                // 點擊月份時，如果帳務面板開著，就同步更新圖表與數據
+                if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+            };
         }
         navContainer.appendChild(btn);
     }
+    
     monthKeys.forEach(mKey => {
       let shouldShow = selectedMonthFilter ? (mKey === selectedMonthFilter) : (mKey >= currentMonthKey);
       if (!shouldShow) return;
@@ -420,6 +560,7 @@
       const grid = document.createElement('div'); grid.className = 'calendar-grid';
       const firstDay = new Date(y, m-1, 1).getDay(), lastDate = new Date(y, m, 0).getDate();
       for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
+      
       for (let d = 1; d <= lastDate; d++) {
         const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
         const cell = document.createElement('div'); cell.className = 'day'; cell.innerHTML = `<span class="day-number">${d}</span>`;
