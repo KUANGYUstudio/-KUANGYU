@@ -991,16 +991,26 @@
           });
       }
 
-      const monthKeysToRender = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
-      let hasRenderedAny = false;
+      // 強制產生該年份 1 到 12 月的所有 Key
+    let monthKeysToRender = [];
+    for (let i = 1; i <= 12; i++) {
+        monthKeysToRender.push(`${displayYear}-${String(i).padStart(2, '0')}`);
+    }
+    
+    let hasRenderedAny = false;
 
-      monthKeysToRender.forEach(mKey => {
-          let shouldShow = false;
-          if (selectedMonthFilter) { shouldShow = (mKey === selectedMonthFilter); } 
-          else { shouldShow = (mKey.startsWith(displayYear)) && (mKey >= currentMonthKey); }
-          
-          if (!shouldShow) return;
-          hasRenderedAny = true;
+    monthKeysToRender.forEach(mKey => {
+      let shouldShow = false;
+      if (selectedMonthFilter) {
+          // 如果有選特定月份，就只顯示該月
+          shouldShow = (mKey === selectedMonthFilter);
+      } else {
+          // 如果沒選，就顯示該年份所有的月份
+          shouldShow = true;
+      }
+      
+      if (!shouldShow) return;
+      hasRenderedAny = true;
           
           const [y, m] = mKey.split('-');
           const section = document.createElement('div'); 
@@ -1032,17 +1042,17 @@
               const hasDailyExpense = dailyExpenseMap[dStr];
               
               if (event) {
-                  const cat = getVal(event, '行程類別'); 
-                  cell.classList.add('has-event');
-                  // 🎯 修復 1：平常只顯示邊框
-                  const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
-                  cell.style.borderColor = pastelColor || '#cfd8dc';
-                  cell.dataset.color = pastelColor || '#cfd8dc'; // 存起來給點擊時使用
-                  cell.onclick = () => handleDayClick(event, cell, grid, dStr);
-              } else if (hasDailyExpense) {
-                  cell.classList.add('has-expense'); 
-                  cell.onclick = () => handleDayClick(null, cell, grid, dStr);
-              }
+          const cat = getVal(event, '行程類別'); 
+          cell.classList.add('has-event');
+          const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
+          cell.style.borderColor = pastelColor || '#cfd8dc';
+          cell.dataset.color = pastelColor || '#cfd8dc';
+          cell.onclick = () => handleDayClick(event, cell, grid, dStr);
+        } else {
+          if (hasDailyExpense) cell.classList.add('has-expense');
+          // 無論有沒有行程，點擊日期都能看到當天資訊，方便規劃
+          cell.onclick = () => handleDayClick(null, cell, grid, dStr);
+        }
               grid.appendChild(cell);
           }
           
