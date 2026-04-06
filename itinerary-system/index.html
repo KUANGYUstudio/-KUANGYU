@@ -885,7 +885,8 @@
   function renderMonthNav() {
       const yearContainer = document.getElementById('year-nav');
       const navContainer = document.getElementById('month-nav');
-      yearContainer.innerHTML = ''; navContainer.innerHTML = '';
+      yearContainer.innerHTML = ''; 
+      navContainer.innerHTML = '';
       
       const now = new Date(); 
       const currentY = now.getFullYear(); 
@@ -927,23 +928,43 @@
           const hasData = uniqueMonthKeysWithData.includes(mKey);
           
           const btn = document.createElement('div'); 
-          btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
+          btn.className = 'month-nav-btn'; 
           if (selectedMonthFilter === mKey) btn.classList.add('active');
           btn.textContent = i;
           
-          if (mKey < currentMonthKey && selectedMonthFilter !== mKey) btn.style.opacity = '0.4';
-          
-          if (hasData) { 
-              btn.onclick = () => { 
-                  selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
-                  renderMain(); 
-                  if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
-              }; 
+          // 🎯 顏色與透明度邏輯優化
+          if (mKey < currentMonthKey) {
+              // 已經過去的月份
+              if (hasData) {
+                  btn.style.color = "#b0bec5"; // 比較淺的灰色 (有過期活動)
+                  btn.style.borderColor = "#cfd8dc";
+              } else {
+                  btn.style.color = "#eceff1"; // 更淺的灰色 (沒活動)
+                  btn.style.borderColor = "#f5f5f5";
+                  btn.style.opacity = "0.6";
+              }
+          } else {
+              // 當月或未來的月份
+              if (hasData) {
+                  btn.style.color = "var(--nav-active)"; // 原本有活動的顏色
+                  btn.style.borderColor = "var(--nav-active)";
+              } else {
+                  btn.style.color = "#eceff1"; // 未來但沒活動：更淺的灰色
+                  btn.style.borderColor = "#f5f5f5";
+                  btn.style.opacity = "0.6";
+              }
           }
+          
+          // 🎯 開放所有按鈕皆可點選
+          btn.onclick = () => { 
+              selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
+              renderMain(); 
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+          }; 
           navContainer.appendChild(btn);
       }
   }
-
+  
   function renderPriceRow(label, val, payer, method, state) {
       if(!hasVal(val) && !hasVal(payer)) return '';
       let p = payer || '-', m = method || '-';
@@ -968,80 +989,69 @@
   }
 
   function renderCalendar() {
-      const container = document.getElementById('calendar-container'); 
-      container.innerHTML = '';
-      
-      const now = new Date(); 
-      const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-      
-      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
-      
-      let eventMap = {}; 
-      let allDatesWithData = [];
-      races.forEach(r => { 
-          const d = formatDate(getVal(r, '日期')); 
-          if (d) { eventMap[d] = r; allDatesWithData.push(d); } 
-      });
-
-      let dailyExpenseMap = {};
-      if (currentFilter === '全部') {
-          (dbData['帳務明細']||[]).forEach(b => { 
-              const d = formatDate(getVal(b, '日期')); 
-              if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
-          });
-      }
-
-      // 強制產生該年份 1 到 12 月的所有 Key
-    let monthKeysToRender = [];
-    for (let i = 1; i <= 12; i++) {
-        monthKeysToRender.push(`${displayYear}-${String(i).padStart(2, '0')}`);
-    }
+    const container = document.getElementById('calendar-container'); 
+    container.innerHTML = '';
+    const now = new Date(); 
+    const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     
-    let hasRenderedAny = false;
+    let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+    
+    let eventMap = {};
+    races.forEach(r => {
+        const d = formatDate(getVal(r, '日期'));
+        if (d) { eventMap[d] = r; }
+    });
+
+    let dailyExpenseMap = {};
+    if (currentFilter === '全部') {
+        (dbData['帳務明細']||[]).forEach(b => {
+            const d = formatDate(getVal(b, '日期'));
+            if (d) { dailyExpenseMap[d] = true; }
+        });
+    }
+
+    // 🎯 修正：強制產生從本月開始的未來 12 個月序列
+    let monthKeysToRender = [];
+    if (selectedMonthFilter) {
+        // 如果使用者有手動點選月份，就只顯示那個月
+        monthKeysToRender = [selectedMonthFilter];
+    } else {
+        // 預設顯示未來 12 個月
+        for (let i = 0; i < 12; i++) {
+            const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+            monthKeysToRender.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
+        }
+    }
 
     monthKeysToRender.forEach(mKey => {
-      let shouldShow = false;
-      if (selectedMonthFilter) {
-          // 如果有選特定月份，就只顯示該月
-          shouldShow = (mKey === selectedMonthFilter);
-      } else {
-          // 如果沒選，就顯示該年份所有的月份
-          shouldShow = true;
-      }
+      const [y, m] = mKey.split('-');
+      const section = document.createElement('div'); 
+      section.className = 'month-section';
+      section.id = 'month-section-' + mKey;
       
-      if (!shouldShow) return;
-      hasRenderedAny = true;
-          
-          const [y, m] = mKey.split('-');
-          const section = document.createElement('div'); 
-          section.className = 'month-section'; 
-          section.id = 'month-section-' + mKey;
-          
-          section.innerHTML = `
-              <div class="month-title">${y}年${m}月</div>
-              <div class="calendar-header">
-                  ${['日','一','二','三','四','五','六'].map(d => `<div class="weekday-header">${d}</div>`).join('')}
-              </div>
-          `;
-          
-          const grid = document.createElement('div'); 
-          grid.className = 'calendar-grid';
-          
-          const firstDay = new Date(y, m-1, 1).getDay(); 
-          const lastDate = new Date(y, m, 0).getDate();
-          
-          for (let i = 0; i < firstDay; i++) { grid.appendChild(document.createElement('div')); }
-          
-          for (let d = 1; d <= lastDate; d++) {
-              const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
-              const cell = document.createElement('div'); 
-              cell.className = 'day'; 
-              cell.innerHTML = `<span class="day-number">${d}</span>`;
-              
-              const event = eventMap[dStr]; 
-              const hasDailyExpense = dailyExpenseMap[dStr];
-              
-              if (event) {
+      section.innerHTML = `
+      <div class="month-title">${y}年${m}月</div>
+      <div class="calendar-header">
+          ${['日','一','二','三','四','五','六'].map(d => `<div class="weekday-header">${d}</div>`).join('')}
+      </div>`;
+      
+      const grid = document.createElement('div'); 
+      grid.className = 'calendar-grid';
+      const firstDay = new Date(y, m-1, 1).getDay();
+      const lastDate = new Date(y, m, 0).getDate();
+      
+      for (let i = 0; i < firstDay; i++) { grid.appendChild(document.createElement('div')); }
+      
+      for (let d = 1; d <= lastDate; d++) {
+        const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
+        const cell = document.createElement('div'); 
+        cell.className = 'day'; 
+        cell.innerHTML = `<span class="day-number">${d}</span>`;
+        
+        const event = eventMap[dStr];
+        const hasDailyExpense = dailyExpenseMap[dStr];
+        
+        if (event) {
           const cat = getVal(event, '行程類別'); 
           cell.classList.add('has-event');
           const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
@@ -1050,19 +1060,14 @@
           cell.onclick = () => handleDayClick(event, cell, grid, dStr);
         } else {
           if (hasDailyExpense) cell.classList.add('has-expense');
-          // 無論有沒有行程，點擊日期都能看到當天資訊，方便規劃
+          // 無行程的日子也開放點擊，方便查看日期與規劃
           cell.onclick = () => handleDayClick(null, cell, grid, dStr);
         }
-              grid.appendChild(cell);
-          }
-          
-          section.appendChild(grid); 
-          container.appendChild(section);
-      });
-
-      if (!hasRenderedAny) {
-          container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">此區間目前沒有排定行程<br><span style="font-size:13px; font-weight:normal;">請切換上方「年份」或「月份」查看</span></div>';
+        grid.appendChild(cell);
       }
+      section.appendChild(grid); 
+      container.appendChild(section);
+    });
   }
 
   function renderList() {
