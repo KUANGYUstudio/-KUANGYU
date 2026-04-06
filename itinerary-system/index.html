@@ -135,12 +135,18 @@
         color: #fff; 
     }
 
-    .view-switcher { display: flex; gap: 4px; }
+    .view-switcher { 
+        display: flex; 
+        gap: 4px; 
+        background: #f0f0f0; 
+        padding: 4px; 
+        border-radius: 20px;
+    }
     
     .view-btn { 
         border: none; 
         padding: 6px 14px; 
-        border-radius: 17px; 
+        border-radius: 16px; 
         cursor: pointer; 
         font-size: 12px; 
         font-weight: bold; 
@@ -196,6 +202,14 @@
     .info-title { font-weight: bold; font-size: 14px; color: var(--text-sub); margin-bottom: 10px; display: flex; align-items: center; }
     .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; background: #eceff1;}
     
+    /* 區塊專屬主題色 */
+    .title-race::before { background: #64b5f6; }
+    .card-race { border-left-color: #64b5f6 !important; }
+    .title-stay::before { background: #ffb74d; }
+    .card-stay { border-left-color: #ffb74d !important; }
+    .title-trans::before { background: #81c784; }
+    .card-trans { border-left-color: #81c784 !important; }
+
     .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; border-left: 5px solid #eceff1; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
     .info-row { display: flex; gap: 12px; margin-bottom: 8px; }
     .info-row > span:first-child { color: #7f8c8d; min-width: 70px; font-weight: 500;}
@@ -203,6 +217,31 @@
     
     .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #f5f5f5; padding-top: 10px; margin-top: 10px; }
     .price-tag { color: var(--settle-pink); font-weight: 800; font-size: 16px; }
+
+    /* 付款狀態標籤 */
+    .status-tag {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-left: 8px;
+        display: inline-block;
+    }
+    .status-paid { background: #e8f5e9; color: #2e7d32; }
+    .status-onsite { background: #f5f5f5; color: #616161; }
+    .status-unpaid { background: #ffebee; color: #c62828; }
+
+    /* 行程結算區塊 */
+    .event-settle-card {
+        border: 1.5px solid var(--settle-pink);
+        border-radius: 12px;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: #fff;
+        margin-top: 15px;
+    }
 
     /* 管理模式按鈕 */
     .edit-controls { display: none; gap: 12px; margin-top: 12px; justify-content: flex-end; border-top: 1px dashed #f0f0f0; padding-top: 12px; }
@@ -425,13 +464,12 @@
       }
   }
 
-  // --- 高質感刪除視窗邏輯 ---
   function showConfirmDelete(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
       deleteTargetSheet = sheetName;
       deleteTargetRowIndex = rowIndex;
       
-      document.getElementById('confirm-desc').innerHTML = `確定要刪除這筆【${sheetName}】資料嗎？<br><span style="color:#e53935; font-size:12px;">(⚠️ 刪除後無法復原)</span>`;
+      document.getElementById('confirm-desc').innerHTML = `確定要刪除這筆【${sheetName}】資料嗎？<br><span style="color:#e53935; font-size:12px;">( 刪除後無法復原)</span>`;
       document.getElementById('confirm-modal').style.display = 'flex';
   }
 
@@ -461,7 +499,6 @@
       }
   }
 
-  // --- 萬用編輯表單邏輯 ---
   function openEditModal(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
       const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
@@ -537,7 +574,6 @@
       }
   }
 
-  // --- 核心資料處理與顯示邏輯 ---
   function getVal(obj, key) { 
       if(!obj) return ""; 
       const exactKey = Object.keys(obj).find(k => k.trim() === key);
@@ -870,14 +906,26 @@
       }
   }
 
-  function renderPriceRow(label, val, payer, method) {
+  // 修改了渲染價錢列表的函式，加入狀態判斷與樣式
+  function renderPriceRow(label, val, payer, method, state) {
       if(!hasVal(val) && !hasVal(payer)) return '';
       let p = payer || '-', m = method || '-';
       let pm = (m === undefined || !hasVal(m)) ? p : (p==='-' && m==='-' ? '-' : `${p} / ${m}`);
+
+      let stateHtml = '';
+      if (state) {
+          if (state === '已付') stateHtml = `<span class="status-tag status-paid">已付</span>`;
+          else if (state === '現場付') stateHtml = `<span class="status-tag status-onsite">現場付</span>`;
+          else if (state === '未付') stateHtml = `<span class="status-tag status-unpaid">未付</span>`;
+          else stateHtml = `<span class="status-tag status-onsite">${state}</span>`;
+      }
+
       return `
           <div class="price-row">
               <div><span style="color:#7f8c8d;">${label}</span> <span class="price-tag">$${val || 0}</span></div>
-              <div style="font-size:12px;color:#888;">${pm}</div>
+              <div style="font-size:12px;color:#888;display:flex;align-items:center;">
+                  ${pm} ${stateHtml}
+              </div>
           </div>
       `;
   }
@@ -1175,7 +1223,7 @@
       `;
       
       html += `
-          <div class="view-switcher" style="margin-bottom: 20px; width: fit-content; background: #f0f0f0;">
+          <div class="view-switcher" style="margin-bottom: 20px; width: fit-content;">
               <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
               <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
           </div>
@@ -1187,7 +1235,8 @@
       if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
       if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
       
-      html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'));
+      // 加入狀態參數
+      html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'));
       
       if(getVal(event,'備註')) {
           html += `<div style="margin-top:12px; font-size:13px; color:#666; border-top: 1px dashed #ddd; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
@@ -1209,7 +1258,8 @@
               if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房時間</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
               if(getVal(s,'訂房平台')) html += `<div class="info-row"><span>平台</span><span>${getVal(s,'訂房平台')}</span></div>`;
               
-              html += renderPriceRow('費用', getVal(s,'費用'), getVal(s,'付款人'), getVal(s,'付款方式'));
+              // 加入狀態參數
+              html += renderPriceRow('費用', getVal(s,'費用'), getVal(s,'付款人'), getVal(s,'付款方式'), getVal(s,'狀態'));
               
               if(getVal(s,'備註')) html += `<div style="margin-top:8px; font-size:12px; color:#666;">備註：${getVal(s,'備註')}</div>`;
               
@@ -1251,7 +1301,8 @@
               if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
               if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
               
-              html += renderPriceRow('費用', getVal(t,'票價或油資'), getVal(t,'付款人'), getVal(t,'付款方式'));
+              // 加入狀態參數
+              html += renderPriceRow('費用', getVal(t,'票價或油資'), getVal(t,'付款人'), getVal(t,'付款方式'), getVal(t,'狀態'));
               
               html += `
                   <div class="edit-controls">
@@ -1267,8 +1318,8 @@
       html += `
           <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
               <div class="event-settle-card">
-                  <div style="font-weight:bold; color:var(--settle-pink); font-size:13px;">本場行程結算</div>
-                  <div style="font-size:20px; font-weight:900; color:var(--settle-pink);">$${calculateEventTotal(code).toLocaleString()}</div>
+                  <div style="font-weight:bold; color:var(--settle-pink); font-size:14px;">本場行程結算</div>
+                  <div style="font-size:18px; font-weight:900; color:var(--settle-pink);">$${calculateEventTotal(code).toLocaleString()}</div>
               </div>
           </div>
       </div>`;
