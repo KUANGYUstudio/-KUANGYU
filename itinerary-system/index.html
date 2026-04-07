@@ -140,6 +140,7 @@
         transition: 0.2s; 
     }
     
+    /* 🎯 統一改為深灰色活動狀態 */
     .acc-toggle-btn.active { 
         background: var(--nav-active); 
         color: #fff; 
@@ -498,6 +499,16 @@
       </div>
   </div>
 
+  <div id="info-modal" class="modal-overlay" style="z-index: 9998;">
+      <div class="modal-content" style="max-width: 500px; text-align: left; max-height: 85vh; padding: 0; display: flex; flex-direction: column; overflow: hidden; background: #fcfcfc;">
+          <div style="padding: 15px 20px; background: #fff; z-index: 10; flex-shrink: 0; border-radius: 28px 28px 0 0; border-bottom: 1px solid #eceff1; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; color: var(--brand-main); font-size: 16px;">行程詳細資訊</span>
+              <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeInfoModal()">×</span>
+          </div>
+          <div id="info-modal-body" style="flex: 1; overflow-y: auto; padding: 20px;"></div>
+      </div>
+  </div>
+
   <div id="edit-modal" class="modal-overlay">
       <div class="modal-content" style="max-width: 400px; text-align: left; padding: 25px;">
           <h3 style="margin:0 0 20px 0; color:var(--brand-main); display: flex; justify-content: space-between; align-items: center;">
@@ -829,9 +840,9 @@
       
       let textArr = [getVal(r, '行程代碼'), getVal(r, '行程名稱'), getVal(r, '備註'), getVal(r, '聿凡項目'), getVal(r, '光武項目')];
       
-      ((dbData['住宿']||[])).filter(s=>getVal(s,'行程代碼')===code).forEach(s => textArr.push(getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註')));
-      ((dbData['交通']||[])).filter(t=>getVal(t,'行程代碼')===code).forEach(t => textArr.push(getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'類型'), getVal(t,'備註')));
-      ((dbData['帳務明細']||[])).filter(b=>getVal(b,'行程代碼')===code).forEach(b => textArr.push(getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')));
+      (dbData['住宿']||[]).filter(s=>getVal(s,'行程代碼')===code).forEach(s => textArr.push(getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註')));
+      (dbData['交通']||[]).filter(t=>getVal(t,'行程代碼')===code).forEach(t => textArr.push(getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'類型'), getVal(t,'備註')));
+      (dbData['帳務明細']||[]).filter(b=>getVal(b,'行程代碼')===code).forEach(b => textArr.push(getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')));
 
       return textArr.join(' ||| ').toLowerCase().includes(q);
   }
@@ -931,8 +942,8 @@
           let inputHtml = '';
           
           let displayH = h;
-          if(h === '行程名稱') displayH = '行程名&#8203;稱';
-          if(h === '飯店名稱') displayH = '飯店名&#8203;稱';
+          if(h === '行程名稱') displayH = '行程名\u200B稱';
+          if(h === '飯店名稱') displayH = '飯店名\u200B稱';
           if(h === '日期' && sheetName === '行程') displayH = '開始日期';
           if(h === '結束日期') displayH = '結束日期 <span style="color:#b0bec5; font-weight:normal;">(單日免填)</span>';
           
@@ -976,7 +987,7 @@
 
       if (sheetName === '行程' && htmlBlocks.length > 12) {
           let endDateBlock = htmlBlocks.splice(12, 1)[0];
-          htmlBlocks.splice(4, 0, endDateBlock); 
+          htmlBlocks.splice(4, 0, endDateBlock); // 將結束日期插入在開始日期之後
       }
 
       formBody.innerHTML = htmlBlocks.join('');
@@ -1179,49 +1190,24 @@
       panel.querySelector('#' + tabId).style.display = 'block';
   }
 
-  function switchView(view) {
-      resetAllNavStates();
-      currentView = view;
-      document.getElementById('btn-' + view).classList.add('active');
-      document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
-      document.getElementById(view + '-view').classList.add('active');
-      closeCurrentPanel();
-      renderMain();
-  }
-
-  function renderMain() { 
-      renderMonthNav(); 
-      if (currentView === 'cal') { renderCalendar(); } else { renderList(); }
-  }
-
-  // 🎯 修正盲點：時空跳躍改為用行程的「主日期」來定位，不再迷路
-  function jumpToEvent(code, eventDateStr) {
+  // 🎯 點擊帳務明細時，觸發專屬行程彈窗，並正確接收主行程的日期
+  function openInfoModalFromAcc(code, eventDateStr) {
       if(!eventDateStr) return;
-      
-      switchView('cal'); 
       isFromAccPanel = true; 
-      
-      displayYear = parseInt(eventDateStr.substring(0, 4));
-      selectedMonthFilter = eventDateStr.substring(0, 7);
-      renderMain();
+      const event = (dbData['行程'] || []).find(r => getVal(r, '行程代碼') === code);
+      const modalBody = document.getElementById('info-modal-body');
+      // 用主行程日期 (eventDateStr) 去生成面板，不會再找錯天！
+      modalBody.innerHTML = generateDetailHTML(event, eventDateStr);
+      document.getElementById('info-modal').style.display = 'flex';
+  }
 
-      setTimeout(() => {
-          const cells = document.querySelectorAll('.day');
-          for(let cell of cells) {
-              if(cell.dataset.date === eventDateStr) {
-                  cell.click();
-                  setTimeout(() => {
-                      cell.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  }, 100);
-                  break;
-              }
-          }
-      }, 50);
+  function closeInfoModal() {
+      document.getElementById('info-modal').style.display = 'none';
+      isFromAccPanel = false;
   }
 
   function returnToAccPanel() {
-      closeCurrentPanel(); 
-      toggleAccPanel();
+      closeInfoModal(); 
   }
 
   function calculateAccounting() {
@@ -1245,7 +1231,7 @@
           const rName = getVal(r, '行程名稱');
           
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          // 🎯 將所有子花費的 eventDate 統一綁定為該行程的「主日期 rDate」
+          // 🎯 綁定主行程日期 rDate，這是防止迷路的定海神針
           if (regFee > 0) allExpenses.push({ date: rDate, eventDate: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code });
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
@@ -1390,7 +1376,7 @@
       }
       items.forEach(item => { 
           listContainer.innerHTML += `
-              <div class="acc-detail-item" onclick="jumpToEvent('${item.code}', '${item.eventDate}')">
+              <div class="acc-detail-item" onclick="openInfoModalFromAcc('${item.code}', '${item.eventDate}')">
                   <div class="acc-detail-name">${item.name}</div>
                   <div class="acc-detail-amount">$${item.amount.toLocaleString()}</div>
               </div>`; 
@@ -1439,14 +1425,7 @@
       let races = (dbData['行程'] || []).filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
       
-      if (currentFilter === '全部') { 
-          (dbData['帳務明細']||[]).forEach(b => { 
-              if (!getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery)) {
-                  const bDate = formatDate(getVal(b, '日期')); 
-                  if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); 
-              }
-          }); 
-      }
+      // 🎯 清單隱藏日常帳單，所以月份導航也只抓行程的月份
       
       const uniqueMonthKeysWithData = [...new Set(monthKeysWithData)].sort();
       let uniqueYears = [...new Set(uniqueMonthKeysWithData.map(k => parseInt(k.substring(0, 4))))].sort((a, b) => a - b);
