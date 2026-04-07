@@ -435,7 +435,12 @@
             <div class="nav-wrapper">
                 <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
                 <div class="center-nav">
-                    <button id="search-toggle-btn" class="acc-toggle-btn" style="color:#78909c;" onclick="toggleSearchArea()">🔍</button>
+                    <button id="search-toggle-btn" class="acc-toggle-btn" style="color:#78909c; display:flex; align-items:center; justify-content:center;" onclick="toggleSearchArea()">
+                        <svg width="20" height="20" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="42" cy="42" r="30"></circle>
+                            <line x1="64" y1="64" x2="90" y2="90"></line>
+                        </svg>
+                    </button>
                     <button id="acc-panel-btn" class="acc-toggle-btn" onclick="toggleAccPanel()">$</button>
                     <div class="view-switcher" style="padding: 0; border-radius: 20px;">
                         <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
@@ -448,7 +453,12 @@
         
         <div id="search-dropdown" class="search-dropdown-area">
             <div class="ios-search-bar">
-                <span class="ios-search-icon">🔍</span>
+                <span class="ios-search-icon" style="display: flex; align-items: center;">
+                    <svg width="16" height="16" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="42" cy="42" r="30"></circle>
+                        <line x1="64" y1="64" x2="90" y2="90"></line>
+                    </svg>
+                </span>
                 <input type="text" id="main-search-input" class="ios-search-input" placeholder="搜尋行程、住宿、航班或帳務..." oninput="handleSearch(this.value)" autocomplete="nope" autocorrect="off" spellcheck="false">
                 <button id="search-clear-btn" class="ios-search-clear" onclick="clearSearch()">✖</button>
             </div>
