@@ -381,10 +381,71 @@
         box-shadow: 0 4px 10px rgba(0,0,0,0.06);
         transform: translateY(-2px);
     }
+
+    /* =========================================
+       新增功能專屬 UI (懸浮按鈕與彈窗表單)
+       ========================================= */
+    /* 1. 右下角懸浮新增按鈕 (FAB) */
+    .fab-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--brand-main);
+        color: #fff;
+        border: none;
+        font-size: 36px;
+        font-weight: 300;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+        cursor: pointer;
+        z-index: 999;
+        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        line-height: 1;
+        padding-bottom: 4px; /* 微調加號的視覺置中 */
+    }
+    .fab-btn:hover {
+        transform: scale(1.1) rotate(90deg); /* 滑過時放大並轉一圈 */
+        background: var(--nav-active);
+    }
+
+    /* 2. 新增表單的切換分頁按鈕 */
+    .admin-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 20px; }
+    .admin-tab-btn { padding: 12px; background: #eceff1; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: bold; color: #7f8c8d; transition: 0.3s; }
+    .admin-tab-btn.active { background: var(--brand-main); color: #fff; box-shadow: 0 4px 10px rgba(44,62,80,0.2); }
+    
+    /* 3. 表單區塊顯示動畫 */
+    .admin-form-section { display: none; }
+    .admin-form-section.active { display: block; animation: slideUp 0.4s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 4. 輸入框與群組樣式 */
+    .admin-input-group { margin-bottom: 18px; text-align: left; }
+    .admin-input-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: var(--text-sub); padding-left: 3px; }
+    .admin-input-group input, .admin-input-group select {
+        width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px;
+        font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s;
+        background: #fcfcfc; font-family: inherit; min-height: 52px; color: var(--text-main);
+    }
+    .admin-input-group input[type="date"] { -webkit-appearance: none; appearance: none; display: block; }
+    .admin-input-group input:focus, .admin-input-group select:focus { border-color: var(--nav-active); background: #fff; box-shadow: 0 0 0 3px rgba(84, 110, 122, 0.1); }
+
+    .admin-group-box { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #eceff1; margin-bottom: 18px; }
+    .admin-group-title { font-weight: bold; color: var(--text-sub); margin-bottom: 12px; font-size: 14px; border-left: 4px solid var(--settle-pink); padding-left: 8px; }
+
+    /* 5. 儲存按鈕 */
+    .admin-submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--nav-active); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 5px; transition: 0.2s; }
+    .admin-submit-btn:active { transform: scale(0.98); }
     
   </style>
 </head>
 <body>
+
+  <button id="fab-add-btn" class="fab-btn" onclick="openAddModal()">+</button>
 
   <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
 
