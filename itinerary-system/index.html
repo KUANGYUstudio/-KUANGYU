@@ -980,40 +980,50 @@
       const now = new Date(); 
       const currentYear = now.getFullYear();
       const currentMonth = now.getMonth() + 1; // 1-12
+      const currentMonthKey = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
       
       let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
       
       let eventMap = {}; 
+      let allDatesWithData = []; // 為了特定類別篩選，我們把儲存日期的陣列加回來
       races.forEach(r => { 
           const d = formatDate(getVal(r, '日期')); 
-          if (d) { eventMap[d] = r; } 
+          if (d) { eventMap[d] = r; allDatesWithData.push(d); } 
       });
 
       let dailyExpenseMap = {};
       if (currentFilter === '全部') {
           (dbData['帳務明細']||[]).forEach(b => { 
               const d = formatDate(getVal(b, '日期')); 
-              if (d) { dailyExpenseMap[d] = true; } 
+              if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
           });
       }
 
-      // --- 修改邏輯開始：建立未來 12 個月的清單 ---
+      // --- 核心修改邏輯開始：根據篩選器決定要畫出哪些月份 ---
       let monthKeysToRender = [];
       if (selectedMonthFilter) {
-          // 如果使用者在導覽列點選了特定月份，只顯示該月
+          // 1. 如果有在上方點選特定月份，就只顯示那個月
           monthKeysToRender = [selectedMonthFilter];
-      } else {
-          // 否則顯示從「當月」開始的未來 12 個月
+      } else if (currentFilter === '全部') {
+          // 2. 如果是看「全部」，強制生成未來 12 個月的日曆
           for (let i = 0; i < 12; i++) {
               let targetDate = new Date(currentYear, currentMonth - 1 + i, 1);
               let y = targetDate.getFullYear();
               let m = String(targetDate.getMonth() + 1).padStart(2, '0');
               monthKeysToRender.push(`${y}-${m}`);
           }
+      } else {
+          // 3. 如果選了特定類別 (例如鐵人)，只抓出該類別「有資料的月份」
+          const uniqueMonths = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
+          // 過濾掉過去的歷史月份，預設只顯示從本月開始的未來行程
+          monthKeysToRender = uniqueMonths.filter(mKey => mKey >= currentMonthKey);
       }
-      // --- 修改邏輯結束 ---
+      // --- 核心修改邏輯結束 ---
+
+      let hasRenderedAny = false;
 
       monthKeysToRender.forEach(mKey => {
+          hasRenderedAny = true;
           const [y, m] = mKey.split('-');
           const section = document.createElement('div'); 
           section.className = 'month-section'; 
@@ -1060,6 +1070,11 @@
           section.appendChild(grid); 
           container.appendChild(section);
       });
+
+      // 防呆機制：如果這個類別完全沒有未來的行程，顯示提示文字
+      if (!hasRenderedAny) {
+          container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">此區間目前沒有排定行程<br><span style="font-size:13px; font-weight:normal;">請切換上方「年份」或「月份」查看</span></div>';
+      }
   }
 
   function renderList() {
