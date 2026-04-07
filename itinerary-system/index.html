@@ -141,7 +141,7 @@
     }
     
     .acc-toggle-btn.active { 
-        background: var(--nav-active); /* 統一四按鈕為深灰色活動狀態 */
+        background: var(--nav-active); 
         color: #fff; 
     }
 
@@ -829,9 +829,9 @@
       
       let textArr = [getVal(r, '行程代碼'), getVal(r, '行程名稱'), getVal(r, '備註'), getVal(r, '聿凡項目'), getVal(r, '光武項目')];
       
-      (dbData['住宿']||[]).filter(s=>getVal(s,'行程代碼')===code).forEach(s => textArr.push(getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註')));
-      (dbData['交通']||[]).filter(t=>getVal(t,'行程代碼')===code).forEach(t => textArr.push(getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'類型'), getVal(t,'備註')));
-      (dbData['帳務明細']||[]).filter(b=>getVal(b,'行程代碼')===code).forEach(b => textArr.push(getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')));
+      ((dbData['住宿']||[])).filter(s=>getVal(s,'行程代碼')===code).forEach(s => textArr.push(getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註')));
+      ((dbData['交通']||[])).filter(t=>getVal(t,'行程代碼')===code).forEach(t => textArr.push(getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'類型'), getVal(t,'備註')));
+      ((dbData['帳務明細']||[])).filter(b=>getVal(b,'行程代碼')===code).forEach(b => textArr.push(getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')));
 
       return textArr.join(' ||| ').toLowerCase().includes(q);
   }
@@ -909,7 +909,7 @@
       const targetInput = document.getElementById(targetInputId);
       if (!targetInput || targetInput.value) return; 
 
-      const event = dbData['行程'].find(r => getVal(r, '行程代碼') === eventCode);
+      const event = (dbData['行程'] || []).find(r => getVal(r, '行程代碼') === eventCode);
       if (event) {
           const dateVal = formatDate(getVal(event, '日期'));
           if (dateVal) targetInput.value = dateVal;
@@ -919,7 +919,7 @@
   // 🎯 升級 1：編輯表單時，把結束日期安插在開始日期下面
   function openEditModal(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
-      const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
+      const rowData = (dbData[sheetName] || []).find(r => r['_rowIndex'] === rowIndex);
       if(!rowData) return;
 
       const headers = sheetHeaders[sheetName];
@@ -931,8 +931,8 @@
           let inputHtml = '';
           
           let displayH = h;
-          if(h === '行程名稱') displayH = '行程名\u200B稱';
-          if(h === '飯店名稱') displayH = '飯店名\u200B稱';
+          if(h === '行程名稱') displayH = '行程名&#8203;稱';
+          if(h === '飯店名稱') displayH = '飯店名&#8203;稱';
           if(h === '日期' && sheetName === '行程') displayH = '開始日期';
           if(h === '結束日期') displayH = '結束日期 <span style="color:#b0bec5; font-weight:normal;">(單日免填)</span>';
           
@@ -976,7 +976,7 @@
 
       if (sheetName === '行程' && htmlBlocks.length > 12) {
           let endDateBlock = htmlBlocks.splice(12, 1)[0];
-          htmlBlocks.splice(4, 0, endDateBlock); // 將結束日期插入在開始日期之後
+          htmlBlocks.splice(4, 0, endDateBlock); 
       }
 
       formBody.innerHTML = htmlBlocks.join('');
@@ -1179,7 +1179,22 @@
       panel.querySelector('#' + tabId).style.display = 'block';
   }
 
-  // 🎯 統整跳轉邏輯，利用主行程日期找路
+  function switchView(view) {
+      resetAllNavStates();
+      currentView = view;
+      document.getElementById('btn-' + view).classList.add('active');
+      document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
+      document.getElementById(view + '-view').classList.add('active');
+      closeCurrentPanel();
+      renderMain();
+  }
+
+  function renderMain() { 
+      renderMonthNav(); 
+      if (currentView === 'cal') { renderCalendar(); } else { renderList(); }
+  }
+
+  // 🎯 修正盲點：時空跳躍改為用行程的「主日期」來定位，不再迷路
   function jumpToEvent(code, eventDateStr) {
       if(!eventDateStr) return;
       
@@ -1211,7 +1226,7 @@
 
   function calculateAccounting() {
       let allExpenses = [];
-      const races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter));
+      const races = (dbData['行程'] || []).filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter));
 
       const expensesByCode = { '住宿': {}, '交通': {}, '帳務明細': {} };
       ['住宿', '交通', '帳務明細'].forEach(sheet => {
@@ -1230,17 +1245,16 @@
           const rName = getVal(r, '行程名稱');
           
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
+          // 🎯 將所有子花費的 eventDate 統一綁定為該行程的「主日期 rDate」
           if (regFee > 0) allExpenses.push({ date: rDate, eventDate: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code });
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
               const fee = parseFloat(getVal(s,'費用')) || 0;
-              // 🎯 確實綁定主行程日期 rDate
               if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, eventDate: rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || rName, searchStr: [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code: code });
           });
           
           (expensesByCode['交通'][code] || []).forEach(t => {
               const fee = parseFloat(getVal(t,'票價或油資')) || 0;
-              // 🎯 確實綁定主行程日期 rDate
               if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, eventDate: rDate, category: '交通', amount: fee, name: getVal(t,'類型') || rName, searchStr: [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code: code });
           });
           
@@ -1287,6 +1301,7 @@
           if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
           categoryTotals[cat] += e.amount;
           grandTotal += e.amount;
+          // 🎯 傳遞正確的 eventDate 給清單產生器
           accDetailsData[cat].push({ name: e.name, amount: e.amount, code: e.code, eventDate: e.eventDate });
       });
 
@@ -1384,7 +1399,7 @@
 
   function calculateEventTotal(code) {
       let sum = 0; 
-      const race = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
+      const race = (dbData['行程'] || []).find(r => getVal(r, '行程代碼') === code);
       if (race) sum += parseFloat(getVal(race, '報名費總額')) || 0;
       
       (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code).forEach(s => sum += parseFloat(getVal(s, '費用')) || 0);
@@ -1396,7 +1411,7 @@
 
   function renderFilters() {
       const bar = document.getElementById('filter-bar');
-      const cats = ['全部', ...new Set(dbData['行程'].map(r => getVal(r, '行程類別')).filter(c => c))];
+      const cats = ['全部', ...new Set((dbData['行程'] || []).map(r => getVal(r, '行程類別')).filter(c => c))];
       bar.innerHTML = '';
       
       cats.forEach(c => {
@@ -1421,10 +1436,17 @@
       const currentM = now.getMonth() + 1;
       const currentMonthKey = `${currentY}-${String(currentM).padStart(2, '0')}`;
       
-      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
+      let races = (dbData['行程'] || []).filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
       
-      // 🎯 隱藏清單的「日常帳單」，所以月份導航也不用算入孤立帳單了
+      if (currentFilter === '全部') { 
+          (dbData['帳務明細']||[]).forEach(b => { 
+              if (!getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery)) {
+                  const bDate = formatDate(getVal(b, '日期')); 
+                  if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); 
+              }
+          }); 
+      }
       
       const uniqueMonthKeysWithData = [...new Set(monthKeysWithData)].sort();
       let uniqueYears = [...new Set(uniqueMonthKeysWithData.map(k => parseInt(k.substring(0, 4))))].sort((a, b) => a - b);
@@ -1500,17 +1522,17 @@
       `;
   }
 
-  // 🎯 升級 2：日曆支援跨日區間
+  // 🎯 升級 2：日曆跨日顏色支援
   function renderCalendar() {
       const container = document.getElementById('calendar-container'); 
       container.innerHTML = '';
       
       const now = new Date(); 
       const currentYear = now.getFullYear();
-      const currentMonth = now.getMonth() + 1; // 1-12
+      const currentMonth = now.getMonth() + 1; 
       const currentMonthKey = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
       
-      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
+      let races = (dbData['行程'] || []).filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       
       let eventMap = {}; 
       let allDatesWithData = []; 
@@ -1523,7 +1545,7 @@
           let end = new Date(eDateStr);
           let loopCount = 0;
           
-          while(cur <= end && loopCount < 30) { // 避免填錯日期造成無限迴圈
+          while(cur <= end && loopCount < 30) { 
               const dStr = formatDate(cur);
               if (dStr) {
                   eventMap[dStr] = r; 
@@ -1616,14 +1638,14 @@
       }
   }
 
-  // 🎯 升級 3：移除日常帳務，並處理跨日顯示
+  // 🎯 升級 3：移除清單的日常帳務，並處理跨日顯示
   function renderList() {
       const container = document.getElementById('list-container'); 
       container.innerHTML = '';
       
       let listItems = [];
 
-      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
+      let races = (dbData['行程'] || []).filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       races.forEach(r => {
           const sDateStr = formatDate(getVal(r, '日期'));
           if (!sDateStr) return;
@@ -1681,9 +1703,8 @@
           const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${item.cat}`).trim();
           domItem.style.borderLeftColor = pastelColor || '#cfd8dc';
           
-          const titleHtml = item.isEvent ? item.title : `📝 ${item.title}`;
+          const titleHtml = item.title;
           
-          // 處理跨日顯示
           let dateHtml = `<span class="d">${item.dateObj.getDate()}</span>`;
           if (item.dateStr !== item.endDateStr && item.endDateStr) {
               const eDate = new Date(item.endDateStr);
@@ -1829,7 +1850,6 @@
   function generateDetailHTML(event, dateStr) {
       let backBtnHtml = '';
       if (isFromAccPanel) {
-          // 🎯 調整返回按鈕位置
           backBtnHtml = `
           <div style="margin-bottom: 15px; margin-top: 15px;">
               <button onclick="returnToAccPanel()" style="background: #fff; border: 1px solid #eceff1; padding: 6px 14px; border-radius: 20px; color: var(--text-sub); font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
