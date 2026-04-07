@@ -460,7 +460,7 @@
               <div class="admin-input-group"><label>行程連結</label><input type="url" id="add-行程-連結"></div>
               <div class="admin-input-group"><label>聿凡項目</label><input type="text" id="add-行程-聿凡"></div>
               <div class="admin-input-group"><label>光武項目</label><input type="text" id="add-行程-光武"></div>
-              <div class="admin-input-group"><label>報名費總額</label><input type="number" id="add-行程-報名費"></div>
+              <div class="admin-input-group"><label>報名費總額</label><input type="number" inputmode="decimal" id="add-行程-報名費"></div>
               <div class="admin-input-group"><label>付款人</label><select id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
               <div class="admin-input-group"><label>付款方式</label><select id="add-行程-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
               <div class="admin-input-group"><label>狀態</label><select id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
@@ -469,7 +469,7 @@
           </div>
 
           <div id="add-form-住宿" class="admin-form-section">
-              <div class="admin-input-group"><label>行程代碼</label><select class="admin-code-selector" id="add-住宿-代碼"></select></div>
+              <div class="admin-input-group"><label>行程代碼</label><select class="admin-code-selector" id="add-住宿-代碼" onchange="autoFillDate(this.value, 'add-住宿-入住日期')"></select></div>
               <div class="admin-input-group"><label>飯店名稱</label><input type="text" id="add-住宿-飯店"></div>
               <div class="admin-group-box">
                   <div class="admin-group-title">入住資訊</div>
@@ -500,7 +500,7 @@
                   </select>
                   <input type="text" id="add-住宿-平台-其他" placeholder="請自行填寫" style="display: none; margin-top: 8px;">
               </div>
-              <div class="admin-input-group"><label>費用</label><input type="number" id="add-住宿-費用"></div>
+              <div class="admin-input-group"><label>費用</label><input type="number" inputmode="decimal" id="add-住宿-費用"></div>
               <div class="admin-input-group"><label>付款人</label><select id="add-住宿-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
               <div class="admin-input-group"><label>付款方式</label><select id="add-住宿-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
               <div class="admin-input-group"><label>狀態</label><select id="add-住宿-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
@@ -526,7 +526,7 @@
           </div>
 
           <div id="add-form-交通" class="admin-form-section">
-              <div class="admin-input-group"><label>行程代碼</label><select class="admin-code-selector" id="add-交通-代碼"></select></div>
+              <div class="admin-input-group"><label>行程代碼</label><select class="admin-code-selector" id="add-交通-代碼" onchange="autoFillDate(this.value, 'add-交通-出發日期')"></select></div>
               <div class="admin-input-group"><label>類型</label><select id="add-交通-類型"><option>自駕</option><option>火車</option><option>飛機</option></select></div>
               <div class="admin-group-box">
                   <div class="admin-group-title">去程資訊</div>
@@ -542,7 +542,7 @@
                   <div class="admin-input-group"><label>回程出發時間</label><input type="text" id="add-交通-回程出發" placeholder="例如 14:30"></div>
                   <div class="admin-input-group" style="margin-bottom: 0;"><label>回程抵達時間</label><input type="text" id="add-交通-回程抵達"></div>
               </div>
-              <div class="admin-input-group"><label>票價或油資</label><input type="number" id="add-交通-費用"></div>
+              <div class="admin-input-group"><label>票價或油資</label><input type="number" inputmode="decimal" id="add-交通-費用"></div>
               <div class="admin-input-group"><label>付款人</label><select id="add-交通-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
               <div class="admin-input-group"><label>付款方式</label><select id="add-交通-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
               <div class="admin-input-group"><label>狀態</label><select id="add-交通-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
@@ -557,7 +557,7 @@
                   <select id="add-帳務-類別"><option>飲食</option><option>交通</option><option>購物</option><option>採買</option><option>娛樂</option><option>其他</option></select>
               </div>
               <div class="admin-input-group"><label>項目</label><input type="text" id="add-帳務-項目" placeholder="例如：晚餐、伴手禮"></div>
-              <div class="admin-input-group"><label>金額</label><input type="number" id="add-帳務-金額"></div>
+              <div class="admin-input-group"><label>金額</label><input type="number" inputmode="decimal" id="add-帳務-金額"></div>
               <div class="admin-input-group"><label>付款方式</label><select id="add-帳務-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
               <div class="admin-input-group"><label>備註</label><input type="text" id="add-帳務-備註" placeholder="可選填"></div>
               <button class="admin-submit-btn" onclick="submitNewData('帳務明細')">確認新增帳務</button>
@@ -604,7 +604,6 @@
       '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註']
   };
 
-  // 🎯 新增了入住時間與退房時間的下拉選項設定
   const selectOptions = {
       '行程類別': ['鐵人','自行車','路跑','游泳','活動','旅遊','移地訓練'],
       '類別': ['飲食','交通','購物','採買','娛樂','其他'],
@@ -713,6 +712,19 @@
       }
   }
 
+  // 🚀 升級 2：自動帶入行程日期的大腦
+  function autoFillDate(eventCode, targetInputId) {
+      if (!eventCode) return;
+      const targetInput = document.getElementById(targetInputId);
+      if (!targetInput || targetInput.value) return; // 如果已經有填了就不覆蓋
+
+      const event = dbData['行程'].find(r => getVal(r, '行程代碼') === eventCode);
+      if (event) {
+          const dateVal = formatDate(getVal(event, '日期'));
+          if (dateVal) targetInput.value = dateVal;
+      }
+  }
+
   function openEditModal(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
       const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
@@ -727,7 +739,6 @@
           let inputHtml = '';
           let labelHtml = `<label>${h}</label>`;
           
-          // 🎯 這裡加入了判斷：如果是時間或平台，我們啟用「有『其他』選項的雙棲選單」
           if(h === '入住時間' || h === '退房時間' || h === '訂房平台') {
               let isCustom = val && val !== '-' && !selectOptions[h].includes(val);
               let selectVal = isCustom ? '其他' : (val || '-');
@@ -748,7 +759,7 @@
               const dVal = formatDate(val);
               inputHtml = `<input type="date" id="edit-field-${idx}" class="edit-input" value="${dVal}">`;
           } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
-              inputHtml = `<input type="number" id="edit-field-${idx}" class="edit-input" value="${val}">`;
+              inputHtml = `<input type="number" inputmode="decimal" id="edit-field-${idx}" class="edit-input" value="${val}">`; // 編輯時也加上數字鍵盤
           } else if(h === '行程代碼') {
               inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
           } else if(h === '含早餐' || h === '充電樁' || h === '待確認') {
@@ -788,7 +799,6 @@
       const rowIndex = parseInt(document.getElementById('edit-rowIndex').value);
       const headers = sheetHeaders[sheetName];
       
-      // 🎯 儲存邏輯也變得更聰明了，會去判斷這個欄位是不是雙棲選單
       const rowData = headers.map((h, idx) => {
           const selectEl = document.getElementById(`edit-field-${idx}-select`);
           if (selectEl) {
@@ -804,6 +814,21 @@
           return el.type === 'checkbox' ? (el.checked ? "V" : "") : el.value;
       });
       
+      // 🚀 升級 3：編輯時的時光倒流防呆
+      if(sheetName === '住宿') {
+          const inDate = new Date(rowData[2]);
+          const outDate = new Date(rowData[4]);
+          if (rowData[2] && rowData[4] && outDate < inDate) {
+              alert("⚠️ 錯誤：退房日期不能早於入住日期喔！"); return;
+          }
+      } else if (sheetName === '交通') {
+          const goDate = new Date(rowData[2]);
+          const backDate = new Date(rowData[6]);
+          if (rowData[2] && rowData[6] && backDate < goDate) {
+              alert("⚠️ 錯誤：回程日期不能早於出發日期喔！"); return;
+          }
+      }
+
       if(sheetName === '帳務明細') {
           if(!rowData[1] || !rowData[4]) { alert("日期與金額不能空白！"); return; }
       } else {
@@ -826,10 +851,6 @@
           document.getElementById('loading').style.display = 'none';
       }
   }
-
-  // =========================================
-  // 新增資料 (Admin 功能整合) 邏輯區塊
-  // =========================================
 
   function openAddModal() {
       const codes = (dbData['行程'] || []).map(r => getVal(r, '行程代碼')).filter(c => c);
@@ -869,7 +890,6 @@
       } else if (sheetName === '住宿') {
           eventCode = document.getElementById('add-住宿-代碼').value;
           
-          // 🎯 擷取住宿的雙棲選單內容
           let checkInTime = document.getElementById('add-住宿-入住時間-select').value;
           if (checkInTime === '其他') checkInTime = document.getElementById('add-住宿-入住時間-其他').value;
           if (checkInTime === '-') checkInTime = '';
@@ -887,9 +907,25 @@
           const isPending = document.getElementById('add-住宿-待確認').checked ? "V" : "";
           
           rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, checkInTime, document.getElementById('add-住宿-退房日期').value, checkOutTime, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, document.getElementById('add-住宿-方式').value, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending];
+      
+          // 🚀 升級 3：新增時的時光倒流防呆
+          const inDate = new Date(document.getElementById('add-住宿-入住日期').value);
+          const outDate = new Date(document.getElementById('add-住宿-退房日期').value);
+          if (document.getElementById('add-住宿-入住日期').value && document.getElementById('add-住宿-退房日期').value && outDate < inDate) {
+              alert("⚠️ 錯誤：退房日期不能早於入住日期喔！"); return;
+          }
+
       } else if (sheetName === '交通') {
           eventCode = document.getElementById('add-交通-代碼').value;
           rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, document.getElementById('add-交通-方式').value, document.getElementById('add-交通-狀態').value];
+      
+          // 🚀 升級 3：新增時的時光倒流防呆
+          const goDate = new Date(document.getElementById('add-交通-出發日期').value);
+          const backDate = new Date(document.getElementById('add-交通-回程日期').value);
+          if (document.getElementById('add-交通-出發日期').value && document.getElementById('add-交通-回程日期').value && backDate < goDate) {
+              alert("⚠️ 錯誤：回程日期不能早於出發日期喔！"); return;
+          }
+
       } else if (sheetName === '帳務明細') {
           eventCode = document.getElementById('add-帳務-代碼').value; 
           rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, document.getElementById('add-帳務-方式').value, document.getElementById('add-帳務-備註').value];
