@@ -434,16 +434,16 @@
             <div class="nav-wrapper">
                 <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
                 <div class="center-nav">
-                    <button id="search-toggle-btn" class="acc-toggle-btn" style="color:#78909c; display:flex; align-items:center; justify-content:center;" onclick="toggleSearchArea()">
+                    <button id="search-toggle-btn" class="acc-toggle-btn" style="color:#78909c; display:flex; align-items:center; justify-content:center;" onclick="switchMainMode('search')">
                         <svg width="20" height="20" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="42" cy="42" r="30"></circle>
                             <line x1="64" y1="64" x2="90" y2="90"></line>
                         </svg>
                     </button>
-                    <button id="acc-panel-btn" class="acc-toggle-btn" onclick="toggleAccPanel()">$</button>
+                    <button id="acc-panel-btn" class="acc-toggle-btn" onclick="switchMainMode('acc')">$</button>
                     <div class="view-switcher" style="padding: 0; border-radius: 20px;">
-                        <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
-                        <button id="btn-list" class="view-btn" onclick="switchView('list')">清單</button>
+                        <button id="btn-cal" class="view-btn active" onclick="switchMainMode('cal')">日曆</button>
+                        <button id="btn-list" class="view-btn" onclick="switchMainMode('list')">清單</button>
                     </div>
                 </div>
                 <button class="tool-btn" onclick="location.reload()">↻</button>
@@ -752,29 +752,64 @@
     }
   }
 
-  function toggleSearchArea() {
-      const area = document.getElementById('search-dropdown');
-      const btn = document.getElementById('search-toggle-btn');
-      if (area.classList.contains('active')) {
-          area.classList.remove('active');
-          btn.classList.remove('active');
-          btn.style.background = '#fff';
-          btn.style.color = '#78909c';
-          clearSearch();
-          document.getElementById('main-search-input').blur();
-      } else {
-          const accPanel = document.getElementById('acc-panel');
-          if (accPanel.style.display === 'block') {
-              accPanel.style.display = 'none';
-              document.getElementById('acc-panel-btn').classList.remove('active');
+  // 🎯 統整 4 個主按鈕互斥邏輯：搜尋、帳務、日曆、清單
+  function switchMainMode(mode) {
+      // 1. 取消所有按鈕的 active 視覺狀態
+      const searchBtn = document.getElementById('search-toggle-btn');
+      searchBtn.classList.remove('active');
+      searchBtn.style.background = '#fff';
+      searchBtn.style.color = '#78909c';
+
+      document.getElementById('acc-panel-btn').classList.remove('active');
+      document.getElementById('btn-cal').classList.remove('active');
+      document.getElementById('btn-list').classList.remove('active');
+
+      // 2. 隱藏所有視窗區域
+      document.getElementById('search-dropdown').classList.remove('active');
+      document.getElementById('acc-panel').style.display = 'none';
+      document.getElementById('cal-view').classList.remove('active');
+      document.getElementById('list-view').classList.remove('active');
+
+      isFromAccPanel = false;
+
+      // 如果切換到其他模式，順便清空搜尋關鍵字
+      if (mode !== 'search') {
+          const input = document.getElementById('main-search-input');
+          if (input.value !== '') {
+              input.value = '';
+              currentSearchQuery = '';
+              document.getElementById('search-clear-btn').style.display = 'none';
           }
+      }
+
+      // 3. 根據選定的模式啟動對應按鈕與視窗
+      if (mode === 'cal') {
+          currentView = 'cal';
+          document.getElementById('btn-cal').classList.add('active');
+          document.getElementById('cal-view').classList.add('active');
+      } else if (mode === 'list') {
+          currentView = 'list';
+          document.getElementById('btn-list').classList.add('active');
+          document.getElementById('list-view').classList.add('active');
+      } else if (mode === 'acc') {
+          document.getElementById('acc-panel-btn').classList.add('active');
+          document.getElementById('acc-panel').style.display = 'block';
+          calculateAccounting();
+      } else if (mode === 'search') {
+          searchBtn.classList.add('active');
+          searchBtn.style.background = '#78909c';
+          searchBtn.style.color = '#fff';
           
-          area.classList.add('active');
-          btn.classList.add('active');
-          btn.style.background = '#78909c';
-          btn.style.color = '#fff';
+          document.getElementById('search-dropdown').classList.add('active');
+          
+          // 搜尋時，下方顯示清單視窗 (但上面按鈕不亮)
+          currentView = 'list';
+          document.getElementById('list-view').classList.add('active');
           setTimeout(() => document.getElementById('main-search-input').focus(), 300);
       }
+
+      closeCurrentPanel();
+      renderMain();
   }
 
   function clearSearch() {
@@ -790,13 +825,6 @@
       
       if (currentSearchQuery.length > 0) {
           clearBtn.style.display = 'flex';
-          if (currentView !== 'list') {
-              document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-              document.getElementById('btn-list').classList.add('active');
-              document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
-              document.getElementById('list-view').classList.add('active');
-              currentView = 'list';
-          }
       } else {
           clearBtn.style.display = 'none';
       }
@@ -914,6 +942,9 @@
       const formBody = document.getElementById('dynamic-edit-form');
       formBody.innerHTML = '';
       
+      // 🎯 用陣列收集生成的 HTML，方便事後調換位置
+      let generatedGroups = [];
+
       headers.forEach((h, idx) => {
           const val = rowData[h] || '';
           let inputHtml = '';
@@ -960,13 +991,29 @@
 
           const groupStyle = labelHtml === '' ? 'margin-bottom: 5px;' : '';
 
-          formBody.innerHTML += `
-              <div class="edit-input-group" style="${groupStyle}">
-                  ${labelHtml}
-                  ${inputHtml}
-              </div>
-          `;
+          generatedGroups.push({
+              idx: idx,
+              html: `
+                  <div class="edit-input-group" style="${groupStyle}">
+                      ${labelHtml}
+                      ${inputHtml}
+                  </div>
+              `
+          });
       });
+
+      // 🎯 把「結束日期」挪到「開始日期」的正下方
+      if (sheetName === '行程') {
+          // 結束日期在 sheetHeaders 是 idx 12，開始日期是 idx 3
+          const endDateGroup = generatedGroups.find(g => g.idx === 12);
+          if (endDateGroup) {
+              generatedGroups = generatedGroups.filter(g => g.idx !== 12);
+              const dateIndex = generatedGroups.findIndex(g => g.idx === 3);
+              generatedGroups.splice(dateIndex + 1, 0, endDateGroup);
+          }
+      }
+
+      formBody.innerHTML = generatedGroups.map(g => g.html).join('');
 
       document.getElementById('edit-sheetName').value = sheetName;
       document.getElementById('edit-rowIndex').value = rowIndex;
@@ -1098,7 +1145,7 @@
           const isPending = document.getElementById('add-住宿-待確認').checked ? "V" : "";
           
           rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, checkInTime, document.getElementById('add-住宿-退房日期').value, checkOutTime, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, document.getElementById('add-住宿-方式').value, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending];
-      
+       
           const inDate = document.getElementById('add-住宿-入住日期').value;
           const outDate = document.getElementById('add-住宿-退房日期').value;
           if (inDate && outDate && inDate > outDate) {
@@ -1108,7 +1155,7 @@
       } else if (sheetName === '交通') {
           eventCode = document.getElementById('add-交通-代碼').value;
           rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, document.getElementById('add-交通-方式').value, document.getElementById('add-交通-狀態').value];
-      
+       
           const goDate = document.getElementById('add-交通-出發日期').value;
           const backDate = document.getElementById('add-交通-回程日期').value;
           if (goDate && backDate && goDate > backDate) {
@@ -1167,54 +1214,16 @@
       panel.querySelector('#' + tabId).style.display = 'block';
   }
 
-  function switchView(view) {
-      currentView = view;
-      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('btn-' + view).classList.add('active');
-      document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
-      document.getElementById(view + '-view').classList.add('active');
-      isFromAccPanel = false; 
-      closeCurrentPanel();
-      renderMain();
-  }
-
   function renderMain() { 
       renderMonthNav(); 
       if (currentView === 'cal') { renderCalendar(); } else { renderList(); }
   }
 
-  function toggleAccPanel() {
-      const panel = document.getElementById('acc-panel');
-      const btn = document.getElementById('acc-panel-btn');
-      const isVisible = panel.style.display === 'block';
-      
-      if (!isVisible) { 
-          const searchArea = document.getElementById('search-dropdown');
-          if (searchArea.classList.contains('active')) {
-              searchArea.classList.remove('active');
-              document.getElementById('search-toggle-btn').classList.remove('active');
-              document.getElementById('search-toggle-btn').style.background = '#fff';
-              document.getElementById('search-toggle-btn').style.color = '#78909c';
-              clearSearch();
-          }
-          
-          btn.classList.add('active'); 
-          calculateAccounting(); 
-      } else { 
-          btn.classList.remove('active'); 
-      }
-      
-      panel.style.display = isVisible ? 'none' : 'block';
-      isFromAccPanel = false; 
-  }
-
-  // 🎯 點擊帳務明細時，觸發專屬行程彈窗，並正確接收主行程的日期
   function openInfoModalFromAcc(code, eventDateStr) {
       if(!eventDateStr) return;
       isFromAccPanel = true; 
       const event = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
       const modalBody = document.getElementById('info-modal-body');
-      // 用主行程日期 (eventDateStr) 去生成面板，不會再找錯天！
       modalBody.innerHTML = generateDetailHTML(event, eventDateStr);
       document.getElementById('info-modal').style.display = 'flex';
   }
@@ -1249,7 +1258,6 @@
           const rName = getVal(r, '行程名稱');
           
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          // 🎯 綁定主行程日期 rDate，這是防止迷路的定海神針
           if (regFee > 0) allExpenses.push({ date: rDate, eventDate: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code });
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
@@ -1305,7 +1313,6 @@
           if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
           categoryTotals[cat] += e.amount;
           grandTotal += e.amount;
-          // 🎯 傳遞正確的 eventDate 給清單產生器
           accDetailsData[cat].push({ name: e.name, amount: e.amount, code: e.code, eventDate: e.eventDate });
       });
 
@@ -1393,7 +1400,6 @@
           return; 
       }
       items.forEach(item => { 
-          // 🎯 把正確的 eventDate 傳進去
           listContainer.innerHTML += `
               <div class="acc-detail-item" onclick="openInfoModalFromAcc('${item.code}', '${item.eventDate}')">
                   <div class="acc-detail-name">${item.name}</div>
@@ -1527,7 +1533,6 @@
       `;
   }
 
-  // 🎯 升級 2：日曆跨日顏色渲染
   function renderCalendar() {
       const container = document.getElementById('calendar-container'); 
       container.innerHTML = '';
@@ -1546,11 +1551,11 @@
           if (!sDateStr) return;
           const eDateStr = formatDate(getVal(r, '結束日期')) || sDateStr;
           
-          let cur = new Date(sDateStr);
-          let end = new Date(eDateStr);
+          // 🎯 修正：將 - 替換為 /，避免瀏覽器解析出錯或減去時區天數
+          let cur = new Date(sDateStr.replace(/-/g, '/'));
+          let end = new Date(eDateStr.replace(/-/g, '/'));
           let loopCount = 0;
           
-          // 把這個區間的每一天都存進去
           while(cur <= end && loopCount < 30) {
               const dStr = formatDate(cur);
               if (dStr) {
@@ -1627,7 +1632,6 @@
                   const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
                   cell.style.borderColor = pastelColor || '#cfd8dc';
                   cell.dataset.color = pastelColor || '#cfd8dc';
-                  // 點擊日曆上的任何一天，都會以那一天 (dStr) 來打開面板
                   cell.onclick = () => handleDayClick(event, cell, grid, dStr);
               } else if (hasDailyExpense) {
                   cell.classList.add('has-expense'); 
@@ -1645,7 +1649,6 @@
       }
   }
 
-  // 🎯 升級 2：清單上的跨日區間顯示
   function renderList() {
       const container = document.getElementById('list-container'); 
       container.innerHTML = '';
@@ -1655,12 +1658,14 @@
       let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       races.forEach(r => {
           const sDateStr = formatDate(getVal(r, '日期'));
+          if(!sDateStr) return;
           const eDateStr = formatDate(getVal(r, '結束日期')) || sDateStr;
           
+          // 🎯 修正時區解析問題
           listItems.push({
               isEvent: true,
               eventData: r,
-              dateObj: new Date(sDateStr),
+              dateObj: new Date(sDateStr.replace(/-/g, '/')),
               dateStr: sDateStr,
               endDateStr: eDateStr,
               cat: getVal(r, '行程類別'),
@@ -1668,26 +1673,7 @@
           });
       });
 
-      if (currentFilter === '全部') {
-          let standaloneBills = (dbData['帳務明細']||[]).filter(b => !getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery));
-          let billDates = [...new Set(standaloneBills.map(b => formatDate(getVal(b, '日期'))))];
-          billDates.forEach(dStr => {
-              if (dStr) {
-                  const hasEventSameDay = listItems.some(item => item.isEvent && item.dateStr === dStr);
-                  if (!hasEventSameDay) {
-                      listItems.push({
-                          isEvent: false,
-                          eventData: null,
-                          dateObj: new Date(dStr),
-                          dateStr: dStr,
-                          endDateStr: dStr,
-                          cat: '其他', 
-                          title: '日常帳務'
-                      });
-                  }
-              }
-          });
-      }
+      // 🎯 已移除「日常帳務」推入 listItems 的程式碼
 
       listItems.sort((a, b) => a.dateObj - b.dateObj);
       
@@ -1732,10 +1718,9 @@
           
           const titleHtml = item.isEvent ? item.title : `📝 ${item.title}`;
           
-          // 如果有結束日期，且不等於開始日期，則顯示區間
           let dateHtml = `<span class="d">${item.dateObj.getDate()}</span>`;
           if (item.dateStr !== item.endDateStr && item.endDateStr) {
-              const eDate = new Date(item.endDateStr);
+              const eDate = new Date(item.endDateStr.replace(/-/g, '/'));
               if (!isNaN(eDate.getTime())) {
                   dateHtml = `<span class="d" style="font-size:15px; margin-top: 4px;">${item.dateObj.getDate()}-${eDate.getDate()}</span>`;
               }
@@ -1839,13 +1824,6 @@
               const memo = getVal(b, '備註');
               total += amt;
               
-              const safeCode = (getVal(b, '行程代碼') || '').replace(/'/g, "\\'");
-              const safeDate = (getVal(b, '日期') || '').replace(/'/g, "\\'");
-              const safeCat = cat.replace(/'/g, "\\'");
-              const safeItem = item.replace(/'/g, "\\'");
-              const safePay = pay.replace(/'/g, "\\'");
-              const safeMemo = (memo || '').replace(/'/g, "\\'");
-
               html += `
                   <div style="display:flex; flex-direction:column; padding: 12px 0; border-bottom: 1px dashed #f5f5f5;">
                       <div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; font-size: 14px; align-items: center;">
