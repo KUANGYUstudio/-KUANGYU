@@ -176,6 +176,39 @@
         box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
     }
 
+    /* 🎯 新增的搜尋列美學 */
+    .search-container {
+        width: 100%;
+        padding: 5px 15px 20px;
+        box-sizing: border-box;
+    }
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border: 1.5px solid #eceff1;
+        border-radius: 25px;
+        padding: 10px 18px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        transition: 0.3s;
+    }
+    .search-box:focus-within {
+        border-color: var(--nav-active);
+        box-shadow: 0 4px 12px rgba(84, 110, 122, 0.1);
+    }
+    .search-box input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 15px;
+        color: var(--text-main);
+        width: 100%;
+        margin-left: 10px;
+        font-family: inherit;
+    }
+    .search-box input::placeholder { color: #b0bec5; }
+    .search-icon { color: #b0bec5; font-size: 16px; font-weight: bold; }
+
     /* 過濾器與年月排版 */
     .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }
     .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 13px; font-weight: bold; color: #78909c; cursor: pointer; transition: 0.2s; }
@@ -290,8 +323,22 @@
     .edit-input { width: 100%; padding: 12px; border: 1.5px solid #dcdde1; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: #fcfcfc; transition: 0.3s;}
     .edit-input:focus { outline: none; border-color: var(--nav-active); background: #fff; }
 
-    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #90a4ae; font-weight: bold;}
+    /* 🎯 蟲蟲殺手：排除 type="checkbox" 以防被自動放大 */
+    .admin-input-group input:not([type="checkbox"]), .admin-input-group select {
+        width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px;
+        font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s;
+        background: #fcfcfc; font-family: inherit; min-height: 52px; color: var(--text-main);
+    }
+    .admin-input-group input[type="date"] { -webkit-appearance: none; appearance: none; display: block; }
+    .admin-input-group input:focus, .admin-input-group select:focus { border-color: var(--nav-active); background: #fff; box-shadow: 0 0 0 3px rgba(84, 110, 122, 0.1); }
+
+    .admin-group-box { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #eceff1; margin-bottom: 18px; }
+    .admin-group-title { font-weight: bold; color: var(--text-sub); margin-bottom: 12px; font-size: 14px; border-left: 4px solid var(--settle-pink); padding-left: 8px; }
+
+    .admin-submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--nav-active); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 5px; transition: 0.2s; }
+    .admin-submit-btn:active { transform: scale(0.98); }
     
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #90a4ae; font-weight: bold;}
     .view-container { display: none; text-align: left; }
     .view-container.active { display: block; }
 
@@ -348,22 +395,6 @@
     .admin-form-section.active { display: block; animation: slideUp 0.4s ease; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .admin-input-group { margin-bottom: 18px; text-align: left; }
-    .admin-input-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: var(--text-sub); padding-left: 3px; }
-    .admin-input-group input, .admin-input-group select {
-        width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px;
-        font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s;
-        background: #fcfcfc; font-family: inherit; min-height: 52px; color: var(--text-main);
-    }
-    .admin-input-group input[type="date"] { -webkit-appearance: none; appearance: none; display: block; }
-    .admin-input-group input:focus, .admin-input-group select:focus { border-color: var(--nav-active); background: #fff; box-shadow: 0 0 0 3px rgba(84, 110, 122, 0.1); }
-
-    .admin-group-box { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #eceff1; margin-bottom: 18px; }
-    .admin-group-title { font-weight: bold; color: var(--text-sub); margin-bottom: 12px; font-size: 14px; border-left: 4px solid var(--settle-pink); padding-left: 8px; }
-
-    .admin-submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--nav-active); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 5px; transition: 0.2s; }
-    .admin-submit-btn:active { transform: scale(0.98); }
-    
   </style>
 </head>
 <body>
@@ -391,6 +422,13 @@
         </div>
         
         <div id="nav-collapse-area">
+            <div class="search-container">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="main-search-input" placeholder="搜尋行程、住宿、航班或帳務..." oninput="handleSearch(this.value)" autocomplete="nope" autocorrect="off" spellcheck="false">
+                </div>
+            </div>
+            
             <div id="filter-bar" class="filter-bar"></div>
             <div id="year-nav" class="year-nav-container"></div>
             <div id="month-nav" class="month-nav-container"></div>
@@ -414,10 +452,11 @@
   </div>
 
   <div id="confirm-modal" class="modal-overlay">
-      <div class="modal-content" style="padding-top: 40px;">
-          <div style="font-weight:800; font-size:20px; margin-bottom:12px; color: var(--brand-main);">確定要刪除嗎？</div>
-          <div id="confirm-desc" style="font-size:14px; color:#78909c; line-height:1.6;">刪除後資料將無法復原。</div>
-          <div class="modal-actions" style="margin-top: 25px;">
+      <div class="modal-content" style="padding-top: 30px;">
+          <div class="confirm-icon">!</div>
+          <div style="font-weight:800; font-size:18px; margin-bottom:10px; color: var(--brand-main);">確定要刪除嗎？</div>
+          <div id="confirm-desc" style="font-size:14px; color:#78909c; line-height:1.6;">刪除後資料將無法恢復。</div>
+          <div class="modal-actions">
               <button class="modal-btn btn-cancel" onclick="closeConfirmModal()">取消</button>
               <button id="confirm-delete-btn" class="modal-btn btn-danger" onclick="doDelete()">確定刪除</button>
           </div>
@@ -430,6 +469,11 @@
               <span id="edit-modal-title">編輯資料</span>
               <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeEditModal()">×</span>
           </h3>
+          <div style="overflow: hidden; width: 0; height: 0;">
+              <input type="text" autocomplete="name">
+              <input type="email" autocomplete="email">
+              <input type="tel" autocomplete="tel">
+          </div>
           <input type="hidden" id="edit-sheetName">
           <input type="hidden" id="edit-rowIndex">
           <div id="dynamic-edit-form" class="modal-body"></div>
@@ -455,114 +499,124 @@
           </div>
 
           <div style="flex: 1; overflow-y: auto; padding: 15px 25px 25px;">
+              <div style="overflow: hidden; width: 0; height: 0;">
+                  <input type="text" autocomplete="name">
+                  <input type="email" autocomplete="email">
+                  <input type="tel" autocomplete="tel">
+              </div>
+
               <div id="add-form-行程" class="admin-form-section active">
-                  <div class="admin-input-group"><label>行程代碼</label><input type="text" id="add-行程-代碼" placeholder="例如：20260403_台東賽"></div>
-                  <div class="admin-input-group"><label>行程名稱</label><input type="text" id="add-行程-名稱"></div>
-                  <div class="admin-input-group"><label>行程類別</label><select id="add-行程-類別" onchange="toggleAddEventFee()"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
-                  <div class="admin-input-group"><label>日期</label><input type="date" id="add-行程-日期"></div>
-                  <div class="admin-input-group"><label>行程連結</label><input type="url" id="add-行程-連結"></div>
-                  <div class="admin-input-group"><label>聿凡項目</label><input type="text" id="add-行程-聿凡"></div>
-                  <div class="admin-input-group"><label>光武項目</label><input type="text" id="add-行程-光武"></div>
-                  <div class="admin-input-group"><label>報名費總額</label><input type="number" inputmode="decimal" id="add-行程-報名費"></div>
-                  <div class="admin-input-group"><label>付款人</label><select id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
-                  <div class="admin-input-group"><label>付款方式</label><select id="add-行程-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
-                  <div class="admin-input-group"><label>狀態</label><select id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
-                  <div class="admin-input-group"><label>備註</label><input type="text" id="add-行程-備註"></div>
+                  <div class="admin-input-group"><label>行程代碼</label><input autocomplete="off" type="text" id="add-行程-代碼" placeholder="例如：20260403_台東賽"></div>
+                  <div class="admin-input-group"><label>行程名&#8203;稱</label><input autocomplete="off" type="text" id="add-行程-名稱"></div>
+                  <div class="admin-input-group"><label>行程類別</label><select autocomplete="off" id="add-行程-類別" onchange="toggleAddEventFee()"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
+                  <div class="admin-input-group"><label>日期</label><input autocomplete="off" type="date" id="add-行程-日期"></div>
+                  <div class="admin-input-group"><label>行程連結</label><input autocomplete="off" type="url" id="add-行程-連結"></div>
+                  <div class="admin-input-group"><label>聿凡項目</label><input autocomplete="off" type="text" id="add-行程-聿凡"></div>
+                  <div class="admin-input-group"><label>光武項目</label><input autocomplete="off" type="text" id="add-行程-光武"></div>
+                  <div class="admin-input-group"><label>報名費總額</label><input autocomplete="off" type="number" inputmode="decimal" id="add-行程-報名費"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-行程-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
+                  <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-行程-備註"></div>
                   <button class="admin-submit-btn" onclick="submitNewData('行程')">確認新增行程</button>
               </div>
 
               <div id="add-form-住宿" class="admin-form-section">
-                  <div class="admin-input-group"><label>行程代碼</label><select class="admin-code-selector" id="add-住宿-代碼" onchange="autoFillDate(this.value, 'add-住宿-入住日期')"></select></div>
-                  <div class="admin-input-group"><label>飯店名稱</label><input type="text" id="add-住宿-飯店"></div>
+                  <div class="admin-input-group"><label>行程代碼</label><select autocomplete="off" class="admin-code-selector" id="add-住宿-代碼" onchange="autoFillDate(this.value, 'add-住宿-入住日期')"></select></div>
+                  <div class="admin-input-group"><label>飯店名&#8203;稱</label><input autocomplete="off" type="text" id="add-住宿-飯店"></div>
                   <div class="admin-group-box">
                       <div class="admin-group-title">入住資訊</div>
-                      <div class="admin-input-group"><label>入住日期</label><input type="date" id="add-住宿-入住日期"></div>
+                      <div class="admin-input-group"><label>入住日期</label><input autocomplete="off" type="date" id="add-住宿-入住日期"></div>
                       <div class="admin-input-group" style="margin-bottom: 0;">
                           <label>入住時間</label>
-                          <select id="add-住宿-入住時間-select" onchange="document.getElementById('add-住宿-入住時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
+                          <select autocomplete="off" id="add-住宿-入住時間-select" onchange="document.getElementById('add-住宿-入住時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
                               <option value="">-</option><option>14:00</option><option>15:00</option><option>16:00</option><option>其他</option>
                           </select>
-                          <input type="text" id="add-住宿-入住時間-其他" placeholder="請填寫入住時間" style="display: none; margin-top: 8px;">
+                          <input autocomplete="off" type="text" id="add-住宿-入住時間-其他" placeholder="請填寫入住時間" style="display: none; margin-top: 8px;">
                       </div>
                   </div>
                   <div class="admin-group-box">
                       <div class="admin-group-title">退房資訊</div>
-                      <div class="admin-input-group"><label>退房日期</label><input type="date" id="add-住宿-退房日期"></div>
+                      <div class="admin-input-group"><label>退房日期</label><input autocomplete="off" type="date" id="add-住宿-退房日期"></div>
                       <div class="admin-input-group" style="margin-bottom: 0;">
                           <label>退房時間</label>
-                          <select id="add-住宿-退房時間-select" onchange="document.getElementById('add-住宿-退房時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
+                          <select autocomplete="off" id="add-住宿-退房時間-select" onchange="document.getElementById('add-住宿-退房時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
                               <option value="">-</option><option>11:00</option><option>12:00</option><option>其他</option>
                           </select>
-                          <input type="text" id="add-住宿-退房時間-其他" placeholder="請填寫退房時間" style="display: none; margin-top: 8px;">
+                          <input autocomplete="off" type="text" id="add-住宿-退房時間-其他" placeholder="請填寫退房時間" style="display: none; margin-top: 8px;">
                       </div>
                   </div>
                   <div class="admin-input-group">
                       <label>訂房平台</label>
-                      <select id="add-住宿-平台-select" onchange="document.getElementById('add-住宿-平台-其他').style.display = this.value === '其他' ? 'block' : 'none'">
+                      <select autocomplete="off" id="add-住宿-平台-select" onchange="document.getElementById('add-住宿-平台-其他').style.display = this.value === '其他' ? 'block' : 'none'">
                           <option value="">-</option><option>Agoda</option><option>Booking.com</option><option>Trip.com</option><option>易遊網</option><option>官方網站</option><option>其他</option>
                       </select>
-                      <input type="text" id="add-住宿-平台-其他" placeholder="請自行填寫" style="display: none; margin-top: 8px;">
+                      <input autocomplete="off" type="text" id="add-住宿-平台-其他" placeholder="請自行填寫" style="display: none; margin-top: 8px;">
                   </div>
-                  <div class="admin-input-group"><label>費用</label><input type="number" inputmode="decimal" id="add-住宿-費用"></div>
-                  <div class="admin-input-group"><label>付款人</label><select id="add-住宿-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
-                  <div class="admin-input-group"><label>付款方式</label><select id="add-住宿-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
-                  <div class="admin-input-group"><label>狀態</label><select id="add-住宿-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
-                  <div class="admin-input-group"><label>連結</label><input type="url" id="add-住宿-連結"></div>
-                  <div class="admin-input-group"><label>備註</label><input type="text" id="add-住宿-備註"></div>
+                  <div class="admin-input-group"><label>費用</label><input autocomplete="off" type="number" inputmode="decimal" id="add-住宿-費用"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-住宿-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-住宿-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-住宿-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
+                  <div class="admin-input-group"><label>連結</label><input autocomplete="off" type="url" id="add-住宿-連結"></div>
+                  <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-住宿-備註"></div>
                   
-                  <div class="admin-input-group" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 25px; background: #f8f9fa; padding: 12px 16px; border-radius: 12px; border: 1px dashed #dcdde1;">
-                  <label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
-                      <input type="checkbox" id="add-住宿-待確認" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
-                      <span style="font-size: 15px; font-weight: bold; color: #e53935;">待確認</span>
-                  </label>
-                  <label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
-                      <input type="checkbox" id="add-住宿-早餐" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
-                      <span style="font-size: 15px; font-weight: bold; color: var(--text-sub);">含早餐</span>
-                  </label>
-                  <label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer; margin: 0;">
-                      <input type="checkbox" id="add-住宿-充電樁" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
-                      <span style="font-size: 15px; font-weight: bold; color: var(--text-sub);">充電樁</span>
-                  </label>
-              </div>
+                  <div class="admin-input-group" style="margin-bottom: 5px;">
+                      <label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
+                          <input autocomplete="off" type="checkbox" id="add-住宿-早餐" style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                          <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">含早餐</span>
+                      </label>
+                  </div>
+                  <div class="admin-input-group" style="margin-bottom: 5px;">
+                      <label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
+                          <input autocomplete="off" type="checkbox" id="add-住宿-充電樁" style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                          <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">充電樁</span>
+                      </label>
+                  </div>
+                  <div class="admin-input-group" style="margin-bottom: 25px;">
+                      <label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
+                          <input autocomplete="off" type="checkbox" id="add-住宿-待確認" style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                          <span style="font-size: 14px; font-weight: bold; color: #e53935;">待確認</span>
+                      </label>
+                  </div>
 
                   <button class="admin-submit-btn" onclick="submitNewData('住宿')">確認新增住宿</button>
               </div>
 
               <div id="add-form-交通" class="admin-form-section">
-                  <div class="admin-input-group"><label>行程代碼</label><select class="admin-code-selector" id="add-交通-代碼" onchange="autoFillDate(this.value, 'add-交通-出發日期')"></select></div>
-                  <div class="admin-input-group"><label>類型</label><select id="add-交通-類型"><option>自駕</option><option>火車</option><option>飛機</option></select></div>
+                  <div class="admin-input-group"><label>行程代碼</label><select autocomplete="off" class="admin-code-selector" id="add-交通-代碼" onchange="autoFillDate(this.value, 'add-交通-出發日期')"></select></div>
+                  <div class="admin-input-group"><label>類型</label><select autocomplete="off" id="add-交通-類型"><option>自駕</option><option>火車</option><option>飛機</option></select></div>
                   <div class="admin-group-box">
                       <div class="admin-group-title">去程資訊</div>
-                      <div class="admin-input-group"><label>出發日期</label><input type="date" id="add-交通-出發日期"></div>
-                      <div class="admin-input-group"><label>去程班次 / 航班</label><input type="text" id="add-交通-去程"></div>
-                      <div class="admin-input-group"><label>去程出發時間</label><input type="text" id="add-交通-去程出發" placeholder="例如 08:30"></div>
-                      <div class="admin-input-group" style="margin-bottom: 0;"><label>去程抵達時間</label><input type="text" id="add-交通-去程抵達"></div>
+                      <div class="admin-input-group"><label>出發日期</label><input autocomplete="off" type="date" id="add-交通-出發日期"></div>
+                      <div class="admin-input-group"><label>去程班次 / 航班</label><input autocomplete="off" type="text" id="add-交通-去程"></div>
+                      <div class="admin-input-group"><label>去程出發時間</label><input autocomplete="off" type="text" id="add-交通-去程出發" placeholder="例如 08:30"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;"><label>去程抵達時間</label><input autocomplete="off" type="text" id="add-交通-去程抵達"></div>
                   </div>
                   <div class="admin-group-box">
                       <div class="admin-group-title">回程資訊</div>
-                      <div class="admin-input-group"><label>回程日期</label><input type="date" id="add-交通-回程日期"></div>
-                      <div class="admin-input-group"><label>回程班次 / 航班</label><input type="text" id="add-交通-回程"></div>
-                      <div class="admin-input-group"><label>回程出發時間</label><input type="text" id="add-交通-回程出發" placeholder="例如 14:30"></div>
-                      <div class="admin-input-group" style="margin-bottom: 0;"><label>回程抵達時間</label><input type="text" id="add-交通-回程抵達"></div>
+                      <div class="admin-input-group"><label>回程日期</label><input autocomplete="off" type="date" id="add-交通-回程日期"></div>
+                      <div class="admin-input-group"><label>回程班次 / 航班</label><input autocomplete="off" type="text" id="add-交通-回程"></div>
+                      <div class="admin-input-group"><label>回程出發時間</label><input autocomplete="off" type="text" id="add-交通-回程出發" placeholder="例如 14:30"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;"><label>回程抵達時間</label><input autocomplete="off" type="text" id="add-交通-回程抵達"></div>
                   </div>
-                  <div class="admin-input-group"><label>票價或油資</label><input type="number" inputmode="decimal" id="add-交通-費用"></div>
-                  <div class="admin-input-group"><label>付款人</label><select id="add-交通-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
-                  <div class="admin-input-group"><label>付款方式</label><select id="add-交通-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
-                  <div class="admin-input-group"><label>狀態</label><select id="add-交通-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
+                  <div class="admin-input-group"><label>票價或油資</label><input autocomplete="off" type="number" inputmode="decimal" id="add-交通-費用"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-交通-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-交通-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-交通-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
                   <button class="admin-submit-btn" onclick="submitNewData('交通')">確認新增交通</button>
               </div>
 
               <div id="add-form-帳務明細" class="admin-form-section">
-                  <div class="admin-input-group"><label>行程代碼 (日常記帳免填)</label><select class="admin-code-selector" id="add-帳務-代碼"></select></div>
-                  <div class="admin-input-group"><label>日期</label><input type="date" id="add-帳務-日期"></div>
+                  <div class="admin-input-group"><label>行程代碼 (日常記帳免填)</label><select autocomplete="off" class="admin-code-selector" id="add-帳務-代碼"></select></div>
+                  <div class="admin-input-group"><label>日期</label><input autocomplete="off" type="date" id="add-帳務-日期"></div>
                   <div class="admin-input-group">
                       <label>類別</label>
-                      <select id="add-帳務-類別"><option>飲食</option><option>交通</option><option>購物</option><option>採買</option><option>娛樂</option><option>其他</option></select>
+                      <select autocomplete="off" id="add-帳務-類別"><option>飲食</option><option>交通</option><option>購物</option><option>採買</option><option>娛樂</option><option>其他</option></select>
                   </div>
-                  <div class="admin-input-group"><label>項目</label><input type="text" id="add-帳務-項目" placeholder="例如：晚餐、伴手禮"></div>
-                  <div class="admin-input-group"><label>金額</label><input type="number" inputmode="decimal" id="add-帳務-金額"></div>
-                  <div class="admin-input-group"><label>付款方式</label><select id="add-帳務-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
-                  <div class="admin-input-group"><label>備註</label><input type="text" id="add-帳務-備註" placeholder="可選填"></div>
+                  <div class="admin-input-group"><label>項目</label><input autocomplete="off" type="text" id="add-帳務-項目" placeholder="例如：晚餐、伴手禮"></div>
+                  <div class="admin-input-group"><label>金額</label><input autocomplete="off" type="number" inputmode="decimal" id="add-帳務-金額"></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-帳務-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-帳務-備註" placeholder="可選填"></div>
                   <button class="admin-submit-btn" onclick="submitNewData('帳務明細')">確認新增帳務</button>
               </div>
           </div>
@@ -578,6 +632,9 @@
   let selectedMonthFilter = null;
   let displayYear = new Date().getFullYear();
   let isEditMode = false;
+
+  // 🎯 全域搜尋關鍵字變數
+  let currentSearchQuery = '';
 
   let accDetailsData = {};
   let currentAccTab = '';
@@ -648,6 +705,34 @@
     }
   }
 
+  // 🎯 處理即時搜尋輸入
+  function handleSearch(val) {
+      currentSearchQuery = val.trim();
+      renderMain();
+      if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+  }
+
+  // 🎯 判斷「單一行程」是否符合搜尋字眼 (深層搜尋所有關聯的住宿、交通、帳務)
+  function doesEventMatch(r, query) {
+      if (!query) return true;
+      const q = query.toLowerCase();
+      const code = getVal(r, '行程代碼');
+      
+      let textArr = [getVal(r, '行程代碼'), getVal(r, '行程名稱'), getVal(r, '備註'), getVal(r, '聿凡項目'), getVal(r, '光武項目')];
+      
+      (dbData['住宿']||[]).filter(s=>getVal(s,'行程代碼')===code).forEach(s => textArr.push(getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註')));
+      (dbData['交通']||[]).filter(t=>getVal(t,'行程代碼')===code).forEach(t => textArr.push(getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'類型'), getVal(t,'備註')));
+      (dbData['帳務明細']||[]).filter(b=>getVal(b,'行程代碼')===code).forEach(b => textArr.push(getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')));
+
+      return textArr.join(' ||| ').toLowerCase().includes(q);
+  }
+
+  // 🎯 判斷「獨立帳單」是否符合搜尋字眼
+  function doesBillMatch(b, query) {
+      if (!query) return true;
+      return [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' ||| ').toLowerCase().includes(query.toLowerCase());
+  }
+
   function toggleNavArea() {
       const area = document.getElementById('nav-collapse-area');
       const btn = document.getElementById('nav-toggle-btn');
@@ -676,7 +761,7 @@
       if(e) e.stopPropagation();
       deleteTargetSheet = sheetName;
       deleteTargetRowIndex = rowIndex;
-      document.getElementById('confirm-desc').innerHTML = `<span style="color:#e53935; font-size:14px; font-weight:bold;">刪除後將無法復原</span>`;
+      document.getElementById('confirm-desc').innerHTML = `確定要刪除這筆【${sheetName}】資料嗎？<br><span style="color:#e53935; font-size:12px;">(刪除後無法復原)</span>`;
       document.getElementById('confirm-modal').style.display = 'flex';
   }
 
@@ -716,11 +801,10 @@
       }
   }
 
-  // 🚀 升級 2：自動帶入行程日期的大腦
   function autoFillDate(eventCode, targetInputId) {
       if (!eventCode) return;
       const targetInput = document.getElementById(targetInputId);
-      if (!targetInput || targetInput.value) return; // 如果已經有填了就不覆蓋
+      if (!targetInput || targetInput.value) return; 
 
       const event = dbData['行程'].find(r => getVal(r, '行程代碼') === eventCode);
       if (event) {
@@ -741,7 +825,12 @@
       headers.forEach((h, idx) => {
           const val = rowData[h] || '';
           let inputHtml = '';
-          let labelHtml = `<label>${h}</label>`;
+          
+          let displayH = h;
+          if(h === '行程名稱') displayH = '行程名\u200B稱';
+          if(h === '飯店名稱') displayH = '飯店名\u200B稱';
+          
+          let labelHtml = `<label>${displayH}</label>`;
           
           if(h === '入住時間' || h === '退房時間' || h === '訂房平台') {
               let isCustom = val && val !== '-' && !selectOptions[h].includes(val);
@@ -750,30 +839,30 @@
               const opts = selectOptions[h].map(o => `<option value="${o}" ${selectVal===o?'selected':''}>${o}</option>`).join('');
               
               inputHtml = `
-                  <select id="edit-field-${idx}-select" class="edit-input" onchange="document.getElementById('edit-field-${idx}-custom').style.display = this.value === '其他' ? 'block' : 'none'">
+                  <select autocomplete="off" id="edit-field-${idx}-select" class="edit-input" onchange="document.getElementById('edit-field-${idx}-custom').style.display = this.value === '其他' ? 'block' : 'none'">
                       ${opts}
                   </select>
-                  <input type="text" id="edit-field-${idx}-custom" class="edit-input" style="margin-top:8px; display:${isCustom ? 'block' : 'none'};" value="${isCustom ? val : ''}" placeholder="請輸入自訂內容">
+                  <input autocomplete="off" type="text" id="edit-field-${idx}-custom" class="edit-input" style="margin-top:8px; display:${isCustom ? 'block' : 'none'};" value="${isCustom ? val : ''}" placeholder="請輸入自訂內容">
               `;
           } else if(selectOptions[h]) {
               const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
               const onChangeAttr = (h === '行程類別') ? 'onchange="toggleEditEventFee()"' : '';
-              inputHtml = `<select id="edit-field-${idx}" class="edit-input" ${onChangeAttr}>${opts}</select>`;
+              inputHtml = `<select autocomplete="off" id="edit-field-${idx}" class="edit-input" ${onChangeAttr}>${opts}</select>`;
           } else if(h.includes('日期')) {
               const dVal = formatDate(val);
-              inputHtml = `<input type="date" id="edit-field-${idx}" class="edit-input" value="${dVal}">`;
+              inputHtml = `<input autocomplete="off" type="date" id="edit-field-${idx}" class="edit-input" value="${dVal}">`;
           } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
-              inputHtml = `<input type="number" inputmode="decimal" id="edit-field-${idx}" class="edit-input" value="${val}">`; // 編輯時也加上數字鍵盤
+              inputHtml = `<input autocomplete="off" type="number" inputmode="decimal" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           } else if(h === '行程代碼') {
-              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
+              inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
           } else if(h === '含早餐' || h === '充電樁' || h === '待確認') {
               labelHtml = ''; 
-              inputHtml = `<label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer;">
-                              <input type="checkbox" id="edit-field-${idx}" style="width: 20px; height: 20px; cursor: pointer;" ${val === 'V' ? 'checked' : ''}>
-                              <span style="font-size: 15px; font-weight: bold; ${h === '待確認' ? 'color:#e53935;' : 'color:var(--text-sub);'}">${h}</span>
+              inputHtml = `<label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer;">
+                              <input autocomplete="off" type="checkbox" id="edit-field-${idx}" style="width: 16px; height: 16px; margin: 0; cursor: pointer;" ${val === 'V' ? 'checked' : ''}>
+                              <span style="font-size: 14px; font-weight: bold; ${h === '待確認' ? 'color:#e53935;' : 'color:var(--text-sub);'}">${h}</span>
                            </label>`;
           } else {
-              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
+              inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           }
 
           const groupStyle = labelHtml === '' ? 'margin-bottom: 5px;' : '';
@@ -818,17 +907,16 @@
           return el.type === 'checkbox' ? (el.checked ? "V" : "") : el.value;
       });
       
-      // 🚀 升級 3：編輯時的時光倒流防呆
       if(sheetName === '住宿') {
-          const inDate = new Date(rowData[2]);
-          const outDate = new Date(rowData[4]);
-          if (rowData[2] && rowData[4] && outDate < inDate) {
+          const inDate = rowData[2];
+          const outDate = rowData[4];
+          if (inDate && outDate && inDate > outDate) {
               alert("⚠️ 錯誤：退房日期不能早於入住日期喔！"); return;
           }
       } else if (sheetName === '交通') {
-          const goDate = new Date(rowData[2]);
-          const backDate = new Date(rowData[6]);
-          if (rowData[2] && rowData[6] && backDate < goDate) {
+          const goDate = rowData[2];
+          const backDate = rowData[6];
+          if (goDate && backDate && goDate > backDate) {
               alert("⚠️ 錯誤：回程日期不能早於出發日期喔！"); return;
           }
       }
@@ -884,6 +972,12 @@
       btn.classList.add('active');
   }
 
+  function toggleAddPlatform() {
+      const select = document.getElementById('add-住宿-平台-select');
+      const otherInput = document.getElementById('add-住宿-平台-其他');
+      otherInput.style.display = select.value === '其他' ? 'block' : 'none';
+  }
+
   async function submitNewData(sheetName) {
       let rowData = [];
       let eventCode = "";
@@ -912,10 +1006,9 @@
           
           rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, checkInTime, document.getElementById('add-住宿-退房日期').value, checkOutTime, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, document.getElementById('add-住宿-方式').value, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending];
       
-          // 🚀 升級 3：新增時的時光倒流防呆
-          const inDate = new Date(document.getElementById('add-住宿-入住日期').value);
-          const outDate = new Date(document.getElementById('add-住宿-退房日期').value);
-          if (document.getElementById('add-住宿-入住日期').value && document.getElementById('add-住宿-退房日期').value && outDate < inDate) {
+          const inDate = document.getElementById('add-住宿-入住日期').value;
+          const outDate = document.getElementById('add-住宿-退房日期').value;
+          if (inDate && outDate && inDate > outDate) {
               alert("⚠️ 錯誤：退房日期不能早於入住日期喔！"); return;
           }
 
@@ -923,10 +1016,9 @@
           eventCode = document.getElementById('add-交通-代碼').value;
           rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, document.getElementById('add-交通-方式').value, document.getElementById('add-交通-狀態').value];
       
-          // 🚀 升級 3：新增時的時光倒流防呆
-          const goDate = new Date(document.getElementById('add-交通-出發日期').value);
-          const backDate = new Date(document.getElementById('add-交通-回程日期').value);
-          if (document.getElementById('add-交通-出發日期').value && document.getElementById('add-交通-回程日期').value && backDate < goDate) {
+          const goDate = document.getElementById('add-交通-出發日期').value;
+          const backDate = document.getElementById('add-交通-回程日期').value;
+          if (goDate && backDate && goDate > backDate) {
               alert("⚠️ 錯誤：回程日期不能早於出發日期喔！"); return;
           }
 
@@ -1006,9 +1098,10 @@
       else { btn.classList.remove('active'); }
   }
 
+  // 🎯 升級 1：根據搜尋字眼與篩選條件，重新計算帳務金額
   function calculateAccounting() {
       let allExpenses = [];
-      const races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+      const races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter));
 
       const expensesByCode = { '住宿': {}, '交通': {}, '帳務明細': {} };
       ['住宿', '交通', '帳務明細'].forEach(sheet => {
@@ -1024,22 +1117,24 @@
       races.forEach(r => {
           const code = getVal(r, '行程代碼');
           const rDate = formatDate(getVal(r, '日期'));
+          const rName = getVal(r, '行程名稱');
+          
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: getVal(r, '行程名稱') });
+          if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' ') });
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
               const fee = parseFloat(getVal(s,'費用')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || getVal(r, '行程名稱') });
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || rName, searchStr: [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' ') });
           });
           
           (expensesByCode['交通'][code] || []).forEach(t => {
               const fee = parseFloat(getVal(t,'票價或油資')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, category: '交通', amount: fee, name: getVal(t,'類型') || getVal(r, '行程名稱') });
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, category: '交通', amount: fee, name: getVal(t,'類型') || rName, searchStr: [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' ') });
           });
           
           (expensesByCode['帳務明細'][code] || []).forEach(b => {
               const fee = parseFloat(getVal(b,'金額')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || getVal(r, '行程名稱') });
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || rName, searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' ') });
           });
       });
 
@@ -1048,7 +1143,7 @@
               const code = getVal(b, '行程代碼');
               if (!code || code.trim() === '') {
                   const fee = parseFloat(getVal(b,'金額')) || 0;
-                  if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')), category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳' });
+                  if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')), category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳', searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' ') });
               }
           });
       }
@@ -1058,6 +1153,11 @@
       
       let filteredExpenses = allExpenses.filter(e => {
           if (!e.date) return false;
+          
+          if (currentSearchQuery && !e.searchStr.toLowerCase().includes(currentSearchQuery.toLowerCase())) {
+              return false;
+          }
+
           const eMonth = e.date.substring(0, 7);
           if (selectedMonthFilter) return eMonth === selectedMonthFilter;
           else return eMonth >= currentMonthKey;
@@ -1198,6 +1298,7 @@
       });
   }
 
+  // 🎯 升級 1：月份導航也會依據搜尋結果自動隱藏沒有資料的月份
   function renderMonthNav() {
       const yearContainer = document.getElementById('year-nav');
       const navContainer = document.getElementById('month-nav');
@@ -1208,13 +1309,15 @@
       const currentM = now.getMonth() + 1;
       const currentMonthKey = `${currentY}-${String(currentM).padStart(2, '0')}`;
       
-      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
       
       if (currentFilter === '全部') { 
           (dbData['帳務明細']||[]).forEach(b => { 
-              const bDate = formatDate(getVal(b, '日期')); 
-              if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); 
+              if (!getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery)) {
+                  const bDate = formatDate(getVal(b, '日期')); 
+                  if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); 
+              }
           }); 
       }
       
@@ -1292,6 +1395,7 @@
       `;
   }
 
+  // 🎯 升級 1：日曆渲染時會依據搜尋結果過濾行程
   function renderCalendar() {
       const container = document.getElementById('calendar-container'); 
       container.innerHTML = '';
@@ -1301,7 +1405,7 @@
       const currentMonth = now.getMonth() + 1; // 1-12
       const currentMonthKey = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
       
-      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       
       let eventMap = {}; 
       let allDatesWithData = []; 
@@ -1313,15 +1417,17 @@
       let dailyExpenseMap = {};
       if (currentFilter === '全部') {
           (dbData['帳務明細']||[]).forEach(b => { 
-              const d = formatDate(getVal(b, '日期')); 
-              if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
+              if (!getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery)) {
+                  const d = formatDate(getVal(b, '日期')); 
+                  if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
+              }
           });
       }
 
       let monthKeysToRender = [];
       if (selectedMonthFilter) {
           monthKeysToRender = [selectedMonthFilter];
-      } else if (currentFilter === '全部') {
+      } else if (currentFilter === '全部' && !currentSearchQuery) {
           for (let i = 0; i < 12; i++) {
               let targetDate = new Date(currentYear, currentMonth - 1 + i, 1);
               let y = targetDate.getFullYear();
@@ -1330,7 +1436,7 @@
           }
       } else {
           const uniqueMonths = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
-          monthKeysToRender = uniqueMonths.filter(mKey => mKey >= currentMonthKey);
+          monthKeysToRender = currentSearchQuery ? uniqueMonths : uniqueMonths.filter(mKey => mKey >= currentMonthKey);
       }
 
       let hasRenderedAny = false;
@@ -1385,15 +1491,16 @@
       });
 
       if (!hasRenderedAny) {
-          container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">此區間目前沒有排定行程<br><span style="font-size:13px; font-weight:normal;">請切換上方「年份」或「月份」查看</span></div>';
+          container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">目前沒有符合條件的行程<br><span style="font-size:13px; font-weight:normal;">試試看更換關鍵字或切換「年份」與「月份」</span></div>';
       }
   }
 
+  // 🎯 升級 1：清單渲染時也會依據搜尋結果過濾
   function renderList() {
       const container = document.getElementById('list-container'); 
       container.innerHTML = '';
       
-      let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
+      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       races.sort((a, b) => new Date(getVal(a, '日期')) - new Date(getVal(b, '日期')));
       
       const today = new Date(); 
@@ -1405,6 +1512,8 @@
       let racesToRender = [];
       if (selectedMonthFilter) {
           racesToRender = races.filter(r => formatDate(getVal(r, '日期')).startsWith(selectedMonthFilter));
+      } else if (currentSearchQuery) {
+          racesToRender = races; // 搜尋狀態下顯示全部符合的，不分過去未來
       } else {
           racesToRender = showPastList ? races.filter(r => formatDate(getVal(r, '日期')).startsWith(displayYear)) : futureRaces;
           if (pastRaces.length > 0) {
@@ -1419,7 +1528,7 @@
       if (racesToRender.length === 0) {
           const emptyMsg = document.createElement('div'); 
           emptyMsg.style.cssText = "padding:40px; text-align:center; color:#95a5a6; font-size:15px; font-weight:bold;"; 
-          emptyMsg.textContent = "此區間目前沒有行程資料"; 
+          emptyMsg.textContent = "目前沒有符合條件的行程資料"; 
           container.appendChild(emptyMsg); 
           return;
       }
@@ -1742,7 +1851,6 @@
       return html;
   }
 
-  // --- 控制新增表單的費用與項目欄位顯示 ---
   function toggleAddEventFee() {
       const cat = document.getElementById('add-行程-類別').value;
       const isNoFee = (cat === '旅遊' || cat === '移地訓練');
@@ -1767,7 +1875,6 @@
       });
   }
 
-  // --- 控制編輯表單的費用與項目欄位顯示 ---
   function toggleEditEventFee() {
       const catSelect = document.getElementById('edit-field-2'); 
       if(!catSelect) return;
@@ -1792,9 +1899,6 @@
       });
   }
 
-  // =========================================
-  // 全域事件監聽：點擊半透明背景自動關閉視窗
-  // =========================================
   ['click', 'touchstart'].forEach(function(eventType) {
       window.addEventListener(eventType, function(event) {
           if (event.target.classList.contains('modal-overlay')) {
@@ -1803,12 +1907,8 @@
       });
   });
 
-  // =========================================
-  // 終極武器：徹底封殺 iOS 自動填寫聯絡人
-  // =========================================
   window.addEventListener('focusin', function(e) {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
-          // 使用 'nope' 這種無效字串，強制讓手機瀏覽器放棄自動填寫
           e.target.setAttribute('autocomplete', 'nope');
           e.target.setAttribute('autocorrect', 'off');
           e.target.setAttribute('spellcheck', 'false');
