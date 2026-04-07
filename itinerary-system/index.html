@@ -511,24 +511,20 @@
                   <div class="admin-input-group"><label>連結</label><input type="url" id="add-住宿-連結"></div>
                   <div class="admin-input-group"><label>備註</label><input type="text" id="add-住宿-備註"></div>
                   
-                  <div class="admin-input-group" style="margin-bottom: 5px;">
-                      <label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer;">
-                          <input type="checkbox" id="add-住宿-早餐" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
-                          <span style="font-size: 15px; font-weight: bold; color: var(--text-sub);">含早餐</span>
-                      </label>
-                  </div>
-                  <div class="admin-input-group" style="margin-bottom: 5px;">
-                      <label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer;">
-                          <input type="checkbox" id="add-住宿-充電樁" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
-                          <span style="font-size: 15px; font-weight: bold; color: var(--text-sub);">充電樁</span>
-                      </label>
-                  </div>
-                  <div class="admin-input-group" style="margin-bottom: 25px;">
-                      <label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer;">
-                          <input type="checkbox" id="add-住宿-待確認" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
-                          <span style="font-size: 15px; font-weight: bold; color: #e53935;">待確認</span>
-                      </label>
-                  </div>
+                  <div class="admin-input-group" style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 25px; background: #f8f9fa; padding: 12px 16px; border-radius: 12px; border: 1px dashed #dcdde1;">
+                  <label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
+                      <input type="checkbox" id="add-住宿-待確認" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
+                      <span style="font-size: 15px; font-weight: bold; color: #e53935;">待確認</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
+                      <input type="checkbox" id="add-住宿-早餐" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
+                      <span style="font-size: 15px; font-weight: bold; color: var(--text-sub);">含早餐</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer; margin: 0;">
+                      <input type="checkbox" id="add-住宿-充電樁" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
+                      <span style="font-size: 15px; font-weight: bold; color: var(--text-sub);">充電樁</span>
+                  </label>
+              </div>
 
                   <button class="admin-submit-btn" onclick="submitNewData('住宿')">確認新增住宿</button>
               </div>
