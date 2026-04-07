@@ -458,7 +458,7 @@
                         <line x1="64" y1="64" x2="90" y2="90"></line>
                     </svg>
                 </span>
-                <input type="text" id="main-search-input" class="ios-search-input" placeholder="搜尋行程、住宿、航班或帳務..." oninput="handleSearch(this.value)" autocomplete="nope" autocorrect="off" spellcheck="false">
+                <input type="text" id="main-search-input" class="ios-search-input" placeholder="搜尋行程、住宿、航班或帳務..." oninput="handleSearch(this.value)" onkeypress="if(event.key === 'Enter') this.blur();" autocomplete="nope" autocorrect="off" spellcheck="false">
                 <button id="search-clear-btn" class="ios-search-clear" onclick="clearSearch()">✖</button>
             </div>
         </div>
@@ -749,7 +749,15 @@
           btn.style.background = '#fff';
           btn.style.color = '#78909c';
           clearSearch();
+          document.getElementById('main-search-input').blur(); // 🎯 強制收起手機鍵盤
       } else {
+          // 🎯 如果帳務面板開著，自動幫你關掉
+          const accPanel = document.getElementById('acc-panel');
+          if (accPanel.style.display === 'block') {
+              accPanel.style.display = 'none';
+              document.getElementById('acc-panel-btn').classList.remove('active');
+          }
+          
           area.classList.add('active');
           btn.classList.add('active');
           btn.style.background = '#78909c';
@@ -762,7 +770,7 @@
       const input = document.getElementById('main-search-input');
       input.value = '';
       handleSearch('');
-      input.focus();
+      input.blur(); // 🎯 強制收起手機鍵盤
   }
 
   function handleSearch(val) {
@@ -1168,13 +1176,25 @@
       const panel = document.getElementById('acc-panel');
       const btn = document.getElementById('acc-panel-btn');
       const isVisible = panel.style.display === 'block';
-      panel.style.display = isVisible ? 'none' : 'block';
+      
       if (!isVisible) { 
+          // 🎯 如果準備打開帳務，先檢查搜尋面板是不是開著，是的話就關掉
+          const searchArea = document.getElementById('search-dropdown');
+          if (searchArea.classList.contains('active')) {
+              searchArea.classList.remove('active');
+              document.getElementById('search-toggle-btn').classList.remove('active');
+              document.getElementById('search-toggle-btn').style.background = '#fff';
+              document.getElementById('search-toggle-btn').style.color = '#78909c';
+              clearSearch();
+          }
+          
           btn.classList.add('active'); 
           calculateAccounting(); 
       } else { 
           btn.classList.remove('active'); 
       }
+      
+      panel.style.display = isVisible ? 'none' : 'block';
       isFromAccPanel = false; 
   }
 
@@ -1638,26 +1658,6 @@
               title: getVal(r, '行程名稱')
           });
       });
-
-      if (currentFilter === '全部') {
-          let standaloneBills = (dbData['帳務明細']||[]).filter(b => !getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery));
-          let billDates = [...new Set(standaloneBills.map(b => formatDate(getVal(b, '日期'))))];
-          billDates.forEach(dStr => {
-              if (dStr) {
-                  const hasEventSameDay = listItems.some(item => item.isEvent && item.dateStr === dStr);
-                  if (!hasEventSameDay) {
-                      listItems.push({
-                          isEvent: false,
-                          eventData: null,
-                          dateObj: new Date(dStr),
-                          dateStr: dStr,
-                          cat: '其他', 
-                          title: '日常帳務'
-                      });
-                  }
-              }
-          });
-      }
 
       listItems.sort((a, b) => a.dateObj - b.dateObj);
       
