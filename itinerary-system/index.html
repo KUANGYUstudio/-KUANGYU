@@ -345,7 +345,6 @@
     .edit-input { width: 100%; padding: 12px; border: 1.5px solid #dcdde1; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: #fcfcfc; transition: 0.3s;}
     .edit-input:focus { outline: none; border-color: var(--nav-active); background: #fff; }
 
-    /* 🎯 蟲蟲殺手：排除 type="checkbox" 以防被自動放大 */
     .admin-input-group input:not([type="checkbox"]), .admin-input-group select {
         width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px;
         font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s;
@@ -380,12 +379,15 @@
     }
     .acc-tab-btn.active { background: var(--nav-active); color: #fff; box-shadow: 0 4px 10px rgba(84, 110, 122, 0.2); }
     
+    /* 🎯 點擊回饋：讓帳務明細看起來可以點擊 */
     .acc-detail-item {
         display: flex; justify-content: space-between; align-items: center;
         padding: 15px 20px; border-bottom: 1px solid #f5f5f5; background: #fff; transition: 0.2s;
+        cursor: pointer;
     }
     .acc-detail-item:last-child { border-bottom: none; }
-    .acc-detail-item:hover { background: #fafafa; }
+    .acc-detail-item:hover { background: #f0f4f8; }
+    .acc-detail-item:active { transform: scale(0.98); }
     .acc-detail-name { font-size: 15px; font-weight: bold; color: var(--text-main); }
     .acc-detail-amount { font-size: 16px; font-weight: 900; color: var(--settle-pink); }
 
@@ -658,6 +660,8 @@
   let isEditMode = false;
 
   let currentSearchQuery = '';
+  // 🎯 記錄是否是從帳務總覽跳過來的時空標記
+  let isFromAccPanel = false;
 
   let accDetailsData = {};
   let currentAccTab = '';
@@ -728,7 +732,6 @@
     }
   }
 
-  // 🎯 展開與收合搜尋框
   function toggleSearchArea() {
       const area = document.getElementById('search-dropdown');
       const btn = document.getElementById('search-toggle-btn');
@@ -747,7 +750,6 @@
       }
   }
 
-  // 🎯 清除搜尋列
   function clearSearch() {
       const input = document.getElementById('main-search-input');
       input.value = '';
@@ -763,6 +765,7 @@
       } else {
           clearBtn.style.display = 'none';
       }
+      isFromAccPanel = false; // 搜尋時取消折返狀態
       renderMain();
       if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
   }
@@ -1133,6 +1136,7 @@
       document.getElementById('btn-' + view).classList.add('active');
       document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
       document.getElementById(view + '-view').classList.add('active');
+      isFromAccPanel = false; // 切換視圖時取消折返狀態
       closeCurrentPanel();
       renderMain();
   }
@@ -1147,8 +1151,66 @@
       const btn = document.getElementById('acc-panel-btn');
       const isVisible = panel.style.display === 'block';
       panel.style.display = isVisible ? 'none' : 'block';
-      if (!isVisible) { btn.classList.add('active'); calculateAccounting(); } 
-      else { btn.classList.remove('active'); }
+      if (!isVisible) { 
+          btn.classList.add('active'); 
+          calculateAccounting(); 
+      } else { 
+          btn.classList.remove('active'); 
+      }
+      isFromAccPanel = false; // 開關帳務時重置狀態
+  }
+
+  // 🎯 時空跳躍：從帳務清單跳回日曆，並幫你自動打開面板
+  function jumpToEvent(code, dateStr) {
+      if(!dateStr) return;
+      
+      // 1. 記住我們是從帳務來的，然後把帳務面板藏起來
+      isFromAccPanel = true;
+      document.getElementById('acc-panel').style.display = 'none';
+      document.getElementById('acc-panel-btn').classList.remove('active');
+      
+      // 2. 切換回日曆模式
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-cal').classList.add('active');
+      document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
+      document.getElementById('cal-view').classList.add('active');
+      currentView = 'cal';
+
+      // 3. 把搜尋框跟篩選器清乾淨，以免找不到那天的格子
+      currentSearchQuery = '';
+      document.getElementById('main-search-input').value = '';
+      document.getElementById('search-dropdown').classList.remove('active');
+      document.getElementById('search-toggle-btn').classList.remove('active');
+      document.getElementById('search-toggle-btn').style.background = '#fff';
+      document.getElementById('search-toggle-btn').style.color = '#78909c';
+      
+      // 4. 時空切換：把日曆翻到那一年、那個月
+      displayYear = parseInt(dateStr.substring(0, 4));
+      selectedMonthFilter = dateStr.substring(0, 7);
+      renderMain();
+
+      // 5. 稍微等畫面畫好，然後自動點擊那天的格子，並平滑滾動到螢幕中央
+      setTimeout(() => {
+          const cells = document.querySelectorAll('.day');
+          for(let cell of cells) {
+              if(cell.dataset.date === dateStr) {
+                  cell.click();
+                  setTimeout(() => {
+                      cell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }, 100);
+                  break;
+              }
+          }
+      }, 50);
+  }
+
+  // 🎯 隱形麵包屑：點擊返回按鈕，帶你回到剛剛的帳務畫面
+  function returnToAccPanel() {
+      isFromAccPanel = false;
+      closeCurrentPanel(); // 收起細節
+      document.getElementById('acc-panel').style.display = 'block'; // 打開帳務
+      document.getElementById('acc-panel-btn').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // 捲回最上面
   }
 
   function calculateAccounting() {
@@ -1172,21 +1234,22 @@
           const rName = getVal(r, '行程名稱');
           
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' ') });
+          // 🎯 每一筆花費都綁上代碼與日期，這是跳躍的鑰匙
+          if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code });
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
               const fee = parseFloat(getVal(s,'費用')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || rName, searchStr: [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' ') });
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || rName, searchStr: [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code: code });
           });
           
           (expensesByCode['交通'][code] || []).forEach(t => {
               const fee = parseFloat(getVal(t,'票價或油資')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, category: '交通', amount: fee, name: getVal(t,'類型') || rName, searchStr: [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' ') });
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, category: '交通', amount: fee, name: getVal(t,'類型') || rName, searchStr: [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code: code });
           });
           
           (expensesByCode['帳務明細'][code] || []).forEach(b => {
               const fee = parseFloat(getVal(b,'金額')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || rName, searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' ') });
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || rName, searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' '), code: code });
           });
       });
 
@@ -1195,7 +1258,8 @@
               const code = getVal(b, '行程代碼');
               if (!code || code.trim() === '') {
                   const fee = parseFloat(getVal(b,'金額')) || 0;
-                  if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')), category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳', searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' ') });
+                  const bDate = formatDate(getVal(b, '日期'));
+                  if (fee > 0) allExpenses.push({ date: bDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳', searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' '), code: '' });
               }
           });
       }
@@ -1226,7 +1290,8 @@
           if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
           categoryTotals[cat] += e.amount;
           grandTotal += e.amount;
-          accDetailsData[cat].push({ name: e.name, amount: e.amount });
+          // 🎯 傳遞鑰匙給清單產生器
+          accDetailsData[cat].push({ name: e.name, amount: e.amount, code: e.code, date: e.date });
       });
 
       document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
@@ -1312,9 +1377,10 @@
           listContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#cfd8dc;">無支出紀錄</div>'; 
           return; 
       }
+      // 🎯 帳務清單加上 onclick 事件，啟動時空跳躍
       items.forEach(item => { 
           listContainer.innerHTML += `
-              <div class="acc-detail-item">
+              <div class="acc-detail-item" onclick="jumpToEvent('${item.code}', '${item.date}')">
                   <div class="acc-detail-name">${item.name}</div>
                   <div class="acc-detail-amount">$${item.amount.toLocaleString()}</div>
               </div>`; 
@@ -1517,6 +1583,8 @@
               const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
               const cell = document.createElement('div'); 
               cell.className = 'day'; 
+              // 🎯 貼上隱形標籤，方便跳躍機制找到這一天
+              cell.dataset.date = dStr;
               cell.innerHTML = `<span class="day-number">${d}</span>`;
               
               const event = eventMap[dStr]; 
@@ -1729,8 +1797,19 @@
   }
 
   function generateDetailHTML(event, dateStr) {
+      // 🎯 如果是從帳務總覽跳過來的，要在最上面加入「隱形麵包屑（返回按鈕）」
+      let backBtnHtml = '';
+      if (isFromAccPanel) {
+          backBtnHtml = `
+          <div style="margin-bottom: 15px;">
+              <button onclick="returnToAccPanel()" style="background: #fff; border: 1px solid #eceff1; padding: 6px 14px; border-radius: 20px; color: var(--text-sub); font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                  ◀ 返回帳務總覽
+              </button>
+          </div>`;
+      }
+
       if (!event) {
-          let html = `
+          let html = backBtnHtml + `
               <div class="detail-header" style="margin-bottom:10px; padding-bottom:5px; border-bottom:none;">
                   <div>
                       <div class="detail-race-name">日常帳務</div>
@@ -1746,7 +1825,7 @@
       const code = getVal(event, '行程代碼');
       const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
       
-      let html = `
+      let html = backBtnHtml + `
       <div class="detail-header" style="flex-direction:column; gap:10px; align-items: flex-start;">
           <div style="display:flex; justify-content:space-between; width:100%; align-items:baseline;">
               <div>
