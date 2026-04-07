@@ -1690,12 +1690,15 @@
   }
 
   // =========================================
-  // 全域事件監聽：點擊半透明背景自動關閉視窗
+  // 全域事件監聽：點擊半透明背景自動關閉視窗 (支援手機觸控)
   // =========================================
-  window.addEventListener('click', function(event) {
-      if (event.target.classList.contains('modal-overlay')) {
-          event.target.style.display = 'none';
-      }
+  ['click', 'touchstart'].forEach(function(eventType) {
+      window.addEventListener(eventType, function(event) {
+          // 如果觸碰到的目標本身包含了 'modal-overlay' 這個 class（代表點在黑底上）
+          if (event.target.classList.contains('modal-overlay')) {
+              event.target.style.display = 'none';
+          }
+      });
   });
   
 </script>
