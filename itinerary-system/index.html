@@ -1581,20 +1581,22 @@
       
       html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
       
-      /* 🎯 修改 1：動態判斷標題與費用顯示 */
+      /* 🎯 修改 1：動態判斷標題與欄位顯示 */
       const eventCat = getVal(event, '行程類別');
       const isNoFeeCat = (eventCat === '旅遊' || eventCat === '移地訓練');
       const infoTitleText = isNoFeeCat ? '行程資訊' : '報名資訊';
       
       html += `<div class="info-section"><div class="info-title title-race">${infoTitleText}</div><div class="info-card card-race">`;
       
-      if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
-      if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
+      // 如果不是旅遊/移地訓練，才顯示光武、聿凡項目
+      if (!isNoFeeCat) {
+          if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
+          if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
+      }
       
       // 如果不是旅遊/移地訓練，或者真的有填寫大於 0 的費用，才顯示費用欄位
       const feeAmount = parseFloat(getVal(event,'報名費總額')) || 0;
       if (!isNoFeeCat || feeAmount > 0) {
-          // 已經乖乖改回 '付款人'，絕不亂動！
           html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'));
       }
       
@@ -1707,27 +1709,34 @@
       return html;
   }
 
-// --- 控制新增表單的費用欄位顯示 ---
+// --- 控制新增表單的費用與項目欄位顯示 ---
   function toggleAddEventFee() {
       const cat = document.getElementById('add-行程-類別').value;
       const isNoFee = (cat === '旅遊' || cat === '移地訓練');
       const displayStyle = isNoFee ? 'none' : 'block';
       
-      const fields = ['報名費', '付款人', '方式', '狀態'];
-      fields.forEach(f => {
+      // 1. 隱藏並清空內容的欄位
+      const hideFields = ['聿凡', '光武', '報名費'];
+      hideFields.forEach(f => {
           const el = document.getElementById(`add-行程-${f}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
-              // 如果隱藏了，順便把裡面的值清空，避免傳送髒資料
-              if(isNoFee) {
-                  if(el.tagName === 'SELECT') el.selectedIndex = 0;
-                  else el.value = '';
-              }
+              if(isNoFee) el.value = ''; // 清空內容
+          }
+      });
+
+      // 2. 隱藏並將預設值切換為 "-" 的選單欄位
+      const defaultSelectFields = ['付款人', '方式', '狀態'];
+      defaultSelectFields.forEach(f => {
+          const el = document.getElementById(`add-行程-${f}`);
+          if(el && el.parentNode) {
+              el.parentNode.style.display = displayStyle;
+              if(isNoFee) el.value = '-'; // 強制設為 "-"
           }
       });
   }
 
-  // --- 控制編輯表單的費用欄位顯示 ---
+  // --- 控制編輯表單的費用與項目欄位顯示 ---
   function toggleEditEventFee() {
       const catSelect = document.getElementById('edit-field-2'); // 行程類別在第 3 欄 (index 2)
       if(!catSelect) return;
@@ -1735,15 +1744,21 @@
       const isNoFee = (cat === '旅遊' || cat === '移地訓練');
       const displayStyle = isNoFee ? 'none' : 'block';
       
-      // index: 7=報名費總額, 8=報名費付款人, 9=付款方式, 10=狀態
-      [7, 8, 9, 10].forEach(i => {
+      // index: 5=聿凡項目, 6=光武項目, 7=報名費總額 (清空內容)
+      [5, 6, 7].forEach(i => {
           const el = document.getElementById(`edit-field-${i}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
-              if(isNoFee) {
-                  if(el.tagName === 'SELECT') el.selectedIndex = 0;
-                  else el.value = '';
-              }
+              if(isNoFee) el.value = '';
+          }
+      });
+
+      // index: 8=付款人, 9=付款方式, 10=狀態 (設為 "-")
+      [8, 9, 10].forEach(i => {
+          const el = document.getElementById(`edit-field-${i}`);
+          if(el && el.parentNode) {
+              el.parentNode.style.display = displayStyle;
+              if(isNoFee) el.value = '-'; // 強制設為 "-"
           }
       });
   }
