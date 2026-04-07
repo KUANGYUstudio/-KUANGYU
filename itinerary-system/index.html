@@ -141,7 +141,7 @@
     }
     
     .acc-toggle-btn.active { 
-        background: var(--coin-gold); 
+        background: var(--nav-active); /* 統一四按鈕為深灰色活動狀態 */
         color: #fff; 
     }
 
@@ -498,16 +498,6 @@
       </div>
   </div>
 
-  <div id="info-modal" class="modal-overlay" style="z-index: 9998;">
-      <div class="modal-content" style="max-width: 500px; text-align: left; max-height: 85vh; padding: 0; display: flex; flex-direction: column; overflow: hidden; background: #fcfcfc;">
-          <div style="padding: 15px 20px; background: #fff; z-index: 10; flex-shrink: 0; border-radius: 28px 28px 0 0; border-bottom: 1px solid #eceff1; display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-weight: 800; color: var(--brand-main); font-size: 16px;">行程詳細資訊</span>
-              <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeInfoModal()">×</span>
-          </div>
-          <div id="info-modal-body" style="flex: 1; overflow-y: auto; padding: 20px;"></div>
-      </div>
-  </div>
-
   <div id="edit-modal" class="modal-overlay">
       <div class="modal-content" style="max-width: 400px; text-align: left; padding: 25px;">
           <h3 style="margin:0 0 20px 0; color:var(--brand-main); display: flex; justify-content: space-between; align-items: center;">
@@ -704,7 +694,6 @@
       return categoryColors[cat] || '#cfd8dc'; 
   }
 
-  // 🎯 把結束日期加在最後面，不影響原本的結構
   const sheetHeaders = {
       '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '付款人', '付款方式', '狀態', '備註', '結束日期'],
       '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註', '含早餐', '充電樁', '待確認'],
@@ -752,58 +741,85 @@
     }
   }
 
+  // 🎯 統整導覽列互斥狀態的重置
+  function resetAllNavStates() {
+      document.getElementById('search-toggle-btn').classList.remove('active');
+      document.getElementById('search-toggle-btn').style.background = '#fff';
+      document.getElementById('search-toggle-btn').style.color = '#78909c';
+      document.getElementById('search-dropdown').classList.remove('active');
+      document.getElementById('search-clear-btn').style.display = 'none';
+      
+      document.getElementById('acc-panel-btn').classList.remove('active');
+      document.getElementById('acc-panel').style.display = 'none';
+      
+      document.getElementById('btn-cal').classList.remove('active');
+      document.getElementById('btn-list').classList.remove('active');
+      document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
+      
+      isFromAccPanel = false;
+  }
+
   function toggleSearchArea() {
-      const area = document.getElementById('search-dropdown');
       const btn = document.getElementById('search-toggle-btn');
-      if (area.classList.contains('active')) {
-          area.classList.remove('active');
-          btn.classList.remove('active');
-          btn.style.background = '#fff';
-          btn.style.color = '#78909c';
+      if (btn.classList.contains('active')) {
           clearSearch();
-          document.getElementById('main-search-input').blur();
+          switchView('cal');
       } else {
-          const accPanel = document.getElementById('acc-panel');
-          if (accPanel.style.display === 'block') {
-              accPanel.style.display = 'none';
-              document.getElementById('acc-panel-btn').classList.remove('active');
-          }
-          
-          area.classList.add('active');
+          resetAllNavStates();
           btn.classList.add('active');
           btn.style.background = '#78909c';
           btn.style.color = '#fff';
+          document.getElementById('search-dropdown').classList.add('active');
+          
+          document.getElementById('list-view').classList.add('active');
+          currentView = 'list';
           setTimeout(() => document.getElementById('main-search-input').focus(), 300);
+          renderMain();
       }
   }
 
+  function toggleAccPanel() {
+      const btn = document.getElementById('acc-panel-btn');
+      if (btn.classList.contains('active')) {
+          switchView('cal');
+      } else {
+          resetAllNavStates();
+          btn.classList.add('active');
+          document.getElementById('acc-panel').style.display = 'block';
+          calculateAccounting();
+      }
+  }
+
+  function switchView(view) {
+      resetAllNavStates();
+      currentView = view;
+      document.getElementById('btn-' + view).classList.add('active');
+      document.getElementById(view + '-view').classList.add('active');
+      
+      document.getElementById('main-search-input').value = '';
+      currentSearchQuery = '';
+      
+      closeCurrentPanel();
+      renderMain();
+  }
+
   function clearSearch() {
-      const input = document.getElementById('main-search-input');
-      input.value = '';
-      handleSearch('');
-      input.blur();
+      document.getElementById('main-search-input').value = '';
+      currentSearchQuery = '';
+      document.getElementById('search-clear-btn').style.display = 'none';
+      document.getElementById('main-search-input').blur();
+      renderMain();
   }
 
   function handleSearch(val) {
       currentSearchQuery = val.trim();
       const clearBtn = document.getElementById('search-clear-btn');
-      
       if (currentSearchQuery.length > 0) {
           clearBtn.style.display = 'flex';
-          if (currentView !== 'list') {
-              document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-              document.getElementById('btn-list').classList.add('active');
-              document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
-              document.getElementById('list-view').classList.add('active');
-              currentView = 'list';
-          }
       } else {
           clearBtn.style.display = 'none';
       }
-      
-      isFromAccPanel = false; 
       renderMain();
-      if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
   }
 
   function doesEventMatch(r, query) {
@@ -818,11 +834,6 @@
       (dbData['帳務明細']||[]).filter(b=>getVal(b,'行程代碼')===code).forEach(b => textArr.push(getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')));
 
       return textArr.join(' ||| ').toLowerCase().includes(q);
-  }
-
-  function doesBillMatch(b, query) {
-      if (!query) return true;
-      return [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' ||| ').toLowerCase().includes(query.toLowerCase());
   }
 
   function toggleNavArea() {
@@ -905,6 +916,7 @@
       }
   }
 
+  // 🎯 升級 1：編輯表單時，把結束日期安插在開始日期下面
   function openEditModal(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
       const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
@@ -912,7 +924,7 @@
 
       const headers = sheetHeaders[sheetName];
       const formBody = document.getElementById('dynamic-edit-form');
-      formBody.innerHTML = '';
+      let htmlBlocks = [];
       
       headers.forEach((h, idx) => {
           const val = rowData[h] || '';
@@ -922,13 +934,13 @@
           if(h === '行程名稱') displayH = '行程名\u200B稱';
           if(h === '飯店名稱') displayH = '飯店名\u200B稱';
           if(h === '日期' && sheetName === '行程') displayH = '開始日期';
+          if(h === '結束日期') displayH = '結束日期 <span style="color:#b0bec5; font-weight:normal;">(單日免填)</span>';
           
           let labelHtml = `<label>${displayH}</label>`;
           
           if(h === '入住時間' || h === '退房時間' || h === '訂房平台') {
               let isCustom = val && val !== '-' && !selectOptions[h].includes(val);
               let selectVal = isCustom ? '其他' : (val || '-');
-              
               const opts = selectOptions[h].map(o => `<option value="${o}" ${selectVal===o?'selected':''}>${o}</option>`).join('');
               
               inputHtml = `
@@ -959,15 +971,15 @@
           }
 
           const groupStyle = labelHtml === '' ? 'margin-bottom: 5px;' : '';
-
-          formBody.innerHTML += `
-              <div class="edit-input-group" style="${groupStyle}">
-                  ${labelHtml}
-                  ${inputHtml}
-              </div>
-          `;
+          htmlBlocks.push(`<div class="edit-input-group" style="${groupStyle}">${labelHtml}${inputHtml}</div>`);
       });
 
+      if (sheetName === '行程' && htmlBlocks.length > 12) {
+          let endDateBlock = htmlBlocks.splice(12, 1)[0];
+          htmlBlocks.splice(4, 0, endDateBlock); // 將結束日期插入在開始日期之後
+      }
+
+      formBody.innerHTML = htmlBlocks.join('');
       document.getElementById('edit-sheetName').value = sheetName;
       document.getElementById('edit-rowIndex').value = rowIndex;
       document.getElementById('edit-modal-title').textContent = `編輯${sheetName}`;
@@ -1167,65 +1179,34 @@
       panel.querySelector('#' + tabId).style.display = 'block';
   }
 
-  function switchView(view) {
-      currentView = view;
-      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('btn-' + view).classList.add('active');
-      document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
-      document.getElementById(view + '-view').classList.add('active');
-      isFromAccPanel = false; 
-      closeCurrentPanel();
-      renderMain();
-  }
-
-  function renderMain() { 
-      renderMonthNav(); 
-      if (currentView === 'cal') { renderCalendar(); } else { renderList(); }
-  }
-
-  function toggleAccPanel() {
-      const panel = document.getElementById('acc-panel');
-      const btn = document.getElementById('acc-panel-btn');
-      const isVisible = panel.style.display === 'block';
-      
-      if (!isVisible) { 
-          const searchArea = document.getElementById('search-dropdown');
-          if (searchArea.classList.contains('active')) {
-              searchArea.classList.remove('active');
-              document.getElementById('search-toggle-btn').classList.remove('active');
-              document.getElementById('search-toggle-btn').style.background = '#fff';
-              document.getElementById('search-toggle-btn').style.color = '#78909c';
-              clearSearch();
-          }
-          
-          btn.classList.add('active'); 
-          calculateAccounting(); 
-      } else { 
-          btn.classList.remove('active'); 
-      }
-      
-      panel.style.display = isVisible ? 'none' : 'block';
-      isFromAccPanel = false; 
-  }
-
-  // 🎯 點擊帳務明細時，觸發專屬行程彈窗，並正確接收主行程的日期
-  function openInfoModalFromAcc(code, eventDateStr) {
+  // 🎯 統整跳轉邏輯，利用主行程日期找路
+  function jumpToEvent(code, eventDateStr) {
       if(!eventDateStr) return;
+      
+      switchView('cal'); 
       isFromAccPanel = true; 
-      const event = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
-      const modalBody = document.getElementById('info-modal-body');
-      // 用主行程日期 (eventDateStr) 去生成面板，不會再找錯天！
-      modalBody.innerHTML = generateDetailHTML(event, eventDateStr);
-      document.getElementById('info-modal').style.display = 'flex';
-  }
+      
+      displayYear = parseInt(eventDateStr.substring(0, 4));
+      selectedMonthFilter = eventDateStr.substring(0, 7);
+      renderMain();
 
-  function closeInfoModal() {
-      document.getElementById('info-modal').style.display = 'none';
-      isFromAccPanel = false;
+      setTimeout(() => {
+          const cells = document.querySelectorAll('.day');
+          for(let cell of cells) {
+              if(cell.dataset.date === eventDateStr) {
+                  cell.click();
+                  setTimeout(() => {
+                      cell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }, 100);
+                  break;
+              }
+          }
+      }, 50);
   }
 
   function returnToAccPanel() {
-      closeInfoModal(); 
+      closeCurrentPanel(); 
+      toggleAccPanel();
   }
 
   function calculateAccounting() {
@@ -1249,16 +1230,17 @@
           const rName = getVal(r, '行程名稱');
           
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          // 🎯 綁定主行程日期 rDate，這是防止迷路的定海神針
           if (regFee > 0) allExpenses.push({ date: rDate, eventDate: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code });
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
               const fee = parseFloat(getVal(s,'費用')) || 0;
+              // 🎯 確實綁定主行程日期 rDate
               if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, eventDate: rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || rName, searchStr: [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code: code });
           });
           
           (expensesByCode['交通'][code] || []).forEach(t => {
               const fee = parseFloat(getVal(t,'票價或油資')) || 0;
+              // 🎯 確實綁定主行程日期 rDate
               if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, eventDate: rDate, category: '交通', amount: fee, name: getVal(t,'類型') || rName, searchStr: [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code: code });
           });
           
@@ -1305,7 +1287,6 @@
           if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
           categoryTotals[cat] += e.amount;
           grandTotal += e.amount;
-          // 🎯 傳遞正確的 eventDate 給清單產生器
           accDetailsData[cat].push({ name: e.name, amount: e.amount, code: e.code, eventDate: e.eventDate });
       });
 
@@ -1393,9 +1374,8 @@
           return; 
       }
       items.forEach(item => { 
-          // 🎯 把正確的 eventDate 傳進去
           listContainer.innerHTML += `
-              <div class="acc-detail-item" onclick="openInfoModalFromAcc('${item.code}', '${item.eventDate}')">
+              <div class="acc-detail-item" onclick="jumpToEvent('${item.code}', '${item.eventDate}')">
                   <div class="acc-detail-name">${item.name}</div>
                   <div class="acc-detail-amount">$${item.amount.toLocaleString()}</div>
               </div>`; 
@@ -1444,14 +1424,7 @@
       let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
       
-      if (currentFilter === '全部') { 
-          (dbData['帳務明細']||[]).forEach(b => { 
-              if (!getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery)) {
-                  const bDate = formatDate(getVal(b, '日期')); 
-                  if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); 
-              }
-          }); 
-      }
+      // 🎯 隱藏清單的「日常帳單」，所以月份導航也不用算入孤立帳單了
       
       const uniqueMonthKeysWithData = [...new Set(monthKeysWithData)].sort();
       let uniqueYears = [...new Set(uniqueMonthKeysWithData.map(k => parseInt(k.substring(0, 4))))].sort((a, b) => a - b);
@@ -1527,7 +1500,7 @@
       `;
   }
 
-  // 🎯 升級 2：日曆跨日顏色渲染
+  // 🎯 升級 2：日曆支援跨日區間
   function renderCalendar() {
       const container = document.getElementById('calendar-container'); 
       container.innerHTML = '';
@@ -1550,8 +1523,7 @@
           let end = new Date(eDateStr);
           let loopCount = 0;
           
-          // 把這個區間的每一天都存進去
-          while(cur <= end && loopCount < 30) {
+          while(cur <= end && loopCount < 30) { // 避免填錯日期造成無限迴圈
               const dStr = formatDate(cur);
               if (dStr) {
                   eventMap[dStr] = r; 
@@ -1627,7 +1599,6 @@
                   const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
                   cell.style.borderColor = pastelColor || '#cfd8dc';
                   cell.dataset.color = pastelColor || '#cfd8dc';
-                  // 點擊日曆上的任何一天，都會以那一天 (dStr) 來打開面板
                   cell.onclick = () => handleDayClick(event, cell, grid, dStr);
               } else if (hasDailyExpense) {
                   cell.classList.add('has-expense'); 
@@ -1645,7 +1616,7 @@
       }
   }
 
-  // 🎯 升級 2：清單上的跨日區間顯示
+  // 🎯 升級 3：移除日常帳務，並處理跨日顯示
   function renderList() {
       const container = document.getElementById('list-container'); 
       container.innerHTML = '';
@@ -1655,6 +1626,7 @@
       let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       races.forEach(r => {
           const sDateStr = formatDate(getVal(r, '日期'));
+          if (!sDateStr) return;
           const eDateStr = formatDate(getVal(r, '結束日期')) || sDateStr;
           
           listItems.push({
@@ -1667,27 +1639,6 @@
               title: getVal(r, '行程名稱')
           });
       });
-
-      if (currentFilter === '全部') {
-          let standaloneBills = (dbData['帳務明細']||[]).filter(b => !getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery));
-          let billDates = [...new Set(standaloneBills.map(b => formatDate(getVal(b, '日期'))))];
-          billDates.forEach(dStr => {
-              if (dStr) {
-                  const hasEventSameDay = listItems.some(item => item.isEvent && item.dateStr === dStr);
-                  if (!hasEventSameDay) {
-                      listItems.push({
-                          isEvent: false,
-                          eventData: null,
-                          dateObj: new Date(dStr),
-                          dateStr: dStr,
-                          endDateStr: dStr,
-                          cat: '其他', 
-                          title: '日常帳務'
-                      });
-                  }
-              }
-          });
-      }
 
       listItems.sort((a, b) => a.dateObj - b.dateObj);
       
@@ -1732,7 +1683,7 @@
           
           const titleHtml = item.isEvent ? item.title : `📝 ${item.title}`;
           
-          // 如果有結束日期，且不等於開始日期，則顯示區間
+          // 處理跨日顯示
           let dateHtml = `<span class="d">${item.dateObj.getDate()}</span>`;
           if (item.dateStr !== item.endDateStr && item.endDateStr) {
               const eDate = new Date(item.endDateStr);
@@ -1878,6 +1829,7 @@
   function generateDetailHTML(event, dateStr) {
       let backBtnHtml = '';
       if (isFromAccPanel) {
+          // 🎯 調整返回按鈕位置
           backBtnHtml = `
           <div style="margin-bottom: 15px; margin-top: 15px;">
               <button onclick="returnToAccPanel()" style="background: #fff; border: 1px solid #eceff1; padding: 6px 14px; border-radius: 20px; color: var(--text-sub); font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
