@@ -1655,6 +1655,16 @@
           }
       });
   }
+
+  // =========================================
+  // 全域事件監聽：點擊半透明背景自動關閉視窗
+  // =========================================
+  window.addEventListener('click', function(event) {
+      // 如果點擊到的目標本身包含了 'modal-overlay' 這個 class（代表點在黑底上，不是點在白底表單內）
+      if (event.target.classList.contains('modal-overlay')) {
+          event.target.style.display = 'none';
+      }
+  });
   
 </script>
 </body>
