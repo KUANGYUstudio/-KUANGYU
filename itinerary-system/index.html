@@ -355,6 +355,33 @@
         font-weight: 900; 
         color: var(--settle-pink); 
     }
+
+    /* 顯示歷史行程按鈕 (膠囊質感設計) */
+    .past-toggle-btn {
+        background: #fcfcfc;
+        color: #78909c;
+        border: 1.5px solid #eceff1;
+        border-radius: 25px; /* 圓潤的膠囊形狀 */
+        padding: 10px 24px;
+        margin: 10px auto 25px; /* 確保它在畫面中間，且跟上下保持呼吸空間 */
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        display: block; /* 讓 margin auto 居中生效 */
+        width: fit-content;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    /* 滑鼠游標靠近時的互動效果 */
+    .past-toggle-btn:hover {
+        background: #fff;
+        color: var(--brand-main);
+        border-color: #cfd8dc;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        transform: translateY(-2px);
+    }
+    
   </style>
 </head>
 <body>
