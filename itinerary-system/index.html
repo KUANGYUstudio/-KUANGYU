@@ -466,8 +466,12 @@
               <div class="admin-input-group"><label>付款人</label><select id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
               <div class="admin-input-group"><label>付款方式</label><select id="add-行程-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
               <div class="admin-input-group"><label>狀態</label><select id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
-              <div class="admin-input-group"><label>備註</label><input type="text" id="add-行程-備註"></div>
-              <button class="admin-submit-btn" onclick="submitNewData('行程')">確認新增行程</button>
+              <div class="admin-input-group"><label>備註</label><input type="text" id="add-住宿-備註"></div>
+              <div class="admin-input-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; cursor: pointer;" onclick="document.getElementById('add-住宿-早餐').click()">
+                  <input type="checkbox" id="add-住宿-早餐" style="width: 20px; height: 20px; min-height: 20px; cursor: pointer;">
+                  <label style="margin-bottom: 0; cursor: pointer;">此訂房包含早餐</label>
+              </div>
+              <button class="admin-submit-btn" onclick="submitNewData('住宿')">確認新增住宿</button>
           </div>
 
           <div id="add-form-住宿" class="admin-form-section">
@@ -573,7 +577,7 @@
 
   const sheetHeaders = {
       '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '付款人', '付款方式', '狀態', '備註'],
-      '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註'],
+      '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註', '含早餐'],
       '交通': ['行程代碼', '類型', '出發日期', '去程班次 / 航班', '去程出發時間', '去程抵達時間', '回程日期', '回程班次 / 航班', '回程出發時間', '回程抵達時間', '票價或油資', '付款人', '付款方式', '狀態'],
       '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註']
   };
@@ -694,7 +698,12 @@
           } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
               inputHtml = `<input type="number" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           } else if(h === '行程代碼') {
-              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
+             inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
+          } else if(h === '含早餐') {
+              inputHtml = `<div style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
+                    <input type="checkbox" id="edit-field-${idx}" style="width: 20px; height: 20px;" ${val === 'V' ? 'checked' : ''}>
+                    <span>包含早餐</span>
+                 </div>`;
           } else {
               inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           }
@@ -723,7 +732,10 @@
       const sheetName = document.getElementById('edit-sheetName').value;
       const rowIndex = parseInt(document.getElementById('edit-rowIndex').value);
       const headers = sheetHeaders[sheetName];
-      const rowData = headers.map((h, idx) => document.getElementById(`edit-field-${idx}`).value);
+      const rowData = headers.map((h, idx) => {
+          const el = document.getElementById(`edit-field-${idx}`);
+          return el.type === 'checkbox' ? (el.checked ? "V" : "") : el.value;
+      });
       
       if(sheetName === '帳務明細') {
           if(!rowData[1] || !rowData[4]) { alert("日期與金額不能空白！"); return; }
@@ -797,7 +809,8 @@
           eventCode = document.getElementById('add-住宿-代碼').value;
           let platformVal = document.getElementById('add-住宿-平台').value;
           if (platformVal === '其他') platformVal = document.getElementById('add-住宿-平台-其他').value;
-          rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, document.getElementById('add-住宿-入住時間').value, document.getElementById('add-住宿-退房日期').value, document.getElementById('add-住宿-退房時間').value, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, document.getElementById('add-住宿-方式').value, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value];
+          const hasBreakfast = document.getElementById('add-住宿-早餐').checked ? "V" : "";
+          rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, document.getElementById('add-住宿-入住時間').value, document.getElementById('add-住宿-退房日期').value, document.getElementById('add-住宿-退房時間').value, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, document.getElementById('add-住宿-方式').value, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast];
       } else if (sheetName === '交通') {
           eventCode = document.getElementById('add-交通-代碼').value;
           rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, document.getElementById('add-交通-方式').value, document.getElementById('add-交通-狀態').value];
@@ -1510,7 +1523,16 @@
               html += `
                   <div class="info-card card-stay">
                       <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-                          <span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>
+                          const breakfastTag = getVal(s,'含早餐') === 'V' ? '<span style="font-size:12px; color:#546e7a; background:#e0f2f1; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:bold;">附早餐</span>' : '';
+html += `
+    <div class="info-card card-stay">
+        <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+            <div style="display:flex; align-items:center;">
+                <span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>
+                ${breakfastTag}
+            </div>
+            ${getVal(s,'連結') ? `<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>` : ''}
+        </div>`;
                           ${getVal(s,'連結') ? `<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>` : ''}
                       </div>`;
               if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
