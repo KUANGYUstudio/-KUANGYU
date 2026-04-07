@@ -268,7 +268,7 @@
     }
     .modal-content { 
         background:#fff; width:85%; max-width:350px; border-radius:28px; 
-        padding:30px; box-sizing:border-box; text-align:center; 
+        box-sizing:border-box; text-align:center; 
         box-shadow: 0 15px 40px rgba(0,0,0,0.2); animation: popScale 0.3s ease; 
     }
     @keyframes popScale { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -278,7 +278,7 @@
         display: flex; align-items: center; justify-content: center; font-size: 28px; 
         margin: 0 auto 20px; border: 2px solid #ffcdd2; font-weight: bold; 
     }
-    .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+    .modal-actions { display: flex; gap: 12px; margin-top: 20px; padding: 0 30px 30px; }
     .modal-btn { flex: 1; padding: 14px; border-radius: 16px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; }
     .btn-cancel { background: #f5f5f5; color: #78909c; }
     .btn-danger { background: #e53935; color: #fff; }
@@ -414,7 +414,7 @@
   </div>
 
   <div id="confirm-modal" class="modal-overlay">
-      <div class="modal-content">
+      <div class="modal-content" style="padding-top: 30px;">
           <div class="confirm-icon">!</div>
           <div style="font-weight:800; font-size:18px; margin-bottom:10px; color: var(--brand-main);">確定要刪除嗎？</div>
           <div id="confirm-desc" style="font-size:14px; color:#78909c; line-height:1.6;">刪除後資料將無法恢復。</div>
@@ -426,7 +426,7 @@
   </div>
 
   <div id="edit-modal" class="modal-overlay">
-      <div class="modal-content" style="max-width: 400px; text-align: left;">
+      <div class="modal-content" style="max-width: 400px; text-align: left; padding: 25px;">
           <h3 style="margin:0 0 20px 0; color:var(--brand-main); display: flex; justify-content: space-between; align-items: center;">
               <span id="edit-modal-title">編輯資料</span>
               <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeEditModal()">×</span>
@@ -439,128 +439,133 @@
   </div>
 
   <div id="add-modal" class="modal-overlay">
-      <div class="modal-content" style="max-width: 500px; text-align: left; max-height: 85vh; overflow-y: auto; padding: 25px;">
-          <h3 style="margin:0 0 20px 0; color:var(--brand-main); display: flex; justify-content: space-between; align-items: center;">
-              <span>新增資料</span>
-              <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeAddModal()">×</span>
-          </h3>
+      <div class="modal-content" style="max-width: 500px; text-align: left; max-height: 85vh; padding: 0; display: flex; flex-direction: column; overflow: hidden;">
+          
+          <div style="padding: 25px 25px 10px; background: #fff; z-index: 10; flex-shrink: 0; border-radius: 28px 28px 0 0;">
+              <h3 style="margin:0 0 20px 0; color:var(--brand-main); display: flex; justify-content: space-between; align-items: center;">
+                  <span>新增資料</span>
+                  <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeAddModal()">×</span>
+              </h3>
 
-          <div class="admin-tabs">
-              <button class="admin-tab-btn active" onclick="switchAdminTab('行程', this)">行程</button>
-              <button class="admin-tab-btn" onclick="switchAdminTab('住宿', this)">住宿</button>
-              <button class="admin-tab-btn" onclick="switchAdminTab('交通', this)">交通</button>
-              <button class="admin-tab-btn" onclick="switchAdminTab('帳務明細', this)">帳務明細</button>
+              <div class="admin-tabs" style="margin-bottom: 0;">
+                  <button class="admin-tab-btn active" onclick="switchAdminTab('行程', this)">行程</button>
+                  <button class="admin-tab-btn" onclick="switchAdminTab('住宿', this)">住宿</button>
+                  <button class="admin-tab-btn" onclick="switchAdminTab('交通', this)">交通</button>
+                  <button class="admin-tab-btn" onclick="switchAdminTab('帳務明細', this)">帳務明細</button>
+              </div>
           </div>
 
-          <div id="add-form-行程" class="admin-form-section active">
-              <div class="admin-input-group"><label>行程代碼</label><input type="text" id="add-行程-代碼" placeholder="例如：20260403_台東賽"></div>
-              <div class="admin-input-group"><label>行程名稱</label><input type="text" id="add-行程-名稱"></div>
-              <div class="admin-input-group"><label>行程類別</label><select id="add-行程-類別" onchange="toggleAddEventFee()"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
-              <div class="admin-input-group"><label>日期</label><input type="date" id="add-行程-日期"></div>
-              <div class="admin-input-group"><label>行程連結</label><input type="url" id="add-行程-連結"></div>
-              <div class="admin-input-group"><label>聿凡項目</label><input type="text" id="add-行程-聿凡"></div>
-              <div class="admin-input-group"><label>光武項目</label><input type="text" id="add-行程-光武"></div>
-              <div class="admin-input-group"><label>報名費總額</label><input type="number" inputmode="decimal" id="add-行程-報名費"></div>
-              <div class="admin-input-group"><label>付款人</label><select id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
-              <div class="admin-input-group"><label>付款方式</label><select id="add-行程-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
-              <div class="admin-input-group"><label>狀態</label><select id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
-              <div class="admin-input-group"><label>備註</label><input type="text" id="add-行程-備註"></div>
-              <button class="admin-submit-btn" onclick="submitNewData('行程')">確認新增行程</button>
-          </div>
+          <div style="flex: 1; overflow-y: auto; padding: 15px 25px 25px;">
+              <div id="add-form-行程" class="admin-form-section active">
+                  <div class="admin-input-group"><label>行程代碼</label><input autocomplete="off" type="text" id="add-行程-代碼" placeholder="例如：20260403_台東賽"></div>
+                  <div class="admin-input-group"><label>行程名稱</label><input autocomplete="off" type="text" id="add-行程-名稱"></div>
+                  <div class="admin-input-group"><label>行程類別</label><select autocomplete="off" id="add-行程-類別" onchange="toggleAddEventFee()"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
+                  <div class="admin-input-group"><label>日期</label><input autocomplete="off" type="date" id="add-行程-日期"></div>
+                  <div class="admin-input-group"><label>行程連結</label><input autocomplete="off" type="url" id="add-行程-連結"></div>
+                  <div class="admin-input-group"><label>聿凡項目</label><input autocomplete="off" type="text" id="add-行程-聿凡"></div>
+                  <div class="admin-input-group"><label>光武項目</label><input autocomplete="off" type="text" id="add-行程-光武"></div>
+                  <div class="admin-input-group"><label>報名費總額</label><input autocomplete="off" type="number" inputmode="decimal" id="add-行程-報名費"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-行程-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
+                  <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-行程-備註"></div>
+                  <button class="admin-submit-btn" onclick="submitNewData('行程')">確認新增行程</button>
+              </div>
 
-          <div id="add-form-住宿" class="admin-form-section">
-              <div class="admin-input-group"><label>行程代碼</label><select class="admin-code-selector" id="add-住宿-代碼" onchange="autoFillDate(this.value, 'add-住宿-入住日期')"></select></div>
-              <div class="admin-input-group"><label>飯店名稱</label><input type="text" id="add-住宿-飯店"></div>
-              <div class="admin-group-box">
-                  <div class="admin-group-title">入住資訊</div>
-                  <div class="admin-input-group"><label>入住日期</label><input type="date" id="add-住宿-入住日期"></div>
-                  <div class="admin-input-group" style="margin-bottom: 0;">
-                      <label>入住時間</label>
-                      <select id="add-住宿-入住時間-select" onchange="document.getElementById('add-住宿-入住時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
-                          <option value="">-</option><option>14:00</option><option>15:00</option><option>16:00</option><option>其他</option>
-                      </select>
-                      <input type="text" id="add-住宿-入住時間-其他" placeholder="請填寫入住時間" style="display: none; margin-top: 8px;">
+              <div id="add-form-住宿" class="admin-form-section">
+                  <div class="admin-input-group"><label>行程代碼</label><select autocomplete="off" class="admin-code-selector" id="add-住宿-代碼" onchange="autoFillDate(this.value, 'add-住宿-入住日期')"></select></div>
+                  <div class="admin-input-group"><label>飯店名稱</label><input autocomplete="off" type="text" id="add-住宿-飯店"></div>
+                  <div class="admin-group-box">
+                      <div class="admin-group-title">入住資訊</div>
+                      <div class="admin-input-group"><label>入住日期</label><input autocomplete="off" type="date" id="add-住宿-入住日期"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;">
+                          <label>入住時間</label>
+                          <select autocomplete="off" id="add-住宿-入住時間-select" onchange="document.getElementById('add-住宿-入住時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
+                              <option value="">-</option><option>14:00</option><option>15:00</option><option>16:00</option><option>其他</option>
+                          </select>
+                          <input autocomplete="off" type="text" id="add-住宿-入住時間-其他" placeholder="請填寫入住時間" style="display: none; margin-top: 8px;">
+                      </div>
                   </div>
-              </div>
-              <div class="admin-group-box">
-                  <div class="admin-group-title">退房資訊</div>
-                  <div class="admin-input-group"><label>退房日期</label><input type="date" id="add-住宿-退房日期"></div>
-                  <div class="admin-input-group" style="margin-bottom: 0;">
-                      <label>退房時間</label>
-                      <select id="add-住宿-退房時間-select" onchange="document.getElementById('add-住宿-退房時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
-                          <option value="">-</option><option>11:00</option><option>12:00</option><option>其他</option>
-                      </select>
-                      <input type="text" id="add-住宿-退房時間-其他" placeholder="請填寫退房時間" style="display: none; margin-top: 8px;">
+                  <div class="admin-group-box">
+                      <div class="admin-group-title">退房資訊</div>
+                      <div class="admin-input-group"><label>退房日期</label><input autocomplete="off" type="date" id="add-住宿-退房日期"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;">
+                          <label>退房時間</label>
+                          <select autocomplete="off" id="add-住宿-退房時間-select" onchange="document.getElementById('add-住宿-退房時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
+                              <option value="">-</option><option>11:00</option><option>12:00</option><option>其他</option>
+                          </select>
+                          <input autocomplete="off" type="text" id="add-住宿-退房時間-其他" placeholder="請填寫退房時間" style="display: none; margin-top: 8px;">
+                      </div>
                   </div>
-              </div>
-              <div class="admin-input-group">
-                  <label>訂房平台</label>
-                  <select id="add-住宿-平台-select" onchange="document.getElementById('add-住宿-平台-其他').style.display = this.value === '其他' ? 'block' : 'none'">
-                      <option value="">-</option><option>Agoda</option><option>Booking.com</option><option>Trip.com</option><option>易遊網</option><option>官方網站</option><option>其他</option>
-                  </select>
-                  <input type="text" id="add-住宿-平台-其他" placeholder="請自行填寫" style="display: none; margin-top: 8px;">
-              </div>
-              <div class="admin-input-group"><label>費用</label><input type="number" inputmode="decimal" id="add-住宿-費用"></div>
-              <div class="admin-input-group"><label>付款人</label><select id="add-住宿-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
-              <div class="admin-input-group"><label>付款方式</label><select id="add-住宿-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
-              <div class="admin-input-group"><label>狀態</label><select id="add-住宿-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
-              <div class="admin-input-group"><label>連結</label><input type="url" id="add-住宿-連結"></div>
-              <div class="admin-input-group"><label>備註</label><input type="text" id="add-住宿-備註"></div>
-              
-              <div class="admin-input-group" style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 25px; background: #f8f9fa; padding: 12px; border-radius: 12px; border: 1px dashed #dcdde1;">
-                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0;">
-                      <input type="checkbox" id="add-住宿-待確認" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
-                      <span style="font-size: 14px; font-weight: 800; color: #e53935;">待確認</span>
-                  </label>
-                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0;">
-                      <input type="checkbox" id="add-住宿-早餐" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
-                      <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">含早餐</span>
-                  </label>
-                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0;">
-                      <input type="checkbox" id="add-住宿-充電樁" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
-                      <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">充電樁</span>
-                  </label>
+                  <div class="admin-input-group">
+                      <label>訂房平台</label>
+                      <select autocomplete="off" id="add-住宿-平台-select" onchange="document.getElementById('add-住宿-平台-其他').style.display = this.value === '其他' ? 'block' : 'none'">
+                          <option value="">-</option><option>Agoda</option><option>Booking.com</option><option>Trip.com</option><option>易遊網</option><option>官方網站</option><option>其他</option>
+                      </select>
+                      <input autocomplete="off" type="text" id="add-住宿-平台-其他" placeholder="請自行填寫" style="display: none; margin-top: 8px;">
+                  </div>
+                  <div class="admin-input-group"><label>費用</label><input autocomplete="off" type="number" inputmode="decimal" id="add-住宿-費用"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-住宿-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-住宿-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-住宿-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
+                  <div class="admin-input-group"><label>連結</label><input autocomplete="off" type="url" id="add-住宿-連結"></div>
+                  <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-住宿-備註"></div>
+                  
+                  <div class="admin-input-group" style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 25px; background: #f8f9fa; padding: 12px; border-radius: 12px; border: 1px dashed #dcdde1;">
+                      <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0;">
+                          <input autocomplete="off" type="checkbox" id="add-住宿-待確認" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
+                          <span style="font-size: 14px; font-weight: 800; color: #e53935;">待確認</span>
+                      </label>
+                      <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0;">
+                          <input autocomplete="off" type="checkbox" id="add-住宿-早餐" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
+                          <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">含早餐</span>
+                      </label>
+                      <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0;">
+                          <input autocomplete="off" type="checkbox" id="add-住宿-充電樁" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
+                          <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">充電樁</span>
+                      </label>
+                  </div>
+
+                  <button class="admin-submit-btn" onclick="submitNewData('住宿')">確認新增住宿</button>
               </div>
 
-              <button class="admin-submit-btn" onclick="submitNewData('住宿')">確認新增住宿</button>
-          </div>
+              <div id="add-form-交通" class="admin-form-section">
+                  <div class="admin-input-group"><label>行程代碼</label><select autocomplete="off" class="admin-code-selector" id="add-交通-代碼" onchange="autoFillDate(this.value, 'add-交通-出發日期')"></select></div>
+                  <div class="admin-input-group"><label>類型</label><select autocomplete="off" id="add-交通-類型"><option>自駕</option><option>火車</option><option>飛機</option></select></div>
+                  <div class="admin-group-box">
+                      <div class="admin-group-title">去程資訊</div>
+                      <div class="admin-input-group"><label>出發日期</label><input autocomplete="off" type="date" id="add-交通-出發日期"></div>
+                      <div class="admin-input-group"><label>去程班次 / 航班</label><input autocomplete="off" type="text" id="add-交通-去程"></div>
+                      <div class="admin-input-group"><label>去程出發時間</label><input autocomplete="off" type="text" id="add-交通-去程出發" placeholder="例如 08:30"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;"><label>去程抵達時間</label><input autocomplete="off" type="text" id="add-交通-去程抵達"></div>
+                  </div>
+                  <div class="admin-group-box">
+                      <div class="admin-group-title">回程資訊</div>
+                      <div class="admin-input-group"><label>回程日期</label><input autocomplete="off" type="date" id="add-交通-回程日期"></div>
+                      <div class="admin-input-group"><label>回程班次 / 航班</label><input autocomplete="off" type="text" id="add-交通-回程"></div>
+                      <div class="admin-input-group"><label>回程出發時間</label><input autocomplete="off" type="text" id="add-交通-回程出發" placeholder="例如 14:30"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;"><label>回程抵達時間</label><input autocomplete="off" type="text" id="add-交通-回程抵達"></div>
+                  </div>
+                  <div class="admin-input-group"><label>票價或油資</label><input autocomplete="off" type="number" inputmode="decimal" id="add-交通-費用"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-交通-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-交通-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-交通-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
+                  <button class="admin-submit-btn" onclick="submitNewData('交通')">確認新增交通</button>
+              </div>
 
-          <div id="add-form-交通" class="admin-form-section">
-              <div class="admin-input-group"><label>行程代碼</label><select class="admin-code-selector" id="add-交通-代碼" onchange="autoFillDate(this.value, 'add-交通-出發日期')"></select></div>
-              <div class="admin-input-group"><label>類型</label><select id="add-交通-類型"><option>自駕</option><option>火車</option><option>飛機</option></select></div>
-              <div class="admin-group-box">
-                  <div class="admin-group-title">去程資訊</div>
-                  <div class="admin-input-group"><label>出發日期</label><input type="date" id="add-交通-出發日期"></div>
-                  <div class="admin-input-group"><label>去程班次 / 航班</label><input type="text" id="add-交通-去程"></div>
-                  <div class="admin-input-group"><label>去程出發時間</label><input type="text" id="add-交通-去程出發" placeholder="例如 08:30"></div>
-                  <div class="admin-input-group" style="margin-bottom: 0;"><label>去程抵達時間</label><input type="text" id="add-交通-去程抵達"></div>
+              <div id="add-form-帳務明細" class="admin-form-section">
+                  <div class="admin-input-group"><label>行程代碼 (日常記帳免填)</label><select autocomplete="off" class="admin-code-selector" id="add-帳務-代碼"></select></div>
+                  <div class="admin-input-group"><label>日期</label><input autocomplete="off" type="date" id="add-帳務-日期"></div>
+                  <div class="admin-input-group">
+                      <label>類別</label>
+                      <select autocomplete="off" id="add-帳務-類別"><option>飲食</option><option>交通</option><option>購物</option><option>採買</option><option>娛樂</option><option>其他</option></select>
+                  </div>
+                  <div class="admin-input-group"><label>項目</label><input autocomplete="off" type="text" id="add-帳務-項目" placeholder="例如：晚餐、伴手禮"></div>
+                  <div class="admin-input-group"><label>金額</label><input autocomplete="off" type="number" inputmode="decimal" id="add-帳務-金額"></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-帳務-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-帳務-備註" placeholder="可選填"></div>
+                  <button class="admin-submit-btn" onclick="submitNewData('帳務明細')">確認新增帳務</button>
               </div>
-              <div class="admin-group-box">
-                  <div class="admin-group-title">回程資訊</div>
-                  <div class="admin-input-group"><label>回程日期</label><input type="date" id="add-交通-回程日期"></div>
-                  <div class="admin-input-group"><label>回程班次 / 航班</label><input type="text" id="add-交通-回程"></div>
-                  <div class="admin-input-group"><label>回程出發時間</label><input type="text" id="add-交通-回程出發" placeholder="例如 14:30"></div>
-                  <div class="admin-input-group" style="margin-bottom: 0;"><label>回程抵達時間</label><input type="text" id="add-交通-回程抵達"></div>
-              </div>
-              <div class="admin-input-group"><label>票價或油資</label><input type="number" inputmode="decimal" id="add-交通-費用"></div>
-              <div class="admin-input-group"><label>付款人</label><select id="add-交通-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
-              <div class="admin-input-group"><label>付款方式</label><select id="add-交通-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
-              <div class="admin-input-group"><label>狀態</label><select id="add-交通-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
-              <button class="admin-submit-btn" onclick="submitNewData('交通')">確認新增交通</button>
-          </div>
-
-          <div id="add-form-帳務明細" class="admin-form-section">
-              <div class="admin-input-group"><label>行程代碼 (日常記帳免填)</label><select class="admin-code-selector" id="add-帳務-代碼"></select></div>
-              <div class="admin-input-group"><label>日期</label><input type="date" id="add-帳務-日期"></div>
-              <div class="admin-input-group">
-                  <label>類別</label>
-                  <select id="add-帳務-類別"><option>飲食</option><option>交通</option><option>購物</option><option>採買</option><option>娛樂</option><option>其他</option></select>
-              </div>
-              <div class="admin-input-group"><label>項目</label><input type="text" id="add-帳務-項目" placeholder="例如：晚餐、伴手禮"></div>
-              <div class="admin-input-group"><label>金額</label><input type="number" inputmode="decimal" id="add-帳務-金額"></div>
-              <div class="admin-input-group"><label>付款方式</label><select id="add-帳務-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
-              <div class="admin-input-group"><label>備註</label><input type="text" id="add-帳務-備註" placeholder="可選填"></div>
-              <button class="admin-submit-btn" onclick="submitNewData('帳務明細')">確認新增帳務</button>
           </div>
       </div>
   </div>
@@ -712,11 +717,10 @@
       }
   }
 
-  // 🚀 升級 2：自動帶入行程日期的大腦
   function autoFillDate(eventCode, targetInputId) {
       if (!eventCode) return;
       const targetInput = document.getElementById(targetInputId);
-      if (!targetInput || targetInput.value) return; // 如果已經有填了就不覆蓋
+      if (!targetInput || targetInput.value) return; 
 
       const event = dbData['行程'].find(r => getVal(r, '行程代碼') === eventCode);
       if (event) {
@@ -746,30 +750,30 @@
               const opts = selectOptions[h].map(o => `<option value="${o}" ${selectVal===o?'selected':''}>${o}</option>`).join('');
               
               inputHtml = `
-                  <select id="edit-field-${idx}-select" class="edit-input" onchange="document.getElementById('edit-field-${idx}-custom').style.display = this.value === '其他' ? 'block' : 'none'">
+                  <select autocomplete="off" id="edit-field-${idx}-select" class="edit-input" onchange="document.getElementById('edit-field-${idx}-custom').style.display = this.value === '其他' ? 'block' : 'none'">
                       ${opts}
                   </select>
-                  <input type="text" id="edit-field-${idx}-custom" class="edit-input" style="margin-top:8px; display:${isCustom ? 'block' : 'none'};" value="${isCustom ? val : ''}" placeholder="請輸入自訂內容">
+                  <input autocomplete="off" type="text" id="edit-field-${idx}-custom" class="edit-input" style="margin-top:8px; display:${isCustom ? 'block' : 'none'};" value="${isCustom ? val : ''}" placeholder="請輸入自訂內容">
               `;
           } else if(selectOptions[h]) {
               const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
               const onChangeAttr = (h === '行程類別') ? 'onchange="toggleEditEventFee()"' : '';
-              inputHtml = `<select id="edit-field-${idx}" class="edit-input" ${onChangeAttr}>${opts}</select>`;
+              inputHtml = `<select autocomplete="off" id="edit-field-${idx}" class="edit-input" ${onChangeAttr}>${opts}</select>`;
           } else if(h.includes('日期')) {
               const dVal = formatDate(val);
-              inputHtml = `<input type="date" id="edit-field-${idx}" class="edit-input" value="${dVal}">`;
+              inputHtml = `<input autocomplete="off" type="date" id="edit-field-${idx}" class="edit-input" value="${dVal}">`;
           } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
-              inputHtml = `<input type="number" inputmode="decimal" id="edit-field-${idx}" class="edit-input" value="${val}">`; // 編輯時也加上數字鍵盤
+              inputHtml = `<input autocomplete="off" type="number" inputmode="decimal" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           } else if(h === '行程代碼') {
-              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
+              inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
           } else if(h === '含早餐' || h === '充電樁' || h === '待確認') {
               labelHtml = ''; 
               inputHtml = `<label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer;">
-                              <input type="checkbox" id="edit-field-${idx}" style="width: 20px; height: 20px; cursor: pointer;" ${val === 'V' ? 'checked' : ''}>
+                              <input autocomplete="off" type="checkbox" id="edit-field-${idx}" style="width: 20px; height: 20px; cursor: pointer;" ${val === 'V' ? 'checked' : ''}>
                               <span style="font-size: 15px; font-weight: bold; ${h === '待確認' ? 'color:#e53935;' : 'color:var(--text-sub);'}">${h}</span>
                            </label>`;
           } else {
-              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
+              inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           }
 
           const groupStyle = labelHtml === '' ? 'margin-bottom: 5px;' : '';
@@ -814,7 +818,6 @@
           return el.type === 'checkbox' ? (el.checked ? "V" : "") : el.value;
       });
       
-      // 🚀 升級 3：編輯時的時光倒流防呆
       if(sheetName === '住宿') {
           const inDate = new Date(rowData[2]);
           const outDate = new Date(rowData[4]);
@@ -880,6 +883,12 @@
       btn.classList.add('active');
   }
 
+  function toggleAddPlatform() {
+      const select = document.getElementById('add-住宿-平台-select');
+      const otherInput = document.getElementById('add-住宿-平台-其他');
+      otherInput.style.display = select.value === '其他' ? 'block' : 'none';
+  }
+
   async function submitNewData(sheetName) {
       let rowData = [];
       let eventCode = "";
@@ -908,7 +917,6 @@
           
           rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, checkInTime, document.getElementById('add-住宿-退房日期').value, checkOutTime, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, document.getElementById('add-住宿-方式').value, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending];
       
-          // 🚀 升級 3：新增時的時光倒流防呆
           const inDate = new Date(document.getElementById('add-住宿-入住日期').value);
           const outDate = new Date(document.getElementById('add-住宿-退房日期').value);
           if (document.getElementById('add-住宿-入住日期').value && document.getElementById('add-住宿-退房日期').value && outDate < inDate) {
@@ -919,7 +927,6 @@
           eventCode = document.getElementById('add-交通-代碼').value;
           rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, document.getElementById('add-交通-方式').value, document.getElementById('add-交通-狀態').value];
       
-          // 🚀 升級 3：新增時的時光倒流防呆
           const goDate = new Date(document.getElementById('add-交通-出發日期').value);
           const backDate = new Date(document.getElementById('add-交通-回程日期').value);
           if (document.getElementById('add-交通-出發日期').value && document.getElementById('add-交通-回程日期').value && backDate < goDate) {
