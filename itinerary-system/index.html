@@ -1125,7 +1125,7 @@
           if (pastRaces.length > 0) {
               const toggleBtn = document.createElement('div'); 
               toggleBtn.className = 'past-toggle-btn';
-              toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示 ${displayYear} 歷史行程 (${pastRaces.length}筆) ▼`;
+              toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示歷史行程 (${pastRaces.length}筆) ▼`;
               toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
               container.appendChild(toggleBtn);
           }
