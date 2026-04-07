@@ -414,11 +414,10 @@
   </div>
 
   <div id="confirm-modal" class="modal-overlay">
-      <div class="modal-content" style="padding-top: 30px;">
-          <div class="confirm-icon">!</div>
-          <div style="font-weight:800; font-size:18px; margin-bottom:10px; color: var(--brand-main);">確定要刪除嗎？</div>
-          <div id="confirm-desc" style="font-size:14px; color:#78909c; line-height:1.6;">刪除後資料將無法恢復。</div>
-          <div class="modal-actions">
+      <div class="modal-content" style="padding-top: 40px;">
+          <div style="font-weight:800; font-size:20px; margin-bottom:12px; color: var(--brand-main);">確定要刪除嗎？</div>
+          <div id="confirm-desc" style="font-size:14px; color:#78909c; line-height:1.6;">刪除後資料將無法復原。</div>
+          <div class="modal-actions" style="margin-top: 25px;">
               <button class="modal-btn btn-cancel" onclick="closeConfirmModal()">取消</button>
               <button id="confirm-delete-btn" class="modal-btn btn-danger" onclick="doDelete()">確定刪除</button>
           </div>
@@ -677,7 +676,7 @@
       if(e) e.stopPropagation();
       deleteTargetSheet = sheetName;
       deleteTargetRowIndex = rowIndex;
-      document.getElementById('confirm-desc').innerHTML = `確定要刪除這筆【${sheetName}】資料嗎？<br><span style="color:#e53935; font-size:12px;">(刪除後無法復原)</span>`;
+      document.getElementById('confirm-desc').innerHTML = `<span style="color:#e53935; font-size:14px; font-weight:bold;">刪除後將無法復原</span>`;
       document.getElementById('confirm-modal').style.display = 'flex';
   }
 
