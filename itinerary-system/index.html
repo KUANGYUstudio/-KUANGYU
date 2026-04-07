@@ -379,7 +379,6 @@
     }
     .acc-tab-btn.active { background: var(--nav-active); color: #fff; box-shadow: 0 4px 10px rgba(84, 110, 122, 0.2); }
     
-    /* 🎯 點擊回饋：讓帳務明細看起來可以點擊 */
     .acc-detail-item {
         display: flex; justify-content: space-between; align-items: center;
         padding: 15px 20px; border-bottom: 1px solid #f5f5f5; background: #fff; transition: 0.2s;
@@ -670,7 +669,6 @@
   let isEditMode = false;
 
   let currentSearchQuery = '';
-  // 🎯 記錄是否是從帳務總覽跳過來的時空標記
   let isFromAccPanel = false;
 
   let accDetailsData = {};
@@ -770,12 +768,22 @@
   function handleSearch(val) {
       currentSearchQuery = val.trim();
       const clearBtn = document.getElementById('search-clear-btn');
+      
       if (currentSearchQuery.length > 0) {
           clearBtn.style.display = 'flex';
+          // 🎯 搜尋時自動切換到「清單」模式
+          if (currentView !== 'list') {
+              document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+              document.getElementById('btn-list').classList.add('active');
+              document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
+              document.getElementById('list-view').classList.add('active');
+              currentView = 'list';
+          }
       } else {
           clearBtn.style.display = 'none';
       }
-      isFromAccPanel = false; // 搜尋時取消折返狀態
+      
+      isFromAccPanel = false; 
       renderMain();
       if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
   }
@@ -1146,7 +1154,7 @@
       document.getElementById('btn-' + view).classList.add('active');
       document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
       document.getElementById(view + '-view').classList.add('active');
-      isFromAccPanel = false; // 切換視圖時取消折返狀態
+      isFromAccPanel = false; 
       closeCurrentPanel();
       renderMain();
   }
@@ -1167,26 +1175,22 @@
       } else { 
           btn.classList.remove('active'); 
       }
-      isFromAccPanel = false; // 開關帳務時重置狀態
+      isFromAccPanel = false; 
   }
 
-  // 🎯 時空跳躍：從帳務清單跳回日曆，並幫你自動打開面板
   function jumpToEvent(code, dateStr) {
       if(!dateStr) return;
       
-      // 1. 記住我們是從帳務來的，然後把帳務面板藏起來
       isFromAccPanel = true;
       document.getElementById('acc-panel').style.display = 'none';
       document.getElementById('acc-panel-btn').classList.remove('active');
       
-      // 2. 切換回日曆模式
       document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('btn-cal').classList.add('active');
       document.querySelectorAll('.view-container').forEach(c => c.classList.remove('active'));
       document.getElementById('cal-view').classList.add('active');
       currentView = 'cal';
 
-      // 3. 把搜尋框跟篩選器清乾淨，以免找不到那天的格子
       currentSearchQuery = '';
       document.getElementById('main-search-input').value = '';
       document.getElementById('search-dropdown').classList.remove('active');
@@ -1194,12 +1198,10 @@
       document.getElementById('search-toggle-btn').style.background = '#fff';
       document.getElementById('search-toggle-btn').style.color = '#78909c';
       
-      // 4. 時空切換：把日曆翻到那一年、那個月
       displayYear = parseInt(dateStr.substring(0, 4));
       selectedMonthFilter = dateStr.substring(0, 7);
       renderMain();
 
-      // 5. 稍微等畫面畫好，然後自動點擊那天的格子，並平滑滾動到螢幕中央
       setTimeout(() => {
           const cells = document.querySelectorAll('.day');
           for(let cell of cells) {
@@ -1214,13 +1216,12 @@
       }, 50);
   }
 
-  // 🎯 隱形麵包屑：點擊返回按鈕，帶你回到剛剛的帳務畫面
   function returnToAccPanel() {
       isFromAccPanel = false;
-      closeCurrentPanel(); // 收起細節
-      document.getElementById('acc-panel').style.display = 'block'; // 打開帳務
+      closeCurrentPanel(); 
+      document.getElementById('acc-panel').style.display = 'block'; 
       document.getElementById('acc-panel-btn').classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' }); // 捲回最上面
+      window.scrollTo({ top: 0, behavior: 'smooth' }); 
   }
 
   function calculateAccounting() {
@@ -1244,7 +1245,6 @@
           const rName = getVal(r, '行程名稱');
           
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          // 🎯 每一筆花費都綁上代碼與日期，這是跳躍的鑰匙
           if (regFee > 0) allExpenses.push({ date: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code });
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
@@ -1300,7 +1300,6 @@
           if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
           categoryTotals[cat] += e.amount;
           grandTotal += e.amount;
-          // 🎯 傳遞鑰匙給清單產生器
           accDetailsData[cat].push({ name: e.name, amount: e.amount, code: e.code, date: e.date });
       });
 
@@ -1387,7 +1386,6 @@
           listContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#cfd8dc;">無支出紀錄</div>'; 
           return; 
       }
-      // 🎯 帳務清單加上 onclick 事件，啟動時空跳躍
       items.forEach(item => { 
           listContainer.innerHTML += `
               <div class="acc-detail-item" onclick="jumpToEvent('${item.code}', '${item.date}')">
@@ -1593,7 +1591,6 @@
               const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
               const cell = document.createElement('div'); 
               cell.className = 'day'; 
-              // 🎯 貼上隱形標籤，方便跳躍機制找到這一天
               cell.dataset.date = dStr;
               cell.innerHTML = `<span class="day-number">${d}</span>`;
               
@@ -1623,65 +1620,98 @@
       }
   }
 
+  // 🎯 升級 1：搜尋時清單會一併抓出獨立的日常帳務
   function renderList() {
       const container = document.getElementById('list-container'); 
       container.innerHTML = '';
       
+      let listItems = [];
+
       let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
-      races.sort((a, b) => new Date(getVal(a, '日期')) - new Date(getVal(b, '日期')));
+      races.forEach(r => {
+          listItems.push({
+              isEvent: true,
+              eventData: r,
+              dateObj: new Date(getVal(r, '日期')),
+              dateStr: formatDate(getVal(r, '日期')),
+              cat: getVal(r, '行程類別'),
+              title: getVal(r, '行程名稱')
+          });
+      });
+
+      if (currentFilter === '全部') {
+          let standaloneBills = (dbData['帳務明細']||[]).filter(b => !getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery));
+          let billDates = [...new Set(standaloneBills.map(b => formatDate(getVal(b, '日期'))))];
+          billDates.forEach(dStr => {
+              if (dStr) {
+                  const hasEventSameDay = listItems.some(item => item.isEvent && item.dateStr === dStr);
+                  if (!hasEventSameDay) {
+                      listItems.push({
+                          isEvent: false,
+                          eventData: null,
+                          dateObj: new Date(dStr),
+                          dateStr: dStr,
+                          cat: '其他', 
+                          title: '日常帳務'
+                      });
+                  }
+              }
+          });
+      }
+
+      listItems.sort((a, b) => a.dateObj - b.dateObj);
       
       const today = new Date(); 
       today.setHours(0, 0, 0, 0);
       
-      const pastRaces = races.filter(r => new Date(getVal(r, '日期')) < today && formatDate(getVal(r, '日期')).startsWith(displayYear));
-      const futureRaces = races.filter(r => new Date(getVal(r, '日期')) >= today && formatDate(getVal(r, '日期')).startsWith(displayYear));
+      const pastItems = listItems.filter(item => item.dateObj < today && item.dateStr.startsWith(displayYear));
+      const futureItems = listItems.filter(item => item.dateObj >= today && item.dateStr.startsWith(displayYear));
       
-      let racesToRender = [];
+      let itemsToRender = [];
       if (selectedMonthFilter) {
-          racesToRender = races.filter(r => formatDate(getVal(r, '日期')).startsWith(selectedMonthFilter));
+          itemsToRender = listItems.filter(item => item.dateStr.startsWith(selectedMonthFilter));
       } else if (currentSearchQuery) {
-          racesToRender = races;
+          itemsToRender = listItems; 
       } else {
-          racesToRender = showPastList ? races.filter(r => formatDate(getVal(r, '日期')).startsWith(displayYear)) : futureRaces;
-          if (pastRaces.length > 0) {
+          itemsToRender = showPastList ? listItems.filter(item => item.dateStr.startsWith(displayYear)) : futureItems;
+          if (pastItems.length > 0) {
               const toggleBtn = document.createElement('div'); 
               toggleBtn.className = 'past-toggle-btn';
-              toggleBtn.textContent = showPastList ? '收起歷史行程 ▲' : `顯示歷史行程 ▼`;
+              toggleBtn.textContent = showPastList ? '收起歷史紀錄 ▲' : `顯示歷史紀錄 ▼`;
               toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
               container.appendChild(toggleBtn);
           }
       }
 
-      if (racesToRender.length === 0) {
+      if (itemsToRender.length === 0) {
           const emptyMsg = document.createElement('div'); 
           emptyMsg.style.cssText = "padding:40px; text-align:center; color:#95a5a6; font-size:15px; font-weight:bold;"; 
-          emptyMsg.textContent = "目前沒有符合條件的行程資料"; 
+          emptyMsg.textContent = "目前沒有符合條件的資料"; 
           container.appendChild(emptyMsg); 
           return;
       }
       
-      racesToRender.forEach(event => {
-          const eDate = new Date(getVal(event, '日期')); 
-          const cat = getVal(event, '行程類別');
-          const daysDiff = Math.ceil((eDate - today) / (1000 * 60 * 60 * 24));
-          
+      itemsToRender.forEach(item => {
+          const daysDiff = Math.ceil((item.dateObj - today) / (1000 * 60 * 60 * 24));
           let countdownHtml = daysDiff > 0 ? `<span style="font-weight:bold; font-size:13px; color:var(--text-main);">還有<span class="list-countdown-days">${daysDiff}</span>天</span>` : (daysDiff === 0 ? `<span style="font-weight:bold; font-size:14px; color:var(--text-main);">今天</span>` : `<span style="font-weight:bold; font-size:13px; color:#bbb;">已結束</span>`);
           
-          const item = document.createElement('div'); 
-          item.className = 'list-item'; 
-          const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
-          item.style.borderLeftColor = pastelColor || '#cfd8dc';
+          const domItem = document.createElement('div'); 
+          domItem.className = 'list-item'; 
+          const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${item.cat}`).trim();
+          domItem.style.borderLeftColor = pastelColor || '#cfd8dc';
           
-          item.innerHTML = `
+          const titleHtml = item.isEvent ? item.title : `📝 ${item.title}`;
+
+          domItem.innerHTML = `
               <div class="list-date">
-                  <span class="m">${eDate.getMonth()+1}月</span>
-                  <span class="d">${eDate.getDate()}</span>
+                  <span class="m">${item.dateObj.getMonth()+1}月</span>
+                  <span class="d">${item.dateObj.getDate()}</span>
               </div>
-              <div class="list-name">${getVal(event, '行程名稱')}</div>
+              <div class="list-name">${titleHtml}</div>
               <div class="list-countdown">${countdownHtml}</div>
           `;
-          item.onclick = () => handleListClick(event, item); 
-          container.appendChild(item);
+          domItem.onclick = () => handleListClick(item.eventData, domItem, item.dateStr); 
+          container.appendChild(domItem);
       });
   }
 
@@ -1718,12 +1748,12 @@
       currentOpenPanel = panel;
   }
 
-  function handleListClick(event, item) {
+  function handleListClick(event, item, forceDateStr) {
       if (currentSelectedEl === item && currentOpenPanel) { closeCurrentPanel(); return; }
       if (currentOpenPanel) currentOpenPanel.remove();
       
       currentSelectedEl = item; 
-      const dStr = formatDate(getVal(event, '日期'));
+      const dStr = forceDateStr || formatDate(getVal(event, '日期'));
       const panel = document.createElement('div'); 
       panel.className = 'detail-panel'; 
       panel.innerHTML = generateDetailHTML(event, dStr);
@@ -1807,7 +1837,6 @@
   }
 
   function generateDetailHTML(event, dateStr) {
-      // 🎯 如果是從帳務總覽跳過來的，要在最上面加入「隱形麵包屑（返回按鈕）」
       let backBtnHtml = '';
       if (isFromAccPanel) {
           backBtnHtml = `
