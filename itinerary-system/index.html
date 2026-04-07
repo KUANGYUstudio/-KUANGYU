@@ -176,38 +176,84 @@
         box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
     }
 
-    /* 🎯 新增的搜尋列美學 */
-    .search-container {
+    /* 🎯 動態展開搜尋列美學 */
+    .search-wrapper {
+        display: flex;
+        justify-content: center;
         width: 100%;
-        padding: 5px 15px 20px;
+        padding: 5px 15px 15px;
         box-sizing: border-box;
     }
-    .search-box {
+    .search-box-animated {
         display: flex;
         align-items: center;
         background: #fff;
         border: 1.5px solid #eceff1;
         border-radius: 25px;
-        padding: 10px 18px;
+        height: 42px;
+        width: 42px; /* 初始為正圓形，只露出放大鏡 */
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-        transition: 0.3s;
+        box-sizing: border-box;
     }
-    .search-box:focus-within {
+    .search-box-animated.expanded {
+        width: 100%; /* 點擊後瞬間展開為全寬度 */
         border-color: var(--nav-active);
         box-shadow: 0 4px 12px rgba(84, 110, 122, 0.1);
     }
-    .search-box input {
+    .search-icon-btn {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        background: transparent;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: #b0bec5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        outline: none;
+        padding: 0;
+        transition: 0.3s;
+    }
+    .search-box-animated.expanded .search-icon-btn {
+        color: var(--nav-active);
+    }
+    .search-input-anim {
+        flex: 1;
         border: none;
         outline: none;
         background: transparent;
         font-size: 15px;
         color: var(--text-main);
-        width: 100%;
-        margin-left: 10px;
+        padding: 0;
+        width: 0; /* 預設寬度為 0 隱藏 */
+        opacity: 0;
+        transition: opacity 0.3s;
         font-family: inherit;
     }
-    .search-box input::placeholder { color: #b0bec5; }
-    .search-icon { color: #b0bec5; font-size: 16px; font-weight: bold; }
+    .search-box-animated.expanded .search-input-anim {
+        width: 100%;
+        opacity: 1;
+        padding-left: 5px;
+    }
+    .search-input-anim::placeholder { color: #b0bec5; }
+    
+    .search-clear-btn {
+        display: none;
+        background: transparent;
+        border: none;
+        color: #b0bec5;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 0 12px;
+        outline: none;
+    }
+    .search-box-animated.expanded .search-clear-btn {
+        display: block;
+    }
 
     /* 過濾器與年月排版 */
     .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }
@@ -422,10 +468,11 @@
         </div>
         
         <div id="nav-collapse-area">
-            <div class="search-container">
-                <div class="search-box">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="main-search-input" placeholder="搜尋行程、住宿、航班或帳務..." oninput="handleSearch(this.value)" autocomplete="nope" autocorrect="off" spellcheck="false">
+            <div class="search-wrapper">
+                <div class="search-box-animated" id="anim-search-box">
+                    <button class="search-icon-btn" onclick="toggleSearchBar()">🔍</button>
+                    <input type="text" id="main-search-input" class="search-input-anim" placeholder="輸入關鍵字..." oninput="handleSearch(this.value)" autocomplete="nope" autocorrect="off" spellcheck="false">
+                    <button class="search-clear-btn" onclick="clearSearchBar()">✖</button>
                 </div>
             </div>
             
@@ -633,7 +680,6 @@
   let displayYear = new Date().getFullYear();
   let isEditMode = false;
 
-  // 🎯 全域搜尋關鍵字變數
   let currentSearchQuery = '';
 
   let accDetailsData = {};
@@ -705,14 +751,33 @@
     }
   }
 
-  // 🎯 處理即時搜尋輸入
+  // 🎯 展開與收合搜尋框的功能
+  function toggleSearchBar() {
+      const box = document.getElementById('anim-search-box');
+      const input = document.getElementById('main-search-input');
+      if (!box.classList.contains('expanded')) {
+          box.classList.add('expanded');
+          setTimeout(() => input.focus(), 100); 
+      } else {
+          input.focus();
+      }
+  }
+
+  // 🎯 清除並收合搜尋框
+  function clearSearchBar() {
+      const input = document.getElementById('main-search-input');
+      const box = document.getElementById('anim-search-box');
+      input.value = '';
+      handleSearch('');
+      box.classList.remove('expanded');
+  }
+
   function handleSearch(val) {
       currentSearchQuery = val.trim();
       renderMain();
       if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
   }
 
-  // 🎯 判斷「單一行程」是否符合搜尋字眼 (深層搜尋所有關聯的住宿、交通、帳務)
   function doesEventMatch(r, query) {
       if (!query) return true;
       const q = query.toLowerCase();
@@ -727,7 +792,6 @@
       return textArr.join(' ||| ').toLowerCase().includes(q);
   }
 
-  // 🎯 判斷「獨立帳單」是否符合搜尋字眼
   function doesBillMatch(b, query) {
       if (!query) return true;
       return [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' ||| ').toLowerCase().includes(query.toLowerCase());
@@ -1098,7 +1162,6 @@
       else { btn.classList.remove('active'); }
   }
 
-  // 🎯 升級 1：根據搜尋字眼與篩選條件，重新計算帳務金額
   function calculateAccounting() {
       let allExpenses = [];
       const races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter));
@@ -1298,7 +1361,6 @@
       });
   }
 
-  // 🎯 升級 1：月份導航也會依據搜尋結果自動隱藏沒有資料的月份
   function renderMonthNav() {
       const yearContainer = document.getElementById('year-nav');
       const navContainer = document.getElementById('month-nav');
@@ -1395,7 +1457,6 @@
       `;
   }
 
-  // 🎯 升級 1：日曆渲染時會依據搜尋結果過濾行程
   function renderCalendar() {
       const container = document.getElementById('calendar-container'); 
       container.innerHTML = '';
@@ -1495,7 +1556,6 @@
       }
   }
 
-  // 🎯 升級 1：清單渲染時也會依據搜尋結果過濾
   function renderList() {
       const container = document.getElementById('list-container'); 
       container.innerHTML = '';
@@ -1513,7 +1573,7 @@
       if (selectedMonthFilter) {
           racesToRender = races.filter(r => formatDate(getVal(r, '日期')).startsWith(selectedMonthFilter));
       } else if (currentSearchQuery) {
-          racesToRender = races; // 搜尋狀態下顯示全部符合的，不分過去未來
+          racesToRender = races;
       } else {
           racesToRender = showPastList ? races.filter(r => formatDate(getVal(r, '日期')).startsWith(displayYear)) : futureRaces;
           if (pastRaces.length > 0) {
