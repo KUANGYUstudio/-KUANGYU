@@ -176,83 +176,59 @@
         box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
     }
 
-    /* 🎯 動態展開搜尋列美學 */
-    .search-wrapper {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        padding: 5px 15px 15px;
-        box-sizing: border-box;
-    }
-    .search-box-animated {
-        display: flex;
-        align-items: center;
-        background: #fff;
-        border: 1.5px solid #eceff1;
-        border-radius: 25px;
-        height: 42px;
-        width: 42px; /* 初始為正圓形，只露出放大鏡 */
+    /* 🎯 原生 APP 風格下拉搜尋列 */
+    .search-dropdown-area {
+        max-height: 0;
+        opacity: 0;
         overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        padding: 0 15px;
         box-sizing: border-box;
+        width: 100%;
+        margin-top: -10px;
     }
-    .search-box-animated.expanded {
-        width: 100%; /* 點擊後瞬間展開為全寬度 */
-        border-color: var(--nav-active);
-        box-shadow: 0 4px 12px rgba(84, 110, 122, 0.1);
+    .search-dropdown-area.active {
+        max-height: 60px;
+        opacity: 1;
+        padding-top: 10px;
+        padding-bottom: 15px;
+        margin-top: 0;
     }
-    .search-icon-btn {
-        width: 40px;
-        height: 40px;
-        flex-shrink: 0;
-        background: transparent;
-        border: none;
-        font-size: 16px;
-        cursor: pointer;
-        color: #b0bec5;
+    .ios-search-bar {
         display: flex;
         align-items: center;
-        justify-content: center;
-        outline: none;
-        padding: 0;
-        transition: 0.3s;
+        background-color: #f2f2f7;
+        border-radius: 12px;
+        padding: 8px 12px;
     }
-    .search-box-animated.expanded .search-icon-btn {
-        color: var(--nav-active);
+    .ios-search-icon {
+        color: #8e8e93;
+        font-size: 16px;
+        margin-right: 8px;
     }
-    .search-input-anim {
+    .ios-search-input {
         flex: 1;
         border: none;
-        outline: none;
         background: transparent;
-        font-size: 15px;
+        font-size: 16px;
         color: var(--text-main);
-        padding: 0;
-        width: 0; /* 預設寬度為 0 隱藏 */
-        opacity: 0;
-        transition: opacity 0.3s;
+        outline: none;
         font-family: inherit;
     }
-    .search-box-animated.expanded .search-input-anim {
-        width: 100%;
-        opacity: 1;
-        padding-left: 5px;
-    }
-    .search-input-anim::placeholder { color: #b0bec5; }
-    
-    .search-clear-btn {
-        display: none;
-        background: transparent;
+    .ios-search-input::placeholder { color: #8e8e93; }
+    .ios-search-clear {
+        background: #c7c7cc;
+        color: #fff;
         border: none;
-        color: #b0bec5;
-        font-size: 18px;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        display: none;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
-        padding: 0 12px;
-        outline: none;
-    }
-    .search-box-animated.expanded .search-clear-btn {
-        display: block;
+        padding: 0;
     }
 
     /* 過濾器與年月排版 */
@@ -457,6 +433,7 @@
             <div class="nav-wrapper">
                 <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
                 <div class="center-nav">
+                    <button id="search-toggle-btn" class="acc-toggle-btn" style="color:#78909c;" onclick="toggleSearchArea()">🔍</button>
                     <button id="acc-panel-btn" class="acc-toggle-btn" onclick="toggleAccPanel()">$</button>
                     <div class="view-switcher" style="padding: 0; border-radius: 20px;">
                         <button id="btn-cal" class="view-btn active" onclick="switchView('cal')">日曆</button>
@@ -467,15 +444,15 @@
             </div>
         </div>
         
-        <div id="nav-collapse-area">
-            <div class="search-wrapper">
-                <div class="search-box-animated" id="anim-search-box">
-                    <button class="search-icon-btn" onclick="toggleSearchBar()">🔍</button>
-                    <input type="text" id="main-search-input" class="search-input-anim" placeholder="輸入關鍵字..." oninput="handleSearch(this.value)" autocomplete="nope" autocorrect="off" spellcheck="false">
-                    <button class="search-clear-btn" onclick="clearSearchBar()">✖</button>
-                </div>
+        <div id="search-dropdown" class="search-dropdown-area">
+            <div class="ios-search-bar">
+                <span class="ios-search-icon">🔍</span>
+                <input type="text" id="main-search-input" class="ios-search-input" placeholder="搜尋行程、住宿、航班或帳務..." oninput="handleSearch(this.value)" autocomplete="nope" autocorrect="off" spellcheck="false">
+                <button id="search-clear-btn" class="ios-search-clear" onclick="clearSearch()">✖</button>
             </div>
-            
+        </div>
+
+        <div id="nav-collapse-area">
             <div id="filter-bar" class="filter-bar"></div>
             <div id="year-nav" class="year-nav-container"></div>
             <div id="month-nav" class="month-nav-container"></div>
@@ -751,29 +728,41 @@
     }
   }
 
-  // 🎯 展開與收合搜尋框的功能
-  function toggleSearchBar() {
-      const box = document.getElementById('anim-search-box');
-      const input = document.getElementById('main-search-input');
-      if (!box.classList.contains('expanded')) {
-          box.classList.add('expanded');
-          setTimeout(() => input.focus(), 100); 
+  // 🎯 展開與收合搜尋框
+  function toggleSearchArea() {
+      const area = document.getElementById('search-dropdown');
+      const btn = document.getElementById('search-toggle-btn');
+      if (area.classList.contains('active')) {
+          area.classList.remove('active');
+          btn.classList.remove('active');
+          btn.style.background = '#fff';
+          btn.style.color = '#78909c';
+          clearSearch();
       } else {
-          input.focus();
+          area.classList.add('active');
+          btn.classList.add('active');
+          btn.style.background = '#78909c';
+          btn.style.color = '#fff';
+          setTimeout(() => document.getElementById('main-search-input').focus(), 300);
       }
   }
 
-  // 🎯 清除並收合搜尋框
-  function clearSearchBar() {
+  // 🎯 清除搜尋列
+  function clearSearch() {
       const input = document.getElementById('main-search-input');
-      const box = document.getElementById('anim-search-box');
       input.value = '';
       handleSearch('');
-      box.classList.remove('expanded');
+      input.focus();
   }
 
   function handleSearch(val) {
       currentSearchQuery = val.trim();
+      const clearBtn = document.getElementById('search-clear-btn');
+      if (currentSearchQuery.length > 0) {
+          clearBtn.style.display = 'flex';
+      } else {
+          clearBtn.style.display = 'none';
+      }
       renderMain();
       if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
   }
