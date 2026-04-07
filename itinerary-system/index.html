@@ -658,7 +658,7 @@
       if(e) e.stopPropagation();
       deleteTargetSheet = sheetName;
       deleteTargetRowIndex = rowIndex;
-      document.getElementById('confirm-desc').innerHTML = `確定要刪除這筆【${sheetName}】資料嗎？<br><span style="color:#e53935; font-size:12px;">(⚠️ 刪除後無法復原)</span>`;
+      document.getElementById('confirm-desc').innerHTML = `確定要刪除這筆【${sheetName}】資料嗎？<br><span style="color:#e53935; font-size:12px;">(刪除後無法復原)</span>`;
       document.getElementById('confirm-modal').style.display = 'flex';
   }
 
@@ -684,6 +684,20 @@
       }
   }
 
+  function forceSelectValue(el, targetText) {
+      if (!el) return;
+      if (el.tagName === 'SELECT') {
+          for (let i = 0; i < el.options.length; i++) {
+              if (el.options[i].text === targetText || el.options[i].value === targetText) {
+                  el.selectedIndex = i;
+                  break;
+              }
+          }
+      } else {
+          el.value = targetText;
+      }
+  }
+
   function openEditModal(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
       const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
@@ -696,6 +710,8 @@
       headers.forEach((h, idx) => {
           const val = rowData[h] || '';
           let inputHtml = '';
+          // 預設會有獨立的標題
+          let labelHtml = `<label>${h}</label>`;
           
           if(selectOptions[h]) {
               const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
@@ -709,17 +725,22 @@
           } else if(h === '行程代碼') {
               inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
           } else if(h === '含早餐' || h === '充電樁' || h === '待確認') {
-              inputHtml = `<div style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
-                              <input type="checkbox" id="edit-field-${idx}" style="width: 20px; height: 20px;" ${val === 'V' ? 'checked' : ''}>
-                              <span style="${h === '待確認' ? 'color:#e53935; font-weight:800;' : ''}">${h}</span>
-                           </div>`;
+              // 🎯 隱藏這三個勾選框的獨立灰色小標題，讓畫面更乾淨
+              labelHtml = ''; 
+              inputHtml = `<label style="display: flex; align-items: center; gap: 10px; padding: 5px 0; cursor: pointer;">
+                              <input type="checkbox" id="edit-field-${idx}" style="width: 20px; height: 20px; cursor: pointer;" ${val === 'V' ? 'checked' : ''}>
+                              <span style="font-size: 15px; font-weight: bold; ${h === '待確認' ? 'color:#e53935;' : 'color:var(--text-sub);'}">${h}</span>
+                           </label>`;
           } else {
               inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           }
 
+          // 如果沒有標題（也就是勾選框），就把底部的間距縮小一點讓排版更緊湊
+          const groupStyle = labelHtml === '' ? 'margin-bottom: 5px;' : '';
+
           formBody.innerHTML += `
-              <div class="edit-input-group">
-                  <label>${h}</label>
+              <div class="edit-input-group" style="${groupStyle}">
+                  ${labelHtml}
                   ${inputHtml}
               </div>
           `;
@@ -1537,8 +1558,9 @@
               const chargerTag = getVal(s,'充電樁') === 'V' ? '<span style="font-size:12px; color:#546e7a; background:#fff9c4; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:bold;">充電樁</span>' : '';
               const pendingTag = getVal(s,'待確認') === 'V' ? '<span style="font-size:12px; color:#fff; background:#e53935; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:900; box-shadow: 0 2px 4px rgba(229,57,53,0.3);">待確認</span>' : '';
               
+              // 🎯 這裡已經移除了強制的紅色邊線，只套用粉紅色底色，會自動保留原本住宿的黃色邊線
               html += `
-                  <div class="info-card card-stay" style="${getVal(s,'待確認') === 'V' ? 'background:#fff8f8; border-left-color:#e53935 !important;' : ''}">
+                  <div class="info-card card-stay" style="${getVal(s,'待確認') === 'V' ? 'background:#fff5f5;' : ''}">
                       <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
                           <div style="display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
                               <span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>
@@ -1645,6 +1667,7 @@
       const isNoFee = (cat === '旅遊' || cat === '移地訓練');
       const displayStyle = isNoFee ? 'none' : 'block';
       
+      // 1. 隱藏並清空內容的欄位
       const hideFields = ['聿凡', '光武', '報名費'];
       hideFields.forEach(f => {
           const el = document.getElementById(`add-行程-${f}`);
@@ -1654,6 +1677,7 @@
           }
       });
 
+      // 2. 隱藏並將預設值切換為第一個選項 ("-")
       const defaultSelectFields = ['付款人', '方式', '狀態'];
       defaultSelectFields.forEach(f => {
           const el = document.getElementById(`add-行程-${f}`);
@@ -1690,11 +1714,10 @@
   }
 
   // =========================================
-  // 全域事件監聽：點擊半透明背景自動關閉視窗 (支援手機觸控)
+  // 全域事件監聽：點擊半透明背景自動關閉視窗
   // =========================================
   ['click', 'touchstart'].forEach(function(eventType) {
       window.addEventListener(eventType, function(event) {
-          // 如果觸碰到的目標本身包含了 'modal-overlay' 這個 class（代表點在黑底上）
           if (event.target.classList.contains('modal-overlay')) {
               event.target.style.display = 'none';
           }
