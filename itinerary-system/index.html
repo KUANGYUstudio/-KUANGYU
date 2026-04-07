@@ -98,7 +98,7 @@
     }
 
     #mode-toggle-btn {
-    font-size: 24px; /* 這裡原本預設是 18px，調大即可讓筆變大 */
+        font-size: 24px; 
     }
     
     .tool-btn.active { 
@@ -146,20 +146,19 @@
         color: #fff; 
     }
 
-    /* 🎯 還原完美的膠囊開關樣式 (參考 image_0.png) */
-.view-switcher {
-    display: flex;
-    gap: 4px;
-    background-color: #f0f0f0; /* 淺灰色膠囊底色 */
-    padding: 4px 8px; /* 增加內部 padding，讓按鈕看起來被包在裡面 */
-    border-radius: 25px; /* 膠囊圓角 */
-    width: fit-content; /* 寬度剛好包住按鈕 */
-}
+    /* 🎯 還原完美的膠囊開關樣式 */
+    .view-switcher {
+        display: flex;
+        gap: 4px;
+        background-color: #f0f0f0; 
+        padding: 4px 8px; 
+        border-radius: 25px; 
+        width: fit-content; 
+    }
 
-/* 2. 在 CSS 中加上一個專門針對面板內切換器的 margin，取代原本在 JS 裡的行內樣式 */
-.panel-view-switcher {
-    margin-bottom: 20px;
-}
+    .panel-view-switcher {
+        margin-bottom: 20px;
+    }
     
     .view-btn { 
         border: none; 
@@ -263,7 +262,7 @@
     .edit-btn { background: #90a4ae; }
     .del-btn { background: var(--settle-pink); }
 
-    /* 高質感自定義彈窗 UI (警告視窗與編輯視窗) */
+    /* 高質感自定義彈窗 UI */
     .modal-overlay { 
         display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
         background:rgba(44, 62, 80, 0.6); z-index:9999; align-items:center; 
@@ -298,132 +297,59 @@
     .view-container { display: none; text-align: left; }
     .view-container.active { display: block; }
 
-    /* 🎯 帳務總覽面板專屬 UI (完美還原圖片樣式) */
+    /* 帳務總覽面板 */
     .acc-card { 
         background: #f8f9fa; 
         border: 1px solid #eceff1; 
         border-radius: 12px; 
         box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
     }
-    .acc-label { 
-        font-weight: bold; 
-    }
-    .acc-val { 
-        font-weight: 800; 
-        color: var(--brand-main); 
-    }
+    .acc-label { font-weight: bold; }
+    .acc-val { font-weight: 800; color: var(--brand-main); }
     
     .acc-tab-btn {
-        padding: 8px 16px;
-        border-radius: 20px;
-        background: #f0f0f0;
-        color: #7f8c8d;
-        font-size: 13px;
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.2s;
+        padding: 8px 16px; border-radius: 20px; background: #f0f0f0; color: #7f8c8d;
+        font-size: 13px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s;
     }
-    .acc-tab-btn.active {
-        background: var(--nav-active);
-        color: #fff;
-        box-shadow: 0 4px 10px rgba(84, 110, 122, 0.2);
-    }
+    .acc-tab-btn.active { background: var(--nav-active); color: #fff; box-shadow: 0 4px 10px rgba(84, 110, 122, 0.2); }
     
     .acc-detail-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 20px;
-        border-bottom: 1px solid #f5f5f5;
-        background: #fff;
-        transition: 0.2s;
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 15px 20px; border-bottom: 1px solid #f5f5f5; background: #fff; transition: 0.2s;
     }
-    .acc-detail-item:last-child { 
-        border-bottom: none; 
-    }
-    .acc-detail-item:hover { 
-        background: #fafafa; 
-    }
-    .acc-detail-name { 
-        font-size: 15px; 
-        font-weight: bold; 
-        color: var(--text-main); 
-    }
-    .acc-detail-amount { 
-        font-size: 16px; 
-        font-weight: 900; 
-        color: var(--settle-pink); 
-    }
+    .acc-detail-item:last-child { border-bottom: none; }
+    .acc-detail-item:hover { background: #fafafa; }
+    .acc-detail-name { font-size: 15px; font-weight: bold; color: var(--text-main); }
+    .acc-detail-amount { font-size: 16px; font-weight: 900; color: var(--settle-pink); }
 
-    /* 顯示歷史行程按鈕 (膠囊質感設計) */
+    /* 顯示歷史行程按鈕 */
     .past-toggle-btn {
-        background: #fcfcfc;
-        color: #78909c;
-        border: 1.5px solid #eceff1;
-        border-radius: 25px; /* 圓潤的膠囊形狀 */
-        padding: 10px 24px;
-        margin: 10px auto 25px; /* 確保它在畫面中間，且跟上下保持呼吸空間 */
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
-        display: block; /* 讓 margin auto 居中生效 */
-        width: fit-content;
-        transition: all 0.3s ease;
+        background: #fcfcfc; color: #78909c; border: 1.5px solid #eceff1; border-radius: 25px; 
+        padding: 10px 24px; margin: 10px auto 25px; font-size: 14px; font-weight: bold;
+        cursor: pointer; display: block; width: fit-content; transition: all 0.3s ease;
         box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
+    .past-toggle-btn:hover { background: #fff; color: var(--brand-main); border-color: #cfd8dc; box-shadow: 0 4px 10px rgba(0,0,0,0.06); transform: translateY(-2px); }
 
-    /* 滑鼠游標靠近時的互動效果 */
-    .past-toggle-btn:hover {
-        background: #fff;
-        color: var(--brand-main);
-        border-color: #cfd8dc;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-        transform: translateY(-2px);
-    }
-
-    /* =========================================
-       新增功能專屬 UI (懸浮按鈕與彈窗表單)
-       ========================================= */
-    /* 1. 右下角懸浮新增按鈕 (FAB) */
+    /* 新增功能專屬 UI */
     .fab-btn {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: var(--brand-main);
-        color: #fff;
-        border: none;
-        font-size: 36px;
-        font-weight: 300;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
-        cursor: pointer;
-        z-index: 999;
-        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        line-height: 1;
-        padding-bottom: 4px; /* 微調加號的視覺置中 */
+        position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+        border-radius: 50%; background: var(--brand-main); color: #fff; border: none;
+        font-size: 36px; font-weight: 300; display: flex; align-items: center;
+        justify-content: center; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+        cursor: pointer; z-index: 999; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        line-height: 1; padding-bottom: 4px;
     }
-    .fab-btn:hover {
-        transform: scale(1.1) rotate(90deg); /* 滑過時放大並轉一圈 */
-        background: var(--nav-active);
-    }
+    .fab-btn:hover { transform: scale(1.1) rotate(90deg); background: var(--nav-active); }
 
-    /* 2. 新增表單的切換分頁按鈕 */
     .admin-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 20px; }
     .admin-tab-btn { padding: 12px; background: #eceff1; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: bold; color: #7f8c8d; transition: 0.3s; }
     .admin-tab-btn.active { background: var(--brand-main); color: #fff; box-shadow: 0 4px 10px rgba(44,62,80,0.2); }
     
-    /* 3. 表單區塊顯示動畫 */
     .admin-form-section { display: none; }
     .admin-form-section.active { display: block; animation: slideUp 0.4s ease; }
     @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* 4. 輸入框與群組樣式 */
     .admin-input-group { margin-bottom: 18px; text-align: left; }
     .admin-input-group label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; color: var(--text-sub); padding-left: 3px; }
     .admin-input-group input, .admin-input-group select {
@@ -437,7 +363,6 @@
     .admin-group-box { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #eceff1; margin-bottom: 18px; }
     .admin-group-title { font-weight: bold; color: var(--text-sub); margin-bottom: 12px; font-size: 14px; border-left: 4px solid var(--settle-pink); padding-left: 8px; }
 
-    /* 5. 儲存按鈕 */
     .admin-submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--nav-active); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 5px; transition: 0.2s; }
     .admin-submit-btn:active { transform: scale(0.98); }
     
@@ -538,9 +463,9 @@
               <div class="admin-input-group"><label>聿凡項目</label><input type="text" id="add-行程-聿凡"></div>
               <div class="admin-input-group"><label>光武項目</label><input type="text" id="add-行程-光武"></div>
               <div class="admin-input-group"><label>報名費總額</label><input type="number" id="add-行程-報名費"></div>
-              <div class="admin-input-group"><label>付款人</label><select id="add-行程-付款人"><option>聿凡</option><option>光武</option><option>-</option></select></div>
-              <div class="admin-input-group"><label>付款方式</label><select id="add-行程-方式"><option>現金</option><option>刷卡</option><option>-</option></select></div>
-              <div class="admin-input-group"><label>狀態</label><select id="add-行程-狀態"><option>已付</option><option>未付</option><option>-</option></select></div>
+              <div class="admin-input-group"><label>付款人</label><select id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+              <div class="admin-input-group"><label>付款方式</label><select id="add-行程-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+              <div class="admin-input-group"><label>狀態</label><select id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
               <div class="admin-input-group"><label>備註</label><input type="text" id="add-行程-備註"></div>
               <button class="admin-submit-btn" onclick="submitNewData('行程')">確認新增行程</button>
           </div>
@@ -566,9 +491,9 @@
                   <input type="text" id="add-住宿-平台-其他" placeholder="請自行填寫" style="display: none; margin-top: 8px;">
               </div>
               <div class="admin-input-group"><label>費用</label><input type="number" id="add-住宿-費用"></div>
-              <div class="admin-input-group"><label>付款人</label><select id="add-住宿-付款人"><option>聿凡</option><option>光武</option><option>-</option></select></div>
-              <div class="admin-input-group"><label>付款方式</label><select id="add-住宿-方式"><option>現金</option><option>刷卡</option><option>-</option></select></div>
-              <div class="admin-input-group"><label>狀態</label><select id="add-住宿-狀態"><option>已付</option><option>現場付</option><option>-</option></select></div>
+              <div class="admin-input-group"><label>付款人</label><select id="add-住宿-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+              <div class="admin-input-group"><label>付款方式</label><select id="add-住宿-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+              <div class="admin-input-group"><label>狀態</label><select id="add-住宿-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
               <div class="admin-input-group"><label>連結</label><input type="url" id="add-住宿-連結"></div>
               <div class="admin-input-group"><label>備註</label><input type="text" id="add-住宿-備註"></div>
               <button class="admin-submit-btn" onclick="submitNewData('住宿')">確認新增住宿</button>
@@ -592,9 +517,9 @@
                   <div class="admin-input-group" style="margin-bottom: 0;"><label>回程抵達時間</label><input type="text" id="add-交通-回程抵達"></div>
               </div>
               <div class="admin-input-group"><label>票價或油資</label><input type="number" id="add-交通-費用"></div>
-              <div class="admin-input-group"><label>付款人</label><select id="add-交通-付款人"><option>聿凡</option><option>光武</option><option>-</option></select></div>
-              <div class="admin-input-group"><label>付款方式</label><select id="add-交通-方式"><option>現金</option><option>刷卡</option><option>-</option></select></div>
-              <div class="admin-input-group"><label>狀態</label><select id="add-交通-狀態"><option>已付</option><option>現場付</option><option>-</option></select></div>
+              <div class="admin-input-group"><label>付款人</label><select id="add-交通-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+              <div class="admin-input-group"><label>付款方式</label><select id="add-交通-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+              <div class="admin-input-group"><label>狀態</label><select id="add-交通-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
               <button class="admin-submit-btn" onclick="submitNewData('交通')">確認新增交通</button>
           </div>
 
@@ -607,7 +532,7 @@
               </div>
               <div class="admin-input-group"><label>項目</label><input type="text" id="add-帳務-項目" placeholder="例如：晚餐、伴手禮"></div>
               <div class="admin-input-group"><label>金額</label><input type="number" id="add-帳務-金額"></div>
-              <div class="admin-input-group"><label>付款方式</label><select id="add-帳務-方式"><option>現金</option><option>刷卡</option><option>-</option></select></div>
+              <div class="admin-input-group"><label>付款方式</label><select id="add-帳務-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
               <div class="admin-input-group"><label>備註</label><input type="text" id="add-帳務-備註" placeholder="可選填"></div>
               <button class="admin-submit-btn" onclick="submitNewData('帳務明細')">確認新增帳務</button>
           </div>
@@ -653,12 +578,13 @@
       '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註']
   };
 
+  // 🎯 全部把 '-' 移到第一位
   const selectOptions = {
       '行程類別': ['鐵人','自行車','路跑','游泳','活動','旅遊','移地訓練'],
       '類別': ['飲食','交通','購物','採買','娛樂','其他'],
-      '付款人': ['聿凡','光武','-'], 
-      '付款方式': ['現金','刷卡','-'], 
-      '狀態': ['已付','未付','現場付','-'], 
+      '付款人': ['-','聿凡','光武'], 
+      '付款方式': ['-','現金','刷卡'], 
+      '狀態': ['-','已付','未付','現場付'], 
       '訂房平台': ['Agoda','Booking.com','Trip.com','易遊網','官方網站','其他'], 
       '類型': ['自駕','火車','飛機']
   };
@@ -742,21 +668,6 @@
       } catch (err) {
           alert('刪除失敗，請檢查網路連線！');
           document.getElementById('loading').style.display = 'none';
-      }
-  }
-
-  // 幫助 select 元素強制選擇某個值的輔助工具
-  function forceSelectValue(el, targetText) {
-      if (!el) return;
-      if (el.tagName === 'SELECT') {
-          for (let i = 0; i < el.options.length; i++) {
-              if (el.options[i].text === targetText || el.options[i].value === targetText) {
-                  el.selectedIndex = i;
-                  break;
-              }
-          }
-      } else {
-          el.value = targetText;
       }
   }
 
@@ -855,8 +766,6 @@
           });
       });
       document.getElementById('add-modal').style.display = 'flex';
-      
-      // 打開視窗時自動判斷一次，以免先前的選擇卡住
       toggleAddEventFee();
   }
 
@@ -897,7 +806,6 @@
           rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, document.getElementById('add-帳務-方式').value, document.getElementById('add-帳務-備註').value];
       }
 
-      // 基本防呆檢查
       if (sheetName !== '帳務明細' && !eventCode) { alert("行程代碼不能空白！"); return; }
       if (sheetName === '帳務明細') {
           if (!document.getElementById('add-帳務-日期').value) { alert("日期不能空白！"); return; }
@@ -1702,6 +1610,7 @@
       const isNoFee = (cat === '旅遊' || cat === '移地訓練');
       const displayStyle = isNoFee ? 'none' : 'block';
       
+      // 1. 隱藏並清空內容的欄位
       const hideFields = ['聿凡', '光武', '報名費'];
       hideFields.forEach(f => {
           const el = document.getElementById(`add-行程-${f}`);
@@ -1711,14 +1620,13 @@
           }
       });
 
+      // 2. 隱藏並將預設值切換為第一個選項 ("-")
       const defaultSelectFields = ['付款人', '方式', '狀態'];
       defaultSelectFields.forEach(f => {
           const el = document.getElementById(`add-行程-${f}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
-              if(isNoFee) {
-                  forceSelectValue(el, '-');
-              }
+              if(isNoFee) el.selectedIndex = 0; // 🎯 直接選第 0 項 ("-")
           }
       });
   }
@@ -1743,9 +1651,7 @@
           const el = document.getElementById(`edit-field-${i}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
-              if(isNoFee) {
-                  forceSelectValue(el, '-');
-              }
+              if(isNoFee) el.selectedIndex = 0; // 🎯 直接選第 0 項 ("-")
           }
       });
   }
