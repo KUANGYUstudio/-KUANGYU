@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>光聿 KUANGYU - 行程小助理</title>
-  <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=行+程&background=e0f2f1&color=00838f&size=180&bold=true">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -146,7 +145,6 @@
         color: #fff; 
     }
 
-    /* 🎯 還原完美的膠囊開關樣式 */
     .view-switcher {
         display: flex;
         gap: 4px;
@@ -466,12 +464,8 @@
               <div class="admin-input-group"><label>付款人</label><select id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
               <div class="admin-input-group"><label>付款方式</label><select id="add-行程-方式"><option>-</option><option>現金</option><option>刷卡</option></select></div>
               <div class="admin-input-group"><label>狀態</label><select id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
-              <div class="admin-input-group"><label>備註</label><input type="text" id="add-住宿-備註"></div>
-              <div class="admin-input-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; cursor: pointer;" onclick="document.getElementById('add-住宿-早餐').click()">
-                  <input type="checkbox" id="add-住宿-早餐" style="width: 20px; height: 20px; min-height: 20px; cursor: pointer;">
-                  <label style="margin-bottom: 0; cursor: pointer;">此訂房包含早餐</label>
-              </div>
-              <button class="admin-submit-btn" onclick="submitNewData('住宿')">確認新增住宿</button>
+              <div class="admin-input-group"><label>備註</label><input type="text" id="add-行程-備註"></div>
+              <button class="admin-submit-btn" onclick="submitNewData('行程')">確認新增行程</button>
           </div>
 
           <div id="add-form-住宿" class="admin-form-section">
@@ -500,6 +494,22 @@
               <div class="admin-input-group"><label>狀態</label><select id="add-住宿-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
               <div class="admin-input-group"><label>連結</label><input type="url" id="add-住宿-連結"></div>
               <div class="admin-input-group"><label>備註</label><input type="text" id="add-住宿-備註"></div>
+              
+              <div class="admin-input-group" style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 25px; background: #f8f9fa; padding: 12px; border-radius: 12px; border: 1px dashed #dcdde1;">
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0;">
+                      <input type="checkbox" id="add-住宿-待確認" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
+                      <span style="font-size: 14px; font-weight: 800; color: #e53935;">待確認</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0;">
+                      <input type="checkbox" id="add-住宿-早餐" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
+                      <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">含早餐</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0;">
+                      <input type="checkbox" id="add-住宿-充電樁" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
+                      <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">充電樁</span>
+                  </label>
+              </div>
+
               <button class="admin-submit-btn" onclick="submitNewData('住宿')">確認新增住宿</button>
           </div>
 
@@ -577,12 +587,11 @@
 
   const sheetHeaders = {
       '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '付款人', '付款方式', '狀態', '備註'],
-      '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註', '含早餐'],
+      '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註', '含早餐', '充電樁', '待確認'],
       '交通': ['行程代碼', '類型', '出發日期', '去程班次 / 航班', '去程出發時間', '去程抵達時間', '回程日期', '回程班次 / 航班', '回程出發時間', '回程抵達時間', '票價或油資', '付款人', '付款方式', '狀態'],
       '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註']
   };
 
-  // 🎯 全部把 '-' 移到第一位
   const selectOptions = {
       '行程類別': ['鐵人','自行車','路跑','游泳','活動','旅遊','移地訓練'],
       '類別': ['飲食','交通','購物','採買','娛樂','其他'],
@@ -698,12 +707,12 @@
           } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
               inputHtml = `<input type="number" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           } else if(h === '行程代碼') {
-             inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
-          } else if(h === '含早餐') {
+              inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
+          } else if(h === '含早餐' || h === '充電樁' || h === '待確認') {
               inputHtml = `<div style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
-                    <input type="checkbox" id="edit-field-${idx}" style="width: 20px; height: 20px;" ${val === 'V' ? 'checked' : ''}>
-                    <span>包含早餐</span>
-                 </div>`;
+                              <input type="checkbox" id="edit-field-${idx}" style="width: 20px; height: 20px;" ${val === 'V' ? 'checked' : ''}>
+                              <span style="${h === '待確認' ? 'color:#e53935; font-weight:800;' : ''}">${h}</span>
+                           </div>`;
           } else {
               inputHtml = `<input type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           }
@@ -809,8 +818,12 @@
           eventCode = document.getElementById('add-住宿-代碼').value;
           let platformVal = document.getElementById('add-住宿-平台').value;
           if (platformVal === '其他') platformVal = document.getElementById('add-住宿-平台-其他').value;
+          
           const hasBreakfast = document.getElementById('add-住宿-早餐').checked ? "V" : "";
-          rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, document.getElementById('add-住宿-入住時間').value, document.getElementById('add-住宿-退房日期').value, document.getElementById('add-住宿-退房時間').value, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, document.getElementById('add-住宿-方式').value, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast];
+          const hasCharger = document.getElementById('add-住宿-充電樁').checked ? "V" : "";
+          const isPending = document.getElementById('add-住宿-待確認').checked ? "V" : "";
+          
+          rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, document.getElementById('add-住宿-入住時間').value, document.getElementById('add-住宿-退房日期').value, document.getElementById('add-住宿-退房時間').value, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, document.getElementById('add-住宿-方式').value, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending];
       } else if (sheetName === '交通') {
           eventCode = document.getElementById('add-交通-代碼').value;
           rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, document.getElementById('add-交通-方式').value, document.getElementById('add-交通-狀態').value];
@@ -1520,18 +1533,20 @@
       if(stays.length > 0) {
           html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
           stays.forEach(s => {
-              // 這裡是大腦邏輯，判斷有沒有含早餐（必須在 html += 組合字串的外面）
-              const breakfastTag = getVal(s,'含早餐') === 'V' ? '<span style="font-size:12px; color:#546e7a; background:#e0f2f1; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:bold;">附早餐</span>' : '';
+              const breakfastTag = getVal(s,'含早餐') === 'V' ? '<span style="font-size:12px; color:#546e7a; background:#e0f2f1; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:bold;">含早餐</span>' : '';
+              const chargerTag = getVal(s,'充電樁') === 'V' ? '<span style="font-size:12px; color:#546e7a; background:#fff9c4; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:bold;">充電樁</span>' : '';
+              const pendingTag = getVal(s,'待確認') === 'V' ? '<span style="font-size:12px; color:#fff; background:#e53935; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:900; box-shadow: 0 2px 4px rgba(229,57,53,0.3);">待確認</span>' : '';
               
-              // 接下來才是組合 HTML 畫面
               html += `
-                  <div class="info-card card-stay">
+                  <div class="info-card card-stay" style="${getVal(s,'待確認') === 'V' ? 'background:#fff8f8; border-left-color:#e53935 !important;' : ''}">
                       <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-                          <div style="display:flex; align-items:center;">
+                          <div style="display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
                               <span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>
+                              ${pendingTag}
                               ${breakfastTag}
+                              ${chargerTag}
                           </div>
-                          ${getVal(s,'連結') ? `<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;">地圖 >></a>` : ''}
+                          ${getVal(s,'連結') ? `<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;white-space:nowrap;height:fit-content;">地圖 >></a>` : ''}
                       </div>`;
               if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
               if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房時間</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
@@ -1630,7 +1645,6 @@
       const isNoFee = (cat === '旅遊' || cat === '移地訓練');
       const displayStyle = isNoFee ? 'none' : 'block';
       
-      // 1. 隱藏並清空內容的欄位
       const hideFields = ['聿凡', '光武', '報名費'];
       hideFields.forEach(f => {
           const el = document.getElementById(`add-行程-${f}`);
@@ -1640,13 +1654,12 @@
           }
       });
 
-      // 2. 隱藏並將預設值切換為第一個選項 ("-")
       const defaultSelectFields = ['付款人', '方式', '狀態'];
       defaultSelectFields.forEach(f => {
           const el = document.getElementById(`add-行程-${f}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
-              if(isNoFee) el.selectedIndex = 0; // 🎯 直接選第 0 項 ("-")
+              if(isNoFee) el.selectedIndex = 0; 
           }
       });
   }
@@ -1671,7 +1684,7 @@
           const el = document.getElementById(`edit-field-${i}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
-              if(isNoFee) el.selectedIndex = 0; // 🎯 直接選第 0 項 ("-")
+              if(isNoFee) el.selectedIndex = 0; 
           }
       });
   }
@@ -1680,7 +1693,6 @@
   // 全域事件監聽：點擊半透明背景自動關閉視窗
   // =========================================
   window.addEventListener('click', function(event) {
-      // 如果點擊到的目標本身包含了 'modal-overlay' 這個 class（代表點在黑底上，不是點在白底表單內）
       if (event.target.classList.contains('modal-overlay')) {
           event.target.style.display = 'none';
       }
