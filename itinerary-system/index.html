@@ -532,13 +532,13 @@
           <div id="add-form-行程" class="admin-form-section active">
               <div class="admin-input-group"><label>行程代碼</label><input type="text" id="add-行程-代碼" placeholder="例如：20260403_台東賽"></div>
               <div class="admin-input-group"><label>行程名稱</label><input type="text" id="add-行程-名稱"></div>
-              <div class="admin-input-group"><label<div class="admin-input-group"><label>行程類別</label><select id="add-行程-類別" onchange="toggleAddEventFee()"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
+              <div class="admin-input-group"><label>行程類別</label><select id="add-行程-類別" onchange="toggleAddEventFee()"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
               <div class="admin-input-group"><label>日期</label><input type="date" id="add-行程-日期"></div>
               <div class="admin-input-group"><label>行程連結</label><input type="url" id="add-行程-連結"></div>
               <div class="admin-input-group"><label>聿凡項目</label><input type="text" id="add-行程-聿凡"></div>
               <div class="admin-input-group"><label>光武項目</label><input type="text" id="add-行程-光武"></div>
               <div class="admin-input-group"><label>報名費總額</label><input type="number" id="add-行程-報名費"></div>
-              <div class="admin-input-group"><label>報名費付款人</label><select id="add-行程-付款人"><option>聿凡</option><option>光武</option><option>-</option></select></div>
+              <div class="admin-input-group"><label>付款人</label><select id="add-行程-付款人"><option>聿凡</option><option>光武</option><option>-</option></select></div>
               <div class="admin-input-group"><label>付款方式</label><select id="add-行程-方式"><option>現金</option><option>刷卡</option><option>-</option></select></div>
               <div class="admin-input-group"><label>狀態</label><select id="add-行程-狀態"><option>已付</option><option>未付</option><option>-</option></select></div>
               <div class="admin-input-group"><label>備註</label><input type="text" id="add-行程-備註"></div>
@@ -647,7 +647,7 @@
   }
 
   const sheetHeaders = {
-      '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '報名費付款人', '付款方式', '狀態', '備註'],
+      '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '付款人', '付款方式', '狀態', '備註'],
       '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註'],
       '交通': ['行程代碼', '類型', '出發日期', '去程班次 / 航班', '去程出發時間', '去程抵達時間', '回程日期', '回程班次 / 航班', '回程出發時間', '回程抵達時間', '票價或油資', '付款人', '付款方式', '狀態'],
       '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註']
@@ -656,7 +656,6 @@
   const selectOptions = {
       '行程類別': ['鐵人','自行車','路跑','游泳','活動','旅遊','移地訓練'],
       '類別': ['飲食','交通','購物','採買','娛樂','其他'],
-      '報名費付款人': ['聿凡','光武','-'], 
       '付款人': ['聿凡','光武','-'], 
       '付款方式': ['現金','刷卡','-'], 
       '狀態': ['已付','未付','現場付','-'], 
@@ -746,6 +745,21 @@
       }
   }
 
+  // 幫助 select 元素強制選擇某個值的輔助工具
+  function forceSelectValue(el, targetText) {
+      if (!el) return;
+      if (el.tagName === 'SELECT') {
+          for (let i = 0; i < el.options.length; i++) {
+              if (el.options[i].text === targetText || el.options[i].value === targetText) {
+                  el.selectedIndex = i;
+                  break;
+              }
+          }
+      } else {
+          el.value = targetText;
+      }
+  }
+
   function openEditModal(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
       const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
@@ -761,7 +775,6 @@
           
           if(selectOptions[h]) {
               const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
-              // 幫「行程類別」動態加上 onchange 事件
               const onChangeAttr = (h === '行程類別') ? 'onchange="toggleEditEventFee()"' : '';
               inputHtml = `<select id="edit-field-${idx}" class="edit-input" ${onChangeAttr}>${opts}</select>`;
           } else if(h.includes('日期')) {
@@ -788,7 +801,6 @@
       document.getElementById('edit-modal-title').textContent = `編輯${sheetName}`;
       document.getElementById('edit-modal').style.display = 'flex';
       
-      // 如果是編輯行程，打開時檢查一次，把不需要的欄位藏起來
       if (sheetName === '行程') { toggleEditEventFee(); }
   }
 
@@ -830,7 +842,6 @@
   // =========================================
 
   function openAddModal() {
-      // 開啟時，抓取現有的行程代碼填入下拉選單
       const codes = (dbData['行程'] || []).map(r => getVal(r, '行程代碼')).filter(c => c);
       const uniqueCodes = [...new Set(codes)];
       
@@ -844,6 +855,9 @@
           });
       });
       document.getElementById('add-modal').style.display = 'flex';
+      
+      // 打開視窗時自動判斷一次，以免先前的選擇卡住
+      toggleAddEventFee();
   }
 
   function closeAddModal() {
@@ -890,19 +904,15 @@
           if (!document.getElementById('add-帳務-金額').value) { alert("金額不能空白！"); return; }
       }
 
-      // 關閉視窗，顯示載入畫面
       closeAddModal();
       document.getElementById('loading').style.display = 'flex';
       document.getElementById('loading').innerHTML = '正在將資料同步至資料庫...';
 
       try {
-          // 利用既有的 API 傳送 insert 指令
           await fetch(API_URL, {
               method: 'POST',
               body: JSON.stringify({ action: 'insert', sheetName: sheetName, data: rowData })
           });
-          
-          // 儲存成功後，清除本地快取並重新整理畫面，這樣最新資料就會馬上印在日曆上
           localStorage.removeItem('kuangyu_dbData'); 
           location.reload();
       } catch (err) {
@@ -1199,24 +1209,18 @@
           btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
           btn.textContent = i;
           
-          // --- 顏色層次調整開始 ---
           if (!hasData) {
-              // 1. 沒有行程：最淺色 (透明度降至 30%)
               btn.style.opacity = '0.3';
           } else if (mKey < currentMonthKey) {
-              // 2. 過期行程：深一點點的色 (透明度降至 60%)
               btn.style.opacity = '0.6';
           } else {
-              // 3. 未來行程 (包含本月)：正常飽和度 (完全不透明 100%)
               btn.style.opacity = '1';
           }
 
-          // 額外保護機制：如果這個月份剛好是被點擊選中的狀態，強制恢復 100% 飽和度並套用高光樣式
           if (selectedMonthFilter === mKey) {
               btn.classList.add('active');
               btn.style.opacity = '1';
           }
-          // --- 顏色層次調整結束 ---
           
           btn.onclick = () => { 
               selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
@@ -1263,7 +1267,7 @@
       let races = currentFilter === '全部' ? dbData['行程'] : dbData['行程'].filter(r => getVal(r, '行程類別') === currentFilter);
       
       let eventMap = {}; 
-      let allDatesWithData = []; // 為了特定類別篩選，我們把儲存日期的陣列加回來
+      let allDatesWithData = []; 
       races.forEach(r => { 
           const d = formatDate(getVal(r, '日期')); 
           if (d) { eventMap[d] = r; allDatesWithData.push(d); } 
@@ -1277,13 +1281,10 @@
           });
       }
 
-      // --- 核心修改邏輯開始：根據篩選器決定要畫出哪些月份 ---
       let monthKeysToRender = [];
       if (selectedMonthFilter) {
-          // 1. 如果有在上方點選特定月份，就只顯示那個月
           monthKeysToRender = [selectedMonthFilter];
       } else if (currentFilter === '全部') {
-          // 2. 如果是看「全部」，強制生成未來 12 個月的日曆
           for (let i = 0; i < 12; i++) {
               let targetDate = new Date(currentYear, currentMonth - 1 + i, 1);
               let y = targetDate.getFullYear();
@@ -1291,12 +1292,9 @@
               monthKeysToRender.push(`${y}-${m}`);
           }
       } else {
-          // 3. 如果選了特定類別 (例如鐵人)，只抓出該類別「有資料的月份」
           const uniqueMonths = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
-          // 過濾掉過去的歷史月份，預設只顯示從本月開始的未來行程
           monthKeysToRender = uniqueMonths.filter(mKey => mKey >= currentMonthKey);
       }
-      // --- 核心修改邏輯結束 ---
 
       let hasRenderedAny = false;
 
@@ -1349,7 +1347,6 @@
           container.appendChild(section);
       });
 
-      // 防呆機制：如果這個類別完全沒有未來的行程，顯示提示文字
       if (!hasRenderedAny) {
           container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">此區間目前沒有排定行程<br><span style="font-size:13px; font-weight:normal;">請切換上方「年份」或「月份」查看</span></div>';
       }
@@ -1402,7 +1399,6 @@
           const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
           item.style.borderLeftColor = pastelColor || '#cfd8dc';
           
-          // 🎯 修復 6：清單日期文字置中對齊
           item.innerHTML = `
               <div class="list-date">
                   <span class="m">${eDate.getMonth()+1}月</span>
@@ -1423,7 +1419,6 @@
       
       if (currentSelectedEl) { 
           currentSelectedEl.classList.remove('selected'); 
-          // 🎯 修復 1：取消點擊時，恢復為透明背景色 (保留邊框)
           if(currentSelectedEl.classList.contains('has-event')) {
               currentSelectedEl.style.backgroundColor = '';
           }
@@ -1433,7 +1428,6 @@
       cell.classList.add('selected');
       
       if (event) { 
-          // 🎯 修復 1：點擊時，套用滿版底色
           cell.style.backgroundColor = cell.dataset.color;
       }
       
@@ -1572,7 +1566,6 @@
           </div>
       </div>`;
       
-      /* 替換為新代碼： */
      html += `
       <div class="view-switcher panel-view-switcher">
                <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
@@ -1581,20 +1574,17 @@
       
       html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
       
-      /* 🎯 修改 1：動態判斷標題與欄位顯示 */
       const eventCat = getVal(event, '行程類別');
       const isNoFeeCat = (eventCat === '旅遊' || eventCat === '移地訓練');
       const infoTitleText = isNoFeeCat ? '行程資訊' : '報名資訊';
       
       html += `<div class="info-section"><div class="info-title title-race">${infoTitleText}</div><div class="info-card card-race">`;
       
-      // 如果不是旅遊/移地訓練，才顯示光武、聿凡項目
       if (!isNoFeeCat) {
           if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
           if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
       }
       
-      // 如果不是旅遊/移地訓練，或者真的有填寫大於 0 的費用，才顯示費用欄位
       const feeAmount = parseFloat(getVal(event,'報名費總額')) || 0;
       if (!isNoFeeCat || feeAmount > 0) {
           html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'));
@@ -1609,7 +1599,6 @@
       if(stays.length > 0) {
           html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
           stays.forEach(s => {
-              /* 🎯 修復 2：加上 card-stay 保證邊線顏色 */
               html += `
                   <div class="info-card card-stay">
                       <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
@@ -1639,7 +1628,6 @@
       if(trans.length > 0) {
           html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
           trans.forEach(t => {
-              /* 🎯 修復 2：加上 card-trans 保證邊線顏色 */
               html += `
                   <div class="info-card card-trans">
                       <div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>
@@ -1676,7 +1664,6 @@
           html += `</div>`;
       }
       
-      /* 🎯 修復 3：找回消失的「其他帳務（分類總結）」區塊 */
       if(bills.length > 0) {
           const sums = {}; 
           bills.forEach(b => { 
@@ -1709,42 +1696,41 @@
       return html;
   }
 
-// --- 控制新增表單的費用與項目欄位顯示 ---
+  // --- 控制新增表單的費用與項目欄位顯示 ---
   function toggleAddEventFee() {
       const cat = document.getElementById('add-行程-類別').value;
       const isNoFee = (cat === '旅遊' || cat === '移地訓練');
       const displayStyle = isNoFee ? 'none' : 'block';
       
-      // 1. 隱藏並清空內容的欄位
       const hideFields = ['聿凡', '光武', '報名費'];
       hideFields.forEach(f => {
           const el = document.getElementById(`add-行程-${f}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
-              if(isNoFee) el.value = ''; // 清空內容
+              if(isNoFee) el.value = ''; 
           }
       });
 
-      // 2. 隱藏並將預設值切換為 "-" 的選單欄位
       const defaultSelectFields = ['付款人', '方式', '狀態'];
       defaultSelectFields.forEach(f => {
           const el = document.getElementById(`add-行程-${f}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
-              if(isNoFee) el.value = '-'; // 強制設為 "-"
+              if(isNoFee) {
+                  forceSelectValue(el, '-');
+              }
           }
       });
   }
 
   // --- 控制編輯表單的費用與項目欄位顯示 ---
   function toggleEditEventFee() {
-      const catSelect = document.getElementById('edit-field-2'); // 行程類別在第 3 欄 (index 2)
+      const catSelect = document.getElementById('edit-field-2'); 
       if(!catSelect) return;
       const cat = catSelect.value;
       const isNoFee = (cat === '旅遊' || cat === '移地訓練');
       const displayStyle = isNoFee ? 'none' : 'block';
       
-      // index: 5=聿凡項目, 6=光武項目, 7=報名費總額 (清空內容)
       [5, 6, 7].forEach(i => {
           const el = document.getElementById(`edit-field-${i}`);
           if(el && el.parentNode) {
@@ -1753,12 +1739,13 @@
           }
       });
 
-      // index: 8=付款人, 9=付款方式, 10=狀態 (設為 "-")
       [8, 9, 10].forEach(i => {
           const el = document.getElementById(`edit-field-${i}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
-              if(isNoFee) el.value = '-'; // 強制設為 "-"
+              if(isNoFee) {
+                  forceSelectValue(el, '-');
+              }
           }
       });
   }
@@ -1766,5 +1753,3 @@
 </script>
 </body>
 </html>
-
-
