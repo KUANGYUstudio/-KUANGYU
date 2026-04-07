@@ -532,7 +532,7 @@
           <div id="add-form-行程" class="admin-form-section active">
               <div class="admin-input-group"><label>行程代碼</label><input type="text" id="add-行程-代碼" placeholder="例如：20260403_台東賽"></div>
               <div class="admin-input-group"><label>行程名稱</label><input type="text" id="add-行程-名稱"></div>
-              <div class="admin-input-group"><label>行程類別</label><select id="add-行程-類別"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
+              <div class="admin-input-group"><label<div class="admin-input-group"><label>行程類別</label><select id="add-行程-類別" onchange="toggleAddEventFee()"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
               <div class="admin-input-group"><label>日期</label><input type="date" id="add-行程-日期"></div>
               <div class="admin-input-group"><label>行程連結</label><input type="url" id="add-行程-連結"></div>
               <div class="admin-input-group"><label>聿凡項目</label><input type="text" id="add-行程-聿凡"></div>
@@ -761,7 +761,9 @@
           
           if(selectOptions[h]) {
               const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
-              inputHtml = `<select id="edit-field-${idx}" class="edit-input">${opts}</select>`;
+              // 幫「行程類別」動態加上 onchange 事件
+              const onChangeAttr = (h === '行程類別') ? 'onchange="toggleEditEventFee()"' : '';
+              inputHtml = `<select id="edit-field-${idx}" class="edit-input" ${onChangeAttr}>${opts}</select>`;
           } else if(h.includes('日期')) {
               const dVal = formatDate(val);
               inputHtml = `<input type="date" id="edit-field-${idx}" class="edit-input" value="${dVal}">`;
@@ -785,6 +787,9 @@
       document.getElementById('edit-rowIndex').value = rowIndex;
       document.getElementById('edit-modal-title').textContent = `編輯${sheetName}`;
       document.getElementById('edit-modal').style.display = 'flex';
+      
+      // 如果是編輯行程，打開時檢查一次，把不需要的欄位藏起來
+      if (sheetName === '行程') { toggleEditEventFee(); }
   }
 
   function closeEditModal() {
@@ -1576,13 +1581,22 @@
       
       html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
       
-      /* 🎯 修復 2：加上 card-race 保證邊線顏色 */
-      html += `<div class="info-section"><div class="info-title title-race">報名資訊</div><div class="info-card card-race">`;
+      /* 🎯 修改 1：動態判斷標題與費用顯示 */
+      const eventCat = getVal(event, '行程類別');
+      const isNoFeeCat = (eventCat === '旅遊' || eventCat === '移地訓練');
+      const infoTitleText = isNoFeeCat ? '行程資訊' : '報名資訊';
+      
+      html += `<div class="info-section"><div class="info-title title-race">${infoTitleText}</div><div class="info-card card-race">`;
       
       if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
       if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
       
-      html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'));
+      // 如果不是旅遊/移地訓練，或者真的有填寫大於 0 的費用，才顯示費用欄位
+      const feeAmount = parseFloat(getVal(event,'報名費總額')) || 0;
+      if (!isNoFeeCat || feeAmount > 0) {
+          // 已經乖乖改回 '付款人'，絕不亂動！
+          html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'));
+      }
       
       if(getVal(event,'備註')) {
           html += `<div style="margin-top:12px; font-size:13px; color:#666; border-top: 1px dashed #ddd; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
@@ -1692,6 +1706,48 @@
       
       return html;
   }
+
+// --- 控制新增表單的費用欄位顯示 ---
+  function toggleAddEventFee() {
+      const cat = document.getElementById('add-行程-類別').value;
+      const isNoFee = (cat === '旅遊' || cat === '移地訓練');
+      const displayStyle = isNoFee ? 'none' : 'block';
+      
+      const fields = ['報名費', '付款人', '方式', '狀態'];
+      fields.forEach(f => {
+          const el = document.getElementById(`add-行程-${f}`);
+          if(el && el.parentNode) {
+              el.parentNode.style.display = displayStyle;
+              // 如果隱藏了，順便把裡面的值清空，避免傳送髒資料
+              if(isNoFee) {
+                  if(el.tagName === 'SELECT') el.selectedIndex = 0;
+                  else el.value = '';
+              }
+          }
+      });
+  }
+
+  // --- 控制編輯表單的費用欄位顯示 ---
+  function toggleEditEventFee() {
+      const catSelect = document.getElementById('edit-field-2'); // 行程類別在第 3 欄 (index 2)
+      if(!catSelect) return;
+      const cat = catSelect.value;
+      const isNoFee = (cat === '旅遊' || cat === '移地訓練');
+      const displayStyle = isNoFee ? 'none' : 'block';
+      
+      // index: 7=報名費總額, 8=報名費付款人, 9=付款方式, 10=狀態
+      [7, 8, 9, 10].forEach(i => {
+          const el = document.getElementById(`edit-field-${i}`);
+          if(el && el.parentNode) {
+              el.parentNode.style.display = displayStyle;
+              if(isNoFee) {
+                  if(el.tagName === 'SELECT') el.selectedIndex = 0;
+                  else el.value = '';
+              }
+          }
+      });
+  }
+  
 </script>
 </body>
 </html>
