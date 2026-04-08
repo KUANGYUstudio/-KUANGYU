@@ -1604,7 +1604,7 @@
           section.innerHTML = `
               <div class="month-title">${y}年${m}月</div>
               <div class="calendar-header">
-                  ${['日','一','二','三','四','五','六'].map(d => `<div class="weekday-header">${d}</div>`).join('')}
+                  ${['一','二','三','四','五','六','日'].map(d => `<div class="weekday-header">${d}</div>`).join('')}
               </div>
           `;
           
@@ -1614,7 +1614,9 @@
           const firstDay = new Date(y, m-1, 1).getDay(); 
           const lastDate = new Date(y, m, 0).getDate();
           
-          for (let i = 0; i < firstDay; i++) { grid.appendChild(document.createElement('div')); }
+          // 調整為星期一為每週第一天
+          const emptyDays = firstDay === 0 ? 6 : firstDay - 1;
+          for (let i = 0; i < emptyDays; i++) { grid.appendChild(document.createElement('div')); }
           
           for (let d = 1; d <= lastDate; d++) {
               const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
