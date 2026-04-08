@@ -57,6 +57,7 @@
         margin-bottom: 20px; 
     }
 
+    /* 置頂區塊 - 黃金三角排版 */
     .sticky-controls {
         position: sticky; 
         top: 0; 
@@ -95,7 +96,9 @@
         font-weight: bold;
     }
 
-    #mode-toggle-btn { font-size: 24px; }
+    #mode-toggle-btn {
+        font-size: 24px; 
+    }
     
     .tool-btn.active { 
         background: var(--settle-pink); 
@@ -103,59 +106,132 @@
         box-shadow: 0 4px 10px rgba(224, 122, 95, 0.3); 
     }
 
-    .action-bar { display: flex; flex-direction: column; align-items: center; margin-bottom: 25px; }
+    .action-bar { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        margin-bottom: 25px; 
+    }
 
+    /* 中央核心控制區 */
     .center-nav { 
-        display: flex; align-items: center; gap: 10px; background: #f0f0f0; 
-        padding: 4px 8px; border-radius: 25px; 
+        display: flex; 
+        align-items: center; 
+        gap: 10px; 
+        background: #f0f0f0; 
+        padding: 4px 8px; 
+        border-radius: 25px; 
     }
     
     .acc-toggle-btn { 
-        background: #fff; color: var(--coin-gold); border: none; width: 38px; height: 38px; 
-        border-radius: 50%; font-weight: 900; cursor: pointer; font-size: 18px; 
-        display: flex; align-items: center; justify-content: center; 
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; 
+        background: #fff; 
+        color: var(--coin-gold); 
+        border: none; 
+        width: 38px; 
+        height: 38px; 
+        border-radius: 50%; 
+        font-weight: 900; 
+        cursor: pointer; 
+        font-size: 18px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+        transition: 0.2s; 
     }
     
-    .acc-toggle-btn.active { background: var(--coin-gold); color: #fff; }
+    .acc-toggle-btn.active { 
+        background: var(--coin-gold); 
+        color: #fff; 
+    }
 
     .view-switcher {
-        display: flex; gap: 4px; background-color: #f0f0f0; 
-        padding: 4px 8px; border-radius: 25px; width: fit-content; 
+        display: flex;
+        gap: 4px;
+        background-color: #f0f0f0; 
+        padding: 4px 8px; 
+        border-radius: 25px; 
+        width: fit-content; 
     }
 
-    .panel-view-switcher { margin-bottom: 20px; }
+    .panel-view-switcher {
+        margin-bottom: 20px;
+    }
     
     .view-btn { 
-        border: none; padding: 6px 14px; border-radius: 17px; cursor: pointer; 
-        font-size: 13px; font-weight: bold; color: #7f8c8d; background: transparent; transition: 0.3s; 
+        border: none; 
+        padding: 6px 14px; 
+        border-radius: 17px; 
+        cursor: pointer; 
+        font-size: 13px; 
+        font-weight: bold; 
+        color: #7f8c8d; 
+        background: transparent; 
+        transition: 0.3s; 
     }
     
-    .view-btn.active { background: #fff; color: var(--brand-main); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .view-btn.active { 
+        background: #fff; 
+        color: var(--brand-main); 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    }
 
+    /* 🎯 原生 APP 風格下拉搜尋列 */
     .search-dropdown-area {
-        max-height: 0; opacity: 0; overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        padding: 0 15px; box-sizing: border-box; width: 100%; margin-top: -10px;
+        padding: 0 15px;
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: -10px;
     }
     .search-dropdown-area.active {
-        max-height: 60px; opacity: 1; padding-top: 10px; padding-bottom: 15px; margin-top: 0;
+        max-height: 60px;
+        opacity: 1;
+        padding-top: 10px;
+        padding-bottom: 15px;
+        margin-top: 0;
     }
     .ios-search-bar {
-        display: flex; align-items: center; background-color: #f2f2f7; border-radius: 12px; padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        background-color: #f2f2f7;
+        border-radius: 12px;
+        padding: 8px 12px;
     }
-    .ios-search-icon { color: #8e8e93; font-size: 16px; margin-right: 8px; }
+    .ios-search-icon {
+        color: #8e8e93;
+        font-size: 16px;
+        margin-right: 8px;
+    }
     .ios-search-input {
-        flex: 1; border: none; background: transparent; font-size: 16px;
-        color: var(--text-main); outline: none; font-family: inherit;
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: 16px;
+        color: var(--text-main);
+        outline: none;
+        font-family: inherit;
     }
     .ios-search-input::placeholder { color: #8e8e93; }
     .ios-search-clear {
-        background: #c7c7cc; color: #fff; border: none; border-radius: 50%;
-        width: 18px; height: 18px; font-size: 10px; display: none;
-        align-items: center; justify-content: center; cursor: pointer; padding: 0;
+        background: #c7c7cc;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 0;
     }
 
+    /* 過濾器與年月排版 */
     .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }
     .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 13px; font-weight: bold; color: #78909c; cursor: pointer; transition: 0.2s; }
     .filter-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); }
@@ -174,9 +250,12 @@
     
     .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: #f4f6f8; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; box-sizing: border-box; }
     .day-number { position: relative; z-index: 2; }
+    
     .day.has-event { background-color: #ffffff; color: #2c3e50; cursor: pointer; font-weight: bold; border-width: 2px; border-style: solid; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+    
     .day.has-expense { cursor: pointer; font-weight: 600; color: #2c3e50; }
     .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: var(--coin-gold); }
+    
     .day.selected { color: #fff !important; transform: scale(1.05); z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; border-color: transparent !important; }
     .day.has-expense.selected { background-color: #b0bec5; } 
     .day.selected::after { background-color: transparent !important; } 
@@ -191,6 +270,7 @@
     .list-name { font-size: 17px; font-weight: bold; color: var(--brand-main); flex: 1; }
     .list-countdown-days { font-size: 18px; font-weight: 900; color: var(--settle-pink); margin: 0 3px; }
 
+    /* 面板與卡片 */
     .detail-panel { grid-column: 1 / -1; background: transparent; border-radius: 16px; margin: 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; width: 100%; }
     .detail-panel.open { max-height: 8000px; opacity: 1; margin-top: -6px; margin-bottom: 25px; text-align: left; overflow: visible; }
     .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; margin-bottom: 20px; margin-top: 15px; }
@@ -218,13 +298,16 @@
     .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #f5f5f5; padding-top: 10px; margin-top: 10px; }
     .price-tag { color: var(--settle-pink); font-weight: 800; font-size: 16px; }
 
+    /* 狀態標籤 */
     .status-tag { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-left: 8px; display: inline-block; }
     .status-paid { background: #e8f5e9; color: #2e7d32; }
     .status-onsite { background: #f5f5f5; color: #616161; }
     .status-unpaid { background: #ffebee; color: #c62828; }
 
+    /* 行程結算區塊 */
     .event-settle-card { border: 1.5px solid var(--settle-pink); border-radius: 12px; padding: 10px 20px; display: flex; align-items: center; gap: 15px; background: #fff; margin-top: 15px; }
 
+    /* 管理模式按鈕 */
     .edit-controls { display: none; gap: 12px; margin-top: 12px; justify-content: flex-end; border-top: 1px dashed #f0f0f0; padding-top: 12px; }
     body.edit-mode-on .edit-controls { display: flex; }
     .circle-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; color: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.15); border: none; font-weight: bold; transition: 0.2s;}
@@ -232,6 +315,7 @@
     .edit-btn { background: #90a4ae; }
     .del-btn { background: var(--settle-pink); }
 
+    /* 高質感自定義彈窗 UI */
     .modal-overlay { 
         display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
         background:rgba(44, 62, 80, 0.6); z-index:9999; align-items:center; 
@@ -254,6 +338,7 @@
     .btn-cancel { background: #f5f5f5; color: #78909c; }
     .btn-danger { background: #e53935; color: #fff; }
 
+    /* 編輯視窗專用 Body */
     .modal-body { max-height: 60vh; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 5px; }
     .edit-input-group { margin-bottom: 15px; }
     .edit-input-group label { font-size: 12px; color: var(--text-sub); font-weight: bold; display:block; margin-bottom:5px; }
@@ -278,20 +363,34 @@
     .view-container { display: none; text-align: left; }
     .view-container.active { display: block; }
 
-    .acc-card { background: #f8f9fa; border: 1px solid #eceff1; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    /* 帳務總覽面板 */
+    .acc-card { 
+        background: #f8f9fa; 
+        border: 1px solid #eceff1; 
+        border-radius: 12px; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+    }
     .acc-label { font-weight: bold; }
     .acc-val { font-weight: 800; color: var(--brand-main); }
     
-    .acc-tab-btn { padding: 8px 16px; border-radius: 20px; background: #f0f0f0; color: #7f8c8d; font-size: 13px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .acc-tab-btn {
+        padding: 8px 16px; border-radius: 20px; background: #f0f0f0; color: #7f8c8d;
+        font-size: 13px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s;
+    }
     .acc-tab-btn.active { background: var(--nav-active); color: #fff; box-shadow: 0 4px 10px rgba(84, 110, 122, 0.2); }
     
-    .acc-detail-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #f5f5f5; background: #fff; transition: 0.2s; cursor: pointer; }
+    .acc-detail-item {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 15px 20px; border-bottom: 1px solid #f5f5f5; background: #fff; transition: 0.2s;
+        cursor: pointer;
+    }
     .acc-detail-item:last-child { border-bottom: none; }
     .acc-detail-item:hover { background: #f0f4f8; }
     .acc-detail-item:active { transform: scale(0.98); }
     .acc-detail-name { font-size: 15px; font-weight: bold; color: var(--text-main); }
     .acc-detail-amount { font-size: 16px; font-weight: 900; color: var(--settle-pink); }
 
+    /* 顯示歷史行程按鈕 */
     .past-toggle-btn {
         background: #fcfcfc; color: #78909c; border: 1.5px solid #eceff1; border-radius: 25px; 
         padding: 10px 24px; margin: 10px auto 25px; font-size: 14px; font-weight: bold;
@@ -300,6 +399,7 @@
     }
     .past-toggle-btn:hover { background: #fff; color: var(--brand-main); border-color: #cfd8dc; box-shadow: 0 4px 10px rgba(0,0,0,0.06); transform: translateY(-2px); }
 
+    /* 新增功能專屬 UI */
     .fab-btn {
         position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
         border-radius: 50%; background: var(--brand-main); color: #fff; border: none;
@@ -564,10 +664,10 @@
                   </div>
                   <div class="admin-input-group"><label>項目</label><input autocomplete="off" type="text" id="add-帳務-項目" placeholder="例如：晚餐、伴手禮"></div>
                   <div class="admin-input-group"><label>金額</label><input autocomplete="off" type="number" inputmode="decimal" id="add-帳務-金額"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-帳務-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
                   <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-帳務-方式" onchange="toggleCreditCardSelect('帳務')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
                   <div class="admin-input-group" id="add-帳務-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-帳務-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
                   <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-帳務-備註" placeholder="可選填"></div>
-                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-帳務-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
                   <button class="admin-submit-btn" onclick="submitNewData('帳務明細')">確認新增帳務</button>
               </div>
           </div>
@@ -609,12 +709,12 @@
       return categoryColors[cat] || '#cfd8dc'; 
   }
 
-  // 🎯 統整最新的欄位順序（完全對應試算表）
+  // 🎯 統一加入信用卡別、帳務加入付款人
   const sheetHeaders = {
       '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '付款人', '付款方式', '狀態', '備註', '結束日期', '信用卡別'],
       '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註', '含早餐', '充電樁', '待確認', '信用卡別'],
       '交通': ['行程代碼', '類型', '出發日期', '去程班次 / 航班', '去程出發時間', '去程抵達時間', '回程日期', '回程班次 / 航班', '回程出發時間', '回程抵達時間', '票價或油資', '付款人', '付款方式', '狀態', '信用卡別'],
-      '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註', '信用卡別', '付款人']
+      '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註', '付款人', '信用卡別']
   };
 
   const selectOptions = {
@@ -634,35 +734,16 @@
 
   async function initSystem() {
     const cachedData = localStorage.getItem('kuangyu_dbData');
-    
-    try {
-        if (cachedData) {
-            dbData = JSON.parse(cachedData);
-            // 防呆避震器：預防快取資料結構不完整導致畫面卡死
-            if (!dbData['行程']) dbData['行程'] = [];
-            if (!dbData['住宿']) dbData['住宿'] = [];
-            if (!dbData['交通']) dbData['交通'] = [];
-            if (!dbData['帳務明細']) dbData['帳務明細'] = [];
-            
-            renderFilters();
-            renderMain();
-            document.getElementById('loading').style.display = 'none';
-        }
-    } catch (e) {
-        console.error("快取解析失敗", e);
-        localStorage.removeItem('kuangyu_dbData');
+    if (cachedData) {
+        dbData = JSON.parse(cachedData);
+        renderFilters();
+        renderMain();
+        document.getElementById('loading').style.display = 'none';
     }
 
     try {
       const res = await fetch(API_URL + "?t=" + new Date().getTime());
       const freshData = await res.json();
-      
-      // 防呆避震器：確保每一項都有陣列，避免 map/filter 報錯卡死
-      if (!freshData['行程']) freshData['行程'] = [];
-      if (!freshData['住宿']) freshData['住宿'] = [];
-      if (!freshData['交通']) freshData['交通'] = [];
-      if (!freshData['帳務明細']) freshData['帳務明細'] = [];
-      
       dbData = freshData;
       localStorage.setItem('kuangyu_dbData', JSON.stringify(freshData));
       
@@ -671,18 +752,15 @@
       if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
       document.getElementById('loading').style.display = 'none';
     } catch (e) {
-      console.error("連線抓取失敗", e);
       if (!cachedData) {
-          document.getElementById('loading').innerHTML = `
-              <div style="line-height:1.8;">
-                  資料連線失敗，請檢查網路連線。<br>
-                  <button onclick="localStorage.removeItem('kuangyu_dbData'); location.reload();" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; background:#78909c; color:#fff; font-weight:bold; cursor:pointer;">清除快取並重新整理</button>
-              </div>`;
+          document.getElementById('loading').innerHTML = "資料連線失敗，請檢查網路連線。";
       }
     }
   }
 
+  // 🎯 統整 4 個主按鈕互斥邏輯：搜尋、帳務、日曆、清單
   function switchMainMode(mode) {
+      // 1. 取消所有按鈕的 active 視覺狀態
       const searchBtn = document.getElementById('search-toggle-btn');
       searchBtn.classList.remove('active');
       searchBtn.style.background = '#fff';
@@ -692,6 +770,7 @@
       document.getElementById('btn-cal').classList.remove('active');
       document.getElementById('btn-list').classList.remove('active');
 
+      // 2. 隱藏所有視窗區域
       document.getElementById('search-dropdown').classList.remove('active');
       document.getElementById('acc-panel').style.display = 'none';
       document.getElementById('cal-view').classList.remove('active');
@@ -699,6 +778,7 @@
 
       isFromAccPanel = false;
 
+      // 如果切換到其他模式，順便清空搜尋關鍵字
       if (mode !== 'search') {
           const input = document.getElementById('main-search-input');
           if (input.value !== '') {
@@ -708,6 +788,7 @@
           }
       }
 
+      // 3. 根據選定的模式啟動對應按鈕與視窗
       if (mode === 'cal') {
           currentView = 'cal';
           document.getElementById('btn-cal').classList.add('active');
@@ -726,6 +807,8 @@
           searchBtn.style.color = '#fff';
           
           document.getElementById('search-dropdown').classList.add('active');
+          
+          // 搜尋時，下方顯示清單視窗 (但上面按鈕不亮)
           currentView = 'list';
           document.getElementById('list-view').classList.add('active');
           setTimeout(() => document.getElementById('main-search-input').focus(), 300);
@@ -745,8 +828,12 @@
   function handleSearch(val) {
       currentSearchQuery = val.trim();
       const clearBtn = document.getElementById('search-clear-btn');
-      if (currentSearchQuery.length > 0) clearBtn.style.display = 'flex';
-      else clearBtn.style.display = 'none';
+      
+      if (currentSearchQuery.length > 0) {
+          clearBtn.style.display = 'flex';
+      } else {
+          clearBtn.style.display = 'none';
+      }
       
       isFromAccPanel = false; 
       renderMain();
@@ -826,12 +913,26 @@
       }
   }
 
+  function forceSelectValue(el, targetText) {
+      if (!el) return;
+      if (el.tagName === 'SELECT') {
+          for (let i = 0; i < el.options.length; i++) {
+              if (el.options[i].text === targetText || el.options[i].value === targetText) {
+                  el.selectedIndex = i;
+                  break;
+              }
+          }
+      } else {
+          el.value = targetText;
+      }
+  }
+
   function autoFillDate(eventCode, targetInputId) {
       if (!eventCode) return;
       const targetInput = document.getElementById(targetInputId);
       if (!targetInput || targetInput.value) return; 
 
-      const event = (dbData['行程']||[]).find(r => getVal(r, '行程代碼') === eventCode);
+      const event = dbData['行程'].find(r => getVal(r, '行程代碼') === eventCode);
       if (event) {
           const dateVal = formatDate(getVal(event, '日期'));
           if (dateVal) targetInput.value = dateVal;
@@ -840,13 +941,14 @@
 
   function openEditModal(sheetName, rowIndex, e) {
       if(e) e.stopPropagation();
-      const rowData = (dbData[sheetName]||[]).find(r => r['_rowIndex'] === rowIndex);
+      const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
       if(!rowData) return;
 
       const headers = sheetHeaders[sheetName];
       const formBody = document.getElementById('dynamic-edit-form');
       formBody.innerHTML = '';
       
+      // 🎯 用陣列收集生成的 HTML，方便事後調換位置
       let generatedGroups = [];
 
       headers.forEach((h, idx) => {
@@ -906,7 +1008,9 @@
           });
       });
 
+      // 🎯 把「結束日期」挪到「開始日期」的正下方
       if (sheetName === '行程') {
+          // 結束日期在 sheetHeaders 是 idx 12，開始日期是 idx 3
           const endDateGroup = generatedGroups.find(g => g.idx === 12);
           if (endDateGroup) {
               generatedGroups = generatedGroups.filter(g => g.idx !== 12);
@@ -1014,6 +1118,13 @@
       btn.classList.add('active');
   }
 
+  function toggleAddPlatform() {
+      const select = document.getElementById('add-住宿-平台-select');
+      const otherInput = document.getElementById('add-住宿-平台-其他');
+      otherInput.style.display = select.value === '其他' ? 'block' : 'none';
+  }
+
+  // 🎯 魔法：選刷卡就滑出信用卡選單
   function toggleCreditCardSelect(type) {
       const method = document.getElementById(`add-${type}-方式`).value;
       const ccGroup = document.getElementById(`add-${type}-信用卡-group`);
@@ -1080,8 +1191,7 @@
           eventCode = document.getElementById('add-帳務-代碼').value; 
           const method = document.getElementById('add-帳務-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-帳務-信用卡').value : '';
-          // 針對 H欄:信用卡別, I欄:付款人 做防呆對齊
-          rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, method, document.getElementById('add-帳務-備註').value, cc, document.getElementById('add-帳務-付款人').value];
+          rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, method, document.getElementById('add-帳務-備註').value, document.getElementById('add-帳務-付款人').value, cc];
       }
 
       if (sheetName !== '帳務明細' && !eventCode) { alert("行程代碼不能空白！"); return; }
@@ -1139,7 +1249,7 @@
   function openInfoModalFromAcc(code, eventDateStr) {
       if(!eventDateStr) return;
       isFromAccPanel = true; 
-      const event = (dbData['行程']||[]).find(r => getVal(r, '行程代碼') === code);
+      const event = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
       const modalBody = document.getElementById('info-modal-body');
       modalBody.innerHTML = generateDetailHTML(event, eventDateStr);
       document.getElementById('info-modal').style.display = 'flex';
@@ -1156,7 +1266,7 @@
 
   function calculateAccounting() {
       let allExpenses = [];
-      const races = (dbData['行程']||[]).filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter));
+      const races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter));
 
       const expensesByCode = { '住宿': {}, '交通': {}, '帳務明細': {} };
       ['住宿', '交通', '帳務明細'].forEach(sheet => {
@@ -1209,7 +1319,11 @@
       
       let filteredExpenses = allExpenses.filter(e => {
           if (!e.date) return false;
-          if (currentSearchQuery && !e.searchStr.toLowerCase().includes(currentSearchQuery.toLowerCase())) return false;
+          
+          if (currentSearchQuery && !e.searchStr.toLowerCase().includes(currentSearchQuery.toLowerCase())) {
+              return false;
+          }
+
           const eMonth = e.date.substring(0, 7);
           if (selectedMonthFilter) return eMonth === selectedMonthFilter;
           else return eMonth >= currentMonthKey;
@@ -1323,7 +1437,7 @@
 
   function calculateEventTotal(code) {
       let sum = 0; 
-      const race = (dbData['行程']||[]).find(r => getVal(r, '行程代碼') === code);
+      const race = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
       if (race) sum += parseFloat(getVal(race, '報名費總額')) || 0;
       
       (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code).forEach(s => sum += parseFloat(getVal(s, '費用')) || 0);
@@ -1335,7 +1449,7 @@
 
   function renderFilters() {
       const bar = document.getElementById('filter-bar');
-      const cats = ['全部', ...new Set((dbData['行程']||[]).map(r => getVal(r, '行程類別')).filter(c => c))];
+      const cats = ['全部', ...new Set(dbData['行程'].map(r => getVal(r, '行程類別')).filter(c => c))];
       bar.innerHTML = '';
       
       cats.forEach(c => {
@@ -1360,7 +1474,7 @@
       const currentM = now.getMonth() + 1;
       const currentMonthKey = `${currentY}-${String(currentM).padStart(2, '0')}`;
       
-      let races = (dbData['行程']||[]).filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
+      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
       
       if (currentFilter === '全部') { 
@@ -1391,6 +1505,7 @@
           yearContainer.appendChild(btn);
       });
 
+      // 準備國字月份陣列（針對十一和十二，單獨縮小字體並向下微調位置）
       const chineseMonths = [
           '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', 
           '<div style="font-size: 12px; margin-top: 2px;">十<br>一</div>', 
@@ -1404,11 +1519,17 @@
           
           const btn = document.createElement('div'); 
           btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
+          
+          // 注意！這裡要從 textContent 改成 innerHTML
           btn.innerHTML = chineseMonths[i - 1];
           
-          if (!hasData) btn.style.opacity = '0.3';
-          else if (mKey < currentMonthKey) btn.style.opacity = '0.6';
-          else btn.style.opacity = '1';
+          if (!hasData) {
+              btn.style.opacity = '0.3';
+          } else if (mKey < currentMonthKey) {
+              btn.style.opacity = '0.6';
+          } else {
+              btn.style.opacity = '1';
+          }
 
           if (selectedMonthFilter === mKey) {
               btn.classList.add('active');
@@ -1454,10 +1575,10 @@
       
       const now = new Date(); 
       const currentYear = now.getFullYear();
-      const currentMonth = now.getMonth() + 1;
+      const currentMonth = now.getMonth() + 1; // 1-12
       const currentMonthKey = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
       
-      let races = (dbData['行程']||[]).filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
+      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       
       let eventMap = {}; 
       let allDatesWithData = []; 
@@ -1466,6 +1587,7 @@
           if (!sDateStr) return;
           const eDateStr = formatDate(getVal(r, '結束日期')) || sDateStr;
           
+          // 🎯 修正：將 - 替換為 /，避免瀏覽器解析出錯或減去時區天數
           let cur = new Date(sDateStr.replace(/-/g, '/'));
           let end = new Date(eDateStr.replace(/-/g, '/'));
           let loopCount = 0;
@@ -1528,6 +1650,7 @@
           const firstDay = new Date(y, m-1, 1).getDay(); 
           const lastDate = new Date(y, m, 0).getDate();
           
+          // 調整為星期一為每週第一天
           const emptyDays = firstDay === 0 ? 6 : firstDay - 1;
           for (let i = 0; i < emptyDays; i++) { grid.appendChild(document.createElement('div')); }
           
@@ -1567,14 +1690,16 @@
   function renderList() {
       const container = document.getElementById('list-container'); 
       container.innerHTML = '';
+      
       let listItems = [];
 
-      let races = (dbData['行程']||[]).filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
+      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       races.forEach(r => {
           const sDateStr = formatDate(getVal(r, '日期'));
           if(!sDateStr) return;
           const eDateStr = formatDate(getVal(r, '結束日期')) || sDateStr;
           
+          // 🎯 修正時區解析問題
           listItems.push({
               isEvent: true,
               eventData: r,
@@ -1585,6 +1710,8 @@
               title: getVal(r, '行程名稱')
           });
       });
+
+      // 🎯 已移除「日常帳務」推入 listItems 的程式碼
 
       listItems.sort((a, b) => a.dateObj - b.dateObj);
       
@@ -1973,6 +2100,7 @@
               if(isNoFee) el.selectedIndex = 0; 
           }
       });
+      // 確保切換時，連動檢查信用卡選單是否需要隱藏
       toggleCreditCardSelect('行程');
   }
 
@@ -1991,6 +2119,7 @@
           }
       });
 
+      // 8=付款人, 9=付款方式, 10=狀態, 13=信用卡別
       [8, 9, 10, 13].forEach(i => {
           const el = document.getElementById(`edit-field-${i}`);
           if(el && el.parentNode) {
