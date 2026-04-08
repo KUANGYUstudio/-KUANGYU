@@ -2118,3 +2118,2153 @@
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>光聿 KUANGYU - 行程小助理</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* =========================================
+       光聿行程美學定義 (旗艦版：柔和粉彩 + 全域編輯 + 黃金三角)
+       ========================================= */
+    :root {
+      --cat-鐵人: #64b5f6; 
+      --cat-自行車: #81c784; 
+      --cat-路跑: #ff8a65; 
+      --cat-游泳: #4dd0e1; 
+      --cat-活動: #f06292; 
+      --cat-旅遊: #ffd54f; 
+      --cat-移地訓練: #ba68c8; 
+
+      --text-main: #2c3e50; 
+      --text-sub: #546e7a; 
+      --bg-color: #fcfcfc;
+      --card-bg: #ffffff; 
+      --brand-main: #2c3e50;
+      
+      --nav-active: #546e7a; 
+      --coin-gold: #e5c07b; 
+      --settle-pink: #e07a5f;
+      --action-button-color: #78909c; 
+      --action-button-bg: #eceff1;
+    }
+
+    body { 
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+        background: var(--bg-color); 
+        margin: 0; 
+        padding: 0; 
+        color: var(--text-main); 
+        min-height: 100vh; 
+    }
+    
+    .container { 
+        max-width: 800px; 
+        width: 100%; 
+        margin: 0 auto; 
+        padding: 30px 20px; 
+        box-sizing: border-box; 
+        text-align: center; 
+    }
+    
+    .header-title { 
+        font-size: 26px; 
+        font-weight: 800; 
+        color: var(--brand-main); 
+        letter-spacing: 2px; 
+        margin-bottom: 20px; 
+    }
+
+    /* 置頂區塊 - 黃金三角排版 */
+    .sticky-controls {
+        position: sticky; 
+        top: 0; 
+        background: rgba(252, 252, 252, 0.95);
+        backdrop-filter: blur(10px); 
+        z-index: 100; 
+        padding: 15px 0 10px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.03); 
+        margin-bottom: 25px;
+    }
+
+    .nav-wrapper { 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        width: 100%; 
+        max-width: 450px; 
+        margin: 0 auto 0px; 
+        padding: 0 10px; 
+        box-sizing: border-box; 
+    }
+    
+    .tool-btn { 
+        width: 38px; 
+        height: 38px; 
+        border-radius: 50%; 
+        background: var(--action-button-bg); 
+        color: var(--action-button-color); 
+        border: none; 
+        font-size: 18px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        cursor: pointer; 
+        transition: 0.2s; 
+        font-weight: bold;
+    }
+
+    #mode-toggle-btn {
+        font-size: 24px; 
+    }
+    
+    .tool-btn.active { 
+        background: var(--settle-pink); 
+        color: #fff; 
+        box-shadow: 0 4px 10px rgba(224, 122, 95, 0.3); 
+    }
+
+    .action-bar { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        margin-bottom: 25px; 
+    }
+
+    /* 中央核心控制區 */
+    .center-nav { 
+        display: flex; 
+        align-items: center; 
+        gap: 10px; 
+        background: #f0f0f0; 
+        padding: 4px 8px; 
+        border-radius: 25px; 
+    }
+    
+    .acc-toggle-btn { 
+        background: #fff; 
+        color: var(--coin-gold); 
+        border: none; 
+        width: 38px; 
+        height: 38px; 
+        border-radius: 50%; 
+        font-weight: 900; 
+        cursor: pointer; 
+        font-size: 18px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+        transition: 0.2s; 
+    }
+    
+    .acc-toggle-btn.active { 
+        background: var(--coin-gold); 
+        color: #fff; 
+    }
+
+    .view-switcher {
+        display: flex;
+        gap: 4px;
+        background-color: #f0f0f0; 
+        padding: 4px 8px; 
+        border-radius: 25px; 
+        width: fit-content; 
+    }
+
+    .panel-view-switcher {
+        margin-bottom: 20px;
+    }
+    
+    .view-btn { 
+        border: none; 
+        padding: 6px 14px; 
+        border-radius: 17px; 
+        cursor: pointer; 
+        font-size: 13px; 
+        font-weight: bold; 
+        color: #7f8c8d; 
+        background: transparent; 
+        transition: 0.3s; 
+    }
+    
+    .view-btn.active { 
+        background: #fff; 
+        color: var(--brand-main); 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    }
+
+    /* 🎯 原生 APP 風格下拉搜尋列 */
+    .search-dropdown-area {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        padding: 0 15px;
+        box-sizing: border-box;
+        width: 100%;
+        margin-top: -10px;
+    }
+    .search-dropdown-area.active {
+        max-height: 60px;
+        opacity: 1;
+        padding-top: 10px;
+        padding-bottom: 15px;
+        margin-top: 0;
+    }
+    .ios-search-bar {
+        display: flex;
+        align-items: center;
+        background-color: #f2f2f7;
+        border-radius: 12px;
+        padding: 8px 12px;
+    }
+    .ios-search-icon {
+        color: #8e8e93;
+        font-size: 16px;
+        margin-right: 8px;
+    }
+    .ios-search-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: 16px;
+        color: var(--text-main);
+        outline: none;
+        font-family: inherit;
+    }
+    .ios-search-input::placeholder { color: #8e8e93; }
+    .ios-search-clear {
+        background: #c7c7cc;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    /* 過濾器與年月排版 */
+    .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }
+    .filter-btn { padding: 8px 16px; background: #fff; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 13px; font-weight: bold; color: #78909c; cursor: pointer; transition: 0.2s; }
+    .filter-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); }
+    
+    .year-nav-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+    .year-nav-btn { padding: 4px 14px; border-radius: 15px; background: #f0f0f0; color: #7f8c8d; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .year-nav-btn.active { background: var(--nav-active); color: #fff; }
+    
+    .month-nav-container { display: grid; grid-template-columns: repeat(6, 36px); gap: 10px 8px; justify-content: center; padding-bottom: 5px; }
+    .month-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #eceff1; background: #fff; color: #b0bec5; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; box-sizing: border-box; line-height: 1.1; }
+    .month-nav-btn.has-data { border-color: var(--nav-active); color: var(--nav-active); }
+    .month-nav-btn.active { background: var(--nav-active); color: #fff; border-color: var(--nav-active); transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .weekday-header { font-weight: bold; font-size: 15px; text-align: center; color: #90a4ae; padding-bottom: 10px; }
+    
+    .day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 14px; background-color: #f4f6f8; color: #90a4ae; transition: 0.2s; font-size: 18px; position: relative; border: 2px solid transparent; box-sizing: border-box; }
+    .day-number { position: relative; z-index: 2; }
+    
+    .day.has-event { background-color: #ffffff; color: #2c3e50; cursor: pointer; font-weight: bold; border-width: 2px; border-style: solid; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+    
+    .day.has-expense { cursor: pointer; font-weight: 600; color: #2c3e50; }
+    .day.has-expense::after { content: ''; position: absolute; bottom: 4px; width: 4px; height: 4px; border-radius: 50%; background-color: var(--coin-gold); }
+    
+    .day.selected { color: #fff !important; transform: scale(1.05); z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important; border-color: transparent !important; }
+    .day.has-expense.selected { background-color: #b0bec5; } 
+    .day.selected::after { background-color: transparent !important; } 
+    
+    .month-title { font-weight: 800; font-size: 22px; margin: 50px 0 15px; text-align: left; color: var(--brand-main); }
+    
+    .list-item { background: #fff; border-radius: 15px; padding: 15px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eceff1; transition: 0.2s; border-left: 6px solid #cfd8dc; text-align: left; }
+    .list-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.06); }
+    .list-date { text-align: center; min-width: 45px; }
+    .list-date .m { font-size: 11px; color: #7f8c8d; display: block; text-align: center; }
+    .list-date .d { font-size: 22px; font-weight: 800; color: var(--brand-main); display: block; text-align: center; line-height: 1.1; }
+    .list-name { font-size: 17px; font-weight: bold; color: var(--brand-main); flex: 1; }
+    .list-countdown-days { font-size: 18px; font-weight: 900; color: var(--settle-pink); margin: 0 3px; }
+
+    /* 面板與卡片 */
+    .detail-panel { grid-column: 1 / -1; background: transparent; border-radius: 16px; margin: 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; box-sizing: border-box; width: 100%; }
+    .detail-panel.open { max-height: 8000px; opacity: 1; margin-top: -6px; margin-bottom: 25px; text-align: left; overflow: visible; }
+    .detail-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; margin-bottom: 20px; margin-top: 15px; }
+    .detail-race-name { font-size: 22px; font-weight: 800; color: var(--brand-main); }
+    .link-btn { font-size: 12px; padding: 6px 14px; background: var(--action-button-bg); color: var(--action-button-color); border-radius: 20px; text-decoration: none; font-weight: bold; }
+    
+    .info-section { margin-bottom: 20px; }
+    .info-title { font-weight: bold; font-size: 14px; color: var(--text-sub); margin-bottom: 10px; display: flex; align-items: center; }
+    .info-title::before { content: ''; display: inline-block; width: 6px; height: 16px; margin-right: 10px; border-radius: 3px; background: #eceff1;}
+    
+    .title-race::before { background: var(--cat-鐵人); }
+    .card-race { border-left-color: var(--cat-鐵人) !important; }
+    .title-stay::before { background: var(--cat-旅遊); }
+    .card-stay { border-left-color: var(--cat-旅遊) !important; }
+    .title-trans::before { background: var(--cat-自行車); }
+    .card-trans { border-left-color: var(--cat-自行車) !important; }
+    .title-bill::before { background: var(--settle-pink); }
+    .card-bill { border-left-color: var(--settle-pink) !important; }
+
+    .info-card { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 15px; border-left: 5px solid #eceff1; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+    .info-row { display: flex; gap: 12px; margin-bottom: 8px; }
+    .info-row > span:first-child { color: #7f8c8d; min-width: 70px; font-weight: 500;}
+    .info-row > span:last-child { color: var(--text-main); flex: 1; font-weight: 500;}
+    
+    .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #f5f5f5; padding-top: 10px; margin-top: 10px; }
+    .price-tag { color: var(--settle-pink); font-weight: 800; font-size: 16px; }
+
+    /* 狀態標籤 */
+    .status-tag { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-left: 8px; display: inline-block; }
+    .status-paid { background: #e8f5e9; color: #2e7d32; }
+    .status-onsite { background: #f5f5f5; color: #616161; }
+    .status-unpaid { background: #ffebee; color: #c62828; }
+
+    /* 行程結算區塊 */
+    .event-settle-card { border: 1.5px solid var(--settle-pink); border-radius: 12px; padding: 10px 20px; display: flex; align-items: center; gap: 15px; background: #fff; margin-top: 15px; }
+
+    /* 管理模式按鈕 */
+    .edit-controls { display: none; gap: 12px; margin-top: 12px; justify-content: flex-end; border-top: 1px dashed #f0f0f0; padding-top: 12px; }
+    body.edit-mode-on .edit-controls { display: flex; }
+    .circle-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; color: #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.15); border: none; font-weight: bold; transition: 0.2s;}
+    .circle-btn:active { transform: scale(0.9); }
+    .edit-btn { background: #90a4ae; }
+    .del-btn { background: var(--settle-pink); }
+
+    /* 高質感自定義彈窗 UI */
+    .modal-overlay { 
+        display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+        background:rgba(44, 62, 80, 0.6); z-index:9999; align-items:center; 
+        justify-content:center; backdrop-filter: blur(5px); 
+    }
+    .modal-content { 
+        background:#fff; width:85%; max-width:350px; border-radius:28px; 
+        box-sizing:border-box; text-align:center; 
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2); animation: popScale 0.3s ease; 
+    }
+    @keyframes popScale { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    
+    .confirm-icon { 
+        width: 60px; height: 60px; background: #fff5f5; color: #e53935; border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center; font-size: 28px; 
+        margin: 0 auto 20px; border: 2px solid #ffcdd2; font-weight: bold; 
+    }
+    .modal-actions { display: flex; gap: 12px; margin-top: 20px; padding: 0 30px 30px; }
+    .modal-btn { flex: 1; padding: 14px; border-radius: 16px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.2s; }
+    .btn-cancel { background: #f5f5f5; color: #78909c; }
+    .btn-danger { background: #e53935; color: #fff; }
+
+    /* 編輯視窗專用 Body */
+    .modal-body { max-height: 60vh; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 5px; }
+    .edit-input-group { margin-bottom: 15px; }
+    .edit-input-group label { font-size: 12px; color: var(--text-sub); font-weight: bold; display:block; margin-bottom:5px; }
+    .edit-input { width: 100%; padding: 12px; border: 1.5px solid #dcdde1; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: #fcfcfc; transition: 0.3s;}
+    .edit-input:focus { outline: none; border-color: var(--nav-active); background: #fff; }
+
+    .admin-input-group input:not([type="checkbox"]), .admin-input-group select {
+        width: 100%; padding: 14px; border: 1.5px solid #dcdde1; border-radius: 12px;
+        font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s;
+        background: #fcfcfc; font-family: inherit; min-height: 52px; color: var(--text-main);
+    }
+    .admin-input-group input[type="date"] { -webkit-appearance: none; appearance: none; display: block; }
+    .admin-input-group input:focus, .admin-input-group select:focus { border-color: var(--nav-active); background: #fff; box-shadow: 0 0 0 3px rgba(84, 110, 122, 0.1); }
+
+    .admin-group-box { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #eceff1; margin-bottom: 18px; }
+    .admin-group-title { font-weight: bold; color: var(--text-sub); margin-bottom: 12px; font-size: 14px; border-left: 4px solid var(--settle-pink); padding-left: 8px; }
+
+    .admin-submit-btn { width: 100%; padding: 16px; border: none; border-radius: 15px; background: var(--nav-active); color: white; font-size: 17px; font-weight: bold; cursor: pointer; margin-top: 5px; transition: 0.2s; }
+    .admin-submit-btn:active { transform: scale(0.98); }
+    
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; color: #90a4ae; font-weight: bold;}
+    .view-container { display: none; text-align: left; }
+    .view-container.active { display: block; }
+
+    /* 帳務總覽面板 */
+    .acc-card { 
+        background: #f8f9fa; 
+        border: 1px solid #eceff1; 
+        border-radius: 12px; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+    }
+    .acc-label { font-weight: bold; }
+    .acc-val { font-weight: 800; color: var(--brand-main); }
+    
+    .acc-tab-btn {
+        padding: 8px 16px; border-radius: 20px; background: #f0f0f0; color: #7f8c8d;
+        font-size: 13px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s;
+    }
+    .acc-tab-btn.active { background: var(--nav-active); color: #fff; box-shadow: 0 4px 10px rgba(84, 110, 122, 0.2); }
+    
+    .acc-detail-item {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 15px 20px; border-bottom: 1px solid #f5f5f5; background: #fff; transition: 0.2s;
+        cursor: pointer;
+    }
+    .acc-detail-item:last-child { border-bottom: none; }
+    .acc-detail-item:hover { background: #f0f4f8; }
+    .acc-detail-item:active { transform: scale(0.98); }
+    .acc-detail-name { font-size: 15px; font-weight: bold; color: var(--text-main); }
+    .acc-detail-amount { font-size: 16px; font-weight: 900; color: var(--settle-pink); }
+
+    /* 顯示歷史行程按鈕 */
+    .past-toggle-btn {
+        background: #fcfcfc; color: #78909c; border: 1.5px solid #eceff1; border-radius: 25px; 
+        padding: 10px 24px; margin: 10px auto 25px; font-size: 14px; font-weight: bold;
+        cursor: pointer; display: block; width: fit-content; transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .past-toggle-btn:hover { background: #fff; color: var(--brand-main); border-color: #cfd8dc; box-shadow: 0 4px 10px rgba(0,0,0,0.06); transform: translateY(-2px); }
+
+    /* 新增功能專屬 UI */
+    .fab-btn {
+        position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+        border-radius: 50%; background: var(--brand-main); color: #fff; border: none;
+        font-size: 36px; font-weight: 300; display: flex; align-items: center;
+        justify-content: center; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+        cursor: pointer; z-index: 999; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        line-height: 1; padding-bottom: 4px;
+    }
+    .fab-btn:hover { transform: scale(1.1) rotate(90deg); background: var(--nav-active); }
+
+    .admin-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 20px; }
+    .admin-tab-btn { padding: 12px; background: #eceff1; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: bold; color: #7f8c8d; transition: 0.3s; }
+    .admin-tab-btn.active { background: var(--brand-main); color: #fff; box-shadow: 0 4px 10px rgba(44,62,80,0.2); }
+    
+    .admin-form-section { display: none; }
+    .admin-form-section.active { display: block; animation: slideUp 0.4s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  </style>
+</head>
+<body>
+
+  <button id="fab-add-btn" class="fab-btn" onclick="openAddModal()">+</button>
+
+  <div id="loading" class="loading-overlay">正在讀取光聿行程資料...</div>
+
+  <div class="container">
+    <div class="header-title">行程小助理</div>
+
+    <div class="sticky-controls">
+        <div class="action-bar">
+            <div class="nav-wrapper">
+                <button id="mode-toggle-btn" class="tool-btn" onclick="toggleEditMode()">✎</button>
+                <div class="center-nav">
+                    <button id="search-toggle-btn" class="acc-toggle-btn" style="color:#78909c; display:flex; align-items:center; justify-content:center;" onclick="switchMainMode('search')">
+                        <svg width="20" height="20" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="42" cy="42" r="30"></circle>
+                            <line x1="64" y1="64" x2="90" y2="90"></line>
+                        </svg>
+                    </button>
+                    <button id="acc-panel-btn" class="acc-toggle-btn" onclick="switchMainMode('acc')">$</button>
+                    <div class="view-switcher" style="padding: 0; border-radius: 20px;">
+                        <button id="btn-cal" class="view-btn active" onclick="switchMainMode('cal')">日曆</button>
+                        <button id="btn-list" class="view-btn" onclick="switchMainMode('list')">清單</button>
+                    </div>
+                </div>
+                <button class="tool-btn" onclick="location.reload()">↻</button>
+            </div>
+        </div>
+        
+        <div id="search-dropdown" class="search-dropdown-area">
+            <div class="ios-search-bar" style="margin-top: -10px; margin-bottom: 15px;">
+                <span class="ios-search-icon" style="display: flex; align-items: center;">
+                    <svg width="16" height="16" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="42" cy="42" r="30"></circle>
+                        <line x1="64" y1="64" x2="90" y2="90"></line>
+                    </svg>
+                </span>
+                <input type="text" id="main-search-input" class="ios-search-input" placeholder="搜尋行程、住宿、航班或帳務..." oninput="handleSearch(this.value)" onkeypress="if(event.key === 'Enter') this.blur();" autocomplete="nope" autocorrect="off" spellcheck="false">
+                <button id="search-clear-btn" class="ios-search-clear" onclick="clearSearch()">✖</button>
+            </div>
+        </div>
+
+        <div id="nav-collapse-area" style="display: none;">
+            <div id="filter-bar" class="filter-bar"></div>
+            <div id="year-nav" class="year-nav-container"></div>
+            <div id="month-nav" class="month-nav-container"></div>
+        </div>
+        <div onclick="toggleNavArea()" id="nav-toggle-btn" style="text-align:right; padding-right:10px; color:#b0bec5; font-size:16px; font-weight:bold; cursor:pointer; padding-top:5px; margin-bottom:-5px;">▼</div>
+    </div>
+
+    <div id="acc-panel" style="display:none; text-align:left; background:#fff; padding:25px; border-radius:20px; margin-bottom:30px; border:1px solid #eceff1; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
+      <div style="background:var(--brand-main); color:#fff; padding:20px; border-radius:16px; text-align:center; margin-bottom:25px;">
+        <div id="acc-grand-label-dynamic" style="font-size:12px; opacity:0.8; margin-bottom:5px;">篩選範圍總支出</div>
+        <div id="acc-grand-total" style="font-size:32px; font-weight:900;">$0</div>
+      </div>
+      <div style="position: relative; height: 180px; margin-bottom: 25px;"><canvas id="expenseChart"></canvas></div>
+      <div id="dynamic-cat-legend" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px;"></div>
+      <div id="acc-tabs" style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;"></div>
+      <div id="acc-detail-list" style="background:#fff; border-radius:12px; border:1px solid #eceff1; overflow:hidden;"></div>
+    </div>
+
+    <div id="cal-view" class="view-container active"><div id="calendar-container"></div></div>
+    <div id="list-view" class="view-container"><div id="list-container"></div></div>
+  </div>
+
+  <div id="confirm-modal" class="modal-overlay">
+      <div class="modal-content" style="padding-top: 30px;">
+          <div class="confirm-icon">!</div>
+          <div style="font-weight:800; font-size:18px; margin-bottom:10px; color: var(--brand-main);">確定要刪除嗎？</div>
+          <div id="confirm-desc" style="font-size:14px; color:#78909c; line-height:1.6;">刪除後資料將無法恢復。</div>
+          <div class="modal-actions">
+              <button class="modal-btn btn-cancel" onclick="closeConfirmModal()">取消</button>
+              <button id="confirm-delete-btn" class="modal-btn btn-danger" onclick="doDelete()">確定刪除</button>
+          </div>
+      </div>
+  </div>
+
+  <div id="info-modal" class="modal-overlay" style="z-index: 9998;">
+      <div class="modal-content" style="max-width: 500px; text-align: left; max-height: 85vh; padding: 0; display: flex; flex-direction: column; overflow: hidden; background: #fcfcfc;">
+          <div style="padding: 15px 20px; background: #fff; z-index: 10; flex-shrink: 0; border-radius: 28px 28px 0 0; border-bottom: 1px solid #eceff1; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; color: var(--brand-main); font-size: 16px;">行程詳細資訊</span>
+              <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeInfoModal()">×</span>
+          </div>
+          <div id="info-modal-body" style="flex: 1; overflow-y: auto; padding: 20px;"></div>
+      </div>
+  </div>
+
+  <div id="edit-modal" class="modal-overlay">
+      <div class="modal-content" style="max-width: 400px; text-align: left; padding: 25px;">
+          <h3 style="margin:0 0 20px 0; color:var(--brand-main); display: flex; justify-content: space-between; align-items: center;">
+              <span id="edit-modal-title">編輯資料</span>
+              <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeEditModal()">×</span>
+          </h3>
+          <div style="overflow: hidden; width: 0; height: 0;">
+              <input type="text" autocomplete="name">
+              <input type="email" autocomplete="email">
+              <input type="tel" autocomplete="tel">
+          </div>
+          <input type="hidden" id="edit-sheetName">
+          <input type="hidden" id="edit-rowIndex">
+          <div id="dynamic-edit-form" class="modal-body"></div>
+          <button onclick="saveDynamicEdit()" style="width:100%; padding:16px; border-radius:15px; border:none; background:var(--nav-active); color:#fff; font-weight:bold; font-size:17px; cursor:pointer; transition: 0.2s;">儲存修改</button>
+      </div>
+  </div>
+
+  <div id="add-modal" class="modal-overlay">
+      <div class="modal-content" style="max-width: 500px; text-align: left; max-height: 85vh; padding: 0; display: flex; flex-direction: column; overflow: hidden;">
+          
+          <div style="padding: 25px 25px 10px; background: #fff; z-index: 10; flex-shrink: 0; border-radius: 28px 28px 0 0;">
+              <h3 style="margin:0 0 20px 0; color:var(--brand-main); display: flex; justify-content: space-between; align-items: center;">
+                  <span>新增資料</span>
+                  <span style="cursor:pointer; color:#aaa; font-size:28px; line-height:1;" onclick="closeAddModal()">×</span>
+              </h3>
+
+              <div class="admin-tabs" style="margin-bottom: 0;">
+                  <button class="admin-tab-btn active" onclick="switchAdminTab('行程', this)">行程</button>
+                  <button class="admin-tab-btn" onclick="switchAdminTab('住宿', this)">住宿</button>
+                  <button class="admin-tab-btn" onclick="switchAdminTab('交通', this)">交通</button>
+                  <button class="admin-tab-btn" onclick="switchAdminTab('帳務明細', this)">帳務明細</button>
+              </div>
+          </div>
+
+          <div style="flex: 1; overflow-y: auto; padding: 15px 25px 25px;">
+              <div style="overflow: hidden; width: 0; height: 0;">
+                  <input type="text" autocomplete="name">
+                  <input type="email" autocomplete="email">
+                  <input type="tel" autocomplete="tel">
+              </div>
+
+              <div id="add-form-行程" class="admin-form-section active">
+                  <div class="admin-input-group"><label>行程代碼</label><input autocomplete="off" type="text" id="add-行程-代碼" placeholder="例如：20260403_台東賽"></div>
+                  <div class="admin-input-group"><label>行程名&#8203;稱</label><input autocomplete="off" type="text" id="add-行程-名稱"></div>
+                  <div class="admin-input-group"><label>行程類別</label><select autocomplete="off" id="add-行程-類別" onchange="toggleAddEventFee()"><option>鐵人</option><option>自行車</option><option>路跑</option><option>游泳</option><option>活動</option><option>旅遊</option><option>移地訓練</option></select></div>
+                  <div class="admin-input-group"><label>開始日期</label><input autocomplete="off" type="date" id="add-行程-日期"></div>
+                  <div class="admin-input-group"><label>結束日期 <span style="color:#b0bec5; font-weight:normal;">(單日免填)</span></label><input autocomplete="off" type="date" id="add-行程-結束日期"></div>
+                  <div class="admin-input-group"><label>行程連結</label><input autocomplete="off" type="url" id="add-行程-連結"></div>
+                  <div class="admin-input-group"><label>聿凡項目</label><input autocomplete="off" type="text" id="add-行程-聿凡"></div>
+                  <div class="admin-input-group"><label>光武項目</label><input autocomplete="off" type="text" id="add-行程-光武"></div>
+                  <div class="admin-input-group"><label>報名費總額</label><input autocomplete="off" type="number" inputmode="decimal" id="add-行程-報名費"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-行程-方式" onchange="toggleCreditCardSelect('行程')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group" id="add-行程-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-行程-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
+                  <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
+                  <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-行程-備註"></div>
+                  <button class="admin-submit-btn" onclick="submitNewData('行程')">確認新增行程</button>
+              </div>
+
+              <div id="add-form-住宿" class="admin-form-section">
+                  <div class="admin-input-group"><label>行程代碼</label><select autocomplete="off" class="admin-code-selector" id="add-住宿-代碼" onchange="autoFillDate(this.value, 'add-住宿-入住日期')"></select></div>
+                  <div class="admin-input-group"><label>飯店名&#8203;稱</label><input autocomplete="off" type="text" id="add-住宿-飯店"></div>
+                  <div class="admin-group-box">
+                      <div class="admin-group-title">入住資訊</div>
+                      <div class="admin-input-group"><label>入住日期</label><input autocomplete="off" type="date" id="add-住宿-入住日期"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;">
+                          <label>入住時間</label>
+                          <select autocomplete="off" id="add-住宿-入住時間-select" onchange="document.getElementById('add-住宿-入住時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
+                              <option value="">-</option><option>14:00</option><option>15:00</option><option>16:00</option><option>其他</option>
+                          </select>
+                          <input autocomplete="off" type="text" id="add-住宿-入住時間-其他" placeholder="請填寫入住時間" style="display: none; margin-top: 8px;">
+                      </div>
+                  </div>
+                  <div class="admin-group-box">
+                      <div class="admin-group-title">退房資訊</div>
+                      <div class="admin-input-group"><label>退房日期</label><input autocomplete="off" type="date" id="add-住宿-退房日期"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;">
+                          <label>退房時間</label>
+                          <select autocomplete="off" id="add-住宿-退房時間-select" onchange="document.getElementById('add-住宿-退房時間-其他').style.display = this.value === '其他' ? 'block' : 'none'">
+                              <option value="">-</option><option>11:00</option><option>12:00</option><option>其他</option>
+                          </select>
+                          <input autocomplete="off" type="text" id="add-住宿-退房時間-其他" placeholder="請填寫退房時間" style="display: none; margin-top: 8px;">
+                      </div>
+                  </div>
+                  <div class="admin-input-group">
+                      <label>訂房平台</label>
+                      <select autocomplete="off" id="add-住宿-平台-select" onchange="document.getElementById('add-住宿-平台-其他').style.display = this.value === '其他' ? 'block' : 'none'">
+                          <option value="">-</option><option>Agoda</option><option>Booking.com</option><option>Trip.com</option><option>易遊網</option><option>官方網站</option><option>其他</option>
+                      </select>
+                      <input autocomplete="off" type="text" id="add-住宿-平台-其他" placeholder="請自行填寫" style="display: none; margin-top: 8px;">
+                  </div>
+                  <div class="admin-input-group"><label>費用</label><input autocomplete="off" type="number" inputmode="decimal" id="add-住宿-費用"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-住宿-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-住宿-方式" onchange="toggleCreditCardSelect('住宿')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group" id="add-住宿-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-住宿-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
+                  <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-住宿-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
+                  <div class="admin-input-group"><label>連結</label><input autocomplete="off" type="url" id="add-住宿-連結"></div>
+                  <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-住宿-備註"></div>
+                  
+                  <div class="admin-input-group" style="margin-bottom: 5px;">
+                      <label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
+                          <input autocomplete="off" type="checkbox" id="add-住宿-早餐" style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                          <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">含早餐</span>
+                      </label>
+                  </div>
+                  <div class="admin-input-group" style="margin-bottom: 5px;">
+                      <label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
+                          <input autocomplete="off" type="checkbox" id="add-住宿-充電樁" style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                          <span style="font-size: 14px; font-weight: bold; color: var(--text-sub);">充電樁</span>
+                      </label>
+                  </div>
+                  <div class="admin-input-group" style="margin-bottom: 25px;">
+                      <label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer; margin-bottom: 0;">
+                          <input autocomplete="off" type="checkbox" id="add-住宿-待確認" style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                          <span style="font-size: 14px; font-weight: bold; color: #e53935;">待確認</span>
+                      </label>
+                  </div>
+
+                  <button class="admin-submit-btn" onclick="submitNewData('住宿')">確認新增住宿</button>
+              </div>
+
+              <div id="add-form-交通" class="admin-form-section">
+                  <div class="admin-input-group"><label>行程代碼</label><select autocomplete="off" class="admin-code-selector" id="add-交通-代碼" onchange="autoFillDate(this.value, 'add-交通-出發日期')"></select></div>
+                  <div class="admin-input-group"><label>類型</label><select autocomplete="off" id="add-交通-類型"><option>自駕</option><option>火車</option><option>飛機</option></select></div>
+                  <div class="admin-group-box">
+                      <div class="admin-group-title">去程資訊</div>
+                      <div class="admin-input-group"><label>出發日期</label><input autocomplete="off" type="date" id="add-交通-出發日期"></div>
+                      <div class="admin-input-group"><label>去程班次 / 航班</label><input autocomplete="off" type="text" id="add-交通-去程"></div>
+                      <div class="admin-input-group"><label>去程出發時間</label><input autocomplete="off" type="text" id="add-交通-去程出發" placeholder="例如 08:30"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;"><label>去程抵達時間</label><input autocomplete="off" type="text" id="add-交通-去程抵達"></div>
+                  </div>
+                  <div class="admin-group-box">
+                      <div class="admin-group-title">回程資訊</div>
+                      <div class="admin-input-group"><label>回程日期</label><input autocomplete="off" type="date" id="add-交通-回程日期"></div>
+                      <div class="admin-input-group"><label>回程班次 / 航班</label><input autocomplete="off" type="text" id="add-交通-回程"></div>
+                      <div class="admin-input-group"><label>回程出發時間</label><input autocomplete="off" type="text" id="add-交通-回程出發" placeholder="例如 14:30"></div>
+                      <div class="admin-input-group" style="margin-bottom: 0;"><label>回程抵達時間</label><input autocomplete="off" type="text" id="add-交通-回程抵達"></div>
+                  </div>
+                  <div class="admin-input-group"><label>票價或油資</label><input autocomplete="off" type="number" inputmode="decimal" id="add-交通-費用"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-交通-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-交通-方式" onchange="toggleCreditCardSelect('交通')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group" id="add-交通-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-交通-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
+                  <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-交通-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
+                  <button class="admin-submit-btn" onclick="submitNewData('交通')">確認新增交通</button>
+              </div>
+
+              <div id="add-form-帳務明細" class="admin-form-section">
+                  <div class="admin-input-group"><label>行程代碼 (日常記帳免填)</label><select autocomplete="off" class="admin-code-selector" id="add-帳務-代碼"></select></div>
+                  <div class="admin-input-group"><label>日期</label><input autocomplete="off" type="date" id="add-帳務-日期"></div>
+                  <div class="admin-input-group">
+                      <label>類別</label>
+                      <select autocomplete="off" id="add-帳務-類別"><option>飲食</option><option>交通</option><option>購物</option><option>採買</option><option>娛樂</option><option>其他</option></select>
+                  </div>
+                  <div class="admin-input-group"><label>項目</label><input autocomplete="off" type="text" id="add-帳務-項目" placeholder="例如：晚餐、伴手禮"></div>
+                  <div class="admin-input-group"><label>金額</label><input autocomplete="off" type="number" inputmode="decimal" id="add-帳務-金額"></div>
+                  <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-帳務-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
+                  <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-帳務-方式" onchange="toggleCreditCardSelect('帳務')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
+                  <div class="admin-input-group" id="add-帳務-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-帳務-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
+                  <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-帳務-備註" placeholder="可選填"></div>
+                  <button class="admin-submit-btn" onclick="submitNewData('帳務明細')">確認新增帳務</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+<script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbxUGVmAqfEmepMoAAlY0KkEiGOis9aSR-DpCqA9Nea6ZJZg4YUCg9uBvnJs6HuR0DAjQg/exec";
+  let dbData = {};
+  let currentFilter = '全部';
+  let currentView = 'cal';
+  let showPastList = false;
+  let selectedMonthFilter = null;
+  let displayYear = new Date().getFullYear();
+  let isEditMode = false;
+
+  let currentSearchQuery = '';
+  let isFromAccPanel = false;
+
+  let accDetailsData = {};
+  let currentAccTab = '';
+  let expenseChartInstance = null; 
+  
+  let deleteTargetSheet = '';
+  let deleteTargetRowIndex = null;
+
+  const categoryColors = { 
+      '報名費': '#64b5f6', 
+      '住宿': '#ffd54f', 
+      '交通': '#81c784', 
+      '飲食': '#ff8a65', 
+      '購物': '#ba68c8', 
+      '採買': '#4dd0e1', 
+      '娛樂': '#f06292', 
+      '其他': '#b0bec5' 
+  };
+  
+  function getColorForCategory(cat) { 
+      return categoryColors[cat] || '#cfd8dc'; 
+  }
+
+  // 🎯 統一加入信用卡別、帳務加入付款人
+  const sheetHeaders = {
+      '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '付款人', '付款方式', '狀態', '備註', '結束日期', '信用卡別'],
+      '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註', '含早餐', '充電樁', '待確認', '信用卡別'],
+      '交通': ['行程代碼', '類型', '出發日期', '去程班次 / 航班', '去程出發時間', '去程抵達時間', '回程日期', '回程班次 / 航班', '回程出發時間', '回程抵達時間', '票價或油資', '付款人', '付款方式', '狀態', '信用卡別'],
+      '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註', '付款人', '信用卡別']
+  };
+
+  const selectOptions = {
+      '行程類別': ['鐵人','自行車','路跑','游泳','活動','旅遊','移地訓練'],
+      '類別': ['飲食','交通','購物','採買','娛樂','其他'],
+      '付款人': ['-','聿凡','光武'], 
+      '付款方式': ['-','現金','刷卡'], 
+      '狀態': ['-','已付','未付','現場付'], 
+      '訂房平台': ['-','Agoda','Booking.com','Trip.com','易遊網','官方網站','其他'], 
+      '類型': ['自駕','火車','飛機'],
+      '入住時間': ['-','14:00','15:00','16:00','其他'],
+      '退房時間': ['-','11:00','12:00','其他'],
+      '信用卡別': ['-', '國泰世華', '第一銀行', '台新銀行', '玉山銀行', '富邦銀行', '中國信託']
+  };
+
+  window.onload = initSystem;
+
+  async function initSystem() {
+    const cachedData = localStorage.getItem('kuangyu_dbData');
+    if (cachedData) {
+        dbData = JSON.parse(cachedData);
+        renderFilters();
+        renderMain();
+        document.getElementById('loading').style.display = 'none';
+    }
+
+    try {
+      const res = await fetch(API_URL + "?t=" + new Date().getTime());
+      const freshData = await res.json();
+      dbData = freshData;
+      localStorage.setItem('kuangyu_dbData', JSON.stringify(freshData));
+      
+      renderFilters();
+      renderMain();
+      if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+      document.getElementById('loading').style.display = 'none';
+    } catch (e) {
+      if (!cachedData) {
+          document.getElementById('loading').innerHTML = "資料連線失敗，請檢查網路連線。";
+      }
+    }
+  }
+
+  // 🎯 統整 4 個主按鈕互斥邏輯：搜尋、帳務、日曆、清單
+  function switchMainMode(mode) {
+      // 1. 取消所有按鈕的 active 視覺狀態
+      const searchBtn = document.getElementById('search-toggle-btn');
+      searchBtn.classList.remove('active');
+      searchBtn.style.background = '#fff';
+      searchBtn.style.color = '#78909c';
+
+      document.getElementById('acc-panel-btn').classList.remove('active');
+      document.getElementById('btn-cal').classList.remove('active');
+      document.getElementById('btn-list').classList.remove('active');
+
+      // 2. 隱藏所有視窗區域
+      document.getElementById('search-dropdown').classList.remove('active');
+      document.getElementById('acc-panel').style.display = 'none';
+      document.getElementById('cal-view').classList.remove('active');
+      document.getElementById('list-view').classList.remove('active');
+
+      isFromAccPanel = false;
+
+      // 如果切換到其他模式，順便清空搜尋關鍵字
+      if (mode !== 'search') {
+          const input = document.getElementById('main-search-input');
+          if (input.value !== '') {
+              input.value = '';
+              currentSearchQuery = '';
+              document.getElementById('search-clear-btn').style.display = 'none';
+          }
+      }
+
+      // 3. 根據選定的模式啟動對應按鈕與視窗
+      if (mode === 'cal') {
+          currentView = 'cal';
+          document.getElementById('btn-cal').classList.add('active');
+          document.getElementById('cal-view').classList.add('active');
+      } else if (mode === 'list') {
+          currentView = 'list';
+          document.getElementById('btn-list').classList.add('active');
+          document.getElementById('list-view').classList.add('active');
+      } else if (mode === 'acc') {
+          document.getElementById('acc-panel-btn').classList.add('active');
+          document.getElementById('acc-panel').style.display = 'block';
+          calculateAccounting();
+      } else if (mode === 'search') {
+          searchBtn.classList.add('active');
+          searchBtn.style.background = '#78909c';
+          searchBtn.style.color = '#fff';
+          
+          document.getElementById('search-dropdown').classList.add('active');
+          
+          // 搜尋時，下方顯示清單視窗 (但上面按鈕不亮)
+          currentView = 'list';
+          document.getElementById('list-view').classList.add('active');
+          setTimeout(() => document.getElementById('main-search-input').focus(), 300);
+      }
+
+      closeCurrentPanel();
+      renderMain();
+  }
+
+  function clearSearch() {
+      const input = document.getElementById('main-search-input');
+      input.value = '';
+      handleSearch('');
+      input.blur();
+  }
+
+  function handleSearch(val) {
+      currentSearchQuery = val.trim();
+      const clearBtn = document.getElementById('search-clear-btn');
+      
+      if (currentSearchQuery.length > 0) {
+          clearBtn.style.display = 'flex';
+      } else {
+          clearBtn.style.display = 'none';
+      }
+      
+      isFromAccPanel = false; 
+      renderMain();
+      if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+  }
+
+  function doesEventMatch(r, query) {
+      if (!query) return true;
+      const q = query.toLowerCase();
+      const code = getVal(r, '行程代碼');
+      
+      let textArr = [getVal(r, '行程代碼'), getVal(r, '行程名稱'), getVal(r, '備註'), getVal(r, '聿凡項目'), getVal(r, '光武項目')];
+      
+      (dbData['住宿']||[]).filter(s=>getVal(s,'行程代碼')===code).forEach(s => textArr.push(getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註')));
+      (dbData['交通']||[]).filter(t=>getVal(t,'行程代碼')===code).forEach(t => textArr.push(getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'類型'), getVal(t,'備註')));
+      (dbData['帳務明細']||[]).filter(b=>getVal(b,'行程代碼')===code).forEach(b => textArr.push(getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')));
+
+      return textArr.join(' ||| ').toLowerCase().includes(q);
+  }
+
+  function doesBillMatch(b, query) {
+      if (!query) return true;
+      return [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' ||| ').toLowerCase().includes(query.toLowerCase());
+  }
+
+  function toggleNavArea() {
+      const area = document.getElementById('nav-collapse-area');
+      const btn = document.getElementById('nav-toggle-btn');
+      if (area.style.display === 'none') {
+          area.style.display = 'block';
+          btn.textContent = '▲';
+      } else {
+          area.style.display = 'none';
+          btn.textContent = '▼';
+      }
+  }
+
+  function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const btn = document.getElementById('mode-toggle-btn');
+      if (isEditMode) {
+          document.body.classList.add('edit-mode-on');
+          btn.classList.add('active');
+      } else {
+          document.body.classList.remove('edit-mode-on');
+          btn.classList.remove('active');
+      }
+  }
+
+  function showConfirmDelete(sheetName, rowIndex, e) {
+      if(e) e.stopPropagation();
+      deleteTargetSheet = sheetName;
+      deleteTargetRowIndex = rowIndex;
+      document.getElementById('confirm-desc').innerHTML = `<span style="color:#e53935; font-weight:bold;">刪除後將無法復原。</span>`;
+      document.getElementById('confirm-modal').style.display = 'flex';
+  }
+
+  function closeConfirmModal() {
+      document.getElementById('confirm-modal').style.display = 'none';
+  }
+
+  async function doDelete() {
+      closeConfirmModal();
+      document.getElementById('loading').style.display = 'flex';
+      document.getElementById('loading').innerHTML = '正在刪除資料...';
+      
+      try {
+          await fetch(API_URL, { 
+              method: 'POST', 
+              body: JSON.stringify({ action: 'delete', sheetName: deleteTargetSheet, rowIndex: deleteTargetRowIndex }) 
+          });
+          localStorage.removeItem('kuangyu_dbData');
+          location.reload();
+      } catch (err) {
+          alert('刪除失敗，請檢查網路連線！');
+          document.getElementById('loading').style.display = 'none';
+      }
+  }
+
+  function forceSelectValue(el, targetText) {
+      if (!el) return;
+      if (el.tagName === 'SELECT') {
+          for (let i = 0; i < el.options.length; i++) {
+              if (el.options[i].text === targetText || el.options[i].value === targetText) {
+                  el.selectedIndex = i;
+                  break;
+              }
+          }
+      } else {
+          el.value = targetText;
+      }
+  }
+
+  function autoFillDate(eventCode, targetInputId) {
+      if (!eventCode) return;
+      const targetInput = document.getElementById(targetInputId);
+      if (!targetInput || targetInput.value) return; 
+
+      const event = dbData['行程'].find(r => getVal(r, '行程代碼') === eventCode);
+      if (event) {
+          const dateVal = formatDate(getVal(event, '日期'));
+          if (dateVal) targetInput.value = dateVal;
+      }
+  }
+
+  function openEditModal(sheetName, rowIndex, e) {
+      if(e) e.stopPropagation();
+      const rowData = dbData[sheetName].find(r => r['_rowIndex'] === rowIndex);
+      if(!rowData) return;
+
+      const headers = sheetHeaders[sheetName];
+      const formBody = document.getElementById('dynamic-edit-form');
+      formBody.innerHTML = '';
+      
+      // 🎯 用陣列收集生成的 HTML，方便事後調換位置
+      let generatedGroups = [];
+
+      headers.forEach((h, idx) => {
+          const val = rowData[h] || '';
+          let inputHtml = '';
+          
+          let displayH = h;
+          if(h === '行程名稱') displayH = '行程名\u200B稱';
+          if(h === '飯店名稱') displayH = '飯店名\u200B稱';
+          if(h === '日期' && sheetName === '行程') displayH = '開始日期';
+          
+          let labelHtml = `<label>${displayH}</label>`;
+          
+          if(h === '入住時間' || h === '退房時間' || h === '訂房平台') {
+              let isCustom = val && val !== '-' && !selectOptions[h].includes(val);
+              let selectVal = isCustom ? '其他' : (val || '-');
+              
+              const opts = selectOptions[h].map(o => `<option value="${o}" ${selectVal===o?'selected':''}>${o}</option>`).join('');
+              
+              inputHtml = `
+                  <select autocomplete="off" id="edit-field-${idx}-select" class="edit-input" onchange="document.getElementById('edit-field-${idx}-custom').style.display = this.value === '其他' ? 'block' : 'none'">
+                      ${opts}
+                  </select>
+                  <input autocomplete="off" type="text" id="edit-field-${idx}-custom" class="edit-input" style="margin-top:8px; display:${isCustom ? 'block' : 'none'};" value="${isCustom ? val : ''}" placeholder="請輸入自訂內容">
+              `;
+          } else if(selectOptions[h]) {
+              const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
+              const onChangeAttr = (h === '行程類別') ? 'onchange="toggleEditEventFee()"' : '';
+              inputHtml = `<select autocomplete="off" id="edit-field-${idx}" class="edit-input" ${onChangeAttr}>${opts}</select>`;
+          } else if(h.includes('日期')) {
+              const dVal = formatDate(val);
+              inputHtml = `<input autocomplete="off" type="date" id="edit-field-${idx}" class="edit-input" value="${dVal}">`;
+          } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
+              inputHtml = `<input autocomplete="off" type="number" inputmode="decimal" id="edit-field-${idx}" class="edit-input" value="${val}">`;
+          } else if(h === '行程代碼') {
+              inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
+          } else if(h === '含早餐' || h === '充電樁' || h === '待確認') {
+              labelHtml = ''; 
+              inputHtml = `<label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer;">
+                              <input autocomplete="off" type="checkbox" id="edit-field-${idx}" style="width: 16px; height: 16px; margin: 0; cursor: pointer;" ${val === 'V' ? 'checked' : ''}>
+                              <span style="font-size: 14px; font-weight: bold; ${h === '待確認' ? 'color:#e53935;' : 'color:var(--text-sub);'}">${h}</span>
+                           </label>`;
+          } else {
+              inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
+          }
+
+          const groupStyle = labelHtml === '' ? 'margin-bottom: 5px;' : '';
+
+          generatedGroups.push({
+              idx: idx,
+              html: `
+                  <div class="edit-input-group" style="${groupStyle}">
+                      ${labelHtml}
+                      ${inputHtml}
+                  </div>
+              `
+          });
+      });
+
+      // 🎯 把「結束日期」挪到「開始日期」的正下方
+      if (sheetName === '行程') {
+          // 結束日期在 sheetHeaders 是 idx 12，開始日期是 idx 3
+          const endDateGroup = generatedGroups.find(g => g.idx === 12);
+          if (endDateGroup) {
+              generatedGroups = generatedGroups.filter(g => g.idx !== 12);
+              const dateIndex = generatedGroups.findIndex(g => g.idx === 3);
+              generatedGroups.splice(dateIndex + 1, 0, endDateGroup);
+          }
+      }
+
+      formBody.innerHTML = generatedGroups.map(g => g.html).join('');
+
+      document.getElementById('edit-sheetName').value = sheetName;
+      document.getElementById('edit-rowIndex').value = rowIndex;
+      document.getElementById('edit-modal-title').textContent = `編輯${sheetName}`;
+      document.getElementById('edit-modal').style.display = 'flex';
+      
+      if (sheetName === '行程') { toggleEditEventFee(); }
+  }
+
+  function closeEditModal() {
+      document.getElementById('edit-modal').style.display = 'none';
+  }
+
+  async function saveDynamicEdit() {
+      const sheetName = document.getElementById('edit-sheetName').value;
+      const rowIndex = parseInt(document.getElementById('edit-rowIndex').value);
+      const headers = sheetHeaders[sheetName];
+      
+      const rowData = headers.map((h, idx) => {
+          const selectEl = document.getElementById(`edit-field-${idx}-select`);
+          if (selectEl) {
+              const customEl = document.getElementById(`edit-field-${idx}-custom`);
+              let val = selectEl.value;
+              if (val === '其他') val = customEl.value;
+              if (val === '-') val = '';
+              return val;
+          }
+          
+          const el = document.getElementById(`edit-field-${idx}`);
+          if (!el) return "";
+          return el.type === 'checkbox' ? (el.checked ? "V" : "") : el.value;
+      });
+      
+      if(sheetName === '住宿') {
+          const inDate = rowData[2];
+          const outDate = rowData[4];
+          if (inDate && outDate && inDate > outDate) {
+              alert("⚠️ 錯誤：退房日期不能早於入住日期喔！"); return;
+          }
+      } else if (sheetName === '交通') {
+          const goDate = rowData[2];
+          const backDate = rowData[6];
+          if (goDate && backDate && goDate > backDate) {
+              alert("⚠️ 錯誤：回程日期不能早於出發日期喔！"); return;
+          }
+      }
+
+      if(sheetName === '帳務明細') {
+          if(!rowData[1] || !rowData[4]) { alert("日期與金額不能空白！"); return; }
+      } else {
+          if(!rowData[0]) { alert("行程代碼不能空白！"); return; }
+      }
+
+      document.getElementById('edit-modal').style.display = 'none';
+      document.getElementById('loading').style.display = 'flex';
+      document.getElementById('loading').innerHTML = '正在儲存修改...';
+      
+      try {
+          await fetch(API_URL, {
+              method: 'POST',
+              body: JSON.stringify({ action: 'update', sheetName: sheetName, rowIndex: rowIndex, data: rowData })
+          });
+          localStorage.removeItem('kuangyu_dbData'); 
+          location.reload();
+      } catch (err) {
+          alert('修改失敗，請檢查網路連線！');
+          document.getElementById('loading').style.display = 'none';
+      }
+  }
+
+  function openAddModal() {
+      const codes = (dbData['行程'] || []).map(r => getVal(r, '行程代碼')).filter(c => c);
+      const uniqueCodes = [...new Set(codes)];
+      
+      document.querySelectorAll('.admin-code-selector').forEach(select => {
+          const isAccounting = select.id === 'add-帳務-代碼';
+          select.innerHTML = `<option value="">${isAccounting ? '--- 日常記帳免選 ---' : '--- 請選擇行程 ---'}</option>`;
+          uniqueCodes.forEach(code => {
+              let opt = document.createElement('option');
+              opt.value = code; opt.textContent = code;
+              select.appendChild(opt);
+          });
+      });
+      document.getElementById('add-modal').style.display = 'flex';
+      toggleAddEventFee();
+  }
+
+  function closeAddModal() {
+      document.getElementById('add-modal').style.display = 'none';
+  }
+
+  function switchAdminTab(tabName, btn) {
+      document.querySelectorAll('.admin-form-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.admin-tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('add-form-' + tabName).classList.add('active');
+      btn.classList.add('active');
+  }
+
+  function toggleAddPlatform() {
+      const select = document.getElementById('add-住宿-平台-select');
+      const otherInput = document.getElementById('add-住宿-平台-其他');
+      otherInput.style.display = select.value === '其他' ? 'block' : 'none';
+  }
+
+  // 🎯 魔法：選刷卡就滑出信用卡選單
+  function toggleCreditCardSelect(type) {
+      const method = document.getElementById(`add-${type}-方式`).value;
+      const ccGroup = document.getElementById(`add-${type}-信用卡-group`);
+      if (ccGroup) {
+          ccGroup.style.display = (method === '刷卡') ? 'block' : 'none';
+          if (method !== '刷卡') {
+              document.getElementById(`add-${type}-信用卡`).selectedIndex = 0;
+          }
+      }
+  }
+
+  async function submitNewData(sheetName) {
+      let rowData = [];
+      let eventCode = "";
+      
+      if (sheetName === '行程') {
+          eventCode = document.getElementById('add-行程-代碼').value;
+          const method = document.getElementById('add-行程-方式').value;
+          const cc = method === '刷卡' ? document.getElementById('add-行程-信用卡').value : '';
+          rowData = [eventCode, document.getElementById('add-行程-名稱').value, document.getElementById('add-行程-類別').value, document.getElementById('add-行程-日期').value, document.getElementById('add-行程-連結').value, document.getElementById('add-行程-聿凡').value, document.getElementById('add-行程-光武').value, document.getElementById('add-行程-報名費').value, document.getElementById('add-行程-付款人').value, method, document.getElementById('add-行程-狀態').value, document.getElementById('add-行程-備註').value, document.getElementById('add-行程-結束日期').value, cc];
+      } else if (sheetName === '住宿') {
+          eventCode = document.getElementById('add-住宿-代碼').value;
+          
+          let checkInTime = document.getElementById('add-住宿-入住時間-select').value;
+          if (checkInTime === '其他') checkInTime = document.getElementById('add-住宿-入住時間-其他').value;
+          if (checkInTime === '-') checkInTime = '';
+          
+          let checkOutTime = document.getElementById('add-住宿-退房時間-select').value;
+          if (checkOutTime === '其他') checkOutTime = document.getElementById('add-住宿-退房時間-其他').value;
+          if (checkOutTime === '-') checkOutTime = '';
+
+          let platformVal = document.getElementById('add-住宿-平台-select').value;
+          if (platformVal === '其他') platformVal = document.getElementById('add-住宿-平台-其他').value;
+          if (platformVal === '-') platformVal = '';
+          
+          const hasBreakfast = document.getElementById('add-住宿-早餐').checked ? "V" : "";
+          const hasCharger = document.getElementById('add-住宿-充電樁').checked ? "V" : "";
+          const isPending = document.getElementById('add-住宿-待確認').checked ? "V" : "";
+          
+          const method = document.getElementById('add-住宿-方式').value;
+          const cc = method === '刷卡' ? document.getElementById('add-住宿-信用卡').value : '';
+
+          rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, checkInTime, document.getElementById('add-住宿-退房日期').value, checkOutTime, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, method, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending, cc];
+       
+          const inDate = document.getElementById('add-住宿-入住日期').value;
+          const outDate = document.getElementById('add-住宿-退房日期').value;
+          if (inDate && outDate && inDate > outDate) {
+              alert("⚠️ 錯誤：退房日期不能早於入住日期喔！"); return;
+          }
+
+      } else if (sheetName === '交通') {
+          eventCode = document.getElementById('add-交通-代碼').value;
+          const method = document.getElementById('add-交通-方式').value;
+          const cc = method === '刷卡' ? document.getElementById('add-交通-信用卡').value : '';
+          rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, method, document.getElementById('add-交通-狀態').value, cc];
+       
+          const goDate = document.getElementById('add-交通-出發日期').value;
+          const backDate = document.getElementById('add-交通-回程日期').value;
+          if (goDate && backDate && goDate > backDate) {
+              alert("⚠️ 錯誤：回程日期不能早於出發日期喔！"); return;
+          }
+
+      } else if (sheetName === '帳務明細') {
+          eventCode = document.getElementById('add-帳務-代碼').value; 
+          const method = document.getElementById('add-帳務-方式').value;
+          const cc = method === '刷卡' ? document.getElementById('add-帳務-信用卡').value : '';
+          rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, method, document.getElementById('add-帳務-備註').value, document.getElementById('add-帳務-付款人').value, cc];
+      }
+
+      if (sheetName !== '帳務明細' && !eventCode) { alert("行程代碼不能空白！"); return; }
+      if (sheetName === '帳務明細') {
+          if (!document.getElementById('add-帳務-日期').value) { alert("日期不能空白！"); return; }
+          if (!document.getElementById('add-帳務-金額').value) { alert("金額不能空白！"); return; }
+      }
+
+      closeAddModal();
+      document.getElementById('loading').style.display = 'flex';
+      document.getElementById('loading').innerHTML = '正在將資料同步至資料庫...';
+
+      try {
+          await fetch(API_URL, {
+              method: 'POST',
+              body: JSON.stringify({ action: 'insert', sheetName: sheetName, data: rowData })
+          });
+          localStorage.removeItem('kuangyu_dbData'); 
+          location.reload();
+      } catch (err) {
+          alert('儲存失敗，請檢查網路連線！');
+          document.getElementById('loading').style.display = 'none';
+      }
+  }
+  
+  function getVal(obj, key) { 
+      if(!obj) return ""; 
+      const exactKey = Object.keys(obj).find(k => k.trim() === key);
+      if(exactKey) return obj[exactKey];
+      const cleanKeyToFind = key.replace(/\s+/g, '').replace('／', '/');
+      const fuzzyKey = Object.keys(obj).find(k => k.replace(/\s+/g, '').replace('／', '/') === cleanKeyToFind);
+      return fuzzyKey ? obj[fuzzyKey] : "";
+  }
+
+  function hasVal(v) { return v !== "" && v !== null && v !== undefined && v !== 0 && v !== "0"; }
+
+  function formatDate(d) { 
+      const date = new Date(d); 
+      return isNaN(date.getTime()) ? "" : `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; 
+  }
+
+  function switchPanelTab(btn, tabId) {
+      const panel = btn.closest('.detail-panel') || btn.closest('.modal-content');
+      panel.querySelectorAll('.panel-view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      panel.querySelectorAll('.panel-tab-content').forEach(c => c.style.display = 'none');
+      panel.querySelector('#' + tabId).style.display = 'block';
+  }
+
+  function renderMain() { 
+      renderMonthNav(); 
+      if (currentView === 'cal') { renderCalendar(); } else { renderList(); }
+  }
+
+  function openInfoModalFromAcc(code, eventDateStr) {
+      if(!eventDateStr) return;
+      isFromAccPanel = true; 
+      const event = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
+      const modalBody = document.getElementById('info-modal-body');
+      modalBody.innerHTML = generateDetailHTML(event, eventDateStr);
+      document.getElementById('info-modal').style.display = 'flex';
+  }
+
+  function closeInfoModal() {
+      document.getElementById('info-modal').style.display = 'none';
+      isFromAccPanel = false;
+  }
+
+  function returnToAccPanel() {
+      closeInfoModal(); 
+  }
+
+  function calculateAccounting() {
+      let allExpenses = [];
+      const races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter));
+
+      const expensesByCode = { '住宿': {}, '交通': {}, '帳務明細': {} };
+      ['住宿', '交通', '帳務明細'].forEach(sheet => {
+          (dbData[sheet]||[]).forEach(row => {
+              const code = getVal(row, '行程代碼');
+              if (code) {
+                  if (!expensesByCode[sheet][code]) expensesByCode[sheet][code] = [];
+                  expensesByCode[sheet][code].push(row);
+              }
+          });
+      });
+
+      races.forEach(r => {
+          const code = getVal(r, '行程代碼');
+          const rDate = formatDate(getVal(r, '日期'));
+          const rName = getVal(r, '行程名稱');
+          
+          const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
+          if (regFee > 0) allExpenses.push({ date: rDate, eventDate: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code });
+          
+          (expensesByCode['住宿'][code] || []).forEach(s => {
+              const fee = parseFloat(getVal(s,'費用')) || 0;
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, eventDate: rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || rName, searchStr: [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code: code });
+          });
+          
+          (expensesByCode['交通'][code] || []).forEach(t => {
+              const fee = parseFloat(getVal(t,'票價或油資')) || 0;
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, eventDate: rDate, category: '交通', amount: fee, name: getVal(t,'類型') || rName, searchStr: [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code: code });
+          });
+          
+          (expensesByCode['帳務明細'][code] || []).forEach(b => {
+              const fee = parseFloat(getVal(b,'金額')) || 0;
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, eventDate: rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || rName, searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' '), code: code });
+          });
+      });
+
+      if (currentFilter === '全部') {
+          (dbData['帳務明細']||[]).forEach(b => {
+              const code = getVal(b, '行程代碼');
+              if (!code || code.trim() === '') {
+                  const fee = parseFloat(getVal(b,'金額')) || 0;
+                  const bDate = formatDate(getVal(b, '日期'));
+                  if (fee > 0) allExpenses.push({ date: bDate, eventDate: bDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳', searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' '), code: '' });
+              }
+          });
+      }
+
+      const now = new Date();
+      const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      
+      let filteredExpenses = allExpenses.filter(e => {
+          if (!e.date) return false;
+          
+          if (currentSearchQuery && !e.searchStr.toLowerCase().includes(currentSearchQuery.toLowerCase())) {
+              return false;
+          }
+
+          const eMonth = e.date.substring(0, 7);
+          if (selectedMonthFilter) return eMonth === selectedMonthFilter;
+          else return eMonth >= currentMonthKey;
+      });
+
+      document.getElementById('acc-grand-label-dynamic').textContent = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月 總支出` : `本月與未來 總支出`;
+
+      let categoryTotals = {};
+      let grandTotal = 0;
+      accDetailsData = {}; 
+
+      filteredExpenses.forEach(e => {
+          let cat = e.category;
+          if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
+          categoryTotals[cat] += e.amount;
+          grandTotal += e.amount;
+          accDetailsData[cat].push({ name: e.name, amount: e.amount, code: e.code, eventDate: e.eventDate });
+      });
+
+      document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
+      let sortedCats = Object.keys(categoryTotals).sort((a,b) => categoryTotals[b] - categoryTotals[a]);
+      const pGrid = document.getElementById('dynamic-cat-legend'); 
+      pGrid.innerHTML = '';
+      
+      let chartLabels = []; let chartData = []; let chartColors = [];
+
+      sortedCats.forEach(k => {
+          const val = categoryTotals[k]; 
+          const pct = grandTotal === 0 ? 0 : (val / grandTotal) * 100;
+          const color = getColorForCategory(k);
+          chartLabels.push(k); chartData.push(val); chartColors.push(color);
+
+          pGrid.innerHTML += `
+              <div class="acc-card" style="display:flex; justify-content:space-between; align-items:center; padding: 10px 15px;">
+                  <div style="display:flex; align-items:center; gap: 8px;">
+                      <div style="width:10px; height:10px; border-radius:50%; background:${color};"></div>
+                      <span class="acc-label" style="color:var(--text-main); font-size:13px;">${k}</span>
+                  </div>
+                  <div style="text-align:right;">
+                      <div class="acc-val" style="font-size:14px;">$${val.toLocaleString()}</div>
+                      <div style="font-size:10px; color:#b0bec5; font-weight:bold;">${pct.toFixed(1)}%</div>
+                  </div>
+              </div>`;
+      });
+
+      const tabsContainer = document.getElementById('acc-tabs'); 
+      tabsContainer.innerHTML = '';
+      
+      if (sortedCats.length === 0) {
+          tabsContainer.innerHTML = '<div style="font-size:13px; color:#999; padding: 10px;">無資料</div>';
+          document.getElementById('acc-detail-list').innerHTML = '';
+      } else {
+          sortedCats.forEach((cat, index) => {
+              const btn = document.createElement('button');
+              btn.className = `acc-tab-btn ${index === 0 ? 'active' : ''}`;
+              btn.textContent = cat;
+              btn.onclick = () => switchAccTab(cat);
+              tabsContainer.appendChild(btn);
+          });
+          currentAccTab = sortedCats[0]; 
+          renderAccDetailsList();
+      }
+      renderDoughnutChart(chartLabels, chartData, chartColors);
+  }
+
+  function renderDoughnutChart(labels, data, colors) {
+      const ctx = document.getElementById('expenseChart').getContext('2d');
+      if (expenseChartInstance) expenseChartInstance.destroy();
+      
+      if (data.length === 0) {
+          expenseChartInstance = new Chart(ctx, { 
+              type: 'doughnut', 
+              data: { labels: ['無資料'], datasets: [{ data: [1], backgroundColor: ['#f5f5f5'], borderWidth: 0 }] }, 
+              options: { cutout: '80%', plugins: { legend: { display: false }, tooltip: { enabled: false } } } 
+          });
+          return;
+      }
+      
+      expenseChartInstance = new Chart(ctx, { 
+          type: 'doughnut', 
+          data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 3, borderColor: '#fff', hoverOffset: 4 }] }, 
+          options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(69, 90, 100, 0.9)', padding: 12, callbacks: { label: (c) => ` ${c.label}：$${c.parsed.toLocaleString()}` } } } } 
+      });
+  }
+
+  function switchAccTab(tabName) {
+      currentAccTab = tabName;
+      document.querySelectorAll('.acc-tab-btn').forEach(b => {
+          if(b.textContent === tabName) b.classList.add('active');
+          else b.classList.remove('active');
+      });
+      renderAccDetailsList();
+  }
+
+  function renderAccDetailsList() {
+      const listContainer = document.getElementById('acc-detail-list'); 
+      listContainer.innerHTML = '';
+      const items = accDetailsData[currentAccTab] || [];
+      if (items.length === 0) { 
+          listContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#cfd8dc;">無支出紀錄</div>'; 
+          return; 
+      }
+      items.forEach(item => { 
+          listContainer.innerHTML += `
+              <div class="acc-detail-item" onclick="openInfoModalFromAcc('${item.code}', '${item.eventDate}')">
+                  <div class="acc-detail-name">${item.name}</div>
+                  <div class="acc-detail-amount">$${item.amount.toLocaleString()}</div>
+              </div>`; 
+      });
+  }
+
+  function calculateEventTotal(code) {
+      let sum = 0; 
+      const race = dbData['行程'].find(r => getVal(r, '行程代碼') === code);
+      if (race) sum += parseFloat(getVal(race, '報名費總額')) || 0;
+      
+      (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code).forEach(s => sum += parseFloat(getVal(s, '費用')) || 0);
+      (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code).forEach(t => sum += parseFloat(getVal(t, '票價或油資')) || 0);
+      (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code).forEach(b => sum += parseFloat(getVal(b, '金額')) || 0);
+      
+      return sum;
+  }
+
+  function renderFilters() {
+      const bar = document.getElementById('filter-bar');
+      const cats = ['全部', ...new Set(dbData['行程'].map(r => getVal(r, '行程類別')).filter(c => c))];
+      bar.innerHTML = '';
+      
+      cats.forEach(c => {
+          const btn = document.createElement('button');
+          btn.className = `filter-btn ${c === currentFilter ? 'active' : ''}`;
+          btn.textContent = c;
+          btn.onclick = () => { 
+              currentFilter = c; renderFilters(); renderMain(); 
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+          };
+          bar.appendChild(btn);
+      });
+  }
+
+  function renderMonthNav() {
+      const yearContainer = document.getElementById('year-nav');
+      const navContainer = document.getElementById('month-nav');
+      yearContainer.innerHTML = ''; navContainer.innerHTML = '';
+      
+      const now = new Date(); 
+      const currentY = now.getFullYear(); 
+      const currentM = now.getMonth() + 1;
+      const currentMonthKey = `${currentY}-${String(currentM).padStart(2, '0')}`;
+      
+      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
+      const monthKeysWithData = [...new Set(races.map(r => formatDate(getVal(r, '日期')).substring(0, 7)))].filter(k => k);
+      
+      if (currentFilter === '全部') { 
+          (dbData['帳務明細']||[]).forEach(b => { 
+              if (!getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery)) {
+                  const bDate = formatDate(getVal(b, '日期')); 
+                  if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); 
+              }
+          }); 
+      }
+      
+      const uniqueMonthKeysWithData = [...new Set(monthKeysWithData)].sort();
+      let uniqueYears = [...new Set(uniqueMonthKeysWithData.map(k => parseInt(k.substring(0, 4))))].sort((a, b) => a - b);
+      
+      if (!uniqueYears.includes(currentY)) {
+          uniqueYears.push(currentY);
+          uniqueYears.sort((a, b) => a - b);
+      }
+
+      uniqueYears.forEach(y => {
+          const btn = document.createElement('div');
+          btn.className = 'year-nav-btn ' + (y === displayYear ? 'active' : '');
+          btn.textContent = y + ' 年';
+          btn.onclick = () => { 
+              displayYear = y; selectedMonthFilter = null; renderMain(); 
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+          };
+          yearContainer.appendChild(btn);
+      });
+
+      // 準備國字月份陣列（針對十一和十二，單獨縮小字體並向下微調位置）
+      const chineseMonths = [
+          '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', 
+          '<div style="font-size: 12px; margin-top: 2px;">十<br>一</div>', 
+          '<div style="font-size: 12.5px; margin-top: 2px;">十<br>二</div>'
+      ];
+
+      for (let i = 1; i <= 12; i++) {
+          const mStr = String(i).padStart(2, '0'); 
+          const mKey = `${displayYear}-${mStr}`;
+          const hasData = uniqueMonthKeysWithData.includes(mKey);
+          
+          const btn = document.createElement('div'); 
+          btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
+          
+          // 注意！這裡要從 textContent 改成 innerHTML
+          btn.innerHTML = chineseMonths[i - 1];
+          
+          if (!hasData) {
+              btn.style.opacity = '0.3';
+          } else if (mKey < currentMonthKey) {
+              btn.style.opacity = '0.6';
+          } else {
+              btn.style.opacity = '1';
+          }
+
+          if (selectedMonthFilter === mKey) {
+              btn.classList.add('active');
+              btn.style.opacity = '1';
+          }
+          
+          btn.onclick = () => { 
+              selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
+              renderMain(); 
+              if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+          }; 
+
+          navContainer.appendChild(btn);
+      }
+  }
+
+  function renderPriceRow(label, val, payer, method, state) {
+      if(!hasVal(val) && !hasVal(payer)) return '';
+      let p = payer || '-', m = method || '-';
+      let pm = (m === undefined || !hasVal(m)) ? p : (p==='-' && m==='-' ? '-' : `${p} / ${m}`);
+
+      let stateHtml = '';
+      if (state) {
+          if (state === '已付') stateHtml = `<span class="status-tag status-paid">已付</span>`;
+          else if (state === '現場付') stateHtml = `<span class="status-tag status-onsite">現場付</span>`;
+          else if (state === '未付') stateHtml = `<span class="status-tag status-unpaid">未付</span>`;
+          else stateHtml = `<span class="status-tag status-onsite">${state}</span>`;
+      }
+
+      return `
+          <div class="price-row">
+              <div><span style="color:#7f8c8d;">${label}</span> <span class="price-tag">$${val || 0}</span></div>
+              <div style="font-size:12px;color:#888;display:flex;align-items:center;">
+                  ${pm} ${stateHtml}
+              </div>
+          </div>
+      `;
+  }
+
+  function renderCalendar() {
+      const container = document.getElementById('calendar-container'); 
+      container.innerHTML = '';
+      
+      const now = new Date(); 
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1; // 1-12
+      const currentMonthKey = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+      
+      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
+      
+      let eventMap = {}; 
+      let allDatesWithData = []; 
+      races.forEach(r => { 
+          const sDateStr = formatDate(getVal(r, '日期')); 
+          if (!sDateStr) return;
+          const eDateStr = formatDate(getVal(r, '結束日期')) || sDateStr;
+          
+          // 🎯 修正：將 - 替換為 /，避免瀏覽器解析出錯或減去時區天數
+          let cur = new Date(sDateStr.replace(/-/g, '/'));
+          let end = new Date(eDateStr.replace(/-/g, '/'));
+          let loopCount = 0;
+          
+          while(cur <= end && loopCount < 30) {
+              const dStr = formatDate(cur);
+              if (dStr) {
+                  eventMap[dStr] = r; 
+                  allDatesWithData.push(dStr);
+              }
+              cur.setDate(cur.getDate() + 1);
+              loopCount++;
+          }
+      });
+
+      let dailyExpenseMap = {};
+      if (currentFilter === '全部') {
+          (dbData['帳務明細']||[]).forEach(b => { 
+              if (!getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery)) {
+                  const d = formatDate(getVal(b, '日期')); 
+                  if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
+              }
+          });
+      }
+
+      let monthKeysToRender = [];
+      if (selectedMonthFilter) {
+          monthKeysToRender = [selectedMonthFilter];
+      } else if (currentFilter === '全部' && !currentSearchQuery) {
+          for (let i = 0; i < 12; i++) {
+              let targetDate = new Date(currentYear, currentMonth - 1 + i, 1);
+              let y = targetDate.getFullYear();
+              let m = String(targetDate.getMonth() + 1).padStart(2, '0');
+              monthKeysToRender.push(`${y}-${m}`);
+          }
+      } else {
+          const uniqueMonths = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
+          monthKeysToRender = currentSearchQuery ? uniqueMonths : uniqueMonths.filter(mKey => mKey >= currentMonthKey);
+      }
+
+      let hasRenderedAny = false;
+
+      monthKeysToRender.forEach(mKey => {
+          hasRenderedAny = true;
+          const [y, m] = mKey.split('-');
+          const section = document.createElement('div'); 
+          section.className = 'month-section'; 
+          section.id = 'month-section-' + mKey;
+          
+          section.innerHTML = `
+              <div class="month-title">${y}年${m}月</div>
+              <div class="calendar-header">
+                  ${['一','二','三','四','五','六','日'].map(d => `<div class="weekday-header">${d}</div>`).join('')}
+              </div>
+          `;
+          
+          const grid = document.createElement('div'); 
+          grid.className = 'calendar-grid';
+          
+          const firstDay = new Date(y, m-1, 1).getDay(); 
+          const lastDate = new Date(y, m, 0).getDate();
+          
+          // 調整為星期一為每週第一天
+          const emptyDays = firstDay === 0 ? 6 : firstDay - 1;
+          for (let i = 0; i < emptyDays; i++) { grid.appendChild(document.createElement('div')); }
+          
+          for (let d = 1; d <= lastDate; d++) {
+              const dStr = `${y}-${m}-${String(d).padStart(2,'0')}`;
+              const cell = document.createElement('div'); 
+              cell.className = 'day'; 
+              cell.dataset.date = dStr;
+              cell.innerHTML = `<span class="day-number">${d}</span>`;
+              
+              const event = eventMap[dStr]; 
+              const hasDailyExpense = dailyExpenseMap[dStr];
+              
+              if (event) {
+                  const cat = getVal(event, '行程類別'); 
+                  cell.classList.add('has-event');
+                  const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
+                  cell.style.borderColor = pastelColor || '#cfd8dc';
+                  cell.dataset.color = pastelColor || '#cfd8dc';
+                  cell.onclick = () => handleDayClick(event, cell, grid, dStr);
+              } else if (hasDailyExpense) {
+                  cell.classList.add('has-expense'); 
+                  cell.onclick = () => handleDayClick(null, cell, grid, dStr);
+              }
+              grid.appendChild(cell);
+          }
+          
+          section.appendChild(grid); 
+          container.appendChild(section);
+      });
+
+      if (!hasRenderedAny) {
+          container.innerHTML = '<div style="padding:60px 20px; text-align:center; color:#90a4ae; font-weight:bold; line-height: 1.6;">目前沒有符合條件的行程<br><span style="font-size:13px; font-weight:normal;">試試看更換關鍵字或切換「年份」與「月份」</span></div>';
+      }
+  }
+
+  function renderList() {
+      const container = document.getElementById('list-container'); 
+      container.innerHTML = '';
+      
+      let listItems = [];
+
+      let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
+      races.forEach(r => {
+          const sDateStr = formatDate(getVal(r, '日期'));
+          if(!sDateStr) return;
+          const eDateStr = formatDate(getVal(r, '結束日期')) || sDateStr;
+          
+          // 🎯 修正時區解析問題
+          listItems.push({
+              isEvent: true,
+              eventData: r,
+              dateObj: new Date(sDateStr.replace(/-/g, '/')),
+              dateStr: sDateStr,
+              endDateStr: eDateStr,
+              cat: getVal(r, '行程類別'),
+              title: getVal(r, '行程名稱')
+          });
+      });
+
+      // 🎯 已移除「日常帳務」推入 listItems 的程式碼
+
+      listItems.sort((a, b) => a.dateObj - b.dateObj);
+      
+      const today = new Date(); 
+      today.setHours(0, 0, 0, 0);
+      
+      const pastItems = listItems.filter(item => item.dateObj < today && item.dateStr.startsWith(displayYear));
+      const futureItems = listItems.filter(item => item.dateObj >= today && item.dateStr.startsWith(displayYear));
+      
+      let itemsToRender = [];
+      if (selectedMonthFilter) {
+          itemsToRender = listItems.filter(item => item.dateStr.startsWith(selectedMonthFilter));
+      } else if (currentSearchQuery) {
+          itemsToRender = listItems; 
+      } else {
+          itemsToRender = showPastList ? listItems.filter(item => item.dateStr.startsWith(displayYear)) : futureItems;
+          if (pastItems.length > 0) {
+              const toggleBtn = document.createElement('div'); 
+              toggleBtn.className = 'past-toggle-btn';
+              toggleBtn.textContent = showPastList ? '收起歷史紀錄 ▲' : `顯示歷史紀錄 ▼`;
+              toggleBtn.onclick = () => { showPastList = !showPastList; renderList(); };
+              container.appendChild(toggleBtn);
+          }
+      }
+
+      if (itemsToRender.length === 0) {
+          const emptyMsg = document.createElement('div'); 
+          emptyMsg.style.cssText = "padding:40px; text-align:center; color:#95a5a6; font-size:15px; font-weight:bold;"; 
+          emptyMsg.textContent = "目前沒有符合條件的資料"; 
+          container.appendChild(emptyMsg); 
+          return;
+      }
+      
+      itemsToRender.forEach(item => {
+          const daysDiff = Math.ceil((item.dateObj - today) / (1000 * 60 * 60 * 24));
+          let countdownHtml = daysDiff > 0 ? `<span style="font-weight:bold; font-size:13px; color:var(--text-main);">還有<span class="list-countdown-days">${daysDiff}</span>天</span>` : (daysDiff === 0 ? `<span style="font-weight:bold; font-size:14px; color:var(--text-main);">今天</span>` : `<span style="font-weight:bold; font-size:13px; color:#bbb;">已結束</span>`);
+          
+          const domItem = document.createElement('div'); 
+          domItem.className = 'list-item'; 
+          const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${item.cat}`).trim();
+          domItem.style.borderLeftColor = pastelColor || '#cfd8dc';
+          
+          const titleHtml = item.isEvent ? item.title : `📝 ${item.title}`;
+          
+          let dateHtml = `<span class="d">${item.dateObj.getDate()}</span>`;
+          if (item.dateStr !== item.endDateStr && item.endDateStr) {
+              const eDate = new Date(item.endDateStr.replace(/-/g, '/'));
+              if (!isNaN(eDate.getTime())) {
+                  dateHtml = `<span class="d" style="font-size:15px; margin-top: 4px;">${item.dateObj.getDate()}-${eDate.getDate()}</span>`;
+              }
+          }
+
+          domItem.innerHTML = `
+              <div class="list-date">
+                  <span class="m">${item.dateObj.getMonth()+1}月</span>
+                  ${dateHtml}
+              </div>
+              <div class="list-name">${titleHtml}</div>
+              <div class="list-countdown">${countdownHtml}</div>
+          `;
+          domItem.onclick = () => handleListClick(item.eventData, domItem, item.dateStr); 
+          container.appendChild(domItem);
+      });
+  }
+
+  let currentOpenPanel = null, currentSelectedEl = null;
+
+  function handleDayClick(event, cell, grid, dStr) {
+      if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
+      
+      if (currentSelectedEl) { 
+          currentSelectedEl.classList.remove('selected'); 
+          if(currentSelectedEl.classList.contains('has-event')) {
+              currentSelectedEl.style.backgroundColor = '';
+          }
+      }
+      
+      currentSelectedEl = cell; 
+      cell.classList.add('selected');
+      
+      if (event) { 
+          cell.style.backgroundColor = cell.dataset.color;
+      }
+      
+      if (currentOpenPanel) currentOpenPanel.remove();
+      const panel = document.createElement('div'); 
+      panel.className = 'detail-panel'; 
+      panel.innerHTML = generateDetailHTML(event, dStr);
+      
+      const cells = Array.from(grid.children); 
+      const idx = cells.indexOf(cell); 
+      const rowEnd = Math.min(cells.length - 1, idx + (6 - (idx % 7)));
+      
+      grid.insertBefore(panel, cells[rowEnd].nextSibling); 
+      setTimeout(() => panel.classList.add('open'), 10); 
+      currentOpenPanel = panel;
+  }
+
+  function handleListClick(event, item, forceDateStr) {
+      if (currentSelectedEl === item && currentOpenPanel) { closeCurrentPanel(); return; }
+      if (currentOpenPanel) currentOpenPanel.remove();
+      
+      currentSelectedEl = item; 
+      const dStr = forceDateStr || formatDate(getVal(event, '日期'));
+      const panel = document.createElement('div'); 
+      panel.className = 'detail-panel'; 
+      panel.innerHTML = generateDetailHTML(event, dStr);
+      
+      item.parentNode.insertBefore(panel, item.nextSibling); 
+      setTimeout(() => panel.classList.add('open'), 10); 
+      currentOpenPanel = panel;
+  }
+
+  function closeCurrentPanel() {
+      if (currentOpenPanel) { 
+          currentOpenPanel.remove(); 
+          currentOpenPanel = null;
+          if (currentSelectedEl) { 
+              currentSelectedEl.classList.remove('selected'); 
+              if(currentSelectedEl.classList.contains('has-event')){
+                  currentSelectedEl.style.backgroundColor = 'transparent';
+              }
+              currentSelectedEl = null; 
+          }
+      }
+  }
+
+  function generateReceiptHTML(bills) {
+      if (bills.length === 0) return `<div style="text-align:center; color:#95a5a6; font-size:13px; padding:20px;">無帳務明細</div>`;
+      
+      const grouped = {};
+      bills.forEach(b => {
+          const d = formatDate(getVal(b, '日期')) || '未填寫日期';
+          if (!grouped[d]) grouped[d] = [];
+          grouped[d].push(b);
+      });
+      
+      let html = `<div style="background:#fff; border-radius:12px; border:1px solid #eee; padding:15px; margin-bottom:15px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">`;
+      let total = 0;
+      
+      Object.keys(grouped).sort().forEach(dateKey => {
+          html += `<div style="font-weight:bold; color:var(--brand-main); margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:14px; margin-top:10px;">${dateKey}</div>`;
+          grouped[dateKey].forEach(b => {
+              const cat = getVal(b, '類別') || '其他'; 
+              const item = getVal(b, '項目') || '未命名項目'; 
+              const pay = getVal(b, '付款方式') || '未填寫'; 
+              const amt = parseFloat(getVal(b, '金額')) || 0; 
+              const memo = getVal(b, '備註');
+              total += amt;
+              
+              html += `
+                  <div style="display:flex; flex-direction:column; padding: 12px 0; border-bottom: 1px dashed #f5f5f5;">
+                      <div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; font-size: 14px; align-items: center;">
+                          <div style="color:#fff; font-size:10px; background:${getColorForCategory(cat)}; padding:2px 8px; border-radius:10px; white-space: nowrap; font-weight:bold;">${cat}</div>
+                          <div style="color:#2c3e50; font-weight: 500;">${item}</div>
+                          <div style="font-size:12px; color:#aaa; white-space: nowrap;">${pay}</div>
+                          <div style="font-weight:bold; color:var(--settle-pink); text-align: right; min-width: 60px;">$${amt.toLocaleString()}</div>
+                      </div>
+                      ${memo ? `<div style="font-size: 12px; color: #95a5a6; margin-top: 4px; padding-left: 45px;">備註：${memo}</div>` : ''}
+                      
+                      <div class="edit-controls">
+                          <button class="circle-btn edit-btn" onclick="openEditModal('帳務明細', ${b['_rowIndex']}, event)">✎</button>
+                          <button class="circle-btn del-btn" onclick="showConfirmDelete('帳務明細', ${b['_rowIndex']}, event)">✖</button>
+                      </div>
+                  </div>
+              `;
+          });
+      });
+      
+      html += `
+          <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:900; color:var(--brand-main); margin-top:15px; padding-top:10px; border-top:2px solid #eee;">
+              <div>總計</div>
+              <div>$${total.toLocaleString()}</div>
+          </div>
+      </div>`;
+      
+      return html;
+  }
+
+  function generateDetailHTML(event, dateStr) {
+      let backBtnHtml = '';
+      if (isFromAccPanel) {
+          backBtnHtml = `
+          <div style="margin-bottom: 15px; margin-top: 15px;">
+              <button onclick="returnToAccPanel()" style="background: #fff; border: 1px solid #eceff1; padding: 6px 14px; border-radius: 20px; color: var(--text-sub); font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                  ◀ 返回帳務總覽
+              </button>
+          </div>`;
+      }
+
+      if (!event) {
+          let html = backBtnHtml + `
+              <div class="detail-header" style="margin-bottom:10px; padding-bottom:5px; border-bottom:none;">
+                  <div>
+                      <div class="detail-race-name">日常帳務</div>
+                      <div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${dateStr}</div>
+                  </div>
+              </div>
+          `;
+          const dailyBills = (dbData['帳務明細']||[]).filter(b => formatDate(getVal(b, '日期')) === dateStr);
+          html += generateReceiptHTML(dailyBills);
+          return html;
+      }
+      
+      const code = getVal(event, '行程代碼');
+      const bills = (dbData['帳務明細']||[]).filter(b => getVal(b, '行程代碼') === code);
+      
+      const sDateStr = formatDate(getVal(event, '日期'));
+      const eDateStr = formatDate(getVal(event, '結束日期'));
+      let displayDate = sDateStr;
+      if (eDateStr && eDateStr !== sDateStr) displayDate += ` ~ ${eDateStr}`;
+
+      let html = backBtnHtml + `
+      <div class="detail-header" style="flex-direction:column; gap:10px; align-items: flex-start;">
+          <div style="display:flex; justify-content:space-between; width:100%; align-items:baseline;">
+              <div>
+                  <div class="detail-race-name">${getVal(event, '行程名稱')}</div>
+                  <div style="font-size:14px;color:#7f8c8d;margin-top:4px;">日期：${displayDate}</div>
+              </div>
+              ${getVal(event,'行程連結') ? `<a href="${getVal(event,'行程連結')}" target="_blank" class="link-btn">簡章 >></a>` : ''}
+          </div>
+          <div class="edit-controls" style="width:100%; border:none; margin:0; padding:0;">
+              <button class="circle-btn edit-btn" onclick="openEditModal('行程', ${event['_rowIndex']}, event)">✎</button>
+              <button class="circle-btn del-btn" onclick="showConfirmDelete('行程', ${event['_rowIndex']}, event)">✖</button>
+          </div>
+      </div>`;
+      
+     html += `
+      <div class="view-switcher panel-view-switcher">
+               <button class="view-btn panel-view-btn active" onclick="switchPanelTab(this, 'tab-info')">行程資訊</button>
+               <button class="view-btn panel-view-btn" onclick="switchPanelTab(this, 'tab-expense')">帳務明細</button>
+      </div>`;
+      
+      html += `<div id="tab-info" class="panel-tab-content" style="display:block;">`;
+      
+      const eventCat = getVal(event, '行程類別');
+      const isNoFeeCat = (eventCat === '旅遊' || eventCat === '移地訓練');
+      const infoTitleText = isNoFeeCat ? '行程資訊' : '報名資訊';
+      
+      html += `<div class="info-section"><div class="info-title title-race">${infoTitleText}</div><div class="info-card card-race">`;
+      
+      if (!isNoFeeCat) {
+          if(getVal(event,'聿凡項目')) html += `<div class="info-row"><span>聿凡</span><span>${getVal(event,'聿凡項目')}</span></div>`;
+          if(getVal(event,'光武項目')) html += `<div class="info-row"><span>光武</span><span>${getVal(event,'光武項目')}</span></div>`;
+      }
+      
+      const feeAmount = parseFloat(getVal(event,'報名費總額')) || 0;
+      if (!isNoFeeCat || feeAmount > 0) {
+          html += renderPriceRow('費用', getVal(event,'報名費總額'), getVal(event,'付款人'), getVal(event,'付款方式'), getVal(event,'狀態'));
+      }
+      
+      if(getVal(event,'備註')) {
+          html += `<div style="margin-top:12px; font-size:13px; color:#666; border-top: 1px dashed #ddd; padding-top: 10px;">備註：${getVal(event,'備註')}</div>`;
+      }
+      html += `</div></div>`;
+      
+      const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
+      if(stays.length > 0) {
+          html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
+          stays.forEach(s => {
+              const breakfastTag = getVal(s,'含早餐') === 'V' ? '<span style="font-size:12px; color:#546e7a; background:#e0f2f1; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:bold;">含早餐</span>' : '';
+              const chargerTag = getVal(s,'充電樁') === 'V' ? '<span style="font-size:12px; color:#546e7a; background:#fff9c4; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:bold;">充電樁</span>' : '';
+              const pendingTag = getVal(s,'待確認') === 'V' ? '<span style="font-size:12px; color:#fff; background:#e53935; padding:2px 8px; border-radius:4px; margin-left:8px; font-weight:900; box-shadow: 0 2px 4px rgba(229,57,53,0.3);">待確認</span>' : '';
+              
+              html += `
+                  <div class="info-card card-stay" style="${getVal(s,'待確認') === 'V' ? 'background:#fff5f5;' : ''}">
+                      <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+                          <div style="display:flex; align-items:center; flex-wrap:wrap; gap:4px;">
+                              <span style="font-weight:bold;font-size:16px;">${getVal(s,'飯店名稱')}</span>
+                              ${pendingTag}
+                              ${breakfastTag}
+                              ${chargerTag}
+                          </div>
+                          ${getVal(s,'連結') ? `<a href="${getVal(s,'連結')}" target="_blank" style="font-size:12px;background:#e1f5fe;color:#01579b;padding:3px 10px;border-radius:15px;text-decoration:none;font-weight:bold;white-space:nowrap;height:fit-content;">地圖 >></a>` : ''}
+                      </div>`;
+              if(getVal(s,'入住日期')) html += `<div class="info-row"><span>入住時間</span><span>${formatDate(getVal(s,'入住日期')).substring(5)} ｜ ${getVal(s,'入住時間')||''}</span></div>`;
+              if(getVal(s,'退房日期')) html += `<div class="info-row"><span>退房時間</span><span>${formatDate(getVal(s,'退房日期')).substring(5)} ｜ ${getVal(s,'退房時間')||''}</span></div>`;
+              if(getVal(s,'訂房平台')) html += `<div class="info-row"><span>平台</span><span>${getVal(s,'訂房平台')}</span></div>`;
+              
+              html += renderPriceRow('費用', getVal(s,'費用'), getVal(s,'付款人'), getVal(s,'付款方式'), getVal(s,'狀態'));
+              
+              if(getVal(s,'備註')) html += `<div style="margin-top:8px; font-size:12px; color:#666;">備註：${getVal(s,'備註')}</div>`;
+              
+              html += `
+                  <div class="edit-controls">
+                      <button class="circle-btn edit-btn" onclick="openEditModal('住宿', ${s['_rowIndex']}, event)">✎</button>
+                      <button class="circle-btn del-btn" onclick="showConfirmDelete('住宿', ${s['_rowIndex']}, event)">✖</button>
+                  </div>
+              `;
+              html += `</div>`;
+          });
+          html += `</div>`;
+      }
+      
+      const trans = (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code);
+      if(trans.length > 0) {
+          html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
+          trans.forEach(t => {
+              html += `
+                  <div class="info-card card-trans">
+                      <div style="font-weight:bold;margin-bottom:10px;font-size:16px;">${getVal(t,'類型')}</div>
+              `;
+              
+              const goB = getVal(t,'去程班次 / 航班') || getVal(t,'去程班次/航班') || getVal(t,'去程班次 / 飛機') || getVal(t,'去程班次/飛機');
+              const goD = getVal(t,'出發日期'); 
+              const goS = getVal(t,'去程出發時間'); 
+              const goA = getVal(t,'去程抵達時間');
+              
+              if(hasVal(goB)) html += `<div class="info-row"><span>航班號碼</span><span><span style="background: #eceff1; color: #546e7a; padding: 2px 8px; border-radius: 6px; font-family: monospace; font-weight: bold; letter-spacing: 0.5px;">${goB}</span></span></div>`;
+              if(hasVal(goD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(goD).substring(5)}</span></div>`;
+              if(hasVal(goS) || hasVal(goA)) html += `<div class="info-row"><span></span><span>${goS||'--:--'}出發－${goA||'--:--'}抵達</span></div>`;
+              
+              const bkB = getVal(t,'回程班次 / 航班') || getVal(t,'回程班次/航班') || getVal(t,'回程班次 / 飛機') || getVal(t,'回程班次/飛機');
+              const bkD = getVal(t,'回程日期'); 
+              const bkS = getVal(t,'回程出發時間'); 
+              const bkA = getVal(t,'回程抵達時間');
+              
+              if(hasVal(bkB)) html += `<div class="info-row" style="margin-top:10px;"><span>航班號碼</span><span><span style="background: #eceff1; color: #546e7a; padding: 2px 8px; border-radius: 6px; font-family: monospace; font-weight: bold; letter-spacing: 0.5px;">${bkB}</span></span></div>`;
+              if(hasVal(bkD)) html += `<div class="info-row"><span>日期時間</span><span>${formatDate(bkD).substring(5)}</span></div>`;
+              if(hasVal(bkS) || hasVal(bkA)) html += `<div class="info-row"><span></span><span>${bkS||'--:--'}出發－${bkA||'--:--'}抵達</span></div>`;
+              
+              html += renderPriceRow('費用', getVal(t,'票價或油資'), getVal(t,'付款人'), getVal(t,'付款方式'), getVal(t,'狀態'));
+              
+              html += `
+                  <div class="edit-controls">
+                      <button class="circle-btn edit-btn" onclick="openEditModal('交通', ${t['_rowIndex']}, event)">✎</button>
+                      <button class="circle-btn del-btn" onclick="showConfirmDelete('交通', ${t['_rowIndex']}, event)">✖</button>
+                  </div>
+              `;
+              html += `</div>`;
+          });
+          html += `</div>`;
+      }
+      
+      if(bills.length > 0) {
+          const sums = {}; 
+          bills.forEach(b => { 
+              const c = getVal(b, '類別') || '其他'; 
+              sums[c] = (sums[c] || 0) + (parseFloat(getVal(b, '金額')) || 0); 
+          });
+          
+          html += `<div class="info-section"><div class="info-title title-bill">其他帳務 (分類總結)</div><div class="info-card card-bill">`;
+          Object.keys(sums).forEach(c => {
+              html += `
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; align-items:center;">
+                  <span style="color:#546e7a; font-weight:bold;">${c}</span>
+                  <span style="font-weight:900; color:var(--brand-main);">$${sums[c].toLocaleString()}</span>
+              </div>`;
+          });
+          html += `</div></div>`;
+      }
+      
+      html += `
+          <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
+              <div class="event-settle-card">
+                  <div style="font-weight:bold; color:var(--settle-pink); font-size:13px;">本場行程結算</div>
+                  <div style="font-size:20px; font-weight:900; color:var(--settle-pink);">$${calculateEventTotal(code).toLocaleString()}</div>
+              </div>
+          </div>
+      </div>`;
+      
+      html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">${generateReceiptHTML(bills)}</div>`;
+      
+      return html;
+  }
+
+  function toggleAddEventFee() {
+      const cat = document.getElementById('add-行程-類別').value;
+      const isNoFee = (cat === '旅遊' || cat === '移地訓練');
+      const displayStyle = isNoFee ? 'none' : 'block';
+      
+      const hideFields = ['聿凡', '光武', '報名費'];
+      hideFields.forEach(f => {
+          const el = document.getElementById(`add-行程-${f}`);
+          if(el && el.parentNode) {
+              el.parentNode.style.display = displayStyle;
+              if(isNoFee) el.value = ''; 
+          }
+      });
+
+      const defaultSelectFields = ['付款人', '方式', '狀態'];
+      defaultSelectFields.forEach(f => {
+          const el = document.getElementById(`add-行程-${f}`);
+          if(el && el.parentNode) {
+              el.parentNode.style.display = displayStyle;
+              if(isNoFee) el.selectedIndex = 0; 
+          }
+      });
+      // 確保切換時，連動檢查信用卡選單是否需要隱藏
+      toggleCreditCardSelect('行程');
+  }
+
+  function toggleEditEventFee() {
+      const catSelect = document.getElementById('edit-field-2'); 
+      if(!catSelect) return;
+      const cat = catSelect.value;
+      const isNoFee = (cat === '旅遊' || cat === '移地訓練');
+      const displayStyle = isNoFee ? 'none' : 'block';
+      
+      [5, 6, 7].forEach(i => {
+          const el = document.getElementById(`edit-field-${i}`);
+          if(el && el.parentNode) {
+              el.parentNode.style.display = displayStyle;
+              if(isNoFee) el.value = '';
+          }
+      });
+
+      // 8=付款人, 9=付款方式, 10=狀態, 13=信用卡別
+      [8, 9, 10, 13].forEach(i => {
+          const el = document.getElementById(`edit-field-${i}`);
+          if(el && el.parentNode) {
+              el.parentNode.style.display = displayStyle;
+              if(isNoFee) el.selectedIndex = 0; 
+          }
+      });
+  }
+
+  ['click', 'touchstart'].forEach(function(eventType) {
+      window.addEventListener(eventType, function(event) {
+          if (event.target.classList.contains('modal-overlay')) {
+              event.target.style.display = 'none';
+          }
+      });
+  });
+
+  window.addEventListener('focusin', function(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
+          e.target.setAttribute('autocomplete', 'nope');
+          e.target.setAttribute('autocorrect', 'off');
+          e.target.setAttribute('spellcheck', 'false');
+      }
+  });
+  
+</script>
+</body>
+</html>
