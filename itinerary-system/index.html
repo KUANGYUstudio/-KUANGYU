@@ -1478,8 +1478,8 @@
           yearContainer.appendChild(btn);
       });
 
-      // 準備國字月份陣列
-      const chineseMonths = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'];
+      // 準備國字月份陣列（在十一和十二中間加入換行標籤 <br>）
+      const chineseMonths = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十<br>一', '十<br>二'];
 
       for (let i = 1; i <= 12; i++) {
           const mStr = String(i).padStart(2, '0'); 
@@ -1488,8 +1488,9 @@
           
           const btn = document.createElement('div'); 
           btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
-          // 把原本顯示數字 i，改成顯示對應的國字
-          btn.textContent = chineseMonths[i - 1];
+          
+          // 注意！這裡要從 textContent 改成 innerHTML
+          btn.innerHTML = chineseMonths[i - 1];
           
           if (!hasData) {
               btn.style.opacity = '0.3';
