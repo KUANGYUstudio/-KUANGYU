@@ -732,12 +732,12 @@
       return colors[cat] || '#cfd8dc'; 
   }
 
-  // 🎯 統一加入信用卡別、帳務加入付款人
+ // 🎯 統一加入信用卡別、帳務加入付款人，並新增分期欄位
   const sheetHeaders = {
-      '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '付款人', '付款方式', '狀態', '備註', '結束日期', '信用卡別'],
-      '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註', '含早餐', '充電樁', '待確認', '信用卡別'],
-      '交通': ['行程代碼', '類型', '出發日期', '去程班次 / 航班', '去程出發時間', '去程抵達時間', '回程日期', '回程班次 / 航班', '回程出發時間', '回程抵達時間', '票價或油資', '付款人', '付款方式', '狀態', '信用卡別'],
-      '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註', '付款人', '信用卡別']
+      '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '付款人', '付款方式', '狀態', '備註', '結束日期', '信用卡別', '分期'],
+      '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註', '含早餐', '充電樁', '待確認', '信用卡別', '分期'],
+      '交通': ['行程代碼', '類型', '出發日期', '去程班次 / 航班', '去程出發時間', '去程抵達時間', '回程日期', '回程班次 / 航班', '回程出發時間', '回程抵達時間', '票價或油資', '付款人', '付款方式', '狀態', '信用卡別', '分期'],
+      '帳務明細': ['行程代碼', '日期', '類別', '項目', '金額', '付款方式', '備註', '付款人', '信用卡別', '分期']
   };
 
   const selectOptions = {
@@ -750,7 +750,8 @@
       '類型': ['自駕','火車','飛機'],
       '入住時間': ['-','14:00','15:00','16:00','其他'],
       '退房時間': ['-','11:00','12:00','其他'],
-      '信用卡別': ['-', '國泰世華', '第一銀行', '台新銀行', '玉山銀行', '富邦銀行', '中國信託']
+      '信用卡別': ['-', '國泰', '第一銀', '台新', '玉山', '富邦', '中信'],
+      '分期': ['-', '3期', '6期', '9期', '12期'] // 🌟 這裡新增分期選項
   };
 
   window.onload = initSystem;
@@ -998,7 +999,6 @@
           } else if(selectOptions[h]) {
               const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
               
-              // 🎯 新增：賦予「付款方式」動態開關功能
               let onChangeAttr = '';
               if (h === '行程類別') onChangeAttr = 'onchange="toggleEditEventFee()"';
               if (h === '付款方式') onChangeAttr = 'onchange="toggleEditCreditCard(this.value)"';
@@ -1023,12 +1023,11 @@
 
           const groupStyle = labelHtml === '' ? 'margin-bottom: 5px;' : '';
           
-          // 🎯 新增：替信用卡別掛上專屬 ID 方便控制隱藏
-          const extraId = h === '信用卡別' ? 'id="edit-cc-group"' : '';
+          // 🎯 替信用卡別與分期加上 ID
+          const extraId = h === '信用卡別' ? 'id="edit-cc-group"' : (h === '分期' ? 'id="edit-inst-group"' : '');
           generatedGroups.push({ idx: idx, header: h, html: `<div class="edit-input-group" ${extraId} style="${groupStyle}">${labelHtml}${inputHtml}</div>` });
       });
 
-      // 1. 調整「行程」日期順序
       if (sheetName === '行程') {
           const endDateGroup = generatedGroups.find(g => g.header === '結束日期');
           if (endDateGroup) {
@@ -1038,16 +1037,20 @@
           }
       }
 
-      // 2. 全域排序：將「信用卡別」挪到「付款方式」正下方
+      // 🎯 讓信用卡別跟分期乖乖排在付款方式下面
       const cardGroup = generatedGroups.find(g => g.header === '信用卡別');
+      const instGroup = generatedGroups.find(g => g.header === '分期');
       const methodGroup = generatedGroups.find(g => g.header === '付款方式');
       if (cardGroup && methodGroup) {
-          generatedGroups = generatedGroups.filter(g => g.header !== '信用卡別');
+          generatedGroups = generatedGroups.filter(g => g.header !== '信用卡別' && g.header !== '分期');
           const mIdx = generatedGroups.findIndex(g => g.header === '付款方式');
-          generatedGroups.splice(mIdx + 1, 0, cardGroup);
+          if (instGroup) {
+              generatedGroups.splice(mIdx + 1, 0, cardGroup, instGroup);
+          } else {
+              generatedGroups.splice(mIdx + 1, 0, cardGroup);
+          }
       }
 
-      // 3. 針對「帳務明細」額外把「付款人」挪到「付款方式」上方
       if (sheetName === '帳務明細') {
           const payerGroup = generatedGroups.find(g => g.header === '付款人');
           if (payerGroup) {
@@ -1065,24 +1068,26 @@
       
       if (sheetName === '行程') { toggleEditEventFee(); }
       
-      // 🎯 新增：彈窗開啟時，檢查是否該顯示信用卡選單
       const methodSelect = formBody.querySelector('select[onchange*="toggleEditCreditCard"]');
-      if (methodSelect) {
-          toggleEditCreditCard(methodSelect.value);
-      }
+      if (methodSelect) toggleEditCreditCard(methodSelect.value);
   }
 
-  // 🎯 新增：控制編輯視窗的信用卡別顯示與隱藏
+  // 🎯 控制編輯視窗的信用卡別與分期顯示
   function toggleEditCreditCard(method) {
       const ccGroup = document.getElementById('edit-cc-group');
+      const instGroup = document.getElementById('edit-inst-group');
       if (ccGroup) {
-          // 若選刷卡則顯示，否則隱藏
-          ccGroup.style.display = (method === '刷卡') ? 'block' : 'none';
+          const isCard = (method === '刷卡');
+          ccGroup.style.display = isCard ? 'block' : 'none';
+          if (instGroup) instGroup.style.display = isCard ? 'block' : 'none';
           
-          // 如果不是刷卡，自動把信用卡選項歸零（避免改為現金卻存到舊的信用卡資料）
-          if (method !== '刷卡') {
+          if (!isCard) {
               const select = ccGroup.querySelector('select');
               if (select) select.selectedIndex = 0;
+              if (instGroup) {
+                  const instSelect = instGroup.querySelector('select');
+                  if (instSelect) instSelect.selectedIndex = 0;
+              }
           }
       }
   }
@@ -1337,28 +1342,52 @@
           });
       });
 
-      // 🎯 抓取資料時，一併把 method(付款方式) 和 creditCard(信用卡別) 推進去
+      // 🌟 新增一個分期處理小幫手
+      function addExpense(dateStr, eventDate, category, amount, name, searchStr, code, method, creditCard, installmentStr) {
+          let n = 1;
+          if (installmentStr && installmentStr.includes('期')) {
+              n = parseInt(installmentStr.replace('期', '')) || 1;
+          }
+          if (n <= 1) {
+              allExpenses.push({ date: dateStr, eventDate, category, amount, name, searchStr, code, method, creditCard });
+              return;
+          }
+          
+          // 處理分期算法：將金額平分，除不盡的餘數灌在最後一期
+          const splitAmt = Math.floor(amount / n);
+          let baseDate = new Date(dateStr.replace(/-/g, '/'));
+          for (let i = 0; i < n; i++) {
+              let curDate = new Date(baseDate);
+              curDate.setMonth(curDate.getMonth() + i);
+              let curDateStr = formatDate(curDate);
+              let curAmt = (i === n - 1) ? (amount - splitAmt * (n - 1)) : splitAmt; 
+              let curName = `${name} (${i+1}/${n}期)`;
+              allExpenses.push({ date: curDateStr, eventDate, category, amount: curAmt, name: curName, searchStr: `${searchStr} ${curName}`, code, method, creditCard });
+          }
+      }
+
+      // 🎯 抓取資料時，全部改用小幫手來處理
       races.forEach(r => {
           const code = getVal(r, '行程代碼');
           const rDate = formatDate(getVal(r, '日期'));
           const rName = getVal(r, '行程名稱');
           
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          if (regFee > 0) allExpenses.push({ date: rDate, eventDate: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code, method: getVal(r, '付款方式'), creditCard: getVal(r, '信用卡別') });
+          if (regFee > 0) addExpense(rDate, rDate, '報名費', regFee, rName, [rName, getVal(r, '備註')].join(' '), code, getVal(r, '付款方式'), getVal(r, '信用卡別'), getVal(r, '分期'));
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
               const fee = parseFloat(getVal(s,'費用')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, eventDate: rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || rName, searchStr: [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code: code, method: getVal(s, '付款方式'), creditCard: getVal(s, '信用卡別') });
+              if (fee > 0) addExpense(formatDate(getVal(s, '入住日期')) || rDate, rDate, '住宿', fee, getVal(s,'飯店名稱') || rName, [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code, getVal(s, '付款方式'), getVal(s, '信用卡別'), getVal(s, '分期'));
           });
           
           (expensesByCode['交通'][code] || []).forEach(t => {
               const fee = parseFloat(getVal(t,'票價或油資')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, eventDate: rDate, category: '交通', amount: fee, name: getVal(t,'類型') || rName, searchStr: [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code: code, method: getVal(t, '付款方式'), creditCard: getVal(t, '信用卡別') });
+              if (fee > 0) addExpense(formatDate(getVal(t, '出發日期')) || rDate, rDate, '交通', fee, getVal(t,'類型') || rName, [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code, getVal(t, '付款方式'), getVal(t, '信用卡別'), getVal(t, '分期'));
           });
           
           (expensesByCode['帳務明細'][code] || []).forEach(b => {
               const fee = parseFloat(getVal(b,'金額')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, eventDate: rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || rName, searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' '), code: code, method: getVal(b, '付款方式'), creditCard: getVal(b, '信用卡別') });
+              if (fee > 0) addExpense(formatDate(getVal(b, '日期')) || rDate, rDate, getVal(b, '類別') || '其他', fee, getVal(b,'項目') || rName, [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' '), code, getVal(b, '付款方式'), getVal(b, '信用卡別'), getVal(b, '分期'));
           });
       });
 
@@ -1368,7 +1397,7 @@
               if (!code || code.trim() === '') {
                   const fee = parseFloat(getVal(b,'金額')) || 0;
                   const bDate = formatDate(getVal(b, '日期'));
-                  if (fee > 0) allExpenses.push({ date: bDate, eventDate: bDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳', searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' '), code: '', method: getVal(b, '付款方式'), creditCard: getVal(b, '信用卡別') });
+                  if (fee > 0) addExpense(bDate, bDate, getVal(b, '類別') || '其他', fee, getVal(b,'項目') || '日常記帳', [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' '), '', getVal(b, '付款方式'), getVal(b, '信用卡別'), getVal(b, '分期'));
               }
           });
       }
@@ -1390,22 +1419,12 @@
       let grandTotal = 0;
       accDetailsData = {}; 
 
-      // 🎯 建立簡寫對照表 (攔截轉換用)
-      const shortNames = {
-          '國泰世華': '國泰',
-          '第一銀行': '第一銀',
-          '台新銀行': '台新',
-          '玉山銀行': '玉山',
-          '富邦銀行': '富邦',
-          '中國信託': '中信'
-      };
+      const shortNames = { '國泰世華': '國泰', '第一銀行': '第一銀', '台新銀行': '台新', '玉山銀行': '玉山', '富邦銀行': '富邦', '中國信託': '中信' };
 
       filteredExpenses.forEach(e => {
-          // 🎯 決定要依照「類別」還是「信用卡」進行群組
           let key = e.category || '其他'; 
           if (currentAccGroupMode === 'creditCard') {
               if (e.method === '刷卡' && e.creditCard && e.creditCard !== '-') {
-                  // 如果對照表裡有，就換成簡寫，沒有就保持原名
                   key = shortNames[e.creditCard] || e.creditCard;
               } else if (e.method === '現金') {
                   key = '現金';          
@@ -1418,12 +1437,10 @@
           categoryTotals[key] += e.amount;
           grandTotal += e.amount;
           
-          // 🎯 列表名稱小優化：如果是依信用卡看，在名稱前面加上 [類別]
           let displayName = e.name;
           if (currentAccGroupMode === 'creditCard') {
               displayName = `<span style="font-size:11px; background:#eceff1; padding:2px 6px; border-radius:6px; margin-right:5px; color:#546e7a;">${e.category || '其他'}</span>${e.name}`;
           }
-
           accDetailsData[key].push({ name: displayName, amount: e.amount, code: e.code, eventDate: e.eventDate });
       });
 
