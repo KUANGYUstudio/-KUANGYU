@@ -475,10 +475,16 @@
     </div>
 
     <div id="acc-panel" style="display:none; text-align:left; background:#fff; padding:25px; border-radius:20px; margin-bottom:30px; border:1px solid #eceff1; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
-      <div style="background:var(--brand-main); color:#fff; padding:20px; border-radius:16px; text-align:center; margin-bottom:25px;">
+      <div style="background:var(--brand-main); color:#fff; padding:20px; border-radius:16px; text-align:center; margin-bottom:20px;">
         <div id="acc-grand-label-dynamic" style="font-size:12px; opacity:0.8; margin-bottom:5px;">篩選範圍總支出</div>
         <div id="acc-grand-total" style="font-size:32px; font-weight:900;">$0</div>
       </div>
+
+      <div class="view-switcher" style="margin: 0 auto 25px; width: fit-content; border: 1px solid #eceff1;">
+          <button id="btn-group-cat" class="view-btn active" onclick="switchAccGroupMode('category')">依類別</button>
+          <button id="btn-group-cc" class="view-btn" onclick="switchAccGroupMode('creditCard')">依信用卡</button>
+      </div>
+
       <div style="position: relative; height: 180px; margin-bottom: 25px;"><canvas id="expenseChart"></canvas></div>
       <div id="dynamic-cat-legend" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px;"></div>
       <div id="acc-tabs" style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;"></div>
@@ -697,19 +703,33 @@
   let deleteTargetSheet = '';
   let deleteTargetRowIndex = null;
 
-  const categoryColors = { 
-      '報名費': '#64b5f6', 
-      '住宿': '#ffd54f', 
-      '交通': '#81c784', 
-      '飲食': '#ff8a65', 
-      '購物': '#ba68c8', 
-      '採買': '#4dd0e1', 
-      '娛樂': '#f06292', 
-      '其他': '#b0bec5' 
-  };
-  
+  // 🎯 新增全域變數，紀錄目前的群組模式
+  let currentAccGroupMode = 'category';
+
+  // 🎯 新增切換模式的函式
+  function switchAccGroupMode(mode) {
+      currentAccGroupMode = mode;
+      document.getElementById('btn-group-cat').classList.toggle('active', mode === 'category');
+      document.getElementById('btn-group-cc').classList.toggle('active', mode === 'creditCard');
+      calculateAccounting();
+  }
+
+  // 🎯 更新顏色函式（加入各家銀行與現金的專屬顏色）
   function getColorForCategory(cat) { 
-      return categoryColors[cat] || '#cfd8dc'; 
+      const colors = {
+          '報名費': '#64b5f6', '住宿': '#ffd54f', '交通': '#81c784', '飲食': '#ff8a65',
+          '購物': '#ba68c8', '採買': '#4dd0e1', '娛樂': '#f06292', '其他': '#b0bec5',
+          // 銀行專屬配色
+          '國泰世華': '#4caf50', // 綠
+          '第一銀行': '#00897b', // 深青
+          '台新銀行': '#e53935', // 紅
+          '玉山銀行': '#8bc34a', // 淺綠
+          '富邦銀行': '#1e88e5', // 藍
+          '中國信託': '#00acc1', // 藍綠
+          '現金支付': '#ffa726', // 橘黃
+          '其他 / 未定': '#cfd8dc'
+      };
+      return colors[cat] || '#cfd8dc'; 
   }
 
   // 🎯 統一加入信用卡別、帳務加入付款人
@@ -1317,27 +1337,28 @@
           });
       });
 
+      // 🎯 抓取資料時，一併把 method(付款方式) 和 creditCard(信用卡別) 推進去
       races.forEach(r => {
           const code = getVal(r, '行程代碼');
           const rDate = formatDate(getVal(r, '日期'));
           const rName = getVal(r, '行程名稱');
           
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          if (regFee > 0) allExpenses.push({ date: rDate, eventDate: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code });
+          if (regFee > 0) allExpenses.push({ date: rDate, eventDate: rDate, category: '報名費', amount: regFee, name: rName, searchStr: [rName, getVal(r, '備註')].join(' '), code: code, method: getVal(r, '付款方式'), creditCard: getVal(r, '信用卡別') });
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
               const fee = parseFloat(getVal(s,'費用')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, eventDate: rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || rName, searchStr: [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code: code });
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(s, '入住日期')) || rDate, eventDate: rDate, category: '住宿', amount: fee, name: getVal(s,'飯店名稱') || rName, searchStr: [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code: code, method: getVal(s, '付款方式'), creditCard: getVal(s, '信用卡別') });
           });
           
           (expensesByCode['交通'][code] || []).forEach(t => {
               const fee = parseFloat(getVal(t,'票價或油資')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, eventDate: rDate, category: '交通', amount: fee, name: getVal(t,'類型') || rName, searchStr: [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code: code });
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(t, '出發日期')) || rDate, eventDate: rDate, category: '交通', amount: fee, name: getVal(t,'類型') || rName, searchStr: [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code: code, method: getVal(t, '付款方式'), creditCard: getVal(t, '信用卡別') });
           });
           
           (expensesByCode['帳務明細'][code] || []).forEach(b => {
               const fee = parseFloat(getVal(b,'金額')) || 0;
-              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, eventDate: rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || rName, searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' '), code: code });
+              if (fee > 0) allExpenses.push({ date: formatDate(getVal(b, '日期')) || rDate, eventDate: rDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || rName, searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' '), code: code, method: getVal(b, '付款方式'), creditCard: getVal(b, '信用卡別') });
           });
       });
 
@@ -1347,7 +1368,7 @@
               if (!code || code.trim() === '') {
                   const fee = parseFloat(getVal(b,'金額')) || 0;
                   const bDate = formatDate(getVal(b, '日期'));
-                  if (fee > 0) allExpenses.push({ date: bDate, eventDate: bDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳', searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' '), code: '' });
+                  if (fee > 0) allExpenses.push({ date: bDate, eventDate: bDate, category: getVal(b, '類別') || '其他', amount: fee, name: getVal(b,'項目') || '日常記帳', searchStr: [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' '), code: '', method: getVal(b, '付款方式'), creditCard: getVal(b, '信用卡別') });
               }
           });
       }
@@ -1357,11 +1378,7 @@
       
       let filteredExpenses = allExpenses.filter(e => {
           if (!e.date) return false;
-          
-          if (currentSearchQuery && !e.searchStr.toLowerCase().includes(currentSearchQuery.toLowerCase())) {
-              return false;
-          }
-
+          if (currentSearchQuery && !e.searchStr.toLowerCase().includes(currentSearchQuery.toLowerCase())) return false;
           const eMonth = e.date.substring(0, 7);
           if (selectedMonthFilter) return eMonth === selectedMonthFilter;
           else return eMonth >= currentMonthKey;
@@ -1374,11 +1391,29 @@
       accDetailsData = {}; 
 
       filteredExpenses.forEach(e => {
-          let cat = e.category;
-          if (!categoryTotals[cat]) { categoryTotals[cat] = 0; accDetailsData[cat] = []; }
-          categoryTotals[cat] += e.amount;
+          // 🎯 決定要依照「類別」還是「信用卡」進行群組
+          let key = e.category || '其他'; 
+          if (currentAccGroupMode === 'creditCard') {
+              if (e.method === '刷卡' && e.creditCard && e.creditCard !== '-') {
+                  key = e.creditCard;
+              } else if (e.method === '現金') {
+                  key = '現金支付';
+              } else {
+                  key = '其他 / 未定';
+              }
+          }
+
+          if (!categoryTotals[key]) { categoryTotals[key] = 0; accDetailsData[key] = []; }
+          categoryTotals[key] += e.amount;
           grandTotal += e.amount;
-          accDetailsData[cat].push({ name: e.name, amount: e.amount, code: e.code, eventDate: e.eventDate });
+          
+          // 🎯 列表名稱小優化：如果是依信用卡看，在名稱前面加上 [類別]
+          let displayName = e.name;
+          if (currentAccGroupMode === 'creditCard') {
+              displayName = `<span style="font-size:11px; background:#eceff1; padding:2px 6px; border-radius:6px; margin-right:5px; color:#546e7a;">${e.category || '其他'}</span>${e.name}`;
+          }
+
+          accDetailsData[key].push({ name: displayName, amount: e.amount, code: e.code, eventDate: e.eventDate });
       });
 
       document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
