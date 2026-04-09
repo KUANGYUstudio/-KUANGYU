@@ -1011,14 +1011,27 @@
           });
       });
 
-      // 🎯 把「結束日期」挪到「開始日期」的正下方
+      // 🎯 調整「行程」視窗順序：結束日期挪到開始日期下方
       if (sheetName === '行程') {
-          // 結束日期在 sheetHeaders 是 idx 12，開始日期是 idx 3
           const endDateGroup = generatedGroups.find(g => g.idx === 12);
           if (endDateGroup) {
               generatedGroups = generatedGroups.filter(g => g.idx !== 12);
               const dateIndex = generatedGroups.findIndex(g => g.idx === 3);
               generatedGroups.splice(dateIndex + 1, 0, endDateGroup);
+          }
+      }
+
+      // 🎯 調整「帳務明細」視窗順序：付款人 > 付款方式 > 信用卡別
+      if (sheetName === '帳務明細') {
+          const methodGroup = generatedGroups.find(g => g.idx === 5); // 付款方式
+          const payerGroup = generatedGroups.find(g => g.idx === 7);  // 付款人
+          const cardGroup = generatedGroups.find(g => g.idx === 8);   // 信用卡別
+
+          if (payerGroup && methodGroup && cardGroup) {
+              generatedGroups = generatedGroups.filter(g => ![5, 7, 8].includes(g.idx));
+              const amtIndex = generatedGroups.findIndex(g => g.idx === 4); // 金額
+              // 依序塞入：付款人 -> 付款方式 -> 信用卡別
+              generatedGroups.splice(amtIndex + 1, 0, payerGroup, methodGroup, cardGroup);
           }
       }
 
