@@ -715,19 +715,19 @@
   }
 
   // 🎯 更新顏色函式（加入各家銀行與現金的專屬顏色）
+// 🎯 更新顏色函式（加入各家銀行與現金的專屬顏色）
   function getColorForCategory(cat) { 
       const colors = {
           '報名費': '#64b5f6', '住宿': '#ffd54f', '交通': '#81c784', '飲食': '#ff8a65',
           '購物': '#ba68c8', '採買': '#4dd0e1', '娛樂': '#f06292', '其他': '#b0bec5',
-          // 銀行專屬配色
-          '國泰世華': '#4caf50', // 綠
-          '第一銀行': '#00897b', // 深青
-          '台新銀行': '#e53935', // 紅
-          '玉山銀行': '#8bc34a', // 淺綠
-          '富邦銀行': '#1e88e5', // 藍
-          '中國信託': '#00acc1', // 藍綠
-          '現金支付': '#ffa726', // 橘黃
-          '其他 / 未定': '#cfd8dc'
+          // 銀行專屬配色 (簡寫版)
+          '國泰': '#4caf50', 
+          '第一銀': '#00897b', 
+          '台新': '#e53935', 
+          '玉山': '#8bc34a', 
+          '富邦': '#1e88e5', 
+          '中信': '#00acc1', 
+          '現金': '#ffa726'
       };
       return colors[cat] || '#cfd8dc'; 
   }
@@ -1390,16 +1390,27 @@
       let grandTotal = 0;
       accDetailsData = {}; 
 
+      // 🎯 建立簡寫對照表 (攔截轉換用)
+      const shortNames = {
+          '國泰世華': '國泰',
+          '第一銀行': '第一銀',
+          '台新銀行': '台新',
+          '玉山銀行': '玉山',
+          '富邦銀行': '富邦',
+          '中國信託': '中信'
+      };
+
       filteredExpenses.forEach(e => {
           // 🎯 決定要依照「類別」還是「信用卡」進行群組
           let key = e.category || '其他'; 
           if (currentAccGroupMode === 'creditCard') {
               if (e.method === '刷卡' && e.creditCard && e.creditCard !== '-') {
-                  key = e.creditCard;
+                  // 如果對照表裡有，就換成簡寫，沒有就保持原名
+                  key = shortNames[e.creditCard] || e.creditCard;
               } else if (e.method === '現金') {
-                  key = '現金支付';
+                  key = '現金';          
               } else {
-                  key = '其他 / 未定';
+                  key = '其他';
               }
           }
 
