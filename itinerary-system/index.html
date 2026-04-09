@@ -951,7 +951,6 @@
       const formBody = document.getElementById('dynamic-edit-form');
       formBody.innerHTML = '';
       
-      // 🎯 用陣列收集生成的 HTML，方便事後調換位置
       let generatedGroups = [];
 
       headers.forEach((h, idx) => {
@@ -968,7 +967,6 @@
           if(h === '入住時間' || h === '退房時間' || h === '訂房平台') {
               let isCustom = val && val !== '-' && !selectOptions[h].includes(val);
               let selectVal = isCustom ? '其他' : (val || '-');
-              
               const opts = selectOptions[h].map(o => `<option value="${o}" ${selectVal===o?'selected':''}>${o}</option>`).join('');
               
               inputHtml = `
@@ -979,7 +977,12 @@
               `;
           } else if(selectOptions[h]) {
               const opts = selectOptions[h].map(o => `<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('');
-              const onChangeAttr = (h === '行程類別') ? 'onchange="toggleEditEventFee()"' : '';
+              
+              // 🎯 新增：賦予「付款方式」動態開關功能
+              let onChangeAttr = '';
+              if (h === '行程類別') onChangeAttr = 'onchange="toggleEditEventFee()"';
+              if (h === '付款方式') onChangeAttr = 'onchange="toggleEditCreditCard(this.value)"';
+              
               inputHtml = `<select autocomplete="off" id="edit-field-${idx}" class="edit-input" ${onChangeAttr}>${opts}</select>`;
           } else if(h.includes('日期')) {
               const dVal = formatDate(val);
@@ -999,50 +1002,69 @@
           }
 
           const groupStyle = labelHtml === '' ? 'margin-bottom: 5px;' : '';
-
-          generatedGroups.push({
-              idx: idx,
-              html: `
-                  <div class="edit-input-group" style="${groupStyle}">
-                      ${labelHtml}
-                      ${inputHtml}
-                  </div>
-              `
-          });
+          
+          // 🎯 新增：替信用卡別掛上專屬 ID 方便控制隱藏
+          const extraId = h === '信用卡別' ? 'id="edit-cc-group"' : '';
+          generatedGroups.push({ idx: idx, header: h, html: `<div class="edit-input-group" ${extraId} style="${groupStyle}">${labelHtml}${inputHtml}</div>` });
       });
 
-      // 🎯 調整「行程」視窗順序：結束日期挪到開始日期下方
+      // 1. 調整「行程」日期順序
       if (sheetName === '行程') {
-          const endDateGroup = generatedGroups.find(g => g.idx === 12);
+          const endDateGroup = generatedGroups.find(g => g.header === '結束日期');
           if (endDateGroup) {
-              generatedGroups = generatedGroups.filter(g => g.idx !== 12);
-              const dateIndex = generatedGroups.findIndex(g => g.idx === 3);
+              generatedGroups = generatedGroups.filter(g => g.header !== '結束日期');
+              const dateIndex = generatedGroups.findIndex(g => g.header === '日期');
               generatedGroups.splice(dateIndex + 1, 0, endDateGroup);
           }
       }
 
-      // 🎯 調整「帳務明細」視窗順序：付款人 > 付款方式 > 信用卡別
-      if (sheetName === '帳務明細') {
-          const methodGroup = generatedGroups.find(g => g.idx === 5); // 付款方式
-          const payerGroup = generatedGroups.find(g => g.idx === 7);  // 付款人
-          const cardGroup = generatedGroups.find(g => g.idx === 8);   // 信用卡別
+      // 2. 全域排序：將「信用卡別」挪到「付款方式」正下方
+      const cardGroup = generatedGroups.find(g => g.header === '信用卡別');
+      const methodGroup = generatedGroups.find(g => g.header === '付款方式');
+      if (cardGroup && methodGroup) {
+          generatedGroups = generatedGroups.filter(g => g.header !== '信用卡別');
+          const mIdx = generatedGroups.findIndex(g => g.header === '付款方式');
+          generatedGroups.splice(mIdx + 1, 0, cardGroup);
+      }
 
-          if (payerGroup && methodGroup && cardGroup) {
-              generatedGroups = generatedGroups.filter(g => ![5, 7, 8].includes(g.idx));
-              const amtIndex = generatedGroups.findIndex(g => g.idx === 4); // 金額
-              // 依序塞入：付款人 -> 付款方式 -> 信用卡別
-              generatedGroups.splice(amtIndex + 1, 0, payerGroup, methodGroup, cardGroup);
+      // 3. 針對「帳務明細」額外把「付款人」挪到「付款方式」上方
+      if (sheetName === '帳務明細') {
+          const payerGroup = generatedGroups.find(g => g.header === '付款人');
+          if (payerGroup) {
+              generatedGroups = generatedGroups.filter(g => g.header !== '付款人');
+              const mIdx = generatedGroups.findIndex(g => g.header === '付款方式');
+              generatedGroups.splice(mIdx, 0, payerGroup);
           }
       }
 
       formBody.innerHTML = generatedGroups.map(g => g.html).join('');
-
       document.getElementById('edit-sheetName').value = sheetName;
       document.getElementById('edit-rowIndex').value = rowIndex;
       document.getElementById('edit-modal-title').textContent = `編輯${sheetName}`;
       document.getElementById('edit-modal').style.display = 'flex';
       
       if (sheetName === '行程') { toggleEditEventFee(); }
+      
+      // 🎯 新增：彈窗開啟時，檢查是否該顯示信用卡選單
+      const methodSelect = formBody.querySelector('select[onchange*="toggleEditCreditCard"]');
+      if (methodSelect) {
+          toggleEditCreditCard(methodSelect.value);
+      }
+  }
+
+  // 🎯 新增：控制編輯視窗的信用卡別顯示與隱藏
+  function toggleEditCreditCard(method) {
+      const ccGroup = document.getElementById('edit-cc-group');
+      if (ccGroup) {
+          // 若選刷卡則顯示，否則隱藏
+          ccGroup.style.display = (method === '刷卡') ? 'block' : 'none';
+          
+          // 如果不是刷卡，自動把信用卡選項歸零（避免改為現金卻存到舊的信用卡資料）
+          if (method !== '刷卡') {
+              const select = ccGroup.querySelector('select');
+              if (select) select.selectedIndex = 0;
+          }
+      }
   }
 
   function closeEditModal() {
