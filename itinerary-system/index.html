@@ -1393,18 +1393,17 @@
           });
       });
 
-      // 🌟 新增一個分期處理小幫手
-      function addExpense(dateStr, eventDate, category, amount, name, searchStr, code, method, creditCard, installmentStr) {
+      // 🌟 新增「payer (付款人)」參數，讓系統記得是誰付的錢
+      function addExpense(dateStr, eventDate, category, amount, name, searchStr, code, method, creditCard, installmentStr, payer) {
           let n = 1;
           if (installmentStr && installmentStr.includes('期')) {
               n = parseInt(installmentStr.replace('期', '')) || 1;
           }
           if (n <= 1) {
-              allExpenses.push({ date: dateStr, eventDate, category, amount, name, searchStr, code, method, creditCard });
+              allExpenses.push({ date: dateStr, eventDate, category, amount, name, searchStr, code, method, creditCard, payer });
               return;
           }
           
-          // 處理分期算法：將金額平分，除不盡的餘數灌在最後一期
           const splitAmt = Math.floor(amount / n);
           let baseDate = new Date(dateStr.replace(/-/g, '/'));
           for (let i = 0; i < n; i++) {
@@ -1413,31 +1412,32 @@
               let curDateStr = formatDate(curDate);
               let curAmt = (i === n - 1) ? (amount - splitAmt * (n - 1)) : splitAmt; 
               let curName = `${name} (${i+1}/${n}期)`;
-              allExpenses.push({ date: curDateStr, eventDate, category, amount: curAmt, name: curName, searchStr: `${searchStr} ${curName}`, code, method, creditCard });
+              allExpenses.push({ date: curDateStr, eventDate, category, amount: curAmt, name: curName, searchStr: `${searchStr} ${curName}`, code, method, creditCard, payer });
           }
       }
 
+      // 🎯 抓取資料時，把 getVal(..., '付款人') 也傳進去
       races.forEach(r => {
           const code = getVal(r, '行程代碼');
           const rDate = formatDate(getVal(r, '日期'));
           const rName = getVal(r, '行程名稱');
           
           const regFee = parseFloat(getVal(r, '報名費總額')) || 0;
-          if (regFee > 0) addExpense(rDate, rDate, '報名費', regFee, rName, [rName, getVal(r, '備註')].join(' '), code, getVal(r, '付款方式'), getVal(r, '信用卡別'), getVal(r, '分期'));
+          if (regFee > 0) addExpense(rDate, rDate, '報名費', regFee, rName, [rName, getVal(r, '備註')].join(' '), code, getVal(r, '付款方式'), getVal(r, '信用卡別'), getVal(r, '分期'), getVal(r, '付款人'));
           
           (expensesByCode['住宿'][code] || []).forEach(s => {
               const fee = parseFloat(getVal(s,'費用')) || 0;
-              if (fee > 0) addExpense(formatDate(getVal(s, '入住日期')) || rDate, rDate, '住宿', fee, getVal(s,'飯店名稱') || rName, [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code, getVal(s, '付款方式'), getVal(s, '信用卡別'), getVal(s, '分期'));
+              if (fee > 0) addExpense(formatDate(getVal(s, '入住日期')) || rDate, rDate, '住宿', fee, getVal(s,'飯店名稱') || rName, [getVal(s,'飯店名稱'), getVal(s,'訂房平台'), getVal(s,'備註'), rName].join(' '), code, getVal(s, '付款方式'), getVal(s, '信用卡別'), getVal(s, '分期'), getVal(s, '付款人'));
           });
           
           (expensesByCode['交通'][code] || []).forEach(t => {
               const fee = parseFloat(getVal(t,'票價或油資')) || 0;
-              if (fee > 0) addExpense(formatDate(getVal(t, '出發日期')) || rDate, rDate, '交通', fee, getVal(t,'類型') || rName, [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code, getVal(t, '付款方式'), getVal(t, '信用卡別'), getVal(t, '分期'));
+              if (fee > 0) addExpense(formatDate(getVal(t, '出發日期')) || rDate, rDate, '交通', fee, getVal(t,'類型') || rName, [getVal(t,'類型'), getVal(t,'去程班次 / 航班'), getVal(t,'回程班次 / 航班'), getVal(t,'備註'), rName].join(' '), code, getVal(t, '付款方式'), getVal(t, '信用卡別'), getVal(t, '分期'), getVal(t, '付款人'));
           });
           
           (expensesByCode['帳務明細'][code] || []).forEach(b => {
               const fee = parseFloat(getVal(b,'金額')) || 0;
-              if (fee > 0) addExpense(formatDate(getVal(b, '日期')) || rDate, rDate, getVal(b, '類別') || '其他', fee, getVal(b,'項目') || rName, [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' '), code, getVal(b, '付款方式'), getVal(b, '信用卡別'), getVal(b, '分期'));
+              if (fee > 0) addExpense(formatDate(getVal(b, '日期')) || rDate, rDate, getVal(b, '類別') || '其他', fee, getVal(b,'項目') || rName, [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別'), rName].join(' '), code, getVal(b, '付款方式'), getVal(b, '信用卡別'), getVal(b, '分期'), getVal(b, '付款人'));
           });
       });
 
@@ -1447,7 +1447,7 @@
               if (!code || code.trim() === '') {
                   const fee = parseFloat(getVal(b,'金額')) || 0;
                   const bDate = formatDate(getVal(b, '日期'));
-                  if (fee > 0) addExpense(bDate, bDate, getVal(b, '類別') || '其他', fee, getVal(b,'項目') || '日常記帳', [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' '), '', getVal(b, '付款方式'), getVal(b, '信用卡別'), getVal(b, '分期'));
+                  if (fee > 0) addExpense(bDate, bDate, getVal(b, '類別') || '其他', fee, getVal(b,'項目') || '日常記帳', [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' '), '', getVal(b, '付款方式'), getVal(b, '信用卡別'), getVal(b, '分期'), getVal(b, '付款人'));
               }
           });
       }
@@ -1474,10 +1474,14 @@
       filteredExpenses.forEach(e => {
           let key = e.category || '其他'; 
           if (currentAccGroupMode === 'creditCard') {
+              // 💡 取得付款人名字，如果是空白就顯示「未知」
+              let payerName = (e.payer && e.payer.trim() !== '' && e.payer !== '-') ? e.payer : '未知';
+
               if (e.method === '刷卡' && e.creditCard && e.creditCard !== '-') {
-                  key = shortNames[e.creditCard] || e.creditCard;
+                  let cardName = shortNames[e.creditCard] || e.creditCard;
+                  key = `${payerName} - ${cardName}`; 
               } else if (e.method === '現金') {
-                  key = '現金';          
+                  key = `${payerName} - 現金`;          
               } else {
                   key = '其他';
               }
