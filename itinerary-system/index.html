@@ -1046,7 +1046,7 @@
           } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
               inputHtml = `<input autocomplete="off" type="number" inputmode="decimal" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           } else if(h === '行程代碼') {
-              inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}" readonly style="background:#eee; color:#888;">`;
+              inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           } else if(h === '含早餐' || h === '充電樁' || h === '待確認') {
               labelHtml = ''; 
               inputHtml = `<label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer;">
