@@ -782,6 +782,42 @@
     }
   }
 
+  // 🌟 靜默更新：背景拉取最新資料，不閃爍網頁，並嘗試恢復剛剛打開的面板
+  async function silentReload() {
+      try {
+          const res = await fetch(API_URL + "?t=" + new Date().getTime());
+          const freshData = await res.json();
+          dbData = freshData;
+          localStorage.setItem('kuangyu_dbData', JSON.stringify(freshData));
+
+          // 1. 記住目前打開的面板日期 (如果在日曆模式下)
+          let openPanelDate = null;
+          if (currentOpenPanel && currentSelectedEl && currentView === 'cal') {
+              openPanelDate = currentSelectedEl.dataset.date;
+          }
+
+          // 2. 清除舊面板狀態並重新渲染核心畫面
+          currentSelectedEl = null;
+          currentOpenPanel = null;
+          renderFilters();
+          renderMain();
+          if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+
+          // 3. 嘗試自動幫使用者重新點開剛剛的那一天！
+          if (openPanelDate && currentView === 'cal') {
+              const targetCell = document.querySelector(`.day[data-date="${openPanelDate}"]`);
+              if (targetCell) {
+                  targetCell.click(); // 模擬點擊，無縫展開
+              }
+          }
+
+          document.getElementById('loading').style.display = 'none';
+      } catch (e) {
+          alert("資料已儲存，但畫面更新失敗，請手動重新整理網頁。");
+          document.getElementById('loading').style.display = 'none';
+      }
+  }
+  
   // 🎯 統整 4 個主按鈕互斥邏輯：搜尋、帳務、日曆、清單
   function switchMainMode(mode) {
       // 1. 取消所有按鈕的 active 視覺狀態
@@ -929,8 +965,8 @@
               method: 'POST', 
               body: JSON.stringify({ action: 'delete', sheetName: deleteTargetSheet, rowIndex: deleteTargetRowIndex }) 
           });
-          localStorage.removeItem('kuangyu_dbData');
-          location.reload();
+          // 💡 替換成靜默更新
+          await silentReload();
       } catch (err) {
           alert('刪除失敗，請檢查網路連線！');
           document.getElementById('loading').style.display = 'none';
@@ -1145,8 +1181,8 @@
               method: 'POST',
               body: JSON.stringify({ action: 'update', sheetName: sheetName, rowIndex: rowIndex, data: rowData })
           });
-          localStorage.removeItem('kuangyu_dbData'); 
-          location.reload();
+          // 💡 替換成靜默更新
+          await silentReload();
       } catch (err) {
           alert('修改失敗，請檢查網路連線！');
           document.getElementById('loading').style.display = 'none';
@@ -1272,8 +1308,8 @@
               method: 'POST',
               body: JSON.stringify({ action: 'insert', sheetName: sheetName, data: rowData })
           });
-          localStorage.removeItem('kuangyu_dbData'); 
-          location.reload();
+          // 💡 替換成靜默更新
+          await silentReload();
       } catch (err) {
           alert('儲存失敗，請檢查網路連線！');
           document.getElementById('loading').style.display = 'none';
