@@ -1391,15 +1391,14 @@
           });
       });
 
-      if (currentFilter === '全部') {
-          (dbData['帳務明細']||[]).forEach(b => {
-              const code = getVal(b, '行程代碼');
-              if (!code || code.trim() === '') {
-                  const fee = parseFloat(getVal(b,'金額')) || 0;
-                  const bDate = formatDate(getVal(b, '日期'));
-                  if (fee > 0) addExpense(bDate, bDate, getVal(b, '類別') || '其他', fee, getVal(b,'項目') || '日常記帳', [getVal(b,'項目'), getVal(b,'備註'), getVal(b,'類別')].join(' '), '', getVal(b, '付款方式'), getVal(b, '信用卡別'), getVal(b, '分期'));
-              }
-          });
+      if (currentFilter === '全部') { 
+         (dbData['帳務明細']||[]).forEach(b => { 
+        // 💡 同步拔除限制
+             if (doesBillMatch(b, currentSearchQuery)) {
+                const bDate = formatDate(getVal(b, '日期')); 
+                if (bDate) monthKeysWithData.push(bDate.substring(0, 7)); 
+             }
+         }); 
       }
 
       const now = new Date();
@@ -1707,11 +1706,12 @@
       let dailyExpenseMap = {};
       if (currentFilter === '全部') {
           (dbData['帳務明細']||[]).forEach(b => { 
-              if (!getVal(b, '行程代碼') && doesBillMatch(b, currentSearchQuery)) {
+        // 💡 拔除限制，讓所有符合日期的帳務都能觸發日曆小金點
+              if (doesBillMatch(b, currentSearchQuery)) {
                   const d = formatDate(getVal(b, '日期')); 
                   if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
-              }
-          });
+                  }
+         });
       }
 
       let monthKeysToRender = [];
