@@ -1379,6 +1379,15 @@
   }
 
   function calculateAccounting() {
+      // 🌟 建立全域變數來記住目前選了誰 (預設為 '全部')
+      window.accPayerFilter = window.accPayerFilter || '全部';
+      
+      // 🌟 點擊按鈕時觸發的切換函式
+      window.setAccPayer = function(payer) {
+          window.accPayerFilter = payer;
+          calculateAccounting();
+      };
+
       let allExpenses = [];
       const races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter));
 
@@ -1393,7 +1402,6 @@
           });
       });
 
-      // 🌟 新增「payer (付款人)」參數，讓系統記得是誰付的錢
       function addExpense(dateStr, eventDate, category, amount, name, searchStr, code, method, creditCard, installmentStr, payer) {
           let n = 1;
           if (installmentStr && installmentStr.includes('期')) {
@@ -1416,7 +1424,6 @@
           }
       }
 
-      // 🎯 抓取資料時，把 getVal(..., '付款人') 也傳進去
       races.forEach(r => {
           const code = getVal(r, '行程代碼');
           const rDate = formatDate(getVal(r, '日期'));
@@ -1463,8 +1470,6 @@
           else return eMonth >= currentMonthKey;
       });
 
-      document.getElementById('acc-grand-label-dynamic').textContent = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月 總支出` : `本月與未來 總支出`;
-
       let categoryTotals = {};
       let grandTotal = 0;
       accDetailsData = {}; 
@@ -1473,15 +1478,20 @@
 
       filteredExpenses.forEach(e => {
           let key = e.category || '其他'; 
+
           if (currentAccGroupMode === 'creditCard') {
-              // 💡 取得付款人名字，如果是空白就顯示「未知」
               let payerName = (e.payer && e.payer.trim() !== '' && e.payer !== '-') ? e.payer : '未知';
 
+              // 🎯 核心過濾邏輯：如果選了光武，就過濾掉聿凡的帳務（總金額也會跟著變！）
+              if (window.accPayerFilter !== '全部' && payerName !== window.accPayerFilter) {
+                  return; // 直接跳過這筆，不計算
+              }
+
+              // 🎯 恢復原本單純的卡名，讓系統抓得到顏色，文字也不會過長
               if (e.method === '刷卡' && e.creditCard && e.creditCard !== '-') {
-                  let cardName = shortNames[e.creditCard] || e.creditCard;
-                  key = `${payerName} - ${cardName}`; 
+                  key = shortNames[e.creditCard] || e.creditCard;
               } else if (e.method === '現金') {
-                  key = `${payerName} - 現金`;          
+                  key = '現金';          
               } else {
                   key = '其他';
               }
@@ -1498,7 +1508,14 @@
           accDetailsData[key].push({ name: displayName, amount: e.amount, code: e.code, eventDate: e.eventDate });
       });
 
+      // 動態更新總金額與標題
+      let titlePrefix = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月` : `本月與未來`;
+      if (currentAccGroupMode === 'creditCard' && window.accPayerFilter !== '全部') {
+          titlePrefix += ` (${window.accPayerFilter})`; // 標題會變成「本月與未來 (光武) 總支出」
+      }
+      document.getElementById('acc-grand-label-dynamic').textContent = `${titlePrefix} 總支出`;
       document.getElementById('acc-grand-total').textContent = '$' + grandTotal.toLocaleString();
+
       let sortedCats = Object.keys(categoryTotals).sort((a,b) => categoryTotals[b] - categoryTotals[a]);
       const pGrid = document.getElementById('dynamic-cat-legend'); 
       pGrid.innerHTML = '';
@@ -1523,6 +1540,32 @@
                   </div>
               </div>`;
       });
+
+      // 🌟 在圖表上方動態插入「付款人切換按鈕」
+      let canvas = document.getElementById('accChart');
+      if (canvas) {
+          let toggleDiv = document.getElementById('payer-toggle-container');
+          if (!toggleDiv) {
+              toggleDiv = document.createElement('div');
+              toggleDiv.id = 'payer-toggle-container';
+              toggleDiv.style.display = 'flex';
+              toggleDiv.style.justifyContent = 'center';
+              toggleDiv.style.gap = '10px';
+              toggleDiv.style.marginBottom = '20px';
+              canvas.parentNode.insertBefore(toggleDiv, canvas);
+          }
+
+          if (currentAccGroupMode === 'creditCard') {
+              toggleDiv.innerHTML = `
+                  <button onclick="setAccPayer('全部')" style="cursor:pointer; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:bold; border:none; transition:0.2s; background:${window.accPayerFilter==='全部'?'#34495e':'#f0f2f5'}; color:${window.accPayerFilter==='全部'?'#fff':'#7f8c8d'};">全部</button>
+                  <button onclick="setAccPayer('光武')" style="cursor:pointer; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:bold; border:none; transition:0.2s; background:${window.accPayerFilter==='光武'?'#34495e':'#f0f2f5'}; color:${window.accPayerFilter==='光武'?'#fff':'#7f8c8d'};">光武</button>
+                  <button onclick="setAccPayer('聿凡')" style="cursor:pointer; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:bold; border:none; transition:0.2s; background:${window.accPayerFilter==='聿凡'?'#34495e':'#f0f2f5'}; color:${window.accPayerFilter==='聿凡'?'#fff':'#7f8c8d'};">聿凡</button>
+              `;
+              toggleDiv.style.display = 'flex';
+          } else {
+              toggleDiv.style.display = 'none'; // 切換回依類別時隱藏
+          }
+      }
 
       const tabsContainer = document.getElementById('acc-tabs'); 
       tabsContainer.innerHTML = '';
