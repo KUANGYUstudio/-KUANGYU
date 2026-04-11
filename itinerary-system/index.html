@@ -1541,9 +1541,9 @@
               </div>`;
       });
 
-      // 🌟 在總金額標題上方動態插入「付款人切換按鈕」(也就是「依信用卡」的正下方)
-      let grandLabelEl = document.getElementById('acc-grand-label-dynamic');
-      if (grandLabelEl) {
+      // 🌟 在「依信用卡」下方、圖表上方動態插入切換按鈕
+      let canvas = document.getElementById('accChart');
+      if (canvas) {
           let toggleDiv = document.getElementById('payer-toggle-container');
           if (!toggleDiv) {
               toggleDiv = document.createElement('div');
@@ -1551,11 +1551,12 @@
               toggleDiv.style.display = 'flex';
               toggleDiv.style.justifyContent = 'center';
               toggleDiv.style.gap = '10px';
-              toggleDiv.style.marginTop = '10px';
-              toggleDiv.style.marginBottom = '15px'; // 和下方的總金額稍微隔開
+              toggleDiv.style.marginTop = '15px';
+              toggleDiv.style.marginBottom = '5px';
               
-              // 💡 關鍵改變：插入到標題的「前面」
-              grandLabelEl.parentNode.insertBefore(toggleDiv, grandLabelEl);
+              // 💡 關鍵改變：把按鈕放在圖表「外層容器」的前面，就不會被洗掉了！
+              let chartWrapper = canvas.parentNode;
+              chartWrapper.parentNode.insertBefore(toggleDiv, chartWrapper);
           }
 
           if (currentAccGroupMode === 'creditCard') {
