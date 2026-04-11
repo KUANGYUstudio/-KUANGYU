@@ -1541,9 +1541,9 @@
               </div>`;
       });
 
-      // 🌟 在圖表上方動態插入「付款人切換按鈕」
-      let canvas = document.getElementById('accChart');
-      if (canvas) {
+      // 🌟 在總金額下方動態插入「付款人切換按鈕」(搬到絕對安全區)
+      let grandTotalEl = document.getElementById('acc-grand-total');
+      if (grandTotalEl) {
           let toggleDiv = document.getElementById('payer-toggle-container');
           if (!toggleDiv) {
               toggleDiv = document.createElement('div');
@@ -1551,8 +1551,10 @@
               toggleDiv.style.display = 'flex';
               toggleDiv.style.justifyContent = 'center';
               toggleDiv.style.gap = '10px';
+              toggleDiv.style.marginTop = '15px'; // 和總金額稍微隔開
               toggleDiv.style.marginBottom = '20px';
-              canvas.parentNode.insertBefore(toggleDiv, canvas);
+              // 安全插入在總金額元素的後面
+              grandTotalEl.parentNode.insertBefore(toggleDiv, grandTotalEl.nextSibling);
           }
 
           if (currentAccGroupMode === 'creditCard') {
