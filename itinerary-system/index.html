@@ -1553,13 +1553,16 @@
           renderAccDetailsList();
       }
 
+
       // 畫圖表
       renderDoughnutChart(chartLabels, chartData, chartColors);
 
-      // 插入按鈕
+      // 🌟 將按鈕放在「絕對安全區」(圖表外層容器的上方)
       let canvas = document.getElementById('accChart');
-      if (canvas) {
+      if (canvas && canvas.parentNode) {
+          let chartContainer = canvas.parentNode; // 這是包裝圓餅圖的父元素
           let toggleDiv = document.getElementById('payer-toggle-container');
+          
           if (!toggleDiv) {
               toggleDiv = document.createElement('div');
               toggleDiv.id = 'payer-toggle-container';
@@ -1568,9 +1571,10 @@
               toggleDiv.style.gap = '10px';
               toggleDiv.style.marginTop = '15px';
               toggleDiv.style.marginBottom = '10px';
+              
+              // 💡 插入到 chartContainer 的「前面」，確保它獨立於圖表之外
+              chartContainer.parentNode.insertBefore(toggleDiv, chartContainer);
           }
-          
-          canvas.parentNode.insertBefore(toggleDiv, canvas);
 
           if (currentAccGroupMode === 'creditCard') {
               toggleDiv.innerHTML = `
