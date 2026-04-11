@@ -1588,8 +1588,38 @@
           currentAccTab = sortedCats[0]; 
           renderAccDetailsList();
       }
+      // 💡 1. 先讓推土機把圖表畫完
       renderDoughnutChart(chartLabels, chartData, chartColors);
-  }
+
+      // 💡 2. 圖表畫完後，我們再安穩地把按鈕放在圖表的正上方！
+      let canvas = document.getElementById('accChart');
+      if (canvas) {
+          let toggleDiv = document.getElementById('payer-toggle-container');
+          if (!toggleDiv) {
+              toggleDiv = document.createElement('div');
+              toggleDiv.id = 'payer-toggle-container';
+              toggleDiv.style.display = 'flex';
+              toggleDiv.style.justifyContent = 'center';
+              toggleDiv.style.gap = '10px';
+              toggleDiv.style.marginTop = '15px';
+              toggleDiv.style.marginBottom = '10px';
+          }
+          
+          // 將按鈕插入到新畫好的 canvas 前面
+          canvas.parentNode.insertBefore(toggleDiv, canvas);
+
+          if (currentAccGroupMode === 'creditCard') {
+              toggleDiv.innerHTML = `
+                  <button onclick="setAccPayer('全部')" style="cursor:pointer; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:bold; border:none; transition:0.2s; background:${window.accPayerFilter==='全部'?'#34495e':'#f0f2f5'}; color:${window.accPayerFilter==='全部'?'#fff':'#7f8c8d'};">全部</button>
+                  <button onclick="setAccPayer('光武')" style="cursor:pointer; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:bold; border:none; transition:0.2s; background:${window.accPayerFilter==='光武'?'#34495e':'#f0f2f5'}; color:${window.accPayerFilter==='光武'?'#fff':'#7f8c8d'};">光武</button>
+                  <button onclick="setAccPayer('聿凡')" style="cursor:pointer; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:bold; border:none; transition:0.2s; background:${window.accPayerFilter==='聿凡'?'#34495e':'#f0f2f5'}; color:${window.accPayerFilter==='聿凡'?'#fff':'#7f8c8d'};">聿凡</button>
+              `;
+              toggleDiv.style.display = 'flex';
+          } else {
+              toggleDiv.style.display = 'none'; // 切換回依類別時隱藏
+          }
+      }
+  } // calculateAccounting 函式的結尾大括號
 
   function renderDoughnutChart(labels, data, colors) {
       const ctx = document.getElementById('expenseChart').getContext('2d');
