@@ -8,7 +8,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
 
-
     /* =========================================
        光聿行程美學定義 (旗艦版：柔和粉彩 + 全域編輯 + 黃金三角)
        ========================================= */
@@ -480,9 +479,17 @@
         <div id="acc-grand-total" style="font-size:32px; font-weight:900;">$0</div>
       </div>
 
-      <div class="view-switcher" style="margin: 0 auto 25px; width: fit-content; border: 1px solid #eceff1;">
-          <button id="btn-group-cat" class="view-btn active" onclick="switchAccGroupMode('category')">依類別</button>
-          <button id="btn-group-cc" class="view-btn" onclick="switchAccGroupMode('creditCard')">依信用卡</button>
+      <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 25px;">
+          <div class="view-switcher" style="margin: 0; width: fit-content; border: 1px solid #eceff1;">
+              <button id="btn-group-cat" class="view-btn active" onclick="switchAccGroupMode('category')">依類別</button>
+              <button id="btn-group-cc" class="view-btn" onclick="switchAccGroupMode('creditCard')">依信用卡</button>
+          </div>
+          
+          <div id="payer-toggle-container" style="display: none; gap: 8px; margin-top: 10px; animation: slideUp 0.3s ease;">
+              <button onclick="setAccPayer('全部')" id="payer-btn-全部" class="acc-tab-btn active" style="font-size: 13px; padding: 6px 18px;">全部</button>
+              <button onclick="setAccPayer('光武')" id="payer-btn-光武" class="acc-tab-btn" style="font-size: 13px; padding: 6px 18px;">光武</button>
+              <button onclick="setAccPayer('聿凡')" id="payer-btn-聿凡" class="acc-tab-btn" style="font-size: 13px; padding: 6px 18px;">聿凡</button>
+          </div>
       </div>
 
       <div style="position: relative; height: 180px; margin-bottom: 25px;"><canvas id="expenseChart"></canvas></div>
@@ -703,19 +710,40 @@
   let deleteTargetSheet = '';
   let deleteTargetRowIndex = null;
 
-  // 🎯 新增全域變數，紀錄目前的群組模式
+  // 🎯 新增全域變數，紀錄目前的群組模式與過濾器
   let currentAccGroupMode = 'category';
+  window.accPayerFilter = '全部';
+
+  // 🎯 點擊光武/聿凡按鈕的處理邏輯
+  function setAccPayer(payer) {
+      window.accPayerFilter = payer;
+      ['全部', '光武', '聿凡'].forEach(p => {
+          const btn = document.getElementById(`payer-btn-${p}`);
+          if (btn) {
+              if (p === payer) btn.classList.add('active');
+              else btn.classList.remove('active');
+          }
+      });
+      calculateAccounting(); // 重新計算圖表
+  }
 
   // 🎯 新增切換模式的函式
   function switchAccGroupMode(mode) {
       currentAccGroupMode = mode;
       document.getElementById('btn-group-cat').classList.toggle('active', mode === 'category');
       document.getElementById('btn-group-cc').classList.toggle('active', mode === 'creditCard');
+      
+      const toggleDiv = document.getElementById('payer-toggle-container');
+      if (mode === 'creditCard') {
+          toggleDiv.style.display = 'flex';
+      } else {
+          toggleDiv.style.display = 'none';
+          setAccPayer('全部'); // 切換回類別時，自動重置過濾器
+      }
       calculateAccounting();
   }
 
-  // 🎯 更新顏色函式（加入各家銀行與現金的專屬顏色）
-// 🎯 更新顏色函式（加入各家銀行與現金的專屬顏色）
+  // 🎯 更新顏色函式（加入各家銀行與現金的專屬顏色，使用縮寫）
   function getColorForCategory(cat) { 
       const colors = {
           '報名費': '#64b5f6', '住宿': '#ffd54f', '交通': '#81c784', '飲食': '#ff8a65',
@@ -732,7 +760,7 @@
       return colors[cat] || '#cfd8dc'; 
   }
 
- // 🎯 統一加入信用卡別、帳務加入付款人，並新增分期欄位
+  // 🎯 統一加入信用卡別、帳務加入付款人，並新增分期欄位
   const sheetHeaders = {
       '行程': ['行程代碼', '行程名稱', '行程類別', '日期', '行程連結', '聿凡項目', '光武項目', '報名費總額', '付款人', '付款方式', '狀態', '備註', '結束日期', '信用卡別', '分期'],
       '住宿': ['行程代碼', '飯店名稱', '入住日期', '入住時間', '退房日期', '退房時間', '訂房平台', '費用', '付款人', '付款方式', '狀態', '連結', '備註', '含早餐', '充電樁', '待確認', '信用卡別', '分期'],
@@ -1379,11 +1407,6 @@
   }
 
   function calculateAccounting() {
-      window.accPayerFilter = window.accPayerFilter || '全部';
-      window.setAccPayer = function(payer) {
-          window.accPayerFilter = payer;
-          calculateAccounting();
-      };
 
       let allExpenses = [];
       const races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter));
@@ -1553,40 +1576,8 @@
           renderAccDetailsList();
       }
 
-
       // 畫圖表
       renderDoughnutChart(chartLabels, chartData, chartColors);
-
-      // 🌟 將按鈕放在「絕對安全區」(圖表外層容器的上方)
-      let canvas = document.getElementById('accChart');
-      if (canvas && canvas.parentNode) {
-          let chartContainer = canvas.parentNode; // 這是包裝圓餅圖的父元素
-          let toggleDiv = document.getElementById('payer-toggle-container');
-          
-          if (!toggleDiv) {
-              toggleDiv = document.createElement('div');
-              toggleDiv.id = 'payer-toggle-container';
-              toggleDiv.style.display = 'flex';
-              toggleDiv.style.justifyContent = 'center';
-              toggleDiv.style.gap = '10px';
-              toggleDiv.style.marginTop = '15px';
-              toggleDiv.style.marginBottom = '10px';
-              
-              // 💡 插入到 chartContainer 的「前面」，確保它獨立於圖表之外
-              chartContainer.parentNode.insertBefore(toggleDiv, chartContainer);
-          }
-
-          if (currentAccGroupMode === 'creditCard') {
-              toggleDiv.innerHTML = `
-                  <button onclick="setAccPayer('全部')" style="cursor:pointer; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:bold; border:none; transition:0.2s; background:${window.accPayerFilter==='全部'?'#34495e':'#f0f2f5'}; color:${window.accPayerFilter==='全部'?'#fff':'#7f8c8d'};">全部</button>
-                  <button onclick="setAccPayer('光武')" style="cursor:pointer; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:bold; border:none; transition:0.2s; background:${window.accPayerFilter==='光武'?'#34495e':'#f0f2f5'}; color:${window.accPayerFilter==='光武'?'#fff':'#7f8c8d'};">光武</button>
-                  <button onclick="setAccPayer('聿凡')" style="cursor:pointer; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:bold; border:none; transition:0.2s; background:${window.accPayerFilter==='聿凡'?'#34495e':'#f0f2f5'}; color:${window.accPayerFilter==='聿凡'?'#fff':'#7f8c8d'};">聿凡</button>
-              `;
-              toggleDiv.style.display = 'flex';
-          } else {
-              toggleDiv.style.display = 'none'; 
-          }
-      }
   }
 
   function renderDoughnutChart(labels, data, colors) {
