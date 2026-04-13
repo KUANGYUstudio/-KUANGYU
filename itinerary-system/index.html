@@ -370,11 +370,24 @@
 
     /* 帳務總覽面板 */
     .acc-card { 
-        background: #f8f9fa; 
-        border: 1px solid #eceff1; 
+        background: #f8f9fa;  /* 🌟 保持你原本的顏色 */
+        border: 1px solid #eceff1;  /* 🌟 保持原本的邊框設定 */
         border-radius: 12px; 
         box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+        cursor: pointer; /* 滑鼠移過去變手手 */
+        transition: all 0.2s ease; /* 漸變動畫 */
     }
+    .acc-card:hover {
+        border-color: #cfd8dc; /* 摸到時邊框稍微變深 */
+        transform: translateY(-2px); /* 微微浮起 */
+    }
+    /* 被點選時的「啟用」狀態 */
+    .acc-card.active {
+        border-color: var(--nav-active);
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(84, 110, 122, 0.15);
+    }
+    
     .acc-label { font-weight: bold; }
     .acc-val { font-weight: 800; color: var(--brand-main); }
     
@@ -1569,14 +1582,22 @@ closeAddModal();
       
       let chartLabels = []; let chartData = []; let chartColors = [];
 
+      // 🎯 新增：確保切換篩選時，目前選中的卡片是有效的
+      if (sortedCats.length > 0 && !sortedCats.includes(currentAccTab)) {
+          currentAccTab = sortedCats[0];
+      }
+
       sortedCats.forEach(k => {
           const val = categoryTotals[k]; 
           const pct = grandTotal === 0 ? 0 : (val / grandTotal) * 100;
           const color = getColorForCategory(k);
           chartLabels.push(k); chartData.push(val); chartColors.push(color);
+          
+          // 判斷這張卡片是不是目前選中的
+          const isActive = (k === currentAccTab) ? 'active' : '';
 
           pGrid.innerHTML += `
-              <div class="acc-card" style="display:flex; justify-content:space-between; align-items:center; padding: 10px 15px;">
+              <div id="card-${k}" class="acc-card ${isActive}" style="display:flex; justify-content:space-between; align-items:center; padding: 10px 15px;" onclick="switchAccTab('${k}')">
                   <div style="display:flex; align-items:center; gap: 8px;">
                       <div style="width:10px; height:10px; border-radius:50%; background:${color};"></div>
                       <span class="acc-label" style="color:var(--text-main); font-size:13px;">${k}</span>
@@ -1588,21 +1609,12 @@ closeAddModal();
               </div>`;
       });
 
-      const tabsContainer = document.getElementById('acc-tabs'); 
-      tabsContainer.innerHTML = '';
+      // 🎯 將原本多餘的按鈕區域隱藏
+      document.getElementById('acc-tabs').style.display = 'none';
       
       if (sortedCats.length === 0) {
-          tabsContainer.innerHTML = '<div style="font-size:13px; color:#999; padding: 10px;">無資料</div>';
-          document.getElementById('acc-detail-list').innerHTML = '';
+          document.getElementById('acc-detail-list').innerHTML = '<div style="padding:20px; text-align:center; color:#cfd8dc;">無支出紀錄</div>';
       } else {
-          sortedCats.forEach((cat, index) => {
-              const btn = document.createElement('button');
-              btn.className = `acc-tab-btn ${index === 0 ? 'active' : ''}`;
-              btn.textContent = cat;
-              btn.onclick = () => switchAccTab(cat);
-              tabsContainer.appendChild(btn);
-          });
-          currentAccTab = sortedCats[0]; 
           renderAccDetailsList();
       }
 
@@ -1632,10 +1644,16 @@ closeAddModal();
 
   function switchAccTab(tabName) {
       currentAccTab = tabName;
-      document.querySelectorAll('.acc-tab-btn').forEach(b => {
-          if(b.textContent === tabName) b.classList.add('active');
-          else b.classList.remove('active');
+      
+      // 🎯 改為切換上方卡片的 active 狀態
+      document.querySelectorAll('.acc-card').forEach(card => {
+          if (card.id === `card-${tabName}`) {
+              card.classList.add('active');
+          } else {
+              card.classList.remove('active');
+          }
       });
+      
       renderAccDetailsList();
   }
 
