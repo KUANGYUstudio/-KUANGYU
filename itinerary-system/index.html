@@ -344,7 +344,10 @@
     .modal-body { max-height: 60vh; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 5px; }
     .edit-input-group { margin-bottom: 15px; }
     .edit-input-group label { font-size: 12px; color: var(--text-sub); font-weight: bold; display:block; margin-bottom:5px; }
-    .edit-input { width: 100%; padding: 12px; border: 1.5px solid #dcdde1; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: #fcfcfc; transition: 0.3s;}
+    /* 🎯 直接在這裡加上 height: 48px 強制鎖定高度 */
+    .edit-input { width: 100%; height: 48px; padding: 12px; border: 1.5px solid #dcdde1; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: #fcfcfc; transition: 0.3s;}
+    /* 🎯 專門把日期的蘋果原生外衣脫掉 */
+    .edit-input[type="date"] { -webkit-appearance: none; appearance: none; display: block; }
     .edit-input:focus { outline: none; border-color: var(--nav-active); background: #fff; }
 
     .admin-input-group input:not([type="checkbox"]), .admin-input-group select {
