@@ -714,6 +714,12 @@
                   <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-帳務-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
                   <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-帳務-方式" onchange="toggleCreditCardSelect('帳務')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
                   <div class="admin-input-group" id="add-帳務-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-帳務-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
+                <div class="admin-input-group" id="add-帳務-分期-group" style="display: none; animation: slideUp 0.3s ease;">
+    <label>分期</label>
+    <select autocomplete="off" id="add-帳務-分期">
+        <option>-</option><option>3期</option><option>6期</option><option>9期</option><option>12期</option>
+    </select>
+</div>
                   <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-帳務-備註" placeholder="可選填"></div>
                   <button class="admin-submit-btn" onclick="submitNewData('帳務明細')">確認新增帳務</button>
               </div>
@@ -1106,22 +1112,20 @@
           } else if(h.includes('金額') || h.includes('費用') || h.includes('總額') || h.includes('票價')) {
               inputHtml = `<input autocomplete="off" type="number" inputmode="decimal" id="edit-field-${idx}" class="edit-input" value="${val}">`;
           } else if(h === '行程代碼') {
-    if (sheetName === '行程') {
-        // 情況 1：編輯主行程時，維持輸入框，讓你自由修改名稱
-        inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
-    } else {
-        // 情況 2：編輯附屬帳務、住宿、交通時，變成下拉選單
-        const codes = (dbData['行程'] || []).map(r => getVal(r, '行程代碼')).filter(c => c);
-        const uniqueCodes = [...new Set(codes)];
-        const isAccounting = sheetName === '帳務明細';
-        
-        let opts = `<option value="">${isAccounting ? '--- 日常記帳免選 ---' : '--- 請選擇行程 ---'}</option>`;
-        uniqueCodes.forEach(code => {
-            opts += `<option value="${code}" ${val === code ? 'selected' : ''}>${code}</option>`;
-        });
-        
-        inputHtml = `<select autocomplete="off" id="edit-field-${idx}" class="edit-input">${opts}</select>`;
-    }
+              if (sheetName === '行程') {
+                  inputHtml = `<input autocomplete="off" type="text" id="edit-field-${idx}" class="edit-input" value="${val}">`;
+              } else {
+                  // 🎯 傳入 val (目前的代碼)，確保就算過期了，這筆舊紀錄的代碼依然會出現在選單中
+                  const uniqueCodes = getActiveEventCodes(val);
+                  const isAccounting = sheetName === '帳務明細';
+                  
+                  let opts = `<option value="">${isAccounting ? '--- 日常記帳免選 ---' : '--- 請選擇行程 ---'}</option>`;
+                  uniqueCodes.forEach(code => {
+                      opts += `<option value="${code}" ${val === code ? 'selected' : ''}>${code}</option>`;
+                  });
+                  
+                  inputHtml = `<select autocomplete="off" id="edit-field-${idx}" class="edit-input">${opts}</select>`;
+              }
           } else if(h === '含早餐' || h === '充電樁' || h === '待確認') {
               labelHtml = ''; 
               inputHtml = `<label style="display: flex; align-items: center; gap: 8px; padding: 5px 0; cursor: pointer;">
@@ -1265,8 +1269,8 @@
   }
 
   function openAddModal() {
-      const codes = (dbData['行程'] || []).map(r => getVal(r, '行程代碼')).filter(c => c);
-      const uniqueCodes = [...new Set(codes)];
+      // 🎯 改用新的過濾函式，只抓取還沒過期一個月的代碼
+      const uniqueCodes = getActiveEventCodes();
       
       document.querySelectorAll('.admin-code-selector').forEach(select => {
           const isAccounting = select.id === 'add-帳務-代碼';
@@ -1283,6 +1287,39 @@
 
   function closeAddModal() {
       document.getElementById('add-modal').style.display = 'none';
+  }
+
+  // 🎯 新增：過濾並取得「未過期（結束一個月內）」的行程代碼
+  function getActiveEventCodes(includeCode = null) {
+      const now = new Date();
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setMonth(now.getMonth() - 1); // 往前推一個月
+
+      let activeCodes = [];
+      (dbData['行程'] || []).forEach(r => {
+          const code = getVal(r, '行程代碼');
+          if (!code) return;
+
+          // 抓取結束日期，如果沒填就用開始日期
+          const eDateVal = getVal(r, '結束日期') || getVal(r, '日期');
+          let isExpired = false;
+          
+          if (eDateVal) {
+              const eDate = new Date(formatDate(eDateVal).replace(/-/g, '/'));
+              // 如果行程結束日期已經早於「一個月前」，標記為過期
+              if (!isNaN(eDate.getTime()) && eDate < oneMonthAgo) {
+                  isExpired = true;
+              }
+          }
+
+          // 如果還沒過期，或是剛好等於我們要保留的舊代碼 (編輯時用)，就加進選單
+          if (!isExpired || code === includeCode) {
+              activeCodes.push(code);
+          }
+      });
+
+      // 回傳不重複的代碼陣列
+      return [...new Set(activeCodes)];
   }
 
   // 🎯 新增：徹底清空新增表單的函式
@@ -1342,7 +1379,7 @@
           eventCode = document.getElementById('add-行程-代碼').value;
           const method = document.getElementById('add-行程-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-行程-信用卡').value : '';
-          rowData = [eventCode, document.getElementById('add-行程-名稱').value, document.getElementById('add-行程-類別').value, document.getElementById('add-行程-日期').value, document.getElementById('add-行程-連結').value, document.getElementById('add-行程-聿凡').value, document.getElementById('add-行程-光武').value, document.getElementById('add-行程-報名費').value, document.getElementById('add-行程-付款人').value, method, document.getElementById('add-行程-狀態').value, document.getElementById('add-行程-備註').value, document.getElementById('add-行程-結束日期').value, cc];
+          rowData = [eventCode, document.getElementById('add-行程-名稱').value, document.getElementById('add-行程-類別').value, document.getElementById('add-行程-日期').value, document.getElementById('add-行程-連結').value, document.getElementById('add-行程-聿凡').value, document.getElementById('add-行程-光武').value, document.getElementById('add-行程-報名費').value, document.getElementById('add-行程-付款人').value, method, document.getElementById('add-行程-狀態').value, document.getElementById('add-行程-備註').value, document.getElementById('add-行程-結束日期').value, cc, ''];
       } else if (sheetName === '住宿') {
           eventCode = document.getElementById('add-住宿-代碼').value;
           
@@ -1365,7 +1402,7 @@
           const method = document.getElementById('add-住宿-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-住宿-信用卡').value : '';
 
-          rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, checkInTime, document.getElementById('add-住宿-退房日期').value, checkOutTime, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, method, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending, cc];
+          rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, checkInTime, document.getElementById('add-住宿-退房日期').value, checkOutTime, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, method, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending, cc, ''];
        
           const inDate = document.getElementById('add-住宿-入住日期').value;
           const outDate = document.getElementById('add-住宿-退房日期').value;
@@ -1377,7 +1414,7 @@
           eventCode = document.getElementById('add-交通-代碼').value;
           const method = document.getElementById('add-交通-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-交通-信用卡').value : '';
-          rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, method, document.getElementById('add-交通-狀態').value, cc];
+          rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, method, document.getElementById('add-交通-狀態').value, cc, ''];
        
           const goDate = document.getElementById('add-交通-出發日期').value;
           const backDate = document.getElementById('add-交通-回程日期').value;
@@ -1389,7 +1426,8 @@
           eventCode = document.getElementById('add-帳務-代碼').value; 
           const method = document.getElementById('add-帳務-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-帳務-信用卡').value : '';
-          rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, method, document.getElementById('add-帳務-備註').value, document.getElementById('add-帳務-付款人').value, cc];
+          // 🎯 補齊了最後的空值，讓陣列長度與表頭一致
+          rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, method, document.getElementById('add-帳務-備註').value, document.getElementById('add-帳務-付款人').value, cc, ''];
       }
 
       if (sheetName !== '帳務明細' && !eventCode) { alert("行程代碼不能空白！"); return; }
@@ -1398,19 +1436,20 @@
           if (!document.getElementById('add-帳務-金額').value) { alert("金額不能空白！"); return; }
       }
 
-closeAddModal();
+      // 順序調整：先關閉視窗與顯示 Loading，再清空表單與發送請求
+      closeAddModal();
       
-      clearAddForm(); // 🎯 就是加在這裡！關閉視窗後立刻清空表單
-
       document.getElementById('loading').style.display = 'flex';
       document.getElementById('loading').innerHTML = '正在將資料同步至資料庫...';
+
+      // 確保在提取完所有 value 後才清空表單
+      clearAddForm(); 
 
       try {
           await fetch(API_URL, {
               method: 'POST',
               body: JSON.stringify({ action: 'insert', sheetName: sheetName, data: rowData })
           });
-          // 💡 替換成靜默更新
           await silentReload();
       } catch (err) {
           alert('儲存失敗，請檢查網路連線！');
