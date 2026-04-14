@@ -766,7 +766,6 @@
   let deleteTargetRowIndex = null;
 
   // 🎯 新增全域變數，紀錄目前的群組模式與過濾器
-  // 🎯 新增全域變數，紀錄目前的群組模式與過濾器
   let currentAccGroupMode = 'category';
   window.accPayerFilter = '光武'; // 🎯 預設改成光武
 
@@ -834,8 +833,8 @@
       '類型': ['自駕','火車','飛機'],
       '入住時間': ['-','14:00','15:00','16:00','其他'],
       '退房時間': ['-','11:00','12:00','其他'],
-      '信用卡別': ['-', '國泰', '第一銀', '台新', '玉山', '富邦', '中信'],
-      '分期': ['-', '3期', '6期', '9期', '12期'] // 🌟 這裡新增分期選項
+      '信用卡別': ['-', '國泰世華', '第一銀行', '台新銀行', '玉山銀行', '富邦銀行', '中國信託'], // 🌟 改成全名
+      '分期': ['-', '3期', '6期', '9期', '12期'] 
   };
 
   window.onload = initSystem;
@@ -1341,7 +1340,6 @@
   }
 
   // 🎯 新增：徹底清空新增表單的函式
-  // 🎯 新增：徹底清空新增表單的函式
   function clearAddForm() {
       // 1. 清空所有輸入框 (文字、數字、日期、網址)
       document.querySelectorAll('#add-modal input[type="text"], #add-modal input[type="number"], #add-modal input[type="date"], #add-modal input[type="url"]').forEach(el => el.value = '');
@@ -1499,10 +1497,6 @@
           });
           await silentReload();
       } catch (err) {
-          alert('儲存失敗，請檢查網路連線！');
-          document.getElementById('loading').style.display = 'none';
-      }
-  }
           alert('儲存失敗，請檢查網路連線！');
           document.getElementById('loading').style.display = 'none';
       }
