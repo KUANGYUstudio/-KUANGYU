@@ -1351,6 +1351,14 @@
       document.getElementById('loading').style.display = 'flex';
       document.getElementById('loading').innerHTML = '正在儲存修改...';
       
+      if (!navigator.onLine) {
+          addOfflineTask('update', sheetName, rowIndex, rowData);
+          document.getElementById('loading').style.display = 'none';
+          renderMain();
+          if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+          return; 
+      }
+      
       try {
           await fetch(API_URL, {
               method: 'POST',
