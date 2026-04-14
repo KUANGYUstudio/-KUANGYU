@@ -610,6 +610,12 @@
                   <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-行程-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
                   <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-行程-方式" onchange="toggleCreditCardSelect('行程')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
                   <div class="admin-input-group" id="add-行程-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-行程-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
+                  <div class="admin-input-group" id="add-行程-分期-group" style="display: none; animation: slideUp 0.3s ease;">
+                       <label>分期</label>
+                       <select autocomplete="off" id="add-行程-分期">
+                           <option>-</option><option>3期</option><option>6期</option><option>9期</option><option>12期</option>
+                       </select>
+                   </div>
                   <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-行程-狀態"><option>-</option><option>已付</option><option>未付</option></select></div>
                   <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-行程-備註"></div>
                   <button class="admin-submit-btn" onclick="submitNewData('行程')">確認新增行程</button>
@@ -651,6 +657,12 @@
                   <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-住宿-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
                   <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-住宿-方式" onchange="toggleCreditCardSelect('住宿')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
                   <div class="admin-input-group" id="add-住宿-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-住宿-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
+                  <div class="admin-input-group" id="add-住宿-分期-group" style="display: none; animation: slideUp 0.3s ease;">
+                      <label>分期</label>
+                      <select autocomplete="off" id="add-住宿-分期">
+                          <option>-</option><option>3期</option><option>6期</option><option>9期</option><option>12期</option>
+                      </select>
+                  </div>
                   <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-住宿-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
                   <div class="admin-input-group"><label>連結</label><input autocomplete="off" type="url" id="add-住宿-連結"></div>
                   <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-住宿-備註"></div>
@@ -698,6 +710,12 @@
                   <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-交通-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
                   <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-交通-方式" onchange="toggleCreditCardSelect('交通')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
                   <div class="admin-input-group" id="add-交通-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-交通-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
+                  <div class="admin-input-group" id="add-交通-分期-group" style="display: none; animation: slideUp 0.3s ease;">
+                      <label>分期</label>
+                      <select autocomplete="off" id="add-交通-分期">
+                          <option>-</option><option>3期</option><option>6期</option><option>9期</option><option>12期</option>
+                      </select>
+                  </div>
                   <div class="admin-input-group"><label>狀態</label><select autocomplete="off" id="add-交通-狀態"><option>-</option><option>已付</option><option>現場付</option></select></div>
                   <button class="admin-submit-btn" onclick="submitNewData('交通')">確認新增交通</button>
               </div>
@@ -1384,6 +1402,7 @@
       }
   }
 
+  // 🎯 統整版：把畫面上的資料打包送給 Google Sheets 的函式
   async function submitNewData(sheetName) {
       let rowData = [];
       let eventCode = "";
@@ -1392,7 +1411,12 @@
           eventCode = document.getElementById('add-行程-代碼').value;
           const method = document.getElementById('add-行程-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-行程-信用卡').value : '';
-          rowData = [eventCode, document.getElementById('add-行程-名稱').value, document.getElementById('add-行程-類別').value, document.getElementById('add-行程-日期').value, document.getElementById('add-行程-連結').value, document.getElementById('add-行程-聿凡').value, document.getElementById('add-行程-光武').value, document.getElementById('add-行程-報名費').value, document.getElementById('add-行程-付款人').value, method, document.getElementById('add-行程-狀態').value, document.getElementById('add-行程-備註').value, document.getElementById('add-行程-結束日期').value, cc, ''];
+          
+          // 🌟 抓取分期資料
+          const inst = method === '刷卡' && document.getElementById('add-行程-分期') ? document.getElementById('add-行程-分期').value : '';
+          
+          rowData = [eventCode, document.getElementById('add-行程-名稱').value, document.getElementById('add-行程-類別').value, document.getElementById('add-行程-日期').value, document.getElementById('add-行程-連結').value, document.getElementById('add-行程-聿凡').value, document.getElementById('add-行程-光武').value, document.getElementById('add-行程-報名費').value, document.getElementById('add-行程-付款人').value, method, document.getElementById('add-行程-狀態').value, document.getElementById('add-行程-備註').value, document.getElementById('add-行程-結束日期').value, cc, inst];
+      
       } else if (sheetName === '住宿') {
           eventCode = document.getElementById('add-住宿-代碼').value;
           
@@ -1414,9 +1438,12 @@
           
           const method = document.getElementById('add-住宿-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-住宿-信用卡').value : '';
+          
+          // 🌟 抓取分期資料
+          const inst = method === '刷卡' && document.getElementById('add-住宿-分期') ? document.getElementById('add-住宿-分期').value : '';
 
-          rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, checkInTime, document.getElementById('add-住宿-退房日期').value, checkOutTime, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, method, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending, cc, ''];
-       
+          rowData = [eventCode, document.getElementById('add-住宿-飯店').value, document.getElementById('add-住宿-入住日期').value, checkInTime, document.getElementById('add-住宿-退房日期').value, checkOutTime, platformVal, document.getElementById('add-住宿-費用').value, document.getElementById('add-住宿-付款人').value, method, document.getElementById('add-住宿-狀態').value, document.getElementById('add-住宿-連結').value, document.getElementById('add-住宿-備註').value, hasBreakfast, hasCharger, isPending, cc, inst];
+        
           const inDate = document.getElementById('add-住宿-入住日期').value;
           const outDate = document.getElementById('add-住宿-退房日期').value;
           if (inDate && outDate && inDate > outDate) {
@@ -1427,8 +1454,12 @@
           eventCode = document.getElementById('add-交通-代碼').value;
           const method = document.getElementById('add-交通-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-交通-信用卡').value : '';
-          rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, method, document.getElementById('add-交通-狀態').value, cc, ''];
-       
+          
+          // 🌟 抓取分期資料
+          const inst = method === '刷卡' && document.getElementById('add-交通-分期') ? document.getElementById('add-交通-分期').value : '';
+          
+          rowData = [eventCode, document.getElementById('add-交通-類型').value, document.getElementById('add-交通-出發日期').value, document.getElementById('add-交通-去程').value, document.getElementById('add-交通-去程出發').value, document.getElementById('add-交通-去程抵達').value, document.getElementById('add-交通-回程日期').value, document.getElementById('add-交通-回程').value, document.getElementById('add-交通-回程出發').value, document.getElementById('add-交通-回程抵達').value, document.getElementById('add-交通-費用').value, document.getElementById('add-交通-付款人').value, method, document.getElementById('add-交通-狀態').value, cc, inst];
+        
           const goDate = document.getElementById('add-交通-出發日期').value;
           const backDate = document.getElementById('add-交通-回程日期').value;
           if (goDate && backDate && goDate > backDate) {
@@ -1440,10 +1471,9 @@
           const method = document.getElementById('add-帳務-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-帳務-信用卡').value : '';
           
-          // 🌟 新增：如果選刷卡，就抓取分期數，否則留空
+          // 🌟 抓取分期資料
           const inst = method === '刷卡' && document.getElementById('add-帳務-分期') ? document.getElementById('add-帳務-分期').value : '';
           
-          // 🌟 把陣列最後面的 '' 換成了 inst
           rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, method, document.getElementById('add-帳務-備註').value, document.getElementById('add-帳務-付款人').value, cc, inst];
       }
 
@@ -1469,6 +1499,10 @@
           });
           await silentReload();
       } catch (err) {
+          alert('儲存失敗，請檢查網路連線！');
+          document.getElementById('loading').style.display = 'none';
+      }
+  }
           alert('儲存失敗，請檢查網路連線！');
           document.getElementById('loading').style.display = 'none';
       }
