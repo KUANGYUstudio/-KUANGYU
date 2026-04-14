@@ -1114,6 +1114,14 @@
       document.getElementById('loading').style.display = 'flex';
       document.getElementById('loading').innerHTML = '正在刪除資料...';
       
+      if (!navigator.onLine) {
+          addOfflineTask('delete', deleteTargetSheet, deleteTargetRowIndex, null);
+          document.getElementById('loading').style.display = 'none';
+          renderMain();
+          if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+          return; 
+      }
+      
       try {
           await fetch(API_URL, { 
               method: 'POST', 
