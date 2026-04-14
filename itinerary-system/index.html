@@ -765,6 +765,74 @@
   let deleteTargetSheet = '';
   let deleteTargetRowIndex = null;
 
+  // ===== 🚀 離線暫存與自動同步系統 (Offline Queue) =====
+  function getOfflineQueue() {
+      return JSON.parse(localStorage.getItem('kuangyu_offlineQueue') || '[]');
+  }
+
+  function saveOfflineQueue(queue) {
+      localStorage.setItem('kuangyu_offlineQueue', JSON.stringify(queue));
+  }
+
+  // 1. 沒網路時，先把資料存進手機，並更新畫面
+  function addOfflineTask(action, sheetName, rowIndex, data) {
+      const queue = getOfflineQueue();
+      queue.push({ action, sheetName, rowIndex, data, timestamp: Date.now() });
+      saveOfflineQueue(queue);
+      
+      // 樂觀更新 (Optimistic UI)：假裝已經上傳成功，直接修改畫面資料
+      if (action === 'insert') {
+          const headers = sheetHeaders[sheetName];
+          let newObj = { _rowIndex: 'offline_' + Date.now() }; 
+          headers.forEach((h, i) => newObj[h] = data[i]);
+          if (!dbData[sheetName]) dbData[sheetName] = [];
+          dbData[sheetName].push(newObj);
+      } else if (action === 'update') {
+          const idx = dbData[sheetName].findIndex(r => r['_rowIndex'] === rowIndex);
+          if (idx > -1) {
+              sheetHeaders[sheetName].forEach((h, i) => dbData[sheetName][idx][h] = data[i]);
+          }
+      } else if (action === 'delete') {
+          dbData[sheetName] = dbData[sheetName].filter(r => r['_rowIndex'] !== rowIndex);
+      }
+      
+      localStorage.setItem('kuangyu_dbData', JSON.stringify(dbData));
+      alert('目前無網路連線 📴\n\n資料已安全暫存於手機中，系統將於網路恢復時自動同步！');
+  }
+
+  // 2. 網路恢復時，自動把暫存區的資料上傳給 Google Sheets
+  async function syncOfflineQueue() {
+      let queue = getOfflineQueue();
+      if (queue.length === 0 || !navigator.onLine) return; // 沒東西或沒網路就不做
+      
+      const loading = document.getElementById('loading');
+      loading.innerHTML = '網路已恢復，正在將暫存資料同步至雲端...';
+      loading.style.display = 'flex';
+      
+      for (let i = 0; i < queue.length; i++) {
+          const task = queue[i];
+          try {
+              await fetch(API_URL, {
+                  method: 'POST',
+                  body: JSON.stringify({ action: task.action, sheetName: task.sheetName, rowIndex: task.rowIndex, data: task.data })
+              });
+          } catch (e) {
+              // 萬一傳到一半又斷線，把剩下的保留，下次再傳
+              saveOfflineQueue(queue.slice(i));
+              loading.style.display = 'none';
+              return;
+          }
+      }
+      
+      saveOfflineQueue([]); // 全部傳完，清空待辦清單
+      await silentReload(); // 重新拉取正確的雲端資料
+      loading.style.display = 'none';
+  }
+
+  // 3. 系統隨時監聽網路狀態
+  window.addEventListener('online', syncOfflineQueue);
+  // ====================================================
+
   // 🎯 新增全域變數，紀錄目前的群組模式與過濾器
   let currentAccGroupMode = 'category';
   window.accPayerFilter = '光武'; // 🎯 預設改成光武
@@ -840,6 +908,9 @@
   window.onload = initSystem;
 
   async function initSystem() {
+    // 👇 加入這行：一啟動系統就檢查有沒有暫存資料要傳送
+    syncOfflineQueue(); 
+
     const cachedData = localStorage.getItem('kuangyu_dbData');
     if (cachedData) {
         dbData = JSON.parse(cachedData);
@@ -1489,6 +1560,16 @@
 
       // 確保在提取完所有 value 後才清空表單
       clearAddForm(); 
+
+      // 👇 插入這段：攔截斷線狀態
+      if (!navigator.onLine) {
+          addOfflineTask('insert', sheetName, null, rowData);
+          document.getElementById('loading').style.display = 'none';
+          renderMain();
+          if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting();
+          return; // 終止，不要去跑下面的 fetch
+      }
+      // 👆 插入結束
 
       try {
           await fetch(API_URL, {
