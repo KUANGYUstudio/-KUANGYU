@@ -300,6 +300,22 @@
     .price-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #f5f5f5; padding-top: 10px; margin-top: 10px; }
     .price-tag { color: var(--settle-pink); font-weight: 800; font-size: 16px; }
 
+    /* 🍏 Apple iOS 風格的精緻捲軸 */
+    ::-webkit-scrollbar {
+        width: 5px; /* 直向捲軸寬度 */
+        height: 5px; /* 橫向捲軸高度 */
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent; /* 軌道背景透明 */
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #cfd8dc; /* 捲軸本體的顏色 */
+        border-radius: 10px; /* 讓捲軸變成圓角 */
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #b0bec5; /* 滑鼠摸到時稍微變深 */
+    }
+
     /* 狀態標籤 */
     .status-tag { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-left: 8px; display: inline-block; }
     .status-paid { background: #e8f5e9; color: #2e7d32; }
@@ -502,8 +518,7 @@
           </div>
           
           <div id="payer-toggle-container" style="display: none; gap: 8px; margin-top: 10px; animation: slideUp 0.3s ease;">
-              <button onclick="setAccPayer('全部')" id="payer-btn-全部" class="acc-tab-btn active" style="font-size: 13px; padding: 6px 18px;">全部</button>
-              <button onclick="setAccPayer('光武')" id="payer-btn-光武" class="acc-tab-btn" style="font-size: 13px; padding: 6px 18px;">光武</button>
+              <button onclick="setAccPayer('光武')" id="payer-btn-光武" class="acc-tab-btn active" style="font-size: 13px; padding: 6px 18px;">光武</button>
               <button onclick="setAccPayer('聿凡')" id="payer-btn-聿凡" class="acc-tab-btn" style="font-size: 13px; padding: 6px 18px;">聿凡</button>
           </div>
       </div>
@@ -727,13 +742,14 @@
   let deleteTargetRowIndex = null;
 
   // 🎯 新增全域變數，紀錄目前的群組模式與過濾器
+  // 🎯 新增全域變數，紀錄目前的群組模式與過濾器
   let currentAccGroupMode = 'category';
-  window.accPayerFilter = '全部';
+  window.accPayerFilter = '光武'; // 🎯 預設改成光武
 
   // 🎯 點擊光武/聿凡按鈕的處理邏輯
   function setAccPayer(payer) {
       window.accPayerFilter = payer;
-      ['全部', '光武', '聿凡'].forEach(p => {
+      ['光武', '聿凡'].forEach(p => {
           const btn = document.getElementById(`payer-btn-${p}`);
           if (btn) {
               if (p === payer) btn.classList.add('active');
@@ -752,9 +768,9 @@
       const toggleDiv = document.getElementById('payer-toggle-container');
       if (mode === 'creditCard') {
           toggleDiv.style.display = 'flex';
+          setAccPayer(window.accPayerFilter); // 確保切換過來時按鈕有亮起
       } else {
           toggleDiv.style.display = 'none';
-          setAccPayer('全部'); // 切換回類別時，自動重置過濾器
       }
       calculateAccounting();
   }
@@ -1528,9 +1544,15 @@ closeAddModal();
       let filteredExpenses = allExpenses.filter(e => {
           if (!e.date) return false;
           if (currentSearchQuery && !e.searchStr.toLowerCase().includes(currentSearchQuery.toLowerCase())) return false;
+          
+          // 🎯 如果選擇「全年」，就抓取符合當前 displayYear 的資料
+          if (selectedMonthFilter === 'ALL_YEAR') {
+              return e.date.startsWith(displayYear.toString());
+          }
+
           const eMonth = e.date.substring(0, 7);
           if (selectedMonthFilter) return eMonth === selectedMonthFilter;
-          else return eMonth === currentMonthKey; // 🎯 改成嚴格等於本月
+          else return eMonth === currentMonthKey;
       });
 
       let categoryTotals = {};
@@ -1569,7 +1591,7 @@ closeAddModal();
           accDetailsData[key].push({ name: displayName, amount: e.amount, code: e.code, eventDate: e.eventDate });
       });
 
-      let titlePrefix = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月` : `本月`; // 🎯 更新標題
+      let titlePrefix = selectedMonthFilter ? (selectedMonthFilter === 'ALL_YEAR' ? `${displayYear}年 全年` : `${selectedMonthFilter.replace('-', '年')}月`) : `本月`;
       if (currentAccGroupMode === 'creditCard' && window.accPayerFilter !== '全部') {
           titlePrefix += ` (${window.accPayerFilter})`; 
       }
@@ -1735,7 +1757,8 @@ closeAddModal();
 
       uniqueYears.forEach(y => {
           const btn = document.createElement('div');
-          btn.className = 'year-nav-btn ' + (y === displayYear ? 'active' : '');
+          // 🎯 當前是這個年份，且「沒有」選看全年時，年份按鈕才會亮
+          btn.className = 'year-nav-btn ' + ((y === displayYear && selectedMonthFilter !== 'ALL_YEAR') ? 'active' : '');
           btn.textContent = y + ' 年';
           btn.onclick = () => { 
               displayYear = y; selectedMonthFilter = null; renderMain(); 
@@ -1743,6 +1766,17 @@ closeAddModal();
           };
           yearContainer.appendChild(btn);
       });
+
+      // 🎯 新增「看全年」按鈕，排在年份旁邊
+      const allYearBtn = document.createElement('div');
+      allYearBtn.className = 'year-nav-btn ' + (selectedMonthFilter === 'ALL_YEAR' ? 'active' : '');
+      allYearBtn.textContent = '看全年';
+      allYearBtn.onclick = () => { 
+          selectedMonthFilter = 'ALL_YEAR'; 
+          renderMain(); 
+          if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
+      };
+      yearContainer.appendChild(allYearBtn);
 
       // 準備國字月份陣列（針對十一和十二，單獨縮小字體並向下微調位置）
       const chineseMonths = [
@@ -1855,7 +1889,12 @@ closeAddModal();
 
       let monthKeysToRender = [];
       if (selectedMonthFilter) {
-          monthKeysToRender = [selectedMonthFilter];
+          if (selectedMonthFilter === 'ALL_YEAR') {
+              const uniqueMonths = [...new Set(allDatesWithData.map(d => d.substring(0, 7)))].sort();
+              monthKeysToRender = uniqueMonths.filter(mKey => mKey.startsWith(displayYear.toString()));
+          } else {
+              monthKeysToRender = [selectedMonthFilter];
+          }
       } else if (currentFilter === '全部' && !currentSearchQuery) {
           for (let i = 0; i < 12; i++) {
               let targetDate = new Date(currentYear, currentMonth - 1 + i, 1);
@@ -1963,9 +2002,12 @@ closeAddModal();
       
       let itemsToRender = [];
       if (selectedMonthFilter) {
-          itemsToRender = listItems.filter(item => item.dateStr.startsWith(selectedMonthFilter));
+          if (selectedMonthFilter === 'ALL_YEAR') {
+              itemsToRender = listItems.filter(item => item.dateStr.startsWith(displayYear.toString()));
+          } else {
+              itemsToRender = listItems.filter(item => item.dateStr.startsWith(selectedMonthFilter));
+          }
       } else if (currentSearchQuery) {
-          itemsToRender = listItems; 
       } else {
           itemsToRender = showPastList ? listItems.filter(item => item.dateStr.startsWith(displayYear)) : futureItems;
           if (pastItems.length > 0) {
@@ -2359,8 +2401,8 @@ closeAddModal();
           }
       });
 
-      // 8=付款人, 9=付款方式, 10=狀態, 13=信用卡別
-      [8, 9, 10, 13].forEach(i => {
+      /// 8=付款人, 9=付款方式, 10=狀態, 13=信用卡別, 14=分期
+      [8, 9, 10, 13, 14].forEach(i => {
           const el = document.getElementById(`edit-field-${i}`);
           if(el && el.parentNode) {
               el.parentNode.style.display = displayStyle;
