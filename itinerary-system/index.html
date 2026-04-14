@@ -511,7 +511,7 @@
       <div style="position: relative; height: 180px; margin-bottom: 25px;"><canvas id="expenseChart"></canvas></div>
       <div id="dynamic-cat-legend" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 25px;"></div>
       <div id="acc-tabs" style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;"></div>
-      <div id="acc-detail-list" style="background:#fff; border-radius:12px; border:1px solid #eceff1; overflow:hidden;"></div>
+      <div id="acc-detail-list" style="background:#fff; border-radius:12px; border:1px solid #eceff1; max-height: 300px; overflow-y: auto;"></div>
     </div>
 
     <div id="cal-view" class="view-container active"><div id="calendar-container"></div></div>
@@ -1530,7 +1530,7 @@ closeAddModal();
           if (currentSearchQuery && !e.searchStr.toLowerCase().includes(currentSearchQuery.toLowerCase())) return false;
           const eMonth = e.date.substring(0, 7);
           if (selectedMonthFilter) return eMonth === selectedMonthFilter;
-          else return eMonth >= currentMonthKey;
+          else return eMonth === currentMonthKey; // 🎯 改成嚴格等於本月
       });
 
       let categoryTotals = {};
@@ -1569,7 +1569,7 @@ closeAddModal();
           accDetailsData[key].push({ name: displayName, amount: e.amount, code: e.code, eventDate: e.eventDate });
       });
 
-      let titlePrefix = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月` : `本月與未來`;
+      let titlePrefix = selectedMonthFilter ? `${selectedMonthFilter.replace('-', '年')}月` : `本月`; // 🎯 更新標題
       if (currentAccGroupMode === 'creditCard' && window.accPayerFilter !== '全部') {
           titlePrefix += ` (${window.accPayerFilter})`; 
       }
