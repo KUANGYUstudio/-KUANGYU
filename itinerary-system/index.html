@@ -1757,26 +1757,18 @@ closeAddModal();
 
       uniqueYears.forEach(y => {
           const btn = document.createElement('div');
-          // 🎯 當前是這個年份，且「沒有」選看全年時，年份按鈕才會亮
-          btn.className = 'year-nav-btn ' + ((y === displayYear && selectedMonthFilter !== 'ALL_YEAR') ? 'active' : '');
+          // 🎯 修改：只要是當前的年份，按鈕就保持亮起
+          btn.className = 'year-nav-btn ' + (y === displayYear ? 'active' : '');
           btn.textContent = y + ' 年';
           btn.onclick = () => { 
-              displayYear = y; selectedMonthFilter = null; renderMain(); 
+              displayYear = y; 
+              // 🎯 修改：點擊年份時，直接把過濾器設定為「看全年」
+              selectedMonthFilter = 'ALL_YEAR'; 
+              renderMain(); 
               if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
           };
           yearContainer.appendChild(btn);
       });
-
-      // 🎯 新增「看全年」按鈕，排在年份旁邊
-      const allYearBtn = document.createElement('div');
-      allYearBtn.className = 'year-nav-btn ' + (selectedMonthFilter === 'ALL_YEAR' ? 'active' : '');
-      allYearBtn.textContent = '看全年';
-      allYearBtn.onclick = () => { 
-          selectedMonthFilter = 'ALL_YEAR'; 
-          renderMain(); 
-          if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
-      };
-      yearContainer.appendChild(allYearBtn);
 
       // 準備國字月份陣列（針對十一和十二，單獨縮小字體並向下微調位置）
       const chineseMonths = [
@@ -1810,10 +1802,11 @@ closeAddModal();
           }
           
           btn.onclick = () => { 
-              selectedMonthFilter = (selectedMonthFilter === mKey) ? null : mKey; 
+              // 🎯 修改：如果再次點擊取消該月份，預設退回「看全年」模式，而不是 null
+              selectedMonthFilter = (selectedMonthFilter === mKey) ? 'ALL_YEAR' : mKey; 
               renderMain(); 
               if(document.getElementById('acc-panel').style.display === 'block') calculateAccounting(); 
-          }; 
+          };
 
           navContainer.appendChild(btn);
       }
