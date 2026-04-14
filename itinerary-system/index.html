@@ -1323,6 +1323,7 @@
   }
 
   // 🎯 新增：徹底清空新增表單的函式
+  // 🎯 新增：徹底清空新增表單的函式
   function clearAddForm() {
       // 1. 清空所有輸入框 (文字、數字、日期、網址)
       document.querySelectorAll('#add-modal input[type="text"], #add-modal input[type="number"], #add-modal input[type="date"], #add-modal input[type="url"]').forEach(el => el.value = '');
@@ -1342,6 +1343,9 @@
       // 5. 隱藏所有的信用卡選擇區塊
       document.querySelectorAll('#add-modal div[id$="-信用卡-group"]').forEach(el => el.style.display = 'none');
       
+      // 🌟 新增：隱藏所有的分期選擇區塊，確保下次打開不會殘留
+      document.querySelectorAll('#add-modal div[id$="-分期-group"]').forEach(el => el.style.display = 'none');
+
       // 6. 重新觸發一次行程類別的連動邏輯 (確保鐵人/旅遊的特殊欄位正確重置)
       toggleAddEventFee();
   }
@@ -1360,13 +1364,22 @@
   }
 
   // 🎯 魔法：選刷卡就滑出信用卡選單
+  // 🎯 魔法：選刷卡就滑出信用卡選單與分期選單
   function toggleCreditCardSelect(type) {
       const method = document.getElementById(`add-${type}-方式`).value;
       const ccGroup = document.getElementById(`add-${type}-信用卡-group`);
+      const instGroup = document.getElementById(`add-${type}-分期-group`); // 🌟 新增抓取分期區塊
+
       if (ccGroup) {
-          ccGroup.style.display = (method === '刷卡') ? 'block' : 'none';
-          if (method !== '刷卡') {
+          const isCard = (method === '刷卡');
+          ccGroup.style.display = isCard ? 'block' : 'none';
+          if (instGroup) instGroup.style.display = isCard ? 'block' : 'none'; // 🌟 一併控制分期區塊顯示
+
+          if (!isCard) {
               document.getElementById(`add-${type}-信用卡`).selectedIndex = 0;
+              if (document.getElementById(`add-${type}-分期`)) {
+                  document.getElementById(`add-${type}-分期`).selectedIndex = 0; // 🌟 如果切回現金，把分期歸零
+              }
           }
       }
   }
@@ -1426,8 +1439,12 @@
           eventCode = document.getElementById('add-帳務-代碼').value; 
           const method = document.getElementById('add-帳務-方式').value;
           const cc = method === '刷卡' ? document.getElementById('add-帳務-信用卡').value : '';
-          // 🎯 補齊了最後的空值，讓陣列長度與表頭一致
-          rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, method, document.getElementById('add-帳務-備註').value, document.getElementById('add-帳務-付款人').value, cc, ''];
+          
+          // 🌟 新增：如果選刷卡，就抓取分期數，否則留空
+          const inst = method === '刷卡' && document.getElementById('add-帳務-分期') ? document.getElementById('add-帳務-分期').value : '';
+          
+          // 🌟 把陣列最後面的 '' 換成了 inst
+          rowData = [eventCode, document.getElementById('add-帳務-日期').value, document.getElementById('add-帳務-類別').value, document.getElementById('add-帳務-項目').value, document.getElementById('add-帳務-金額').value, method, document.getElementById('add-帳務-備註').value, document.getElementById('add-帳務-付款人').value, cc, inst];
       }
 
       if (sheetName !== '帳務明細' && !eventCode) { alert("行程代碼不能空白！"); return; }
