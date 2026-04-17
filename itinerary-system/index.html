@@ -2438,6 +2438,8 @@
       html += `</div></div>`;
       
       const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
+      // 新增：利用 localeCompare 比對日期字串，達到按時間先後排序的效果
+      stays.sort((a, b) => (getVal(a, '入住日期') || "").localeCompare(getVal(b, '入住日期') || ""));
       if(stays.length > 0) {
           html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
           stays.forEach(s => {
@@ -2476,6 +2478,8 @@
       }
       
       const trans = (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code);
+      // 新增：利用 localeCompare 比對日期字串，達到按時間先後排序的效果
+      trans.sort((a, b) => (getVal(a, '出發日期') || "").localeCompare(getVal(b, '出發日期') || ""));
       if(trans.length > 0) {
           html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
           trans.forEach(t => {
