@@ -2561,7 +2561,7 @@
 
       // 2. 日常帳務區塊 (如果當天有一般記帳，才會顯示這個區塊)
       if (dailyBills.length > 0) {
-          expenseTabHtml += `<div style="font-weight:bold; color:var(--text-sub); margin-top:25px; margin-bottom:10px; font-size:14px; display:flex; align-items:center;"><span style="width:6px; height:16px; background:#b0bec5; border-radius:3px; margin-right:8px; display:inline-block;"></span>本日一般日常記帳</div>`;
+          expenseTabHtml += `<div style="font-weight:bold; color:var(--text-sub); margin-top:25px; margin-bottom:10px; font-size:14px; display:flex; align-items:center;"><span style="width:6px; height:16px; background:#b0bec5; border-radius:3px; margin-right:8px; display:inline-block;"></span>日常記帳</div>`;
           expenseTabHtml += generateReceiptHTML(dailyBills);
       }
 
