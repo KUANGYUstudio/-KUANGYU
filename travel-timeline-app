@@ -1,1 +1,412 @@
 
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>光聿 KUANGYU - 旅行小助手</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* =========================================
+       光聿美學：柔和色系、無 Emoji、標準字重、清晰易讀
+       ========================================= */
+    :root {
+      --bg-color: #fcfcfc;
+      --card-bg: #ffffff;
+      --text-main: #2c3e50;
+      --text-sub: #546e7a;
+      --brand-main: #2c3e50;
+      --border-color: #eceff1;
+      
+      /* 類型專屬色 */
+      --type-trans: #81c784; /* 交通 */
+      --type-spot: #64b5f6;  /* 景點 */
+      --type-food: #ff8a65;  /* 飲食 */
+      --type-shop: #ba68c8;  /* 購物 */
+      --type-stay: #ffd54f;  /* 住宿 */
+    }
+
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      color: var(--text-main);
+      font-weight: normal; /* 確保標準字重 */
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header-title {
+      font-size: 24px;
+      color: var(--brand-main);
+      text-align: center;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* 日期切換導覽列 */
+    .day-nav {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    .day-btn {
+      padding: 8px 20px;
+      background: #f0f0f0;
+      color: var(--text-sub);
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.2s;
+    }
+
+    .day-btn.active {
+      background: var(--text-sub);
+      color: #ffffff;
+    }
+
+    /* 時間軸設計 */
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border-color);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 25px;
+      cursor: pointer;
+    }
+
+    /* 時間軸上的小圓點 */
+    .timeline-dot {
+      position: absolute;
+      left: -30px;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #cfd8dc;
+      border: 2px solid var(--bg-color);
+    }
+
+    .time-label {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 5px;
+    }
+
+    .event-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .event-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .event-title {
+      font-size: 16px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .event-meta {
+      font-size: 13px;
+      color: var(--text-sub);
+      display: flex;
+      gap: 15px;
+    }
+
+    .tag {
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      color: #ffffff;
+    }
+
+    /* 彈出視窗設計 */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(44, 62, 80, 0.6);
+      z-index: 999;
+      align-items: flex-end; /* 底部彈出 */
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--bg-color);
+      width: 100%;
+      max-width: 600px;
+      max-height: 85vh;
+      border-radius: 20px 20px 0 0;
+      overflow-y: auto;
+      padding: 25px;
+      box-sizing: border-box;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-close {
+      text-align: right;
+      font-size: 24px;
+      color: #aaa;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .detail-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 5px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .info-label {
+      color: var(--text-sub);
+      min-width: 70px;
+    }
+
+    .info-value {
+      color: var(--text-main);
+      text-align: right;
+    }
+
+    /* 購物清單樣式 */
+    .shop-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .shop-item:last-child {
+      border-bottom: none;
+    }
+
+    .shop-item.purchased .shop-name {
+      text-decoration: line-through;
+      color: #b0bec5;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-title">旅行小助手</div>
+    
+    <div id="day-nav-container" class="day-nav"></div>
+
+    <div id="timeline-container" class="timeline"></div>
+  </div>
+
+  <div id="detail-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-close" onclick="closeModal()">×</div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+<script>
+  /* * 這是模擬從 Google Sheets 撈下來的資料結構
+   * 分為「日程表」、「詳細資訊」與「購物清單」三個表單概念
+   */
+  const mockData = {
+    schedule: [
+      { id: 'E01', date: '2026-04-12', startTime: '09:00', endTime: '10:00', title: '抵達與取車', location: '機場', type: '交通', typeColor: 'var(--type-trans)' },
+      { id: 'E02', date: '2026-04-12', startTime: '10:30', endTime: '12:00', title: '市區採買與早午餐', location: '市區商圈', type: '飲食', typeColor: 'var(--type-food)' },
+      { id: 'E03', date: '2026-04-12', startTime: '13:00', endTime: '16:00', title: '海岸線巡禮', location: '北環路線', type: '景點', typeColor: 'var(--type-spot)' },
+      { id: 'E04', date: '2026-04-13', startTime: '08:00', endTime: '12:00', title: '賽事活動', location: '活動會場', type: '景點', typeColor: 'var(--type-spot)' }
+    ],
+    details: [
+      { eventId: 'E01', address: '機場路1號', ticketInfo: '無', link: 'https://maps.google.com', note: '確認租車合約與保險' },
+      { eventId: 'E02', address: '中正路商圈', ticketInfo: '無', link: 'https://maps.google.com', note: '在地特色小吃與名產街' },
+      { eventId: 'E03', address: '跨海大橋', ticketInfo: '免門票', link: 'https://maps.google.com', note: '注意防曬與水分補充' }
+    ],
+    shopping: [
+      { eventId: 'E02', category: '代購', name: '特色黑糖糕', price: '100', owner: '光武', status: '未買' },
+      { eventId: 'E02', category: '自用', name: '防曬乳', price: '350', owner: '聿凡', status: '未買' },
+      { eventId: 'E03', category: '紀念品', name: '明信片', price: '50', owner: '-', status: '已買' }
+    ]
+  };
+
+  let currentSelectedDate = '2026-04-12';
+
+  // 初始化畫面
+  function init() {
+    renderDayNav();
+    renderTimeline();
+  }
+
+  // 渲染上方的日期按鈕
+  function renderDayNav() {
+    const container = document.getElementById('day-nav-container');
+    container.innerHTML = '';
+    
+    // 萃取所有不重複的日期
+    const uniqueDates = [...new Set(mockData.schedule.map(item => item.date))].sort();
+    
+    uniqueDates.forEach((date, index) => {
+      const btn = document.createElement('button');
+      btn.className = `day-btn ${date === currentSelectedDate ? 'active' : ''}`;
+      btn.textContent = `Day ${index + 1} (${date.substring(5)})`;
+      btn.onclick = () => {
+        currentSelectedDate = date;
+        renderDayNav();
+        renderTimeline();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  // 渲染時間軸
+  function renderTimeline() {
+    const container = document.getElementById('timeline-container');
+    container.innerHTML = '';
+
+    const dayEvents = mockData.schedule.filter(item => item.date === currentSelectedDate);
+    
+    // 依照開始時間排序
+    dayEvents.sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+    dayEvents.forEach(event => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'timeline-item';
+      itemDiv.onclick = () => openModal(event.id);
+
+      itemDiv.innerHTML = `
+        <div class="timeline-dot" style="background: ${event.typeColor}"></div>
+        <div class="time-label">${event.startTime} - ${event.endTime}</div>
+        <div class="event-card">
+          <div class="event-title">${event.title}</div>
+          <div class="event-meta">
+            <span class="tag" style="background: ${event.typeColor}">${event.type}</span>
+            <span>地點：${event.location}</span>
+          </div>
+        </div>
+      `;
+      container.appendChild(itemDiv);
+    });
+  }
+
+  // 打開詳細資訊視窗
+  function openModal(eventId) {
+    const event = mockData.schedule.find(e => e.id === eventId);
+    const detail = mockData.details.find(d => d.eventId === eventId) || {};
+    const shops = mockData.shopping.filter(s => s.eventId === eventId);
+
+    const body = document.getElementById('modal-body');
+    
+    // 1. 基本資訊區塊
+    let html = `
+      <div style="font-size: 20px; color: var(--brand-main); margin-bottom: 15px;">${event.title}</div>
+      <div class="detail-section">
+        <div class="section-title">行程資訊</div>
+        <div class="info-row"><span class="info-label">時間</span><span class="info-value">${event.startTime} - ${event.endTime}</span></div>
+        <div class="info-row"><span class="info-label">地點</span><span class="info-value">${event.location}</span></div>
+        ${detail.address ? `<div class="info-row"><span class="info-label">地址</span><span class="info-value">${detail.address}</span></div>` : ''}
+        ${detail.note ? `<div class="info-row"><span class="info-label">備註</span><span class="info-value">${detail.note}</span></div>` : ''}
+      </div>
+    `;
+
+    // 2. 票券與連結區塊
+    if (detail.ticketInfo || detail.link) {
+      html += `
+        <div class="detail-section">
+          <div class="section-title">票券與連結</div>
+          ${detail.ticketInfo ? `<div class="info-row"><span class="info-label">門票/序號</span><span class="info-value">${detail.ticketInfo}</span></div>` : ''}
+          ${detail.link ? `<div class="info-row"><span class="info-label">參考地圖</span><span class="info-value"><a href="${detail.link}" target="_blank" style="color: var(--text-sub); text-decoration: none;">開啟地圖</a></span></div>` : ''}
+        </div>
+      `;
+    }
+
+    // 3. 專屬這個地點的購物清單
+    if (shops.length > 0) {
+      html += `
+        <div class="detail-section">
+          <div class="section-title">此地點購物清單</div>
+      `;
+      shops.forEach(shop => {
+        const isPurchased = shop.status === '已買';
+        html += `
+          <div class="shop-item ${isPurchased ? 'purchased' : ''}">
+            <div>
+              <span style="font-size: 11px; background: #eceff1; padding: 2px 6px; border-radius: 4px; margin-right: 6px;">${shop.category}</span>
+              <span class="shop-name">${shop.name}</span>
+            </div>
+            <div style="text-align: right; font-size: 13px;">
+              <div>$${shop.price}</div>
+              <div style="color: #b0bec5;">${shop.owner !== '-' ? shop.owner : ''}</div>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+    }
+
+    body.innerHTML = html;
+    document.getElementById('detail-modal').style.display = 'flex';
+  }
+
+  // 關閉視窗
+  function closeModal() {
+    document.getElementById('detail-modal').style.display = 'none';
+  }
+
+  // 點擊背景關閉視窗
+  document.getElementById('detail-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  window.onload = init;
+</script>
+</body>
+</html>
