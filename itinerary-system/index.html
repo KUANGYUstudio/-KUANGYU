@@ -2438,8 +2438,7 @@
       html += `</div></div>`;
       
       const stays = (dbData['住宿']||[]).filter(s => getVal(s, '行程代碼') === code);
-      // 新增：利用 localeCompare 比對日期字串，達到按時間先後排序的效果
-      stays.sort((a, b) => (getVal(a, '入住日期') || "").localeCompare(getVal(b, '入住日期') || ""));
+      stays.sort((a, b) => (getVal(a, '入住日期') || "").localeCompare(getVal(b, '入住日期') || ""));
       if(stays.length > 0) {
           html += `<div class="info-section"><div class="info-title title-stay">住宿資訊</div>`;
           stays.forEach(s => {
@@ -2478,8 +2477,7 @@
       }
       
       const trans = (dbData['交通']||[]).filter(t => getVal(t, '行程代碼') === code);
-      // 新增：利用 localeCompare 比對日期字串，達到按時間先後排序的效果
-      trans.sort((a, b) => (getVal(a, '出發日期') || "").localeCompare(getVal(b, '出發日期') || ""));
+      trans.sort((a, b) => (getVal(a, '出發日期') || "").localeCompare(getVal(b, '出發日期') || ""));
       if(trans.length > 0) {
           html += `<div class="info-section"><div class="info-title title-trans">交通安排</div>`;
           trans.forEach(t => {
@@ -2546,7 +2544,30 @@
           </div>
       </div>`;
       
-      html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">${generateReceiptHTML(bills)}</div>`;
+      // ===== 這裡開始是修改的重點：組合帳務明細分頁 =====
+      
+      // 找出點擊這天的「一般日常記帳」(沒有綁定行程代碼的帳務)
+      const dailyBills = (dbData['帳務明細']||[]).filter(b => {
+          const bDate = formatDate(getVal(b, '日期'));
+          const bCode = getVal(b, '行程代碼');
+          return bDate === dateStr && (!bCode || bCode.trim() === '');
+      });
+
+      let expenseTabHtml = '';
+
+      // 1. 行程專屬帳務區塊
+      expenseTabHtml += `<div style="font-weight:bold; color:var(--text-sub); margin-bottom:10px; font-size:14px; display:flex; align-items:center;"><span style="width:6px; height:16px; background:var(--settle-pink); border-radius:3px; margin-right:8px; display:inline-block;"></span>本場行程花費</div>`;
+      expenseTabHtml += generateReceiptHTML(bills);
+
+      // 2. 日常帳務區塊 (如果當天有一般記帳，才會顯示這個區塊)
+      if (dailyBills.length > 0) {
+          expenseTabHtml += `<div style="font-weight:bold; color:var(--text-sub); margin-top:25px; margin-bottom:10px; font-size:14px; display:flex; align-items:center;"><span style="width:6px; height:16px; background:#b0bec5; border-radius:3px; margin-right:8px; display:inline-block;"></span>本日一般日常記帳</div>`;
+          expenseTabHtml += generateReceiptHTML(dailyBills);
+      }
+
+      html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">${expenseTabHtml}</div>`;
+      
+      // ===== 修改重點結束 =====
       
       return html;
   }
