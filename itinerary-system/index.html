@@ -2165,11 +2165,12 @@
           if(!sDateStr) return;
           const eDateStr = formatDate(getVal(r, '結束日期')) || sDateStr;
           
-          // 🎯 修正時區解析問題
+          // 這裡將結束日期也轉換成日期物件，方便後續計算
           listItems.push({
               isEvent: true,
               eventData: r,
               dateObj: new Date(sDateStr.replace(/-/g, '/')),
+              endDateObj: new Date(eDateStr.replace(/-/g, '/')), 
               dateStr: sDateStr,
               endDateStr: eDateStr,
               cat: getVal(r, '行程類別'),
@@ -2177,15 +2178,14 @@
           });
       });
 
-      // 🎯 已移除「日常帳務」推入 listItems 的程式碼
-
       listItems.sort((a, b) => a.dateObj - b.dateObj);
       
       const today = new Date(); 
       today.setHours(0, 0, 0, 0);
       
-      const pastItems = listItems.filter(item => item.dateObj < today && item.dateStr.startsWith(displayYear));
-      const futureItems = listItems.filter(item => item.dateObj >= today && item.dateStr.startsWith(displayYear));
+      // 改用「結束日期 (endDateObj)」來判斷是否納入歷史行程
+      const pastItems = listItems.filter(item => item.endDateObj < today && item.dateStr.startsWith(displayYear.toString()));
+      const futureItems = listItems.filter(item => item.endDateObj >= today && item.dateStr.startsWith(displayYear.toString()));
       
       let itemsToRender = [];
       if (selectedMonthFilter) {
@@ -2195,8 +2195,10 @@
               itemsToRender = listItems.filter(item => item.dateStr.startsWith(selectedMonthFilter));
           }
       } else if (currentSearchQuery) {
+          // 修補原有邏輯：若有搜尋關鍵字，則顯示符合條件的所有清單
+          itemsToRender = listItems; 
       } else {
-          itemsToRender = showPastList ? listItems.filter(item => item.dateStr.startsWith(displayYear)) : futureItems;
+          itemsToRender = showPastList ? listItems.filter(item => item.dateStr.startsWith(displayYear.toString())) : futureItems;
           if (pastItems.length > 0) {
               const toggleBtn = document.createElement('div'); 
               toggleBtn.className = 'past-toggle-btn';
@@ -2215,15 +2217,28 @@
       }
       
       itemsToRender.forEach(item => {
-          const daysDiff = Math.ceil((item.dateObj - today) / (1000 * 60 * 60 * 24));
-          let countdownHtml = daysDiff > 0 ? `<span style="font-weight:bold; font-size:13px; color:var(--text-main);">還有<span class="list-countdown-days">${daysDiff}</span>天</span>` : (daysDiff === 0 ? `<span style="font-weight:bold; font-size:14px; color:var(--text-main);">今天</span>` : `<span style="font-weight:bold; font-size:13px; color:#bbb;">已結束</span>`);
+          // 分別計算與「開始日期」和「結束日期」的天數差
+          const daysToStart = Math.ceil((item.dateObj - today) / (1000 * 60 * 60 * 24));
+          const daysToEnd = Math.ceil((item.endDateObj - today) / (1000 * 60 * 60 * 24));
+          
+          let countdownHtml = '';
+          if (daysToStart > 0) {
+              // 還沒到開始日期：顯示倒數
+              countdownHtml = `<span style="font-weight:bold; font-size:13px; color:var(--text-main);">還有<span class="list-countdown-days">${daysToStart}</span>天</span>`;
+          } else if (daysToEnd >= 0) {
+              // 已經過了開始日期，但還沒超過結束日期：顯示進行中
+              countdownHtml = `<span style="font-weight:900; font-size:14px; color:var(--settle-pink);">進行中</span>`;
+          } else {
+              // 已經超過結束日期：顯示已結束
+              countdownHtml = `<span style="font-weight:bold; font-size:13px; color:#bbb;">已結束</span>`;
+          }
           
           const domItem = document.createElement('div'); 
           domItem.className = 'list-item'; 
           const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${item.cat}`).trim();
           domItem.style.borderLeftColor = pastelColor || '#cfd8dc';
           
-          const titleHtml = item.isEvent ? item.title : `📝 ${item.title}`;
+          const titleHtml = item.isEvent ? item.title : ` ${item.title}`;
           
           let dateHtml = `<span class="d">${item.dateObj.getDate()}</span>`;
           if (item.dateStr !== item.endDateStr && item.endDateStr) {
