@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>穩健投資計畫 2.0</title>
+<title>穩健投資計畫 2.0 - 專業記錄版</title>
 <style>
   :root {
     --bg-main: #0a0a0f;
@@ -31,144 +31,70 @@
     text-align: center;
     border-bottom: 1px solid var(--border-color);
   }
-  .header-sub { 
-    font-size: 0.75rem; 
-    letter-spacing: 0.4em; 
-    color: var(--accent-blue); 
-    margin-bottom: 16px; 
-    font-weight: 600;
-  }
+  .header-sub { font-size: 0.75rem; letter-spacing: 0.4em; color: var(--accent-blue); margin-bottom: 16px; font-weight: 600; }
   .header h1 { font-size: 2.2rem; margin-bottom: 12px; letter-spacing: -0.02em; }
   .header p { color: var(--text-secondary); font-size: 0.95rem; }
 
   .stats { 
     display: grid; 
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 20px; 
-    max-width: 900px; 
-    margin: 32px auto 0;
+    gap: 20px; max-width: 900px; margin: 32px auto 0;
   }
-  .stat-item {
-    background: var(--card-bg);
-    padding: 16px;
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-  }
+  .stat-item { background: var(--card-bg); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center;}
   .stat-val { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
   .stat-label { font-size: 0.75rem; color: var(--text-secondary); }
 
   .tabs { 
-    display: flex; 
-    justify-content: center; 
-    gap: 8px; 
-    padding: 24px 16px; 
-    position: sticky; 
-    top: 0; 
-    z-index: 100;
-    background: rgba(10, 10, 15, 0.8);
-    backdrop-filter: blur(12px);
+    display: flex; justify-content: center; gap: 8px; padding: 24px 16px; 
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10, 10, 15, 0.8); backdrop-filter: blur(12px);
   }
   .tab {
-    padding: 10px 20px; 
-    border-radius: 12px; 
-    border: 1px solid var(--border-color);
-    background: transparent; 
-    color: var(--text-secondary); 
-    font-size: 0.88rem; 
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 10px 20px; border-radius: 12px; border: 1px solid var(--border-color);
+    background: transparent; color: var(--text-secondary); font-size: 0.88rem; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
   }
-  .tab.active { 
-    background: var(--accent-blue); 
-    border-color: var(--accent-blue); 
-    color: white;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-  }
+  .tab.active { background: var(--accent-blue); border-color: var(--accent-blue); color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
 
   .content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
   .panel { display: none; animation: fadeIn 0.4s ease-out; }
   .panel.active { display: block; }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
   .card {
-    background: var(--card-bg); 
-    border: 1px solid var(--border-color);
-    border-radius: 20px; 
-    padding: 28px; 
-    margin-bottom: 20px;
-    transition: transform 0.3s ease, background 0.3s ease;
+    background: var(--card-bg); border: 1px solid var(--border-color);
+    border-radius: 20px; padding: 28px; margin-bottom: 20px;
   }
-  .card:hover { 
-    background: rgba(255, 255, 255, 0.06);
-    transform: translateY(-2px);
-  }
-
-  /* 桶位顏色裝飾 */
   .card-accent-blue { border-top: 4px solid var(--accent-blue); }
   .card-accent-green { border-top: 4px solid var(--accent-green); }
-  .card-accent-purple { border-top: 4px solid var(--accent-purple); }
+  
+  /* 表單樣式 */
+  .form-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 15px; }
+  input { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; color: white; width: 100%; }
+  .btn-add { background: var(--accent-blue); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 600; cursor: pointer; width: 100%; }
 
+  /* 表格樣式 */
+  .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
+  .history-table th { text-align: left; color: var(--text-secondary); padding: 12px; border-bottom: 1px solid var(--border-color); }
+  .history-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .profit-up { color: var(--accent-green); }
+  .profit-down { color: #ef4444; }
+
+  /* 原有元件複用 */
   .bucket-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
-  .bucket-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+  .bucket-title { font-size: 1.2rem; font-weight: 700; }
   .bucket-pct { font-size: 2rem; font-weight: 800; line-height: 1; }
-
   .bar-bg { background: rgba(255,255,255,0.08); border-radius: 99px; height: 8px; margin-bottom: 20px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 99px; transition: width 1s ease-in-out; }
-
+  .bar-fill { height: 100%; border-radius: 99px; }
   .tag-group { display: flex; gap: 10px; flex-wrap: wrap; }
-  .tag { 
-    background: rgba(255, 255, 255, 0.05); 
-    border: 1px solid var(--border-color);
-    border-radius: 10px; 
-    padding: 8px 14px; 
-    font-size: 0.85rem;
-  }
-
-  /* ETF 明細優化 */
-  .etf-grid { display: flex; align-items: center; gap: 24px; }
-  .etf-info-main { flex: 1; }
-  .etf-code-box { 
-    background: var(--bg-main); 
-    padding: 12px; 
-    border-radius: 14px; 
-    text-align: center; 
-    min-width: 100px;
-  }
-  .etf-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #fff; }
-  .etf-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px; }
-
-  /* 日曆優化 */
+  .tag { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 14px; font-size: 0.85rem; }
   .cal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 8px; }
-  .cal-box { 
-    background: rgba(255,255,255,0.03); 
-    border: 1px solid var(--border-color);
-    border-radius: 12px; 
-    padding: 12px 4px; 
-    text-align: center;
-  }
+  .cal-box { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 4px; text-align: center; }
   .cal-box.active { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.4); }
-  .cal-m { font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px; }
-  .cal-c { font-size: 0.7rem; font-weight: 700; color: var(--accent-blue); }
-
-  /* 規則列表 */
   .rule-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 600px) { .rule-list { grid-template-columns: 1fr; } }
-  .rule-item { 
-    padding: 20px; 
-    background: var(--card-bg); 
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-  }
-  .rule-item h4 { margin-bottom: 8px; color: var(--accent-blue); }
-
+  .rule-item { padding: 20px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); }
   .footer { text-align: center; padding: 40px; color: #475569; font-size: 0.8rem; }
-
-  /* 圖表佔位 */
-  .chart-container { display: flex; justify-content: center; padding: 20px 0; }
-
 </style>
 </head>
 <body>
@@ -176,48 +102,28 @@
 <header class="header">
   <div class="header-sub">CORE INVESTMENT STRATEGY</div>
   <h1>50萬長期投資計畫</h1>
-  <p>配置對策：三桶架構 × 定期定額 × 跨國配置</p>
+  <p>配置對策：三桶架構 × 定期定額 × 歷程追蹤</p>
   
   <div class="stats">
-    <div class="stat-item">
-      <div class="stat-val">50萬</div>
-      <div class="stat-label">首批投入</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-val">4.0萬</div>
-      <div class="stat-label">每月定額</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-val">10年</div>
-      <div class="stat-label">計畫週期</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-val">5檔</div>
-      <div class="stat-label">組合核心</div>
-    </div>
+    <div class="stat-item"><div class="stat-val" id="summary-total-invest">0</div><div class="stat-label">累計投入</div></div>
+    <div class="stat-item"><div class="stat-val" id="summary-total-value">0</div><div class="stat-label">當前市值</div></div>
+    <div class="stat-item"><div class="stat-val" id="summary-total-profit">0%</div><div class="stat-label">總損益率</div></div>
   </div>
 </header>
 
 <nav class="tabs">
   <button class="tab active" onclick="switchTab(event, 'overview')">資產配置</button>
-  <button class="tab" onclick="switchTab(event, 'details')">標的明細</button>
+  <button class="tab" onclick="switchTab(event, 'history')">紀錄歷程</button>
   <button class="tab" onclick="switchTab(event, 'plan')">執行時程</button>
   <button class="tab" onclick="switchTab(event, 'rules')">投資守則</button>
 </nav>
 
 <main class="content">
-  <!-- 頁籤 1: 資產配置 -->
   <section id="overview" class="panel active">
     <div class="card card-accent-blue">
       <div class="bucket-header">
-        <div>
-          <div class="bucket-title">成長桶</div>
-          <p class="etf-desc">追求長期資產最大增值</p>
-        </div>
-        <div style="text-align: right">
-          <div class="bucket-pct" style="color: var(--accent-blue)">50%</div>
-          <p class="stat-label">250,000 元</p>
-        </div>
+        <div><div class="bucket-title">成長桶</div><p style="color:var(--text-secondary); font-size:0.9rem;">追求長期資產最大增值</p></div>
+        <div style="text-align: right"><div class="bucket-pct" style="color: var(--accent-blue)">50%</div></div>
       </div>
       <div class="bar-bg"><div class="bar-fill" style="width: 50%; background: var(--accent-blue)"></div></div>
       <div class="tag-group">
@@ -228,14 +134,8 @@
 
     <div class="card card-accent-green">
       <div class="bucket-header">
-        <div>
-          <div class="bucket-title">收息桶</div>
-          <p class="etf-desc">建立穩定且可預期的現金流</p>
-        </div>
-        <div style="text-align: right">
-          <div class="bucket-pct" style="color: var(--accent-green)">30%</div>
-          <p class="stat-label">150,000 元</p>
-        </div>
+        <div><div class="bucket-title">收息桶</div><p style="color:var(--text-secondary); font-size:0.9rem;">建立穩定且可預期的現金流</p></div>
+        <div style="text-align: right"><div class="bucket-pct" style="color: var(--accent-green)">30%</div></div>
       </div>
       <div class="bar-bg"><div class="bar-fill" style="width: 30%; background: var(--accent-green)"></div></div>
       <div class="tag-group">
@@ -243,105 +143,138 @@
         <div class="tag">00713 元大高息低波 (15%)</div>
       </div>
     </div>
-
-    <div class="card card-accent-purple">
-      <div class="bucket-header">
-        <div>
-          <div class="bucket-title">保護桶</div>
-          <p class="etf-desc">降低整體波動與避險工具</p>
-        </div>
-        <div style="text-align: right">
-          <div class="bucket-pct" style="color: var(--accent-purple)">20%</div>
-          <p class="stat-label">100,000 元</p>
-        </div>
-      </div>
-      <div class="bar-bg"><div class="bar-fill" style="width: 20%; background: var(--accent-purple)"></div></div>
-      <div class="tag-group">
-        <div class="tag">00679B 元大美債20年 (20%)</div>
-      </div>
-    </div>
   </section>
 
-  <!-- 頁籤 2: 標的明細 -->
-  <section id="details" class="panel">
+  <section id="history" class="panel">
     <div class="card">
-      <div class="etf-grid">
-        <div class="etf-code-box">
-          <div style="font-weight: 800; color: var(--accent-blue)">006208</div>
-          <div style="font-size: 0.7rem; color: var(--text-secondary)">台灣</div>
-        </div>
-        <div class="etf-info-main">
-          <div class="etf-name">富邦台灣採樣母體</div>
-          <p class="etf-desc">投資台灣市值前50大公司。內扣費用極低，是參與台灣經濟成長的首選。</p>
-          <div class="tag-group">
-            <span class="tag">配置 10,000/月</span>
-            <span class="tag">半年配息</span>
-          </div>
-        </div>
+      <h3 style="margin-bottom:15px">新增買入紀錄</h3>
+      <div class="form-group">
+        <input type="date" id="trade-date">
+        <input type="text" id="etf-symbol" placeholder="代號 (如 006208.TW)">
+        <input type="number" id="trade-amount" placeholder="金額 (TWD)">
       </div>
+      <button class="btn-add" onclick="addRecord()">存入並獲取即時股價</button>
     </div>
-    <!-- 其他標的可依此類推複製 -->
+
+    <div class="card" style="overflow-x: auto;">
+      <h3 style="margin-bottom:15px">投資歷程表</h3>
+      <table class="history-table" id="history-table">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>代號</th>
+            <th>金額</th>
+            <th>買入單價</th>
+            <th>市值/損益</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </section>
 
-  <!-- 頁籤 3: 執行時程 -->
   <section id="plan" class="panel">
     <div class="card">
       <h3 style="margin-bottom: 20px">年度配息日曆</h3>
-      <div class="cal-grid" id="dividend-cal">
-        <!-- JS 將生成內容 -->
-      </div>
+      <div class="cal-grid" id="dividend-cal"></div>
     </div>
   </section>
 
-  <!-- 頁籤 4: 投資守則 -->
   <section id="rules" class="panel">
     <div class="rule-list">
-      <div class="rule-item">
-        <h4>紀律投入</h4>
-        <p class="etf-desc">忽略市場漲跌，每月固定日期扣款，讓持有成本平滑化。</p>
-      </div>
-      <div class="rule-item">
-        <h4>股息再投入</h4>
-        <p class="etf-desc">初期領到的配息不應提領，應自動買回原標的，啟動複利加速器。</p>
-      </div>
-      <div class="rule-item">
-        <h4>風險耐受</h4>
-        <p class="etf-desc">如遇市場下跌 20% 以上，嚴禁情緒性停損，應視為獲取廉價部位的機會。</p>
-      </div>
-      <div class="rule-item">
-        <h4>十年週期</h4>
-        <p class="etf-desc">此計畫非短期獲利，目標為十年後資產的穩健翻倍與現金流替代。</p>
-      </div>
+      <div class="rule-item"><h4>紀律投入</h4><p style="color:var(--text-secondary); font-size:0.9rem;">忽略市場漲跌，每月固定日期扣款，讓持有成本平滑化。</p></div>
+      <div class="rule-item"><h4>股息再投入</h4><p style="color:var(--text-secondary); font-size:0.9rem;">初期領到的配息不應提領，應自動買回原標的。</p></div>
     </div>
   </section>
 </main>
 
-<footer class="footer">
-  本文僅供學習紀錄，非投資建議。市場有風險，投入前請審慎評估。
-</footer>
+<footer class="footer">本文僅供學習紀錄，非投資建議。</footer>
 
 <script>
+  let records = JSON.parse(localStorage.getItem('invest_records')) || [];
+
   function switchTab(event, tabId) {
-    // 移除所有 active 狀態
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    
-    // 加入當前 active 狀態
     event.currentTarget.classList.add('active');
     document.getElementById(tabId).classList.add('active');
-    
-    // 平滑捲動回頂部
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // 初始化模擬日曆
+  async function getPrice(symbol) {
+    try {
+      const res = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`);
+      const data = await res.json();
+      return data.chart.result[0].meta.regularMarketPrice;
+    } catch (e) { return null; }
+  }
+
+  async function addRecord() {
+    const date = document.getElementById('trade-date').value;
+    const symbol = document.getElementById('etf-symbol').value.toUpperCase();
+    const amount = parseFloat(document.getElementById('trade-amount').value);
+
+    if (!date || !symbol || !amount) { alert("請填寫完整資訊"); return; }
+    
+    const price = await getPrice(symbol);
+    if (!price) { alert("無法獲取股價，台股請記得加 .TW"); return; }
+
+    records.push({ id: Date.now(), date, symbol, amount, buyPrice: price, shares: (amount/price) });
+    saveAndRender();
+  }
+
+  function deleteRecord(id) {
+    records = records.filter(r => r.id !== id);
+    saveAndRender();
+  }
+
+  function saveAndRender() {
+    localStorage.setItem('invest_records', JSON.stringify(records));
+    renderTable();
+    updateSummary();
+  }
+
+  async function renderTable() {
+    const tbody = document.querySelector('#history-table tbody');
+    tbody.innerHTML = '';
+    for (const r of records) {
+      const currentPrice = await getPrice(r.symbol) || r.buyPrice;
+      const currentVal = r.shares * currentPrice;
+      const profitPct = (((currentVal - r.amount) / r.amount) * 100).toFixed(2);
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${r.date}</td>
+          <td style="color:var(--accent-blue); font-weight:700">${r.symbol}</td>
+          <td>$${r.amount.toLocaleString()}</td>
+          <td>$${r.buyPrice.toFixed(2)}</td>
+          <td class="${profitPct >= 0 ? 'profit-up' : 'profit-down'}">
+            $${currentVal.toFixed(0)} (${profitPct}%)
+          </td>
+          <td><span style="color:#ef4444; cursor:pointer;" onclick="deleteRecord(${r.id})">刪除</span></td>
+        </tr>`;
+    }
+  }
+
+  function updateSummary() {
+    let total = 0;
+    records.forEach(r => total += r.amount);
+    document.getElementById('summary-total-invest').innerText = `$${(total/10000).toFixed(1)}萬`;
+  }
+
+  // 初始化日曆
   const calGrid = document.getElementById('dividend-cal');
   for (let i = 1; i <= 12; i++) {
     const div = document.createElement('div');
     div.className = 'cal-box' + ([2, 5, 8, 11].includes(i) ? ' active' : '');
-    div.innerHTML = `<div class="cal-m">${i}月</div><div class="cal-c">${[2, 5, 8, 11].includes(i) ? '配息月' : '-'}</div>`;
+    div.innerHTML = `<div style="font-size:0.75rem;">${i}月</div><div style="font-size:0.7rem; color:var(--accent-blue)">${[2,5,8,11].includes(i)?'配息':'-'}</div>`;
     calGrid.appendChild(div);
   }
+
+  document.getElementById('trade-date').valueAsDate = new Date();
+  renderTable();
+  updateSummary();
 </script>
 </body>
 </html>
