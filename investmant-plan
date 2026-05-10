@@ -3,509 +3,345 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我的穩健投資計畫 2.0</title>
+<title>穩健投資計畫 2.0</title>
 <style>
+  :root {
+    --bg-main: #0a0a0f;
+    --card-bg: rgba(255, 255, 255, 0.04);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --accent-blue: #3b82f6;
+    --accent-green: #10b981;
+    --accent-purple: #8b5cf6;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: #0f0f13; color: #e8e4dc; min-height: 100vh; }
-  button { cursor: pointer; font-family: inherit; }
+  body { 
+    font-family: "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif; 
+    background: var(--bg-main); 
+    color: var(--text-primary); 
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
 
   .header {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    padding: 48px 24px 32px; text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: radial-gradient(circle at top right, #1e293b, #0f172a);
+    padding: 60px 24px 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
   }
-  .header-sub { font-size: 0.72rem; letter-spacing: 0.3em; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase; }
-  .header h1 { font-size: 1.8rem; font-weight: 700; color: #f1f5f9; margin-bottom: 8px; }
-  .header p { color: #64748b; font-size: 0.88rem; }
-  .stats { display: flex; justify-content: center; gap: 28px; margin-top: 28px; flex-wrap: wrap; }
-  .stat-val { font-size: 1.3rem; font-weight: 700; color: #93c5fd; }
-  .stat-label { font-size: 0.7rem; color: #64748b; margin-top: 2px; }
+  .header-sub { 
+    font-size: 0.75rem; 
+    letter-spacing: 0.4em; 
+    color: var(--accent-blue); 
+    margin-bottom: 16px; 
+    font-weight: 600;
+  }
+  .header h1 { font-size: 2.2rem; margin-bottom: 12px; letter-spacing: -0.02em; }
+  .header p { color: var(--text-secondary); font-size: 0.95rem; }
 
-  .tabs { display: flex; justify-content: center; gap: 6px; padding: 20px 16px 0; flex-wrap: wrap; }
+  .stats { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px; 
+    max-width: 900px; 
+    margin: 32px auto 0;
+  }
+  .stat-item {
+    background: var(--card-bg);
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+  }
+  .stat-val { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+  .stat-label { font-size: 0.75rem; color: var(--text-secondary); }
+
+  .tabs { 
+    display: flex; 
+    justify-content: center; 
+    gap: 8px; 
+    padding: 24px 16px; 
+    position: sticky; 
+    top: 0; 
+    z-index: 100;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(12px);
+  }
   .tab {
-    padding: 9px 16px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.1);
-    background: transparent; color: #94a3b8; font-size: 0.82rem; white-space: nowrap; transition: all 0.2s;
+    padding: 10px 20px; 
+    border-radius: 12px; 
+    border: 1px solid var(--border-color);
+    background: transparent; 
+    color: var(--text-secondary); 
+    font-size: 0.88rem; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .tab.active { background: #2563eb; border-color: #2563eb; color: white; }
+  .tab.active { 
+    background: var(--accent-blue); 
+    border-color: var(--accent-blue); 
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
 
-  .content { max-width: 800px; margin: 0 auto; padding: 24px; }
-  .panel { display: none; }
+  .content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+  .panel { display: none; animation: fadeIn 0.4s ease-out; }
   .panel.active { display: block; }
 
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   .card {
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px; padding: 22px; margin-bottom: 16px;
+    background: var(--card-bg); 
+    border: 1px solid var(--border-color);
+    border-radius: 20px; 
+    padding: 28px; 
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, background 0.3s ease;
   }
-  .card-accent-blue { border-left: 4px solid #2563eb; border-color: rgba(37,99,235,0.3); }
-  .card-accent-green { border-left: 4px solid #059669; border-color: rgba(5,150,105,0.3); }
-  .card-accent-purple { border-left: 4px solid #7c3aed; border-color: rgba(124,58,237,0.3); }
-
-  .bucket-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
-  .bucket-title { font-size: 1.05rem; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
-  .bucket-desc { font-size: 0.8rem; color: #64748b; }
-  .bucket-pct { font-size: 1.8rem; font-weight: 700; }
-  .bucket-amt { font-size: 0.75rem; color: #64748b; }
-
-  .bar-bg { background: rgba(255,255,255,0.06); border-radius: 99px; height: 6px; margin-bottom: 12px; }
-  .bar-fill { height: 100%; border-radius: 99px; }
-
-  .tags { display: flex; gap: 7px; flex-wrap: wrap; }
-  .tag { border-radius: 8px; padding: 6px 12px; font-size: 0.78rem; }
-
-  /* ETF cards */
-  .etf-card { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
-  .etf-badge { border-radius: 10px; padding: 10px 14px; text-align: center; min-width: 80px; }
-  .etf-code { font-size: 1rem; font-weight: 700; }
-  .etf-bucket { font-size: 0.68rem; color: #64748b; margin-top: 2px; }
-  .etf-region { font-size: 0.72rem; margin-top: 4px; }
-  .etf-name { font-size: 0.95rem; font-weight: 600; color: #f1f5f9; margin-bottom: 5px; }
-  .etf-tip { font-size: 0.8rem; color: #94a3b8; line-height: 1.6; margin-bottom: 10px; }
-  .pills { display: flex; gap: 7px; flex-wrap: wrap; }
-  .pill { font-size: 0.72rem; background: rgba(255,255,255,0.06); padding: 3px 10px; border-radius: 99px; color: #64748b; }
-
-  /* Calendar */
-  .cal { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; margin-bottom: 12px; }
-  .cal-cell { border-radius: 7px; padding: 7px 3px; text-align: center; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.03); }
-  .cal-cell.has-income { background: rgba(5,150,105,0.12); border-color: rgba(5,150,105,0.25); }
-  .cal-cell.full { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.2); }
-  .cal-month { font-size: 0.65rem; color: #64748b; margin-bottom: 3px; }
-  .cal-code { font-size: 0.52rem; font-weight: 700; line-height: 1.5; }
-  .cal-empty { font-size: 0.6rem; color: #2d3748; }
-
-  /* Schedule */
-  .phase-badge { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; margin-bottom: 6px; }
-  .phase-title { font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
-  .phase-desc { font-size: 0.8rem; color: #64748b; margin-bottom: 14px; }
-  .steps { display: grid; gap: 9px; }
-  .step { display: flex; gap: 10px; align-items: flex-start; }
-  .step-num { width: 20px; height: 20px; border-radius: 50%; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .step-text { font-size: 0.85rem; color: #94a3b8; line-height: 1.6; padding-top: 1px; }
-
-  /* Monthly breakdown */
-  .monthly-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .monthly-left { display: flex; align-items: center; gap: 10px; }
-  .monthly-dot { width: 7px; height: 7px; border-radius: 50%; }
-  .monthly-code { font-weight: 600; font-size: 0.85rem; }
-  .monthly-name { color: #64748b; font-size: 0.8rem; }
-  .monthly-amt { font-weight: 700; color: #f1f5f9; font-size: 0.85rem; }
-
-  /* Rules */
-  .rules-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
-  .rule-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px; display: flex; gap: 12px; }
-  .rule-icon { font-size: 1.5rem; flex-shrink: 0; }
-  .rule-title { font-weight: 700; color: #f1f5f9; margin-bottom: 5px; }
-  .rule-desc { font-size: 0.82rem; color: #64748b; line-height: 1.6; }
-  .formula-card {
-    background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(124,58,237,0.1));
-    border: 1px solid rgba(37,99,235,0.3); border-radius: 12px; padding: 20px 24px; text-align: center;
+  .card:hover { 
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
   }
-  .formula-title { font-size: 1.05rem; color: #93c5fd; font-weight: 700; margin-bottom: 8px; }
-  .formula-text { color: #94a3b8; font-size: 0.88rem; line-height: 1.8; }
 
-  .footer { text-align: center; margin-top: 28px; font-size: 0.72rem; color: #334155; line-height: 1.6; }
+  /* 桶位顏色裝飾 */
+  .card-accent-blue { border-top: 4px solid var(--accent-blue); }
+  .card-accent-green { border-top: 4px solid var(--accent-green); }
+  .card-accent-purple { border-top: 4px solid var(--accent-purple); }
 
-  /* Donut */
-  .donut-wrap { display: flex; align-items: center; justify-content: center; gap: 32px; flex-wrap: wrap; padding: 8px 0; }
-  .legend { display: flex; flex-direction: column; gap: 10px; }
-  .legend-item { display: flex; align-items: center; gap: 10px; }
-  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
-  .legend-name { font-size: 0.85rem; color: #94a3b8; }
-  .legend-pct { font-weight: 700; margin-left: auto; padding-left: 16px; }
-  .legend-note { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; font-size: 0.78rem; color: #64748b; }
+  .bucket-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+  .bucket-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+  .bucket-pct { font-size: 2rem; font-weight: 800; line-height: 1; }
 
-  .section-title { font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin-bottom: 14px; letter-spacing: 0.05em; }
-  .tip-note { font-size: 0.78rem; color: #64748b; margin-top: 10px; }
+  .bar-bg { background: rgba(255,255,255,0.08); border-radius: 99px; height: 8px; margin-bottom: 20px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 99px; transition: width 1s ease-in-out; }
 
-  .future-item { display: flex; align-items: center; gap: 12px; border-radius: 8px; padding: 10px 14px; margin-top: 8px; }
-  .future-badge { font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
-  .future-code { font-weight: 700; font-size: 0.88rem; }
-  .future-name { font-size: 0.82rem; color: #94a3b8; margin-left: 8px; }
-  .future-month { font-size: 0.78rem; color: #64748b; margin-left: 8px; }
+  .tag-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .tag { 
+    background: rgba(255, 255, 255, 0.05); 
+    border: 1px solid var(--border-color);
+    border-radius: 10px; 
+    padding: 8px 14px; 
+    font-size: 0.85rem;
+  }
+
+  /* ETF 明細優化 */
+  .etf-grid { display: flex; align-items: center; gap: 24px; }
+  .etf-info-main { flex: 1; }
+  .etf-code-box { 
+    background: var(--bg-main); 
+    padding: 12px; 
+    border-radius: 14px; 
+    text-align: center; 
+    min-width: 100px;
+  }
+  .etf-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #fff; }
+  .etf-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px; }
+
+  /* 日曆優化 */
+  .cal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 8px; }
+  .cal-box { 
+    background: rgba(255,255,255,0.03); 
+    border: 1px solid var(--border-color);
+    border-radius: 12px; 
+    padding: 12px 4px; 
+    text-align: center;
+  }
+  .cal-box.active { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.4); }
+  .cal-m { font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px; }
+  .cal-c { font-size: 0.7rem; font-weight: 700; color: var(--accent-blue); }
+
+  /* 規則列表 */
+  .rule-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .rule-list { grid-template-columns: 1fr; } }
+  .rule-item { 
+    padding: 20px; 
+    background: var(--card-bg); 
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+  }
+  .rule-item h4 { margin-bottom: 8px; color: var(--accent-blue); }
+
+  .footer { text-align: center; padding: 40px; color: #475569; font-size: 0.8rem; }
+
+  /* 圖表佔位 */
+  .chart-container { display: flex; justify-content: center; padding: 20px 0; }
+
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-sub">我的穩健投資計畫 2.0</div>
-  <h1>50萬長期投資藍圖</h1>
-  <p>10年以上 · 定期定額 · 三桶架構 · 台灣＋美國</p>
+<header class="header">
+  <div class="header-sub">CORE INVESTMENT STRATEGY</div>
+  <h1>50萬長期投資計畫</h1>
+  <p>配置對策：三桶架構 × 定期定額 × 跨國配置</p>
+  
   <div class="stats">
-    <div><div class="stat-val">50萬</div><div class="stat-label">第一批資金</div></div>
-    <div><div class="stat-val">＋50-60萬</div><div class="stat-label">半年後加碼</div></div>
-    <div><div class="stat-val">4萬</div><div class="stat-label">每月投入</div></div>
-    <div><div class="stat-val">5檔</div><div class="stat-label">起始ETF</div></div>
-    <div><div class="stat-val">10年+</div><div class="stat-label">投資期間</div></div>
+    <div class="stat-item">
+      <div class="stat-val">50萬</div>
+      <div class="stat-label">首批投入</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">4.0萬</div>
+      <div class="stat-label">每月定額</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">10年</div>
+      <div class="stat-label">計畫週期</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">5檔</div>
+      <div class="stat-label">組合核心</div>
+    </div>
   </div>
-</div>
+</header>
 
-<div class="tabs">
-  <button class="tab active" onclick="switchTab('overview')">📊 組合總覽</button>
-  <button class="tab" onclick="switchTab('etfs')">📋 ETF明細</button>
-  <button class="tab" onclick="switchTab('dividend')">💰 配息計畫</button>
-  <button class="tab" onclick="switchTab('schedule')">🗓 執行計畫</button>
-  <button class="tab" onclick="switchTab('rules')">📌 投資守則</button>
-</div>
+<nav class="tabs">
+  <button class="tab active" onclick="switchTab(event, 'overview')">資產配置</button>
+  <button class="tab" onclick="switchTab(event, 'details')">標的明細</button>
+  <button class="tab" onclick="switchTab(event, 'plan')">執行時程</button>
+  <button class="tab" onclick="switchTab(event, 'rules')">投資守則</button>
+</nav>
 
-<div class="content">
-
-  <!-- OVERVIEW -->
-  <div id="panel-overview" class="panel active">
-
+<main class="content">
+  <!-- 頁籤 1: 資產配置 -->
+  <section id="overview" class="panel active">
     <div class="card card-accent-blue">
       <div class="bucket-header">
-        <div><div class="bucket-title">🟦 成長桶</div><div class="bucket-desc">長期增值主力</div></div>
-        <div style="text-align:right"><div class="bucket-pct" style="color:#2563eb">50%</div><div class="bucket-amt">250,000 元</div></div>
+        <div>
+          <div class="bucket-title">成長桶</div>
+          <p class="etf-desc">追求長期資產最大增值</p>
+        </div>
+        <div style="text-align: right">
+          <div class="bucket-pct" style="color: var(--accent-blue)">50%</div>
+          <p class="stat-label">250,000 元</p>
+        </div>
       </div>
-      <div class="bar-bg"><div class="bar-fill" style="width:50%;background:#2563eb"></div></div>
-      <div class="tags">
-        <div class="tag" style="background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3)">
-          <span style="color:#2563eb;font-weight:700">006208</span>
-          <span style="color:#94a3b8;margin-left:6px">富邦台50</span>
-          <span style="color:#64748b;margin-left:6px">· 25% 🇹🇼</span>
-        </div>
-        <div class="tag" style="background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3)">
-          <span style="color:#2563eb;font-weight:700">00646</span>
-          <span style="color:#94a3b8;margin-left:6px">元大S&P500</span>
-          <span style="color:#64748b;margin-left:6px">· 25% 🇺🇸</span>
-        </div>
+      <div class="bar-bg"><div class="bar-fill" style="width: 50%; background: var(--accent-blue)"></div></div>
+      <div class="tag-group">
+        <div class="tag">006208 富邦台50 (25%)</div>
+        <div class="tag">00646 元大S&P500 (25%)</div>
       </div>
     </div>
 
     <div class="card card-accent-green">
       <div class="bucket-header">
-        <div><div class="bucket-title">🟩 收息桶</div><div class="bucket-desc">穩定現金流</div></div>
-        <div style="text-align:right"><div class="bucket-pct" style="color:#059669">30%</div><div class="bucket-amt">150,000 元</div></div>
+        <div>
+          <div class="bucket-title">收息桶</div>
+          <p class="etf-desc">建立穩定且可預期的現金流</p>
+        </div>
+        <div style="text-align: right">
+          <div class="bucket-pct" style="color: var(--accent-green)">30%</div>
+          <p class="stat-label">150,000 元</p>
+        </div>
       </div>
-      <div class="bar-bg"><div class="bar-fill" style="width:30%;background:#059669"></div></div>
-      <div class="tags">
-        <div class="tag" style="background:rgba(5,150,105,0.15);border:1px solid rgba(5,150,105,0.3)">
-          <span style="color:#059669;font-weight:700">00878</span>
-          <span style="color:#94a3b8;margin-left:6px">國泰永續高股息</span>
-          <span style="color:#64748b;margin-left:6px">· 15% 🇹🇼</span>
-        </div>
-        <div class="tag" style="background:rgba(5,150,105,0.15);border:1px solid rgba(5,150,105,0.3)">
-          <span style="color:#059669;font-weight:700">00713</span>
-          <span style="color:#94a3b8;margin-left:6px">元大高息低波</span>
-          <span style="color:#64748b;margin-left:6px">· 15% 🇹🇼</span>
-        </div>
+      <div class="bar-bg"><div class="bar-fill" style="width: 30%; background: var(--accent-green)"></div></div>
+      <div class="tag-group">
+        <div class="tag">00878 國泰永續高股息 (15%)</div>
+        <div class="tag">00713 元大高息低波 (15%)</div>
       </div>
     </div>
 
     <div class="card card-accent-purple">
       <div class="bucket-header">
-        <div><div class="bucket-title">🟫 保護桶</div><div class="bucket-desc">大跌時的安全網</div></div>
-        <div style="text-align:right"><div class="bucket-pct" style="color:#7c3aed">20%</div><div class="bucket-amt">100,000 元</div></div>
-      </div>
-      <div class="bar-bg"><div class="bar-fill" style="width:20%;background:#7c3aed"></div></div>
-      <div class="tags">
-        <div class="tag" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3)">
-          <span style="color:#7c3aed;font-weight:700">00679B</span>
-          <span style="color:#94a3b8;margin-left:6px">元大美債20年</span>
-          <span style="color:#64748b;margin-left:6px">· 20% 🇺🇸</span>
+        <div>
+          <div class="bucket-title">保護桶</div>
+          <p class="etf-desc">降低整體波動與避險工具</p>
+        </div>
+        <div style="text-align: right">
+          <div class="bucket-pct" style="color: var(--accent-purple)">20%</div>
+          <p class="stat-label">100,000 元</p>
         </div>
       </div>
-    </div>
-
-    <div class="card">
-      <div class="donut-wrap">
-        <svg width="150" height="150" viewBox="0 0 160 160">
-          <circle cx="80" cy="80" r="60" fill="none" stroke="#2563eb" stroke-width="32" stroke-dasharray="188.5 376.99" stroke-dashoffset="0" transform="rotate(-90 80 80)" />
-          <circle cx="80" cy="80" r="60" fill="none" stroke="#059669" stroke-width="32" stroke-dasharray="113.1 376.99" stroke-dashoffset="-188.5" transform="rotate(-90 80 80)" />
-          <circle cx="80" cy="80" r="60" fill="none" stroke="#7c3aed" stroke-width="32" stroke-dasharray="75.4 376.99" stroke-dashoffset="-301.6" transform="rotate(-90 80 80)" />
-          <text x="80" y="76" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">資產</text>
-          <text x="80" y="92" text-anchor="middle" fill="#64748b" font-size="10">配置圖</text>
-        </svg>
-        <div class="legend">
-          <div class="legend-item">
-            <div class="legend-dot" style="background:#2563eb"></div>
-            <div class="legend-name">成長桶</div>
-            <div class="legend-pct" style="color:#2563eb">50%</div>
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot" style="background:#059669"></div>
-            <div class="legend-name">收息桶</div>
-            <div class="legend-pct" style="color:#059669">30%</div>
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot" style="background:#7c3aed"></div>
-            <div class="legend-name">保護桶</div>
-            <div class="legend-pct" style="color:#7c3aed">20%</div>
-          </div>
-          <div class="legend-note">🇹🇼 台灣 75% · 🇺🇸 美國 45%</div>
-        </div>
+      <div class="bar-bg"><div class="bar-fill" style="width: 20%; background: var(--accent-purple)"></div></div>
+      <div class="tag-group">
+        <div class="tag">00679B 元大美債20年 (20%)</div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- ETFs -->
-  <div id="panel-etfs" class="panel">
-
+  <!-- 頁籤 2: 標的明細 -->
+  <section id="details" class="panel">
     <div class="card">
-      <div class="etf-card">
-        <div class="etf-badge" style="background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3)">
-          <div class="etf-code" style="color:#2563eb">006208</div>
-          <div class="etf-bucket">成長桶</div>
-          <div class="etf-region">🇹🇼 台灣</div>
+      <div class="etf-grid">
+        <div class="etf-code-box">
+          <div style="font-weight: 800; color: var(--accent-blue)">006208</div>
+          <div style="font-size: 0.7rem; color: var(--text-secondary)">台灣</div>
         </div>
-        <div style="flex:1">
-          <div class="etf-name">富邦台50</div>
-          <div class="etf-tip">台灣前50大公司，費用率最低（0.09%），長期增值主力，台積電為最大持股</div>
-          <div class="pills">
-            <span class="pill">配置 25%</span>
-            <span class="pill">每月 10,000 元</span>
-            <span class="pill" style="background:rgba(37,99,235,0.15);color:#2563eb">半年配</span>
+        <div class="etf-info-main">
+          <div class="etf-name">富邦台灣採樣母體</div>
+          <p class="etf-desc">投資台灣市值前50大公司。內扣費用極低，是參與台灣經濟成長的首選。</p>
+          <div class="tag-group">
+            <span class="tag">配置 10,000/月</span>
+            <span class="tag">半年配息</span>
           </div>
         </div>
       </div>
     </div>
+    <!-- 其他標的可依此類推複製 -->
+  </section>
 
+  <!-- 頁籤 3: 執行時程 -->
+  <section id="plan" class="panel">
     <div class="card">
-      <div class="etf-card">
-        <div class="etf-badge" style="background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3)">
-          <div class="etf-code" style="color:#2563eb">00646</div>
-          <div class="etf-bucket">成長桶</div>
-          <div class="etf-region">🇺🇸 美國</div>
-        </div>
-        <div style="flex:1">
-          <div class="etf-name">元大S&P500</div>
-          <div class="etf-tip">用台幣買美國500大公司（Apple、Microsoft、Google等），分散台灣風險，長期年化報酬約10%</div>
-          <div class="pills">
-            <span class="pill">配置 25%</span>
-            <span class="pill">每月 10,000 元</span>
-            <span class="pill" style="background:rgba(37,99,235,0.15);color:#2563eb">不配息</span>
-          </div>
-        </div>
+      <h3 style="margin-bottom: 20px">年度配息日曆</h3>
+      <div class="cal-grid" id="dividend-cal">
+        <!-- JS 將生成內容 -->
       </div>
     </div>
+  </section>
 
-    <div class="card">
-      <div class="etf-card">
-        <div class="etf-badge" style="background:rgba(5,150,105,0.15);border:1px solid rgba(5,150,105,0.3)">
-          <div class="etf-code" style="color:#059669">00878</div>
-          <div class="etf-bucket">收息桶</div>
-          <div class="etf-region">🇹🇼 台灣</div>
-        </div>
-        <div style="flex:1">
-          <div class="etf-name">國泰永續高股息</div>
-          <div class="etf-tip">ESG篩選，成立至今每次都填息，金融股為主力，穩健抗跌。除息月份：2、5、8、11月</div>
-          <div class="pills">
-            <span class="pill">配置 15%</span>
-            <span class="pill">每月 6,000 元</span>
-            <span class="pill" style="background:rgba(5,150,105,0.15);color:#059669">季配息</span>
-          </div>
-        </div>
+  <!-- 頁籤 4: 投資守則 -->
+  <section id="rules" class="panel">
+    <div class="rule-list">
+      <div class="rule-item">
+        <h4>紀律投入</h4>
+        <p class="etf-desc">忽略市場漲跌，每月固定日期扣款，讓持有成本平滑化。</p>
+      </div>
+      <div class="rule-item">
+        <h4>股息再投入</h4>
+        <p class="etf-desc">初期領到的配息不應提領，應自動買回原標的，啟動複利加速器。</p>
+      </div>
+      <div class="rule-item">
+        <h4>風險耐受</h4>
+        <p class="etf-desc">如遇市場下跌 20% 以上，嚴禁情緒性停損，應視為獲取廉價部位的機會。</p>
+      </div>
+      <div class="rule-item">
+        <h4>十年週期</h4>
+        <p class="etf-desc">此計畫非短期獲利，目標為十年後資產的穩健翻倍與現金流替代。</p>
       </div>
     </div>
+  </section>
+</main>
 
-    <div class="card">
-      <div class="etf-card">
-        <div class="etf-badge" style="background:rgba(5,150,105,0.15);border:1px solid rgba(5,150,105,0.3)">
-          <div class="etf-code" style="color:#059669">00713</div>
-          <div class="etf-bucket">收息桶</div>
-          <div class="etf-region">🇹🇼 台灣</div>
-        </div>
-        <div style="flex:1">
-          <div class="etf-name">元大高息低波</div>
-          <div class="etf-tip">高股息＋低波動雙重篩選，跌市時比較抗跌，與00878形成互補。除息月份：3、6、9、12月</div>
-          <div class="pills">
-            <span class="pill">配置 15%</span>
-            <span class="pill">每月 6,000 元</span>
-            <span class="pill" style="background:rgba(5,150,105,0.15);color:#059669">季配息</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="etf-card">
-        <div class="etf-badge" style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3)">
-          <div class="etf-code" style="color:#7c3aed">00679B</div>
-          <div class="etf-bucket">保護桶</div>
-          <div class="etf-region">🇺🇸 美國</div>
-        </div>
-        <div style="flex:1">
-          <div class="etf-name">元大美債20年</div>
-          <div class="etf-tip">持有美國20年長期公債，股市大跌時通常上漲，也是低點加碼的子彈來源</div>
-          <div class="pills">
-            <span class="pill">配置 20%</span>
-            <span class="pill">每月 8,000 元</span>
-            <span class="pill" style="background:rgba(124,58,237,0.15);color:#7c3aed">月配息</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- DIVIDEND -->
-  <div id="panel-dividend" class="panel">
-
-    <div class="card">
-      <div class="section-title">第一年配息月份</div>
-      <div class="cal" id="cal-year1"></div>
-      <div class="tip-note">💡 00679B 每月配息・00878 季配 2/5/8/11月・00713 季配 3/6/9/12月</div>
-    </div>
-
-    <div class="card">
-      <div class="section-title">第三年後：月月領息目標</div>
-      <div class="cal" id="cal-year3"></div>
-      <div class="future-item" style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25)">
-        <span class="future-badge" style="background:rgba(245,158,11,0.2);color:#f59e0b">第二年加入</span>
-        <span class="future-code" style="color:#f59e0b">0056</span>
-        <span class="future-name">元大高股息</span>
-        <span class="future-month">· 1、4、7、10月除息</span>
-      </div>
-      <div class="future-item" style="background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.25)">
-        <span class="future-badge" style="background:rgba(236,72,153,0.2);color:#ec4899">第三年加入</span>
-        <span class="future-code" style="color:#ec4899">00919</span>
-        <span class="future-name">群益台灣精選高息</span>
-        <span class="future-month">· 3、6、9、12月除息</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- SCHEDULE -->
-  <div id="panel-schedule" class="panel">
-
-    <div class="card" style="border-left:4px solid #2563eb">
-      <div class="phase-badge" style="background:rgba(37,99,235,0.2);color:#2563eb">第一年</div>
-      <div class="phase-title">打好地基</div>
-      <div class="phase-desc">每月4萬，買熟5檔ETF</div>
-      <div class="steps">
-        <div class="step"><div class="step-num" style="background:rgba(37,99,235,0.2);border:1px solid rgba(37,99,235,0.4);color:#2563eb">1</div><div class="step-text">每月固定投入 4 萬元，共 12 個月</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(37,99,235,0.2);border:1px solid rgba(37,99,235,0.4);color:#2563eb">2</div><div class="step-text">按比例同時買入全部 5 檔 ETF</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(37,99,235,0.2);border:1px solid rgba(37,99,235,0.4);color:#2563eb">3</div><div class="step-text">設好定期定額後不要亂動</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(37,99,235,0.2);border:1px solid rgba(37,99,235,0.4);color:#2563eb">4</div><div class="step-text">感受市場漲跌節奏，建立信心</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(37,99,235,0.2);border:1px solid rgba(37,99,235,0.4);color:#2563eb">5</div><div class="step-text">領到的股息直接再投入</div></div>
-      </div>
-    </div>
-
-    <div class="card" style="border-left:4px solid #059669">
-      <div class="phase-badge" style="background:rgba(5,150,105,0.2);color:#059669">第二年</div>
-      <div class="phase-title">加碼擴張</div>
-      <div class="phase-desc">新資金進場，補齊配息空窗</div>
-      <div class="steps">
-        <div class="step"><div class="step-num" style="background:rgba(5,150,105,0.2);border:1px solid rgba(5,150,105,0.4);color:#059669">1</div><div class="step-text">新的 50-60 萬繼續每月分批投入</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(5,150,105,0.2);border:1px solid rgba(5,150,105,0.4);color:#059669">2</div><div class="step-text">加入 0056（除息：1、4、7、10月）補空窗</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(5,150,105,0.2);border:1px solid rgba(5,150,105,0.4);color:#059669">3</div><div class="step-text">此時 00878＋0056 幾乎每月都有息領</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(5,150,105,0.2);border:1px solid rgba(5,150,105,0.4);color:#059669">4</div><div class="step-text">把每季領到的股息全數再投入</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(5,150,105,0.2);border:1px solid rgba(5,150,105,0.4);color:#059669">5</div><div class="step-text">檢視各桶比例，必要時再平衡</div></div>
-      </div>
-    </div>
-
-    <div class="card" style="border-left:4px solid #7c3aed">
-      <div class="phase-badge" style="background:rgba(124,58,237,0.2);color:#7c3aed">第三年起</div>
-      <div class="phase-title">月月領息</div>
-      <div class="phase-desc">三檔湊齊，每月都有現金流</div>
-      <div class="steps">
-        <div class="step"><div class="step-num" style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);color:#7c3aed">1</div><div class="step-text">視情況加入 00919（除息：3、6、9、12月）</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);color:#7c3aed">2</div><div class="step-text">00878＋0056＋00919 完成月月領息拼圖</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);color:#7c3aed">3</div><div class="step-text">維持三桶架構，比例隨人生階段調整</div></div>
-        <div class="step"><div class="step-num" style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);color:#7c3aed">4</div><div class="step-text">持續讓複利滾雪球</div></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="section-title">每月定期定額明細（第一年）</div>
-      <div class="monthly-row">
-        <div class="monthly-left"><div class="monthly-dot" style="background:#2563eb"></div><span class="monthly-code" style="color:#2563eb">006208</span><span class="monthly-name">富邦台50 🇹🇼</span></div>
-        <div class="monthly-amt">10,000 元</div>
-      </div>
-      <div class="monthly-row">
-        <div class="monthly-left"><div class="monthly-dot" style="background:#2563eb"></div><span class="monthly-code" style="color:#2563eb">00646</span><span class="monthly-name">元大S&P500 🇺🇸</span></div>
-        <div class="monthly-amt">10,000 元</div>
-      </div>
-      <div class="monthly-row">
-        <div class="monthly-left"><div class="monthly-dot" style="background:#059669"></div><span class="monthly-code" style="color:#059669">00878</span><span class="monthly-name">國泰永續高股息 🇹🇼</span></div>
-        <div class="monthly-amt">6,000 元</div>
-      </div>
-      <div class="monthly-row">
-        <div class="monthly-left"><div class="monthly-dot" style="background:#059669"></div><span class="monthly-code" style="color:#059669">00713</span><span class="monthly-name">元大高息低波 🇹🇼</span></div>
-        <div class="monthly-amt">6,000 元</div>
-      </div>
-      <div class="monthly-row" style="border:none">
-        <div class="monthly-left"><div class="monthly-dot" style="background:#7c3aed"></div><span class="monthly-code" style="color:#7c3aed">00679B</span><span class="monthly-name">元大美債20年 🇺🇸</span></div>
-        <div class="monthly-amt">8,000 元</div>
-      </div>
-      <div style="display:flex;justify-content:space-between;margin-top:14px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.08)">
-        <span style="color:#94a3b8;font-weight:600">每月合計</span>
-        <span style="color:#93c5fd;font-weight:700;font-size:1rem">40,000 元</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- RULES -->
-  <div id="panel-rules" class="panel">
-    <div class="rules-grid">
-      <div class="rule-card"><div class="rule-icon">📅</div><div><div class="rule-title">定期定額</div><div class="rule-desc">每月固定買，不管漲跌都買，平滑進場成本</div></div></div>
-      <div class="rule-card"><div class="rule-icon">🙈</div><div><div class="rule-title">買完不要看</div><div class="rule-desc">短期波動是正常的，看太頻繁容易衝動賣出</div></div></div>
-      <div class="rule-card"><div class="rule-icon">🔄</div><div><div class="rule-title">股息再投入</div><div class="rule-desc">領到的配息繼續買，讓複利慢慢發酵</div></div></div>
-      <div class="rule-card"><div class="rule-icon">🚫</div><div><div class="rule-title">不碰個股</div><div class="rule-desc">打穩基礎前，不買單一股票，避免踩雷</div></div></div>
-      <div class="rule-card"><div class="rule-icon">💪</div><div><div class="rule-title">跌了不要賣</div><div class="rule-desc">跌30%很正常，長期持有才能等到回來</div></div></div>
-      <div class="rule-card"><div class="rule-icon">📈</div><div><div class="rule-title">先求穩再求多</div><div class="rule-desc">5檔打穩比10檔搞混更有效</div></div></div>
-      <div class="formula-card" style="grid-column:1/-1">
-        <div class="formula-title">你的投資公式</div>
-        <div class="formula-text">
-          定期定額 ＋ 股息再投入 ＋ 持續加碼 ＋ 10年不動<br>
-          <strong style="color:#f1f5f9">= 時間幫你工作，複利幫你滾雪球</strong>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer">
-    以上資訊僅供學習參考，不構成投資建議。<br>
-    實際操作前請諮詢持牌理財顧問，並依個人財務狀況評估。
-  </div>
-
-</div>
+<footer class="footer">
+  本文僅供學習紀錄，非投資建議。市場有風險，投入前請審慎評估。
+</footer>
 
 <script>
-  function switchTab(id) {
+  function switchTab(event, tabId) {
+    // 移除所有 active 狀態
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById('panel-' + id).classList.add('active');
+    
+    // 加入當前 active 狀態
+    event.currentTarget.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+    
+    // 平滑捲動回頂部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Calendar year 1
-  const months = [1,2,3,4,5,6,7,8,9,10,11,12];
-  const cal1 = document.getElementById('cal-year1');
-  months.forEach(m => {
-    const codes = [];
-    if ([2,5,8,11].includes(m)) codes.push({ code:'00878', color:'#059669' });
-    if ([3,6,9,12].includes(m)) codes.push({ code:'00713', color:'#059669' });
-    codes.push({ code:'00679B', color:'#7c3aed' }); // monthly
-    const hasIncome = codes.length > 1 || true;
-    const cell = document.createElement('div');
-    cell.className = 'cal-cell has-income';
-    let inner = `<div class="cal-month">${m}月</div>`;
-    codes.forEach(c => {
-      inner += `<div class="cal-code" style="color:${c.color}">${c.code}</div>`;
-    });
-    cell.innerHTML = inner;
-    cal1.appendChild(cell);
-  });
-
-  // Calendar year 3
-  const cal3 = document.getElementById('cal-year3');
-  months.forEach(m => {
-    const codes = [];
-    if ([2,5,8,11].includes(m)) codes.push({ code:'00878', color:'#059669' });
-    if ([1,4,7,10].includes(m)) codes.push({ code:'0056', color:'#f59e0b' });
-    if ([3,6,9,12].includes(m)) codes.push({ code:'00919', color:'#ec4899' });
-    codes.push({ code:'00679B', color:'#7c3aed' });
-    const cell = document.createElement('div');
-    cell.className = 'cal-cell full';
-    let inner = `<div class="cal-month">${m}月</div>`;
-    codes.forEach(c => {
-      inner += `<div class="cal-code" style="color:${c.color}">${c.code}</div>`;
-    });
-    cell.innerHTML = inner;
-    cal3.appendChild(cell);
-  });
+  // 初始化模擬日曆
+  const calGrid = document.getElementById('dividend-cal');
+  for (let i = 1; i <= 12; i++) {
+    const div = document.createElement('div');
+    div.className = 'cal-box' + ([2, 5, 8, 11].includes(i) ? ' active' : '');
+    div.innerHTML = `<div class="cal-m">${i}月</div><div class="cal-c">${[2, 5, 8, 11].includes(i) ? '配息月' : '-'}</div>`;
+    calGrid.appendChild(div);
+  }
 </script>
 </body>
 </html>
