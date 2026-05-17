@@ -2163,15 +2163,24 @@
                       cell.style.borderRightColor = colors[0];
                       cell.style.borderBottomColor = colors[1];
                       cell.style.borderLeftColor = colors[1];
-                      cell.dataset.color = `linear-gradient(135deg, ${colors[0]} 50%, ${colors[1]} 50%)`;
+                      // 🎯 改為上下分明的 50/50 雙色塊
+                      cell.dataset.color = `linear-gradient(to bottom, ${colors[0]} 50%, ${colors[1]} 50%)`;
                   }
 
-                  // 點開時顯示該日的第一個行程 (其他可透過清單檢視)
-                  cell.onclick = () => handleDayClick(events[0], cell, grid, dStr);
+                  // 🎯 點開時將該日所有行程存起來，並顯示第一個
+                  cell.onclick = () => {
+                      currentDayEvents = events;
+                      currentEventIndex = 0;
+                      handleDayClick(events[0], cell, grid, dStr);
+                  };
                   
               } else if (hasDailyExpense) {
                   cell.classList.add('has-expense'); 
-                  cell.onclick = () => handleDayClick(null, cell, grid, dStr);
+                  cell.onclick = () => {
+                      currentDayEvents = [];
+                      currentEventIndex = 0;
+                      handleDayClick(null, cell, grid, dStr);
+                  };
               }
               // 沒事件的空白日子，不綁定 onclick，無法點開！
               
@@ -2296,6 +2305,9 @@
   }
 
   let currentOpenPanel = null, currentSelectedEl = null;
+  // 🎯 新增變數：用來記錄「點擊的那一天」有哪幾個行程
+  let currentDayEvents = []; 
+  let currentEventIndex = 0;
 
   function handleDayClick(event, cell, grid, dStr) {
       if (currentSelectedEl === cell && currentOpenPanel) { closeCurrentPanel(); return; }
@@ -2333,6 +2345,10 @@
       if (currentOpenPanel) currentOpenPanel.remove();
       
       currentSelectedEl = item; 
+      // 🎯 清單模式點擊時，確保只記錄當前點擊的這一個行程
+      currentDayEvents = [event]; 
+      currentEventIndex = 0;
+      
       const dStr = forceDateStr || formatDate(getVal(event, '日期'));
       const panel = document.createElement('div'); 
       panel.className = 'detail-panel'; 
@@ -2449,7 +2465,18 @@
       let displayDate = sDateStr;
       if (eDateStr && eDateStr !== sDateStr) displayDate += ` ~ ${eDateStr}`;
 
-      let html = backBtnHtml + `
+      // 🎯 如果當天有超過1個行程，就產生切換按鈕
+      let switchBtnHtml = '';
+      if (currentDayEvents && currentDayEvents.length > 1) {
+          switchBtnHtml = `
+          <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 15px; margin-top: 5px;">
+              <button onclick="switchDayEvent('${dateStr}')" style="background: var(--nav-active); color: #fff; border: none; padding: 6px 18px; border-radius: 20px; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(84, 110, 122, 0.2); transition: 0.2s;">
+                  ↻ 切換行程 (${currentEventIndex + 1} / ${currentDayEvents.length})
+              </button>
+          </div>`;
+      }
+
+      let html = backBtnHtml + switchBtnHtml + `
       <div class="detail-header" style="flex-direction:column; gap:10px; align-items: flex-start;">
           <div style="display:flex; justify-content:space-between; width:100%; align-items:baseline;">
               <div>
@@ -2595,6 +2622,20 @@
       html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">${expenseTabHtml}</div>`;
       
       return html;
+  }
+
+  // 🎯 新增：切換同一天多個行程的函式
+  function switchDayEvent(dateStr) {
+      if (currentDayEvents.length <= 1) return;
+      
+      // 索引 + 1，如果到底了就回到 0
+      currentEventIndex = (currentEventIndex + 1) % currentDayEvents.length;
+      
+      const panel = document.querySelector('.detail-panel');
+      if (panel) {
+          // 重新生成面板內容
+          panel.innerHTML = generateDetailHTML(currentDayEvents[currentEventIndex], dateStr);
+      }
   }
 
   function toggleAddEventFee() {
