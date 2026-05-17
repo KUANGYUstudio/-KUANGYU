@@ -361,9 +361,7 @@
     .modal-body { max-height: 60vh; overflow-y: auto; text-align: left; margin-bottom: 20px; padding-right: 5px; }
     .edit-input-group { margin-bottom: 15px; }
     .edit-input-group label { font-size: 12px; color: var(--text-sub); font-weight: bold; display:block; margin-bottom:5px; }
-    /* 🎯 直接在這裡加上 height: 48px 強制鎖定高度 */
     .edit-input { width: 100%; height: 48px; padding: 12px; border: 1.5px solid #dcdde1; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-size: 16px; background: #fcfcfc; transition: 0.3s;}
-    /* 🎯 專門把日期的蘋果原生外衣脫掉 */
     .edit-input[type="date"] { -webkit-appearance: none; appearance: none; display: block; }
     .edit-input:focus { outline: none; border-color: var(--nav-active); background: #fff; }
 
@@ -387,18 +385,17 @@
 
     /* 帳務總覽面板 */
     .acc-card { 
-        background: #f8f9fa;  /* 🌟 保持你原本的顏色 */
-        border: 1px solid #eceff1;  /* 🌟 保持原本的邊框設定 */
+        background: #f8f9fa; 
+        border: 1px solid #eceff1; 
         border-radius: 12px; 
         box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
-        cursor: pointer; /* 滑鼠移過去變手手 */
-        transition: all 0.2s ease; /* 漸變動畫 */
+        cursor: pointer; 
+        transition: all 0.2s ease; 
     }
     .acc-card:hover {
-        border-color: #cfd8dc; /* 摸到時邊框稍微變深 */
-        transform: translateY(-2px); /* 微微浮起 */
+        border-color: #cfd8dc; 
+        transform: translateY(-2px); 
     }
-    /* 被點選時的「啟用」狀態 */
     .acc-card.active {
         border-color: var(--nav-active);
         background: #fff;
@@ -733,12 +730,12 @@
                   <div class="admin-input-group"><label>付款人</label><select autocomplete="off" id="add-帳務-付款人"><option>-</option><option>聿凡</option><option>光武</option></select></div>
                   <div class="admin-input-group"><label>付款方式</label><select autocomplete="off" id="add-帳務-方式" onchange="toggleCreditCardSelect('帳務')"><option>-</option><option>現金</option><option>刷卡</option></select></div>
                   <div class="admin-input-group" id="add-帳務-信用卡-group" style="display: none; animation: slideUp 0.3s ease;"><label>信用卡別</label><select autocomplete="off" id="add-帳務-信用卡"><option value="">- 請選擇銀行 -</option><option>國泰世華</option><option>第一銀行</option><option>台新銀行</option><option>玉山銀行</option><option>富邦銀行</option><option>中國信託</option></select></div>
-                <div class="admin-input-group" id="add-帳務-分期-group" style="display: none; animation: slideUp 0.3s ease;">
-    <label>分期</label>
-    <select autocomplete="off" id="add-帳務-分期">
-        <option>-</option><option>3期</option><option>6期</option><option>9期</option><option>12期</option>
-    </select>
-</div>
+                  <div class="admin-input-group" id="add-帳務-分期-group" style="display: none; animation: slideUp 0.3s ease;">
+                    <label>分期</label>
+                    <select autocomplete="off" id="add-帳務-分期">
+                        <option>-</option><option>3期</option><option>6期</option><option>9期</option><option>12期</option>
+                    </select>
+                </div>
                   <div class="admin-input-group"><label>備註</label><input autocomplete="off" type="text" id="add-帳務-備註" placeholder="可選填"></div>
                   <button class="admin-submit-btn" onclick="submitNewData('帳務明細')">確認新增帳務</button>
               </div>
@@ -768,7 +765,11 @@
 
   // ===== 🚀 離線暫存與自動同步系統 (Offline Queue) =====
   function getOfflineQueue() {
-      return JSON.parse(localStorage.getItem('kuangyu_offlineQueue') || '[]');
+      try {
+          return JSON.parse(localStorage.getItem('kuangyu_offlineQueue') || '[]');
+      } catch (e) {
+          return [];
+      }
   }
 
   function saveOfflineQueue(queue) {
@@ -914,10 +915,14 @@
 
     const cachedData = localStorage.getItem('kuangyu_dbData');
     if (cachedData) {
-        dbData = JSON.parse(cachedData);
-        renderFilters();
-        renderMain();
-        document.getElementById('loading').style.display = 'none';
+        try {
+            dbData = JSON.parse(cachedData);
+            renderFilters();
+            renderMain();
+            document.getElementById('loading').style.display = 'none';
+        } catch (e) {
+            localStorage.removeItem('kuangyu_dbData');
+        }
     }
 
     try {
@@ -1467,7 +1472,6 @@
       otherInput.style.display = select.value === '其他' ? 'block' : 'none';
   }
 
-  // 🎯 魔法：選刷卡就滑出信用卡選單
   // 🎯 魔法：選刷卡就滑出信用卡選單與分期選單
   function toggleCreditCardSelect(type) {
       const method = document.getElementById(`add-${type}-方式`).value;
@@ -1970,22 +1974,29 @@
           const hasData = uniqueMonthKeysWithData.includes(mKey);
           
           const btn = document.createElement('div'); 
-          btn.className = 'month-nav-btn ' + (hasData ? 'has-data' : 'no-data');
-          
-          // 注意！這裡要從 textContent 改成 innerHTML
+          btn.className = 'month-nav-btn'; 
           btn.innerHTML = chineseMonths[i - 1];
-          
-          if (!hasData) {
-              btn.style.opacity = '0.3';
-          } else if (mKey < currentMonthKey) {
-              btn.style.opacity = '0.6';
-          } else {
-              btn.style.opacity = '1';
-          }
 
+          // 🎯 修改重點：月份按鈕的三階段顏色清晰度
           if (selectedMonthFilter === mKey) {
               btn.classList.add('active');
-              btn.style.opacity = '1';
+          } else {
+              if (hasData) {
+                  if (mKey < currentMonthKey) {
+                      // 1. 過去有活動：稍微淺一點的灰藍色
+                      btn.style.color = "#90a4ae"; 
+                      btn.style.borderColor = "#cfd8dc";
+                      btn.style.background = "#fff";
+                  } else {
+                      // 2. 當月或未來有活動：使用鮮豔主色
+                      btn.classList.add('has-data');
+                  }
+              } else {
+                  // 3. 沒有活動（無論過去未來）：最淺的灰色
+                  btn.style.color = "#cfd8dc"; 
+                  btn.style.borderColor = "#f0f0f0";
+                  btn.style.background = "#fafafa";
+              }
           }
           
           btn.onclick = () => { 
@@ -2040,6 +2051,7 @@
       
       let races = dbData['行程'].filter(r => (currentFilter === '全部' || getVal(r, '行程類別') === currentFilter) && doesEventMatch(r, currentSearchQuery));
       
+      // 🎯 修正核心：支援陣列，可容納同一天多筆行程！
       let eventMap = {}; 
       let allDatesWithData = []; 
       races.forEach(r => { 
@@ -2047,7 +2059,6 @@
           if (!sDateStr) return;
           const eDateStr = formatDate(getVal(r, '結束日期')) || sDateStr;
           
-          // 🎯 修正：將 - 替換為 /，避免瀏覽器解析出錯或減去時區天數
           let cur = new Date(sDateStr.replace(/-/g, '/'));
           let end = new Date(eDateStr.replace(/-/g, '/'));
           let loopCount = 0;
@@ -2055,7 +2066,10 @@
           while(cur <= end && loopCount < 30) {
               const dStr = formatDate(cur);
               if (dStr) {
-                  eventMap[dStr] = r; 
+                  // 🎯 將每天的行程改為「陣列」
+                  if (!eventMap[dStr]) eventMap[dStr] = [];
+                  eventMap[dStr].push(r); 
+                  
                   allDatesWithData.push(dStr);
               }
               cur.setDate(cur.getDate() + 1);
@@ -2066,12 +2080,11 @@
       let dailyExpenseMap = {};
       if (currentFilter === '全部') {
           (dbData['帳務明細']||[]).forEach(b => { 
-        // 💡 拔除限制，讓所有符合日期的帳務都能觸發日曆小金點
               if (doesBillMatch(b, currentSearchQuery)) {
                   const d = formatDate(getVal(b, '日期')); 
                   if (d) { dailyExpenseMap[d] = true; allDatesWithData.push(d); } 
-                  }
-         });
+              }
+          });
       }
 
       let monthKeysToRender = [];
@@ -2083,6 +2096,7 @@
               monthKeysToRender = [selectedMonthFilter];
           }
       } else if (currentFilter === '全部' && !currentSearchQuery) {
+          // 強制顯示本月與未來 12 個月
           for (let i = 0; i < 12; i++) {
               let targetDate = new Date(currentYear, currentMonth - 1 + i, 1);
               let y = targetDate.getFullYear();
@@ -2127,20 +2141,40 @@
               cell.dataset.date = dStr;
               cell.innerHTML = `<span class="day-number">${d}</span>`;
               
-              const event = eventMap[dStr]; 
+              const events = eventMap[dStr]; 
               const hasDailyExpense = dailyExpenseMap[dStr];
               
-              if (event) {
-                  const cat = getVal(event, '行程類別'); 
+              if (events && events.length > 0) {
                   cell.classList.add('has-event');
-                  const pastelColor = getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim();
-                  cell.style.borderColor = pastelColor || '#cfd8dc';
-                  cell.dataset.color = pastelColor || '#cfd8dc';
-                  cell.onclick = () => handleDayClick(event, cell, grid, dStr);
+                  
+                  // 🎯 同一日多筆行程，使用雙色外框與雙色漸層
+                  const colors = [...new Set(events.map(e => {
+                      const cat = getVal(e, '行程類別');
+                      return getComputedStyle(document.documentElement).getPropertyValue(`--cat-${cat}`).trim() || '#cfd8dc';
+                  }))];
+
+                  if (colors.length === 1) {
+                      // 單一行程：單色邊框
+                      cell.style.borderColor = colors[0];
+                      cell.dataset.color = colors[0];
+                  } else {
+                      // 兩個以上行程：對角雙色
+                      cell.style.borderTopColor = colors[0];
+                      cell.style.borderRightColor = colors[0];
+                      cell.style.borderBottomColor = colors[1];
+                      cell.style.borderLeftColor = colors[1];
+                      cell.dataset.color = `linear-gradient(135deg, ${colors[0]} 50%, ${colors[1]} 50%)`;
+                  }
+
+                  // 點開時顯示該日的第一個行程 (其他可透過清單檢視)
+                  cell.onclick = () => handleDayClick(events[0], cell, grid, dStr);
+                  
               } else if (hasDailyExpense) {
                   cell.classList.add('has-expense'); 
                   cell.onclick = () => handleDayClick(null, cell, grid, dStr);
               }
+              // 沒事件的空白日子，不綁定 onclick，無法點開！
+              
               grid.appendChild(cell);
           }
           
@@ -2269,7 +2303,7 @@
       if (currentSelectedEl) { 
           currentSelectedEl.classList.remove('selected'); 
           if(currentSelectedEl.classList.contains('has-event')) {
-              currentSelectedEl.style.backgroundColor = '';
+              currentSelectedEl.style.background = ''; // 🎯 改為 background 支援漸層還原
           }
       }
       
@@ -2277,7 +2311,7 @@
       cell.classList.add('selected');
       
       if (event) { 
-          cell.style.backgroundColor = cell.dataset.color;
+          cell.style.background = cell.dataset.color; // 🎯 改為 background 支援漸層渲染
       }
       
       if (currentOpenPanel) currentOpenPanel.remove();
@@ -2316,7 +2350,7 @@
           if (currentSelectedEl) { 
               currentSelectedEl.classList.remove('selected'); 
               if(currentSelectedEl.classList.contains('has-event')){
-                  currentSelectedEl.style.backgroundColor = 'transparent';
+                  currentSelectedEl.style.background = ''; // 🎯 支援漸層還原
               }
               currentSelectedEl = null; 
           }
@@ -2346,6 +2380,13 @@
               const memo = getVal(b, '備註');
               total += amt;
               
+              const safeCode = (getVal(b, '行程代碼') || '').replace(/'/g, "\\'");
+              const safeDate = (getVal(b, '日期') || '').replace(/'/g, "\\'");
+              const safeCat = cat.replace(/'/g, "\\'");
+              const safeItem = item.replace(/'/g, "\\'");
+              const safePay = pay.replace(/'/g, "\\'");
+              const safeMemo = (memo || '').replace(/'/g, "\\'");
+
               html += `
                   <div style="display:flex; flex-direction:column; padding: 12px 0; border-bottom: 1px dashed #f5f5f5;">
                       <div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; font-size: 14px; align-items: center;">
@@ -2532,35 +2573,6 @@
           html += `</div>`;
       }
       
-      if(bills.length > 0) {
-          const sums = {}; 
-          bills.forEach(b => { 
-              const c = getVal(b, '類別') || '其他'; 
-              sums[c] = (sums[c] || 0) + (parseFloat(getVal(b, '金額')) || 0); 
-          });
-          
-          html += `<div class="info-section"><div class="info-title title-bill">其他帳務 (分類總結)</div><div class="info-card card-bill">`;
-          Object.keys(sums).forEach(c => {
-              html += `
-              <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; align-items:center;">
-                  <span style="color:#546e7a; font-weight:bold;">${c}</span>
-                  <span style="font-weight:900; color:var(--brand-main);">$${sums[c].toLocaleString()}</span>
-              </div>`;
-          });
-          html += `</div></div>`;
-      }
-      
-      html += `
-          <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
-              <div class="event-settle-card">
-                  <div style="font-weight:bold; color:var(--settle-pink); font-size:13px;">本場行程結算</div>
-                  <div style="font-size:20px; font-weight:900; color:var(--settle-pink);">$${calculateEventTotal(code).toLocaleString()}</div>
-              </div>
-          </div>
-      </div>`;
-      
-      // ===== 這裡開始是修改的重點：組合帳務明細分頁 =====
-      
       // 找出點擊這天的「一般日常記帳」(沒有綁定行程代碼的帳務)
       const dailyBills = (dbData['帳務明細']||[]).filter(b => {
           const bDate = formatDate(getVal(b, '日期'));
@@ -2574,15 +2586,13 @@
       expenseTabHtml += `<div style="font-weight:bold; color:var(--text-sub); margin-bottom:10px; font-size:14px; display:flex; align-items:center;"><span style="width:6px; height:16px; background:var(--settle-pink); border-radius:3px; margin-right:8px; display:inline-block;"></span>本場行程花費</div>`;
       expenseTabHtml += generateReceiptHTML(bills);
 
-      // 2. 日常帳務區塊 (如果當天有一般記帳，才會顯示這個區塊)
+      // 2. 日常帳務區塊
       if (dailyBills.length > 0) {
           expenseTabHtml += `<div style="font-weight:bold; color:var(--text-sub); margin-top:25px; margin-bottom:10px; font-size:14px; display:flex; align-items:center;"><span style="width:6px; height:16px; background:#b0bec5; border-radius:3px; margin-right:8px; display:inline-block;"></span>日常記帳</div>`;
           expenseTabHtml += generateReceiptHTML(dailyBills);
       }
 
       html += `<div id="tab-expense" class="panel-tab-content" style="display:none;">${expenseTabHtml}</div>`;
-      
-      // ===== 修改重點結束 =====
       
       return html;
   }
