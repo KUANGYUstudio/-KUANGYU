@@ -2163,8 +2163,8 @@
                       cell.style.borderRightColor = colors[0];
                       cell.style.borderBottomColor = colors[1];
                       cell.style.borderLeftColor = colors[1];
-                      // 🎯 改為上下分明的 50/50 雙色塊
-                      cell.dataset.color = `linear-gradient(to bottom, ${colors[0]} 50%, ${colors[1]} 50%)`;
+                      // 🎯 改為對角線分明的雙色塊，讓底色與邊框完美重疊
+                      cell.dataset.color = `linear-gradient(to bottom left, ${colors[0]} 50%, ${colors[1]} 50%)`;
                   }
 
                   // 🎯 點開時將該日所有行程存起來，並顯示第一個
