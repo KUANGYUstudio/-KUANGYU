@@ -12,6 +12,10 @@
         .gradient-bg { background: linear-gradient(135deg, #f97316 0%, #c2410c 100%); }
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         
+        /* 隱藏橫向滾動條但保留滑動功能 */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
         /* 列印樣式優化 */
         @media print {
             body { -webkit-print-color-adjust: exact; }
@@ -35,7 +39,6 @@
                 </div>
                 <div class="hidden md:flex space-x-8">
                     <a href="#about" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">企劃摘要</a>
-                    <a href="#training" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">訓練架構</a>
                     <a href="#pricing" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">方案定價</a>
                     <a href="#schedule" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">營運時程</a>
                 </div>
@@ -109,10 +112,11 @@
                 <p class="text-gray-500">規劃三種客製化層次，精準打擊不同需求之受眾</p>
             </div>
             
-            <div class="grid lg:grid-cols-3 gap-6 items-stretch">
+            <!-- 手機版橫向滑動容器 -->
+            <div class="flex overflow-x-auto lg:grid lg:grid-cols-3 gap-6 pb-8 hide-scrollbar snap-x snap-mandatory">
                 
                 <!-- 初階方案 -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-400 hover:bg-orange-50/10 group">
+                <div class="min-w-[85vw] sm:min-w-[400px] lg:min-w-0 snap-center bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-400 hover:bg-orange-50/10 group">
                     <div class="p-6 text-center border-b border-gray-100">
                         <h3 class="text-2xl font-bold text-slate-800">初階方案</h3>
                         <p class="text-orange-600 text-xs font-medium mt-2 bg-orange-50 inline-block px-3 py-1 rounded-full">有初鐵經驗，希望穩定完賽者</p>
@@ -155,7 +159,7 @@
                 </div>
 
                 <!-- 進階方案 -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-400 hover:bg-orange-50/10 group">
+                <div class="min-w-[85vw] sm:min-w-[400px] lg:min-w-0 snap-center bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-400 hover:bg-orange-50/10 group">
                     <div class="p-6 text-center border-b border-gray-100">
                         <h3 class="text-2xl font-bold text-slate-800">進階方案</h3>
                         <p class="text-orange-600 text-xs font-medium mt-2 bg-orange-50 inline-block px-3 py-1 rounded-full">想提升成績、建立完整體能系統者</p>
@@ -193,34 +197,34 @@
                     </div>
                 </div>
 
-                <!-- VIP方案 -->
-                <div class="bg-slate-900 rounded-2xl shadow-lg border border-slate-700 overflow-hidden flex flex-col relative transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-900/30 hover:border-orange-500 group">
-                    <div class="absolute top-0 right-0 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl tracking-wider">尊榮首選</div>
-                    <div class="p-6 text-center border-b border-slate-700">
-                        <h3 class="text-2xl font-bold text-white">VIP方案</h3>
-                        <p class="text-orange-200 text-xs font-medium mt-2 bg-slate-800 border border-slate-700 inline-block px-3 py-1 rounded-full">高強度工作族群、追求恢復品質</p>
+                <!-- VIP方案 (改回與其他方案相同底色) -->
+                <div class="min-w-[85vw] sm:min-w-[400px] lg:min-w-0 snap-center bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col relative transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-400 hover:bg-orange-50/10 group">
+                    <div class="absolute top-0 right-0 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl tracking-wider z-10">尊榮首選</div>
+                    <div class="p-6 text-center border-b border-gray-100">
+                        <h3 class="text-2xl font-bold text-slate-800">VIP方案</h3>
+                        <p class="text-orange-600 text-xs font-medium mt-2 bg-orange-50 inline-block px-3 py-1 rounded-full">高強度工作族群、追求恢復品質</p>
                         <div class="my-6">
-                            <span class="text-3xl font-black text-white">NT$55,000</span>
+                            <span class="text-3xl font-black text-slate-800">NT$55,000</span>
                             <span class="text-gray-400 text-sm font-medium">/早鳥價</span>
                         </div>
-                        <p class="text-sm text-gray-500 line-through">原價 NT$59,200</p>
+                        <p class="text-sm text-gray-400 line-through">原價 NT$59,200</p>
                     </div>
-                    <div class="p-6 flex-grow bg-slate-800">
-                        <ul class="space-y-4 text-sm text-gray-300">
+                    <div class="p-6 flex-grow bg-gray-50/50">
+                        <ul class="space-y-4 text-sm text-gray-600">
                             <li>
-                                <div class="font-bold text-white mb-2 flex items-center"><i class="fas fa-layer-group text-orange-400 w-5"></i> 完整系統</div>
+                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-layer-group text-orange-500 w-5"></i> 完整系統</div>
                                 <div class="pl-5 space-y-2">
-                                    <div class="flex items-start"><i class="fas fa-check text-orange-400 mr-2 mt-1 w-3"></i> 包含【進階方案】光聿訓練</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-orange-400 mr-2 mt-1 w-3"></i> 包含所有贊助禮包</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-orange-400 mr-2 mt-1 w-3"></i> 包含【川岳】每週 1 堂肌力訓練</div>
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 包含【進階方案】光聿訓練</div>
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 包含所有贊助禮包</div>
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 包含【川岳】每週 1 堂肌力訓練</div>
                                 </div>
                             </li>
-                            <li class="pt-2 border-t border-slate-700">
-                                <div class="font-bold text-white mb-2 flex items-center"><i class="fas fa-spa text-orange-400 w-5"></i> 川岳尊榮恢復升級</div>
+                            <li class="pt-2 border-t border-gray-200">
+                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-spa text-orange-500 w-5"></i> 川岳尊榮恢復升級</div>
                                 <div class="pl-5 space-y-2">
-                                    <div class="flex items-start font-medium text-orange-100"><i class="fas fa-arrow-up text-orange-400 mr-2 mt-1 w-3"></i> 高壓氧療程：共 5 次 (4+1)</div>
-                                    <div class="flex items-start font-medium text-orange-100"><i class="fas fa-arrow-up text-orange-400 mr-2 mt-1 w-3"></i> 岩盤浴療程：共 5 次 (4+1)</div>
-                                    <div class="flex items-start font-medium text-orange-100"><i class="fas fa-arrow-up text-orange-400 mr-2 mt-1 w-3"></i> 運動按摩：共 3 次 (2+1)</div>
+                                    <div class="flex items-start font-medium text-slate-700"><i class="fas fa-arrow-up text-orange-500 mr-2 mt-1 w-3"></i> 高壓氧療程：共 5 次 (4+1)</div>
+                                    <div class="flex items-start font-medium text-slate-700"><i class="fas fa-arrow-up text-orange-500 mr-2 mt-1 w-3"></i> 岩盤浴療程：共 5 次 (4+1)</div>
+                                    <div class="flex items-start font-medium text-slate-700"><i class="fas fa-arrow-up text-orange-500 mr-2 mt-1 w-3"></i> 運動按摩：共 3 次 (2+1)</div>
                                 </div>
                             </li>
                         </ul>
@@ -233,7 +237,7 @@
         <!-- Section: 詳細比較表 -->
         <section class="mb-20">
             <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center"><i class="fas fa-list-alt text-orange-500 mr-2"></i> 服務項目與合作價格對照表</h3>
-            <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+            <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm hide-scrollbar">
                 <table class="w-full text-sm text-left whitespace-nowrap min-w-[800px]">
                     <thead class="text-xs text-slate-700 uppercase bg-gray-100">
                         <tr>
@@ -243,8 +247,8 @@
                             <th scope="col" class="px-4 py-4 border-b border-gray-200 text-right bg-white text-orange-600">合作價格</th>
                             <th scope="col" class="px-4 py-4 border-b border-gray-200 text-center bg-gray-50 border-l">進階方案</th>
                             <th scope="col" class="px-4 py-4 border-b border-gray-200 text-right bg-gray-50 text-orange-600">合作價格</th>
-                            <th scope="col" class="px-4 py-4 border-b border-gray-200 text-center bg-slate-800 text-white border-l">VIP方案</th>
-                            <th scope="col" class="px-4 py-4 border-b border-gray-200 text-right bg-slate-800 text-orange-300">合作價格</th>
+                            <th scope="col" class="px-4 py-4 border-b border-gray-200 text-center bg-white border-l">VIP方案</th>
+                            <th scope="col" class="px-4 py-4 border-b border-gray-200 text-right bg-white text-orange-600">合作價格</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -321,9 +325,9 @@
                             <td class="px-4 py-3 text-center text-green-600 border-l border-gray-200"><i class="fas fa-check"></i></td>
                             <td class="px-4 py-3 text-right font-mono text-gray-400">X</td>
                             <td class="px-4 py-3 text-center text-green-600 border-l border-gray-200"><i class="fas fa-check"></i></td>
-                            <td class="px-4 py-3 text-right font-mono text-gray-400"></td>
+                            <td class="px-4 py-3 text-right font-mono text-gray-400">X</td>
                             <td class="px-4 py-3 text-center text-green-600 border-l border-gray-200"><i class="fas fa-check"></i></td>
-                            <td class="px-4 py-3 text-right font-mono text-gray-400"></td>
+                            <td class="px-4 py-3 text-right font-mono text-gray-400">X</td>
                         </tr>
                         <tr class="border-b border-gray-300 bg-amber-50/30 text-gray-400">
                             <td class="px-4 py-2 font-medium">LUMILUME運動洗衣精</td>
@@ -348,29 +352,29 @@
                         </tr>
                         <tr class="border-b border-gray-100 bg-orange-50/40">
                             <td class="px-4 py-3 font-medium text-slate-700">高壓氧療程</td>
-                            <td class="px-4 py-3 text-center text-slate-500 text-[10px] border-l border-gray-200">贈送1次30分鐘</td>
+                            <td class="px-4 py-3 text-center text-slate-600 text-sm border-l border-gray-200">贈送一次 (30分鐘)</td>
                             <td class="px-4 py-3 text-right font-mono text-gray-600">600</td>
-                            <td class="px-4 py-3 text-center text-slate-500 text-[10px] border-l border-gray-200">贈送1次30分鐘</td>
+                            <td class="px-4 py-3 text-center text-slate-600 text-sm border-l border-gray-200">贈送一次 (30分鐘)</td>
                             <td class="px-4 py-3 text-right font-mono text-gray-600">600</td>
-                            <td class="px-4 py-3 text-center font-bold text-orange-600 text-xs border-l border-gray-200">4次 + 再贈送1次</td>
+                            <td class="px-4 py-3 text-center font-bold text-orange-600 text-sm border-l border-gray-200">4次 + 再贈送1次</td>
                             <td class="px-4 py-3 text-right font-mono text-gray-600">5,400</td>
                         </tr>
                         <tr class="border-b border-gray-100 bg-orange-50/40">
                             <td class="px-4 py-3 font-medium text-slate-700">岩盤浴療程</td>
-                            <td class="px-4 py-3 text-center text-slate-500 text-[10px] border-l border-gray-200">贈送1次30分鐘</td>
+                            <td class="px-4 py-3 text-center text-slate-600 text-sm border-l border-gray-200">贈送一次 (30分鐘)</td>
                             <td class="px-4 py-3 text-right font-mono text-gray-600">300</td>
-                            <td class="px-4 py-3 text-center text-slate-500 text-[10px] border-l border-gray-200">贈送1次30分鐘</td>
+                            <td class="px-4 py-3 text-center text-slate-600 text-sm border-l border-gray-200">贈送一次 (30分鐘)</td>
                             <td class="px-4 py-3 text-right font-mono text-gray-600">300</td>
-                            <td class="px-4 py-3 text-center font-bold text-orange-600 text-xs border-l border-gray-200">4次 + 再贈送1次</td>
+                            <td class="px-4 py-3 text-center font-bold text-orange-600 text-sm border-l border-gray-200">4次 + 再贈送1次</td>
                             <td class="px-4 py-3 text-right font-mono text-gray-600">2,700</td>
                         </tr>
                         <tr class="bg-orange-50/40 border-b-2 border-orange-200">
                             <td class="px-4 py-3 font-medium text-slate-700">運動按摩</td>
-                            <td class="px-4 py-3 text-center text-slate-500 text-[10px] border-l border-gray-200">贈送1次30分鐘</td>
+                            <td class="px-4 py-3 text-center text-slate-600 text-sm border-l border-gray-200">贈送一次 (30分鐘)</td>
                             <td class="px-4 py-3 text-right font-mono text-gray-600">900</td>
-                            <td class="px-4 py-3 text-center text-slate-500 text-[10px] border-l border-gray-200">贈送1次30分鐘</td>
+                            <td class="px-4 py-3 text-center text-slate-600 text-sm border-l border-gray-200">贈送一次 (30分鐘)</td>
                             <td class="px-4 py-3 text-right font-mono text-gray-600">900</td>
-                            <td class="px-4 py-3 text-center font-bold text-orange-600 text-xs border-l border-gray-200">2次 + 再贈送1次</td>
+                            <td class="px-4 py-3 text-center font-bold text-orange-600 text-sm border-l border-gray-200">2次 + 再贈送1次</td>
                             <td class="px-4 py-3 text-right font-mono text-gray-600">4,500</td>
                         </tr>
                     </tbody>
