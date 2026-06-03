@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IM 70.3 墾丁 鐵人三項訓練營 | 報名表單</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #f97316 0%, #c2410c 100%); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-200 selection:text-orange-900">
+
+    <header class="gradient-bg pt-20 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+        <div class="max-w-3xl mx-auto text-center relative z-10">
+            <h1 class="text-3xl md:text-5xl font-black text-white leading-tight mb-4 tracking-tight">
+                IM 70.3 墾丁訓練營<br />
+                <span class="text-orange-200">正式報名表單</span>
+            </h1>
+            <p class="text-lg text-orange-50 font-light">
+                早鳥優惠至 6/24 (三) 24:00 截止，請填寫下方資訊完成報名程序。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-10">
+            <!-- 將 action 替換為您的 Google Apps Script Web App URL -->
+            <form id="registrationForm" action="您的_APPS_SCRIPT_網址" method="POST" class="space-y-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-slate-700 mb-1">真實姓名</label>
+                        <input type="text" id="name" name="姓名" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-slate-700 mb-1">聯絡電話 (手機)</label>
+                        <input type="tel" id="phone" name="聯絡電話" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-slate-700 mb-1">Email 信箱</label>
+                    <input type="email" id="email" name="Email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition">
+                </div>
+
+                <div>
+                    <label for="plan" class="block text-sm font-medium text-slate-700 mb-1">報名方案 (含早鳥優惠)</label>
+                    <select id="plan" name="報名方案" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition bg-white">
+                        <option value="" disabled selected>請選擇方案</option>
+                        <option value="初階方案">初階方案 - 早鳥價 NT$25,000</option>
+                        <option value="進階方案">進階方案 - 早鳥價 NT$45,000</option>
+                        <option value="VIP方案">VIP方案 - 早鳥價 NT$55,000</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="size" class="block text-sm font-medium text-slate-700 mb-1">Alé 三鐵衣尺寸</label>
+                        <select id="size" name="三鐵衣尺寸" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition bg-white">
+                            <option value="" disabled selected>請選擇尺寸</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="experience" class="block text-sm font-medium text-slate-700 mb-1">鐵人三項經驗</label>
+                        <select id="experience" name="鐵人三項經驗" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition bg-white">
+                            <option value="" disabled selected>請選擇經驗</option>
+                            <option value="無經驗 (初鐵)">無經驗 (初鐵)</option>
+                            <option value="有標鐵經驗">有標鐵 (51.5) 經驗</option>
+                            <option value="有半程超鐵經驗">有半程超鐵 (113/70.3) 經驗</option>
+                            <option value="有超鐵經驗">有超鐵 (226) 經驗</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="remarks" class="block text-sm font-medium text-slate-700 mb-1">備註 (如有舊傷、特殊飲食習慣或其他疑問)</label>
+                    <textarea id="remarks" name="備註" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"></textarea>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full gradient-bg hover:opacity-90 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 flex justify-center items-center">
+                        提交報名資料
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>川岳中醫 x 光聿KUANGYU 聯合訓練營</p>
+    </footer>
+
+    <script>
+        // 防止表單提交後跳轉，並可加上 Loading 效果與提示
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 提交中...';
+            btn.disabled = true;
+
+            const formData = new FormData(this);
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                alert('報名成功！我們將盡快與您聯繫。');
+                this.reset();
+                btn.innerHTML = '提交報名資料';
+                btn.disabled = false;
+            })
+            .catch(error => {
+                alert('系統發生錯誤，請稍後再試。');
+                btn.innerHTML = '提交報名資料';
+                btn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
