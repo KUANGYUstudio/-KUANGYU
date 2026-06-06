@@ -2,16 +2,17 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>App 圖示完美比例產生器 V3 (自訂檔名版)</title>
+  <title>App 圖示完美比例產生器 V5 (漸層與邊框擴充版)</title>
   <style>
     * { box-sizing: border-box; }
     :root {
-      --primary: #2e67a8;
-      --bg: #f8fafc;
+      --primary: #5c5c5c;
+      --bg: #f5f5f3;
       --card-bg: #ffffff;
-      --text-main: #334155;
-      --text-sub: #64748b;
-      --border: #e2e8f0;
+      --text-main: #333333;
+      --text-sub: #7a7a7a;
+      --border: #e0e0e0;
+      --preview-radius: 22.5%;
     }
     body { 
       font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; 
@@ -24,69 +25,157 @@
     }
     .container {
       background: var(--card-bg); 
-      padding: 30px; 
-      border-radius: 16px; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+      padding: 40px; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02); 
       border: 1px solid var(--border);
-      text-align: center;
     }
-    h2 { color: var(--primary); margin-top: 0; }
-    p { color: var(--text-sub); font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
-    .control-group {
-      margin-bottom: 20px;
-      text-align: left;
-      background: #f1f5f9;
-      padding: 16px;
-      border-radius: 12px;
+    h2 { color: var(--text-main); margin-top: 0; font-weight: 500; text-align: center; }
+    p { color: var(--text-sub); font-size: 14px; margin-bottom: 30px; line-height: 1.6; text-align: center; }
+    
+    .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .control-group { margin-bottom: 20px; text-align: left; }
+    .full-width { grid-column: 1 / -1; }
+    
+    label { display: block; font-weight: 500; margin-bottom: 8px; font-size: 13px; color: var(--text-main); }
+    input[type="file"], input[type="range"], input[type="color"], input[type="text"], select { 
+      width: 100%; display: block; 
     }
-    label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
-    input[type="file"], input[type="range"], input[type="color"], input[type="text"] { width: 100%; display: block; }
-    input[type="file"] { padding: 8px; font-size: 14px; }
-    input[type="color"] { border: 1px solid var(--border); border-radius: 4px; padding: 0; height: 40px; cursor: pointer; }
-    input[type="text"] { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; }
-    input[type="text"]:focus { border-color: var(--primary); }
+    input[type="file"] { padding: 10px; font-size: 13px; border: 1px dashed var(--border); border-radius: 4px; cursor: pointer; }
+    input[type="color"] { border: 1px solid var(--border); border-radius: 4px; padding: 0; height: 38px; cursor: pointer; }
+    input[type="text"], select { padding: 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; outline: none; background: #fff; }
+    input[type="text"]:focus, select:focus { border-color: var(--primary); }
+    
+    .checkbox-group { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-main); cursor: pointer; }
+    .checkbox-group input { width: auto; }
+
+    .sub-panel { background: #fafafa; padding: 15px; border-radius: 6px; margin-top: 10px; border: 1px solid #f0f0f0; }
+    .flex-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px;}
+    .flex-row > div { flex: 1; }
+    .flex-row:last-child { margin-bottom: 0; }
+    .hidden { display: none !important; }
+
+    .preview-section { margin: 40px 0 20px; padding-top: 30px; border-top: 1px solid var(--border); text-align: center; }
     .preview-container {
-      margin: 30px auto; width: 180px; height: 180px; border-radius: 22.5%; 
-      overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);
+      margin: 15px auto; width: 160px; height: 160px; border-radius: var(--preview-radius); 
+      overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); background: #fff;
+      transition: border-radius 0.2s ease;
     }
     canvas { display: block; width: 100%; height: 100%; }
+    
     .btn {
       background: var(--primary); color: white; border: none; padding: 14px 24px;
-      border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: 0.2s;
+      border-radius: 4px; font-size: 15px; font-weight: 500; cursor: pointer; width: 100%; transition: 0.2s; letter-spacing: 1px;
     }
-    .btn:hover { background: #235284; }
-    .btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+    .btn:hover { background: #4a4a4a; }
+    .btn:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>高畫質圖示產生器 V3</h2>
-    <p>上傳修改好尺寸的 SVG 向量圖示，設定專屬檔案名稱，系統將為您輸出最完美的 App 桌面圖示。</p>
+    <h2>圖示產生器</h2>
+    <p>系統化處理 SVG 向量圖示，輸出精準的 App 桌面圖標。</p>
 
-    <div class="control-group">
-      <label>1. 上傳 SVG 向量圖示</label>
+    <div class="control-group full-width">
+      <label>1. 上傳圖示檔案 (SVG / PNG)</label>
       <input type="file" id="upload" accept="image/svg+xml, image/png">
     </div>
 
-    <div class="control-group">
-      <label>2. 調整圖示大小 (預設 65% 最佳比例)</label>
-      <input type="range" id="scale" min="30" max="100" value="65">
-      <div style="text-align:right; font-size:12px; color:var(--text-sub);" id="scaleValue">65%</div>
+    <div class="grid-layout">
+      <div class="control-group">
+        <label>2. 內部圖示縮放 (<span id="scaleValue">65%</span>)</label>
+        <input type="range" id="scale" min="30" max="100" value="65">
+      </div>
+
+      <div class="control-group">
+        <label>3. 預覽外框圓角 (<span id="radiusValue">22%</span>)</label>
+        <input type="range" id="radius" min="0" max="50" value="22">
+      </div>
     </div>
 
-    <div class="control-group">
-      <label>3. 選擇明亮底色 (預設為純白)</label>
-      <input type="color" id="bgColor" value="#ffffff">
+    <div class="control-group full-width">
+      <label>4. 背景設定</label>
+      <select id="bgType">
+        <option value="solid">單色背景</option>
+        <option value="gradient">漸層背景</option>
+      </select>
+      
+      <div id="bgGradientPanel" class="sub-panel hidden">
+        <div class="flex-row">
+          <div>
+            <label>主要顏色</label>
+            <input type="color" id="bgColor1" value="#ffffff">
+          </div>
+          <div>
+            <label>漸層副色</label>
+            <input type="color" id="bgColor2" value="#e2e8f0">
+          </div>
+        </div>
+        <div class="flex-row">
+          <div style="flex: 1;">
+            <label>漸層方向</label>
+            <select id="bgAngle">
+              <option value="toBottom">由上至下</option>
+              <option value="toRight">由左至右</option>
+              <option value="toBottomRight">左上至右下</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div id="bgSolidPanel" class="sub-panel">
+        <label>背景顏色</label>
+        <input type="color" id="bgColorSolid" value="#ffffff">
+      </div>
     </div>
 
-    <div class="control-group">
-      <label>4. 設定輸出檔案名稱 (不需輸入 .png)</label>
-      <input type="text" id="fileName" value="icon-final" placeholder="例如: my-icon">
+    <div class="control-group full-width">
+      <label>5. 邊框花紋設定</label>
+      <select id="borderStyle">
+        <option value="none">無邊框</option>
+        <option value="solid">實線邊框</option>
+        <option value="dashed">虛線邊框</option>
+        <option value="dotted">點狀邊框</option>
+      </select>
+
+      <div id="borderPanel" class="sub-panel hidden">
+        <div class="flex-row">
+          <div>
+            <label>邊框顏色</label>
+            <input type="color" id="borderColor" value="#333333">
+          </div>
+          <div>
+            <label>邊框粗細 (<span id="borderWidthValue">10</span>px)</label>
+            <input type="range" id="borderWidth" min="2" max="60" value="10">
+          </div>
+        </div>
+      </div>
     </div>
 
-    <label style="text-align: center; color: var(--text-sub);">手機桌面銳利度預覽</label>
-    <div class="preview-container">
-      <canvas id="canvas" width="512" height="512"></canvas>
+    <div class="grid-layout">
+      <div class="control-group">
+        <label>6. 匯出尺寸</label>
+        <select id="exportSize">
+          <option value="512">512 x 512</option>
+          <option value="1024">1024 x 1024</option>
+        </select>
+      </div>
+      <div class="control-group" style="display: flex; align-items: flex-end; padding-bottom: 10px;">
+        <label class="checkbox-group">
+          <input type="checkbox" id="addShadow"> 圖示輕微陰影
+        </label>
+      </div>
+    </div>
+
+    <div class="control-group full-width">
+      <label>7. 設定檔案名稱</label>
+      <input type="text" id="fileName" value="icon-final" placeholder="不需輸入副檔名">
+    </div>
+
+    <div class="preview-section">
+      <label style="color: var(--text-sub);">視覺預覽</label>
+      <div class="preview-container" id="previewBox">
+        <canvas id="canvas" width="512" height="512"></canvas>
+      </div>
     </div>
 
     <button class="btn" id="downloadBtn" disabled>請先上傳圖片</button>
@@ -96,8 +185,29 @@
     const upload = document.getElementById('upload');
     const scaleSlider = document.getElementById('scale');
     const scaleValue = document.getElementById('scaleValue');
-    const bgColorPicker = document.getElementById('bgColor');
+    const radiusSlider = document.getElementById('radius');
+    const radiusValue = document.getElementById('radiusValue');
+    
+    // Background controls
+    const bgType = document.getElementById('bgType');
+    const bgSolidPanel = document.getElementById('bgSolidPanel');
+    const bgGradientPanel = document.getElementById('bgGradientPanel');
+    const bgColorSolid = document.getElementById('bgColorSolid');
+    const bgColor1 = document.getElementById('bgColor1');
+    const bgColor2 = document.getElementById('bgColor2');
+    const bgAngle = document.getElementById('bgAngle');
+
+    // Border controls
+    const borderStyle = document.getElementById('borderStyle');
+    const borderPanel = document.getElementById('borderPanel');
+    const borderColor = document.getElementById('borderColor');
+    const borderWidthSlider = document.getElementById('borderWidth');
+    const borderWidthValue = document.getElementById('borderWidthValue');
+
+    const exportSizeSelect = document.getElementById('exportSize');
+    const addShadowCheck = document.getElementById('addShadow');
     const fileNameInput = document.getElementById('fileName');
+    
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const downloadBtn = document.getElementById('downloadBtn');
@@ -107,21 +217,92 @@
 
     let currentImg = null;
 
+    // UI Toggle logic
+    bgType.addEventListener('change', (e) => {
+      if (e.target.value === 'solid') {
+        bgSolidPanel.classList.remove('hidden');
+        bgGradientPanel.classList.add('hidden');
+      } else {
+        bgSolidPanel.classList.add('hidden');
+        bgGradientPanel.classList.remove('hidden');
+      }
+      drawCanvas();
+    });
+
+    borderStyle.addEventListener('change', (e) => {
+      if (e.target.value === 'none') {
+        borderPanel.classList.add('hidden');
+      } else {
+        borderPanel.classList.remove('hidden');
+      }
+      drawCanvas();
+    });
+
     function drawCanvas() {
-      ctx.fillStyle = bgColorPicker.value;
+      const size = parseInt(exportSizeSelect.value, 10);
+      
+      if (canvas.width !== size) {
+        canvas.width = size;
+        canvas.height = size;
+      }
+
+      // 繪製背景
+      if (bgType.value === 'solid') {
+        ctx.fillStyle = bgColorSolid.value;
+      } else {
+        let grad;
+        if (bgAngle.value === 'toBottom') {
+          grad = ctx.createLinearGradient(0, 0, 0, size);
+        } else if (bgAngle.value === 'toRight') {
+          grad = ctx.createLinearGradient(0, 0, size, 0);
+        } else {
+          grad = ctx.createLinearGradient(0, 0, size, size);
+        }
+        grad.addColorStop(0, bgColor1.value);
+        grad.addColorStop(1, bgColor2.value);
+        ctx.fillStyle = grad;
+      }
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      // 繪製內部圖示
       if (currentImg) {
         const scale = scaleSlider.value / 100;
         const maxDim = Math.max(currentImg.width, currentImg.height);
-        const ratio = 512 / maxDim; 
+        const ratio = size / maxDim; 
         
         const scaledWidth = currentImg.width * ratio * scale;
         const scaledHeight = currentImg.height * ratio * scale;
-        const x = (512 - scaledWidth) / 2;
-        const y = (512 - scaledHeight) / 2;
+        const x = (size - scaledWidth) / 2;
+        const y = (size - scaledHeight) / 2;
 
+        ctx.save();
+        if (addShadowCheck.checked) {
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+          ctx.shadowBlur = size * 0.03;
+          ctx.shadowOffsetY = size * 0.01;
+        }
         ctx.drawImage(currentImg, x, y, scaledWidth, scaledHeight);
+        ctx.restore();
+      }
+
+      // 繪製邊框
+      const currentBorder = borderStyle.value;
+      if (currentBorder !== 'none') {
+        const width = parseInt(borderWidthSlider.value, 10) * (size / 512); // 依解析度等比放大邊框
+        ctx.lineWidth = width;
+        ctx.strokeStyle = borderColor.value;
+        
+        if (currentBorder === 'dashed') {
+          ctx.setLineDash([width * 2, width * 2]);
+        } else if (currentBorder === 'dotted') {
+          ctx.setLineDash([width, width]);
+        } else {
+          ctx.setLineDash([]);
+        }
+
+        // 往內縮半個線寬，確保邊框完全顯示在畫布內
+        ctx.strokeRect(width / 2, width / 2, size - width, size - width);
+        ctx.setLineDash([]); // 重置
       }
     }
 
@@ -151,19 +332,25 @@
       reader.readAsDataURL(file);
     });
 
-    scaleSlider.addEventListener('input', function(e) {
-      scaleValue.textContent = e.target.value + '%';
-      drawCanvas();
+    // Event Listeners
+    scaleSlider.addEventListener('input', (e) => { scaleValue.textContent = e.target.value + '%'; drawCanvas(); });
+    radiusSlider.addEventListener('input', (e) => { 
+      const val = e.target.value; 
+      radiusValue.textContent = val + '%'; 
+      document.documentElement.style.setProperty('--preview-radius', val + '%'); 
+    });
+    borderWidthSlider.addEventListener('input', (e) => { borderWidthValue.textContent = e.target.value; drawCanvas(); });
+    
+    [bgColorSolid, bgColor1, bgColor2, bgAngle, borderColor, exportSizeSelect, addShadowCheck].forEach(el => {
+      el.addEventListener('change', drawCanvas);
+      el.addEventListener('input', drawCanvas);
     });
 
-    bgColorPicker.addEventListener('input', drawCanvas);
     fileNameInput.addEventListener('input', updateBtnText);
 
     downloadBtn.addEventListener('click', function() {
       if (!currentImg) return;
-      let name = fileNameInput.value.trim();
-      if (!name) name = 'icon';
-      
+      let name = fileNameInput.value.trim() || 'icon';
       const link = document.createElement('a');
       link.download = name + '.png';
       link.href = canvas.toDataURL('image/png', 1.0);
