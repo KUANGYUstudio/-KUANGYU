@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>App 圖示完美比例產生器 V2 (高畫質引擎)</title>
+  <title>App 圖示完美比例產生器 V3 (自訂檔名版)</title>
   <style>
     * { box-sizing: border-box; }
     :root {
@@ -40,9 +40,11 @@
       border-radius: 12px;
     }
     label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
-    input[type="file"], input[type="range"], input[type="color"] { width: 100%; display: block; }
+    input[type="file"], input[type="range"], input[type="color"], input[type="text"] { width: 100%; display: block; }
     input[type="file"] { padding: 8px; font-size: 14px; }
     input[type="color"] { border: 1px solid var(--border); border-radius: 4px; padding: 0; height: 40px; cursor: pointer; }
+    input[type="text"] { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; }
+    input[type="text"]:focus { border-color: var(--primary); }
     .preview-container {
       margin: 30px auto; width: 180px; height: 180px; border-radius: 22.5%; 
       overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);
@@ -58,8 +60,8 @@
 </head>
 <body>
   <div class="container">
-    <h2>高畫質圖示產生器 V2</h2>
-    <p>請上傳下載好的 SVG 檔案。系統將以向量運算引擎重新繪製，保證圖示邊緣絕對銳利清晰。</p>
+    <h2>高畫質圖示產生器 V3</h2>
+    <p>上傳修改好尺寸的 SVG 向量圖示，設定專屬檔案名稱，系統將為您輸出最完美的 App 桌面圖示。</p>
 
     <div class="control-group">
       <label>1. 上傳 SVG 向量圖示</label>
@@ -77,12 +79,17 @@
       <input type="color" id="bgColor" value="#ffffff">
     </div>
 
+    <div class="control-group">
+      <label>4. 設定輸出檔案名稱 (不需輸入 .png)</label>
+      <input type="text" id="fileName" value="icon-final" placeholder="例如: my-icon">
+    </div>
+
     <label style="text-align: center; color: var(--text-sub);">手機桌面銳利度預覽</label>
     <div class="preview-container">
       <canvas id="canvas" width="512" height="512"></canvas>
     </div>
 
-    <button class="btn" id="downloadBtn" disabled>下載高畫質 icon03.png</button>
+    <button class="btn" id="downloadBtn" disabled>請先上傳圖片</button>
   </div>
 
   <script>
@@ -90,11 +97,11 @@
     const scaleSlider = document.getElementById('scale');
     const scaleValue = document.getElementById('scaleValue');
     const bgColorPicker = document.getElementById('bgColor');
+    const fileNameInput = document.getElementById('fileName');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const downloadBtn = document.getElementById('downloadBtn');
 
-    // 啟動高畫質渲染引擎
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
@@ -120,6 +127,13 @@
 
     drawCanvas();
 
+    function updateBtnText() {
+      if (currentImg) {
+        let name = fileNameInput.value.trim() || 'icon';
+        downloadBtn.textContent = `下載 ${name}.png`;
+      }
+    }
+
     upload.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -130,6 +144,7 @@
           currentImg = img;
           drawCanvas();
           downloadBtn.disabled = false;
+          updateBtnText();
         }
         img.src = event.target.result;
       }
@@ -141,12 +156,16 @@
       drawCanvas();
     });
 
-    bgColorPicker.addEventListener('input', function() { drawCanvas(); });
+    bgColorPicker.addEventListener('input', drawCanvas);
+    fileNameInput.addEventListener('input', updateBtnText);
 
     downloadBtn.addEventListener('click', function() {
       if (!currentImg) return;
+      let name = fileNameInput.value.trim();
+      if (!name) name = 'icon';
+      
       const link = document.createElement('a');
-      link.download = 'icon03.png';
+      link.download = name + '.png';
       link.href = canvas.toDataURL('image/png', 1.0);
       link.click();
     });
