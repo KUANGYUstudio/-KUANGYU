@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="光聿主控板">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#2e67a8">
+  
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1828/1828791.png">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1828/1828791.png">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --primary: #2e67a8;
+      --accent: #a01d21;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #334155;
+      --text-sub: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+    }
+
+    body { 
+      font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; 
+      padding: 12px; 
+      margin: 0 auto; 
+      max-width: 768px; 
+      background-color: var(--bg); 
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h3 { font-weight: 700; color: var(--primary); margin: 8px 0 16px 0; text-align: center; font-size: 19px; }
+
+    .function-tabs { 
+      display: flex; margin-bottom: 16px; background: #cbd5e1; padding: 4px; 
+      border-radius: 12px; overflow-x: auto; white-space: nowrap; gap: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .function-tabs::-webkit-scrollbar { display: none; }
+    .tab-button { 
+      flex: 1; padding: 12px 8px; border: none; border-radius: 9px; 
+      font-size: 14px; color: #475569; cursor: pointer; font-weight: 600; transition: all 0.2s;
+      background: transparent; text-align: center;
+    }
+    .tab-button.active { background-color: #fff; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+    .card-section {
+      background: var(--card-bg); padding: 16px; border-radius: 14px; 
+      margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;
+    }
+    .card-title { font-size: 17px; font-weight: 700; color: var(--text-main); margin-bottom: 14px; border-bottom: 2px dashed var(--border); padding-bottom: 10px; text-align: center; }
+    .card-title.adjust-theme { color: var(--accent); }
+
+    label { display: block; margin-top: 14px; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: var(--text-sub); }
+    label:first-of-type { margin-top: 0; }
+    
+    input, select { 
+      width: 100%; padding: 12px; border: 1.5px solid var(--border); 
+      border-radius: 10px; font-size: 16px; 
+      background-color: #fff; outline: none; transition: border-color 0.2s; color: var(--text-main);
+    }
+    
+    input[type="date"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      box-sizing: border-box;
+      display: block;
+    }
+    input:focus, select:focus { border-color: var(--primary); }
+    select { font-weight: 600; }
+
+    .btn-grid { display: grid; gap: 8px; margin-top: 5px; }
+    .cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .cols-2 { grid-template-columns: repeat(2, 1fr); }
+    
+    .option-btn { 
+      padding: 12px 4px; cursor: pointer; border: 1.5px solid var(--border); 
+      border-radius: 10px; background-color: #fff; font-size: 14px; 
+      color: var(--text-sub); font-weight: 500; transition: all 0.2s;
+      min-height: 46px; 
+      display: flex; align-items: center; justify-content: center;
+    }
+    .option-btn.selected { 
+      background-color: var(--primary) !important; color: white !important; 
+      border-color: var(--primary) !important; 
+    }
+    .option-btn.accent-selected { 
+      background-color: var(--accent) !important; color: white !important; 
+      border-color: var(--accent) !important; 
+    }
+
+    .dashed-box {
+      border: 2px dashed #f1aeb5; background-color: #fff8f9;
+      padding: 12px; border-radius: 10px; margin-top: 12px;
+    }
+
+    .parking-box { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--border); }
+    
+    .date-row { display: flex; gap: 10px; }
+    .date-group { flex: 1; min-width: 0; }
+    @media (max-width: 480px) {
+      .date-row { flex-direction: column; gap: 4px; }
+    }
+
+    .special-input-box { background-color: #fff3e0; padding: 12px; border-radius: 8px; border: 1px dashed #ffcc80; margin-top: 8px; }
+
+    .submit-btn { 
+      width: 100%; color: #fff; border: none; padding: 14px; 
+      border-radius: 10px; font-size: 16px; font-weight: 600; margin-top: 20px; 
+      cursor: pointer; transition: 0.2s;
+    }
+    .submit-btn:active { transform: translateY(1px); }
+
+    .action-btn { padding: 10px 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; min-height: 42px; }
+    .bg-primary { background: var(--primary); color: white; }
+    .bg-success { background: var(--success); color: white; }
+    .bg-warning { background: var(--warning); color: white; }
+    .bg-outline { background: transparent; color: var(--text-sub); border: 1px solid var(--border); }
+
+    .history-item { 
+      padding: 12px 0; border-bottom: 1px solid #f1f5f9; 
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .history-item:last-child { border-bottom: none; }
+    .h-info { display: flex; flex-direction: column; gap: 2px; }
+    .h-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
+    .h-sub { font-size: 13px; color: var(--text-sub); }
+
+    .search-box { display: flex; gap: 8px; margin-bottom: 4px; }
+    .search-box select { flex: 1; margin-bottom: 0; }
+    .search-box .action-btn { width: auto; height: 45px; margin-top: 0; }
+
+    .edit-panel { display: none; margin-top: 12px; padding: 12px; background: #f8f9fa; border-radius: 10px; border: 1px solid #e2e8f0; }
+    .hidden-panel { display: none; }
+    
+    .content { display: none; }
+    .content.active { display: block; }
+    #loading, #studentLoading, #reportLoading, #initLoading { text-align: center; padding: 16px; color: var(--text-sub); display: none; font-weight: bold; font-size: 14px; }
+    
+    .report-display-box {
+      background-color: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 10px;
+      font-size: 14px; line-height: 1.6; color: var(--text-main); white-space: pre-wrap; font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>光聿管理員主控板</h3>
+
+  <div class="function-tabs">
+    <button class="tab-button active" onclick="switchTab('tab-daily')">單日管理</button>
+    <button class="tab-button" onclick="switchTab('tab-student')">學生狀態</button>
+    <button class="tab-button" onclick="switchTab('tab-finance')">堂數儲值</button>
+    <button class="tab-button" onclick="switchTab('tab-adjust')">堂數調整</button>
+    <button class="tab-button" onclick="switchTab('tab-alert')">警示報表</button>
+  </div>
+  
+  <div id="initLoading" style="display:block;">系統初始化...</div>
+
+  <div id="tab-daily" class="content active">
+    <div class="card-section">
+      <div class="card-title">課程日期查詢</div>
+      <input type="date" id="searchDate">
+      <button class="submit-btn" style="margin-top: 10px; background: var(--primary);" onclick="loadClasses()">查詢名單</button>
+    </div>
+    <div id="loading">讀取中，請稍候...</div>
+    <div class="card-section" id="resultCard" style="display:none;">
+      <div class="card-title" id="resultTitle">查詢結果</div>
+      <div id="classList"></div>
+    </div>
+  </div>
+
+  <div id="tab-student" class="content">
+    <div class="card-section">
+      <div class="card-title">學生狀態查詢</div>
+      <div class="search-box">
+        <select id="studentKeyword">
+          <option value="">載入名單中...</option>
+        </select>
+        <button class="action-btn bg-primary" onclick="searchStudentData()">查詢</button>
+      </div>
+    </div>
+    <div id="studentLoading">讀取中，請稍候...</div>
+    <div id="studentResultList"></div>
+  </div>
+
+  <div id="tab-finance" class="content">
+    <div class="card-section">
+      <div class="card-title">學生儲值系統</div>
+      
+      <label>學生姓名</label>
+      <select id="financeStudentName">
+        <option value="">載入名單中...</option>
+      </select>
+
+      <label>課程名稱</label>
+      <div class="btn-grid course-buttons" style="grid-template-columns: repeat(2, 1fr);">
+        <button class="option-btn" onclick="selectCourse(this, '功率課')">功率課</button>
+        <button class="option-btn" onclick="selectCourse(this, '跑班')">跑班</button>
+        <button class="option-btn" onclick="selectCourse(this, '補差額')">補差額</button>
+        <button class="option-btn" onclick="selectCourse(this, '租車位')">租車位</button>
+      </div>
+      <input type="hidden" id="selectedCourse">
+
+      <div id="option-container" style="margin-top: 12px;">
+        
+        <div id="功率課-options" class="hidden-panel">
+          <label>購買堂數</label>
+          <div class="btn-grid cols-3">
+            <button class="option-btn" onclick="setCount(this, 10)">10堂</button>
+            <button class="option-btn" onclick="setCount(this, 20)">20堂</button>
+            <button class="option-btn" onclick="clearCountSelection(this.parentElement); focusInput('power-count')">自訂</button>
+          </div>
+          <input type="number" id="power-count" style="margin-top:10px; display:none;" placeholder="輸入堂數" oninput="syncManualInput('count', this.value)">
+
+          <label>金額</label>
+          <div class="btn-grid cols-3">
+            <button class="option-btn" onclick="setPrice(this, 5500)">5500</button>
+            <button class="option-btn" onclick="setPrice(this, 10000)">10000</button>
+            <button class="option-btn" onclick="clearPriceSelection(this.parentElement); focusInput('power-price')">自訂</button>
+          </div>
+          <input type="number" id="power-price" style="margin-top:10px; display:none;" placeholder="自訂金額" oninput="syncManualInput('price', this.value)">
+        </div>
+
+        <div id="跑班-options" class="hidden-panel">
+          <label>購買堂數</label>
+          <div class="btn-grid cols-2">
+            <button class="option-btn" onclick="setCount(this, 10)">10堂</button>
+            <button class="option-btn" onclick="clearCountSelection(this.parentElement); focusInput('run-count')">自訂</button>
+          </div>
+          <input type="number" id="run-count" style="margin-top:10px; display:none;" placeholder="輸入堂數" oninput="syncManualInput('count', this.value)">
+
+          <label>金額</label>
+          <div class="btn-grid cols-2">
+            <button class="option-btn" onclick="setPrice(this, 4500)">4500</button>
+            <button class="option-btn" onclick="clearPriceSelection(this.parentElement); focusInput('run-price')">自訂</button>
+          </div>
+          <input type="number" id="run-price" style="margin-top:10px; display:none;" placeholder="輸入金額" oninput="syncManualInput('price', this.value)">
+        </div>
+
+        <div id="補差額-options" class="hidden-panel">
+          <div class="special-input-box">
+            <label style="margin-top:0; color:#e65100;">輸入補繳總金額</label>
+            <input type="number" id="makeup-price-input" placeholder="輸入金額" 
+                   oninput="syncManualInput('price', this.value); document.getElementById('financeCount').value=0;"
+                   style="font-size: 16px; font-weight: bold; color: #e65100; border: 2px solid #ffcc80;">
+          </div>
+        </div>
+
+        <div id="租車位-options" class="hidden-panel">
+          <div class="parking-box">
+            <div class="date-row">
+              <div class="date-group">
+                <label>開始日期</label>
+                <input type="date" id="parking-start-date" onchange="calculateParkingMonths()">
+              </div>
+              <div class="date-group">
+                <label>結束日期</label>
+                <input type="date" id="parking-end-date" onchange="calculateParkingMonths()">
+              </div>
+            </div>
+          </div>
+
+          <label>計算月數</label>
+          <input type="number" id="parking-months" placeholder="自動計算" oninput="syncManualInput('count', this.value)">
+
+          <label>金額</label>
+          <div class="btn-grid cols-3">
+            <button class="option-btn" onclick="setPrice(this, 800)">800</button>
+            <button class="option-btn" onclick="setPrice(this, 1600)">1600</button>
+            <button class="option-btn" onclick="setPrice(this, 2400)">2400</button>
+          </div>
+          <input type="number" id="parking-price" style="margin-top:10px; display:block;" placeholder="或輸入自訂金額" oninput="syncManualInput('price', this.value)">
+        </div>
+      </div>
+
+      <label>付款方式</label>
+      <div class="btn-grid payment-methods cols-3">
+        <button class="option-btn" onclick="setMethod(this, '現金')">現金</button>
+        <button class="option-btn" onclick="setMethod(this, 'LINE PAY')">LINE PAY</button>
+        <button class="option-btn" onclick="setMethod(this, '銀行匯款')">銀行匯款</button>
+      </div>
+
+      <label>繳費日期</label>
+      <input type="date" id="payment-date">
+
+      <input type="hidden" id="financeCount">
+      <input type="hidden" id="financePrice">
+      <input type="hidden" id="financeMethod">
+
+      <button onclick="submitFinanceTopUp()" class="submit-btn" id="submit-finance-btn" style="margin-top:24px; background:var(--primary);">確認儲值</button>
+    </div>
+  </div>
+
+  <div id="tab-adjust" class="content">
+    <div class="card-section">
+      <div class="card-title adjust-theme">調整與補簽系統</div>
+      
+      <label>選擇學生</label>
+      <select id="adjustStudentName">
+        <option value="">載入名單中...</option>
+      </select>
+      
+      <label>選擇課程項目</label>
+      <div class="btn-grid cols-3 adjust-course-grid">
+        <button class="option-btn" onclick="selectAdjustItem(this, 'course', '功率課')">功率課</button>
+        <button class="option-btn" onclick="selectAdjustItem(this, 'course', '跑班')">跑班</button>
+        <button class="option-btn" onclick="selectAdjustItem(this, 'course', '皮拉提斯')">皮拉提斯</button>
+      </div>
+      
+      <label>執行動作</label>
+      <div class="btn-grid cols-2 adjust-action-grid">
+        <button class="option-btn" onclick="selectAdjustItem(this, 'action', '補簽到')">補簽到</button>
+        <button class="option-btn" onclick="selectAdjustItem(this, 'action', '請假')">請假</button>
+        <button class="option-btn" onclick="selectAdjustItem(this, 'action', '補堂')">補堂</button>
+        <button class="option-btn" onclick="selectAdjustItem(this, 'action', '扣堂')">扣堂</button>
+      </div>
+      
+      <div id="adjust-count-panel" class="dashed-box hidden-panel">
+        <label style="color:var(--accent); margin-top:0;">輸入調整堂數</label>
+        <input type="number" id="adjustCount" value="1">
+      </div>
+
+      <label>日期設定</label>
+      <input type="date" id="adjustDate">
+      
+      <label>異動備註說明</label>
+      <input type="text" id="adjustNote" placeholder="請輸入備註原因">
+      
+      <input type="hidden" id="selectedAdjustCourse">
+      <input type="hidden" id="selectedAdjustAction">
+      
+      <button class="submit-btn" style="background:var(--accent);" onclick="executeAdjustment()">確認送出調整</button>
+    </div>
+  </div>
+
+  <div id="tab-alert" class="content">
+    <div class="card-section">
+      <div class="card-title">系統警示報表</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <button class="action-btn bg-warning" style="width:100%; text-align:center;" onclick="fetchReport('getLowBalanceReport')">功率課不足 (低於2堂)</button>
+        <button class="action-btn bg-primary" style="width:100%; text-align:center;" onclick="fetchReport('getParkingExpiryReport')">車位即將到期 (7天內)</button>
+        <button class="action-btn bg-outline" style="width:100%; text-align:center;" onclick="fetchReport('getInactiveStudentsReport')">超過兩週未上課</button>
+      </div>
+    </div>
+    <div id="reportLoading">報表產出中...</div>
+    <div class="card-section" id="reportCard" style="display:none;">
+      <div class="report-display-box" id="reportResult"></div>
+    </div>
+  </div>
+
+  <script>
+    // 📢 貼上網址位置：請在此處填入您從 Google Apps Script 取得的網頁應用程式網址 (URL)
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
+
+    // 核心優化：建立跨網域通訊控制中心
+    function callBackend(action, data) {
+      return fetch(WEB_APP_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: action, data: data }),
+        headers: { "Content-Type": "text/plain" }
+      })
+      .then(response => response.json())
+      .then(res => {
+        if (res.success) return res.result;
+        throw new Error(res.error);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const today = new Date();
+      const offset = today.getTimezoneOffset() * 60000;
+      const localISOTime = (new Date(today - offset)).toISOString().split('T')[0];
+      document.getElementById('searchDate').value = localISOTime;
+      document.getElementById('payment-date').value = localISOTime;
+      document.getElementById('adjustDate').value = localISOTime;
+
+      callBackend("getAllStudentNames", {})
+        .then(populateDropdowns)
+        .catch(err => alert("載入名單失敗：" + err.message));
+    });
+
+    function populateDropdowns(names) {
+      document.getElementById('initLoading').style.display = 'none';
+      const selects = ['studentKeyword', 'financeStudentName', 'adjustStudentName'];
+      
+      selects.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.innerHTML = '<option value="">請選擇學生...</option>';
+          names.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            el.appendChild(opt);
+          });
+        }
+      });
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function loadClasses() {
+      const dateStr = document.getElementById('searchDate').value;
+      if (!dateStr) return alert("請選擇日期");
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('resultCard').style.display = 'none';
+      
+      callBackend("getClassesByDate", { dateStr: dateStr })
+        .then(displayClasses)
+        .catch(err => {
+          document.getElementById('loading').style.display = 'none';
+          alert("讀取失敗：" + err.message);
+        });
+    }
+
+    function displayClasses(data) {
+      document.getElementById('loading').style.display = 'none';
+      const container = document.getElementById('classList');
+      container.innerHTML = '';
+      document.getElementById('resultTitle').textContent = `共 ${data.length} 筆預約`;
+      document.getElementById('resultCard').style.display = 'block';
+      
+      if (data.length === 0) {
+        container.innerHTML = '<div style="color:#666; text-align:center; padding:10px;">該日無預約資料</div>';
+        return;
+      }
+      data.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        
+        let actionButtonsHtml = '';
+        
+        if (item.hasSignedIn) {
+          actionButtonsHtml = `<button class="action-btn" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" disabled>已簽到</button>`;
+        } else if (item.isExcused) {
+          const excusedText = (item.courseType === '跑班') ? '已請假' : '已取消';
+          actionButtonsHtml = `<button class="action-btn" style="background:#fef2f2; color:#ef4444; border:1px solid #fecaca; cursor:not-allowed;" disabled>${excusedText}</button>`;
+        } else {
+          const cancelBtnText = (item.courseType === '跑班') ? '請假' : '取消';
+          
+          actionButtonsHtml = `
+            <button class="action-btn bg-success" onclick="actionSignIn('${item.studentName}', '${item.courseType}', this)">代簽到</button>
+            <button class="action-btn bg-outline" style="color:var(--danger); border-color:var(--danger);" onclick="actionCancel('${item.studentName}', '${item.sheetName}', ${item.rowIndex}, this)">${cancelBtnText}</button>
+          `;
+        }
+
+        div.innerHTML = `
+          <div class="h-info">
+            <span class="h-title">${item.studentName}</span>
+            <span class="h-sub">${item.courseType}</span>
+          </div>
+          <div style="display:flex; gap:6px;">
+            ${actionButtonsHtml}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function actionSignIn(name, course, btnElement) {
+      const dateStr = document.getElementById('searchDate').value;
+      if (!confirm(`確定幫 ${name} 簽到並扣堂？`)) return;
+      btnElement.textContent = "處理中...";
+      
+      callBackend("manualCoachSignIn", { studentName: name, courseType: course, dateStr: dateStr })
+        .then(res => {
+          alert(res); 
+          btnElement.textContent = "已簽到"; 
+          btnElement.style.background = "#f1f5f9"; 
+          btnElement.style.color = "#94a3b8"; 
+          btnElement.style.border = "1px solid #e2e8f0"; 
+          btnElement.disabled = true; 
+          const nextBtn = btnElement.nextElementSibling;
+          if (nextBtn) nextBtn.style.display = 'none';
+        })
+        .catch(err => {
+          alert("簽到失敗：" + err.message);
+          btnElement.textContent = "代簽到";
+        });
+    }
+
+    function actionCancel(name, sheetName, rowIndex, btnElement) {
+      const dateStr = document.getElementById('searchDate').value;
+      const actionText = btnElement.textContent; 
+      if (!confirm(`確定執行 ${name} 的 ${actionText} 動作？`)) return;
+      
+      const container = btnElement.parentElement;
+      const signInBtn = container.querySelector('.bg-success');
+      
+      btnElement.textContent = "處理中...";
+      btnElement.disabled = true;
+      if (signInBtn) signInBtn.disabled = true; 
+      
+      callBackend("manualCoachCancel", { studentName: name, sheetName: sheetName, dateStr: dateStr, rowIndex: rowIndex })
+        .then(res => {
+          alert(res); 
+          btnElement.textContent = `已${actionText}`; 
+          btnElement.style.color = "#ef4444"; 
+          btnElement.style.borderColor = "#fecaca"; 
+          btnElement.style.background = "#fef2f2";
+          btnElement.disabled = true; 
+          if (signInBtn) signInBtn.style.display = 'none';
+        })
+        .catch(err => {
+          alert("操作失敗：" + err.message);
+          btnElement.textContent = actionText;
+          btnElement.disabled = false;
+          if (signInBtn) signInBtn.disabled = false;
+        });
+    }
+
+    function searchStudentData() {
+      const keyword = document.getElementById('studentKeyword').value;
+      if (!keyword) return alert("請先選擇學生");
+      document.getElementById('studentLoading').style.display = 'block';
+      document.getElementById('studentResultList').innerHTML = '';
+      
+      callBackend("searchStudent", { keyword: keyword })
+        .then(displayStudents)
+        .catch(err => {
+          document.getElementById('studentLoading').style.display = 'none';
+          alert("查詢失敗：" + err.message);
+        });
+    }
+
+    function displayStudents(students) {
+      document.getElementById('studentLoading').style.display = 'none';
+      const container = document.getElementById('studentResultList');
+      
+      if (students.length === 0) {
+        container.innerHTML = '<div class="card-section" style="text-align:center; color:#666;">查無相符學生資料</div>';
+        return;
+      }
+      
+      students.forEach(s => {
+        let html = `<div class="card-section"><div class="card-title">${s.name}</div>`;
+        let hasAnyService = false;
+
+        if (s.powerBalance !== "-" && s.powerBalance !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>功率課：</strong>${s.powerBalance} 堂 <span style="font-size:13px; color:var(--text-sub); margin-left:4px;">(到期日: ${s.expiryDate})</span></div>`;
+          hasAnyService = true;
+        }
+        if (s.runBalance !== "-" && s.runBalance !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>跑班：</strong>${s.runBalance} 堂</div>`;
+          hasAnyService = true;
+        }
+        if (s.pilatesBalance !== "-" && s.pilatesBalance !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>皮拉提斯：</strong>${s.pilatesBalance} 堂</div>`;
+          hasAnyService = true;
+        }
+        if (s.onlinePlan !== "-" && s.onlinePlan !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>線上課表期間：</strong>${s.onlinePlan}</div>`;
+          hasAnyService = true;
+        }
+        if (s.parking !== "-" && s.parking !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>租車位到期日：</strong>${s.parking}</div>`;
+          hasAnyService = true;
+        }
+
+        if (!hasAnyService) {
+           html += `<div style="font-size:14px; color:var(--text-sub); text-align:center; margin:16px 0;">目前無進行中的課程或服務紀錄</div>`;
+        }
+
+        let actionButtonsHtml = '';
+        if (s.powerBalance !== "-" && s.powerBalance !== "") {
+          actionButtonsHtml = `
+            <button class="action-btn bg-warning" style="flex:1;" onclick="sendProgressReminder('${s.name}', this)">進度提醒</button>
+            <button class="action-btn bg-outline" style="flex:1;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
+          `;
+        } else {
+          actionButtonsHtml = `
+            <button class="action-btn bg-outline" style="width:100%;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
+          `;
+        }
+
+        html += `
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            ${actionButtonsHtml}
+          </div>
+          <button class="action-btn bg-outline" style="width:100%; margin-top:8px; border-style:dashed;" onclick="copyToFinance('${s.name}')">帶入帳務與收費操作</button>
+          
+          <div id="editBox_${s.rowIndex}" class="edit-panel">
+            <label>修正姓名</label>
+            <input type="text" id="editName_${s.rowIndex}" value="${s.name}">
+            <label>修正 Email</label>
+            <input type="text" id="editEmail_${s.rowIndex}" value="${s.email}">
+            <button class="submit-btn" style="margin-top:12px; padding:12px; background:var(--primary);" onclick="saveStudentInfo(${s.rowIndex}, this)">儲存變更</button>
+          </div>
+        </div>`;
+        
+        container.innerHTML += html;
+      });
+    }
+
+    function toggleEdit(id) {
+      const el = document.getElementById(`editBox_${id}`);
+      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function saveStudentInfo(rowIndex, btn) {
+      const newName = document.getElementById(`editName_${rowIndex}`).value.trim();
+      const newEmail = document.getElementById(`editEmail_${rowIndex}`).value.trim();
+      if (!newName) return alert("姓名不能為空");
+      btn.textContent = "儲存中...";
+      
+      callBackend("updateStudentInfo", { rowIndex: rowIndex, newName: newName, newEmail: newEmail })
+        .then(res => { alert(res); btn.textContent = "儲存變更"; })
+        .catch(err => { alert("儲存失敗：" + err.message); btn.textContent = "儲存變更"; });
+    }
+
+    function sendProgressReminder(name, btn) {
+      if (!confirm(`確定發送功率課進度提醒給 ${name} 嗎？`)) return;
+      btn.textContent = "發送中...";
+      
+      callBackend("sendSingleProgressReminder", { name: name })
+        .then(res => { alert(res); btn.textContent = "進度提醒"; })
+        .catch(err => { alert("發送失敗：" + err.message); btn.textContent = "進度提醒"; });
+    }
+
+    function copyToFinance(name) {
+      document.getElementById('financeStudentName').value = name;
+      document.getElementById('adjustStudentName').value = name;
+      alert(`已帶入 [${name}] 的資料，請點擊上方標籤切換至帳務或調整區操作`);
+    }
+
+    function selectCourse(el, course) {
+      clearAllSelections();
+      document.getElementById("selectedCourse").value = course;
+      document.querySelectorAll('.course-buttons .option-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add("selected");
+
+      document.querySelectorAll("#option-container > div").forEach(d => d.classList.add("hidden-panel"));
+      const targetDiv = document.getElementById(course + "-options");
+      if (targetDiv) targetDiv.classList.remove("hidden-panel");
+
+      if (course === '補差額') {
+        document.getElementById("financeCount").value = 0;
+        setTimeout(() => {
+          const input = document.getElementById("makeup-price-input");
+          if(input) input.focus();
+        }, 100);
+      }
+    }
+
+    function setCount(el, c) { 
+      document.getElementById("financeCount").value = c; 
+      highlightBtn(el); 
+      const input = el.parentElement.nextElementSibling;
+      if(input && input.tagName === 'INPUT') input.style.display = 'none';
+    }
+
+    function setPrice(el, p) { 
+      document.getElementById("financePrice").value = p; 
+      highlightBtn(el); 
+      const input = el.parentElement.nextElementSibling;
+      if(input && input.tagName === 'INPUT') input.style.display = 'none';
+    }
+
+    function setMethod(el, m) { 
+      document.getElementById("financeMethod").value = m; 
+      highlightBtn(el); 
+    }
+
+    // 餘下內部邏輯輔助函式保持原樣
+    function highlightBtn(el) { el.parentNode.querySelectorAll('button').forEach(b => b.classList.remove("selected")); el.classList.add("selected"); }
+    function clearCountSelection(parent) { parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); document.getElementById("financeCount").value = ""; }
+    function clearPriceSelection(parent) { parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); document.getElementById("financePrice").value = ""; }
+    function focusInput(id) { const el = document.getElementById(id); el.style.display = 'block'; setTimeout(() => el.focus(), 100); }
+    function syncManualInput(type, val) { if(type === 'count') document.getElementById("financeCount").value = val; if(type === 'price') document.getElementById("financePrice").value = val; }
+    
+    function calculateParkingMonths() {
+      const s = document.getElementById('parking-start-date').value;
+      const e = document.getElementById('parking-end-date').value;
+      if (s && e) {
+        const start = new Date(s);
+        const end = new Date(e);
+        let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+        if (months <= 0) months = 0;
+        document.getElementById('parking-months').value = months;
+        document.getElementById('financeCount').value = months;
+      }
+    }
+
+    function clearAllSelections() {
+      document.getElementById("financeCount").value = "";
+      document.getElementById("financePrice").value = "";
+      document.querySelectorAll('#option-container .option-btn').forEach(b => b.classList.remove('selected'));
+      ['power-count', 'power-price', 'run-count', 'run-price', 'makeup-price-input', 'parking-price'].forEach(id => {
+         const el = document.getElementById(id); if(el) { if(id !== 'makeup-price-input' && id !== 'parking-price') el.style.display = 'none'; el.value = ''; }
+      });
+    }
+
+    function submitFinanceTopUp() {
+      const btn = document.getElementById("submit-finance-btn");
+      const data = {
+        name: document.getElementById("financeStudentName").value,
+        course: document.getElementById("selectedCourse").value,
+        count: document.getElementById("financeCount").value,
+        price: document.getElementById("financePrice").value,
+        method: document.getElementById("financeMethod").value,
+        paymentDate: document.getElementById("payment-date").value,
+        parkingStartDate: document.getElementById("parking-start-date").value,
+        parkingEndDate: document.getElementById("parking-end-date").value
+      };
+
+      if (!data.name || !data.course || !data.price || !data.method) return alert("資訊未填寫完整喔！");
+      if (data.course !== '補差額' && !data.count) return alert("請選擇或輸入堂數/月數！");
+
+      btn.textContent = "發送中...";
+      btn.disabled = true;
+
+      callBackend("submitStudentTopUp", data)
+        .then(res => {
+          alert(res); btn.textContent = "確認儲值"; btn.disabled = false; clearAllSelections();
+          document.getElementById("financePrice").value = "";
+          document.querySelectorAll('.payment-methods .option-btn').forEach(b => b.classList.remove('selected'));
+        })
+        .catch(err => {
+          alert("錯誤：" + err.message); btn.textContent = "確認儲值"; btn.disabled = false;
+        });
+    }
+
+    function selectAdjustItem(btn, type, val) {
+      const gridClass = (type === 'course') ? '.adjust-course-grid' : '.adjust-action-grid';
+      document.querySelectorAll(`${gridClass} .option-btn`).forEach(b => b.classList.remove('accent-selected'));
+      btn.classList.add('accent-selected');
+      if (type === 'course') document.getElementById('selectedAdjustCourse').value = val;
+      if (type === 'action') {
+        document.getElementById('selectedAdjustAction').value = val;
+        const panel = document.getElementById('adjust-count-panel');
+        if (val === '補堂' || val === '扣堂') panel.classList.remove('hidden-panel');
+        else { panel.classList.add('hidden-panel'); document.getElementById('adjustCount').value = (val === '請假') ? 0 : 1; }
+      }
+    }
+
+    function executeAdjustment() {
+      const name = document.getElementById('adjustStudentName').value;
+      const course = document.getElementById('selectedAdjustCourse').value;
+      const type = document.getElementById('selectedAdjustAction').value;
+      const count = document.getElementById('adjustCount').value;
+      const date = document.getElementById('adjustDate').value; 
+      const note = document.getElementById('adjustNote').value.trim();
+      
+      if (!name) return alert("請選擇學生");
+      if (!course) return alert("請選擇課程項目");
+      if (!type) return alert("請選擇執行動作");
+      if (!count || count <= 0) return alert("請輸入正確堂數");
+      if (!date) return alert("請選擇日期設定");
+      
+      const finalNote = note || type; 
+      if (!confirm(`確認執行手動異動：\n學生：${name}\n動作：${course} [${type}] ${count} 堂`)) return;
+      
+      callBackend("submitStudentAdjustment", { name: name, courseType: course, actionType: type, count: count, note: finalNote, targetDate: date })
+        .then(res => { alert(res); document.getElementById('adjustNote').value = ''; })
+        .catch(err => alert("調整失敗：" + err.message));
+    }
+
+    function fetchReport(functionName) {
+      document.getElementById('reportLoading').style.display = 'block';
+      document.getElementById('reportCard').style.display = 'none';
+      
+      callBackend(functionName, {})
+        .then(res => {
+          document.getElementById('reportLoading').style.display = 'none';
+          document.getElementById('reportResult').textContent = res;
+          document.getElementById('reportCard').style.display = 'block';
+        })
+        .catch(err => {
+          document.getElementById('reportLoading').style.display = 'none';
+          document.getElementById('reportResult').textContent = "[系統錯誤] " + err.message;
+          document.getElementById('reportCard').style.display = 'block';
+        });
+    }
+  </script>
+</body>
+</html>
