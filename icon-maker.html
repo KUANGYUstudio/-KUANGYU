@@ -2,10 +2,9 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>App 圖示完美比例產生器</title>
+  <title>App 圖示完美比例產生器 V2 (高畫質引擎)</title>
   <style>
     * { box-sizing: border-box; }
-
     :root {
       --primary: #2e67a8;
       --bg: #f8fafc;
@@ -14,7 +13,6 @@
       --text-sub: #64748b;
       --border: #e2e8f0;
     }
-
     body { 
       font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; 
       padding: 40px 20px; 
@@ -24,7 +22,6 @@
       color: var(--text-main);
       -webkit-font-smoothing: antialiased;
     }
-
     .container {
       background: var(--card-bg); 
       padding: 30px; 
@@ -33,10 +30,8 @@
       border: 1px solid var(--border);
       text-align: center;
     }
-
     h2 { color: var(--primary); margin-top: 0; }
     p { color: var(--text-sub); font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
-
     .control-group {
       margin-bottom: 20px;
       text-align: left;
@@ -44,89 +39,50 @@
       padding: 16px;
       border-radius: 12px;
     }
-
     label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
-    
-    input[type="file"] {
-      display: block; width: 100%; padding: 8px; font-size: 14px;
-    }
-
-    input[type="range"] {
-      width: 100%; margin-top: 8px;
-    }
-
-    input[type="color"] {
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0;
-      width: 100%;
-      height: 40px;
-      cursor: pointer;
-    }
-
-    /* 模擬 iOS 圓角的預覽區塊 */
+    input[type="file"], input[type="range"], input[type="color"] { width: 100%; display: block; }
+    input[type="file"] { padding: 8px; font-size: 14px; }
+    input[type="color"] { border: 1px solid var(--border); border-radius: 4px; padding: 0; height: 40px; cursor: pointer; }
     .preview-container {
-      margin: 30px auto;
-      width: 180px;
-      height: 180px;
-      border-radius: 22.5%; /* 模擬 Apple 圖示圓角比例 */
-      overflow: hidden;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      border: 1px solid rgba(0,0,0,0.05);
+      margin: 30px auto; width: 180px; height: 180px; border-radius: 22.5%; 
+      overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);
     }
-
-    canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
+    canvas { display: block; width: 100%; height: 100%; }
     .btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 14px 24px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      width: 100%;
-      transition: 0.2s;
+      background: var(--primary); color: white; border: none; padding: 14px 24px;
+      border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: 0.2s;
     }
-
     .btn:hover { background: #235284; }
     .btn:disabled { background: #cbd5e1; cursor: not-allowed; }
-
   </style>
 </head>
 <body>
-
   <div class="container">
-    <h2>App 圖示完美比例產生器</h2>
-    <p>上傳您下載的透明背景圖示，系統會自動幫您加上明亮底色並縮小預留邊距，產出最適合手機桌面的 512x512 解析度圖片。</p>
+    <h2>高畫質圖示產生器 V2</h2>
+    <p>請上傳下載好的 SVG 檔案。系統將以向量運算引擎重新繪製，保證圖示邊緣絕對銳利清晰。</p>
 
     <div class="control-group">
-      <label>1. 上傳透明背景的 PNG 圖示</label>
-      <input type="file" id="upload" accept="image/png">
+      <label>1. 上傳 SVG 向量圖示</label>
+      <input type="file" id="upload" accept="image/svg+xml, image/png">
     </div>
 
     <div class="control-group">
-      <label>2. 調整圖示大小 (預設 65% 最適合 iOS)</label>
+      <label>2. 調整圖示大小 (預設 65% 最佳比例)</label>
       <input type="range" id="scale" min="30" max="100" value="65">
       <div style="text-align:right; font-size:12px; color:var(--text-sub);" id="scaleValue">65%</div>
     </div>
 
     <div class="control-group">
-      <label>3. 選擇背景顏色 (預設為純白)</label>
+      <label>3. 選擇明亮底色 (預設為純白)</label>
       <input type="color" id="bgColor" value="#ffffff">
     </div>
 
-    <label style="text-align: center; color: var(--text-sub);">手機桌面預覽效果</label>
+    <label style="text-align: center; color: var(--text-sub);">手機桌面銳利度預覽</label>
     <div class="preview-container">
       <canvas id="canvas" width="512" height="512"></canvas>
     </div>
 
-    <button class="btn" id="downloadBtn" disabled>下載 icon01.png</button>
+    <button class="btn" id="downloadBtn" disabled>下載高畫質 icon03.png</button>
   </div>
 
   <script>
@@ -138,26 +94,23 @@
     const ctx = canvas.getContext('2d');
     const downloadBtn = document.getElementById('downloadBtn');
 
+    // 啟動高畫質渲染引擎
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
     let currentImg = null;
 
-    // 初始化畫布背景
     function drawCanvas() {
-      // 1. 填滿背景色
       ctx.fillStyle = bgColorPicker.value;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 2. 如果有圖片，則依照比例畫上去
       if (currentImg) {
         const scale = scaleSlider.value / 100;
-        
-        // 為了確保不變形，找出最長邊來計算縮放
         const maxDim = Math.max(currentImg.width, currentImg.height);
         const ratio = 512 / maxDim; 
         
         const scaledWidth = currentImg.width * ratio * scale;
         const scaledHeight = currentImg.height * ratio * scale;
-        
-        // 計算置中的 X 與 Y 座標
         const x = (512 - scaledWidth) / 2;
         const y = (512 - scaledHeight) / 2;
 
@@ -165,45 +118,36 @@
       }
     }
 
-    // 初始執行一次畫出白底
     drawCanvas();
 
-    // 監聽圖片上傳
     upload.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(event) {
         const img = new Image();
         img.onload = function() {
           currentImg = img;
           drawCanvas();
-          downloadBtn.disabled = false; // 圖片載入後開放下載
+          downloadBtn.disabled = false;
         }
         img.src = event.target.result;
       }
       reader.readAsDataURL(file);
     });
 
-    // 監聽大小調整
     scaleSlider.addEventListener('input', function(e) {
       scaleValue.textContent = e.target.value + '%';
       drawCanvas();
     });
 
-    // 監聽顏色調整
-    bgColorPicker.addEventListener('input', function() {
-      drawCanvas();
-    });
+    bgColorPicker.addEventListener('input', function() { drawCanvas(); });
 
-    // 下載功能
     downloadBtn.addEventListener('click', function() {
       if (!currentImg) return;
-      
       const link = document.createElement('a');
-      link.download = 'icon01.png';
-      link.href = canvas.toDataURL('image/png'); // 匯出為最高畫質的 PNG
+      link.download = 'icon03.png';
+      link.href = canvas.toDataURL('image/png', 1.0);
       link.click();
     });
   </script>
