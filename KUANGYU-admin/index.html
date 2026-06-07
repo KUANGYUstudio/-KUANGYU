@@ -844,15 +844,22 @@
       if (!name) return alert("請選擇學生");
       if (!course) return alert("請選擇課程項目");
       if (!type) return alert("請選擇執行動作");
-      if (!count || count <= 0) return alert("請輸入正確堂數");
       if (!date) return alert("請選擇日期設定");
 
+      // 針對「新增預約」的專屬流程
       if (type === '新增預約') {
-        if (!confirm(`確認要幫 ${name} 手動登記 ${date} 的課程預約嗎？`)) return;
+        if (course !== '功率課') return alert("目前僅開放「功率課」進行手動預約登記喔！");
+        if (!confirm(`確認要幫 ${name} 手動登記 ${date} 的功率課預約嗎？\n(系統將自動檢查是否滿班)`)) return;
+        
         callBackend("manualAddReservation", { name: name, courseType: course, dateStr: date, note: note })
           .then(res => { alert(res); document.getElementById('adjustNote').value = ''; })
           .catch(err => alert("預約失敗：" + err.message));
-        return;
+        return; // 執行完預約就結束，不往下走
+      }
+      
+      // 針對「補簽到、扣堂、補堂」的堂數檢查 (請假不需要大於 0)
+      if (type !== '請假' && (!count || count <= 0)) {
+        return alert("請輸入正確的調整堂數");
       }
       
       const finalNote = note || type; 
