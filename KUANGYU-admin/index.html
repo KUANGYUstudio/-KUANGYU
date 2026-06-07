@@ -10,8 +10,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#2e67a8">
   
-  <!-- App 圖示 -->
-<link rel="apple-touch-icon" href="./icon11.png">
+  <link rel="apple-touch-icon" href="./icon11.png">
 <link rel="icon" href="./icon11.png">
 
   <style>
@@ -28,6 +27,14 @@
       --danger: #ef4444;
       --warning: #f59e0b;
       --success: #10b981;
+      
+      /* 新增日曆配色 */
+      --evening-main: #00838f; 
+      --evening-light: #00acc1;
+      --evening-bg: #e0f7fa;
+      --morning-main: #ffb300; 
+      --morning-light: #ffca28;
+      --morning-bg: #fff8e1;
     }
 
     body { 
@@ -153,6 +160,17 @@
       background-color: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 10px;
       font-size: 14px; line-height: 1.6; color: var(--text-main); white-space: pre-wrap; font-family: monospace;
     }
+
+    /* 日曆專屬樣式 */
+    .calendar-wrapper { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
+    .calendar-month-title { font-weight: 700; font-size: 15px; color: var(--primary); text-align: center; margin-bottom: 8px; letter-spacing: 1px; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+    .calendar-day-header { font-size: 12px; color: var(--text-sub); font-weight: 600; padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+    .calendar-date { padding: 8px 0; font-size: 14px; border-radius: 8px; color: var(--text-main); display: flex; align-items: center; justify-content: center; }
+    .calendar-date.empty { background: transparent; }
+    .calendar-date.evening { background: var(--evening-bg); color: var(--evening-main); font-weight: 700; border: 1px solid var(--evening-light); }
+    .calendar-date.morning { background: var(--morning-bg); color: var(--morning-main); font-weight: 700; border: 1px solid var(--morning-light); }
+    .calendar-date.other { background: #f1f5f9; color: var(--primary); font-weight: 700; border: 1px solid #cbd5e1; }
   </style>
 </head>
 <body>
@@ -362,7 +380,7 @@
   </div>
 
   <script>
-    // 📢 貼上網址位置：請在此處填入您從 Google Apps Script 取得的網頁應用程式網址 (URL)
+    // 貼上網址位置：請在此處填入您從 Google Apps Script 取得的網頁應用程式網址 (URL)
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
     // 核心優化：建立跨網域通訊控制中心
@@ -542,106 +560,137 @@
     }
 
     function displayStudents(students) {
-  document.getElementById('studentLoading').style.display = 'none';
-  const container = document.getElementById('studentResultList');
-  
-  if (students.length === 0) {
-    container.innerHTML = '<div class="card-section" style="text-align:center; color:#666;">查無相符學生資料</div>';
-    return;
-  }
-  
-  students.forEach(s => {
-    let html = `<div class="card-section"><div class="card-title">${s.name}</div>`;
-    let hasAnyService = false;
-
-    if (s.powerBalance !== "-" && s.powerBalance !== "") {
-      html += `<div style="font-size:15px; margin:8px 0;"><strong>功率課：</strong>${s.powerBalance} 堂 <span style="font-size:13px; color:var(--text-sub); margin-left:4px;">(到期日: ${s.expiryDate})</span></div>`;
-      hasAnyService = true;
-    }
-    if (s.runBalance !== "-" && s.runBalance !== "") {
-      html += `<div style="font-size:15px; margin:8px 0;"><strong>跑班：</strong>${s.runBalance} 堂</div>`;
-      hasAnyService = true;
-    }
-    if (s.pilatesBalance !== "-" && s.pilatesBalance !== "") {
-      html += `<div style="font-size:15px; margin:8px 0;"><strong>皮拉提斯：</strong>${s.pilatesBalance} 堂</div>`;
-      hasAnyService = true;
-    }
-    if (s.onlinePlan !== "-" && s.onlinePlan !== "") {
-      html += `<div style="font-size:15px; margin:8px 0;"><strong>線上課表期間：</strong>${s.onlinePlan}</div>`;
-      hasAnyService = true;
-    }
-    if (s.parking !== "-" && s.parking !== "") {
-      html += `<div style="font-size:15px; margin:8px 0;"><strong>租車位到期日：</strong>${s.parking}</div>`;
-      hasAnyService = true;
-    }
-
-    if (!hasAnyService) {
-       html += `<div style="font-size:14px; color:var(--text-sub); text-align:center; margin:16px 0;">目前無進行中的課程或服務紀錄</div>`;
-    }
-
-    // === 新增：後續預約紀錄區塊 (日曆卡片版) ===
-    html += `<div class="dashed-box" style="margin-top: 16px; border-color: #cbd5e1; background-color: #f8fafc;">`;
-    html += `<div style="font-weight:700; font-size:14px; color:var(--primary); margin-bottom:8px;">接下來的功率課預約</div>`;
-    
-    if (s.upcomingClasses && s.upcomingClasses.length > 0) {
-      // 建立一個彈性容器，讓日曆卡片可以由左至右排列，超過畫面自動換行
-      html += `<div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">`;
+      document.getElementById('studentLoading').style.display = 'none';
+      const container = document.getElementById('studentResultList');
       
-      s.upcomingClasses.forEach(uc => {
-        // 將系統回傳的 "2026/06/18" 切割，取出月份 (6) 與日期 (18)
-        const dateParts = uc.dateStr.split('/');
-        const month = parseInt(dateParts[1], 10);
-        const day = parseInt(dateParts[2], 10);
+      if (students.length === 0) {
+        container.innerHTML = '<div class="card-section" style="text-align:center; color:#666;">查無相符學生資料</div>';
+        return;
+      }
+      
+      students.forEach(s => {
+        let html = `<div class="card-section"><div class="card-title">${s.name}</div>`;
+        let hasAnyService = false;
+
+        if (s.powerBalance !== "-" && s.powerBalance !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>功率課：</strong>${s.powerBalance} 堂 <span style="font-size:13px; color:var(--text-sub); margin-left:4px;">(到期日: ${s.expiryDate})</span></div>`;
+          hasAnyService = true;
+        }
+        if (s.runBalance !== "-" && s.runBalance !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>跑班：</strong>${s.runBalance} 堂</div>`;
+          hasAnyService = true;
+        }
+        if (s.pilatesBalance !== "-" && s.pilatesBalance !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>皮拉提斯：</strong>${s.pilatesBalance} 堂</div>`;
+          hasAnyService = true;
+        }
+        if (s.onlinePlan !== "-" && s.onlinePlan !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>線上課表期間：</strong>${s.onlinePlan}</div>`;
+          hasAnyService = true;
+        }
+        if (s.parking !== "-" && s.parking !== "") {
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>租車位到期日：</strong>${s.parking}</div>`;
+          hasAnyService = true;
+        }
+
+        if (!hasAnyService) {
+           html += `<div style="font-size:14px; color:var(--text-sub); text-align:center; margin:16px 0;">目前無進行中的課程或服務紀錄</div>`;
+        }
+
+        // === 新增：後續預約紀錄區塊 (小日曆版) ===
+        html += `<div class="dashed-box" style="margin-top: 16px; border-color: #cbd5e1; background-color: #f8fafc;">`;
+        html += `<div style="font-weight:700; font-size:14px; color:var(--primary); margin-bottom:8px;">後續預約進度</div>`;
         
-        // 為了極簡排版，將 "早班功率" 簡化為 "早班"
-        const shortType = uc.type.replace('功率', '');
+        if (s.upcomingClasses && s.upcomingClasses.length > 0) {
+          // 1. 先將預約資料依照「年-月」進行分組整理
+          const monthGroups = {};
+          s.upcomingClasses.forEach(uc => {
+            const parts = uc.dateStr.split('/');
+            const yyyy = parts[0];
+            const mm = parseInt(parts[1], 10);
+            const dd = parseInt(parts[2], 10);
+            const key = `${yyyy}-${mm}`;
+            
+            if (!monthGroups[key]) monthGroups[key] = { year: yyyy, month: mm, days: {} };
+            
+            // 依照星期給予對應的樣式標籤
+            if (uc.dayOfWeek === '二' || uc.dayOfWeek === '四') {
+              monthGroups[key].days[dd] = 'evening'; 
+            } else if (uc.dayOfWeek === '三') {
+              monthGroups[key].days[dd] = 'morning'; 
+            } else {
+              monthGroups[key].days[dd] = 'other'; 
+            }
+          });
 
-        // 繪製單張日曆卡片
+          // 2. 針對每一個有預約的月份，畫出日曆方格
+          html += `<div class="calendar-wrapper">`;
+          for (const key in monthGroups) {
+            const group = monthGroups[key];
+            html += `<div>`;
+            html += `<div class="calendar-month-title">${group.year} 年 ${group.month} 月</div>`;
+            html += `<div class="calendar-grid">`;
+            
+            // 日曆標頭
+            const daysOfWeek = ['日', '一', '二', '三', '四', '五', '六'];
+            daysOfWeek.forEach(d => {
+              html += `<div class="calendar-day-header">${d}</div>`;
+            });
+
+            // 計算該月第一天是星期幾，以及該月總天數
+            const firstDay = new Date(group.year, group.month - 1, 1).getDay();
+            const daysInMonth = new Date(group.year, group.month, 0).getDate();
+
+            // 填補第一天前面的空白格子
+            for (let i = 0; i < firstDay; i++) {
+              html += `<div class="calendar-date empty"></div>`;
+            }
+
+            // 填入每一天的數字並標記顏色
+            for (let d = 1; d <= daysInMonth; d++) {
+              const styleClass = group.days[d] ? group.days[d] : '';
+              html += `<div class="calendar-date ${styleClass}">${d}</div>`;
+            }
+            
+            html += `</div></div>`; 
+          }
+          html += `</div>`;
+        } else {
+          html += `<div style="font-size:13px; color:var(--text-sub);">目前無後續預約紀錄</div>`;
+        }
+        html += `</div>`;
+        // ==============================
+
+        let actionButtonsHtml = '';
+        if (s.powerBalance !== "-" && s.powerBalance !== "") {
+          actionButtonsHtml = `
+            <button class="action-btn bg-warning" style="flex:1;" onclick="sendProgressReminder('${s.name}', this)">進度提醒</button>
+            <button class="action-btn bg-outline" style="flex:1;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
+          `;
+        } else {
+          actionButtonsHtml = `
+            <button class="action-btn bg-outline" style="width:100%;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
+          `;
+        }
+
         html += `
-          <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; min-width: 70px; text-align: center; background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-            <div style="background: var(--primary); color: #ffffff; font-size: 12px; font-weight: 600; padding: 4px 0; letter-spacing: 1px;">${month}月</div>
-            <div style="font-size: 22px; font-weight: 700; color: var(--text-main); padding: 8px 0 2px 0; line-height: 1;">${day}</div>
-            <div style="font-size: 11px; color: var(--text-sub); font-weight: 500; padding-bottom: 8px;">${uc.dayOfWeek} · ${shortType}</div>
+          <div style="display:flex; gap:8px; margin-top:16px;">
+            ${actionButtonsHtml}
           </div>
-        `;
+          <button class="action-btn bg-outline" style="width:100%; margin-top:8px; border-style:dashed;" onclick="copyToFinance('${s.name}')">帶入帳務與收費操作</button>
+          
+          <div id="editBox_${s.rowIndex}" class="edit-panel">
+            <label>修正姓名</label>
+            <input type="text" id="editName_${s.rowIndex}" value="${s.name}">
+            <label>修正 Email</label>
+            <input type="text" id="editEmail_${s.rowIndex}" value="${s.email}">
+            <button class="submit-btn" style="margin-top:12px; padding:12px; background:var(--primary);" onclick="saveStudentInfo(${s.rowIndex}, this)">儲存變更</button>
+          </div>
+        </div>`;
+        
+        container.innerHTML += html;
       });
-      html += `</div>`;
-    } else {
-      html += `<div style="font-size:13px; color:var(--text-sub);">目前無後續預約紀錄</div>`;
     }
-    html += `</div>`;
-    // ==============================
-
-    let actionButtonsHtml = '';
-    if (s.powerBalance !== "-" && s.powerBalance !== "") {
-      actionButtonsHtml = `
-        <button class="action-btn bg-warning" style="flex:1;" onclick="sendProgressReminder('${s.name}', this)">進度提醒</button>
-        <button class="action-btn bg-outline" style="flex:1;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
-      `;
-    } else {
-      actionButtonsHtml = `
-        <button class="action-btn bg-outline" style="width:100%;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
-      `;
-    }
-
-    html += `
-      <div style="display:flex; gap:8px; margin-top:16px;">
-        ${actionButtonsHtml}
-      </div>
-      <button class="action-btn bg-outline" style="width:100%; margin-top:8px; border-style:dashed;" onclick="copyToFinance('${s.name}')">帶入帳務與收費操作</button>
-      
-      <div id="editBox_${s.rowIndex}" class="edit-panel">
-        <label>修正姓名</label>
-        <input type="text" id="editName_${s.rowIndex}" value="${s.name}">
-        <label>修正 Email</label>
-        <input type="text" id="editEmail_${s.rowIndex}" value="${s.email}">
-        <button class="submit-btn" style="margin-top:12px; padding:12px; background:var(--primary);" onclick="saveStudentInfo(${s.rowIndex}, this)">儲存變更</button>
-      </div>
-    </div>`;
-    
-    container.innerHTML += html;
-  });
-}
 
     function toggleEdit(id) {
       const el = document.getElementById(`editBox_${id}`);
@@ -712,7 +761,6 @@
       highlightBtn(el); 
     }
 
-    // 餘下內部邏輯輔助函式保持原樣
     function highlightBtn(el) { el.parentNode.querySelectorAll('button').forEach(b => b.classList.remove("selected")); el.classList.add("selected"); }
     function clearCountSelection(parent) { parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); document.getElementById("financeCount").value = ""; }
     function clearPriceSelection(parent) { parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); document.getElementById("financePrice").value = ""; }
