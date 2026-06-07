@@ -542,73 +542,90 @@
     }
 
     function displayStudents(students) {
-      document.getElementById('studentLoading').style.display = 'none';
-      const container = document.getElementById('studentResultList');
-      
-      if (students.length === 0) {
-        container.innerHTML = '<div class="card-section" style="text-align:center; color:#666;">查無相符學生資料</div>';
-        return;
-      }
-      
-      students.forEach(s => {
-        let html = `<div class="card-section"><div class="card-title">${s.name}</div>`;
-        let hasAnyService = false;
+  document.getElementById('studentLoading').style.display = 'none';
+  const container = document.getElementById('studentResultList');
+  
+  if (students.length === 0) {
+    container.innerHTML = '<div class="card-section" style="text-align:center; color:#666;">查無相符學生資料</div>';
+    return;
+  }
+  
+  students.forEach(s => {
+    let html = `<div class="card-section"><div class="card-title">${s.name}</div>`;
+    let hasAnyService = false;
 
-        if (s.powerBalance !== "-" && s.powerBalance !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>功率課：</strong>${s.powerBalance} 堂 <span style="font-size:13px; color:var(--text-sub); margin-left:4px;">(到期日: ${s.expiryDate})</span></div>`;
-          hasAnyService = true;
-        }
-        if (s.runBalance !== "-" && s.runBalance !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>跑班：</strong>${s.runBalance} 堂</div>`;
-          hasAnyService = true;
-        }
-        if (s.pilatesBalance !== "-" && s.pilatesBalance !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>皮拉提斯：</strong>${s.pilatesBalance} 堂</div>`;
-          hasAnyService = true;
-        }
-        if (s.onlinePlan !== "-" && s.onlinePlan !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>線上課表期間：</strong>${s.onlinePlan}</div>`;
-          hasAnyService = true;
-        }
-        if (s.parking !== "-" && s.parking !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>租車位到期日：</strong>${s.parking}</div>`;
-          hasAnyService = true;
-        }
-
-        if (!hasAnyService) {
-           html += `<div style="font-size:14px; color:var(--text-sub); text-align:center; margin:16px 0;">目前無進行中的課程或服務紀錄</div>`;
-        }
-
-        let actionButtonsHtml = '';
-        if (s.powerBalance !== "-" && s.powerBalance !== "") {
-          actionButtonsHtml = `
-            <button class="action-btn bg-warning" style="flex:1;" onclick="sendProgressReminder('${s.name}', this)">進度提醒</button>
-            <button class="action-btn bg-outline" style="flex:1;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
-          `;
-        } else {
-          actionButtonsHtml = `
-            <button class="action-btn bg-outline" style="width:100%;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
-          `;
-        }
-
-        html += `
-          <div style="display:flex; gap:8px; margin-top:16px;">
-            ${actionButtonsHtml}
-          </div>
-          <button class="action-btn bg-outline" style="width:100%; margin-top:8px; border-style:dashed;" onclick="copyToFinance('${s.name}')">帶入帳務與收費操作</button>
-          
-          <div id="editBox_${s.rowIndex}" class="edit-panel">
-            <label>修正姓名</label>
-            <input type="text" id="editName_${s.rowIndex}" value="${s.name}">
-            <label>修正 Email</label>
-            <input type="text" id="editEmail_${s.rowIndex}" value="${s.email}">
-            <button class="submit-btn" style="margin-top:12px; padding:12px; background:var(--primary);" onclick="saveStudentInfo(${s.rowIndex}, this)">儲存變更</button>
-          </div>
-        </div>`;
-        
-        container.innerHTML += html;
-      });
+    if (s.powerBalance !== "-" && s.powerBalance !== "") {
+      html += `<div style="font-size:15px; margin:8px 0;"><strong>功率課：</strong>${s.powerBalance} 堂 <span style="font-size:13px; color:var(--text-sub); margin-left:4px;">(到期日: ${s.expiryDate})</span></div>`;
+      hasAnyService = true;
     }
+    if (s.runBalance !== "-" && s.runBalance !== "") {
+      html += `<div style="font-size:15px; margin:8px 0;"><strong>跑班：</strong>${s.runBalance} 堂</div>`;
+      hasAnyService = true;
+    }
+    if (s.pilatesBalance !== "-" && s.pilatesBalance !== "") {
+      html += `<div style="font-size:15px; margin:8px 0;"><strong>皮拉提斯：</strong>${s.pilatesBalance} 堂</div>`;
+      hasAnyService = true;
+    }
+    if (s.onlinePlan !== "-" && s.onlinePlan !== "") {
+      html += `<div style="font-size:15px; margin:8px 0;"><strong>線上課表期間：</strong>${s.onlinePlan}</div>`;
+      hasAnyService = true;
+    }
+    if (s.parking !== "-" && s.parking !== "") {
+      html += `<div style="font-size:15px; margin:8px 0;"><strong>租車位到期日：</strong>${s.parking}</div>`;
+      hasAnyService = true;
+    }
+
+    if (!hasAnyService) {
+       html += `<div style="font-size:14px; color:var(--text-sub); text-align:center; margin:16px 0;">目前無進行中的課程或服務紀錄</div>`;
+    }
+
+    // === 新增：後續預約紀錄區塊 ===
+    html += `<div class="dashed-box" style="margin-top: 16px; border-color: #cbd5e1; background-color: #f8fafc;">`;
+    html += `<div style="font-weight:700; font-size:14px; color:var(--primary); margin-bottom:8px;">接下來的功率課預約</div>`;
+    
+    if (s.upcomingClasses && s.upcomingClasses.length > 0) {
+      s.upcomingClasses.forEach(uc => {
+        html += `<div style="font-size:14px; margin-bottom:4px; display:flex; justify-content:space-between; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">
+                   <span>${uc.dateStr} (${uc.dayOfWeek})</span>
+                   <span style="color:var(--text-sub); font-weight:600;">${uc.type}</span>
+                 </div>`;
+      });
+    } else {
+      html += `<div style="font-size:13px; color:var(--text-sub);">目前無後續預約紀錄</div>`;
+    }
+    html += `</div>`;
+    // ==============================
+
+    let actionButtonsHtml = '';
+    if (s.powerBalance !== "-" && s.powerBalance !== "") {
+      actionButtonsHtml = `
+        <button class="action-btn bg-warning" style="flex:1;" onclick="sendProgressReminder('${s.name}', this)">進度提醒</button>
+        <button class="action-btn bg-outline" style="flex:1;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
+      `;
+    } else {
+      actionButtonsHtml = `
+        <button class="action-btn bg-outline" style="width:100%;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
+      `;
+    }
+
+    html += `
+      <div style="display:flex; gap:8px; margin-top:16px;">
+        ${actionButtonsHtml}
+      </div>
+      <button class="action-btn bg-outline" style="width:100%; margin-top:8px; border-style:dashed;" onclick="copyToFinance('${s.name}')">帶入帳務與收費操作</button>
+      
+      <div id="editBox_${s.rowIndex}" class="edit-panel">
+        <label>修正姓名</label>
+        <input type="text" id="editName_${s.rowIndex}" value="${s.name}">
+        <label>修正 Email</label>
+        <input type="text" id="editEmail_${s.rowIndex}" value="${s.email}">
+        <button class="submit-btn" style="margin-top:12px; padding:12px; background:var(--primary);" onclick="saveStudentInfo(${s.rowIndex}, this)">儲存變更</button>
+      </div>
+    </div>`;
+    
+    container.innerHTML += html;
+  });
+}
 
     function toggleEdit(id) {
       const el = document.getElementById(`editBox_${id}`);
