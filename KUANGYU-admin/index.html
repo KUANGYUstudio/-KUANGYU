@@ -339,9 +339,10 @@
       </div>
       
       <label>執行動作</label>
-      <div class="btn-grid cols-2 adjust-action-grid">
+      <div class="btn-grid cols-3 adjust-action-grid">
         <button class="option-btn" onclick="selectAdjustItem(this, 'action', '補簽到')">補簽到</button>
         <button class="option-btn" onclick="selectAdjustItem(this, 'action', '請假')">請假</button>
+        <button class="option-btn" onclick="selectAdjustItem(this, 'action', '新增預約')">新增預約</button>
         <button class="option-btn" onclick="selectAdjustItem(this, 'action', '補堂')">補堂</button>
         <button class="option-btn" onclick="selectAdjustItem(this, 'action', '扣堂')">扣堂</button>
       </div>
@@ -828,7 +829,7 @@
         document.getElementById('selectedAdjustAction').value = val;
         const panel = document.getElementById('adjust-count-panel');
         if (val === '補堂' || val === '扣堂') panel.classList.remove('hidden-panel');
-        else { panel.classList.add('hidden-panel'); document.getElementById('adjustCount').value = (val === '請假') ? 0 : 1; }
+        else { panel.classList.add('hidden-panel'); document.getElementById('adjustCount').value = (val === '請假' || val === '新增預約') ? 0 : 1; }
       }
     }
 
@@ -845,6 +846,14 @@
       if (!type) return alert("請選擇執行動作");
       if (!count || count <= 0) return alert("請輸入正確堂數");
       if (!date) return alert("請選擇日期設定");
+
+      if (type === '新增預約') {
+        if (!confirm(`確認要幫 ${name} 手動登記 ${date} 的課程預約嗎？`)) return;
+        callBackend("manualAddReservation", { name: name, courseType: course, dateStr: date, note: note })
+          .then(res => { alert(res); document.getElementById('adjustNote').value = ''; })
+          .catch(err => alert("預約失敗：" + err.message));
+        return;
+      }
       
       const finalNote = note || type; 
       if (!confirm(`確認執行手動異動：\n學生：${name}\n動作：${course} [${type}] ${count} 堂`)) return;
