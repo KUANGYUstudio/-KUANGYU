@@ -14,7 +14,9 @@
   <link rel="icon" href="./icon11.png">
 
   <style>
-    * { box-sizing: border-box; }
+    * { 
+      box-sizing: border-box; 
+    }
 
     :root {
       --primary: #2e67a8;
@@ -46,109 +48,370 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    h3 { font-weight: 700; color: var(--primary); margin: 8px 0 16px 0; text-align: center; font-size: 19px; }
+    h3 { 
+      font-weight: 700; 
+      color: var(--primary); 
+      margin: 8px 0 16px 0; 
+      text-align: center; 
+      font-size: 19px; 
+    }
 
     .function-tabs { 
-      display: flex; margin-bottom: 16px; background: #cbd5e1; padding: 4px; 
-      border-radius: 12px; overflow-x: auto; white-space: nowrap; gap: 4px;
+      display: flex; 
+      margin-bottom: 16px; 
+      background: #cbd5e1; 
+      padding: 4px; 
+      border-radius: 12px; 
+      overflow-x: auto; 
+      white-space: nowrap; 
+      gap: 4px;
       -webkit-overflow-scrolling: touch;
     }
-    .function-tabs::-webkit-scrollbar { display: none; }
-    .tab-button { 
-      flex: 1; padding: 12px 8px; border: none; border-radius: 9px; 
-      font-size: 14px; color: #475569; cursor: pointer; font-weight: 600; transition: all 0.2s;
-      background: transparent; text-align: center;
+
+    .function-tabs::-webkit-scrollbar { 
+      display: none; 
     }
-    .tab-button.active { background-color: #fff; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+    .tab-button { 
+      flex: 1; 
+      padding: 12px 8px; 
+      border: none; 
+      border-radius: 9px; 
+      font-size: 14px; 
+      color: #475569; 
+      cursor: pointer; 
+      font-weight: 600; 
+      transition: all 0.2s;
+      background: transparent; 
+      text-align: center;
+    }
+
+    .tab-button.active { 
+      background-color: #fff; 
+      color: var(--primary); 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    }
 
     .card-section {
-      background: var(--card-bg); padding: 16px; border-radius: 14px; 
-      margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;
+      background: var(--card-bg); 
+      padding: 16px; 
+      border-radius: 14px; 
+      margin-bottom: 12px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02); 
+      border: 1px solid #f1f5f9;
     }
-    .card-title { font-size: 17px; font-weight: 700; color: var(--text-main); margin-bottom: 14px; border-bottom: 2px dashed var(--border); padding-bottom: 10px; text-align: center; }
-    .card-title.adjust-theme { color: var(--accent); }
 
-    label { display: block; margin-top: 14px; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: var(--text-sub); }
-    label:first-of-type { margin-top: 0; }
+    .card-title { 
+      font-size: 17px; 
+      font-weight: 700; 
+      color: var(--text-main); 
+      margin-bottom: 14px; 
+      border-bottom: 2px dashed var(--border); 
+      padding-bottom: 10px; 
+      text-align: center; 
+    }
+
+    .card-title.adjust-theme { 
+      color: var(--accent); 
+    }
+
+    label { 
+      display: block; 
+      margin-top: 14px; 
+      margin-bottom: 6px; 
+      font-weight: 600; 
+      font-size: 13px; 
+      color: var(--text-sub); 
+    }
+
+    label:first-of-type { 
+      margin-top: 0; 
+    }
     
     input, select { 
-      width: 100%; padding: 12px; border: 1.5px solid var(--border); 
-      border-radius: 10px; font-size: 16px; 
-      background-color: #fff; outline: none; transition: border-color 0.2s; color: var(--text-main);
+      width: 100%; 
+      padding: 12px; 
+      border: 1.5px solid var(--border); 
+      border-radius: 10px; 
+      font-size: 16px; 
+      background-color: #fff; 
+      outline: none; 
+      transition: border-color 0.2s; 
+      color: var(--text-main);
     }
     
-    input[type="date"] { appearance: none; -webkit-appearance: none; width: 100%; box-sizing: border-box; display: block; }
-    input:focus, select:focus { border-color: var(--primary); }
-    select { font-weight: 600; }
+    input[type="date"] { 
+      appearance: none; 
+      -webkit-appearance: none; 
+      width: 100%; 
+      box-sizing: border-box; 
+      display: block; 
+    }
 
-    .btn-grid { display: grid; gap: 8px; margin-top: 5px; }
+    input:focus, select:focus { 
+      border-color: var(--primary); 
+    }
+
+    select { 
+      font-weight: 600; 
+    }
+
+    .btn-grid { 
+      display: grid; 
+      gap: 8px; 
+      margin-top: 5px; 
+    }
+
     .cols-3 { grid-template-columns: repeat(3, 1fr); }
     .cols-2 { grid-template-columns: repeat(2, 1fr); }
     .cols-1 { grid-template-columns: repeat(1, 1fr); }
     
     .option-btn { 
-      padding: 12px 4px; cursor: pointer; border: 1.5px solid var(--border); 
-      border-radius: 10px; background-color: #fff; font-size: 14px; 
-      color: var(--text-sub); font-weight: 500; transition: all 0.2s;
-      min-height: 46px; display: flex; align-items: center; justify-content: center;
+      padding: 12px 4px; 
+      cursor: pointer; 
+      border: 1.5px solid var(--border); 
+      border-radius: 10px; 
+      background-color: #fff; 
+      font-size: 14px; 
+      color: var(--text-sub); 
+      font-weight: 500; 
+      transition: all 0.2s;
+      min-height: 46px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
     }
-    .option-btn.selected { background-color: var(--primary) !important; color: white !important; border-color: var(--primary) !important; }
-    .option-btn.accent-selected { background-color: var(--accent) !important; color: white !important; border-color: var(--accent) !important; }
 
-    .dashed-box { border: 2px dashed #f1aeb5; background-color: #fff8f9; padding: 12px; border-radius: 10px; margin-top: 12px; }
-    .parking-box { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--border); }
+    .option-btn.selected { 
+      background-color: var(--primary) !important; 
+      color: white !important; 
+      border-color: var(--primary) !important; 
+    }
+
+    .option-btn.accent-selected { 
+      background-color: var(--accent) !important; 
+      color: white !important; 
+      border-color: var(--accent) !important; 
+    }
+
+    .dashed-box { 
+      border: 2px dashed #f1aeb5; 
+      background-color: #fff8f9; 
+      padding: 12px; 
+      border-radius: 10px; 
+      margin-top: 12px; 
+    }
+
+    .parking-box { 
+      background: #f8fafc; 
+      padding: 12px; 
+      border-radius: 10px; 
+      margin-bottom: 10px; 
+      border: 1px solid var(--border); 
+    }
     
-    .date-row { display: flex; gap: 10px; }
-    .date-group { flex: 1; min-width: 0; }
-    @media (max-width: 480px) { .date-row { flex-direction: column; gap: 4px; } }
+    .date-row { 
+      display: flex; 
+      gap: 10px; 
+    }
 
-    .special-input-box { background-color: #fff3e0; padding: 12px; border-radius: 8px; border: 1px dashed #ffcc80; margin-top: 8px; }
+    .date-group { 
+      flex: 1; 
+      min-width: 0; 
+    }
+
+    @media (max-width: 480px) { 
+      .date-row { flex-direction: column; gap: 4px; } 
+    }
+
+    .special-input-box { 
+      background-color: #fff3e0; 
+      padding: 12px; 
+      border-radius: 8px; 
+      border: 1px dashed #ffcc80; 
+      margin-top: 8px; 
+    }
 
     .submit-btn { 
-      width: 100%; color: #fff; border: none; padding: 14px; 
-      border-radius: 10px; font-size: 16px; font-weight: 600; margin-top: 20px; 
-      cursor: pointer; transition: 0.2s;
+      width: 100%; 
+      color: #fff; 
+      border: none; 
+      padding: 14px; 
+      border-radius: 10px; 
+      font-size: 16px; 
+      font-weight: 600; 
+      margin-top: 20px; 
+      cursor: pointer; 
+      transition: 0.2s;
     }
-    .submit-btn:active { transform: translateY(1px); }
 
-    .action-btn { padding: 10px 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; min-height: 42px; }
+    .submit-btn:active { 
+      transform: translateY(1px); 
+    }
+
+    .action-btn { 
+      padding: 10px 12px; 
+      border: none; 
+      border-radius: 8px; 
+      font-size: 14px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      text-align: center; 
+      transition: 0.2s; 
+      min-height: 42px; 
+    }
+
     .bg-primary { background: var(--primary); color: white; }
     .bg-success { background: var(--success); color: white; }
     .bg-warning { background: var(--warning); color: white; }
     .bg-outline { background: transparent; color: var(--text-sub); border: 1px solid var(--border); }
 
-    .history-item { padding: 12px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-    .history-item:last-child { border-bottom: none; }
-    .h-info { display: flex; flex-direction: column; gap: 2px; }
-    .h-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
-    .h-sub { font-size: 13px; color: var(--text-sub); }
+    .history-item { 
+      padding: 12px 0; 
+      border-bottom: 1px solid #f1f5f9; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      flex-wrap: wrap; 
+      gap: 8px; 
+    }
 
-    .search-box { display: flex; gap: 8px; margin-bottom: 4px; }
-    .search-box select { flex: 1; margin-bottom: 0; }
-    .search-box .action-btn { width: auto; height: 45px; margin-top: 0; }
+    .history-item:last-child { 
+      border-bottom: none; 
+    }
 
-    .edit-panel { display: none; margin-top: 12px; padding: 12px; background: #f8f9fa; border-radius: 10px; border: 1px solid #e2e8f0; }
-    .hidden-panel { display: none; }
+    .h-info { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 2px; 
+    }
+
+    .h-title { 
+      font-size: 15px; 
+      font-weight: 700; 
+      color: var(--text-main); 
+    }
+
+    .h-sub { 
+      font-size: 13px; 
+      color: var(--text-sub); 
+    }
+
+    .search-box { 
+      display: flex; 
+      gap: 8px; 
+      margin-bottom: 4px; 
+    }
+
+    .search-box select { 
+      flex: 1; 
+      margin-bottom: 0; 
+    }
+
+    .search-box .action-btn { 
+      width: auto; 
+      height: 45px; 
+      margin-top: 0; 
+    }
+
+    .edit-panel { 
+      display: none; 
+      margin-top: 12px; 
+      padding: 12px; 
+      background: #f8f9fa; 
+      border-radius: 10px; 
+      border: 1px solid #e2e8f0; 
+    }
+
+    .hidden-panel { 
+      display: none; 
+    }
     
-    .content { display: none; }
-    .content.active { display: block; }
-    #loading, #studentLoading, #reportLoading, #initLoading { text-align: center; padding: 16px; color: var(--text-sub); display: none; font-weight: bold; font-size: 14px; }
+    .content { 
+      display: none; 
+    }
+
+    .content.active { 
+      display: block; 
+    }
+
+    #loading, #studentLoading, #reportLoading, #initLoading { 
+      text-align: center; 
+      padding: 16px; 
+      color: var(--text-sub); 
+      display: none; 
+      font-weight: bold; 
+      font-size: 14px; 
+    }
     
-    .report-display-box { background-color: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 10px; font-size: 14px; line-height: 1.6; color: var(--text-main); white-space: pre-wrap; font-family: monospace; }
+    .report-display-box { 
+      background-color: #f8fafc; 
+      border: 1px solid var(--border); 
+      padding: 14px; 
+      border-radius: 10px; 
+      font-size: 14px; 
+      line-height: 1.6; 
+      color: var(--text-main); 
+      white-space: pre-wrap; 
+      font-family: monospace; 
+    }
 
     /* 靜態小日曆樣式 (學生查詢用) */
-    .calendar-wrapper { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
-    .calendar-month-title { font-weight: 700; font-size: 15px; color: var(--primary); text-align: center; margin-bottom: 8px; letter-spacing: 1px; }
-    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
-    .calendar-day-header { font-size: 12px; color: var(--text-sub); font-weight: 600; padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
-    .calendar-date { padding: 8px 0; font-size: 14px; border-radius: 8px; color: #cbd5e1; display: flex; align-items: center; justify-content: center; }
+    .calendar-wrapper { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 16px; 
+      margin-top: 12px; 
+    }
+
+    .calendar-month-title { 
+      font-weight: 700; 
+      font-size: 15px; 
+      color: var(--primary); 
+      text-align: center; 
+      margin-bottom: 8px; 
+      letter-spacing: 1px; 
+    }
+
+    .calendar-grid { 
+      display: grid; 
+      grid-template-columns: repeat(7, 1fr); 
+      gap: 4px; 
+      text-align: center; 
+    }
+
+    .calendar-day-header { 
+      font-size: 12px; 
+      color: var(--text-sub); 
+      font-weight: 600; 
+      padding-bottom: 6px; 
+      border-bottom: 1px solid var(--border); 
+      margin-bottom: 4px; 
+    }
+
+    .calendar-date { 
+      padding: 8px 0; 
+      font-size: 14px; 
+      border-radius: 8px; 
+      color: #cbd5e1; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+    }
+
     .calendar-date.empty { background: transparent; }
     .calendar-date.evening { background: transparent; color: var(--evening-main); font-weight: 900; font-size: 15px; }
     .calendar-date.morning { background: transparent; color: var(--morning-main); font-weight: 900; font-size: 15px; }
     .calendar-date.other { background: transparent; color: var(--primary); font-weight: 900; font-size: 15px; }
 
     /* 互動式多選日曆樣式 (手動預約用) */
-    .interactive-cal-container { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 8px; }
+    .interactive-cal-container { 
+      background: #f8fafc; 
+      border: 1.5px solid var(--border); 
+      border-radius: 10px; 
+      padding: 12px; 
+      margin-top: 8px; 
+    }
     
     .interactive-cal-header { 
       display: grid; 
@@ -156,6 +419,7 @@
       align-items: center; 
       margin-bottom: 12px; 
     }
+
     .cal-nav-btn { 
       background: transparent; 
       border: none; 
@@ -168,6 +432,7 @@
       justify-content: center;
       align-items: center;
     }
+
     .cal-month-label { 
       font-weight: 700; 
       font-size: 16px; 
@@ -175,7 +440,18 @@
       text-align: center; 
     }
 
-    .int-cal-cell { padding: 10px 0; font-size: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; border: 1.5px solid transparent; }
+    .int-cal-cell { 
+      padding: 10px 0; 
+      font-size: 15px; 
+      border-radius: 8px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      cursor: pointer; 
+      transition: 0.2s; 
+      border: 1.5px solid transparent; 
+    }
+
     .int-cal-cell.empty { background: transparent; cursor: default; }
     .int-cal-cell.disabled { color: #cbd5e1; cursor: default; pointer-events: none; }
     .int-cal-cell.expired { color: #cbd5e1; text-decoration: line-through; cursor: default; pointer-events: none; }
@@ -184,8 +460,24 @@
     .int-cal-cell.morning { color: var(--morning-main); font-weight: 900; }
     .int-cal-cell.selected { background-color: var(--primary) !important; color: white !important; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     
-    .selected-dates-list { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
-    .selected-tag { background: #e2e8f0; color: var(--text-main); padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .selected-dates-list { 
+      margin-top: 12px; 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 8px; 
+    }
+
+    .selected-tag { 
+      background: #e2e8f0; 
+      color: var(--text-main); 
+      padding: 6px 12px; 
+      border-radius: 20px; 
+      font-size: 13px; 
+      font-weight: 600; 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+    }
   </style>
 </head>
 <body>
@@ -450,7 +742,9 @@
       })
       .then(response => response.json())
       .then(res => {
-        if (res.success) return res.result;
+        if (res.success) {
+          return res.result;
+        }
         throw new Error(res.error);
       });
     }
@@ -459,6 +753,7 @@
       const today = new Date();
       const offset = today.getTimezoneOffset() * 60000;
       const localISOTime = (new Date(today - offset)).toISOString().split('T')[0];
+      
       document.getElementById('searchDate').value = localISOTime;
       document.getElementById('payment-date').value = localISOTime;
       document.getElementById('adjustDate').value = localISOTime;
@@ -492,6 +787,7 @@
     function switchTab(tabId) {
       document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+      
       event.target.classList.add('active');
       document.getElementById(tabId).classList.add('active');
       
@@ -514,6 +810,7 @@
 
     function fetchBookingCapacities() {
       document.getElementById('reserveCalLoading').style.display = 'block';
+      
       callBackend("getBookingCapacities", {})
         .then(data => {
           bookingCapacities = data;
@@ -626,36 +923,48 @@
       const name = document.getElementById('reserveStudentName').value;
       const note = document.getElementById('reserveNote').value.trim();
       
-      if (!name) return alert("請先選擇學生");
-      if (selectedReserveDates.length === 0) return alert("請在日曆上點選至少一個預約日期");
+      if (!name) {
+        return alert("請先選擇學生");
+      }
+      if (selectedReserveDates.length === 0) {
+        return alert("請在日曆上點選至少一個預約日期");
+      }
       
-      if (!confirm(`確認要幫 ${name} 手動登記以下 ${selectedReserveDates.length} 個日期的功率課嗎？\n\n${selectedReserveDates.join("\n")}`)) return;
+      if (!confirm(`確認要幫 ${name} 手動登記以下 ${selectedReserveDates.length} 個日期的功率課嗎？\n\n${selectedReserveDates.join("\n")}`)) {
+        return;
+      }
       
       const btn = event.target;
       btn.textContent = "傳送中...";
       btn.disabled = true;
       
-      callBackend("manualAddMultipleReservations", { name: name, courseType: "功率課", dateStrs: selectedReserveDates, note: note })
-        .then(res => { 
-          alert(res); 
-          document.getElementById('reserveNote').value = ''; 
-          selectedReserveDates = [];
-          renderSelectedDates();
-          fetchBookingCapacities(); 
-          btn.textContent = "確認送出預約";
-          btn.disabled = false;
-        })
-        .catch(err => {
-          alert("預約失敗：" + err.message);
-          btn.textContent = "確認送出預約";
-          btn.disabled = false;
-        });
+      callBackend("manualAddMultipleReservations", { 
+        name: name, 
+        courseType: "功率課", 
+        dateStrs: selectedReserveDates, 
+        note: note 
+      })
+      .then(res => { 
+        alert(res); 
+        document.getElementById('reserveNote').value = ''; 
+        selectedReserveDates = [];
+        renderSelectedDates();
+        fetchBookingCapacities(); 
+        btn.textContent = "確認送出預約";
+        btn.disabled = false;
+      })
+      .catch(err => {
+        alert("預約失敗：" + err.message);
+        btn.textContent = "確認送出預約";
+        btn.disabled = false;
+      });
     }
     /* ========================================== */
 
     function loadClasses() {
       const dateStr = document.getElementById('searchDate').value;
       if (!dateStr) return alert("請選擇日期");
+      
       document.getElementById('loading').style.display = 'block';
       document.getElementById('resultCard').style.display = 'none';
       
@@ -671,6 +980,7 @@
       document.getElementById('loading').style.display = 'none';
       const container = document.getElementById('classList');
       container.innerHTML = '';
+      
       document.getElementById('resultTitle').textContent = `共 ${data.length} 筆預約`;
       document.getElementById('resultCard').style.display = 'block';
       
@@ -678,6 +988,7 @@
         container.innerHTML = '<div style="color:#666; text-align:center; padding:10px;">該日無預約資料</div>';
         return;
       }
+      
       data.forEach(item => {
         const div = document.createElement('div');
         div.className = 'history-item';
@@ -713,28 +1024,35 @@
     function actionSignIn(name, course, btnElement) {
       const dateStr = document.getElementById('searchDate').value;
       if (!confirm(`確定幫 ${name} 簽到並扣堂？`)) return;
+      
       btnElement.textContent = "處理中...";
       
-      callBackend("manualCoachSignIn", { studentName: name, courseType: course, dateStr: dateStr })
-        .then(res => {
-          alert(res); 
-          btnElement.textContent = "已簽到"; 
-          btnElement.style.background = "#f1f5f9"; 
-          btnElement.style.color = "#94a3b8"; 
-          btnElement.style.border = "1px solid #e2e8f0"; 
-          btnElement.disabled = true; 
-          const nextBtn = btnElement.nextElementSibling;
-          if (nextBtn) nextBtn.style.display = 'none';
-        })
-        .catch(err => {
-          alert("簽到失敗：" + err.message);
-          btnElement.textContent = "代簽到";
-        });
+      callBackend("manualCoachSignIn", { 
+        studentName: name, 
+        courseType: course, 
+        dateStr: dateStr 
+      })
+      .then(res => {
+        alert(res); 
+        btnElement.textContent = "已簽到"; 
+        btnElement.style.background = "#f1f5f9"; 
+        btnElement.style.color = "#94a3b8"; 
+        btnElement.style.border = "1px solid #e2e8f0"; 
+        btnElement.disabled = true; 
+        
+        const nextBtn = btnElement.nextElementSibling;
+        if (nextBtn) nextBtn.style.display = 'none';
+      })
+      .catch(err => {
+        alert("簽到失敗：" + err.message);
+        btnElement.textContent = "代簽到";
+      });
     }
 
     function actionCancel(name, sheetName, rowIndex, btnElement) {
       const dateStr = document.getElementById('searchDate').value;
       const actionText = btnElement.textContent; 
+      
       if (!confirm(`確定執行 ${name} 的 ${actionText} 動作？`)) return;
       
       const container = btnElement.parentElement;
@@ -744,27 +1062,33 @@
       btnElement.disabled = true;
       if (signInBtn) signInBtn.disabled = true; 
       
-      callBackend("manualCoachCancel", { studentName: name, sheetName: sheetName, dateStr: dateStr, rowIndex: rowIndex })
-        .then(res => {
-          alert(res); 
-          btnElement.textContent = `已${actionText}`; 
-          btnElement.style.color = "#ef4444"; 
-          btnElement.style.borderColor = "#fecaca"; 
-          btnElement.style.background = "#fef2f2";
-          btnElement.disabled = true; 
-          if (signInBtn) signInBtn.style.display = 'none';
-        })
-        .catch(err => {
-          alert("操作失敗：" + err.message);
-          btnElement.textContent = actionText;
-          btnElement.disabled = false;
-          if (signInBtn) signInBtn.disabled = false;
-        });
+      callBackend("manualCoachCancel", { 
+        studentName: name, 
+        sheetName: sheetName, 
+        dateStr: dateStr, 
+        rowIndex: rowIndex 
+      })
+      .then(res => {
+        alert(res); 
+        btnElement.textContent = `已${actionText}`; 
+        btnElement.style.color = "#ef4444"; 
+        btnElement.style.borderColor = "#fecaca"; 
+        btnElement.style.background = "#fef2f2";
+        btnElement.disabled = true; 
+        if (signInBtn) signInBtn.style.display = 'none';
+      })
+      .catch(err => {
+        alert("操作失敗：" + err.message);
+        btnElement.textContent = actionText;
+        btnElement.disabled = false;
+        if (signInBtn) signInBtn.disabled = false;
+      });
     }
 
     function searchStudentData() {
       const keyword = document.getElementById('studentKeyword').value;
       if (!keyword) return alert("請先選擇學生");
+      
       document.getElementById('studentLoading').style.display = 'block';
       document.getElementById('studentResultList').innerHTML = '';
       
@@ -787,7 +1111,7 @@
       }
       
       students.forEach(s => {
-        let titleHtml = s.nickname ? s.name + ' <span style="font-size:14px; color:var(--text-sub); font-weight:normal;">(' + s.nickname + ')</span>' : s.name;
+        let titleHtml = s.nickname ? `${s.name} <span style="font-size:14px; color:var(--text-sub); font-weight:normal;">(${s.nickname})</span>` : s.name;
         let html = `<div class="card-section"><div class="card-title">${titleHtml}</div>`;
         let hasAnyService = false;
 
@@ -828,7 +1152,9 @@
             const dd = parseInt(parts[2], 10);
             const key = `${yyyy}-${mm}`;
             
-            if (!monthGroups[key]) monthGroups[key] = { year: yyyy, month: mm, days: {} };
+            if (!monthGroups[key]) {
+              monthGroups[key] = { year: yyyy, month: mm, days: {} };
+            }
             
             if (uc.dayOfWeek === '二' || uc.dayOfWeek === '四') {
               monthGroups[key].days[dd] = 'evening'; 
@@ -910,12 +1236,23 @@
     function saveStudentInfo(rowIndex, btn) {
       const newName = document.getElementById(`editName_${rowIndex}`).value.trim();
       const newEmail = document.getElementById(`editEmail_${rowIndex}`).value.trim();
+      
       if (!newName) return alert("姓名不能為空");
       btn.textContent = "儲存中...";
       
-      callBackend("updateStudentInfo", { rowIndex: rowIndex, newName: newName, newEmail: newEmail })
-        .then(res => { alert(res); btn.textContent = "儲存變更"; })
-        .catch(err => { alert("儲存失敗：" + err.message); btn.textContent = "儲存變更"; });
+      callBackend("updateStudentInfo", { 
+        rowIndex: rowIndex, 
+        newName: newName, 
+        newEmail: newEmail 
+      })
+      .then(res => { 
+        alert(res); 
+        btn.textContent = "儲存變更"; 
+      })
+      .catch(err => { 
+        alert("儲存失敗：" + err.message); 
+        btn.textContent = "儲存變更"; 
+      });
     }
 
     function sendProgressReminder(name, btn) {
@@ -923,8 +1260,14 @@
       btn.textContent = "發送中...";
       
       callBackend("sendSingleProgressReminder", { name: name })
-        .then(res => { alert(res); btn.textContent = "進度提醒"; })
-        .catch(err => { alert("發送失敗：" + err.message); btn.textContent = "進度提醒"; });
+        .then(res => { 
+          alert(res); 
+          btn.textContent = "進度提醒"; 
+        })
+        .catch(err => { 
+          alert("發送失敗：" + err.message); 
+          btn.textContent = "進度提醒"; 
+        });
     }
 
     function copyToFinance(name) {
@@ -937,12 +1280,15 @@
     function selectCourse(el, course) {
       clearAllSelections();
       document.getElementById("selectedCourse").value = course;
+      
       document.querySelectorAll('.course-buttons .option-btn').forEach(b => b.classList.remove('selected'));
       el.classList.add("selected");
 
       document.querySelectorAll("#option-container > div").forEach(d => d.classList.add("hidden-panel"));
       const targetDiv = document.getElementById(course + "-options");
-      if (targetDiv) targetDiv.classList.remove("hidden-panel");
+      if (targetDiv) {
+        targetDiv.classList.remove("hidden-panel");
+      }
 
       if (course === '補差額') {
         document.getElementById("financeCount").value = 0;
@@ -957,14 +1303,18 @@
       document.getElementById("financeCount").value = c; 
       highlightBtn(el); 
       const input = el.parentElement.nextElementSibling;
-      if(input && input.tagName === 'INPUT') input.style.display = 'none';
+      if(input && input.tagName === 'INPUT') {
+        input.style.display = 'none';
+      }
     }
 
     function setPrice(el, p) { 
       document.getElementById("financePrice").value = p; 
       highlightBtn(el); 
       const input = el.parentElement.nextElementSibling;
-      if(input && input.tagName === 'INPUT') input.style.display = 'none';
+      if(input && input.tagName === 'INPUT') {
+        input.style.display = 'none';
+      }
     }
 
     function setMethod(el, m) { 
@@ -972,11 +1322,35 @@
       highlightBtn(el); 
     }
 
-    function highlightBtn(el) { el.parentNode.querySelectorAll('button').forEach(b => b.classList.remove("selected")); el.classList.add("selected"); }
-    function clearCountSelection(parent) { parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); document.getElementById("financeCount").value = ""; }
-    function clearPriceSelection(parent) { parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); document.getElementById("financePrice").value = ""; }
-    function focusInput(id) { const el = document.getElementById(id); el.style.display = 'block'; setTimeout(() => el.focus(), 100); }
-    function syncManualInput(type, val) { if(type === 'count') document.getElementById("financeCount").value = val; if(type === 'price') document.getElementById("financePrice").value = val; }
+    function highlightBtn(el) { 
+      el.parentNode.querySelectorAll('button').forEach(b => b.classList.remove("selected")); 
+      el.classList.add("selected"); 
+    }
+
+    function clearCountSelection(parent) { 
+      parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); 
+      document.getElementById("financeCount").value = ""; 
+    }
+
+    function clearPriceSelection(parent) { 
+      parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); 
+      document.getElementById("financePrice").value = ""; 
+    }
+
+    function focusInput(id) { 
+      const el = document.getElementById(id); 
+      el.style.display = 'block'; 
+      setTimeout(() => el.focus(), 100); 
+    }
+
+    function syncManualInput(type, val) { 
+      if(type === 'count') {
+        document.getElementById("financeCount").value = val; 
+      }
+      if(type === 'price') {
+        document.getElementById("financePrice").value = val; 
+      }
+    }
     
     function calculateParkingMonths() {
       const s = document.getElementById('parking-start-date').value;
@@ -995,8 +1369,15 @@
       document.getElementById("financeCount").value = "";
       document.getElementById("financePrice").value = "";
       document.querySelectorAll('#option-container .option-btn').forEach(b => b.classList.remove('selected'));
+      
       ['power-count', 'power-price', 'run-count', 'run-price', 'makeup-price-input', 'parking-price'].forEach(id => {
-         const el = document.getElementById(id); if(el) { if(id !== 'makeup-price-input' && id !== 'parking-price') el.style.display = 'none'; el.value = ''; }
+         const el = document.getElementById(id); 
+         if(el) { 
+           if(id !== 'makeup-price-input' && id !== 'parking-price') {
+             el.style.display = 'none'; 
+           }
+           el.value = ''; 
+         }
       });
     }
 
@@ -1013,20 +1394,29 @@
         parkingEndDate: document.getElementById("parking-end-date").value
       };
 
-      if (!data.name || !data.course || !data.price || !data.method) return alert("資訊未填寫完整喔！");
-      if (data.course !== '補差額' && !data.count) return alert("請選擇或輸入堂數/月數！");
+      if (!data.name || !data.course || !data.price || !data.method) {
+        return alert("資訊未填寫完整喔！");
+      }
+      if (data.course !== '補差額' && !data.count) {
+        return alert("請選擇或輸入堂數/月數！");
+      }
 
       btn.textContent = "發送中...";
       btn.disabled = true;
 
       callBackend("submitStudentTopUp", data)
         .then(res => {
-          alert(res); btn.textContent = "確認儲值"; btn.disabled = false; clearAllSelections();
+          alert(res); 
+          btn.textContent = "確認儲值"; 
+          btn.disabled = false; 
+          clearAllSelections();
           document.getElementById("financePrice").value = "";
           document.querySelectorAll('.payment-methods .option-btn').forEach(b => b.classList.remove('selected'));
         })
         .catch(err => {
-          alert("錯誤：" + err.message); btn.textContent = "確認儲值"; btn.disabled = false;
+          alert("錯誤：" + err.message); 
+          btn.textContent = "確認儲值"; 
+          btn.disabled = false;
         });
     }
 
@@ -1034,12 +1424,19 @@
       const gridClass = (type === 'course') ? '.adjust-course-grid' : '.adjust-action-grid';
       document.querySelectorAll(`${gridClass} .option-btn`).forEach(b => b.classList.remove('accent-selected'));
       btn.classList.add('accent-selected');
-      if (type === 'course') document.getElementById('selectedAdjustCourse').value = val;
+      
+      if (type === 'course') {
+        document.getElementById('selectedAdjustCourse').value = val;
+      }
       if (type === 'action') {
         document.getElementById('selectedAdjustAction').value = val;
         const panel = document.getElementById('adjust-count-panel');
-        if (val === '補堂' || val === '扣堂') panel.classList.remove('hidden-panel');
-        else { panel.classList.add('hidden-panel'); document.getElementById('adjustCount').value = (val === '請假') ? 0 : 1; }
+        if (val === '補堂' || val === '扣堂') {
+          panel.classList.remove('hidden-panel');
+        } else { 
+          panel.classList.add('hidden-panel'); 
+          document.getElementById('adjustCount').value = (val === '請假') ? 0 : 1; 
+        }
       }
     }
 
@@ -1063,9 +1460,19 @@
       const finalNote = note || type; 
       if (!confirm(`確認執行手動異動：\n學生：${name}\n動作：${course} [${type}] ${count} 堂`)) return;
       
-      callBackend("submitStudentAdjustment", { name: name, courseType: course, actionType: type, count: count, note: finalNote, targetDate: date })
-        .then(res => { alert(res); document.getElementById('adjustNote').value = ''; })
-        .catch(err => alert("調整失敗：" + err.message));
+      callBackend("submitStudentAdjustment", { 
+        name: name, 
+        courseType: course, 
+        actionType: type, 
+        count: count, 
+        note: finalNote, 
+        targetDate: date 
+      })
+      .then(res => { 
+        alert(res); 
+        document.getElementById('adjustNote').value = ''; 
+      })
+      .catch(err => alert("調整失敗：" + err.message));
     }
 
     function fetchReport(functionName) {
