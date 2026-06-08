@@ -147,21 +147,20 @@
     .calendar-date.morning { background: transparent; color: var(--morning-main); font-weight: 900; font-size: 15px; }
     .calendar-date.other { background: transparent; color: var(--primary); font-weight: 900; font-size: 15px; }
 
-    /* 互動式多選日曆樣式 (手動預約用) */
+    /* 互動式多選日曆樣式 */
     .interactive-cal-container { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 8px; }
-    .interactive-cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .cal-nav-btn { background: transparent; border: none; font-size: 16px; color: var(--text-sub); cursor: pointer; font-weight: bold; padding: 4px 12px; }
-    .cal-month-label { font-weight: 700; font-size: 16px; color: var(--text-main); }
     .int-cal-cell { padding: 10px 0; font-size: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; border: 1.5px solid transparent; }
     .int-cal-cell.empty { background: transparent; cursor: default; }
-    .int-cal-cell.disabled { color: #cbd5e1; cursor: default; pointer-events: none; }
     
-    /* 預設可選樣式 */
+    /* 已過期樣式：灰階+刪除線 */
+    .int-cal-cell.expired { color: #cbd5e1; text-decoration: line-through; cursor: default; pointer-events: none; }
+    
+    /* 已額滿樣式：粗體深灰色，不刪除 */
+    .int-cal-cell.full { color: #475569; font-weight: 900; background: #f1f5f9; cursor: not-allowed; pointer-events: none; }
+    
+    /* 預設樣式 */
     .int-cal-cell.evening { color: var(--evening-main); font-weight: 900; }
     .int-cal-cell.morning { color: var(--morning-main); font-weight: 900; }
-    
-    /* 額滿樣式 */
-    .int-cal-cell.full { color: #475569; font-weight: 900; background: #f1f5f9; text-decoration: line-through; cursor: not-allowed; pointer-events: none; }
     
     /* 選取樣式 */
     .int-cal-cell.selected { background-color: var(--primary) !important; color: white !important; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -530,7 +529,8 @@
       
       for (let d = 1; d <= daysInMonth; d++) {
         const dateObj = new Date(year, month, d);
-        const dayOfWeek = dateObj.getDay();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
         
         const padMonth = String(month + 1).padStart(2, '0');
         const padDay = String(d).padStart(2, '0');
@@ -538,23 +538,26 @@
         
         const cell = document.createElement('div');
         cell.textContent = d;
-        cell.className = 'int-cal-cell disabled'; 
         
-        // 判斷是否為週二、三、四
-        if (dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4) {
-          cell.className = 'int-cal-cell';
-          
-          if (dayOfWeek === 2 || dayOfWeek === 4) cell.classList.add('evening');
-          if (dayOfWeek === 3) cell.classList.add('morning');
-          
-          const currentCount = bookingCapacities[dateStr] || 0;
-          if (currentCount >= MAX_CAPACITY) {
-            cell.className = 'int-cal-cell full'; // 額滿
-          } else {
-            cell.onclick = () => toggleReserveDate(dateStr, cell);
-            if (selectedReserveDates.includes(dateStr)) {
-              cell.classList.add('selected');
+        // 判斷狀態
+        if (dateObj < today) {
+          cell.className = 'int-cal-cell expired';
+        } else {
+          const dayOfWeek = dateObj.getDay();
+          if (dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4) {
+            cell.className = 'int-cal-cell';
+            if (dayOfWeek === 2 || dayOfWeek === 4) cell.classList.add('evening');
+            if (dayOfWeek === 3) cell.classList.add('morning');
+            
+            const currentCount = bookingCapacities[dateStr] || 0;
+            if (currentCount >= MAX_CAPACITY) {
+              cell.classList.add('full'); // 粗體深灰色，不槓掉
+            } else {
+              cell.onclick = () => toggleReserveDate(dateStr, cell);
+              if (selectedReserveDates.includes(dateStr)) cell.classList.add('selected');
             }
+          } else {
+            cell.className = 'int-cal-cell disabled';
           }
         }
         grid.appendChild(cell);
