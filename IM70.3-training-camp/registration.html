@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IM 70.3 墾丁 鐵人三項訓練營 | 線上報名</title>
+    <title>IM 70.3 墾丁 鐵人三項訓練營 | 線上報名表</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -11,365 +11,125 @@
         body { font-family: 'Noto Sans TC', sans-serif; }
         .gradient-bg { background: linear-gradient(135deg, #f97316 0%, #c2410c 100%); }
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        
-        /* 隱藏橫向滾動條但保留滑動功能 */
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* 列印樣式優化 */
-        @media print {
-            body { -webkit-print-color-adjust: exact; }
-            .no-print { display: none !important; }
-            .page-break { page-break-before: always; }
-            .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl { box-shadow: none !important; border: 1px solid #e5e7eb !important; }
-            .gradient-bg { background: #f97316 !important; }
-            section { page-break-inside: avoid; }
-        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-200 selection:text-orange-900">
 
-    <nav class="fixed w-full z-50 glass-card border-b border-gray-200 shadow-sm no-print">
+    <nav class="fixed w-full z-50 glass-card border-b border-gray-200 shadow-sm">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center space-x-2">
-                    <i class="fas fa-swimmer text-orange-600 text-xl"></i>
-                    <span class="font-bold text-xl tracking-tight text-slate-800">川岳中醫 <span class="text-gray-400 font-light">x</span> 光聿KUANGYU</span>
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <i class="fas fa-swimmer text-orange-600 text-xl"></i>
+                        <span class="font-bold text-xl tracking-tight text-slate-800">川岳中醫 <span class="text-gray-400 font-light">x</span> 光聿KUANGYU</span>
+                    </a>
                 </div>
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#about" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">企劃摘要</a>
-                    <a href="#pricing" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">方案定價</a>
-                    <a href="#schedule" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">重要時程</a>
-                    <a href="#registration" class="text-sm font-bold bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition shadow-sm">立即報名</a>
+                <div>
+                    <a href="index.html" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">返回訓練營介紹</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <header class="gradient-bg pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-        <div class="max-w-4xl mx-auto text-center relative z-10">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 tracking-tight mt-8">
-                IM 70.3 墾丁<br />
-                <span class="text-orange-200">鐵人三項訓練營</span>
-            </h1>
-            <p class="text-lg md:text-xl text-orange-50 mb-8 max-w-2xl mx-auto font-light">
-                結合「光聿科學化訓練」與「川岳專業醫療恢復」，打造全台最具競爭力的 16 週一站式鐵人備賽方案。
-            </p>
-            <div class="flex flex-wrap justify-center gap-4 text-sm font-medium text-white/90">
-                <div class="flex items-center bg-black/20 px-4 py-2 rounded-lg backdrop-blur-sm">
-                    <i class="far fa-calendar-alt w-5 text-center mr-2 text-orange-200"></i> 賽事：2026/11/01
-                </div>
-                <div class="flex items-center bg-black/20 px-4 py-2 rounded-lg backdrop-blur-sm">
-                    <i class="fas fa-stopwatch w-5 text-center mr-2 text-orange-200"></i> 週期：16 週 (7/13 開訓)
-                </div>
-                <div class="flex items-center bg-black/20 px-4 py-2 rounded-lg backdrop-blur-sm">
-                    <i class="fas fa-users w-5 text-center mr-2 text-orange-200"></i> 招募：滿 8 人開班 / 上限 20 人
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
         
-        <section id="about" class="mb-20">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold mb-6 text-slate-800 text-center">強強聯手，資源整合</h2>
-                <p class="text-gray-600 mb-4 leading-relaxed text-center">
-                    本次訓練營旨在為參加 2026 年 IM 70.3 墾丁賽事的選手，<br class="hidden sm:block">
-                    提供從「體能建立、技術突破」到「賽後修復、傷痛預防」的完整週期！
-                </p>
-                <p class="text-gray-600 mb-10 leading-relaxed text-center">
-                    透過 光聿KUANGYU 在鐵人三項科學化課表的專業，結合 川岳中醫 完善的場地與醫療恢復資源，<br class="hidden sm:block">
-                    創造市場上獨一無二的訓練營體驗。
-                </p>
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="bg-orange-50 p-6 rounded-xl border border-orange-100 flex-1 shadow-sm">
-                        <h4 class="font-bold text-orange-800 mb-2"><i class="fas fa-dumbbell mr-2"></i>光聿 KUANGYU</h4>
-                        <p class="text-sm text-orange-700/80">主導 16 週科學化課表設計、線上簡易諮詢與實體團練。</p>
-                    </div>
-                    <div class="bg-slate-100 p-6 rounded-xl border border-slate-200 flex-1 shadow-sm">
-                        <h4 class="font-bold text-slate-800 mb-2"><i class="fas fa-clinic-medical mr-2"></i>川岳中醫</h4>
-                        <p class="text-sm text-slate-600">提供訓練場地、一對一肌力專業指導與頂級醫療恢復支持。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="page-break"></div>
-
-        <section id="pricing" class="mb-20">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800 mb-4">訓練方案定價</h2>
-                <p class="text-gray-500">提供三種客製化層次，精準符合您的備賽需求</p>
+        <section class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="gradient-bg p-6 text-center text-white">
+                <h2 class="text-2xl font-bold">IM 70.3 墾丁訓練營 線上報名</h2>
+                <p class="text-orange-100 text-sm mt-2">請填寫以下完整資訊，我們將於收到報名後儘速與您聯絡</p>
             </div>
             
-            <div class="flex overflow-x-auto lg:grid lg:grid-cols-3 gap-6 pt-6 pb-8 hide-scrollbar snap-x snap-mandatory">
-                
-                <div class="min-w-[85vw] sm:min-w-[400px] lg:min-w-0 snap-center bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-400 hover:bg-orange-50/10 group">
-                    <div class="p-6 text-center border-b border-gray-100">
-                        <h3 class="text-2xl font-bold text-slate-800">初階方案</h3>
-                        <p class="text-orange-600 text-xs font-medium mt-2 bg-orange-50 inline-block px-3 py-1 rounded-full">有初鐵經驗，希望穩定完賽者</p>
-                        <div class="my-6">
-                            <span class="text-3xl font-black text-slate-800">NT$25,000</span>
-                            <span class="text-gray-400 text-sm font-medium">/早鳥價</span>
-                        </div>
-                        <p class="text-sm text-gray-400 line-through">原價 NT$29,200</p>
-                    </div>
-                    <div class="p-6 flex-grow bg-gray-50/50">
-                        <ul class="space-y-4 text-sm text-gray-600">
-                            <li>
-                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-stopwatch text-orange-500 w-5"></i> 光聿訓練</div>
-                                <div class="pl-5 space-y-2">
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 16 週線上課表</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 游泳團練 (平日 1 次)</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 8次團練 (海泳/外騎/跑山)</div>
-                                </div>
-                            </li>
-                            <li class="pt-2 border-t border-gray-200">
-                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-gift text-orange-500 w-5"></i> 贊助禮包</div>
-                                <div class="pl-5 space-y-2">
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> Alé 客製化三鐵衣一套</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> Garmin 折扣碼</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> Vision 輪組折扣碼</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> UP 補給大禮包</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> COMPRESSPORT/BONT/BLUE70 8折券</div>
-                                </div>
-                            </li>
-                            <li class="pt-2 border-t border-gray-200">
-                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-leaf text-orange-500 w-5"></i> 川岳體驗</div>
-                                <div class="pl-5 space-y-2 text-gray-500">
-                                    <div class="flex items-start"><i class="fas fa-plus text-gray-400 mr-2 mt-1 w-3"></i> 贈送高壓氧 1 次 (30分鐘)</div>
-                                    <div class="flex items-start"><i class="fas fa-plus text-gray-400 mr-2 mt-1 w-3"></i> 贈送岩盤浴 1 次 (30分鐘)</div>
-                                    <div class="flex items-start"><i class="fas fa-plus text-gray-400 mr-2 mt-1 w-3"></i> 贈送運動按摩 1 次 (30分鐘)</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="min-w-[85vw] sm:min-w-[400px] lg:min-w-0 snap-center bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-400 hover:bg-orange-50/10 group">
-                    <div class="p-6 text-center border-b border-gray-100">
-                        <h3 class="text-2xl font-bold text-slate-800">進階方案</h3>
-                        <p class="text-orange-600 text-xs font-medium mt-2 bg-orange-50 inline-block px-3 py-1 rounded-full">想提升成績、建立完整體能系統者</p>
-                        <div class="my-6">
-                            <span class="text-3xl font-black text-slate-800">NT$45,000</span>
-                            <span class="text-gray-400 text-sm font-medium">/早鳥價</span>
-                        </div>
-                        <p class="text-sm text-gray-400 line-through">原價 NT$48,400</p>
-                    </div>
-                    <div class="p-6 flex-grow bg-gray-50/50">
-                        <ul class="space-y-4 text-sm text-gray-600">
-                            <li>
-                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-layer-group text-orange-500 w-5"></i> 基礎心肺</div>
-                                <div class="pl-5 space-y-2">
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 包含【初階方案】所有光聿訓練</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 包含所有贊助禮包</div>
-                                </div>
-                            </li>
-                            <li class="pt-2 border-t border-gray-200">
-                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-dumbbell text-orange-500 w-5"></i> 川岳肌力訓練 <span class="ml-2 text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded">核心重點</span></div>
-                                <div class="pl-5 space-y-2">
-                                    <div class="flex items-start font-medium text-slate-700"><i class="fas fa-arrow-right text-orange-500 mr-2 mt-1 w-3"></i> 每週 1 堂 一對一肌力</div>
-                                    <div class="flex items-start"><i class="fas fa-circle text-gray-300 text-[8px] mr-2 mt-1.5 w-3"></i> 內容：核心 / <span class="text-red-500 font-bold">上肢</span> / 協調性</div>
-                                </div>
-                            </li>
-                            <li class="pt-2 border-t border-gray-200">
-                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-leaf text-orange-500 w-5"></i> 川岳體驗</div>
-                                <div class="pl-5 space-y-2 text-gray-500">
-                                    <div class="flex items-start"><i class="fas fa-plus text-gray-400 mr-2 mt-1 w-3"></i> 贈送高壓氧 1 次 (30分鐘)</div>
-                                    <div class="flex items-start"><i class="fas fa-plus text-gray-400 mr-2 mt-1 w-3"></i> 贈送岩盤浴 1 次 (30分鐘)</div>
-                                    <div class="flex items-start"><i class="fas fa-plus text-gray-400 mr-2 mt-1 w-3"></i> 贈送運動按摩 1 次 (30分鐘)</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="min-w-[85vw] sm:min-w-[400px] lg:min-w-0 snap-center bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col relative transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-400 hover:bg-orange-50/10 group">
-                    <div class="absolute top-0 right-0 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl tracking-wider z-10">尊榮首選</div>
-                    <div class="p-6 text-center border-b border-gray-100">
-                        <h3 class="text-2xl font-bold text-slate-800">VIP方案</h3>
-                        <p class="text-orange-600 text-xs font-medium mt-2 bg-orange-50 inline-block px-3 py-1 rounded-full">高強度工作族群、追求恢復品質</p>
-                        <div class="my-6">
-                            <span class="text-3xl font-black text-slate-800">NT$55,000</span>
-                            <span class="text-gray-400 text-sm font-medium">/早鳥價</span>
-                        </div>
-                        <p class="text-sm text-gray-400 line-through">原價 NT$59,200</p>
-                    </div>
-                    <div class="p-6 flex-grow bg-gray-50/50">
-                        <ul class="space-y-4 text-sm text-gray-600">
-                            <li>
-                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-layer-group text-orange-500 w-5"></i> 完整系統</div>
-                                <div class="pl-5 space-y-2">
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 包含【進階方案】光聿訓練</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 包含所有贊助禮包</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-1 w-3"></i> 包含【川岳】每週 1 堂肌力訓練</div>
-                                </div>
-                            </li>
-                            <li class="pt-2 border-t border-gray-200">
-                                <div class="font-bold text-slate-800 mb-2 flex items-center"><i class="fas fa-spa text-orange-500 w-5"></i> 川岳尊榮恢復升級</div>
-                                <div class="pl-5 space-y-2">
-                                    <div class="flex items-start font-medium text-slate-700"><i class="fas fa-arrow-up text-orange-500 mr-2 mt-1 w-3"></i> 高壓氧療程：共 5 次 (4+1)</div>
-                                    <div class="flex items-start font-medium text-slate-700"><i class="fas fa-arrow-up text-orange-500 mr-2 mt-1 w-3"></i> 岩盤浴療程：共 5 次 (4+1)</div>
-                                    <div class="flex items-start font-medium text-slate-700"><i class="fas fa-arrow-up text-orange-500 mr-2 mt-1 w-3"></i> 運動按摩：共 3 次 (2+1)</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <div class="page-break"></div>
-
-        <section id="schedule" class="mb-20">
-            <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">重要時程</h2>
-            <div class="relative border-l-2 border-orange-200 ml-3 md:ml-6 space-y-8 max-w-3xl mx-auto">
-                
-                <div class="relative pl-8">
-                    <div class="absolute w-8 h-8 bg-slate-800 rounded-full -left-[17px] top-0 border-4 border-white shadow flex items-center justify-center">
-                        <i class="fas fa-bullhorn text-white text-xs"></i>
-                    </div>
-                    <div class="bg-orange-50 p-5 rounded-xl border border-orange-200 shadow-sm">
-                        <span class="text-sm font-bold text-orange-700 tracking-wider">6/21 (日)</span>
-                        <h4 class="text-lg font-bold text-slate-800 mt-1 mb-2">實體說明會</h4>
-                        <p class="text-gray-700 text-sm">歡迎來到川岳場館體驗，我們將現場為您詳細說明 16 週科學化公版課表與團體核心規劃。</p>
-                    </div>
-                </div>
-
-                <div class="relative pl-8">
-                    <div class="absolute w-6 h-6 bg-orange-500 rounded-full -left-[13px] top-1 border-4 border-white shadow"></div>
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
-                        <span class="text-sm font-bold text-orange-600 tracking-wider">6/24 (三) 24:00</span>
-                        <h4 class="text-lg font-bold text-slate-800 mt-1 mb-2">早鳥優惠截止</h4>
-                        <p class="text-gray-600 text-sm">說明會後保留 3 天專屬優惠期限，請把握時間完成報名手續。</p>
-                    </div>
-                </div>
-
-                <div class="relative pl-8">
-                    <div class="absolute w-6 h-6 bg-gray-300 rounded-full -left-[13px] top-1 border-4 border-white shadow"></div>
-                    <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
-                        <span class="text-sm font-bold text-gray-500 tracking-wider">7/05 (日) 24:00</span>
-                        <h4 class="text-lg font-bold text-slate-800 mt-1 mb-2">報名全面截止</h4>
-                        <p class="text-gray-600 text-sm">為維護教學與訓練品質，招募名額設有上限（滿 8 人開班 / 上限 20 人），額滿或逾期將不再受理報名。</p>
-                    </div>
-                </div>
-
-                <div class="relative pl-8">
-                    <div class="absolute w-8 h-8 bg-orange-600 rounded-full -left-[17px] top-0 border-4 border-white shadow flex items-center justify-center">
-                        <i class="fas fa-flag-checkered text-white text-xs"></i>
-                    </div>
-                    <div class="bg-gradient-to-r from-orange-500 to-orange-400 p-5 rounded-xl shadow-md text-white">
-                        <span class="text-sm font-bold text-orange-100 tracking-wider">7/13 (一) 06:30</span>
-                        <h4 class="text-xl font-black mt-1 mb-1">正式開訓</h4>
-                        <p class="text-orange-50 text-sm">展開為期 16 週的密集訓練與恢復療程，為 IM 70.3 墾丁賽事打下最堅實的基礎。</p>
-                    </div>
-                </div>
-                
-            </div>
-        </section>
-
-        <section id="registration" class="mb-10 scroll-mt-24 no-print">
-            <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="gradient-bg p-6 text-center text-white">
-                    <h2 class="text-2xl font-bold">IM 70.3 墾丁訓練營 線上報名</h2>
-                    <p class="text-orange-100 text-sm mt-2">請填寫以下完整資訊，我們將於收到報名後儘速與您聯絡</p>
-                </div>
-                
-                <form id="signUpForm" class="p-8 space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">姓名</label>
-                            <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">性別</label>
-                            <select name="gender" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition bg-white">
-                                <option value="" disabled selected>請選擇性別</option>
-                                <option value="男">男</option>
-                                <option value="女">女</option>
-                                <option value="其他">其他</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">出生年月日</label>
-                            <input type="date" name="birthdate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">身分證字號 (保險用)</label>
-                            <input type="text" name="id_number" required placeholder="例如：A123456789" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition uppercase">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">聯絡電話</label>
-                            <input type="tel" name="phone" required placeholder="例如：0912345678" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
-                            <input type="email" name="email" required placeholder="example@email.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">LINE ID (加入群組用)</label>
-                            <input type="text" name="line_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">報名方案</label>
-                            <select name="plan" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition bg-white">
-                                <option value="" disabled selected>請選擇方案</option>
-                                <option value="初階方案">初階方案 (NT$25,000)</option>
-                                <option value="進階方案">進階方案 (NT$45,000)</option>
-                                <option value="VIP方案">VIP方案 (NT$55,000)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">三鐵衣尺寸</label>
-                            <select name="size" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition bg-white">
-                                <option value="" disabled selected>請選擇尺寸</option>
-                                <option value="XS">XS</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">鐵人三項經驗</label>
-                            <input type="text" name="experience" required placeholder="例如：無經驗、曾完成標鐵、初鐵等" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
-                        </div>
-                    </div>
-
+            <form id="signUpForm" class="p-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">備註 (選填)</label>
-                        <textarea name="notes" rows="3" placeholder="如有特殊飲食習慣、過敏史或特殊需求請註記" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition resize-none"></textarea>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">姓名</label>
+                        <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">性別</label>
+                        <select name="gender" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition bg-white">
+                            <option value="" disabled selected>請選擇性別</option>
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                </div>
 
-                    <div class="pt-4">
-                        <button type="submit" id="submitBtn" class="w-full gradient-bg text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition transform active:scale-[0.98]">
-                            確認送出報名
-                        </button>
-                        <p id="statusMsg" class="text-center text-sm font-medium mt-4 hidden"></p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">出生年月日</label>
+                        <input type="date" name="birthdate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
                     </div>
-                </form>
-            </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">身分證字號 (保險用)</label>
+                        <input type="text" name="id_number" required placeholder="例如：A123456789" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition uppercase">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">聯絡電話</label>
+                        <input type="tel" name="phone" required placeholder="例如：0912345678" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                        <input type="email" name="email" required placeholder="example@email.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">LINE ID (加入群組用)</label>
+                        <input type="text" name="line_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">報名方案</label>
+                        <select name="plan" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition bg-white">
+                            <option value="" disabled selected>請選擇方案</option>
+                            <option value="初階方案">初階方案 (NT$25,000)</option>
+                            <option value="進階方案">進階方案 (NT$45,000)</option>
+                            <option value="VIP方案">VIP方案 (NT$55,000)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">三鐵衣尺寸</label>
+                        <select name="size" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition bg-white">
+                            <option value="" disabled selected>請選擇尺寸</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">鐵人三項經驗</label>
+                        <input type="text" name="experience" required placeholder="例如：無經驗、曾完成標鐵、初鐵等" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">備註 (選填)</label>
+                    <textarea name="notes" rows="3" placeholder="如有特殊飲食習慣、過敏史或特殊需求請註記" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition resize-none"></textarea>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" id="submitBtn" class="w-full gradient-bg text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition transform active:scale-[0.98]">
+                        確認送出報名
+                    </button>
+                    <p id="statusMsg" class="text-center text-sm font-medium mt-4 hidden"></p>
+                </div>
+            </form>
         </section>
 
     </main>
 
-    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm no-print">
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
         <p>Copyright &copy; 2026 川岳中醫 x 光聿KUANGYU. All rights reserved.</p>
     </footer>
 
@@ -381,7 +141,7 @@
             const submitBtn = document.getElementById('submitBtn');
             const statusMsg = document.getElementById('statusMsg');
             
-            // 您的 Google Apps Script 部署網址
+            // 您的 Google Apps Script 部署網址已保留在此處
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbyxcVuvzxcV28ddUvu4LO9c7d3lqQT2AIzD29e3LlnEpI_g1E3o3ecFvE5G-3WL9hms1g/exec';
             
             submitBtn.disabled = true;
@@ -394,7 +154,7 @@
             fetch(scriptUrl, {
                 method: 'POST',
                 body: new URLSearchParams(formData),
-                mode: 'no-cors' // 採用無跨域限制模式，確保靜態網頁能穩定將資料送進試算表
+                mode: 'no-cors'
             })
             .then(() => {
                 statusMsg.textContent = '報名資料已成功送出！我們將儘速與您聯絡。';
