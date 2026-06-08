@@ -150,7 +150,6 @@
     /* 互動式多選日曆樣式 (手動預約用) */
     .interactive-cal-container { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 8px; }
     
-    /* 修正日曆標頭排版：強制置中 */
     .interactive-cal-header { 
       display: grid; 
       grid-template-columns: 40px 1fr 40px; 
@@ -179,18 +178,10 @@
     .int-cal-cell { padding: 10px 0; font-size: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; border: 1.5px solid transparent; }
     .int-cal-cell.empty { background: transparent; cursor: default; }
     .int-cal-cell.disabled { color: #cbd5e1; cursor: default; pointer-events: none; }
-    
-    /* 已過期樣式：灰階+刪除線 */
     .int-cal-cell.expired { color: #cbd5e1; text-decoration: line-through; cursor: default; pointer-events: none; }
-    
-    /* 已額滿樣式：粗體深灰色，不刪除 */
     .int-cal-cell.full { color: #475569; font-weight: 900; background: #f1f5f9; cursor: not-allowed; pointer-events: none; }
-    
-    /* 預設可選樣式 */
     .int-cal-cell.evening { color: var(--evening-main); font-weight: 900; }
     .int-cal-cell.morning { color: var(--morning-main); font-weight: 900; }
-    
-    /* 選取樣式 */
     .int-cal-cell.selected { background-color: var(--primary) !important; color: white !important; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     
     .selected-dates-list { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -479,7 +470,8 @@
       initInteractiveCalendar();
     });
 
-    function populateDropdowns(names) {
+    // 替換：更新為處理包含暱稱的物件陣列，且隱藏值維持真實姓名
+    function populateDropdowns(students) {
       document.getElementById('initLoading').style.display = 'none';
       const selects = ['studentKeyword', 'financeStudentName', 'adjustStudentName', 'reserveStudentName'];
       
@@ -487,10 +479,10 @@
         const el = document.getElementById(id);
         if (el) {
           el.innerHTML = '<option value="">請選擇學生...</option>';
-          names.forEach(name => {
+          students.forEach(s => {
             const opt = document.createElement('option');
-            opt.value = name;
-            opt.textContent = name;
+            opt.value = s.name; 
+            opt.textContent = s.nickname ? s.name + " (" + s.nickname + ")" : s.name;
             el.appendChild(opt);
           });
         }
@@ -569,7 +561,6 @@
         const cell = document.createElement('div');
         cell.textContent = d;
         
-        // 判斷狀態
         if (dateObj < today) {
           cell.className = 'int-cal-cell expired';
         } else {
@@ -581,7 +572,7 @@
             
             const currentCount = bookingCapacities[dateStr] || 0;
             if (currentCount >= MAX_CAPACITY) {
-              cell.classList.add('full'); // 粗體深灰色，不槓掉
+              cell.classList.add('full'); 
             } else {
               cell.onclick = () => toggleReserveDate(dateStr, cell);
               if (selectedReserveDates.includes(dateStr)) {
@@ -605,7 +596,7 @@
         selectedReserveDates.push(dateStr);
         cellElement.classList.add('selected');
       }
-      selectedReserveDates.sort(); // 保持日期排序
+      selectedReserveDates.sort(); 
       renderSelectedDates();
     }
 
@@ -650,7 +641,7 @@
           document.getElementById('reserveNote').value = ''; 
           selectedReserveDates = [];
           renderSelectedDates();
-          fetchBookingCapacities(); // 重新抓取最新滿班狀態
+          fetchBookingCapacities(); 
           btn.textContent = "確認送出預約";
           btn.disabled = false;
         })
@@ -785,6 +776,7 @@
         });
     }
 
+    // 替換：更新為支援顯示暱稱的排版
     function displayStudents(students) {
       document.getElementById('studentLoading').style.display = 'none';
       const container = document.getElementById('studentResultList');
@@ -795,7 +787,8 @@
       }
       
       students.forEach(s => {
-        let html = `<div class="card-section"><div class="card-title">${s.name}</div>`;
+        let titleHtml = s.nickname ? s.name + ' <span style="font-size:14px; color:var(--text-sub); font-weight:normal;">(' + s.nickname + ')</span>' : s.name;
+        let html = `<div class="card-section"><div class="card-title">${titleHtml}</div>`;
         let hasAnyService = false;
 
         if (s.powerBalance !== "-" && s.powerBalance !== "") {
