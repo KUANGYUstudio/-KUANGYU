@@ -28,7 +28,6 @@
       --warning: #f59e0b;
       --success: #10b981;
       
-      /* 新增日曆配色 */
       --evening-main: #00838f; 
       --evening-light: #00acc1;
       --evening-bg: #e0f7fa;
@@ -78,13 +77,7 @@
       background-color: #fff; outline: none; transition: border-color 0.2s; color: var(--text-main);
     }
     
-    input[type="date"] {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 100%;
-      box-sizing: border-box;
-      display: block;
-    }
+    input[type="date"] { appearance: none; -webkit-appearance: none; width: 100%; box-sizing: border-box; display: block; }
     input:focus, select:focus { border-color: var(--primary); }
     select { font-weight: 600; }
 
@@ -97,30 +90,17 @@
       padding: 12px 4px; cursor: pointer; border: 1.5px solid var(--border); 
       border-radius: 10px; background-color: #fff; font-size: 14px; 
       color: var(--text-sub); font-weight: 500; transition: all 0.2s;
-      min-height: 46px; 
-      display: flex; align-items: center; justify-content: center;
+      min-height: 46px; display: flex; align-items: center; justify-content: center;
     }
-    .option-btn.selected { 
-      background-color: var(--primary) !important; color: white !important; 
-      border-color: var(--primary) !important; 
-    }
-    .option-btn.accent-selected { 
-      background-color: var(--accent) !important; color: white !important; 
-      border-color: var(--accent) !important; 
-    }
+    .option-btn.selected { background-color: var(--primary) !important; color: white !important; border-color: var(--primary) !important; }
+    .option-btn.accent-selected { background-color: var(--accent) !important; color: white !important; border-color: var(--accent) !important; }
 
-    .dashed-box {
-      border: 2px dashed #f1aeb5; background-color: #fff8f9;
-      padding: 12px; border-radius: 10px; margin-top: 12px;
-    }
-
+    .dashed-box { border: 2px dashed #f1aeb5; background-color: #fff8f9; padding: 12px; border-radius: 10px; margin-top: 12px; }
     .parking-box { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--border); }
     
     .date-row { display: flex; gap: 10px; }
     .date-group { flex: 1; min-width: 0; }
-    @media (max-width: 480px) {
-      .date-row { flex-direction: column; gap: 4px; }
-    }
+    @media (max-width: 480px) { .date-row { flex-direction: column; gap: 4px; } }
 
     .special-input-box { background-color: #fff3e0; padding: 12px; border-radius: 8px; border: 1px dashed #ffcc80; margin-top: 8px; }
 
@@ -137,10 +117,7 @@
     .bg-warning { background: var(--warning); color: white; }
     .bg-outline { background: transparent; color: var(--text-sub); border: 1px solid var(--border); }
 
-    .history-item { 
-      padding: 12px 0; border-bottom: 1px solid #f1f5f9; 
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
-    }
+    .history-item { padding: 12px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
     .history-item:last-child { border-bottom: none; }
     .h-info { display: flex; flex-direction: column; gap: 2px; }
     .h-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
@@ -157,12 +134,9 @@
     .content.active { display: block; }
     #loading, #studentLoading, #reportLoading, #initLoading { text-align: center; padding: 16px; color: var(--text-sub); display: none; font-weight: bold; font-size: 14px; }
     
-    .report-display-box {
-      background-color: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 10px;
-      font-size: 14px; line-height: 1.6; color: var(--text-main); white-space: pre-wrap; font-family: monospace;
-    }
+    .report-display-box { background-color: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 10px; font-size: 14px; line-height: 1.6; color: var(--text-main); white-space: pre-wrap; font-family: monospace; }
 
-    /* 日曆專屬樣式 */
+    /* 靜態小日曆樣式 (學生查詢用) */
     .calendar-wrapper { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
     .calendar-month-title { font-weight: 700; font-size: 15px; color: var(--primary); text-align: center; margin-bottom: 8px; letter-spacing: 1px; }
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
@@ -172,6 +146,28 @@
     .calendar-date.evening { background: transparent; color: var(--evening-main); font-weight: 900; font-size: 15px; }
     .calendar-date.morning { background: transparent; color: var(--morning-main); font-weight: 900; font-size: 15px; }
     .calendar-date.other { background: transparent; color: var(--primary); font-weight: 900; font-size: 15px; }
+
+    /* 互動式多選日曆樣式 (手動預約用) */
+    .interactive-cal-container { background: #f8fafc; border: 1.5px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 8px; }
+    .interactive-cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .cal-nav-btn { background: transparent; border: none; font-size: 16px; color: var(--text-sub); cursor: pointer; font-weight: bold; padding: 4px 12px; }
+    .cal-month-label { font-weight: 700; font-size: 16px; color: var(--text-main); }
+    .int-cal-cell { padding: 10px 0; font-size: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; border: 1.5px solid transparent; }
+    .int-cal-cell.empty { background: transparent; cursor: default; }
+    .int-cal-cell.disabled { color: #cbd5e1; cursor: default; pointer-events: none; }
+    
+    /* 預設可選樣式 */
+    .int-cal-cell.evening { color: var(--evening-main); font-weight: 900; }
+    .int-cal-cell.morning { color: var(--morning-main); font-weight: 900; }
+    
+    /* 額滿樣式 */
+    .int-cal-cell.full { color: #475569; font-weight: 900; background: #f1f5f9; text-decoration: line-through; cursor: not-allowed; pointer-events: none; }
+    
+    /* 選取樣式 */
+    .int-cal-cell.selected { background-color: var(--primary) !important; color: white !important; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    
+    .selected-dates-list { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .selected-tag { background: #e2e8f0; color: var(--text-main); padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
   </style>
 </head>
 <body>
@@ -181,7 +177,6 @@
   <div class="function-tabs">
     <button class="tab-button active" onclick="switchTab('tab-daily')">單日管理</button>
     <button class="tab-button" onclick="switchTab('tab-student')">學生狀態</button>
-    <!-- 獨立的手動預約標籤 -->
     <button class="tab-button" onclick="switchTab('tab-reserve')">手動預約</button>
     <button class="tab-button" onclick="switchTab('tab-finance')">堂數儲值</button>
     <button class="tab-button" onclick="switchTab('tab-adjust')">堂數調整</button>
@@ -217,10 +212,9 @@
     <div id="studentResultList"></div>
   </div>
 
-  <!-- 新增的獨立手動預約區塊 -->
   <div id="tab-reserve" class="content">
     <div class="card-section">
-      <div class="card-title" style="color:var(--primary);">手動新增預約</div>
+      <div class="card-title" style="color:var(--primary);">手動多重預約</div>
       
       <label>選擇學生</label>
       <select id="reserveStudentName">
@@ -232,13 +226,33 @@
         <button class="option-btn selected" disabled style="cursor: default; background:var(--primary); color:white; border-color:var(--primary);">功率課</button>
       </div>
       
-      <label>日期設定</label>
-      <input type="date" id="reserveDate">
+      <label>選擇日期 (可多選)</label>
+      <div id="reserveCalLoading" style="text-align:center; padding:10px; font-size:13px; color:var(--text-sub); display:none;">同步剩餘名額中...</div>
       
-      <label>異動備註說明</label>
+      <div class="interactive-cal-container" id="interactiveCalArea">
+        <div class="interactive-cal-header">
+          <button class="cal-nav-btn" onclick="changeCalMonth(-1)">&#10094;</button>
+          <div class="cal-month-label" id="intCalTitle">2026 年 6 月</div>
+          <button class="cal-nav-btn" onclick="changeCalMonth(1)">&#10095;</button>
+        </div>
+        <div class="calendar-grid">
+          <div class="calendar-day-header">日</div>
+          <div class="calendar-day-header">一</div>
+          <div class="calendar-day-header">二</div>
+          <div class="calendar-day-header">三</div>
+          <div class="calendar-day-header">四</div>
+          <div class="calendar-day-header">五</div>
+          <div class="calendar-day-header">六</div>
+        </div>
+        <div class="calendar-grid" id="intCalGrid"></div>
+      </div>
+      
+      <div class="selected-dates-list" id="selectedDatesDisplay"></div>
+      
+      <label style="margin-top:16px;">異動備註說明</label>
       <input type="text" id="reserveNote" placeholder="請輸入備註原因 (選填)">
       
-      <button class="submit-btn" style="background:var(--primary);" onclick="executeReservation()">確認新增預約</button>
+      <button class="submit-btn" style="background:var(--primary);" onclick="executeReservation()">確認送出預約</button>
     </div>
   </div>
 
@@ -408,10 +422,8 @@
   </div>
 
   <script>
-    // 貼上網址位置：請在此處填入您從 Google Apps Script 取得的網頁應用程式網址 (URL)
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
-    // 核心優化：建立跨網域通訊控制中心
     function callBackend(action, data) {
       return fetch(WEB_APP_URL, {
         method: "POST",
@@ -432,11 +444,12 @@
       document.getElementById('searchDate').value = localISOTime;
       document.getElementById('payment-date').value = localISOTime;
       document.getElementById('adjustDate').value = localISOTime;
-      document.getElementById('reserveDate').value = localISOTime;
 
       callBackend("getAllStudentNames", {})
         .then(populateDropdowns)
         .catch(err => alert("載入名單失敗：" + err.message));
+        
+      initInteractiveCalendar();
     });
 
     function populateDropdowns(names) {
@@ -462,7 +475,157 @@
       document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
       event.target.classList.add('active');
       document.getElementById(tabId).classList.add('active');
+      
+      if (tabId === 'tab-reserve') {
+         fetchBookingCapacities();
+      }
     }
+
+    /* ==========================================
+       互動式多選日曆邏輯 (手動預約專用)
+       ========================================== */
+    let currentIntCalDate = new Date();
+    let selectedReserveDates = []; 
+    let bookingCapacities = {};
+    const MAX_CAPACITY = 6;
+
+    function initInteractiveCalendar() {
+      renderInteractiveCalendar();
+    }
+
+    function fetchBookingCapacities() {
+      document.getElementById('reserveCalLoading').style.display = 'block';
+      callBackend("getBookingCapacities", {})
+        .then(data => {
+          bookingCapacities = data;
+          document.getElementById('reserveCalLoading').style.display = 'none';
+          renderInteractiveCalendar(); 
+        })
+        .catch(err => {
+          document.getElementById('reserveCalLoading').style.display = 'none';
+          console.error("載入滿班資訊失敗: ", err);
+        });
+    }
+
+    function changeCalMonth(delta) {
+      currentIntCalDate.setMonth(currentIntCalDate.getMonth() + delta);
+      renderInteractiveCalendar();
+    }
+
+    function renderInteractiveCalendar() {
+      const year = currentIntCalDate.getFullYear();
+      const month = currentIntCalDate.getMonth();
+      document.getElementById('intCalTitle').textContent = `${year} 年 ${month + 1} 月`;
+      
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const grid = document.getElementById('intCalGrid');
+      grid.innerHTML = '';
+      
+      for (let i = 0; i < firstDay; i++) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'int-cal-cell empty';
+        grid.appendChild(emptyDiv);
+      }
+      
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateObj = new Date(year, month, d);
+        const dayOfWeek = dateObj.getDay();
+        
+        const padMonth = String(month + 1).padStart(2, '0');
+        const padDay = String(d).padStart(2, '0');
+        const dateStr = `${year}/${padMonth}/${padDay}`;
+        
+        const cell = document.createElement('div');
+        cell.textContent = d;
+        cell.className = 'int-cal-cell disabled'; 
+        
+        // 判斷是否為週二、三、四
+        if (dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4) {
+          cell.className = 'int-cal-cell';
+          
+          if (dayOfWeek === 2 || dayOfWeek === 4) cell.classList.add('evening');
+          if (dayOfWeek === 3) cell.classList.add('morning');
+          
+          const currentCount = bookingCapacities[dateStr] || 0;
+          if (currentCount >= MAX_CAPACITY) {
+            cell.className = 'int-cal-cell full'; // 額滿
+          } else {
+            cell.onclick = () => toggleReserveDate(dateStr, cell);
+            if (selectedReserveDates.includes(dateStr)) {
+              cell.classList.add('selected');
+            }
+          }
+        }
+        grid.appendChild(cell);
+      }
+    }
+
+    function toggleReserveDate(dateStr, cellElement) {
+      const idx = selectedReserveDates.indexOf(dateStr);
+      if (idx > -1) {
+        selectedReserveDates.splice(idx, 1);
+        cellElement.classList.remove('selected');
+      } else {
+        selectedReserveDates.push(dateStr);
+        cellElement.classList.add('selected');
+      }
+      selectedReserveDates.sort(); // 保持日期排序
+      renderSelectedDates();
+    }
+
+    function removeSelectedDate(dateStr) {
+      const idx = selectedReserveDates.indexOf(dateStr);
+      if (idx > -1) {
+        selectedReserveDates.splice(idx, 1);
+        renderInteractiveCalendar(); 
+        renderSelectedDates();
+      }
+    }
+
+    function renderSelectedDates() {
+      const container = document.getElementById('selectedDatesDisplay');
+      container.innerHTML = '';
+      selectedReserveDates.forEach(dateStr => {
+        const parts = dateStr.split('/');
+        const shortDate = `${parts[1]}/${parts[2]}`;
+        const tag = document.createElement('div');
+        tag.className = 'selected-tag';
+        tag.innerHTML = `${shortDate} <span style="cursor:pointer; color:var(--danger);" onclick="removeSelectedDate('${dateStr}')">✖</span>`;
+        container.appendChild(tag);
+      });
+    }
+
+    function executeReservation() {
+      const name = document.getElementById('reserveStudentName').value;
+      const note = document.getElementById('reserveNote').value.trim();
+      
+      if (!name) return alert("請先選擇學生");
+      if (selectedReserveDates.length === 0) return alert("請在日曆上點選至少一個預約日期");
+      
+      if (!confirm(`確認要幫 ${name} 手動登記以下 ${selectedReserveDates.length} 個日期的功率課嗎？\n\n${selectedReserveDates.join("\n")}`)) return;
+      
+      const btn = event.target;
+      btn.textContent = "傳送中...";
+      btn.disabled = true;
+      
+      callBackend("manualAddMultipleReservations", { name: name, courseType: "功率課", dateStrs: selectedReserveDates, note: note })
+        .then(res => { 
+          alert(res); 
+          document.getElementById('reserveNote').value = ''; 
+          selectedReserveDates = [];
+          renderSelectedDates();
+          fetchBookingCapacities(); // 重新抓取最新滿班狀態
+          btn.textContent = "確認送出預約";
+          btn.disabled = false;
+        })
+        .catch(err => {
+          alert("預約失敗：" + err.message);
+          btn.textContent = "確認送出預約";
+          btn.disabled = false;
+        });
+    }
+    /* ========================================== */
 
     function loadClasses() {
       const dateStr = document.getElementById('searchDate').value;
@@ -502,7 +665,6 @@
           actionButtonsHtml = `<button class="action-btn" style="background:#fef2f2; color:#ef4444; border:1px solid #fecaca; cursor:not-allowed;" disabled>${excusedText}</button>`;
         } else {
           const cancelBtnText = (item.courseType === '跑班') ? '請假' : '取消';
-          
           actionButtonsHtml = `
             <button class="action-btn bg-success" onclick="actionSignIn('${item.studentName}', '${item.courseType}', this)">代簽到</button>
             <button class="action-btn bg-outline" style="color:var(--danger); border-color:var(--danger);" onclick="actionCancel('${item.studentName}', '${item.sheetName}', ${item.rowIndex}, this)">${cancelBtnText}</button>
@@ -626,12 +788,10 @@
            html += `<div style="font-size:14px; color:var(--text-sub); text-align:center; margin:16px 0;">目前無進行中的課程或服務紀錄</div>`;
         }
 
-        // === 新增：後續預約紀錄區塊 (小日曆版) ===
         html += `<div class="dashed-box" style="margin-top: 16px; border-color: #cbd5e1; background-color: #f8fafc;">`;
         html += `<div style="font-weight:700; font-size:14px; color:var(--primary); margin-bottom:8px;">後續預約進度</div>`;
         
         if (s.upcomingClasses && s.upcomingClasses.length > 0) {
-          // 1. 先將預約資料依照「年-月」進行分組整理
           const monthGroups = {};
           s.upcomingClasses.forEach(uc => {
             const parts = uc.dateStr.split('/');
@@ -642,7 +802,6 @@
             
             if (!monthGroups[key]) monthGroups[key] = { year: yyyy, month: mm, days: {} };
             
-            // 依照星期給予對應的樣式標籤
             if (uc.dayOfWeek === '二' || uc.dayOfWeek === '四') {
               monthGroups[key].days[dd] = 'evening'; 
             } else if (uc.dayOfWeek === '三') {
@@ -652,7 +811,6 @@
             }
           });
 
-          // 2. 針對每一個有預約的月份，畫出日曆方格
           html += `<div class="calendar-wrapper">`;
           for (const key in monthGroups) {
             const group = monthGroups[key];
@@ -660,22 +818,18 @@
             html += `<div class="calendar-month-title">${group.year} 年 ${group.month} 月</div>`;
             html += `<div class="calendar-grid">`;
             
-            // 日曆標頭
             const daysOfWeek = ['日', '一', '二', '三', '四', '五', '六'];
             daysOfWeek.forEach(d => {
               html += `<div class="calendar-day-header">${d}</div>`;
             });
 
-            // 計算該月第一天是星期幾，以及該月總天數
             const firstDay = new Date(group.year, group.month - 1, 1).getDay();
             const daysInMonth = new Date(group.year, group.month, 0).getDate();
 
-            // 填補第一天前面的空白格子
             for (let i = 0; i < firstDay; i++) {
               html += `<div class="calendar-date empty"></div>`;
             }
 
-            // 填入每一天的數字並標記顏色
             for (let d = 1; d <= daysInMonth; d++) {
               const styleClass = group.days[d] ? group.days[d] : '';
               html += `<div class="calendar-date ${styleClass}">${d}</div>`;
@@ -688,7 +842,6 @@
           html += `<div style="font-size:13px; color:var(--text-sub);">目前無後續預約紀錄</div>`;
         }
         html += `</div>`;
-        // ==============================
 
         let actionButtonsHtml = '';
         if (s.powerBalance !== "-" && s.powerBalance !== "") {
@@ -885,24 +1038,6 @@
       callBackend("submitStudentAdjustment", { name: name, courseType: course, actionType: type, count: count, note: finalNote, targetDate: date })
         .then(res => { alert(res); document.getElementById('adjustNote').value = ''; })
         .catch(err => alert("調整失敗：" + err.message));
-    }
-
-    function executeReservation() {
-      const name = document.getElementById('reserveStudentName').value;
-      const date = document.getElementById('reserveDate').value;
-      const note = document.getElementById('reserveNote').value.trim();
-      
-      if (!name) return alert("請選擇學生");
-      if (!date) return alert("請選擇日期");
-      
-      if (!confirm(`確認要幫 ${name} 手動登記 ${date} 的功率課預約嗎？\n(系統將自動檢查當天是否超過6人滿班)`)) return;
-      
-      callBackend("manualAddReservation", { name: name, courseType: "功率課", dateStr: date, note: note })
-        .then(res => { 
-          alert(res); 
-          document.getElementById('reserveNote').value = ''; 
-        })
-        .catch(err => alert("預約失敗：" + err.message));
     }
 
     function fetchReport(functionName) {
