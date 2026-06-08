@@ -12,11 +12,9 @@
         .gradient-bg { background: linear-gradient(135deg, #f97316 0%, #c2410c 100%); }
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         
-        /* 隱藏橫向滾動條但保留滑動功能 */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 列印樣式優化 */
         @media print {
             body { -webkit-print-color-adjust: exact; }
             .no-print { display: none !important; }
@@ -72,7 +70,7 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         
-        <section id="about" class="mb-20">
+        <section id="about" class="mb-16">
             <div class="max-w-4xl mx-auto">
                 <h2 class="text-3xl font-bold mb-6 text-slate-800 text-center">強強聯手，資源整合</h2>
                 <p class="text-gray-600 mb-4 leading-relaxed text-center">
@@ -93,6 +91,24 @@
                         <p class="text-sm text-slate-600">提供訓練場地、一對一肌力專業指導與頂級醫療恢復支持。</p>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                    <i class="fas fa-user-check text-orange-600 mr-2"></i> 參加資格
+                </h3>
+                <ul class="space-y-4 text-gray-600 text-sm md:text-base">
+                    <li class="flex items-start">
+                        <span class="font-bold text-orange-600 mr-3">(1)</span>
+                        <span>曾完賽至少一場 51.5 公里標準鐵人三項賽</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="font-bold text-orange-600 mr-3">(2)</span>
+                        <span>具備連續捷泳 1000 公尺以上能力</span>
+                    </li>
+                </ul>
             </div>
         </section>
 
