@@ -21,7 +21,6 @@
       border-radius: 4px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.02);
     }
-    /* 新增導覽列樣式 */
     .nav-bar {
       margin-bottom: 20px;
     }
@@ -42,16 +41,30 @@
       padding-bottom: 10px;
       border-bottom: 1px solid #eee;
     }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 30px 0 15px 0;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #333;
+    }
     .form-group {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+    }
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+    .form-row .form-group {
+      flex: 1;
     }
     label {
       display: block;
       font-weight: 500;
       margin-bottom: 8px;
-      font-size: 15px;
+      font-size: 14px;
     }
-    input[type="text"] {
+    input[type="text"], input[type="date"] {
       width: 100%;
       padding: 10px;
       border: 1px solid #ddd;
@@ -59,7 +72,7 @@
       box-sizing: border-box;
       font-size: 14px;
     }
-    input[type="text"]:focus {
+    input[type="text"]:focus, input[type="date"]:focus {
       outline: none;
       border-color: #999;
     }
@@ -67,6 +80,10 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+    }
+    .radio-group.horizontal {
+      flex-direction: row;
+      gap: 20px;
     }
     .radio-group label, .checkbox-group label {
       font-weight: 400;
@@ -79,6 +96,7 @@
       font-size: 13px;
       color: #777;
       margin-top: 4px;
+      margin-bottom: 8px;
     }
     button {
       width: 100%;
@@ -90,7 +108,7 @@
       font-size: 16px;
       cursor: pointer;
       transition: background 0.2s;
-      margin-top: 10px;
+      margin-top: 20px;
     }
     button:hover {
       background-color: #555;
@@ -101,6 +119,7 @@
       text-align: center;
       display: none;
       border-radius: 4px;
+      font-size: 14px;
     }
     .success { background-color: #e8f5e9; color: #2e7d32; }
     .error { background-color: #ffebee; color: #c62828; }
@@ -116,13 +135,59 @@
     <h1>2026 崇越武嶺盃｜特訓計畫報名</h1>
     
     <form id="trainingForm">
-      <div class="form-group">
-        <label for="name">姓名</label>
-        <input type="text" id="name" name="name" required>
+      
+      <div class="section-title">一、基本與保險資料</div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">姓名</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label>性別</label>
+          <div class="radio-group horizontal" style="margin-top: 12px;">
+            <label><input type="radio" name="gender" value="男" required> 男</label>
+            <label><input type="radio" name="gender" value="女"> 女</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nationality">國籍</label>
+          <input type="text" id="nationality" name="nationality" value="台灣" required>
+        </div>
+        <div class="form-group">
+          <label for="dob">出生年月日</label>
+          <input type="date" id="dob" name="dob" required>
+        </div>
       </div>
 
       <div class="form-group">
-        <label>報名方案</label>
+        <label for="idNumber">身分證字號 (外籍填護照號碼)</label>
+        <input type="text" id="idNumber" name="idNumber" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="emergName">緊急聯絡人姓名</label>
+          <input type="text" id="emergName" name="emergName" required>
+        </div>
+        <div class="form-group">
+          <label for="emergRel">關係</label>
+          <input type="text" id="emergRel" name="emergRel" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="emergPhone">緊急聯絡人電話</label>
+        <input type="text" id="emergPhone" name="emergPhone" required>
+      </div>
+
+      <div class="section-title">二、報名方案與意願調查</div>
+
+      <div class="form-group">
+        <label>特訓報名方案</label>
         <div class="radio-group">
           <label><input type="radio" name="plan" value="武嶺特訓包（三次全報扣5堂）" required> 武嶺特訓包（三次全報，優惠扣 5 堂課）</label>
           <label><input type="radio" name="plan" value="單次報名"> 單次彈性報名（每次扣 2 堂課）</label>
@@ -139,22 +204,32 @@
       </div>
 
       <div class="form-group">
-        <label>太平山移地訓練意願 (7/4 或 8/8)</label>
-        <div class="note">不扣堂數，一日保母車資均攤實報實銷</div>
-        <div class="radio-group" style="margin-top: 8px;">
-          <label><input type="radio" name="taiping" value="偏好 7/4" required> 偏好 7/4前往</label>
-          <label><input type="radio" name="taiping" value="偏好 8/8"> 偏好 8/8前往</label>
-          <label><input type="radio" name="taiping" value="兩天皆可"> 兩天皆可，配合團隊</label>
-          <label><input type="radio" name="taiping" value="不參加"> 不參加本次移地</label>
+        <label>太平山移地訓練 (7/4 或 8/8)</label>
+        <div class="note">不扣堂數。移地訓練為自主騎乘。</div>
+        <div class="radio-group">
+          <label><input type="radio" name="taiping" value="參加，偏好 7/4" required> 參加（偏好 7/4）</label>
+          <label><input type="radio" name="taiping" value="參加，偏好 8/8"> 參加（偏好 8/8）</label>
+          <label><input type="radio" name="taiping" value="參加，兩天皆可"> 參加（兩天皆可配合團隊）</label>
+          <label><input type="radio" name="taiping" value="不參加"> 不參加本次移地訓練</label>
         </div>
       </div>
 
-      <div class="form-group">
-        <label>8/22 雪霸仙山 (B級賽事)</label>
-        <div class="note">彈性選配，不含在特訓包內</div>
-        <div class="radio-group" style="margin-top: 8px;">
-          <label><input type="radio" name="xuepa" value="預計報名" required> 預計自行報名參賽</label>
-          <label><input type="radio" name="xuepa" value="不參加"> 不參加</label>
+      <div class="form-group" id="vanGroup" style="display: none; padding-left: 20px; border-left: 2px solid #eee;">
+        <label>是否需要工作室協助安排太平山保母車？</label>
+        <div class="note">一日車資將由搭乘者實報實銷共同均攤</div>
+        <div class="radio-group">
+          <label><input type="radio" name="needVan" value="需要保母車"> 需要協助安排保母車</label>
+          <label><input type="radio" name="needVan" value="不需要，自行前往"> 不需要，我會自行前往</label>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top: 30px;">
+        <label>雪巴仙山站 (8/22 賽事意願)</label>
+        <div class="note">此為自由參加之B級賽事，工作室可運用上方資料代辦團報</div>
+        <div class="radio-group">
+          <label><input type="radio" name="xuepa" value="委託代辦團報" required> 委託工作室代辦團報</label>
+          <label><input type="radio" name="xuepa" value="自行報名"> 我會自行報名參賽</label>
+          <label><input type="radio" name="xuepa" value="不參加"> 不參加此賽事</label>
         </div>
       </div>
 
@@ -164,6 +239,7 @@
   </div>
 
   <script>
+    // 處理單次報名的顯示
     const planRadios = document.querySelectorAll('input[name="plan"]');
     const singleDatesGroup = document.getElementById('singleDatesGroup');
     
@@ -178,6 +254,23 @@
       });
     });
 
+    // 處理保母車選項的顯示 (不參加太平山則隱藏)
+    const taipingRadios = document.querySelectorAll('input[name="taiping"]');
+    const vanGroup = document.getElementById('vanGroup');
+    const vanRadios = document.querySelectorAll('input[name="needVan"]');
+    
+    taipingRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        if(e.target.value === '不參加') {
+          vanGroup.style.display = 'none';
+          vanRadios.forEach(r => r.checked = false);
+        } else {
+          vanGroup.style.display = 'block';
+        }
+      });
+    });
+
+    // 表單送出邏輯
     document.getElementById('trainingForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -185,7 +278,25 @@
       const btn = document.getElementById('submitBtn');
       const msg = document.getElementById('message');
       
-      btn.innerText = '傳送中...';
+      // 驗證邏輯：如果有顯示單次報名，則至少要勾選一天
+      if (singleDatesGroup.style.display === 'block') {
+        const checkedDates = document.querySelectorAll('input[name="singleDates"]:checked');
+        if (checkedDates.length === 0) {
+          alert('請至少勾選一天的單次參加日期');
+          return;
+        }
+      }
+
+      // 驗證邏輯：如果有顯示保母車選項，則必須選擇
+      if (vanGroup.style.display === 'block') {
+        const checkedVan = document.querySelector('input[name="needVan"]:checked');
+        if (!checkedVan) {
+          alert('請選擇是否需要保母車');
+          return;
+        }
+      }
+      
+      btn.innerText = '資料傳送中...';
       btn.disabled = true;
 
       let selectedDates = [];
@@ -196,7 +307,7 @@
       const formData = new FormData(form);
       formData.set('singleDates', selectedDates.join(', '));
 
-      // 記得將此處替換為您的 Google Apps Script URL
+      // 請替換為您的 Google Apps Script URL
       const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
 
       fetch(scriptURL, { method: 'POST', body: formData })
@@ -206,11 +317,12 @@
           msg.style.display = 'block';
           form.reset();
           singleDatesGroup.style.display = 'none';
+          vanGroup.style.display = 'none';
           btn.innerText = '送出資料';
           btn.disabled = false;
         })
         .catch(error => {
-          msg.innerText = '傳送失敗，請稍後再試或聯繫教練團隊。';
+          msg.innerText = '傳送失敗，請稍後再試。';
           msg.className = 'error';
           msg.style.display = 'block';
           btn.innerText = '重新送出';
