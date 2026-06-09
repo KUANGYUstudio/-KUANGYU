@@ -7,7 +7,7 @@
   
   <style>
     /* ==========================================
-       CSS 樣式：莫蘭迪藍極簡版 (手機響應式與層次優化)
+       CSS 樣式：莫蘭迪藍極簡版 (橫向滑動表格與緊湊間距)
        ========================================== */
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
@@ -15,7 +15,7 @@
       color: #333333; 
       margin: 0; 
       padding: 60px 20px; 
-      line-height: 1.7;
+      line-height: 1.6;
       letter-spacing: 0.04em;
     }
     
@@ -23,7 +23,7 @@
       max-width: 680px; 
       margin: 0 auto; 
       background: #ffffff; 
-      padding: 60px 70px; 
+      padding: 50px 60px; 
       border-radius: 8px; 
       box-shadow: 0 4px 24px rgba(0,0,0,0.04); 
     }
@@ -35,11 +35,11 @@
     
     /* 主標題 */
     h1 { 
-      font-size: 28px; 
+      font-size: 26px; 
       font-weight: 600; 
       letter-spacing: 0.12em;
       text-align: center;
-      margin-bottom: 50px;
+      margin-bottom: 40px;
       color: #2c3e50;
       padding-bottom: 20px;
       border-bottom: 1px solid #e1e5e9;
@@ -47,26 +47,32 @@
 
     /* 計畫表樣式 */
     .schedule-section {
-      margin-bottom: 60px;
+      margin-bottom: 50px;
     }
 
     .schedule-title {
       font-size: 16px;
       font-weight: 600;
       color: #2c3e50;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       letter-spacing: 0.08em;
     }
 
-    /* 電腦版表格樣式 */
-    .schedule-table {
+    /* 表格滑動容器 */
+    .table-responsive {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 15px;
-      background-color: #fafbfc;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       border: 1px solid #e1e5e9;
       border-radius: 6px;
-      overflow: hidden;
+      background-color: #fafbfc;
+    }
+
+    .schedule-table {
+      width: 100%;
+      min-width: 500px; /* 確保在手機上也能維持舒適的欄位寬度 */
+      border-collapse: collapse;
+      font-size: 15px;
     }
 
     .schedule-table th {
@@ -75,6 +81,7 @@
       color: #2c3e50;
       font-weight: 600;
       padding: 14px 16px;
+      white-space: nowrap; /* 表頭不折行 */
     }
 
     .schedule-table td {
@@ -83,17 +90,23 @@
       color: #444;
       vertical-align: middle;
     }
+    
+    /* 日期與目標欄位不折行 */
+    .schedule-table td:first-child,
+    .schedule-table td:last-child {
+      white-space: nowrap;
+    }
 
     .schedule-table td strong {
       color: #2c3e50;
       font-weight: 600;
+      display: block;
     }
 
-    /* 課表補充說明文字（第二行） */
     .sub-text {
       display: block;
       font-size: 13.5px;
-      color: #777;
+      color: #888;
       margin-top: 4px;
     }
 
@@ -101,70 +114,28 @@
       background-color: #eef2f5 !important;
     }
 
-    /* 手機版卡片式表格轉換 */
-    @media (max-width: 600px) {
-      .schedule-table thead {
-        display: none; /* 隱藏原本的表頭 */
-      }
-      .schedule-table {
-        background-color: transparent;
-        border: none;
-      }
-      .schedule-table tr {
-        display: block;
-        background-color: #fafbfc;
-        border: 1px solid #e1e5e9;
-        border-radius: 8px;
-        margin-bottom: 16px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-      }
-      .schedule-table td {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        padding: 14px 16px;
-        text-align: right;
-      }
-      .schedule-table td::before {
-        content: attr(data-label); /* 動態抓取 HTML 中的 data-label 作為標題 */
-        font-weight: 600;
-        color: #6b8293;
-        margin-right: 16px;
-        flex-shrink: 0;
-      }
-      .schedule-table td:last-child {
-        border-bottom: none;
-      }
-      .td-content {
-        text-align: right;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-      }
-    }
-
     /* 區段標題：莫蘭迪藍色塊 */
     .section-title { 
       font-size: 15px; 
       font-weight: 600; 
       color: #2c3e50;
-      margin: 60px 0 32px; 
+      margin: 50px 0 24px; 
       padding: 14px 18px;
       background-color: #eef2f5;
-      border-left: 4px solid #6b8293;
+      border-left: 4px solid #6b8293; /* 莫蘭迪藍主色 */
       border-radius: 4px;
       letter-spacing: 0.08em;
     }
     
-    /* 表單間距優化：確保題目之間有適當呼吸感 */
+    /* 表單間距緊湊化 */
     .form-group { 
-      margin-bottom: 32px; 
+      margin-bottom: 20px; 
     }
     
     .form-row { 
       display: flex; 
-      gap: 24px; 
-      margin-bottom: 32px; 
+      gap: 20px; 
+      margin-bottom: 20px; 
     }
     
     .form-row .form-group { 
@@ -175,8 +146,8 @@
     @media (max-width: 600px) {
       .form-row { 
         flex-direction: column; 
-        gap: 32px; 
-        margin-bottom: 32px; 
+        gap: 20px; 
+        margin-bottom: 20px; 
       }
     }
     
@@ -185,14 +156,14 @@
       font-weight: 600; 
       font-size: 14px; 
       color: #444;
-      margin-bottom: 10px; /* 拉近題目與輸入區塊的距離 */
+      margin-bottom: 6px; 
     }
     
     input[type="text"], 
     input[type="date"], 
     input[type="email"] { 
       width: 100%; 
-      padding: 14px; 
+      padding: 12px 14px; 
       border: 1px solid #d1d9e0; 
       border-radius: 6px; 
       background-color: #fff;
@@ -213,22 +184,22 @@
     .note { 
       font-size: 13.5px; 
       color: #777; 
-      margin-top: 8px;
-      line-height: 1.6; 
+      margin-top: 6px;
+      line-height: 1.5; 
     }
     
     /* 單純圓點選項樣式 */
     .option-group { 
       display: flex; 
       flex-direction: column; 
-      gap: 14px; 
+      gap: 12px; 
       margin-top: 4px;
     }
     
     .option-group.row-layout {
       flex-direction: row;
       flex-wrap: wrap;
-      gap: 24px;
+      gap: 20px;
     }
     
     .option-label { 
@@ -237,7 +208,7 @@
       color: #333;
       display: flex; 
       align-items: center; 
-      gap: 10px; 
+      gap: 8px; 
       cursor: pointer;
       margin-bottom: 0;
     }
@@ -253,21 +224,21 @@
     /* 動態面板 */
     .dynamic-panel {
       display: none;
-      padding: 24px; 
+      padding: 20px; 
       background: #f8fafb; 
       border: 1px solid #eef2f5;
       border-radius: 6px; 
-      margin-bottom: 32px;
-      margin-top: 10px;
+      margin-bottom: 20px;
+      margin-top: 8px;
     }
 
     .bank-info { 
       background: #fafbfc; 
       border: 1px solid #e1e5e9; 
-      padding: 24px; 
+      padding: 20px; 
       border-radius: 6px; 
       font-size: 14.5px; 
-      margin-top: 20px; 
+      margin-top: 16px; 
       line-height: 1.8;
       color: #444;
     }
@@ -283,7 +254,7 @@
       font-weight: 600;
       letter-spacing: 0.15em;
       cursor: pointer; 
-      margin-top: 40px; 
+      margin-top: 36px; 
       transition: all 0.2s ease;
     }
     
@@ -297,7 +268,7 @@
     }
     
     #message { 
-      margin-top: 24px; 
+      margin-top: 20px; 
       padding: 16px; 
       text-align: center; 
       border-radius: 6px; 
@@ -320,79 +291,69 @@
 
   <div class="schedule-section">
     <div class="schedule-title">週末課表總覽</div>
-    <table class="schedule-table">
-      <thead>
-        <tr>
-          <th>日期</th>
-          <th>課程內容</th>
-          <th>目標</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td data-label="日期">6/20 (六)</td>
-          <td data-label="課程內容">
-            <div class="td-content">
+    <div class="table-responsive">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>課程內容</th>
+            <th>目標</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>6/20 (六)</td>
+            <td>
               <strong>期初測驗</strong>
               <span class="sub-text">(中社+風櫃嘴)</span>
-            </div>
-          </td>
-          <td data-label="目標">Zone 3-4</td>
-        </tr>
-        <tr>
-          <td data-label="日期">7/4 (六)</td>
-          <td data-label="課程內容">
-            <div class="td-content">
+            </td>
+            <td>Zone 3-4</td>
+          </tr>
+          <tr>
+            <td>7/4 (六)</td>
+            <td>
               <strong>太平山移地訓練</strong>
               <span class="sub-text">(自主)</span>
-            </div>
-          </td>
-          <td data-label="目標">Zone 2-3</td>
-        </tr>
-        <tr>
-          <td data-label="日期">8/8 (六)</td>
-          <td data-label="課程內容">
-            <div class="td-content">
+            </td>
+            <td>Zone 2-3</td>
+          </tr>
+          <tr>
+            <td>8/8 (六)</td>
+            <td>
               <strong>碧山巖 / 汐萬路耐力</strong>
-            </div>
-          </td>
-          <td data-label="目標">Zone 2-3</td>
-        </tr>
-        <tr>
-          <td data-label="日期">8/22 (六)</td>
-          <td data-label="課程內容">
-            <div class="td-content">
+            </td>
+            <td>Zone 2-3</td>
+          </tr>
+          <tr>
+            <td>8/22 (六)</td>
+            <td>
               <strong>雪巴仙山站</strong>
               <span class="sub-text">(Tempo)</span>
-            </div>
-          </td>
-          <td data-label="目標">Zone 3</td>
-        </tr>
-        <tr>
-          <td data-label="日期">8/29 (六)</td>
-          <td data-label="課程內容">
-            <div class="td-content">
+            </td>
+            <td>Zone 3</td>
+          </tr>
+          <tr>
+            <td>8/29 (六)</td>
+            <td>
               <strong>期末測驗</strong>
               <span class="sub-text">(中社+風櫃嘴)</span>
-            </div>
-          </td>
-          <td data-label="目標">Zone 3-4</td>
-        </tr>
-        <tr class="highlight-row">
-          <td data-label="日期">9/14 (日)</td>
-          <td data-label="課程內容">
-            <div class="td-content">
+            </td>
+            <td>Zone 3-4</td>
+          </tr>
+          <tr class="highlight-row">
+            <td>9/14 (日)</td>
+            <td>
               <strong>崇越武嶺盃 正賽</strong>
-            </div>
-          </td>
-          <td data-label="目標"><strong>Peak</strong></td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+            <td><strong>Peak</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="note">
       注意事項：<br>
-      ※ 太平山移地訓練可由教練統一安排保母車。<br>
-      ※ 雪巴仙山站為自由報名賽事，可自行報名或一起團報。
+      太平山移地訓練可由教練統一安排保母車。<br>
+      雪巴仙山站為自由報名賽事，可自行報名或一起團報。
     </div>
   </div>
   
@@ -479,7 +440,7 @@
       </div>
     </div>
 
-    <div class="form-group" style="margin-top: 35px;">
+    <div class="form-group" style="margin-top: 24px;">
       <label class="field-label">太平山移地訓練</label>
       <div class="option-group row-layout">
         <label class="option-label"><input type="radio" name="taipingIntent" value="參加" required><span>參加</span></label>
@@ -489,7 +450,7 @@
     
     <div id="taipingDetailsGroup" class="dynamic-panel">
       <label class="field-label" style="color: #2c3e50;">偏好日期</label>
-      <div class="option-group row-layout" style="margin-bottom: 24px;">
+      <div class="option-group row-layout" style="margin-bottom: 20px;">
         <label class="option-label"><input type="radio" name="taipingDate" value="偏好 7/4"><span>7/4</span></label>
         <label class="option-label"><input type="radio" name="taipingDate" value="偏好 8/8"><span>8/8</span></label>
         <label class="option-label"><input type="radio" name="taipingDate" value="皆可"><span>皆可</span></label>
@@ -502,7 +463,7 @@
       </div>
     </div>
 
-    <div class="form-group" style="margin-top: 35px;">
+    <div class="form-group" style="margin-top: 24px;">
       <label class="field-label">雪巴仙山站意願調查</label>
       <div class="option-group row-layout">
         <label class="option-label"><input type="radio" name="xuepa" value="參加" required><span>參加</span></label>
