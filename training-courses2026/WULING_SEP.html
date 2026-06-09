@@ -6,9 +6,6 @@
   <title>2026 崇越武嶺盃｜週末特訓計畫報名</title>
   
   <style>
-    /* ==========================================
-       CSS 樣式：日系極簡風格排版
-       ========================================== */
     body { 
       font-family: -apple-system, system-ui, sans-serif; 
       background-color: #f7f7f7; 
@@ -71,7 +68,9 @@
       margin-bottom: 6px; 
     }
     
-    input[type="text"], input[type="date"], input[type="email"] { 
+    input[type="text"], 
+    input[type="date"], 
+    input[type="email"] { 
       width: 100%; 
       padding: 10px; 
       border: 1px solid #ddd; 
@@ -150,8 +149,7 @@
   
   <form id="trainingForm">
     
-    <div class="section-title">一、學員基本資料</div>
-    
+    <div class="section-title">一、基本與保險資料</div>
     <div class="form-row">
       <div class="form-group">
         <label>姓名</label>
@@ -187,9 +185,7 @@
       <input type="email" name="email" required>
     </div>
 
-
     <div class="section-title">二、緊急聯絡資訊</div>
-    
     <div class="form-row">
       <div class="form-group">
         <label>聯絡人姓名</label>
@@ -206,9 +202,7 @@
       <input type="text" name="emergPhone" required>
     </div>
 
-
     <div class="section-title">三、付款方式</div>
-    
     <div class="radio-group">
       <label><input type="radio" name="paymentMethod" value="匯款" required> 匯款</label>
       <label><input type="radio" name="paymentMethod" value="LINE PAY"> LINE PAY</label>
@@ -223,14 +217,13 @@
       戶名：費聿凡
     </div>
 
-
-    <div class="section-title">四、計畫選項</div>
-    
+    <div class="section-title">四、報名身份與方案</div>
     <div class="form-group">
-      <label>報名方案</label>
       <div class="radio-group">
-        <label><input type="radio" name="plan" value="武嶺特訓包（三次全報扣5堂）" required> 武嶺特訓包（三次全報，特惠扣 5 堂課）</label>
-        <label><input type="radio" name="plan" value="單次報名"> 單次彈性報名（每次扣 2 堂課）</label>
+        <label><input type="radio" name="plan" value="光聿學員：武嶺特訓包（扣 5 堂課）" required> 【光聿學員】武嶺特訓包（三次全報，扣 5 堂課）</label>
+        <label><input type="radio" name="plan" value="光聿學員：單次彈性報名（每次扣 2 堂課）"> 【光聿學員】單次彈性報名（每次扣 2 堂課）</label>
+        <label><input type="radio" name="plan" value="非學員：武嶺特訓包（特惠 $3000）"> 【非學員】武嶺特訓包（三次全報，特惠 $3000）</label>
+        <label><input type="radio" name="plan" value="非學員：單次彈性報名（單次 $1200）"> 【非學員】單次彈性報名（單次 $1200）</label>
       </div>
     </div>
     
@@ -274,47 +267,53 @@
 </div>
 
 <script>
-  // ==========================================
-  // JavaScript：前端互動與資料傳送邏輯
-  // ==========================================
-  
-  // 請將下方引號內的網址，替換為您 Google Apps Script 部署後的網頁應用程式 URL
+  // 請記得填入您的 Google Apps Script URL
   const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
   
   const form = document.getElementById('trainingForm');
   const btn = document.getElementById('submitBtn');
   const msg = document.getElementById('message');
 
-  // 動態顯示控制：報名方案切換
+  // 修改判斷邏輯：只要包含「單次」兩個字，就顯示日期勾選框
   document.querySelectorAll('input[name="plan"]').forEach(r => {
-    r.onchange = () => document.getElementById('singleDatesGroup').style.display = (r.value === '單次報名' ? 'block' : 'none');
+    r.onchange = () => {
+      const isSingle = r.value.includes('單次');
+      if (isSingle) {
+        document.getElementById('singleDatesGroup').style.display = 'block';
+      } else {
+        document.getElementById('singleDatesGroup').style.display = 'none';
+      }
+    };
   });
   
-  // 動態顯示控制：太平山意願切換
+  // 判斷保母車欄位是否顯示
   document.querySelectorAll('input[name="taiping"]').forEach(r => {
-    r.onchange = () => document.getElementById('vanGroup').style.display = (r.value === '不參加' ? 'none' : 'block');
+    r.onchange = () => {
+      if (r.value === '不參加') {
+        document.getElementById('vanGroup').style.display = 'none';
+      } else {
+        document.getElementById('vanGroup').style.display = 'block';
+      }
+    };
   });
 
-  // 表單送出事件監聽
+  // 表單送出處理
   form.onsubmit = e => {
     e.preventDefault();
     
-    // 按鈕進入鎖定狀態，避免重複點擊
     btn.disabled = true; 
     btn.innerText = '處理中...';
     
-    // 彙整複選的單次日期
     let selectedDates = []; 
-    document.querySelectorAll('input[name="singleDates"]:checked').forEach(c => selectedDates.push(c.value));
+    document.querySelectorAll('input[name="singleDates"]:checked').forEach(c => {
+      selectedDates.push(c.value);
+    });
     
-    // 封裝表單資料
     const formData = new FormData(form); 
     formData.set('singleDates', selectedDates.join(', '));
     
-    // 發送資料至 Google Apps Script 後端
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        // 成功處理
         msg.innerText = '報名成功！請至 Email 查看確認信件與匯款細節。'; 
         msg.style.display = 'block'; 
         msg.className = 'success';
@@ -327,7 +326,6 @@
         btn.innerText = '確認並送出報名';
       })
       .catch(() => {
-        // 失敗處理
         alert('報名失敗，請檢查網路連線或聯繫教練。'); 
         btn.disabled = false; 
         btn.innerText = '確認並送出報名';
