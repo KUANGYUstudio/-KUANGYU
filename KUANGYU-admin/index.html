@@ -31,11 +31,7 @@
       --success: #10b981;
       
       --evening-main: #00838f; 
-      --evening-light: #00acc1;
-      --evening-bg: #e0f7fa;
       --morning-main: #ffb300; 
-      --morning-light: #ffca28;
-      --morning-bg: #fff8e1;
     }
 
     body { 
@@ -44,10 +40,10 @@
       margin: 0 auto; 
       max-width: 768px; 
       background-color: var(--bg); 
-      color: var(--text-main);
-      -webkit-font-smoothing: antialiased;
+      color: var(--text-main); 
+      -webkit-font-smoothing: antialiased; 
     }
-
+    
     h3 { 
       font-weight: 700; 
       color: var(--primary); 
@@ -64,14 +60,14 @@
       border-radius: 12px; 
       overflow-x: auto; 
       white-space: nowrap; 
-      gap: 4px;
-      -webkit-overflow-scrolling: touch;
+      gap: 4px; 
+      -webkit-overflow-scrolling: touch; 
     }
-
+    
     .function-tabs::-webkit-scrollbar { 
       display: none; 
     }
-
+    
     .tab-button { 
       flex: 1; 
       padding: 12px 8px; 
@@ -81,26 +77,26 @@
       color: #475569; 
       cursor: pointer; 
       font-weight: 600; 
-      transition: all 0.2s;
+      transition: all 0.2s; 
       background: transparent; 
-      text-align: center;
+      text-align: center; 
     }
-
+    
     .tab-button.active { 
       background-color: #fff; 
       color: var(--primary); 
       box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
     }
 
-    .card-section {
+    .card-section { 
       background: var(--card-bg); 
       padding: 16px; 
       border-radius: 14px; 
       margin-bottom: 12px; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.02); 
-      border: 1px solid #f1f5f9;
+      border: 1px solid #f1f5f9; 
     }
-
+    
     .card-title { 
       font-size: 17px; 
       font-weight: 700; 
@@ -110,7 +106,7 @@
       padding-bottom: 10px; 
       text-align: center; 
     }
-
+    
     .card-title.adjust-theme { 
       color: var(--accent); 
     }
@@ -123,7 +119,7 @@
       font-size: 13px; 
       color: var(--text-sub); 
     }
-
+    
     label:first-of-type { 
       margin-top: 0; 
     }
@@ -137,7 +133,7 @@
       background-color: #fff; 
       outline: none; 
       transition: border-color 0.2s; 
-      color: var(--text-main);
+      color: var(--text-main); 
     }
     
     input[type="date"] { 
@@ -147,11 +143,11 @@
       box-sizing: border-box; 
       display: block; 
     }
-
+    
     input:focus, select:focus { 
       border-color: var(--primary); 
     }
-
+    
     select { 
       font-weight: 600; 
     }
@@ -161,10 +157,18 @@
       gap: 8px; 
       margin-top: 5px; 
     }
-
-    .cols-3 { grid-template-columns: repeat(3, 1fr); }
-    .cols-2 { grid-template-columns: repeat(2, 1fr); }
-    .cols-1 { grid-template-columns: repeat(1, 1fr); }
+    
+    .cols-3 { 
+      grid-template-columns: repeat(3, 1fr); 
+    }
+    
+    .cols-2 { 
+      grid-template-columns: repeat(2, 1fr); 
+    }
+    
+    .cols-1 { 
+      grid-template-columns: repeat(1, 1fr); 
+    }
     
     .option-btn { 
       padding: 12px 4px; 
@@ -175,19 +179,19 @@
       font-size: 14px; 
       color: var(--text-sub); 
       font-weight: 500; 
-      transition: all 0.2s;
+      transition: all 0.2s; 
       min-height: 46px; 
       display: flex; 
       align-items: center; 
-      justify-content: center;
+      justify-content: center; 
     }
-
+    
     .option-btn.selected { 
       background-color: var(--primary) !important; 
       color: white !important; 
       border-color: var(--primary) !important; 
     }
-
+    
     .option-btn.accent-selected { 
       background-color: var(--accent) !important; 
       color: white !important; 
@@ -201,7 +205,7 @@
       border-radius: 10px; 
       margin-top: 12px; 
     }
-
+    
     .parking-box { 
       background: #f8fafc; 
       padding: 12px; 
@@ -214,14 +218,17 @@
       display: flex; 
       gap: 10px; 
     }
-
+    
     .date-group { 
       flex: 1; 
       min-width: 0; 
     }
-
+    
     @media (max-width: 480px) { 
-      .date-row { flex-direction: column; gap: 4px; } 
+      .date-row { 
+        flex-direction: column; 
+        gap: 4px; 
+      } 
     }
 
     .special-input-box { 
@@ -242,9 +249,9 @@
       font-weight: 600; 
       margin-top: 20px; 
       cursor: pointer; 
-      transition: 0.2s;
+      transition: 0.2s; 
     }
-
+    
     .submit-btn:active { 
       transform: translateY(1px); 
     }
@@ -260,11 +267,27 @@
       transition: 0.2s; 
       min-height: 42px; 
     }
-
-    .bg-primary { background: var(--primary); color: white; }
-    .bg-success { background: var(--success); color: white; }
-    .bg-warning { background: var(--warning); color: white; }
-    .bg-outline { background: transparent; color: var(--text-sub); border: 1px solid var(--border); }
+    
+    .bg-primary { 
+      background: var(--primary); 
+      color: white; 
+    }
+    
+    .bg-success { 
+      background: var(--success); 
+      color: white; 
+    }
+    
+    .bg-warning { 
+      background: var(--warning); 
+      color: white; 
+    }
+    
+    .bg-outline { 
+      background: transparent; 
+      color: var(--text-sub); 
+      border: 1px solid var(--border); 
+    }
 
     .history-item { 
       padding: 12px 0; 
@@ -275,23 +298,23 @@
       flex-wrap: wrap; 
       gap: 8px; 
     }
-
+    
     .history-item:last-child { 
       border-bottom: none; 
     }
-
+    
     .h-info { 
       display: flex; 
       flex-direction: column; 
       gap: 2px; 
     }
-
+    
     .h-title { 
       font-size: 15px; 
       font-weight: 700; 
       color: var(--text-main); 
     }
-
+    
     .h-sub { 
       font-size: 13px; 
       color: var(--text-sub); 
@@ -302,12 +325,12 @@
       gap: 8px; 
       margin-bottom: 4px; 
     }
-
+    
     .search-box select { 
       flex: 1; 
       margin-bottom: 0; 
     }
-
+    
     .search-box .action-btn { 
       width: auto; 
       height: 45px; 
@@ -322,7 +345,7 @@
       border-radius: 10px; 
       border: 1px solid #e2e8f0; 
     }
-
+    
     .hidden-panel { 
       display: none; 
     }
@@ -330,11 +353,11 @@
     .content { 
       display: none; 
     }
-
+    
     .content.active { 
       display: block; 
     }
-
+    
     #loading, #studentLoading, #reportLoading, #initLoading { 
       text-align: center; 
       padding: 16px; 
@@ -363,7 +386,8 @@
       gap: 16px; 
       margin-top: 12px; 
     }
-
+    
+    /* 這裡加上了淡淡的底色與圓角 */
     .calendar-month-title { 
       font-weight: 700; 
       font-size: 15px; 
@@ -371,15 +395,18 @@
       text-align: center; 
       margin-bottom: 8px; 
       letter-spacing: 1px; 
+      background-color: #f1f5f9; 
+      padding: 6px; 
+      border-radius: 8px; 
     }
-
+    
     .calendar-grid { 
       display: grid; 
       grid-template-columns: repeat(7, 1fr); 
       gap: 4px; 
       text-align: center; 
     }
-
+    
     .calendar-day-header { 
       font-size: 12px; 
       color: var(--text-sub); 
@@ -388,7 +415,7 @@
       border-bottom: 1px solid var(--border); 
       margin-bottom: 4px; 
     }
-
+    
     .calendar-date { 
       padding: 8px 0; 
       font-size: 14px; 
@@ -396,21 +423,54 @@
       color: #cbd5e1; 
       display: flex; 
       align-items: center; 
-      justify-content: center;
-      transition: 0.2s;
+      justify-content: center; 
+      transition: 0.2s; 
+      border: 1.5px solid transparent; 
     }
-
-    .calendar-date.empty { background: transparent; }
+    
+    .calendar-date.empty { 
+      background: transparent; 
+    }
     
     /* 可取消點擊的特殊樣式 */
-    .cancelable-date { cursor: pointer; border: 1.5px solid transparent; }
-    .cancelable-date.evening { color: var(--evening-main); font-weight: 900; font-size: 15px; }
-    .cancelable-date.morning { color: var(--morning-main); font-weight: 900; font-size: 15px; }
-    .cancelable-date.other { color: var(--primary); font-weight: 900; font-size: 15px; }
+    .cancelable-date { 
+      cursor: pointer; 
+    }
+    
+    .cancelable-date.evening { 
+      color: var(--evening-main); 
+      font-weight: 900; 
+      font-size: 15px; 
+    }
+    
+    .cancelable-date.morning { 
+      color: var(--morning-main); 
+      font-weight: 900; 
+      font-size: 15px; 
+    }
+    
+    .cancelable-date.other { 
+      color: var(--primary); 
+      font-weight: 900; 
+      font-size: 15px; 
+    }
     
     /* 準備被取消的選取狀態 (變紅) */
-    .cancel-selected { background-color: var(--danger) !important; color: white !important; font-weight: bold !important; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .cancel-panel { display: none; background: #fff5f5; border: 1px dashed var(--danger); padding: 12px; border-radius: 10px; margin-top: 12px; }
+    .cancel-selected { 
+      background-color: var(--danger) !important; 
+      color: white !important; 
+      font-weight: bold !important; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    }
+    
+    .cancel-panel { 
+      display: none; 
+      background: #fff5f5; 
+      border: 1px dashed var(--danger); 
+      padding: 12px; 
+      border-radius: 10px; 
+      margin-top: 12px; 
+    }
 
     /* 互動式多選日曆樣式 (手動預約用) */
     .interactive-cal-container { 
@@ -421,13 +481,14 @@
       margin-top: 8px; 
     }
     
+    /* 強制置中標頭配置，解決擠在一起的問題 */
     .interactive-cal-header { 
       display: grid; 
       grid-template-columns: 40px 1fr 40px; 
       align-items: center; 
       margin-bottom: 12px; 
     }
-
+    
     .cal-nav-btn { 
       background: transparent; 
       border: none; 
@@ -435,19 +496,24 @@
       color: var(--primary); 
       cursor: pointer; 
       font-weight: bold; 
-      padding: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 8px; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
     }
-
+    
+    /* 這裡也為手動預約的月份標題加上對應底色 */
     .cal-month-label { 
       font-weight: 700; 
       font-size: 16px; 
       color: var(--text-main); 
       text-align: center; 
+      background-color: #f1f5f9; 
+      padding: 4px 12px; 
+      border-radius: 8px; 
+      display: inline-block; 
     }
-
+    
     .int-cal-cell { 
       padding: 10px 0; 
       font-size: 15px; 
@@ -459,14 +525,49 @@
       transition: 0.2s; 
       border: 1.5px solid transparent; 
     }
-
-    .int-cal-cell.empty { background: transparent; cursor: default; }
-    .int-cal-cell.disabled { color: #cbd5e1; cursor: default; pointer-events: none; }
-    .int-cal-cell.expired { color: #cbd5e1; text-decoration: line-through; cursor: default; pointer-events: none; }
-    .int-cal-cell.full { color: #475569; font-weight: 900; background: #f1f5f9; cursor: not-allowed; pointer-events: none; }
-    .int-cal-cell.evening { color: var(--evening-main); font-weight: 900; }
-    .int-cal-cell.morning { color: var(--morning-main); font-weight: 900; }
-    .int-cal-cell.selected { background-color: var(--primary) !important; color: white !important; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    
+    .int-cal-cell.empty { 
+      background: transparent; 
+      cursor: default; 
+    }
+    
+    .int-cal-cell.disabled { 
+      color: #cbd5e1; 
+      cursor: default; 
+      pointer-events: none; 
+    }
+    
+    .int-cal-cell.expired { 
+      color: #cbd5e1; 
+      text-decoration: line-through; 
+      cursor: default; 
+      pointer-events: none; 
+    }
+    
+    .int-cal-cell.full { 
+      color: #475569; 
+      font-weight: 900; 
+      background: #f1f5f9; 
+      cursor: not-allowed; 
+      pointer-events: none; 
+    }
+    
+    .int-cal-cell.evening { 
+      color: var(--evening-main); 
+      font-weight: 900; 
+    }
+    
+    .int-cal-cell.morning { 
+      color: var(--morning-main); 
+      font-weight: 900; 
+    }
+    
+    .int-cal-cell.selected { 
+      background-color: var(--primary) !important; 
+      color: white !important; 
+      font-weight: bold; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    }
     
     .selected-dates-list { 
       margin-top: 12px; 
@@ -474,7 +575,7 @@
       flex-wrap: wrap; 
       gap: 8px; 
     }
-
+    
     .selected-tag { 
       background: #e2e8f0; 
       color: var(--text-main); 
@@ -533,24 +634,21 @@
   <div id="tab-reserve" class="content">
     <div class="card-section">
       <div class="card-title" style="color:var(--primary);">手動多重預約</div>
-      
       <label>選擇學生</label>
       <select id="reserveStudentName">
         <option value="">載入名單中...</option>
       </select>
-      
       <label>課程項目 (僅開放功率課)</label>
       <div class="btn-grid cols-1">
         <button class="option-btn selected" disabled style="cursor: default; background:var(--primary); color:white; border-color:var(--primary);">功率課</button>
       </div>
-      
       <label>選擇日期 (可多選)</label>
       <div id="reserveCalLoading" style="text-align:center; padding:10px; font-size:13px; color:var(--text-sub); display:none;">同步剩餘名額中...</div>
       
       <div class="interactive-cal-container" id="interactiveCalArea">
         <div class="interactive-cal-header">
           <button class="cal-nav-btn" onclick="changeCalMonth(-1)">&#10094;</button>
-          <div class="cal-month-label" id="intCalTitle"></div>
+          <div><span class="cal-month-label" id="intCalTitle"></span></div>
           <button class="cal-nav-btn" onclick="changeCalMonth(1)">&#10095;</button>
         </div>
         <div class="calendar-grid">
@@ -566,10 +664,8 @@
       </div>
       
       <div class="selected-dates-list" id="selectedDatesDisplay"></div>
-      
       <label style="margin-top:16px;">異動備註說明</label>
       <input type="text" id="reserveNote" placeholder="請輸入備註原因 (選填)">
-      
       <button class="submit-btn" style="background:var(--primary);" onclick="executeReservation()">確認送出預約</button>
     </div>
   </div>
@@ -577,12 +673,10 @@
   <div id="tab-finance" class="content">
     <div class="card-section">
       <div class="card-title">學生儲值系統</div>
-      
       <label>學生姓名</label>
       <select id="financeStudentName">
         <option value="">載入名單中...</option>
       </select>
-
       <label>課程名稱</label>
       <div class="btn-grid course-buttons" style="grid-template-columns: repeat(2, 1fr);">
         <button class="option-btn" onclick="selectCourse(this, '功率課')">功率課</button>
@@ -591,9 +685,8 @@
         <button class="option-btn" onclick="selectCourse(this, '租車位')">租車位</button>
       </div>
       <input type="hidden" id="selectedCourse">
-
+      
       <div id="option-container" style="margin-top: 12px;">
-        
         <div id="功率課-options" class="hidden-panel">
           <label>購買堂數</label>
           <div class="btn-grid cols-3">
@@ -602,7 +695,6 @@
             <button class="option-btn" onclick="clearCountSelection(this.parentElement); focusInput('power-count')">自訂</button>
           </div>
           <input type="number" id="power-count" style="margin-top:10px; display:none;" placeholder="輸入堂數" oninput="syncManualInput('count', this.value)">
-
           <label>金額</label>
           <div class="btn-grid cols-3">
             <button class="option-btn" onclick="setPrice(this, 5500)">5500</button>
@@ -611,7 +703,7 @@
           </div>
           <input type="number" id="power-price" style="margin-top:10px; display:none;" placeholder="自訂金額" oninput="syncManualInput('price', this.value)">
         </div>
-
+        
         <div id="跑班-options" class="hidden-panel">
           <label>購買堂數</label>
           <div class="btn-grid cols-2">
@@ -619,7 +711,6 @@
             <button class="option-btn" onclick="clearCountSelection(this.parentElement); focusInput('run-count')">自訂</button>
           </div>
           <input type="number" id="run-count" style="margin-top:10px; display:none;" placeholder="輸入堂數" oninput="syncManualInput('count', this.value)">
-
           <label>金額</label>
           <div class="btn-grid cols-2">
             <button class="option-btn" onclick="setPrice(this, 4500)">4500</button>
@@ -627,16 +718,14 @@
           </div>
           <input type="number" id="run-price" style="margin-top:10px; display:none;" placeholder="輸入金額" oninput="syncManualInput('price', this.value)">
         </div>
-
+        
         <div id="補差額-options" class="hidden-panel">
           <div class="special-input-box">
             <label style="margin-top:0; color:#e65100;">輸入補繳總金額</label>
-            <input type="number" id="makeup-price-input" placeholder="輸入金額" 
-                   oninput="syncManualInput('price', this.value); document.getElementById('financeCount').value=0;"
-                   style="font-size: 16px; font-weight: bold; color: #e65100; border: 2px solid #ffcc80;">
+            <input type="number" id="makeup-price-input" placeholder="輸入金額" oninput="syncManualInput('price', this.value); document.getElementById('financeCount').value=0;" style="font-size: 16px; font-weight: bold; color: #e65100; border: 2px solid #ffcc80;">
           </div>
         </div>
-
+        
         <div id="租車位-options" class="hidden-panel">
           <div class="parking-box">
             <div class="date-row">
@@ -650,10 +739,8 @@
               </div>
             </div>
           </div>
-
           <label>計算月數</label>
           <input type="number" id="parking-months" placeholder="自動計算" oninput="syncManualInput('count', this.value)">
-
           <label>金額</label>
           <div class="btn-grid cols-3">
             <button class="option-btn" onclick="setPrice(this, 800)">800</button>
@@ -663,21 +750,21 @@
           <input type="number" id="parking-price" style="margin-top:10px; display:block;" placeholder="或輸入自訂金額" oninput="syncManualInput('price', this.value)">
         </div>
       </div>
-
+      
       <label>付款方式</label>
       <div class="btn-grid payment-methods cols-3">
         <button class="option-btn" onclick="setMethod(this, '現金')">現金</button>
         <button class="option-btn" onclick="setMethod(this, 'LINE PAY')">LINE PAY</button>
         <button class="option-btn" onclick="setMethod(this, '銀行匯款')">銀行匯款</button>
       </div>
-
+      
       <label>繳費日期</label>
       <input type="date" id="payment-date">
-
+      
       <input type="hidden" id="financeCount">
       <input type="hidden" id="financePrice">
       <input type="hidden" id="financeMethod">
-
+      
       <button onclick="submitFinanceTopUp()" class="submit-btn" id="submit-finance-btn" style="margin-top:24px; background:var(--primary);">確認儲值</button>
     </div>
   </div>
@@ -685,19 +772,16 @@
   <div id="tab-adjust" class="content">
     <div class="card-section">
       <div class="card-title adjust-theme">調整與補簽系統</div>
-      
       <label>選擇學生</label>
       <select id="adjustStudentName">
         <option value="">載入名單中...</option>
       </select>
-      
       <label>選擇課程項目</label>
       <div class="btn-grid cols-3 adjust-course-grid">
         <button class="option-btn" onclick="selectAdjustItem(this, 'course', '功率課')">功率課</button>
         <button class="option-btn" onclick="selectAdjustItem(this, 'course', '跑班')">跑班</button>
         <button class="option-btn" onclick="selectAdjustItem(this, 'course', '皮拉提斯')">皮拉提斯</button>
       </div>
-      
       <label>執行動作</label>
       <div class="btn-grid cols-2 adjust-action-grid">
         <button class="option-btn" onclick="selectAdjustItem(this, 'action', '補簽到')">補簽到</button>
@@ -705,15 +789,12 @@
         <button class="option-btn" onclick="selectAdjustItem(this, 'action', '補堂')">補堂</button>
         <button class="option-btn" onclick="selectAdjustItem(this, 'action', '扣堂')">扣堂</button>
       </div>
-      
       <div id="adjust-count-panel" class="dashed-box hidden-panel">
         <label style="color:var(--accent); margin-top:0;">輸入調整堂數</label>
         <input type="number" id="adjustCount" value="1">
       </div>
-
       <label>日期設定</label>
       <input type="date" id="adjustDate">
-      
       <label>異動備註說明</label>
       <input type="text" id="adjustNote" placeholder="請輸入備註原因">
       
@@ -742,7 +823,7 @@
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
-    // 紀錄準備被取消的日期清單
+    // 儲存每個學生準備取消的預約清單
     let cancelSelections = {}; 
 
     function callBackend(action, data) {
@@ -753,9 +834,7 @@
       })
       .then(response => response.json())
       .then(res => {
-        if (res.success) {
-          return res.result;
-        }
+        if (res.success) return res.result;
         throw new Error(res.error);
       });
     }
@@ -801,9 +880,7 @@
       event.target.classList.add('active');
       document.getElementById(tabId).classList.add('active');
       
-      if (tabId === 'tab-reserve') {
-         fetchBookingCapacities();
-      }
+      if (tabId === 'tab-reserve') fetchBookingCapacities();
     }
 
     /* ==========================================
@@ -814,62 +891,59 @@
     let bookingCapacities = {};
     const MAX_CAPACITY = 6;
 
-    function initInteractiveCalendar() {
-      renderInteractiveCalendar();
+    function initInteractiveCalendar() { 
+      renderInteractiveCalendar(); 
     }
 
     function fetchBookingCapacities() {
       document.getElementById('reserveCalLoading').style.display = 'block';
-      
       callBackend("getBookingCapacities", {})
-        .then(data => {
-          bookingCapacities = data;
-          document.getElementById('reserveCalLoading').style.display = 'none';
+        .then(data => { 
+          bookingCapacities = data; 
+          document.getElementById('reserveCalLoading').style.display = 'none'; 
           renderInteractiveCalendar(); 
         })
-        .catch(err => {
-          document.getElementById('reserveCalLoading').style.display = 'none';
-          console.error("載入滿班資訊失敗: ", err);
+        .catch(err => { 
+          document.getElementById('reserveCalLoading').style.display = 'none'; 
         });
     }
 
-    function changeCalMonth(delta) {
-      currentIntCalDate.setMonth(currentIntCalDate.getMonth() + delta);
-      renderInteractiveCalendar();
+    function changeCalMonth(delta) { 
+      currentIntCalDate.setMonth(currentIntCalDate.getMonth() + delta); 
+      renderInteractiveCalendar(); 
     }
 
     function renderInteractiveCalendar() {
-      const year = currentIntCalDate.getFullYear();
+      const year = currentIntCalDate.getFullYear(); 
       const month = currentIntCalDate.getMonth();
       document.getElementById('intCalTitle').textContent = `${year} 年 ${month + 1} 月`;
       
-      const firstDay = new Date(year, month, 1).getDay();
+      const firstDay = new Date(year, month, 1).getDay(); 
       const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const grid = document.getElementById('intCalGrid');
+      const grid = document.getElementById('intCalGrid'); 
       grid.innerHTML = '';
       
-      for (let i = 0; i < firstDay; i++) {
-        const emptyDiv = document.createElement('div');
-        emptyDiv.className = 'int-cal-cell empty';
-        grid.appendChild(emptyDiv);
+      for (let i = 0; i < firstDay; i++) { 
+        const emptyDiv = document.createElement('div'); 
+        emptyDiv.className = 'int-cal-cell empty'; 
+        grid.appendChild(emptyDiv); 
       }
       
-      const today = new Date();
+      const today = new Date(); 
       today.setHours(0, 0, 0, 0);
       
       for (let d = 1; d <= daysInMonth; d++) {
-        const dateObj = new Date(year, month, d);
+        const dateObj = new Date(year, month, d); 
         const dayOfWeek = dateObj.getDay();
-        
-        const padMonth = String(month + 1).padStart(2, '0');
-        const padDay = String(d).padStart(2, '0');
+        const padMonth = String(month + 1).padStart(2, '0'); 
+        const padDay = String(d).padStart(2, '0'); 
         const dateStr = `${year}/${padMonth}/${padDay}`;
         
-        const cell = document.createElement('div');
+        const cell = document.createElement('div'); 
         cell.textContent = d;
         
-        if (dateObj < today) {
-          cell.className = 'int-cal-cell expired';
+        if (dateObj < today) { 
+          cell.className = 'int-cal-cell expired'; 
         } else {
           if (dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4) {
             cell.className = 'int-cal-cell';
@@ -878,16 +952,15 @@
             if (dayOfWeek === 3) cell.classList.add('morning');
             
             const currentCount = bookingCapacities[dateStr] || 0;
+            
             if (currentCount >= MAX_CAPACITY) {
               cell.classList.add('full'); 
-            } else {
-              cell.onclick = () => toggleReserveDate(dateStr, cell);
-              if (selectedReserveDates.includes(dateStr)) {
-                cell.classList.add('selected');
-              }
+            } else { 
+              cell.onclick = () => toggleReserveDate(dateStr, cell); 
+              if (selectedReserveDates.includes(dateStr)) cell.classList.add('selected'); 
             }
-          } else {
-            cell.className = 'int-cal-cell disabled';
+          } else { 
+            cell.className = 'int-cal-cell disabled'; 
           }
         }
         grid.appendChild(cell);
@@ -896,56 +969,49 @@
 
     function toggleReserveDate(dateStr, cellElement) {
       const idx = selectedReserveDates.indexOf(dateStr);
-      if (idx > -1) {
-        selectedReserveDates.splice(idx, 1);
-        cellElement.classList.remove('selected');
-      } else {
-        selectedReserveDates.push(dateStr);
-        cellElement.classList.add('selected');
+      if (idx > -1) { 
+        selectedReserveDates.splice(idx, 1); 
+        cellElement.classList.remove('selected'); 
+      } else { 
+        selectedReserveDates.push(dateStr); 
+        cellElement.classList.add('selected'); 
       }
       selectedReserveDates.sort(); 
       renderSelectedDates();
     }
 
-    function removeSelectedDate(dateStr) {
-      const idx = selectedReserveDates.indexOf(dateStr);
-      if (idx > -1) {
-        selectedReserveDates.splice(idx, 1);
+    function removeSelectedDate(dateStr) { 
+      const idx = selectedReserveDates.indexOf(dateStr); 
+      if (idx > -1) { 
+        selectedReserveDates.splice(idx, 1); 
         renderInteractiveCalendar(); 
-        renderSelectedDates();
-      }
+        renderSelectedDates(); 
+      } 
     }
 
     function renderSelectedDates() {
-      const container = document.getElementById('selectedDatesDisplay');
+      const container = document.getElementById('selectedDatesDisplay'); 
       container.innerHTML = '';
       selectedReserveDates.forEach(dateStr => {
-        const parts = dateStr.split('/');
-        const shortDate = `${parts[1]}/${parts[2]}`;
+        const parts = dateStr.split('/'); 
+        const shortDate = `${parts[1]}/${parts[2]}`; 
         const tag = document.createElement('div');
-        tag.className = 'selected-tag';
-        tag.innerHTML = `${shortDate} <span style="cursor:pointer; color:var(--danger);" onclick="removeSelectedDate('${dateStr}')">✖</span>`;
+        tag.className = 'selected-tag'; 
+        tag.innerHTML = `${shortDate} <span style="cursor:pointer; color:var(--danger);" onclick="removeSelectedDate('${dateStr}')">✖</span>`; 
         container.appendChild(tag);
       });
     }
 
     function executeReservation() {
-      const name = document.getElementById('reserveStudentName').value;
+      const name = document.getElementById('reserveStudentName').value; 
       const note = document.getElementById('reserveNote').value.trim();
       
-      if (!name) {
-        return alert("請先選擇學生");
-      }
-      if (selectedReserveDates.length === 0) {
-        return alert("請在日曆上點選至少一個預約日期");
-      }
+      if (!name) return alert("請先選擇學生"); 
+      if (selectedReserveDates.length === 0) return alert("請在日曆上點選至少一個預約日期");
+      if (!confirm(`確認要幫 ${name} 手動登記以下 ${selectedReserveDates.length} 個日期的功率課嗎？\n\n${selectedReserveDates.join("\n")}`)) return;
       
-      if (!confirm(`確認要幫 ${name} 手動登記以下 ${selectedReserveDates.length} 個日期的功率課嗎？\n\n${selectedReserveDates.join("\n")}`)) {
-        return;
-      }
-      
-      const btn = event.target;
-      btn.textContent = "傳送中...";
+      const btn = event.target; 
+      btn.textContent = "傳送中..."; 
       btn.disabled = true;
       
       callBackend("manualAddMultipleReservations", { 
@@ -957,21 +1023,21 @@
       .then(res => { 
         alert(res); 
         document.getElementById('reserveNote').value = ''; 
-        selectedReserveDates = [];
-        renderSelectedDates();
+        selectedReserveDates = []; 
+        renderSelectedDates(); 
         fetchBookingCapacities(); 
-        btn.textContent = "確認送出預約";
-        btn.disabled = false;
+        btn.textContent = "確認送出預約"; 
+        btn.disabled = false; 
       })
-      .catch(err => {
-        alert("預約失敗：" + err.message);
-        btn.textContent = "確認送出預約";
-        btn.disabled = false;
+      .catch(err => { 
+        alert("預約失敗：" + err.message); 
+        btn.textContent = "確認送出預約"; 
+        btn.disabled = false; 
       });
     }
 
     /* ==========================================
-       學生狀態查詢 - 包含批次取消邏輯
+       學生查詢面板：多重取消預約邏輯
        ========================================== */
     function searchStudentData() {
       const keyword = document.getElementById('studentKeyword').value;
@@ -979,13 +1045,13 @@
       
       document.getElementById('studentLoading').style.display = 'block';
       document.getElementById('studentResultList').innerHTML = '';
-      cancelSelections = {}; // 清空取消暫存
+      cancelSelections = {}; // 清空取消快取
       
       callBackend("searchStudent", { keyword: keyword })
         .then(displayStudents)
-        .catch(err => {
-          document.getElementById('studentLoading').style.display = 'none';
-          alert("查詢失敗：" + err.message);
+        .catch(err => { 
+          document.getElementById('studentLoading').style.display = 'none'; 
+          alert("查詢失敗：" + err.message); 
         });
     }
 
@@ -993,39 +1059,38 @@
       document.getElementById('studentLoading').style.display = 'none';
       const container = document.getElementById('studentResultList');
       
-      if (students.length === 0) {
-        container.innerHTML = '<div class="card-section" style="text-align:center; color:#666;">查無相符學生資料</div>';
-        return;
+      if (students.length === 0) { 
+        container.innerHTML = '<div class="card-section" style="text-align:center; color:#666;">查無相符學生資料</div>'; 
+        return; 
       }
       
       students.forEach(s => {
-        let titleHtml = s.nickname ? `${s.name} <span style="font-size:14px; color:var(--text-sub); font-weight:normal;">(${s.nickname})</span>` : s.name;
+        let titleHtml = s.nickname ? s.name + ' <span style="font-size:14px; color:var(--text-sub); font-weight:normal;">(' + s.nickname + ')</span>' : s.name;
         let html = `<div class="card-section"><div class="card-title">${titleHtml}</div>`;
         let hasAnyService = false;
 
-        if (s.powerBalance !== "-" && s.powerBalance !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>功率課：</strong>${s.powerBalance} 堂 <span style="font-size:13px; color:var(--text-sub); margin-left:4px;">(到期日: ${s.expiryDate})</span></div>`;
-          hasAnyService = true;
+        if (s.powerBalance !== "-" && s.powerBalance !== "") { 
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>功率課：</strong>${s.powerBalance} 堂 <span style="font-size:13px; color:var(--text-sub); margin-left:4px;">(到期日: ${s.expiryDate})</span></div>`; 
+          hasAnyService = true; 
         }
-        if (s.runBalance !== "-" && s.runBalance !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>跑班：</strong>${s.runBalance} 堂</div>`;
-          hasAnyService = true;
+        if (s.runBalance !== "-" && s.runBalance !== "") { 
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>跑班：</strong>${s.runBalance} 堂</div>`; 
+          hasAnyService = true; 
         }
-        if (s.pilatesBalance !== "-" && s.pilatesBalance !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>皮拉提斯：</strong>${s.pilatesBalance} 堂</div>`;
-          hasAnyService = true;
+        if (s.pilatesBalance !== "-" && s.pilatesBalance !== "") { 
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>皮拉提斯：</strong>${s.pilatesBalance} 堂</div>`; 
+          hasAnyService = true; 
         }
-        if (s.onlinePlan !== "-" && s.onlinePlan !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>線上課表期間：</strong>${s.onlinePlan}</div>`;
-          hasAnyService = true;
+        if (s.onlinePlan !== "-" && s.onlinePlan !== "") { 
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>線上課表期間：</strong>${s.onlinePlan}</div>`; 
+          hasAnyService = true; 
         }
-        if (s.parking !== "-" && s.parking !== "") {
-          html += `<div style="font-size:15px; margin:8px 0;"><strong>租車位到期日：</strong>${s.parking}</div>`;
-          hasAnyService = true;
+        if (s.parking !== "-" && s.parking !== "") { 
+          html += `<div style="font-size:15px; margin:8px 0;"><strong>租車位到期日：</strong>${s.parking}</div>`; 
+          hasAnyService = true; 
         }
-
-        if (!hasAnyService) {
-           html += `<div style="font-size:14px; color:var(--text-sub); text-align:center; margin:16px 0;">目前無進行中的課程或服務紀錄</div>`;
+        if (!hasAnyService) { 
+          html += `<div style="font-size:14px; color:var(--text-sub); text-align:center; margin:16px 0;">目前無進行中的課程或服務紀錄</div>`; 
         }
 
         html += `<div class="dashed-box" style="margin-top: 16px; border-color: #cbd5e1; background-color: #f8fafc;">`;
@@ -1035,55 +1100,43 @@
           const monthGroups = {};
           s.upcomingClasses.forEach(uc => {
             const parts = uc.dateStr.split('/');
-            const yyyy = parts[0];
-            const mm = parseInt(parts[1], 10);
+            const yyyy = parts[0]; 
+            const mm = parseInt(parts[1], 10); 
             const dd = parseInt(parts[2], 10);
             const key = `${yyyy}-${mm}`;
-            
-            if (!monthGroups[key]) {
-              monthGroups[key] = { year: yyyy, month: mm, days: {} };
-            }
+            if (!monthGroups[key]) monthGroups[key] = { year: yyyy, month: mm, days: {} };
             
             let sClass = 'other';
-            if (uc.dayOfWeek === '二' || uc.dayOfWeek === '四') sClass = 'evening'; 
+            if (uc.dayOfWeek === '二' || uc.dayOfWeek === '四') sClass = 'evening';
             else if (uc.dayOfWeek === '三') sClass = 'morning';
             
-            // 將整包資料存入給格子
-            monthGroups[key].days[dd] = { 
-              styleClass: sClass, 
-              fullDateStr: uc.dateStr, 
-              sheetName: uc.type + '登記' 
-            };
+            monthGroups[key].days[dd] = { styleClass: sClass, fullDateStr: uc.dateStr, sheetName: uc.type + '登記' };
           });
 
           html += `<div class="calendar-wrapper">`;
           for (const key in monthGroups) {
             const group = monthGroups[key];
-            html += `<div>`;
-            html += `<div class="calendar-month-title">${group.year} 年 ${group.month} 月</div>`;
-            html += `<div class="calendar-grid">`;
+            html += `<div><div class="calendar-month-title">${group.year} 年 ${group.month} 月</div><div class="calendar-grid">`;
             
-            const daysOfWeek = ['日', '一', '二', '三', '四', '五', '六'];
-            daysOfWeek.forEach(d => {
-              html += `<div class="calendar-day-header">${d}</div>`;
+            ['日', '一', '二', '三', '四', '五', '六'].forEach(d => { 
+              html += `<div class="calendar-day-header">${d}</div>`; 
             });
-
-            const firstDay = new Date(group.year, group.month - 1, 1).getDay();
+            
+            const firstDay = new Date(group.year, group.month - 1, 1).getDay(); 
             const daysInMonth = new Date(group.year, group.month, 0).getDate();
-
-            for (let i = 0; i < firstDay; i++) {
-              html += `<div class="calendar-date empty"></div>`;
+            
+            for (let i = 0; i < firstDay; i++) { 
+              html += `<div class="calendar-date empty"></div>`; 
             }
-
+            
             for (let d = 1; d <= daysInMonth; d++) {
               const classInfo = group.days[d];
               if (classInfo) {
                  html += `<div class="calendar-date cancelable-date ${classInfo.styleClass}" data-date="${classInfo.fullDateStr}" onclick="toggleStudentCancelDate(this, '${s.rowIndex}', '${s.name}', '${classInfo.fullDateStr}', '${classInfo.sheetName}')">${d}</div>`;
               } else {
-                 html += `<div class="calendar-date empty"></div>`;
+                 html += `<div class="calendar-date empty">${d}</div>`;
               }
             }
-            
             html += `</div></div>`; 
           }
           html += `</div>`;
@@ -1094,6 +1147,7 @@
                      <div id="cancelList_${s.rowIndex}" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;"></div>
                      <button class="submit-btn" style="background:var(--danger); margin-top:0;" onclick="executeBatchCancel('${s.rowIndex}', '${s.name}')">確認取消選取預約</button>
                    </div>`;
+
         } else {
           html += `<div style="font-size:13px; color:var(--text-sub);">目前無後續預約紀錄</div>`;
         }
@@ -1101,36 +1155,24 @@
 
         let actionButtonsHtml = '';
         if (s.powerBalance !== "-" && s.powerBalance !== "") {
-          actionButtonsHtml = `
-            <button class="action-btn bg-warning" style="flex:1;" onclick="sendProgressReminder('${s.name}', this)">進度提醒</button>
-            <button class="action-btn bg-outline" style="flex:1;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
-          `;
+          actionButtonsHtml = `<button class="action-btn bg-warning" style="flex:1;" onclick="sendProgressReminder('${s.name}', this)">進度提醒</button><button class="action-btn bg-outline" style="flex:1;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>`;
         } else {
-          actionButtonsHtml = `
-            <button class="action-btn bg-outline" style="width:100%;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>
-          `;
+          actionButtonsHtml = `<button class="action-btn bg-outline" style="width:100%;" onclick="toggleEdit('${s.rowIndex}')">修改資料</button>`;
         }
 
         html += `
-          <div style="display:flex; gap:8px; margin-top:16px;">
-            ${actionButtonsHtml}
-          </div>
+          <div style="display:flex; gap:8px; margin-top:16px;">${actionButtonsHtml}</div>
           <button class="action-btn bg-outline" style="width:100%; margin-top:8px; border-style:dashed;" onclick="copyToFinance('${s.name}')">帶入帳務與收費操作</button>
-          
           <div id="editBox_${s.rowIndex}" class="edit-panel">
-            <label>修正姓名</label>
-            <input type="text" id="editName_${s.rowIndex}" value="${s.name}">
-            <label>修正 Email</label>
-            <input type="text" id="editEmail_${s.rowIndex}" value="${s.email}">
+            <label>修正姓名</label><input type="text" id="editName_${s.rowIndex}" value="${s.name}">
+            <label>修正 Email</label><input type="text" id="editEmail_${s.rowIndex}" value="${s.email}">
             <button class="submit-btn" style="margin-top:12px; padding:12px; background:var(--primary);" onclick="saveStudentInfo(${s.rowIndex}, this)">儲存變更</button>
           </div>
         </div>`;
-        
         container.innerHTML += html;
       });
     }
 
-    // 點擊日曆格子切換取消狀態
     function toggleStudentCancelDate(cellElement, rowIndex, name, dateStr, sheetName) {
       if (!cancelSelections[rowIndex]) cancelSelections[rowIndex] = [];
       const list = cancelSelections[rowIndex];
@@ -1146,7 +1188,6 @@
       renderCancelPanel(rowIndex);
     }
 
-    // 從下方清單移除準備取消的日期
     function removeStudentCancelDate(rowIndex, dateStr) {
        const cells = document.querySelectorAll(`.cancelable-date[data-date="${dateStr}"]`);
        cells.forEach(cell => cell.classList.remove('cancel-selected'));
@@ -1157,11 +1198,11 @@
        renderCancelPanel(rowIndex);
     }
 
-    // 渲染下方取消面板
     function renderCancelPanel(rowIndex) {
       const list = cancelSelections[rowIndex] || [];
       const panel = document.getElementById(`cancelPanel_${rowIndex}`);
       if (!panel) return;
+      
       const listContainer = document.getElementById(`cancelList_${rowIndex}`);
       
       if (list.length > 0) {
@@ -1181,11 +1222,9 @@
       }
     }
 
-    // 執行整批取消
     function executeBatchCancel(rowIndex, studentName) {
       const list = cancelSelections[rowIndex];
       if (!list || list.length === 0) return;
-      
       if (!confirm(`確定要為 ${studentName} 取消這 ${list.length} 筆預約嗎？\n(將同步退還堂數並釋出行事曆名額)`)) return;
       
       const panel = document.getElementById(`cancelPanel_${rowIndex}`);
@@ -1193,52 +1232,153 @@
       btn.textContent = "處理中..."; 
       btn.disabled = true;
       
-      callBackend("batchCancelReservations", { 
-        studentName: studentName, 
-        cancelList: list 
-      })
-      .then(res => {
-        alert(res);
-        cancelSelections[rowIndex] = [];
-        searchStudentData(); // 重新整理狀態
-      })
-      .catch(err => {
-        alert("取消失敗：" + err.message);
-        btn.textContent = "確認取消選取預約"; 
-        btn.disabled = false;
+      callBackend("batchCancelReservations", { studentName: studentName, cancelList: list })
+        .then(res => {
+          alert(res);
+          cancelSelections[rowIndex] = [];
+          searchStudentData(); 
+        })
+        .catch(err => {
+          alert("取消失敗：" + err.message);
+          btn.textContent = "確認取消選取預約"; 
+          btn.disabled = false;
+        });
+    }
+
+    /* ==========================================
+       單日管理等其他邏輯
+       ========================================== */
+    function loadClasses() {
+      const dateStr = document.getElementById('searchDate').value;
+      if (!dateStr) return alert("請選擇日期");
+      
+      document.getElementById('loading').style.display = 'block'; 
+      document.getElementById('resultCard').style.display = 'none';
+      
+      callBackend("getClassesByDate", { dateStr: dateStr })
+        .then(displayClasses)
+        .catch(err => { 
+          document.getElementById('loading').style.display = 'none'; 
+          alert("讀取失敗：" + err.message); 
+        });
+    }
+
+    function displayClasses(data) {
+      document.getElementById('loading').style.display = 'none';
+      const container = document.getElementById('classList'); 
+      container.innerHTML = '';
+      
+      document.getElementById('resultTitle').textContent = `共 ${data.length} 筆預約`; 
+      document.getElementById('resultCard').style.display = 'block';
+      
+      if (data.length === 0) { 
+        container.innerHTML = '<div style="color:#666; text-align:center; padding:10px;">該日無預約資料</div>'; 
+        return; 
+      }
+      
+      data.forEach(item => {
+        const div = document.createElement('div'); 
+        div.className = 'history-item';
+        let actionButtonsHtml = '';
+        
+        if (item.hasSignedIn) { 
+          actionButtonsHtml = `<button class="action-btn" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" disabled>已簽到</button>`; 
+        } else if (item.isExcused) { 
+          const excusedText = (item.courseType === '跑班') ? '已請假' : '已取消'; 
+          actionButtonsHtml = `<button class="action-btn" style="background:#fef2f2; color:#ef4444; border:1px solid #fecaca; cursor:not-allowed;" disabled>${excusedText}</button>`; 
+        } else { 
+          const cancelBtnText = (item.courseType === '跑班') ? '請假' : '取消'; 
+          actionButtonsHtml = `<button class="action-btn bg-success" onclick="actionSignIn('${item.studentName}', '${item.courseType}', this)">代簽到</button><button class="action-btn bg-outline" style="color:var(--danger); border-color:var(--danger);" onclick="actionCancel('${item.studentName}', '${item.sheetName}', ${item.rowIndex}, this)">${cancelBtnText}</button>`; 
+        }
+        
+        div.innerHTML = `<div class="h-info"><span class="h-title">${item.studentName}</span><span class="h-sub">${item.courseType}</span></div><div style="display:flex; gap:6px;">${actionButtonsHtml}</div>`;
+        container.appendChild(div);
       });
     }
 
-    function toggleEdit(id) {
-      const el = document.getElementById(`editBox_${id}`);
-      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    function actionSignIn(name, course, btnElement) {
+      const dateStr = document.getElementById('searchDate').value;
+      if (!confirm(`確定幫 ${name} 簽到並扣堂？`)) return;
+      
+      btnElement.textContent = "處理中...";
+      
+      callBackend("manualCoachSignIn", { studentName: name, courseType: course, dateStr: dateStr })
+        .then(res => { 
+          alert(res); 
+          btnElement.textContent = "已簽到"; 
+          btnElement.style.background = "#f1f5f9"; 
+          btnElement.style.color = "#94a3b8"; 
+          btnElement.style.border = "1px solid #e2e8f0"; 
+          btnElement.disabled = true; 
+          
+          const nextBtn = btnElement.nextElementSibling; 
+          if (nextBtn) nextBtn.style.display = 'none'; 
+        })
+        .catch(err => { 
+          alert("簽到失敗：" + err.message); 
+          btnElement.textContent = "代簽到"; 
+        });
     }
 
-    function saveStudentInfo(rowIndex, btn) {
-      const newName = document.getElementById(`editName_${rowIndex}`).value.trim();
-      const newEmail = document.getElementById(`editEmail_${rowIndex}`).value.trim();
+    function actionCancel(name, sheetName, rowIndex, btnElement) {
+      const dateStr = document.getElementById('searchDate').value; 
+      const actionText = btnElement.textContent; 
       
-      if (!newName) return alert("姓名不能為空");
-      btn.textContent = "儲存中...";
+      if (!confirm(`確定執行 ${name} 的 ${actionText} 動作？`)) return;
       
-      callBackend("updateStudentInfo", { 
-        rowIndex: rowIndex, 
-        newName: newName, 
-        newEmail: newEmail 
-      })
-      .then(res => { 
-        alert(res); 
-        btn.textContent = "儲存變更"; 
-      })
-      .catch(err => { 
-        alert("儲存失敗：" + err.message); 
-        btn.textContent = "儲存變更"; 
-      });
+      const container = btnElement.parentElement; 
+      const signInBtn = container.querySelector('.bg-success');
+      
+      btnElement.textContent = "處理中..."; 
+      btnElement.disabled = true; 
+      if (signInBtn) signInBtn.disabled = true; 
+      
+      callBackend("manualCoachCancel", { studentName: name, sheetName: sheetName, dateStr: dateStr, rowIndex: rowIndex })
+        .then(res => { 
+          alert(res); 
+          btnElement.textContent = `已${actionText}`; 
+          btnElement.style.color = "#ef4444"; 
+          btnElement.style.borderColor = "#fecaca"; 
+          btnElement.style.background = "#fef2f2"; 
+          btnElement.disabled = true; 
+          
+          if (signInBtn) signInBtn.style.display = 'none'; 
+        })
+        .catch(err => { 
+          alert("操作失敗：" + err.message); 
+          btnElement.textContent = actionText; 
+          btnElement.disabled = false; 
+          if (signInBtn) signInBtn.disabled = false; 
+        });
     }
 
-    function sendProgressReminder(name, btn) {
-      if (!confirm(`確定發送功率課進度提醒給 ${name} 嗎？`)) return;
-      btn.textContent = "發送中...";
+    function toggleEdit(id) { 
+      const el = document.getElementById(`editBox_${id}`); 
+      el.style.display = (el.style.display === 'block') ? 'none' : 'block'; 
+    }
+    
+    function saveStudentInfo(rowIndex, btn) { 
+      const newName = document.getElementById(`editName_${rowIndex}`).value.trim(); 
+      const newEmail = document.getElementById(`editEmail_${rowIndex}`).value.trim(); 
+      if (!newName) return alert("姓名不能為空"); 
+      
+      btn.textContent = "儲存中..."; 
+      
+      callBackend("updateStudentInfo", { rowIndex: rowIndex, newName: newName, newEmail: newEmail })
+        .then(res => { 
+          alert(res); 
+          btn.textContent = "儲存變更"; 
+        })
+        .catch(err => { 
+          alert("儲存失敗：" + err.message); 
+          btn.textContent = "儲存變更"; 
+        }); 
+    }
+    
+    function sendProgressReminder(name, btn) { 
+      if (!confirm(`確定發送功率課進度提醒給 ${name} 嗎？`)) return; 
+      
+      btn.textContent = "發送中..."; 
       
       callBackend("sendSingleProgressReminder", { name: name })
         .then(res => { 
@@ -1248,198 +1388,180 @@
         .catch(err => { 
           alert("發送失敗：" + err.message); 
           btn.textContent = "進度提醒"; 
-        });
+        }); 
     }
-
-    function copyToFinance(name) {
-      document.getElementById('financeStudentName').value = name;
-      document.getElementById('adjustStudentName').value = name;
-      document.getElementById('reserveStudentName').value = name;
-      alert(`已帶入 [${name}] 的資料，請點擊上方標籤切換至各專區操作`);
+    
+    function copyToFinance(name) { 
+      document.getElementById('financeStudentName').value = name; 
+      document.getElementById('adjustStudentName').value = name; 
+      document.getElementById('reserveStudentName').value = name; 
+      alert(`已帶入 [${name}] 的資料，請點擊上方標籤切換至各專區操作`); 
     }
-
-    function selectCourse(el, course) {
-      clearAllSelections();
-      document.getElementById("selectedCourse").value = course;
+    
+    function selectCourse(el, course) { 
+      clearAllSelections(); 
+      document.getElementById("selectedCourse").value = course; 
+      document.querySelectorAll('.course-buttons .option-btn').forEach(b => b.classList.remove('selected')); 
+      el.classList.add("selected"); 
       
-      document.querySelectorAll('.course-buttons .option-btn').forEach(b => b.classList.remove('selected'));
-      el.classList.add("selected");
-
-      document.querySelectorAll("#option-container > div").forEach(d => d.classList.add("hidden-panel"));
-      const targetDiv = document.getElementById(course + "-options");
-      if (targetDiv) {
-        targetDiv.classList.remove("hidden-panel");
-      }
-
-      if (course === '補差額') {
-        document.getElementById("financeCount").value = 0;
-        setTimeout(() => {
-          const input = document.getElementById("makeup-price-input");
-          if(input) input.focus();
-        }, 100);
-      }
+      document.querySelectorAll("#option-container > div").forEach(d => d.classList.add("hidden-panel")); 
+      const targetDiv = document.getElementById(course + "-options"); 
+      if (targetDiv) targetDiv.classList.remove("hidden-panel"); 
+      
+      if (course === '補差額') { 
+        document.getElementById("financeCount").value = 0; 
+        setTimeout(() => { 
+          const input = document.getElementById("makeup-price-input"); 
+          if(input) input.focus(); 
+        }, 100); 
+      } 
     }
-
+    
     function setCount(el, c) { 
       document.getElementById("financeCount").value = c; 
       highlightBtn(el); 
-      const input = el.parentElement.nextElementSibling;
-      if(input && input.tagName === 'INPUT') {
-        input.style.display = 'none';
-      }
+      const input = el.parentElement.nextElementSibling; 
+      if(input && input.tagName === 'INPUT') input.style.display = 'none'; 
     }
-
+    
     function setPrice(el, p) { 
       document.getElementById("financePrice").value = p; 
       highlightBtn(el); 
-      const input = el.parentElement.nextElementSibling;
-      if(input && input.tagName === 'INPUT') {
-        input.style.display = 'none';
-      }
+      const input = el.parentElement.nextElementSibling; 
+      if(input && input.tagName === 'INPUT') input.style.display = 'none'; 
     }
-
+    
     function setMethod(el, m) { 
       document.getElementById("financeMethod").value = m; 
       highlightBtn(el); 
     }
-
+    
     function highlightBtn(el) { 
       el.parentNode.querySelectorAll('button').forEach(b => b.classList.remove("selected")); 
       el.classList.add("selected"); 
     }
-
+    
     function clearCountSelection(parent) { 
       parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); 
       document.getElementById("financeCount").value = ""; 
     }
-
+    
     function clearPriceSelection(parent) { 
       parent.querySelectorAll('button').forEach(b => b.classList.remove('selected')); 
       document.getElementById("financePrice").value = ""; 
     }
-
+    
     function focusInput(id) { 
       const el = document.getElementById(id); 
       el.style.display = 'block'; 
       setTimeout(() => el.focus(), 100); 
     }
-
+    
     function syncManualInput(type, val) { 
-      if(type === 'count') {
-        document.getElementById("financeCount").value = val; 
-      }
-      if(type === 'price') {
-        document.getElementById("financePrice").value = val; 
-      }
+      if(type === 'count') document.getElementById("financeCount").value = val; 
+      if(type === 'price') document.getElementById("financePrice").value = val; 
     }
     
-    function calculateParkingMonths() {
-      const s = document.getElementById('parking-start-date').value;
-      const e = document.getElementById('parking-end-date').value;
-      if (s && e) {
-        const start = new Date(s);
-        const end = new Date(e);
-        let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-        if (months <= 0) months = 0;
-        document.getElementById('parking-months').value = months;
-        document.getElementById('financeCount').value = months;
-      }
-    }
-
-    function clearAllSelections() {
-      document.getElementById("financeCount").value = "";
-      document.getElementById("financePrice").value = "";
-      document.querySelectorAll('#option-container .option-btn').forEach(b => b.classList.remove('selected'));
+    function calculateParkingMonths() { 
+      const s = document.getElementById('parking-start-date').value; 
+      const e = document.getElementById('parking-end-date').value; 
       
-      ['power-count', 'power-price', 'run-count', 'run-price', 'makeup-price-input', 'parking-price'].forEach(id => {
-         const el = document.getElementById(id); 
-         if(el) { 
-           if(id !== 'makeup-price-input' && id !== 'parking-price') {
-             el.style.display = 'none'; 
-           }
-           el.value = ''; 
-         }
-      });
+      if (s && e) { 
+        const start = new Date(s); 
+        const end = new Date(e); 
+        let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()); 
+        if (months <= 0) months = 0; 
+        
+        document.getElementById('parking-months').value = months; 
+        document.getElementById('financeCount').value = months; 
+      } 
     }
-
-    function submitFinanceTopUp() {
-      const btn = document.getElementById("submit-finance-btn");
-      const data = {
-        name: document.getElementById("financeStudentName").value,
-        course: document.getElementById("selectedCourse").value,
-        count: document.getElementById("financeCount").value,
-        price: document.getElementById("financePrice").value,
-        method: document.getElementById("financeMethod").value,
-        paymentDate: document.getElementById("payment-date").value,
-        parkingStartDate: document.getElementById("parking-start-date").value,
-        parkingEndDate: document.getElementById("parking-end-date").value
-      };
-
-      if (!data.name || !data.course || !data.price || !data.method) {
-        return alert("資訊未填寫完整喔！");
-      }
-      if (data.course !== '補差額' && !data.count) {
-        return alert("請選擇或輸入堂數/月數！");
-      }
-
-      btn.textContent = "發送中...";
-      btn.disabled = true;
-
+    
+    function clearAllSelections() { 
+      document.getElementById("financeCount").value = ""; 
+      document.getElementById("financePrice").value = ""; 
+      document.querySelectorAll('#option-container .option-btn').forEach(b => b.classList.remove('selected')); 
+      
+      ['power-count', 'power-price', 'run-count', 'run-price', 'makeup-price-input', 'parking-price'].forEach(id => { 
+        const el = document.getElementById(id); 
+        if(el) { 
+          if(id !== 'makeup-price-input' && id !== 'parking-price') el.style.display = 'none'; 
+          el.value = ''; 
+        } 
+      }); 
+    }
+    
+    function submitFinanceTopUp() { 
+      const btn = document.getElementById("submit-finance-btn"); 
+      const data = { 
+        name: document.getElementById("financeStudentName").value, 
+        course: document.getElementById("selectedCourse").value, 
+        count: document.getElementById("financeCount").value, 
+        price: document.getElementById("financePrice").value, 
+        method: document.getElementById("financeMethod").value, 
+        paymentDate: document.getElementById("payment-date").value, 
+        parkingStartDate: document.getElementById("parking-start-date").value, 
+        parkingEndDate: document.getElementById("parking-end-date").value 
+      }; 
+      
+      if (!data.name || !data.course || !data.price || !data.method) return alert("資訊未填寫完整喔！"); 
+      if (data.course !== '補差額' && !data.count) return alert("請選擇或輸入堂數/月數！"); 
+      
+      btn.textContent = "發送中..."; 
+      btn.disabled = true; 
+      
       callBackend("submitStudentTopUp", data)
-        .then(res => {
+        .then(res => { 
           alert(res); 
           btn.textContent = "確認儲值"; 
           btn.disabled = false; 
-          clearAllSelections();
-          document.getElementById("financePrice").value = "";
-          document.querySelectorAll('.payment-methods .option-btn').forEach(b => b.classList.remove('selected'));
+          clearAllSelections(); 
+          document.getElementById("financePrice").value = ""; 
+          document.querySelectorAll('.payment-methods .option-btn').forEach(b => b.classList.remove('selected')); 
         })
-        .catch(err => {
+        .catch(err => { 
           alert("錯誤：" + err.message); 
           btn.textContent = "確認儲值"; 
-          btn.disabled = false;
-        });
+          btn.disabled = false; 
+        }); 
     }
-
-    function selectAdjustItem(btn, type, val) {
-      const gridClass = (type === 'course') ? '.adjust-course-grid' : '.adjust-action-grid';
-      document.querySelectorAll(`${gridClass} .option-btn`).forEach(b => b.classList.remove('accent-selected'));
-      btn.classList.add('accent-selected');
+    
+    function selectAdjustItem(btn, type, val) { 
+      const gridClass = (type === 'course') ? '.adjust-course-grid' : '.adjust-action-grid'; 
+      document.querySelectorAll(`${gridClass} .option-btn`).forEach(b => b.classList.remove('accent-selected')); 
+      btn.classList.add('accent-selected'); 
       
-      if (type === 'course') {
-        document.getElementById('selectedAdjustCourse').value = val;
-      }
-      if (type === 'action') {
-        document.getElementById('selectedAdjustAction').value = val;
-        const panel = document.getElementById('adjust-count-panel');
+      if (type === 'course') document.getElementById('selectedAdjustCourse').value = val; 
+      if (type === 'action') { 
+        document.getElementById('selectedAdjustAction').value = val; 
+        const panel = document.getElementById('adjust-count-panel'); 
         if (val === '補堂' || val === '扣堂') {
-          panel.classList.remove('hidden-panel');
+          panel.classList.remove('hidden-panel'); 
         } else { 
           panel.classList.add('hidden-panel'); 
           document.getElementById('adjustCount').value = (val === '請假') ? 0 : 1; 
-        }
-      }
+        } 
+      } 
     }
-
-    function executeAdjustment() {
-      const name = document.getElementById('adjustStudentName').value;
-      const course = document.getElementById('selectedAdjustCourse').value;
-      const type = document.getElementById('selectedAdjustAction').value;
-      const count = document.getElementById('adjustCount').value;
+    
+    function executeAdjustment() { 
+      const name = document.getElementById('adjustStudentName').value; 
+      const course = document.getElementById('selectedAdjustCourse').value; 
+      const type = document.getElementById('selectedAdjustAction').value; 
+      const count = document.getElementById('adjustCount').value; 
       const date = document.getElementById('adjustDate').value; 
-      const note = document.getElementById('adjustNote').value.trim();
+      const note = document.getElementById('adjustNote').value.trim(); 
       
-      if (!name) return alert("請選擇學生");
-      if (!course) return alert("請選擇課程項目");
-      if (!type) return alert("請選擇執行動作");
-      if (!date) return alert("請選擇日期設定");
-      
-      if (type !== '請假' && (!count || count <= 0)) {
-        return alert("請輸入正確的調整堂數");
-      }
+      if (!name) return alert("請選擇學生"); 
+      if (!course) return alert("請選擇課程項目"); 
+      if (!type) return alert("請選擇執行動作"); 
+      if (!date) return alert("請選擇日期設定"); 
+      if (type !== '請假' && (!count || count <= 0)) { 
+        return alert("請輸入正確的調整堂數"); 
+      } 
       
       const finalNote = note || type; 
-      if (!confirm(`確認執行手動異動：\n學生：${name}\n動作：${course} [${type}] ${count} 堂`)) return;
+      if (!confirm(`確認執行手動異動：\n學生：${name}\n動作：${course} [${type}] ${count} 堂`)) return; 
       
       callBackend("submitStudentAdjustment", { 
         name: name, 
@@ -1453,148 +1575,24 @@
         alert(res); 
         document.getElementById('adjustNote').value = ''; 
       })
-      .catch(err => alert("調整失敗：" + err.message));
+      .catch(err => alert("調整失敗：" + err.message)); 
     }
-
-    function loadClasses() {
-      const dateStr = document.getElementById('searchDate').value;
-      if (!dateStr) return alert("請選擇日期");
-      
-      document.getElementById('loading').style.display = 'block';
-      document.getElementById('resultCard').style.display = 'none';
-      
-      callBackend("getClassesByDate", { dateStr: dateStr })
-        .then(displayClassesForDaily)
-        .catch(err => {
-          document.getElementById('loading').style.display = 'none';
-          alert("讀取失敗：" + err.message);
-        });
-    }
-
-    function displayClassesForDaily(data) {
-      document.getElementById('loading').style.display = 'none';
-      const container = document.getElementById('classList');
-      container.innerHTML = '';
-      
-      document.getElementById('resultTitle').textContent = `共 ${data.length} 筆預約`;
-      document.getElementById('resultCard').style.display = 'block';
-      
-      if (data.length === 0) {
-        container.innerHTML = '<div style="color:#666; text-align:center; padding:10px;">該日無預約資料</div>';
-        return;
-      }
-      
-      data.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'history-item';
-        
-        let actionButtonsHtml = '';
-        
-        if (item.hasSignedIn) {
-          actionButtonsHtml = `<button class="action-btn" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" disabled>已簽到</button>`;
-        } else if (item.isExcused) {
-          const excusedText = (item.courseType === '跑班') ? '已請假' : '已取消';
-          actionButtonsHtml = `<button class="action-btn" style="background:#fef2f2; color:#ef4444; border:1px solid #fecaca; cursor:not-allowed;" disabled>${excusedText}</button>`;
-        } else {
-          const cancelBtnText = (item.courseType === '跑班') ? '請假' : '取消';
-          actionButtonsHtml = `
-            <button class="action-btn bg-success" onclick="actionSignIn('${item.studentName}', '${item.courseType}', this)">代簽到</button>
-            <button class="action-btn bg-outline" style="color:var(--danger); border-color:var(--danger);" onclick="actionCancel('${item.studentName}', '${item.sheetName}', ${item.rowIndex}, this)">${cancelBtnText}</button>
-          `;
-        }
-
-        div.innerHTML = `
-          <div class="h-info">
-            <span class="h-title">${item.studentName}</span>
-            <span class="h-sub">${item.courseType}</span>
-          </div>
-          <div style="display:flex; gap:6px;">
-            ${actionButtonsHtml}
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function actionSignIn(name, course, btnElement) {
-      const dateStr = document.getElementById('searchDate').value;
-      if (!confirm(`確定幫 ${name} 簽到並扣堂？`)) return;
-      
-      btnElement.textContent = "處理中...";
-      
-      callBackend("manualCoachSignIn", { 
-        studentName: name, 
-        courseType: course, 
-        dateStr: dateStr 
-      })
-      .then(res => {
-        alert(res); 
-        btnElement.textContent = "已簽到"; 
-        btnElement.style.background = "#f1f5f9"; 
-        btnElement.style.color = "#94a3b8"; 
-        btnElement.style.border = "1px solid #e2e8f0"; 
-        btnElement.disabled = true; 
-        
-        const nextBtn = btnElement.nextElementSibling;
-        if (nextBtn) nextBtn.style.display = 'none';
-      })
-      .catch(err => {
-        alert("簽到失敗：" + err.message);
-        btnElement.textContent = "代簽到";
-      });
-    }
-
-    function actionCancel(name, sheetName, rowIndex, btnElement) {
-      const dateStr = document.getElementById('searchDate').value;
-      const actionText = btnElement.textContent; 
-      
-      if (!confirm(`確定執行 ${name} 的 ${actionText} 動作？`)) return;
-      
-      const container = btnElement.parentElement;
-      const signInBtn = container.querySelector('.bg-success');
-      
-      btnElement.textContent = "處理中...";
-      btnElement.disabled = true;
-      if (signInBtn) signInBtn.disabled = true; 
-      
-      callBackend("manualCoachCancel", { 
-        studentName: name, 
-        sheetName: sheetName, 
-        dateStr: dateStr, 
-        rowIndex: rowIndex 
-      })
-      .then(res => {
-        alert(res); 
-        btnElement.textContent = `已${actionText}`; 
-        btnElement.style.color = "#ef4444"; 
-        btnElement.style.borderColor = "#fecaca"; 
-        btnElement.style.background = "#fef2f2";
-        btnElement.disabled = true; 
-        if (signInBtn) signInBtn.style.display = 'none';
-      })
-      .catch(err => {
-        alert("操作失敗：" + err.message);
-        btnElement.textContent = actionText;
-        btnElement.disabled = false;
-        if (signInBtn) signInBtn.disabled = false;
-      });
-    }
-
-    function fetchReport(functionName) {
-      document.getElementById('reportLoading').style.display = 'block';
-      document.getElementById('reportCard').style.display = 'none';
+    
+    function fetchReport(functionName) { 
+      document.getElementById('reportLoading').style.display = 'block'; 
+      document.getElementById('reportCard').style.display = 'none'; 
       
       callBackend(functionName, {})
-        .then(res => {
-          document.getElementById('reportLoading').style.display = 'none';
-          document.getElementById('reportResult').textContent = res;
-          document.getElementById('reportCard').style.display = 'block';
+        .then(res => { 
+          document.getElementById('reportLoading').style.display = 'none'; 
+          document.getElementById('reportResult').textContent = res; 
+          document.getElementById('reportCard').style.display = 'block'; 
         })
-        .catch(err => {
-          document.getElementById('reportLoading').style.display = 'none';
-          document.getElementById('reportResult').textContent = "[系統錯誤] " + err.message;
-          document.getElementById('reportCard').style.display = 'block';
-        });
+        .catch(err => { 
+          document.getElementById('reportLoading').style.display = 'none'; 
+          document.getElementById('reportResult').textContent = "[系統錯誤] " + err.message; 
+          document.getElementById('reportCard').style.display = 'block'; 
+        }); 
     }
   </script>
 </body>
