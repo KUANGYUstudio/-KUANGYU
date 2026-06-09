@@ -21,6 +21,20 @@
       border-radius: 4px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.02);
     }
+    /* 新增導覽列樣式 */
+    .nav-bar {
+      margin-bottom: 20px;
+    }
+    .nav-bar a {
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .nav-bar a:hover {
+      color: #333;
+      text-decoration: underline;
+    }
     h1 {
       font-size: 20px;
       font-weight: 500;
@@ -95,6 +109,10 @@
 <body>
 
   <div class="container">
+    <div class="nav-bar">
+      <a href="../index.html">← 返回首頁</a>
+    </div>
+
     <h1>2026 崇越武嶺盃｜特訓計畫報名</h1>
     
     <form id="trainingForm">
@@ -146,7 +164,6 @@
   </div>
 
   <script>
-    // 處理單次報名的選項顯示
     const planRadios = document.querySelectorAll('input[name="plan"]');
     const singleDatesGroup = document.getElementById('singleDatesGroup');
     
@@ -161,7 +178,6 @@
       });
     });
 
-    // 表單送出邏輯
     document.getElementById('trainingForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -172,7 +188,6 @@
       btn.innerText = '傳送中...';
       btn.disabled = true;
 
-      // 整理單選框陣列為字串
       let selectedDates = [];
       document.querySelectorAll('input[name="singleDates"]:checked').forEach(cb => {
         selectedDates.push(cb.value);
@@ -181,7 +196,7 @@
       const formData = new FormData(form);
       formData.set('singleDates', selectedDates.join(', '));
 
-      // 請將下方引號內的網址換成你的 Google Apps Script 網頁應用程式 URL
+      // 記得將此處替換為您的 Google Apps Script URL
       const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
 
       fetch(scriptURL, { method: 'POST', body: formData })
@@ -195,7 +210,7 @@
           btn.disabled = false;
         })
         .catch(error => {
-          msg.innerText = '傳送失敗，請稍後再試或聯繫教練。';
+          msg.innerText = '傳送失敗，請稍後再試或聯繫教練團隊。';
           msg.className = 'error';
           msg.style.display = 'block';
           btn.innerText = '重新送出';
