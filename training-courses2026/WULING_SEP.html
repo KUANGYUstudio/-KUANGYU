@@ -7,12 +7,12 @@
   
   <style>
     /* ==========================================
-       CSS 樣式：山系極簡專業版 (增強對比與點擊回饋)
+       CSS 樣式：莫蘭迪藍極簡版
        ========================================== */
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background-color: #fafafa; 
-      color: #1a1a1a; 
+      background-color: #f4f6f8; 
+      color: #333333; 
       margin: 0; 
       padding: 60px 20px; 
       line-height: 1.7;
@@ -24,8 +24,8 @@
       margin: 0 auto; 
       background: #ffffff; 
       padding: 60px 70px; 
-      border-radius: 12px; 
-      box-shadow: 0 10px 40px rgba(0,0,0,0.06); 
+      border-radius: 8px; 
+      box-shadow: 0 4px 24px rgba(0,0,0,0.04); 
     }
 
     @media (max-width: 600px) {
@@ -33,16 +33,16 @@
       body { padding: 30px 15px; }
     }
     
-    /* 主標題與底部強調 */
+    /* 主標題 */
     h1 { 
-      font-size: 30px; 
-      font-weight: 700; 
+      font-size: 28px; 
+      font-weight: 600; 
       letter-spacing: 0.12em;
       text-align: center;
-      margin-bottom: 60px;
-      color: #111;
-      padding-bottom: 25px;
-      border-bottom: 2px solid #ddd;
+      margin-bottom: 50px;
+      color: #2c3e50;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e1e5e9;
     }
 
     /* 計畫表樣式 */
@@ -51,58 +51,57 @@
     }
 
     .schedule-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #111;
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
       margin-bottom: 20px;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
     }
 
     .schedule-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 15px;
-      background-color: #fbfbfb;
-      border: 1px solid #eee;
+      background-color: #fafbfc;
+      border: 1px solid #e1e5e9;
     }
 
     .schedule-table th {
       text-align: left;
-      background-color: #eee;
-      color: #111;
-      font-weight: 700;
-      padding: 16px;
+      background-color: #e1e5e9;
+      color: #2c3e50;
+      font-weight: 600;
+      padding: 14px 16px;
     }
 
     .schedule-table td {
-      padding: 16px;
-      border-bottom: 1px solid #eee;
-      color: #333;
+      padding: 14px 16px;
+      border-bottom: 1px solid #e1e5e9;
+      color: #444;
     }
 
+    /* 莫蘭迪藍強調列 */
     .highlight-row {
-      background-color: #fdf6e3 !important;
-      color: #111 !important;
-      font-weight: 700;
+      background-color: #eef2f5 !important;
+      color: #2c3e50 !important;
+      font-weight: 600;
     }
 
-    /* 區段標題優化：加上色塊與左側飾條 */
+    /* 區段標題：莫蘭迪藍色塊 */
     .section-title { 
-      font-size: 16px; 
-      font-weight: 700; 
-      color: #111;
+      font-size: 15px; 
+      font-weight: 600; 
+      color: #2c3e50;
       margin: 60px 0 30px; 
-      padding: 16px 20px;
-      background-color: #eee;
-      border-left: 5px solid #1e3a8a; /* 山系深藍 */
+      padding: 14px 18px;
+      background-color: #eef2f5;
+      border-left: 4px solid #6b8293; /* 莫蘭迪藍主色 */
       border-radius: 4px;
-      letter-spacing: 0.1em;
-      display: flex;
-      align-items: center;
+      letter-spacing: 0.08em;
     }
     
     .form-group { 
-      margin-bottom: 32px; 
+      margin-bottom: 30px; 
     }
     
     .form-row { 
@@ -116,14 +115,14 @@
     }
 
     @media (max-width: 600px) {
-      .form-row { flex-direction: column; gap: 32px; }
+      .form-row { flex-direction: column; gap: 30px; }
     }
     
-    label { 
+    label.field-label { 
       display: block; 
-      font-weight: 700; 
+      font-weight: 600; 
       font-size: 14px; 
-      color: #222;
+      color: #444;
       margin-bottom: 12px; 
     }
     
@@ -131,13 +130,13 @@
     input[type="date"], 
     input[type="email"] { 
       width: 100%; 
-      padding: 15px 16px; 
-      border: 2px solid #ccc; /* 加深邊框 */
-      border-radius: 8px; 
+      padding: 14px; 
+      border: 1px solid #d1d9e0; 
+      border-radius: 6px; 
       background-color: #fff;
       box-sizing: border-box; 
-      font-size: 16px;
-      color: #111;
+      font-size: 15px;
+      color: #333;
       transition: all 0.2s ease;
     }
     
@@ -145,138 +144,108 @@
     input[type="date"]:focus, 
     input[type="email"]:focus {
       outline: none;
-      border-color: #1e3a8a; /* 深藍外框 */
-      box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1);
+      border-color: #6b8293;
+      box-shadow: 0 0 0 3px rgba(107, 130, 147, 0.15);
     }
     
     .note { 
-      font-size: 14px; 
-      color: #666; /* 加深註解 */
-      margin-top: 10px;
+      font-size: 13.5px; 
+      color: #777; 
+      margin-top: 8px;
       line-height: 1.6; 
     }
     
-    /* 精緻的選項按鈕：原點＋方框 */
+    /* 單純圓點選項樣式 */
     .option-group { 
       display: flex; 
       flex-direction: column; 
-      gap: 12px; 
+      gap: 14px; 
     }
     
     .option-group.row-layout {
       flex-direction: row;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 24px;
     }
     
     .option-label { 
       font-weight: 400; 
       font-size: 15px; 
-      color: #1a1a1a;
+      color: #333;
       display: flex; 
       align-items: center; 
-      gap: 14px; 
+      gap: 10px; 
       cursor: pointer;
-      padding: 14px 20px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      transition: all 0.2s ease;
       margin-bottom: 0;
-      background-color: #fff;
-      flex-grow: 1; /* 手機上按鈕平均分配空間 */
-    }
-
-    .option-label:hover {
-      border-color: #1e3a8a;
-      background-color: #f0f7ff;
     }
 
     input[type="radio"], input[type="checkbox"] {
-      accent-color: #1e3a8a; /* 深藍強調色 */
-      width: 22px; /* 放大原點，更好點擊 */
-      height: 22px;
+      accent-color: #6b8293; /* 莫蘭迪藍原點 */
+      width: 18px; 
+      height: 18px;
       cursor: pointer;
       margin: 0;
     }
-
-    input[type="radio"]:checked + span,
-    input[type="checkbox"]:checked + span {
-      font-weight: 700;
-      color: #1e3a8a;
-    }
-
-    input[type="radio"]:checked,
-    input[type="checkbox"]:checked {
-      /* 選取時標籤框變藍 */
-      border-color: #1e3a8a;
-    }
-    /* 用 CSS 模擬，需要更改 HTML 結構才能正確運作，因此在 JS 中處理 */
     
     /* 動態面板 */
     .dynamic-panel {
       display: none;
-      padding: 30px; 
-      background: #fdfdfd; 
-      border: 2px solid #eee;
-      border-radius: 8px; 
-      margin-bottom: 32px;
-      margin-top: 15px;
+      padding: 24px; 
+      background: #f8fafb; 
+      border: 1px solid #eef2f5;
+      border-radius: 6px; 
+      margin-bottom: 30px;
+      margin-top: 10px;
     }
 
     .bank-info { 
-      background: #fbfbfb; 
-      border: 2px solid #eee; 
+      background: #fafbfc; 
+      border: 1px solid #e1e5e9; 
       padding: 24px; 
-      border-radius: 8px; 
-      font-size: 15px; 
-      margin-top: 24px; 
+      border-radius: 6px; 
+      font-size: 14.5px; 
+      margin-top: 20px; 
       line-height: 1.8;
-      color: #222;
+      color: #444;
     }
     
     button { 
       width: 100%; 
-      padding: 20px; 
-      background: #1e3a8a; /* 深藍按鈕 */
+      padding: 16px; 
+      background: #6b8293; /* 莫蘭迪藍按鈕 */
       color: #fff; 
       border: none; 
-      border-radius: 8px; 
-      font-size: 18px; 
-      font-weight: 700;
+      border-radius: 6px; 
+      font-size: 16px; 
+      font-weight: 600;
       letter-spacing: 0.15em;
       cursor: pointer; 
-      margin-top: 60px; 
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
+      margin-top: 50px; 
+      transition: all 0.2s ease;
     }
     
     button:hover {
-      background: #1a337a;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(30, 58, 138, 0.3);
+      background: #5a7080;
     }
 
     button:disabled { 
-      background: #b0bec5; 
+      background: #c5d0d6; 
       cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
     }
     
     #message { 
-      margin-top: 30px; 
+      margin-top: 24px; 
       padding: 16px; 
       text-align: center; 
-      border-radius: 8px; 
+      border-radius: 6px; 
       display: none; 
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 15px;
     }
     
     .success { 
-      background: #e8f5e9; 
-      color: #2e7d32; 
-      border: 2px solid #a5d6a7;
+      background: #f0f4f2; 
+      color: #4a6c59; 
+      border: 1px solid #dce8e1;
     }
   </style>
 </head>
@@ -287,7 +256,7 @@
   <h1>2026 崇越武嶺盃 特訓計畫</h1>
 
   <div class="schedule-section">
-    <div class="schedule-title">📅 週末特訓課表總覽</div>
+    <div class="schedule-title">週末課表總覽</div>
     <table class="schedule-table">
       <thead>
         <tr>
@@ -342,12 +311,12 @@
     
     <div class="form-row">
       <div class="form-group">
-        <label>姓名</label>
+        <label class="field-label">姓名</label>
         <input type="text" name="name" required>
       </div>
       <div class="form-group">
-        <label>性別</label>
-        <div class="option-group row-layout" style="margin-top: 12px;">
+        <label class="field-label">性別</label>
+        <div class="option-group row-layout" style="margin-top: 14px;">
           <label class="option-label"><input type="radio" name="gender" value="男" required><span>男</span></label>
           <label class="option-label"><input type="radio" name="gender" value="女"><span>女</span></label>
         </div>
@@ -356,22 +325,22 @@
     
     <div class="form-row">
       <div class="form-group">
-        <label>國籍</label>
+        <label class="field-label">國籍</label>
         <input type="text" name="nationality" value="台灣" required>
       </div>
       <div class="form-group">
-        <label>出生年月日</label>
+        <label class="field-label">出生年月日</label>
         <input type="date" name="dob" required>
       </div>
     </div>
     
     <div class="form-group">
-      <label>身分證 / 護照號碼</label>
+      <label class="field-label">身分證 / 護照號碼</label>
       <input type="text" name="idNumber" required>
     </div>
     
     <div class="form-group">
-      <label>Email 信箱</label>
+      <label class="field-label">Email 信箱</label>
       <input type="email" name="email" required>
       <div class="note">將用於寄送報名副本與匯款資訊。請務必填寫正確。</div>
     </div>
@@ -380,24 +349,24 @@
     
     <div class="form-row">
       <div class="form-group">
-        <label>聯絡人姓名</label>
+        <label class="field-label">聯絡人姓名</label>
         <input type="text" name="emergName" required>
       </div>
       <div class="form-group">
-        <label>關係</label>
+        <label class="field-label">關係</label>
         <input type="text" name="emergRel" required>
       </div>
     </div>
     
     <div class="form-group">
-      <label>聯絡人電話</label>
+      <label class="field-label">聯絡人電話</label>
       <input type="text" name="emergPhone" required>
     </div>
 
     <div class="section-title">03 / 報名身分與方案選擇</div>
     
     <div class="form-group">
-      <label>報名身分</label>
+      <label class="field-label">報名身分</label>
       <div class="option-group row-layout">
         <label class="option-label"><input type="radio" name="identity" value="光聿學員" required><span>光聿學員</span></label>
         <label class="option-label"><input type="radio" name="identity" value="非學員"><span>非學員</span></label>
@@ -405,13 +374,13 @@
     </div>
     
     <div id="planGroup" class="dynamic-panel">
-      <label style="margin-bottom: 15px; color: #111;">報名方案</label>
+      <label class="field-label" style="color: #2c3e50;">報名方案</label>
       <div class="option-group" id="planOptions">
-                </div>
+        </div>
     </div>
     
     <div id="singleDatesGroup" class="dynamic-panel">
-      <label style="margin-bottom: 15px; color: #111;">請勾選單次參加日期</label>
+      <label class="field-label" style="color: #2c3e50;">請勾選單次參加日期</label>
       <div class="option-group">
         <label class="option-label"><input type="checkbox" name="singleDates" value="6/20"><span>6/20 (六) 期初測驗＋風櫃嘴</span></label>
         <label class="option-label"><input type="checkbox" name="singleDates" value="8/8"><span>8/8 (六) 碧山巖 / 汐萬路</span></label>
@@ -419,8 +388,8 @@
       </div>
     </div>
 
-    <div class="form-group" style="margin-top: 40px;">
-      <label>太平山移地訓練</label>
+    <div class="form-group" style="margin-top: 35px;">
+      <label class="field-label">太平山移地訓練</label>
       <div class="option-group row-layout">
         <label class="option-label"><input type="radio" name="taipingIntent" value="參加" required><span>參加</span></label>
         <label class="option-label"><input type="radio" name="taipingIntent" value="不參加"><span>不參加</span></label>
@@ -428,22 +397,22 @@
     </div>
     
     <div id="taipingDetailsGroup" class="dynamic-panel">
-      <label style="margin-bottom: 15px; color: #111;">偏好日期</label>
-      <div class="option-group row-layout" style="margin-bottom: 30px;">
+      <label class="field-label" style="color: #2c3e50;">偏好日期</label>
+      <div class="option-group row-layout" style="margin-bottom: 24px;">
         <label class="option-label"><input type="radio" name="taipingDate" value="偏好 7/4"><span>7/4</span></label>
         <label class="option-label"><input type="radio" name="taipingDate" value="偏好 8/8"><span>8/8</span></label>
         <label class="option-label"><input type="radio" name="taipingDate" value="皆可"><span>皆可</span></label>
       </div>
 
-      <label style="margin-bottom: 15px; color: #111;">保母車需求</label>
+      <label class="field-label" style="color: #2c3e50;">保母車需求</label>
       <div class="option-group">
         <label class="option-label"><input type="radio" name="needVan" value="需要保母車"><span>需要教練協助安排 (約 $800-1000/人)</span></label>
         <label class="option-label"><input type="radio" name="needVan" value="不需要，自行前往"><span>不需要，自行前往</span></label>
       </div>
     </div>
 
-    <div class="form-group" style="margin-top: 40px;">
-      <label>雪巴仙山站意願調查</label>
+    <div class="form-group" style="margin-top: 35px;">
+      <label class="field-label">雪巴仙山站意願調查</label>
       <div class="option-group row-layout">
         <label class="option-label"><input type="radio" name="xuepa" value="參加" required><span>參加</span></label>
         <label class="option-label"><input type="radio" name="xuepa" value="有興趣"><span>有興趣</span></label>
@@ -461,7 +430,7 @@
     </div>
     
     <div class="bank-info">
-      <strong style="color:#111; font-size: 16px;">匯款帳戶資訊</strong><br><br>
+      <strong style="color:#2c3e50; font-size: 15px;">匯款帳戶資訊</strong><br><br>
       銀行：國泰世華 (013)<br>
       帳號：269506136805<br>
       戶名：費聿凡
@@ -486,7 +455,7 @@
   const singleDatesGroup = document.getElementById('singleDatesGroup');
   const taipingDetailsGroup = document.getElementById('taipingDetailsGroup');
 
-  // 共用函式：生成精緻按鈕樣式的 HTML
+  // 共用函式：生成選項 HTML
   function createOptionHtml(type, name, value, label, required = false) {
     return `
       <label class="option-label">
@@ -540,39 +509,6 @@
     });
   });
 
-  // 增加 JS：選取時動態改變外框顏色 (因為結構問題，純 CSS 難以完美達成，用 JS 輔助)
-  document.addEventListener('change', function(e) {
-    if (e.target.type === 'radio' || e.target.type === 'checkbox') {
-      // 先移除同一個 name 下所有 label 的 checked 樣式
-      const name = e.target.name;
-      document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
-        input.closest('.option-label').style.borderColor = '#ccc';
-        input.closest('.option-label').style.backgroundColor = '#fff';
-      });
-
-      // 為被選取的 input 的 label 加上 checked 樣式
-      if (e.target.checked) {
-        const label = e.target.closest('.option-label');
-        label.style.borderColor = '#1e3a8a';
-        label.style.backgroundColor = '#f0f7ff';
-      }
-
-      // 複選框需要特別處理，因為上面的邏輯會把其他複選框的樣式也移除
-      if (e.target.type === 'checkbox') {
-        document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
-          const label = input.closest('.option-label');
-          if (input.checked) {
-            label.style.borderColor = '#1e3a8a';
-            label.style.backgroundColor = '#f0f7ff';
-          } else {
-            label.style.borderColor = '#ccc';
-            label.style.backgroundColor = '#fff';
-          }
-        });
-      }
-    }
-  });
-
   // 送出處理
   form.onsubmit = e => {
     e.preventDefault();
@@ -612,11 +548,6 @@
         msg.style.display = 'block'; 
         msg.className = 'success';
         form.reset(); 
-        // 送出後重置所有 label 樣式
-        document.querySelectorAll('.option-label').forEach(label => {
-          label.style.borderColor = '#ccc';
-          label.style.backgroundColor = '#fff';
-        });
         planGroup.style.display = 'none';
         singleDatesGroup.style.display = 'none';
         taipingDetailsGroup.style.display = 'none';
