@@ -7,12 +7,12 @@
   
   <style>
     /* ==========================================
-       CSS 樣式：光聿極簡專業版 (卡片式 UI)
+       CSS 樣式：山系極簡專業版 (增強對比與點擊回饋)
        ========================================== */
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background-color: #f7f7f7; 
-      color: #333333; 
+      background-color: #fafafa; 
+      color: #1a1a1a; 
       margin: 0; 
       padding: 60px 20px; 
       line-height: 1.7;
@@ -20,12 +20,12 @@
     }
     
     .container { 
-      max-width: 640px; 
+      max-width: 680px; 
       margin: 0 auto; 
       background: #ffffff; 
       padding: 60px 70px; 
       border-radius: 12px; 
-      box-shadow: 0 8px 32px rgba(0,0,0,0.03); 
+      box-shadow: 0 10px 40px rgba(0,0,0,0.06); 
     }
 
     @media (max-width: 600px) {
@@ -33,16 +33,16 @@
       body { padding: 30px 15px; }
     }
     
-    /* 主標題 */
+    /* 主標題與底部強調 */
     h1 { 
-      font-size: 26px; 
-      font-weight: 600; 
+      font-size: 30px; 
+      font-weight: 700; 
       letter-spacing: 0.12em;
       text-align: center;
       margin-bottom: 60px;
       color: #111;
       padding-bottom: 25px;
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 2px solid #ddd;
     }
 
     /* 計畫表樣式 */
@@ -51,43 +51,54 @@
     }
 
     .schedule-title {
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 700;
       color: #111;
       margin-bottom: 20px;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
     }
 
     .schedule-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
-      margin-bottom: 15px;
+      font-size: 15px;
+      background-color: #fbfbfb;
+      border: 1px solid #eee;
     }
 
     .schedule-table th {
       text-align: left;
-      color: #888;
-      font-weight: 500;
-      padding: 12px 10px;
-      border-bottom: 1px solid #eaeaea;
+      background-color: #eee;
+      color: #111;
+      font-weight: 700;
+      padding: 16px;
     }
 
     .schedule-table td {
-      padding: 16px 10px;
-      border-bottom: 1px solid #f5f5f5;
-      color: #444;
+      padding: 16px;
+      border-bottom: 1px solid #eee;
+      color: #333;
     }
 
-    /* 區段標題 */
+    .highlight-row {
+      background-color: #fdf6e3 !important;
+      color: #111 !important;
+      font-weight: 700;
+    }
+
+    /* 區段標題優化：加上色塊與左側飾條 */
     .section-title { 
-      font-size: 14px; 
-      font-weight: 600; 
+      font-size: 16px; 
+      font-weight: 700; 
       color: #111;
       margin: 60px 0 30px; 
-      padding-bottom: 10px;
-      border-bottom: 1px solid #111;
+      padding: 16px 20px;
+      background-color: #eee;
+      border-left: 5px solid #1e3a8a; /* 山系深藍 */
+      border-radius: 4px;
       letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
     }
     
     .form-group { 
@@ -108,169 +119,164 @@
       .form-row { flex-direction: column; gap: 32px; }
     }
     
-    label.field-label { 
+    label { 
       display: block; 
-      font-weight: 500; 
-      font-size: 13px; 
-      color: #666;
+      font-weight: 700; 
+      font-size: 14px; 
+      color: #222;
       margin-bottom: 12px; 
     }
     
-    /* 輸入框優化 */
     input[type="text"], 
     input[type="date"], 
     input[type="email"] { 
       width: 100%; 
       padding: 15px 16px; 
-      border: 1px solid #e5e5e5; 
+      border: 2px solid #ccc; /* 加深邊框 */
       border-radius: 8px; 
-      background-color: #fbfbfb;
+      background-color: #fff;
       box-sizing: border-box; 
-      font-size: 15px;
+      font-size: 16px;
       color: #111;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
     
     input[type="text"]:focus, 
     input[type="date"]:focus, 
     input[type="email"]:focus {
       outline: none;
-      border-color: #111;
-      background-color: #fff;
-      box-shadow: 0 0 0 3px rgba(0,0,0,0.03);
+      border-color: #1e3a8a; /* 深藍外框 */
+      box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1);
     }
     
     .note { 
-      font-size: 13px; 
-      color: #888; 
+      font-size: 14px; 
+      color: #666; /* 加深註解 */
       margin-top: 10px;
       line-height: 1.6; 
     }
     
-    /* 卡片式選項設計 */
-    .card-group { 
+    /* 精緻的選項按鈕：原點＋方框 */
+    .option-group { 
       display: flex; 
       flex-direction: column; 
       gap: 12px; 
     }
     
-    .card-group.row-layout {
+    .option-group.row-layout {
       flex-direction: row;
       flex-wrap: wrap;
-    }
-
-    .card-group.row-layout .radio-card {
-      flex: 1;
-      min-width: 100px;
+      gap: 15px;
     }
     
-    .radio-card {
-      display: block;
-      position: relative;
+    .option-label { 
+      font-weight: 400; 
+      font-size: 15px; 
+      color: #1a1a1a;
+      display: flex; 
+      align-items: center; 
+      gap: 14px; 
+      cursor: pointer;
+      padding: 14px 20px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 0;
+      background-color: #fff;
+      flex-grow: 1; /* 手機上按鈕平均分配空間 */
+    }
+
+    .option-label:hover {
+      border-color: #1e3a8a;
+      background-color: #f0f7ff;
+    }
+
+    input[type="radio"], input[type="checkbox"] {
+      accent-color: #1e3a8a; /* 深藍強調色 */
+      width: 22px; /* 放大原點，更好點擊 */
+      height: 22px;
       cursor: pointer;
       margin: 0;
     }
 
-    .radio-card input {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
+    input[type="radio"]:checked + span,
+    input[type="checkbox"]:checked + span {
+      font-weight: 700;
+      color: #1e3a8a;
     }
 
-    .card-content {
-      display: block;
-      padding: 15px 20px;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      background-color: #fff;
-      font-size: 14.5px;
-      color: #555;
-      transition: all 0.2s ease;
-      text-align: center;
+    input[type="radio"]:checked,
+    input[type="checkbox"]:checked {
+      /* 選取時標籤框變藍 */
+      border-color: #1e3a8a;
     }
-
-    .radio-card input:checked + .card-content {
-      border-color: #111;
-      border-width: 1.5px;
-      padding: 14.5px 19.5px; /* 扣除增加的邊框厚度 */
-      background-color: #fafafa;
-      color: #111;
-      font-weight: 500;
-    }
-
-    .radio-card input:focus-visible + .card-content {
-      outline: 2px solid #111;
-      outline-offset: 2px;
-    }
-
-    .card-group.col-layout .card-content {
-      text-align: left;
-    }
+    /* 用 CSS 模擬，需要更改 HTML 結構才能正確運作，因此在 JS 中處理 */
     
     /* 動態面板 */
     .dynamic-panel {
       display: none;
       padding: 30px; 
-      background: #fafafa; 
+      background: #fdfdfd; 
+      border: 2px solid #eee;
       border-radius: 8px; 
       margin-bottom: 32px;
       margin-top: 15px;
     }
 
     .bank-info { 
-      background: #fafafa; 
-      border: 1px solid #f0f0f0; 
-      padding: 24px 30px; 
+      background: #fbfbfb; 
+      border: 2px solid #eee; 
+      padding: 24px; 
       border-radius: 8px; 
-      font-size: 14px; 
+      font-size: 15px; 
       margin-top: 24px; 
       line-height: 1.8;
-      color: #555;
+      color: #222;
     }
     
     button { 
       width: 100%; 
-      padding: 18px; 
-      background: #111; 
+      padding: 20px; 
+      background: #1e3a8a; /* 深藍按鈕 */
       color: #fff; 
       border: none; 
       border-radius: 8px; 
-      font-size: 15px; 
-      font-weight: 500;
+      font-size: 18px; 
+      font-weight: 700;
       letter-spacing: 0.15em;
       cursor: pointer; 
-      margin-top: 50px; 
+      margin-top: 60px; 
       transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
     }
     
     button:hover {
-      background: #333;
+      background: #1a337a;
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      box-shadow: 0 6px 20px rgba(30, 58, 138, 0.3);
     }
 
     button:disabled { 
-      background: #d0d0d0; 
-      color: #888;
+      background: #b0bec5; 
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
     
     #message { 
-      margin-top: 20px; 
+      margin-top: 30px; 
       padding: 16px; 
       text-align: center; 
       border-radius: 8px; 
       display: none; 
-      font-size: 14.5px;
+      font-size: 16px;
+      font-weight: 700;
     }
     
     .success { 
-      background: #f4f9f4; 
-      color: #2c522c; 
-      border: 1px solid #e0eee0;
+      background: #e8f5e9; 
+      color: #2e7d32; 
+      border: 2px solid #a5d6a7;
     }
   </style>
 </head>
@@ -278,10 +284,10 @@
 
 <div class="container">
   
-  <h1>2026 崇越武嶺盃特訓計畫</h1>
+  <h1>2026 崇越武嶺盃 特訓計畫</h1>
 
   <div class="schedule-section">
-    <div class="schedule-title">週末課表總覽</div>
+    <div class="schedule-title">📅 週末特訓課表總覽</div>
     <table class="schedule-table">
       <thead>
         <tr>
@@ -316,17 +322,17 @@
           <td>期末測驗 (中社+風櫃嘴)</td>
           <td>Zone 3-4</td>
         </tr>
-        <tr>
+        <tr class="highlight-row">
           <td>9/14 (日)</td>
-          <td>崇越武嶺盃正賽</td>
+          <td>崇越武嶺盃 正賽</td>
           <td>Peak</td>
         </tr>
       </tbody>
     </table>
     <div class="note">
-      注意事項<br>
-      太平山移地訓練由教練統一安排保母車。<br>
-      雪巴仙山站為自由報名賽事，可自行報名或一起團報。
+      注意事項：<br>
+      ※ 太平山移地訓練由教練統一安排保母車。<br>
+      ※ 雪巴仙山站為自由報名賽事，可自行報名或一起團報。
     </div>
   </div>
   
@@ -336,189 +342,126 @@
     
     <div class="form-row">
       <div class="form-group">
-        <label class="field-label">姓名</label>
+        <label>姓名</label>
         <input type="text" name="name" required>
       </div>
       <div class="form-group">
-        <label class="field-label">性別</label>
-        <div class="card-group row-layout">
-          <label class="radio-card">
-            <input type="radio" name="gender" value="男" required>
-            <span class="card-content">男</span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="gender" value="女">
-            <span class="card-content">女</span>
-          </label>
+        <label>性別</label>
+        <div class="option-group row-layout" style="margin-top: 12px;">
+          <label class="option-label"><input type="radio" name="gender" value="男" required><span>男</span></label>
+          <label class="option-label"><input type="radio" name="gender" value="女"><span>女</span></label>
         </div>
       </div>
     </div>
     
     <div class="form-row">
       <div class="form-group">
-        <label class="field-label">國籍</label>
+        <label>國籍</label>
         <input type="text" name="nationality" value="台灣" required>
       </div>
       <div class="form-group">
-        <label class="field-label">出生年月日</label>
+        <label>出生年月日</label>
         <input type="date" name="dob" required>
       </div>
     </div>
     
     <div class="form-group">
-      <label class="field-label">身分證 / 護照號碼</label>
+      <label>身分證 / 護照號碼</label>
       <input type="text" name="idNumber" required>
     </div>
     
     <div class="form-group">
-      <label class="field-label">Email 信箱</label>
+      <label>Email 信箱</label>
       <input type="email" name="email" required>
-      <div class="note">將用於寄送報名副本與匯款資訊</div>
+      <div class="note">將用於寄送報名副本與匯款資訊。請務必填寫正確。</div>
     </div>
 
     <div class="section-title">02 / 緊急聯絡資訊</div>
     
     <div class="form-row">
       <div class="form-group">
-        <label class="field-label">聯絡人姓名</label>
+        <label>聯絡人姓名</label>
         <input type="text" name="emergName" required>
       </div>
       <div class="form-group">
-        <label class="field-label">關係</label>
+        <label>關係</label>
         <input type="text" name="emergRel" required>
       </div>
     </div>
     
     <div class="form-group">
-      <label class="field-label">聯絡人電話</label>
+      <label>聯絡人電話</label>
       <input type="text" name="emergPhone" required>
     </div>
 
     <div class="section-title">03 / 報名身分與方案選擇</div>
     
     <div class="form-group">
-      <label class="field-label">報名身分</label>
-      <div class="card-group row-layout">
-        <label class="radio-card">
-          <input type="radio" name="identity" value="光聿學員" required>
-          <span class="card-content">光聿學員</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="identity" value="非學員">
-          <span class="card-content">非學員</span>
-        </label>
+      <label>報名身分</label>
+      <div class="option-group row-layout">
+        <label class="option-label"><input type="radio" name="identity" value="光聿學員" required><span>光聿學員</span></label>
+        <label class="option-label"><input type="radio" name="identity" value="非學員"><span>非學員</span></label>
       </div>
     </div>
     
     <div id="planGroup" class="dynamic-panel">
-      <label class="field-label" style="color: #111;">報名方案</label>
-      <div class="card-group col-layout" id="planOptions">
-        </div>
+      <label style="margin-bottom: 15px; color: #111;">報名方案</label>
+      <div class="option-group" id="planOptions">
+                </div>
     </div>
     
     <div id="singleDatesGroup" class="dynamic-panel">
-      <label class="field-label" style="color: #111;">請點擊選擇單次參加日期</label>
-      <div class="card-group col-layout">
-        <label class="radio-card">
-          <input type="checkbox" name="singleDates" value="6/20">
-          <span class="card-content">6/20 (六) 期初測驗＋風櫃嘴</span>
-        </label>
-        <label class="radio-card">
-          <input type="checkbox" name="singleDates" value="8/8">
-          <span class="card-content">8/8 (六) 碧山巖 / 汐萬路</span>
-        </label>
-        <label class="radio-card">
-          <input type="checkbox" name="singleDates" value="8/29">
-          <span class="card-content">8/29 (六) 期末驗收＋風櫃嘴</span>
-        </label>
+      <label style="margin-bottom: 15px; color: #111;">請勾選單次參加日期</label>
+      <div class="option-group">
+        <label class="option-label"><input type="checkbox" name="singleDates" value="6/20"><span>6/20 (六) 期初測驗＋風櫃嘴</span></label>
+        <label class="option-label"><input type="checkbox" name="singleDates" value="8/8"><span>8/8 (六) 碧山巖 / 汐萬路</span></label>
+        <label class="option-label"><input type="checkbox" name="singleDates" value="8/29"><span>8/29 (六) 期末驗收＋風櫃嘴</span></label>
       </div>
     </div>
 
     <div class="form-group" style="margin-top: 40px;">
-      <label class="field-label">太平山移地訓練</label>
-      <div class="card-group row-layout">
-        <label class="radio-card">
-          <input type="radio" name="taipingIntent" value="參加" required>
-          <span class="card-content">參加</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="taipingIntent" value="不參加">
-          <span class="card-content">不參加</span>
-        </label>
+      <label>太平山移地訓練</label>
+      <div class="option-group row-layout">
+        <label class="option-label"><input type="radio" name="taipingIntent" value="參加" required><span>參加</span></label>
+        <label class="option-label"><input type="radio" name="taipingIntent" value="不參加"><span>不參加</span></label>
       </div>
     </div>
     
     <div id="taipingDetailsGroup" class="dynamic-panel">
-      <label class="field-label" style="color: #111;">偏好日期</label>
-      <div class="card-group row-layout" style="margin-bottom: 30px;">
-        <label class="radio-card">
-          <input type="radio" name="taipingDate" value="偏好 7/4">
-          <span class="card-content">7/4</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="taipingDate" value="偏好 8/8">
-          <span class="card-content">8/8</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="taipingDate" value="皆可">
-          <span class="card-content">皆可</span>
-        </label>
+      <label style="margin-bottom: 15px; color: #111;">偏好日期</label>
+      <div class="option-group row-layout" style="margin-bottom: 30px;">
+        <label class="option-label"><input type="radio" name="taipingDate" value="偏好 7/4"><span>7/4</span></label>
+        <label class="option-label"><input type="radio" name="taipingDate" value="偏好 8/8"><span>8/8</span></label>
+        <label class="option-label"><input type="radio" name="taipingDate" value="皆可"><span>皆可</span></label>
       </div>
 
-      <label class="field-label" style="color: #111;">保母車需求</label>
-      <div class="card-group col-layout">
-        <label class="radio-card">
-          <input type="radio" name="needVan" value="需要保母車">
-          <span class="card-content">需要教練協助安排</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="needVan" value="不需要，自行前往">
-          <span class="card-content">不需要，自行前往</span>
-        </label>
+      <label style="margin-bottom: 15px; color: #111;">保母車需求</label>
+      <div class="option-group">
+        <label class="option-label"><input type="radio" name="needVan" value="需要保母車"><span>需要教練協助安排 (約 $800-1000/人)</span></label>
+        <label class="option-label"><input type="radio" name="needVan" value="不需要，自行前往"><span>不需要，自行前往</span></label>
       </div>
     </div>
 
     <div class="form-group" style="margin-top: 40px;">
-      <label class="field-label">雪巴仙山站意願調查</label>
-      <div class="card-group row-layout">
-        <label class="radio-card">
-          <input type="radio" name="xuepa" value="參加" required>
-          <span class="card-content">參加</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="xuepa" value="有興趣">
-          <span class="card-content">有興趣</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="xuepa" value="不參加">
-          <span class="card-content">不參加</span>
-        </label>
+      <label>雪巴仙山站意願調查</label>
+      <div class="option-group row-layout">
+        <label class="option-label"><input type="radio" name="xuepa" value="參加" required><span>參加</span></label>
+        <label class="option-label"><input type="radio" name="xuepa" value="有興趣"><span>有興趣</span></label>
+        <label class="option-label"><input type="radio" name="xuepa" value="不參加"><span>不參加</span></label>
       </div>
     </div>
 
     <div class="section-title">04 / 付款方式</div>
     
-    <div class="card-group row-layout">
-      <label class="radio-card">
-        <input type="radio" name="paymentMethod" value="匯款" required>
-        <span class="card-content">匯款</span>
-      </label>
-      <label class="radio-card">
-        <input type="radio" name="paymentMethod" value="LINE PAY">
-        <span class="card-content">LINE PAY</span>
-      </label>
-      <label class="radio-card">
-        <input type="radio" name="paymentMethod" value="iPass Money">
-        <span class="card-content">iPass</span>
-      </label>
-      <label class="radio-card">
-        <input type="radio" name="paymentMethod" value="現金">
-        <span class="card-content">現金</span>
-      </label>
+    <div class="option-group row-layout" style="flex-wrap: wrap;">
+      <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" required><span>匯款</span></label>
+      <label class="option-label"><input type="radio" name="paymentMethod" value="LINE PAY"><span>LINE PAY</span></label>
+      <label class="option-label"><input type="radio" name="paymentMethod" value="iPass Money"><span>iPass Money</span></label>
+      <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金支付 (限工作室)</span></label>
     </div>
     
     <div class="bank-info">
-      <strong style="color:#111; font-weight: 600;">匯款帳戶資訊</strong><br><br>
+      <strong style="color:#111; font-size: 16px;">匯款帳戶資訊</strong><br><br>
       銀行：國泰世華 (013)<br>
       帳號：269506136805<br>
       戶名：費聿凡
@@ -531,6 +474,7 @@
 </div>
 
 <script>
+  // 請記得更換為您的 Google Apps Script URL
   const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
   
   const form = document.getElementById('trainingForm');
@@ -542,6 +486,16 @@
   const singleDatesGroup = document.getElementById('singleDatesGroup');
   const taipingDetailsGroup = document.getElementById('taipingDetailsGroup');
 
+  // 共用函式：生成精緻按鈕樣式的 HTML
+  function createOptionHtml(type, name, value, label, required = false) {
+    return `
+      <label class="option-label">
+        <input type="${type}" name="${name}" value="${value}" ${required ? 'required' : ''}>
+        <span>${label}</span>
+      </label>
+    `;
+  }
+
   // 身分選擇邏輯
   document.querySelectorAll('input[name="identity"]').forEach(r => {
     r.addEventListener('change', (e) => {
@@ -550,28 +504,17 @@
       
       if(e.target.value === '光聿學員') {
         planOptionsDiv.innerHTML = `
-          <label class="radio-card">
-            <input type="radio" name="planRaw" value="武嶺特訓包（三次全報，扣 5 堂課）" required>
-            <span class="card-content">武嶺特訓包（三次全報，扣 5 堂課）</span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="planRaw" value="單次彈性報名（每次扣 2 堂課）">
-            <span class="card-content">單次彈性報名（每次扣 2 堂課）</span>
-          </label>
+          ${createOptionHtml('radio', 'planRaw', '武嶺特訓包（三次全報，扣 5 堂課）', '武嶺特訓包（三次全報，扣 5 堂課）', true)}
+          ${createOptionHtml('radio', 'planRaw', '單次彈性報名（每次扣 2 堂課）', '單次彈性報名（每次扣 2 堂課）')}
         `;
       } else {
         planOptionsDiv.innerHTML = `
-          <label class="radio-card">
-            <input type="radio" name="planRaw" value="武嶺特訓包（三次全報，特惠 $3000）" required>
-            <span class="card-content">武嶺特訓包（三次全報，特惠 $3000）</span>
-          </label>
-          <label class="radio-card">
-            <input type="radio" name="planRaw" value="單次彈性報名（單次 $1200）">
-            <span class="card-content">單次彈性報名（單次 $1200）</span>
-          </label>
+          ${createOptionHtml('radio', 'planRaw', '武嶺特訓包（三次全報，特惠 $3000）', '武嶺特訓包（三次全報，特惠 $3000）', true)}
+          ${createOptionHtml('radio', 'planRaw', '單次彈性報名（單次 $1200）', '單次彈性報名（單次 $1200）')}
         `;
       }
 
+      // 方案選擇邏輯（需在動態生成後重新綁定）
       document.querySelectorAll('input[name="planRaw"]').forEach(pr => {
         pr.addEventListener('change', (ev) => {
           const isSingle = ev.target.value.includes('單次');
@@ -597,6 +540,39 @@
     });
   });
 
+  // 增加 JS：選取時動態改變外框顏色 (因為結構問題，純 CSS 難以完美達成，用 JS 輔助)
+  document.addEventListener('change', function(e) {
+    if (e.target.type === 'radio' || e.target.type === 'checkbox') {
+      // 先移除同一個 name 下所有 label 的 checked 樣式
+      const name = e.target.name;
+      document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+        input.closest('.option-label').style.borderColor = '#ccc';
+        input.closest('.option-label').style.backgroundColor = '#fff';
+      });
+
+      // 為被選取的 input 的 label 加上 checked 樣式
+      if (e.target.checked) {
+        const label = e.target.closest('.option-label');
+        label.style.borderColor = '#1e3a8a';
+        label.style.backgroundColor = '#f0f7ff';
+      }
+
+      // 複選框需要特別處理，因為上面的邏輯會把其他複選框的樣式也移除
+      if (e.target.type === 'checkbox') {
+        document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+          const label = input.closest('.option-label');
+          if (input.checked) {
+            label.style.borderColor = '#1e3a8a';
+            label.style.backgroundColor = '#f0f7ff';
+          } else {
+            label.style.borderColor = '#ccc';
+            label.style.backgroundColor = '#fff';
+          }
+        });
+      }
+    }
+  });
+
   // 送出處理
   form.onsubmit = e => {
     e.preventDefault();
@@ -607,7 +583,7 @@
     let selectedDates = []; 
     document.querySelectorAll('input[name="singleDates"]:checked').forEach(c => selectedDates.push(c.value));
     if (planRawEl.value.includes('單次') && selectedDates.length === 0) {
-      alert('選擇單次報名方案，請至少選擇一個日期。'); return;
+      alert('選擇單次報名方案，請至少勾選一個日期。'); return;
     }
 
     const taipingIntent = document.querySelector('input[name="taipingIntent"]:checked').value;
@@ -616,7 +592,7 @@
       const taipingDateEl = document.querySelector('input[name="taipingDate"]:checked');
       const needVanEl = document.querySelector('input[name="needVan"]:checked');
       if (!taipingDateEl || !needVanEl) {
-        alert('請完整選擇太平山移地訓練的細節。'); return;
+        alert('請完整勾選太平山移地訓練的細節。'); return;
       }
       finalTaiping = `參加（${taipingDateEl.value}）`;
     }
@@ -636,6 +612,11 @@
         msg.style.display = 'block'; 
         msg.className = 'success';
         form.reset(); 
+        // 送出後重置所有 label 樣式
+        document.querySelectorAll('.option-label').forEach(label => {
+          label.style.borderColor = '#ccc';
+          label.style.backgroundColor = '#fff';
+        });
         planGroup.style.display = 'none';
         singleDatesGroup.style.display = 'none';
         taipingDetailsGroup.style.display = 'none';
