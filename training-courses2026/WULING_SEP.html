@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026 崇越武嶺盃｜爬坡特訓包</title>
+  <title>2026 崇越武嶺盃｜爬坡特訓計畫</title>
   
   <style>
+    /* ==========================================
+       CSS 樣式：日系美學進化版 (色塊標題優化)
+       ========================================== */
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
       background-color: #f5f5f4; 
@@ -26,28 +29,34 @@
     }
 
     @media (max-width: 600px) {
-      .container { padding: 30px 20px; }
+      .container { padding: 40px 24px; }
     }
     
+    /* 主標題放大與底部強調 */
     h1 { 
-      font-size: 24px; 
-      font-weight: 500; 
-      letter-spacing: 0.05em;
+      font-size: 28px; 
+      font-weight: 600; 
+      letter-spacing: 0.1em;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
       color: #111;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eaeaea;
     }
 
+    /* 計畫表樣式 */
     .schedule-section {
       margin-bottom: 50px;
     }
 
     .schedule-title {
-      font-size: 15px;
-      font-weight: 500;
-      color: #555;
-      margin-bottom: 16px;
-      letter-spacing: 0.05em;
+      font-size: 16px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .schedule-table {
@@ -63,8 +72,8 @@
       text-align: left;
       background-color: #ebeae6;
       color: #444;
-      font-weight: 500;
-      padding: 12px 16px;
+      font-weight: 600;
+      padding: 14px 16px;
     }
 
     .schedule-table td {
@@ -73,28 +82,28 @@
       color: #555;
     }
 
-    .schedule-table tr:last-child td {
-      border-bottom: none;
-    }
-
     .highlight-row {
       background-color: #f4f2ed;
       color: #111 !important;
-      font-weight: 500;
+      font-weight: 600;
     }
 
+    /* 區段標題優化：加上色塊背景 */
     .section-title { 
-      font-size: 14px; 
-      font-weight: 600; 
-      color: #888;
-      margin: 45px 0 20px; 
-      border-bottom: 1px solid #eaeaea; 
-      padding-bottom: 10px; 
-      letter-spacing: 0.05em;
+      font-size: 15px; 
+      font-weight: 700; 
+      color: #222;
+      margin: 55px 0 25px; 
+      padding: 12px 18px;
+      background-color: #f0f0ee; /* 淺米灰色塊 */
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
     }
     
     .form-group { 
-      margin-bottom: 24px; 
+      margin-bottom: 28px; 
     }
     
     .form-row { 
@@ -108,25 +117,24 @@
     }
 
     @media (max-width: 600px) {
-      .form-row { flex-direction: column; gap: 24px; }
-      .form-row .form-group { margin-bottom: 0; }
+      .form-row { flex-direction: column; gap: 28px; }
     }
     
     label { 
       display: block; 
-      font-weight: 500; 
-      font-size: 13px; 
+      font-weight: 600; 
+      font-size: 13.5px; 
       color: #444;
-      margin-bottom: 8px; 
+      margin-bottom: 10px; 
     }
     
     input[type="text"], 
     input[type="date"], 
     input[type="email"] { 
       width: 100%; 
-      padding: 12px 14px; 
+      padding: 14px; 
       border: 1px solid #e0e0e0; 
-      border-radius: 4px; 
+      border-radius: 6px; 
       background-color: #fafafa;
       box-sizing: border-box; 
       font-size: 15px;
@@ -138,96 +146,100 @@
     input[type="date"]:focus, 
     input[type="email"]:focus {
       outline: none;
-      border-color: #b0b0b0;
+      border-color: #333;
       background-color: #fff;
     }
     
     .note { 
       font-size: 13px; 
       color: #888; 
-      margin-top: 6px; 
+      margin-top: 8px; 
     }
     
     .radio-group { 
       display: flex; 
       flex-direction: column; 
-      gap: 12px; 
+      gap: 14px; 
     }
     
     .radio-group.row-layout {
       flex-direction: row;
-      gap: 24px;
+      gap: 30px;
     }
     
     .radio-group label, .checkbox-group label { 
       font-weight: 400; 
-      font-size: 14px; 
+      font-size: 14.5px; 
       color: #333;
       display: flex; 
       align-items: center; 
-      gap: 10px; 
+      gap: 12px; 
       cursor: pointer;
     }
 
     input[type="radio"], input[type="checkbox"] {
-      accent-color: #555;
-      width: 16px;
-      height: 16px;
+      accent-color: #222;
+      width: 18px;
+      height: 18px;
       cursor: pointer;
     }
     
+    /* 動態面板：加強視覺區隔 */
     .dynamic-panel {
       display: none;
-      padding: 20px; 
-      background: #fafafa; 
-      border-radius: 6px; 
-      margin-bottom: 24px;
-      border-left: 3px solid #ddd;
+      padding: 24px; 
+      background: #fcfcfc; 
+      border: 1px solid #f0f0f0;
+      border-radius: 8px; 
+      margin-bottom: 30px;
+      margin-top: 10px;
     }
 
     .bank-info { 
       background: #fafafa; 
       border: 1px solid #eaeaea; 
-      padding: 20px; 
-      border-radius: 6px; 
-      font-size: 14px; 
-      margin-top: 16px; 
+      padding: 24px; 
+      border-radius: 8px; 
+      font-size: 14.5px; 
+      margin-top: 20px; 
       line-height: 1.8;
-      color: #555;
+      color: #444;
     }
     
     button { 
       width: 100%; 
-      padding: 16px; 
+      padding: 18px; 
       background: #222; 
       color: #fff; 
       border: none; 
-      border-radius: 4px; 
-      font-size: 15px; 
-      font-weight: 500;
-      letter-spacing: 0.1em;
+      border-radius: 6px; 
+      font-size: 16px; 
+      font-weight: 600;
+      letter-spacing: 0.15em;
       cursor: pointer; 
-      margin-top: 40px; 
-      transition: background 0.3s;
+      margin-top: 50px; 
+      transition: all 0.3s ease;
     }
     
     button:hover {
-      background: #444;
+      background: #000;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     button:disabled { 
       background: #cccccc; 
       cursor: not-allowed;
+      transform: none;
     }
     
     #message { 
-      margin-top: 24px; 
-      padding: 14px; 
+      margin-top: 30px; 
+      padding: 16px; 
       text-align: center; 
-      border-radius: 4px; 
+      border-radius: 6px; 
       display: none; 
-      font-size: 14px;
-      letter-spacing: 0.05em;
+      font-size: 15px;
     }
     
     .success { 
@@ -244,7 +256,7 @@
   <h1>2026 崇越武嶺盃 特訓計畫</h1>
 
   <div class="schedule-section">
-    <div class="schedule-title">週末特訓課表總覽</div>
+    <div class="schedule-title">📅 週末特訓課表總覽</div>
     <table class="schedule-table">
       <thead>
         <tr>
@@ -281,7 +293,7 @@
         </tr>
         <tr class="highlight-row">
           <td>9/14 (日)</td>
-          <td>崇越武嶺盃</td>
+          <td>崇越武嶺盃 正賽</td>
           <td>Peak</td>
         </tr>
       </tbody>
@@ -361,13 +373,13 @@
     </div>
     
     <div id="planGroup" class="dynamic-panel">
-      <label style="margin-bottom: 12px;">報名方案</label>
+      <label style="margin-bottom: 15px; color: #111;">報名方案</label>
       <div class="radio-group" id="planOptions">
         </div>
     </div>
     
-    <div id="singleDatesGroup" class="dynamic-panel" style="border-left-color: #bbb;">
-      <label style="margin-bottom: 12px;">請勾選單次參加日期</label>
+    <div id="singleDatesGroup" class="dynamic-panel">
+      <label style="margin-bottom: 15px; color: #111;">請勾選單次參加日期</label>
       <div class="radio-group">
         <label><input type="checkbox" name="singleDates" value="6/20"> 6/20 (六) 期初測驗＋風櫃嘴</label>
         <label><input type="checkbox" name="singleDates" value="8/8"> 8/8 (六) 碧山巖 / 汐萬路</label>
@@ -375,7 +387,7 @@
       </div>
     </div>
 
-    <div class="form-group" style="margin-top: 32px;">
+    <div class="form-group" style="margin-top: 35px;">
       <label>太平山移地訓練</label>
       <div class="radio-group row-layout">
         <label><input type="radio" name="taipingIntent" value="參加" required> 參加</label>
@@ -384,21 +396,21 @@
     </div>
     
     <div id="taipingDetailsGroup" class="dynamic-panel">
-      <label style="margin-bottom: 12px;">偏好日期</label>
-      <div class="radio-group row-layout" style="margin-bottom: 24px;">
+      <label style="margin-bottom: 15px; color: #111;">偏好日期</label>
+      <div class="radio-group row-layout" style="margin-bottom: 30px;">
         <label><input type="radio" name="taipingDate" value="偏好 7/4"> 7/4</label>
         <label><input type="radio" name="taipingDate" value="偏好 8/8"> 8/8</label>
         <label><input type="radio" name="taipingDate" value="皆可"> 皆可</label>
       </div>
 
-      <label style="margin-bottom: 12px;">保母車需求</label>
+      <label style="margin-bottom: 15px; color: #111;">保母車需求</label>
       <div class="radio-group">
         <label><input type="radio" name="needVan" value="需要保母車"> 需要教練協助安排</label>
         <label><input type="radio" name="needVan" value="不需要，自行前往"> 不需要，自行前往</label>
       </div>
     </div>
 
-    <div class="form-group" style="margin-top: 32px;">
+    <div class="form-group" style="margin-top: 35px;">
       <label>雪巴仙山站意願調查</label>
       <div class="radio-group row-layout">
         <label><input type="radio" name="xuepa" value="參加" required> 參加</label>
@@ -417,7 +429,7 @@
     </div>
     
     <div class="bank-info">
-      <strong>匯款帳戶資訊</strong><br>
+      <strong style="color:#111;">匯款帳戶資訊</strong><br>
       銀行：國泰世華 (013)<br>
       帳號：269506136805<br>
       戶名：費聿凡
@@ -430,7 +442,7 @@
 </div>
 
 <script>
-  // 請替換為您的 Google Apps Script URL
+  // 請記得更換為您的 Google Apps Script URL
   const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
   
   const form = document.getElementById('trainingForm');
@@ -442,7 +454,7 @@
   const singleDatesGroup = document.getElementById('singleDatesGroup');
   const taipingDetailsGroup = document.getElementById('taipingDetailsGroup');
 
-  // 身分選擇邏輯：動態載入對應的報名方案
+  // 身分選擇邏輯
   document.querySelectorAll('input[name="identity"]').forEach(r => {
     r.addEventListener('change', (e) => {
       planGroup.style.display = 'block';
@@ -460,7 +472,6 @@
         `;
       }
 
-      // 重新綁定方案選擇事件，判斷是否顯示單次日期
       document.querySelectorAll('input[name="planRaw"]').forEach(pr => {
         pr.addEventListener('change', (ev) => {
           const isSingle = ev.target.value.includes('單次');
@@ -473,7 +484,7 @@
     });
   });
 
-  // 太平山移地訓練意願切換
+  // 太平山細節切換
   document.querySelectorAll('input[name="taipingIntent"]').forEach(r => {
     r.addEventListener('change', (e) => {
       if (e.target.value === '參加') {
@@ -486,34 +497,26 @@
     });
   });
 
-  // 表單送出檢查與重組
+  // 送出處理
   form.onsubmit = e => {
     e.preventDefault();
     
-    // 檢查方案
     const planRawEl = document.querySelector('input[name="planRaw"]:checked');
-    if (!planRawEl) {
-      alert('請選擇報名方案。');
-      return;
-    }
+    if (!planRawEl) { alert('請選擇報名方案。'); return; }
 
-    // 檢查單次日期
     let selectedDates = []; 
     document.querySelectorAll('input[name="singleDates"]:checked').forEach(c => selectedDates.push(c.value));
     if (planRawEl.value.includes('單次') && selectedDates.length === 0) {
-      alert('選擇單次報名方案，請至少勾選一個日期。');
-      return;
+      alert('選擇單次報名方案，請至少勾選一個日期。'); return;
     }
 
-    // 檢查太平山詳細資訊
     const taipingIntent = document.querySelector('input[name="taipingIntent"]:checked').value;
     let finalTaiping = '不參加';
     if (taipingIntent === '參加') {
       const taipingDateEl = document.querySelector('input[name="taipingDate"]:checked');
       const needVanEl = document.querySelector('input[name="needVan"]:checked');
       if (!taipingDateEl || !needVanEl) {
-        alert('請完整勾選太平山移地訓練的「偏好日期」與「保母車需求」。');
-        return;
+        alert('請完整勾選太平山移地訓練的細節。'); return;
       }
       finalTaiping = `參加（${taipingDateEl.value}）`;
     }
@@ -522,8 +525,6 @@
     btn.innerText = '處理中...';
     
     const formData = new FormData(form); 
-    
-    // 重組資料以符合後端試算表格式
     const identity = document.querySelector('input[name="identity"]:checked').value;
     formData.set('plan', `【${identity}】${planRawEl.value}`);
     formData.set('singleDates', selectedDates.join(', '));
@@ -531,22 +532,19 @@
     
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        msg.innerText = '報名成功，請至信箱查看報名副本與匯款資訊。'; 
+        msg.innerText = '報名成功，請至信箱查看確認副本。'; 
         msg.style.display = 'block'; 
         msg.className = 'success';
-        
         form.reset(); 
         planGroup.style.display = 'none';
         singleDatesGroup.style.display = 'none';
         taipingDetailsGroup.style.display = 'none';
-        
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
-        
         window.scrollTo({ top: 0, behavior: 'smooth' });
       })
       .catch(() => {
-        alert('傳送失敗，請檢查網路連線或聯繫工作室。'); 
+        alert('傳送失敗，請連繫工作室。'); 
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
       });
