@@ -6,9 +6,6 @@
   <title>2026 崇越武嶺盃｜週末特訓計畫報名</title>
   
   <style>
-    /* ==========================================
-       CSS 樣式：日系極簡美學 (Minimalist)
-       ========================================== */
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
       background-color: #f5f5f4; 
@@ -41,9 +38,6 @@
       color: #111;
     }
 
-    /* ==========================================
-       特訓計畫表樣式
-       ========================================== */
     .schedule-section {
       margin-bottom: 50px;
     }
@@ -89,9 +83,6 @@
       font-weight: 500;
     }
 
-    /* ==========================================
-       表單區塊樣式
-       ========================================== */
     .section-title { 
       font-size: 14px; 
       font-weight: 600; 
@@ -178,7 +169,6 @@
       cursor: pointer;
     }
 
-    /* 自訂選取框顏色 */
     input[type="radio"], input[type="checkbox"] {
       accent-color: #555;
       width: 16px;
@@ -186,6 +176,15 @@
       cursor: pointer;
     }
     
+    .dynamic-panel {
+      display: none;
+      padding: 20px; 
+      background: #fafafa; 
+      border-radius: 6px; 
+      margin-bottom: 24px;
+      border-left: 3px solid #ddd;
+    }
+
     .bank-info { 
       background: #fafafa; 
       border: 1px solid #eaeaea; 
@@ -333,7 +332,6 @@
       <div class="note">將用於寄送報名副本與匯款資訊</div>
     </div>
 
-
     <div class="section-title">02 / 緊急聯絡資訊</div>
     
     <div class="form-row">
@@ -352,19 +350,23 @@
       <input type="text" name="emergPhone" required>
     </div>
 
-
     <div class="section-title">03 / 報名身分與方案選擇</div>
     
     <div class="form-group">
-      <div class="radio-group">
-        <label><input type="radio" name="plan" value="光聿學員：武嶺特訓包（扣 5 堂課）" required> 【光聿學員】武嶺特訓包（三次全報，扣 5 堂課）</label>
-        <label><input type="radio" name="plan" value="光聿學員：單次彈性報名（每次扣 2 堂課）"> 【光聿學員】單次彈性報名（每次扣 2 堂課）</label>
-        <label><input type="radio" name="plan" value="非學員：武嶺特訓包（特惠 $3000）"> 【非學員】武嶺特訓包（三次全報，特惠 $3000）</label>
-        <label><input type="radio" name="plan" value="非學員：單次彈性報名（單次 $1200）"> 【非學員】單次彈性報名（單次 $1200）</label>
+      <label>報名身分</label>
+      <div class="radio-group row-layout">
+        <label><input type="radio" name="identity" value="光聿學員" required> 光聿學員</label>
+        <label><input type="radio" name="identity" value="非學員"> 非學員</label>
       </div>
     </div>
     
-    <div id="singleDatesGroup" style="display:none; padding: 20px; background: #fafafa; border-radius: 6px; margin-bottom: 24px;">
+    <div id="planGroup" class="dynamic-panel">
+      <label style="margin-bottom: 12px;">報名方案</label>
+      <div class="radio-group" id="planOptions">
+        </div>
+    </div>
+    
+    <div id="singleDatesGroup" class="dynamic-panel" style="border-left-color: #bbb;">
       <label style="margin-bottom: 12px;">請勾選單次參加日期</label>
       <div class="radio-group">
         <label><input type="checkbox" name="singleDates" value="6/20"> 6/20 (六) 期初測驗</label>
@@ -374,15 +376,21 @@
     </div>
 
     <div class="form-group" style="margin-top: 32px;">
-      <label>太平山移地訓練 (7/4 或 8/8)</label>
-      <div class="radio-group">
-        <label><input type="radio" name="taiping" value="參加，偏好 7/4" required> 參加（偏好 7/4）</label>
-        <label><input type="radio" name="taiping" value="參加，偏好 8/8"> 參加（偏好 8/8）</label>
-        <label><input type="radio" name="taiping" value="不參加"> 不參加</label>
+      <label>太平山移地訓練</label>
+      <div class="radio-group row-layout">
+        <label><input type="radio" name="taipingIntent" value="參加" required> 參加</label>
+        <label><input type="radio" name="taipingIntent" value="不參加"> 不參加</label>
       </div>
     </div>
     
-    <div id="vanGroup" style="display:none; padding: 20px; background: #fafafa; border-radius: 6px; margin-bottom: 24px;">
+    <div id="taipingDetailsGroup" class="dynamic-panel">
+      <label style="margin-bottom: 12px;">偏好日期</label>
+      <div class="radio-group row-layout" style="margin-bottom: 24px;">
+        <label><input type="radio" name="taipingDate" value="偏好 7/4"> 偏好 7/4</label>
+        <label><input type="radio" name="taipingDate" value="偏好 8/8"> 偏好 8/8</label>
+        <label><input type="radio" name="taipingDate" value="皆可"> 皆可</label>
+      </div>
+
       <label style="margin-bottom: 12px;">保母車需求</label>
       <div class="radio-group">
         <label><input type="radio" name="needVan" value="需要保母車"> 需要協助安排 (車資實報實銷)</label>
@@ -391,10 +399,10 @@
     </div>
 
     <div class="form-group" style="margin-top: 32px;">
-      <label>雪巴仙山站 (8/22 賽事意願)</label>
-      <div class="radio-group">
-        <label><input type="radio" name="xuepa" value="委託代辦團報" required> 委託工作室運用上述資料代辦團報</label>
-        <label><input type="radio" name="xuepa" value="自行報名"> 我會自行報名參賽</label>
+      <label>雪巴仙山站意願</label>
+      <div class="radio-group row-layout">
+        <label><input type="radio" name="xuepa" value="參加" required> 參加</label>
+        <label><input type="radio" name="xuepa" value="有興趣"> 有興趣</label>
         <label><input type="radio" name="xuepa" value="不參加"> 不參加</label>
       </div>
     </div>
@@ -422,59 +430,104 @@
 </div>
 
 <script>
-  // ==========================================
-  // 記得將此處替換為您的 Google Apps Script URL
-  // ==========================================
+  // 請替換為您的 Google Apps Script URL
   const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
   
   const form = document.getElementById('trainingForm');
   const btn = document.getElementById('submitBtn');
   const msg = document.getElementById('message');
 
-  document.querySelectorAll('input[name="plan"]').forEach(r => {
-    r.onchange = () => {
-      const isSingle = r.value.includes('單次');
-      if (isSingle) {
-        document.getElementById('singleDatesGroup').style.display = 'block';
+  const planGroup = document.getElementById('planGroup');
+  const planOptionsDiv = document.getElementById('planOptions');
+  const singleDatesGroup = document.getElementById('singleDatesGroup');
+  const taipingDetailsGroup = document.getElementById('taipingDetailsGroup');
+
+  // 身分選擇邏輯：動態載入對應的報名方案
+  document.querySelectorAll('input[name="identity"]').forEach(r => {
+    r.addEventListener('change', (e) => {
+      planGroup.style.display = 'block';
+      singleDatesGroup.style.display = 'none';
+      
+      if(e.target.value === '光聿學員') {
+        planOptionsDiv.innerHTML = `
+          <label><input type="radio" name="planRaw" value="武嶺特訓包（三次全報，扣 5 堂課）" required> 武嶺特訓包（三次全報，扣 5 堂課）</label>
+          <label><input type="radio" name="planRaw" value="單次彈性報名（每次扣 2 堂課）"> 單次彈性報名（每次扣 2 堂課）</label>
+        `;
       } else {
-        document.getElementById('singleDatesGroup').style.display = 'none';
-        document.querySelectorAll('input[name="singleDates"]').forEach(c => c.checked = false);
+        planOptionsDiv.innerHTML = `
+          <label><input type="radio" name="planRaw" value="武嶺特訓包（三次全報，特惠 $3000）" required> 武嶺特訓包（三次全報，特惠 $3000）</label>
+          <label><input type="radio" name="planRaw" value="單次彈性報名（單次 $1200）"> 單次彈性報名（單次 $1200）</label>
+        `;
       }
-    };
-  });
-  
-  document.querySelectorAll('input[name="taiping"]').forEach(r => {
-    r.onchange = () => {
-      if (r.value === '不參加') {
-        document.getElementById('vanGroup').style.display = 'none';
-        document.querySelectorAll('input[name="needVan"]').forEach(v => v.checked = false);
-      } else {
-        document.getElementById('vanGroup').style.display = 'block';
-      }
-    };
+
+      // 重新綁定方案選擇事件，判斷是否顯示單次日期
+      document.querySelectorAll('input[name="planRaw"]').forEach(pr => {
+        pr.addEventListener('change', (ev) => {
+          const isSingle = ev.target.value.includes('單次');
+          singleDatesGroup.style.display = isSingle ? 'block' : 'none';
+          if(!isSingle) {
+            document.querySelectorAll('input[name="singleDates"]').forEach(c => c.checked = false);
+          }
+        });
+      });
+    });
   });
 
+  // 太平山移地訓練意願切換
+  document.querySelectorAll('input[name="taipingIntent"]').forEach(r => {
+    r.addEventListener('change', (e) => {
+      if (e.target.value === '參加') {
+        taipingDetailsGroup.style.display = 'block';
+      } else {
+        taipingDetailsGroup.style.display = 'none';
+        document.querySelectorAll('input[name="taipingDate"]').forEach(v => v.checked = false);
+        document.querySelectorAll('input[name="needVan"]').forEach(v => v.checked = false);
+      }
+    });
+  });
+
+  // 表單送出檢查與重組
   form.onsubmit = e => {
     e.preventDefault();
     
+    // 檢查方案
+    const planRawEl = document.querySelector('input[name="planRaw"]:checked');
+    if (!planRawEl) {
+      alert('請選擇報名方案。');
+      return;
+    }
+
+    // 檢查單次日期
+    let selectedDates = []; 
+    document.querySelectorAll('input[name="singleDates"]:checked').forEach(c => selectedDates.push(c.value));
+    if (planRawEl.value.includes('單次') && selectedDates.length === 0) {
+      alert('選擇單次報名方案，請至少勾選一個日期。');
+      return;
+    }
+
+    // 檢查太平山詳細資訊
+    const taipingIntent = document.querySelector('input[name="taipingIntent"]:checked').value;
+    let finalTaiping = '不參加';
+    if (taipingIntent === '參加') {
+      const taipingDateEl = document.querySelector('input[name="taipingDate"]:checked');
+      const needVanEl = document.querySelector('input[name="needVan"]:checked');
+      if (!taipingDateEl || !needVanEl) {
+        alert('請完整勾選太平山移地訓練的「偏好日期」與「保母車需求」。');
+        return;
+      }
+      finalTaiping = `參加（${taipingDateEl.value}）`;
+    }
+
     btn.disabled = true; 
     btn.innerText = '處理中...';
     
-    let selectedDates = []; 
-    document.querySelectorAll('input[name="singleDates"]:checked').forEach(c => {
-      selectedDates.push(c.value);
-    });
-    
-    const currentPlan = document.querySelector('input[name="plan"]:checked').value;
-    if (currentPlan.includes('單次') && selectedDates.length === 0) {
-      alert('選擇單次報名方案，請至少勾選一個日期。');
-      btn.disabled = false;
-      btn.innerText = '確認送出報名';
-      return;
-    }
-    
     const formData = new FormData(form); 
+    
+    // 重組資料以符合後端試算表格式
+    const identity = document.querySelector('input[name="identity"]:checked').value;
+    formData.set('plan', `【${identity}】${planRawEl.value}`);
     formData.set('singleDates', selectedDates.join(', '));
+    formData.set('taiping', finalTaiping);
     
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
@@ -483,8 +536,9 @@
         msg.className = 'success';
         
         form.reset(); 
-        document.getElementById('singleDatesGroup').style.display = 'none';
-        document.getElementById('vanGroup').style.display = 'none';
+        planGroup.style.display = 'none';
+        singleDatesGroup.style.display = 'none';
+        taipingDetailsGroup.style.display = 'none';
         
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
