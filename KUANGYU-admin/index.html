@@ -396,13 +396,21 @@
       color: #cbd5e1; 
       display: flex; 
       align-items: center; 
-      justify-content: center; 
+      justify-content: center;
+      transition: 0.2s;
     }
 
     .calendar-date.empty { background: transparent; }
-    .calendar-date.evening { background: transparent; color: var(--evening-main); font-weight: 900; font-size: 15px; }
-    .calendar-date.morning { background: transparent; color: var(--morning-main); font-weight: 900; font-size: 15px; }
-    .calendar-date.other { background: transparent; color: var(--primary); font-weight: 900; font-size: 15px; }
+    
+    /* 可取消點擊的特殊樣式 */
+    .cancelable-date { cursor: pointer; border: 1.5px solid transparent; }
+    .cancelable-date.evening { color: var(--evening-main); font-weight: 900; font-size: 15px; }
+    .cancelable-date.morning { color: var(--morning-main); font-weight: 900; font-size: 15px; }
+    .cancelable-date.other { color: var(--primary); font-weight: 900; font-size: 15px; }
+    
+    /* 準備被取消的選取狀態 (變紅) */
+    .cancel-selected { background-color: var(--danger) !important; color: white !important; font-weight: bold !important; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .cancel-panel { display: none; background: #fff5f5; border: 1px dashed var(--danger); padding: 12px; border-radius: 10px; margin-top: 12px; }
 
     /* 互動式多選日曆樣式 (手動預約用) */
     .interactive-cal-container { 
@@ -734,6 +742,9 @@
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaAiWuCchIr3I4cpPD0GzWqgE9AW4MEXYuPKOFOldl3mQE1WxjCECssLVetJC5Wb-O/exec";
 
+    // 紀錄準備被取消的日期清單
+    let cancelSelections = {}; 
+
     function callBackend(action, data) {
       return fetch(WEB_APP_URL, {
         method: "POST",
@@ -765,7 +776,6 @@
       initInteractiveCalendar();
     });
 
-    // 替換：更新為處理包含暱稱的物件陣列，且隱藏值維持真實姓名
     function populateDropdowns(students) {
       document.getElementById('initLoading').style.display = 'none';
       const selects = ['studentKeyword', 'financeStudentName', 'adjustStudentName', 'reserveStudentName'];
@@ -959,138 +969,17 @@
         btn.disabled = false;
       });
     }
-    /* ========================================== */
 
-    function loadClasses() {
-      const dateStr = document.getElementById('searchDate').value;
-      if (!dateStr) return alert("請選擇日期");
-      
-      document.getElementById('loading').style.display = 'block';
-      document.getElementById('resultCard').style.display = 'none';
-      
-      callBackend("getClassesByDate", { dateStr: dateStr })
-        .then(displayClasses)
-        .catch(err => {
-          document.getElementById('loading').style.display = 'none';
-          alert("讀取失敗：" + err.message);
-        });
-    }
-
-    function displayClasses(data) {
-      document.getElementById('loading').style.display = 'none';
-      const container = document.getElementById('classList');
-      container.innerHTML = '';
-      
-      document.getElementById('resultTitle').textContent = `共 ${data.length} 筆預約`;
-      document.getElementById('resultCard').style.display = 'block';
-      
-      if (data.length === 0) {
-        container.innerHTML = '<div style="color:#666; text-align:center; padding:10px;">該日無預約資料</div>';
-        return;
-      }
-      
-      data.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'history-item';
-        
-        let actionButtonsHtml = '';
-        
-        if (item.hasSignedIn) {
-          actionButtonsHtml = `<button class="action-btn" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" disabled>已簽到</button>`;
-        } else if (item.isExcused) {
-          const excusedText = (item.courseType === '跑班') ? '已請假' : '已取消';
-          actionButtonsHtml = `<button class="action-btn" style="background:#fef2f2; color:#ef4444; border:1px solid #fecaca; cursor:not-allowed;" disabled>${excusedText}</button>`;
-        } else {
-          const cancelBtnText = (item.courseType === '跑班') ? '請假' : '取消';
-          actionButtonsHtml = `
-            <button class="action-btn bg-success" onclick="actionSignIn('${item.studentName}', '${item.courseType}', this)">代簽到</button>
-            <button class="action-btn bg-outline" style="color:var(--danger); border-color:var(--danger);" onclick="actionCancel('${item.studentName}', '${item.sheetName}', ${item.rowIndex}, this)">${cancelBtnText}</button>
-          `;
-        }
-
-        div.innerHTML = `
-          <div class="h-info">
-            <span class="h-title">${item.studentName}</span>
-            <span class="h-sub">${item.courseType}</span>
-          </div>
-          <div style="display:flex; gap:6px;">
-            ${actionButtonsHtml}
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function actionSignIn(name, course, btnElement) {
-      const dateStr = document.getElementById('searchDate').value;
-      if (!confirm(`確定幫 ${name} 簽到並扣堂？`)) return;
-      
-      btnElement.textContent = "處理中...";
-      
-      callBackend("manualCoachSignIn", { 
-        studentName: name, 
-        courseType: course, 
-        dateStr: dateStr 
-      })
-      .then(res => {
-        alert(res); 
-        btnElement.textContent = "已簽到"; 
-        btnElement.style.background = "#f1f5f9"; 
-        btnElement.style.color = "#94a3b8"; 
-        btnElement.style.border = "1px solid #e2e8f0"; 
-        btnElement.disabled = true; 
-        
-        const nextBtn = btnElement.nextElementSibling;
-        if (nextBtn) nextBtn.style.display = 'none';
-      })
-      .catch(err => {
-        alert("簽到失敗：" + err.message);
-        btnElement.textContent = "代簽到";
-      });
-    }
-
-    function actionCancel(name, sheetName, rowIndex, btnElement) {
-      const dateStr = document.getElementById('searchDate').value;
-      const actionText = btnElement.textContent; 
-      
-      if (!confirm(`確定執行 ${name} 的 ${actionText} 動作？`)) return;
-      
-      const container = btnElement.parentElement;
-      const signInBtn = container.querySelector('.bg-success');
-      
-      btnElement.textContent = "處理中...";
-      btnElement.disabled = true;
-      if (signInBtn) signInBtn.disabled = true; 
-      
-      callBackend("manualCoachCancel", { 
-        studentName: name, 
-        sheetName: sheetName, 
-        dateStr: dateStr, 
-        rowIndex: rowIndex 
-      })
-      .then(res => {
-        alert(res); 
-        btnElement.textContent = `已${actionText}`; 
-        btnElement.style.color = "#ef4444"; 
-        btnElement.style.borderColor = "#fecaca"; 
-        btnElement.style.background = "#fef2f2";
-        btnElement.disabled = true; 
-        if (signInBtn) signInBtn.style.display = 'none';
-      })
-      .catch(err => {
-        alert("操作失敗：" + err.message);
-        btnElement.textContent = actionText;
-        btnElement.disabled = false;
-        if (signInBtn) signInBtn.disabled = false;
-      });
-    }
-
+    /* ==========================================
+       學生狀態查詢 - 包含批次取消邏輯
+       ========================================== */
     function searchStudentData() {
       const keyword = document.getElementById('studentKeyword').value;
       if (!keyword) return alert("請先選擇學生");
       
       document.getElementById('studentLoading').style.display = 'block';
       document.getElementById('studentResultList').innerHTML = '';
+      cancelSelections = {}; // 清空取消暫存
       
       callBackend("searchStudent", { keyword: keyword })
         .then(displayStudents)
@@ -1100,7 +989,6 @@
         });
     }
 
-    // 替換：更新為支援顯示暱稱的排版
     function displayStudents(students) {
       document.getElementById('studentLoading').style.display = 'none';
       const container = document.getElementById('studentResultList');
@@ -1141,7 +1029,7 @@
         }
 
         html += `<div class="dashed-box" style="margin-top: 16px; border-color: #cbd5e1; background-color: #f8fafc;">`;
-        html += `<div style="font-weight:700; font-size:14px; color:var(--primary); margin-bottom:8px;">後續預約進度</div>`;
+        html += `<div style="font-weight:700; font-size:14px; color:var(--primary); margin-bottom:8px;">後續預約進度 (點選即可準備取消)</div>`;
         
         if (s.upcomingClasses && s.upcomingClasses.length > 0) {
           const monthGroups = {};
@@ -1156,13 +1044,16 @@
               monthGroups[key] = { year: yyyy, month: mm, days: {} };
             }
             
-            if (uc.dayOfWeek === '二' || uc.dayOfWeek === '四') {
-              monthGroups[key].days[dd] = 'evening'; 
-            } else if (uc.dayOfWeek === '三') {
-              monthGroups[key].days[dd] = 'morning'; 
-            } else {
-              monthGroups[key].days[dd] = 'other'; 
-            }
+            let sClass = 'other';
+            if (uc.dayOfWeek === '二' || uc.dayOfWeek === '四') sClass = 'evening'; 
+            else if (uc.dayOfWeek === '三') sClass = 'morning';
+            
+            // 將整包資料存入給格子
+            monthGroups[key].days[dd] = { 
+              styleClass: sClass, 
+              fullDateStr: uc.dateStr, 
+              sheetName: uc.type + '登記' 
+            };
           });
 
           html += `<div class="calendar-wrapper">`;
@@ -1185,13 +1076,24 @@
             }
 
             for (let d = 1; d <= daysInMonth; d++) {
-              const styleClass = group.days[d] ? group.days[d] : '';
-              html += `<div class="calendar-date ${styleClass}">${d}</div>`;
+              const classInfo = group.days[d];
+              if (classInfo) {
+                 html += `<div class="calendar-date cancelable-date ${classInfo.styleClass}" data-date="${classInfo.fullDateStr}" onclick="toggleStudentCancelDate(this, '${s.rowIndex}', '${s.name}', '${classInfo.fullDateStr}', '${classInfo.sheetName}')">${d}</div>`;
+              } else {
+                 html += `<div class="calendar-date empty"></div>`;
+              }
             }
             
             html += `</div></div>`; 
           }
           html += `</div>`;
+          
+          // 隱藏的取消面板
+          html += `<div id="cancelPanel_${s.rowIndex}" class="cancel-panel">
+                     <div style="font-weight:bold; color:var(--danger); margin-bottom:8px; font-size:14px;">已選取準備取消的預約：</div>
+                     <div id="cancelList_${s.rowIndex}" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;"></div>
+                     <button class="submit-btn" style="background:var(--danger); margin-top:0;" onclick="executeBatchCancel('${s.rowIndex}', '${s.name}')">確認取消選取預約</button>
+                   </div>`;
         } else {
           html += `<div style="font-size:13px; color:var(--text-sub);">目前無後續預約紀錄</div>`;
         }
@@ -1225,6 +1127,85 @@
         </div>`;
         
         container.innerHTML += html;
+      });
+    }
+
+    // 點擊日曆格子切換取消狀態
+    function toggleStudentCancelDate(cellElement, rowIndex, name, dateStr, sheetName) {
+      if (!cancelSelections[rowIndex]) cancelSelections[rowIndex] = [];
+      const list = cancelSelections[rowIndex];
+      
+      const idx = list.findIndex(item => item.dateStr === dateStr);
+      if (idx > -1) {
+        list.splice(idx, 1);
+        cellElement.classList.remove('cancel-selected');
+      } else {
+        list.push({ dateStr: dateStr, sheetName: sheetName });
+        cellElement.classList.add('cancel-selected');
+      }
+      renderCancelPanel(rowIndex);
+    }
+
+    // 從下方清單移除準備取消的日期
+    function removeStudentCancelDate(rowIndex, dateStr) {
+       const cells = document.querySelectorAll(`.cancelable-date[data-date="${dateStr}"]`);
+       cells.forEach(cell => cell.classList.remove('cancel-selected'));
+       
+       const list = cancelSelections[rowIndex];
+       const idx = list.findIndex(item => item.dateStr === dateStr);
+       if (idx > -1) list.splice(idx, 1);
+       renderCancelPanel(rowIndex);
+    }
+
+    // 渲染下方取消面板
+    function renderCancelPanel(rowIndex) {
+      const list = cancelSelections[rowIndex] || [];
+      const panel = document.getElementById(`cancelPanel_${rowIndex}`);
+      if (!panel) return;
+      const listContainer = document.getElementById(`cancelList_${rowIndex}`);
+      
+      if (list.length > 0) {
+        panel.style.display = 'block';
+        listContainer.innerHTML = '';
+        list.sort((a,b) => a.dateStr.localeCompare(b.dateStr)).forEach(item => {
+          const tag = document.createElement('div');
+          tag.className = 'selected-tag';
+          tag.style.background = '#fecaca';
+          tag.style.color = '#b91c1c';
+          const shortDate = item.dateStr.substring(5);
+          tag.innerHTML = `${shortDate} <span style="cursor:pointer;" onclick="removeStudentCancelDate('${rowIndex}', '${item.dateStr}')">✖</span>`;
+          listContainer.appendChild(tag);
+        });
+      } else {
+        panel.style.display = 'none';
+      }
+    }
+
+    // 執行整批取消
+    function executeBatchCancel(rowIndex, studentName) {
+      const list = cancelSelections[rowIndex];
+      if (!list || list.length === 0) return;
+      
+      if (!confirm(`確定要為 ${studentName} 取消這 ${list.length} 筆預約嗎？\n(將同步退還堂數並釋出行事曆名額)`)) return;
+      
+      const panel = document.getElementById(`cancelPanel_${rowIndex}`);
+      const btn = panel.querySelector('button');
+      btn.textContent = "處理中..."; 
+      btn.disabled = true;
+      
+      callBackend("batchCancelReservations", { 
+        studentName: studentName, 
+        cancelList: list 
+      })
+      .then(res => {
+        alert(res);
+        cancelSelections[rowIndex] = [];
+        searchStudentData(); // 重新整理狀態
+      })
+      .catch(err => {
+        alert("取消失敗：" + err.message);
+        btn.textContent = "確認取消選取預約"; 
+        btn.disabled = false;
       });
     }
 
@@ -1473,6 +1454,130 @@
         document.getElementById('adjustNote').value = ''; 
       })
       .catch(err => alert("調整失敗：" + err.message));
+    }
+
+    function loadClasses() {
+      const dateStr = document.getElementById('searchDate').value;
+      if (!dateStr) return alert("請選擇日期");
+      
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('resultCard').style.display = 'none';
+      
+      callBackend("getClassesByDate", { dateStr: dateStr })
+        .then(displayClassesForDaily)
+        .catch(err => {
+          document.getElementById('loading').style.display = 'none';
+          alert("讀取失敗：" + err.message);
+        });
+    }
+
+    function displayClassesForDaily(data) {
+      document.getElementById('loading').style.display = 'none';
+      const container = document.getElementById('classList');
+      container.innerHTML = '';
+      
+      document.getElementById('resultTitle').textContent = `共 ${data.length} 筆預約`;
+      document.getElementById('resultCard').style.display = 'block';
+      
+      if (data.length === 0) {
+        container.innerHTML = '<div style="color:#666; text-align:center; padding:10px;">該日無預約資料</div>';
+        return;
+      }
+      
+      data.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        
+        let actionButtonsHtml = '';
+        
+        if (item.hasSignedIn) {
+          actionButtonsHtml = `<button class="action-btn" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" disabled>已簽到</button>`;
+        } else if (item.isExcused) {
+          const excusedText = (item.courseType === '跑班') ? '已請假' : '已取消';
+          actionButtonsHtml = `<button class="action-btn" style="background:#fef2f2; color:#ef4444; border:1px solid #fecaca; cursor:not-allowed;" disabled>${excusedText}</button>`;
+        } else {
+          const cancelBtnText = (item.courseType === '跑班') ? '請假' : '取消';
+          actionButtonsHtml = `
+            <button class="action-btn bg-success" onclick="actionSignIn('${item.studentName}', '${item.courseType}', this)">代簽到</button>
+            <button class="action-btn bg-outline" style="color:var(--danger); border-color:var(--danger);" onclick="actionCancel('${item.studentName}', '${item.sheetName}', ${item.rowIndex}, this)">${cancelBtnText}</button>
+          `;
+        }
+
+        div.innerHTML = `
+          <div class="h-info">
+            <span class="h-title">${item.studentName}</span>
+            <span class="h-sub">${item.courseType}</span>
+          </div>
+          <div style="display:flex; gap:6px;">
+            ${actionButtonsHtml}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function actionSignIn(name, course, btnElement) {
+      const dateStr = document.getElementById('searchDate').value;
+      if (!confirm(`確定幫 ${name} 簽到並扣堂？`)) return;
+      
+      btnElement.textContent = "處理中...";
+      
+      callBackend("manualCoachSignIn", { 
+        studentName: name, 
+        courseType: course, 
+        dateStr: dateStr 
+      })
+      .then(res => {
+        alert(res); 
+        btnElement.textContent = "已簽到"; 
+        btnElement.style.background = "#f1f5f9"; 
+        btnElement.style.color = "#94a3b8"; 
+        btnElement.style.border = "1px solid #e2e8f0"; 
+        btnElement.disabled = true; 
+        
+        const nextBtn = btnElement.nextElementSibling;
+        if (nextBtn) nextBtn.style.display = 'none';
+      })
+      .catch(err => {
+        alert("簽到失敗：" + err.message);
+        btnElement.textContent = "代簽到";
+      });
+    }
+
+    function actionCancel(name, sheetName, rowIndex, btnElement) {
+      const dateStr = document.getElementById('searchDate').value;
+      const actionText = btnElement.textContent; 
+      
+      if (!confirm(`確定執行 ${name} 的 ${actionText} 動作？`)) return;
+      
+      const container = btnElement.parentElement;
+      const signInBtn = container.querySelector('.bg-success');
+      
+      btnElement.textContent = "處理中...";
+      btnElement.disabled = true;
+      if (signInBtn) signInBtn.disabled = true; 
+      
+      callBackend("manualCoachCancel", { 
+        studentName: name, 
+        sheetName: sheetName, 
+        dateStr: dateStr, 
+        rowIndex: rowIndex 
+      })
+      .then(res => {
+        alert(res); 
+        btnElement.textContent = `已${actionText}`; 
+        btnElement.style.color = "#ef4444"; 
+        btnElement.style.borderColor = "#fecaca"; 
+        btnElement.style.background = "#fef2f2";
+        btnElement.disabled = true; 
+        if (signInBtn) signInBtn.style.display = 'none';
+      })
+      .catch(err => {
+        alert("操作失敗：" + err.message);
+        btnElement.textContent = actionText;
+        btnElement.disabled = false;
+        if (signInBtn) signInBtn.disabled = false;
+      });
     }
 
     function fetchReport(functionName) {
