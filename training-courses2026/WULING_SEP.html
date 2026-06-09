@@ -7,7 +7,7 @@
   
   <style>
     /* ==========================================
-       CSS 樣式：莫蘭迪藍極簡版
+       CSS 樣式：莫蘭迪藍極簡版 (間距優化)
        ========================================== */
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
@@ -92,7 +92,7 @@
       font-size: 15px; 
       font-weight: 600; 
       color: #2c3e50;
-      margin: 60px 0 30px; 
+      margin: 60px 0 28px; 
       padding: 14px 18px;
       background-color: #eef2f5;
       border-left: 4px solid #6b8293; /* 莫蘭迪藍主色 */
@@ -100,22 +100,24 @@
       letter-spacing: 0.08em;
     }
     
+    /* 表單間距優化 */
     .form-group { 
-      margin-bottom: 30px; 
+      margin-bottom: 28px; 
     }
     
     .form-row { 
       display: flex; 
       gap: 24px; 
+      margin-bottom: 28px; /* 補上列與列之間的底部距離 */
     }
     
     .form-row .form-group { 
       flex: 1; 
-      margin-bottom: 0;
+      margin-bottom: 0; /* 避免列內部的 group 重複計算距離 */
     }
 
     @media (max-width: 600px) {
-      .form-row { flex-direction: column; gap: 30px; }
+      .form-row { flex-direction: column; gap: 28px; margin-bottom: 28px; }
     }
     
     label.field-label { 
@@ -123,7 +125,7 @@
       font-weight: 600; 
       font-size: 14px; 
       color: #444;
-      margin-bottom: 12px; 
+      margin-bottom: 8px; /* 拉近問題與回答的距離 */
     }
     
     input[type="text"], 
@@ -160,6 +162,7 @@
       display: flex; 
       flex-direction: column; 
       gap: 14px; 
+      margin-top: 6px; /* 讓選項稍微遠離標題一點點，保持層次 */
     }
     
     .option-group.row-layout {
@@ -194,7 +197,7 @@
       background: #f8fafb; 
       border: 1px solid #eef2f5;
       border-radius: 6px; 
-      margin-bottom: 30px;
+      margin-bottom: 28px;
       margin-top: 10px;
     }
 
@@ -220,7 +223,7 @@
       font-weight: 600;
       letter-spacing: 0.15em;
       cursor: pointer; 
-      margin-top: 50px; 
+      margin-top: 40px; 
       transition: all 0.2s ease;
     }
     
@@ -316,7 +319,7 @@
       </div>
       <div class="form-group">
         <label class="field-label">性別</label>
-        <div class="option-group row-layout" style="margin-top: 14px;">
+        <div class="option-group row-layout">
           <label class="option-label"><input type="radio" name="gender" value="男" required><span>男</span></label>
           <label class="option-label"><input type="radio" name="gender" value="女"><span>女</span></label>
         </div>
@@ -443,7 +446,6 @@
 </div>
 
 <script>
-  // 請記得更換為您的 Google Apps Script URL
   const scriptURL = 'https://script.google.com/macros/s/AKfycbyyXKq170lsclsdNMy4C0L-AQGN93QXKQDG2A8emAwDQ2KMj51wl3qpaFmYDcXaib0wDg/exec';
   
   const form = document.getElementById('trainingForm');
@@ -455,7 +457,6 @@
   const singleDatesGroup = document.getElementById('singleDatesGroup');
   const taipingDetailsGroup = document.getElementById('taipingDetailsGroup');
 
-  // 共用函式：生成選項 HTML
   function createOptionHtml(type, name, value, label, required = false) {
     return `
       <label class="option-label">
@@ -465,7 +466,6 @@
     `;
   }
 
-  // 身分選擇邏輯
   document.querySelectorAll('input[name="identity"]').forEach(r => {
     r.addEventListener('change', (e) => {
       planGroup.style.display = 'block';
@@ -483,7 +483,6 @@
         `;
       }
 
-      // 方案選擇邏輯（需在動態生成後重新綁定）
       document.querySelectorAll('input[name="planRaw"]').forEach(pr => {
         pr.addEventListener('change', (ev) => {
           const isSingle = ev.target.value.includes('單次');
@@ -496,7 +495,6 @@
     });
   });
 
-  // 太平山細節切換
   document.querySelectorAll('input[name="taipingIntent"]').forEach(r => {
     r.addEventListener('change', (e) => {
       if (e.target.value === '參加') {
@@ -509,7 +507,6 @@
     });
   });
 
-  // 送出處理
   form.onsubmit = e => {
     e.preventDefault();
     
