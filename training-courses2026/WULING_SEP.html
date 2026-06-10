@@ -487,7 +487,6 @@
     <div class="form-group">
       <label class="field-label">Email 信箱</label>
       <input type="email" name="email" required>
-      <div class="note">將用於寄送報名副本與匯款資訊。請務必填寫正確。</div>
     </div>
 
     <div class="section-title">02 / 緊急聯絡資訊</div>
@@ -599,7 +598,7 @@
 <div class="modal-overlay" id="customAlert">
   <div class="modal-content">
     <div class="modal-icon">✓</div>
-    <div class="modal-text">報名成功！請至信箱查看確認副本。</div>
+    <div class="modal-text">報名成功！請至信箱查看報名確認信。</div>
     <button class="modal-btn" onclick="closeAlert()">確定</button>
   </div>
 </div>
@@ -730,7 +729,7 @@
         setTimeout(() => modal.classList.add('show'), 10);
         
         // 保留原本的文字提示與表單重置功能
-        msg.innerText = '報名成功，請至信箱查看確認副本。'; 
+        msg.innerText = '報名成功，請至信箱查看報名確認信。'; 
         msg.style.display = 'block'; 
         msg.className = 'success';
         form.reset(); 
