@@ -309,6 +309,71 @@
       color: #4a6c59; 
       border: 1px solid #dce8e1;
     }
+
+    /* ==========================================
+       自訂彈出視窗樣式
+       ========================================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      max-width: 80%;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.show .modal-content {
+      transform: translateY(0);
+    }
+    .modal-icon {
+      width: 50px;
+      height: 50px;
+      background: #f0f4f2;
+      color: #4a6c59;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 15px;
+    }
+    .modal-text {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 24px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    .modal-btn {
+      background: var(--blue-main);
+      color: #fff;
+      border: none;
+      padding: 10px 32px;
+      border-radius: 6px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .modal-btn:hover {
+      background: #5a7080;
+    }
   </style>
 </head>
 <body>
@@ -531,6 +596,14 @@
   </form>
 </div>
 
+<div class="modal-overlay" id="customAlert">
+  <div class="modal-content">
+    <div class="modal-icon">✓</div>
+    <div class="modal-text">報名成功！請至信箱查看確認副本。</div>
+    <button class="modal-btn" onclick="closeAlert()">確定</button>
+  </div>
+</div>
+
 <script {nonce}>
   const scriptURL = 'https://script.google.com/macros/s/AKfycbyyXKq170lsclsdNMy4C0L-AQGN93QXKQDG2A8emAwDQ2KMj51wl3qpaFmYDcXaib0wDg/exec';
   
@@ -552,6 +625,14 @@
         <span>${label}</span>
       </label>
     `;
+  }
+
+  // 關閉自訂彈出視窗
+  function closeAlert() {
+    document.getElementById('customAlert').classList.remove('show');
+    setTimeout(() => {
+      document.getElementById('customAlert').style.display = 'none';
+    }, 300);
   }
 
   document.querySelectorAll('input[name="identity"]').forEach(r => {
@@ -643,8 +724,10 @@
     
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        // 加入彈出式視窗
-        alert('報名成功！請至信箱查看確認副本。');
+        // 觸發自訂美化視窗
+        const modal = document.getElementById('customAlert');
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
         
         // 保留原本的文字提示與表單重置功能
         msg.innerText = '報名成功，請至信箱查看確認副本。'; 
