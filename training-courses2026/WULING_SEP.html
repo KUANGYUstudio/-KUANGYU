@@ -232,13 +232,6 @@
       cursor: pointer;
       margin-bottom: 0;
     }
-
-    .payment-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
     
     .payment-full {
       margin-top: 5px;
@@ -505,16 +498,15 @@
 
     <div class="section-title">04 / 付款方式</div>
     
-    <div class="section-title">04 / 付款方式</div>
-<div class="payment-grid">
-  <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" required><span>匯款</span></label>
-  <label class="option-label"><input type="radio" name="paymentMethod" value="LINE PAY"><span>LINE PAY</span></label>
-  <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
-  <label class="option-label"><input type="radio" name="paymentMethod" value="iPass Money"><span>iPass Money</span></label>
-</div>
-<div class="payment-full">
-  <label class="option-label"><input type="radio" name="paymentMethod" value="光聿學員扣堂數"><span>光聿學員扣堂數 (由教練扣除堂數)</span></label>
-</div>
+    <div class="option-group row-layout" style="margin-bottom: 15px;">
+      <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" required><span>匯款</span></label>
+      <label class="option-label"><input type="radio" name="paymentMethod" value="LINE PAY"><span>LINE PAY</span></label>
+      <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
+      <label class="option-label"><input type="radio" name="paymentMethod" value="iPass Money"><span>iPass Money</span></label>
+    </div>
+    <div class="payment-full">
+      <label class="option-label"><input type="radio" name="paymentMethod" value="光聿學員扣堂數"><span>光聿學員扣堂數 (由教練扣除堂數)</span></label>
+    </div>
     
     <div id="bankDetailsGroup" class="dynamic-panel">
       <div class="bank-info">
