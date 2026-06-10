@@ -7,28 +7,28 @@
   
   <style>
     /* ==========================================
-       CSS 樣式：雙色莫蘭迪極簡版 (課表水綠 x 表單藍)
+       CSS 樣式：多巴胺亮藍綠沁涼版
        ========================================== */
     
     :root {
-      /* 莫蘭迪藍 (表單區與按鈕) */
-      --blue-main: #5b7c8d;
-      --blue-dark: #24333e;
-      --blue-light: #ebf0f3;
-      --blue-border: #dbe3e8;
-      --blue-bg: #f7fafc;
+      /* 多巴胺水藍 (表單區與按鈕) */
+      --blue-main: #00c4cc;
+      --blue-dark: #007a80;
+      --blue-light: #e0f9fa;
+      --blue-border: #a3ebed;
+      --blue-bg: #f0fcfc;
 
-      /* 莫蘭迪水綠 (課表區 - 沿用原 pink 變數名稱方便維護) */
-      --pink-main: #6e8b8e;
-      --pink-dark: #2c383a;
-      --pink-light: #edf2f2;
-      --pink-border: #dadfe0;
-      --pink-bg: #f8f9f9;
+      /* 多巴胺薄荷綠 (課表區) */
+      --teal-main: #00d2a1;
+      --teal-dark: #008062;
+      --teal-light: #e0faf3;
+      --teal-border: #a3f0da;
+      --teal-bg: #f2fdf9;
     }
 
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background-color: #f4f6f8; 
+      background-color: #ebf5f5; 
       color: #333333; 
       margin: 0; 
       padding: 60px 20px; 
@@ -42,7 +42,7 @@
       background: #ffffff; 
       padding: 50px 60px; 
       border-radius: 8px; 
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04); 
+      box-shadow: 0 4px 24px rgba(0, 196, 204, 0.08); 
     }
 
     @media (max-width: 600px) {
@@ -57,13 +57,13 @@
       letter-spacing: 0.12em;
       text-align: center;
       margin-bottom: 40px;
-      color: var(--pink-dark);
+      color: var(--teal-dark);
       padding-bottom: 20px;
-      border-bottom: 1px solid var(--pink-border);
+      border-bottom: 1px solid var(--teal-border);
     }
 
     /* ==========================================
-       上半部：課表區塊 (莫蘭迪水綠)
+       上半部：課表區塊
        ========================================== */
     .schedule-section {
       margin-bottom: 50px;
@@ -72,7 +72,7 @@
     .schedule-title {
       font-size: 16px;
       font-weight: 600;
-      color: var(--pink-dark);
+      color: var(--teal-dark);
       margin-bottom: 16px;
       letter-spacing: 0.08em;
     }
@@ -81,9 +81,9 @@
       width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--pink-border);
+      border: 1px solid var(--teal-border);
       border-radius: 6px;
-      background-color: var(--pink-bg);
+      background-color: var(--teal-bg);
     }
 
     .schedule-table {
@@ -95,8 +95,8 @@
 
     .schedule-table th {
       text-align: left;
-      background-color: var(--pink-border);
-      color: var(--pink-dark);
+      background-color: var(--teal-border);
+      color: var(--teal-dark);
       font-weight: 600;
       padding: 14px 16px;
       white-space: nowrap; 
@@ -104,7 +104,7 @@
 
     .schedule-table td {
       padding: 14px 16px;
-      border-bottom: 1px solid var(--pink-border);
+      border-bottom: 1px solid var(--teal-border);
       color: #444;
       vertical-align: middle;
     }
@@ -115,7 +115,7 @@
     }
 
     .schedule-table td strong {
-      color: var(--pink-dark);
+      color: var(--teal-dark);
       font-weight: 600;
       display: block;
     }
@@ -129,7 +129,7 @@
 
     .highlight-row td,
     .highlight-row td strong {
-      color: #2c383a !important;
+      color: #005944 !important;
     }
 
     /* 課表注意事項 */
@@ -141,7 +141,7 @@
     }
 
     /* ==========================================
-       下半部：表單區塊 (莫蘭迪藍)
+       下半部：表單區塊
        ========================================== */
 
     .section-title { 
@@ -189,28 +189,31 @@
     
     input[type="text"], 
     input[type="date"], 
-    input[type="email"] { 
+    input[type="email"],
+    textarea { 
       display: block;
       width: 100%;
       max-width: 100%;
       -webkit-appearance: none;
       appearance: none;
       padding: 12px 14px; 
-      border: 1px solid #d1d9e0; 
+      border: 1px solid #d1dbde; 
       border-radius: 6px; 
       background-color: #fff;
       box-sizing: border-box; 
       font-size: 15px;
       color: #333;
       transition: all 0.2s ease;
+      font-family: inherit;
     }
     
     input[type="text"]:focus, 
     input[type="date"]:focus, 
-    input[type="email"]:focus {
+    input[type="email"]:focus,
+    textarea:focus {
       outline: none;
       border-color: var(--blue-main);
-      box-shadow: 0 0 0 3px rgba(91, 124, 141, 0.15);
+      box-shadow: 0 0 0 3px rgba(0, 196, 204, 0.15);
     }
     
     .option-group { 
@@ -226,7 +229,6 @@
       gap: 20px;
     }
 
-    /* 付款方式專用網格 */
     .payment-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -268,7 +270,7 @@
     }
 
     .bank-info { 
-      background: var(--blue-bg); 
+      background: #ffffff; 
       border: 1px solid var(--blue-border); 
       padding: 20px; 
       border-radius: 6px; 
@@ -292,15 +294,20 @@
       cursor: pointer; 
       margin-top: 36px; 
       transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 196, 204, 0.2);
     }
     
     button:hover {
-      background: #4a6675;
+      background: #00aeb5;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 196, 204, 0.3);
     }
 
     button:disabled { 
-      background: #c5d0d6; 
+      background: #c2e8e9; 
       cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
     }
     
     #message { 
@@ -313,9 +320,9 @@
     }
     
     .success { 
-      background: #f0f4f2; 
-      color: #4a6c59; 
-      border: 1px solid #dce8e1;
+      background: var(--teal-bg); 
+      color: var(--teal-dark); 
+      border: 1px solid var(--teal-border);
     }
 
     /* ==========================================
@@ -325,7 +332,7 @@
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 30, 30, 0.4);
       z-index: 1000;
       align-items: center;
       justify-content: center;
@@ -341,7 +348,7 @@
       padding: 30px 40px;
       border-radius: 8px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 30px rgba(0, 196, 204, 0.15);
       max-width: 80%;
       transform: translateY(-20px);
       transition: transform 0.3s ease;
@@ -352,8 +359,8 @@
     .modal-icon {
       width: 50px;
       height: 50px;
-      background: #f0f4f2;
-      color: #4a6c59;
+      background: var(--teal-bg);
+      color: var(--teal-main);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -380,7 +387,7 @@
       transition: background 0.2s;
     }
     .modal-btn:hover {
-      background: #4a6675;
+      background: #00aeb5;
     }
   </style>
 </head>
@@ -546,7 +553,7 @@
     
     <div class="form-group">
       <label class="field-label">對本次游泳團練的期望或過去游泳經歷？（選填）</label>
-      <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
+      <textarea name="remarks" rows="3"></textarea>
     </div>
     
     <button type="submit" id="submitBtn">確認送出報名</button>
