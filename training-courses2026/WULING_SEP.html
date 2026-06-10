@@ -257,7 +257,8 @@
       padding: 20px; 
       border-radius: 6px; 
       font-size: 14.5px; 
-      margin-top: 16px; 
+      margin-top: 0; 
+      margin-bottom: 16px;
       line-height: 1.8;
       color: #444;
     }
@@ -338,7 +339,7 @@
           <tr>
             <td>8/8 (六)</td>
             <td>
-              <strong>碧山巖 / 汐萬路</strong>
+              <strong>碧山巖 / 汐萬路耐力</strong>
             </td>
             <td>Zone 2-3</td>
           </tr>
@@ -500,11 +501,17 @@
       <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
     </div>
     
-    <div class="bank-info">
-      <strong style="color: var(--blue-dark); font-size: 15px;">匯款帳戶資訊</strong><br>
-      銀行：國泰世華 (013)<br>
-      帳號：269506136805<br>
-      戶名：費聿凡
+    <div id="bankDetailsGroup" class="dynamic-panel">
+      <div class="bank-info">
+        <strong style="color: var(--blue-dark); font-size: 15px;">匯款帳戶資訊</strong><br>
+        銀行：國泰世華 (013)<br>
+        帳號：269506136805<br>
+        戶名：費聿凡
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="field-label">轉帳帳號後五碼</label>
+        <input type="text" name="bankLastFive" placeholder="請輸入匯款帳號後五碼">
+      </div>
     </div>
 
     <button type="submit" id="submitBtn">確認送出報名</button>
@@ -513,7 +520,7 @@
   </form>
 </div>
 
-<script>
+<script {nonce}>
   const scriptURL = 'https://script.google.com/macros/s/AKfycbyyXKq170lsclsdNMy4C0L-AQGN93QXKQDG2A8emAwDQ2KMj51wl3qpaFmYDcXaib0wDg/exec';
   
   const form = document.getElementById('trainingForm');
@@ -524,6 +531,8 @@
   const planOptionsDiv = document.getElementById('planOptions');
   const singleDatesGroup = document.getElementById('singleDatesGroup');
   const taipingDetailsGroup = document.getElementById('taipingDetailsGroup');
+  const bankDetailsGroup = document.getElementById('bankDetailsGroup');
+  const bankLastFiveInput = document.querySelector('input[name="bankLastFive"]');
 
   function createOptionHtml(type, name, value, label, required = false) {
     return `
@@ -575,6 +584,20 @@
     });
   });
 
+  // 付款方式切換邏輯
+  document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
+    r.addEventListener('change', (e) => {
+      if (e.target.value === '匯款') {
+        bankDetailsGroup.style.display = 'block';
+        bankLastFiveInput.required = true;
+      } else {
+        bankDetailsGroup.style.display = 'none';
+        bankLastFiveInput.required = false;
+        bankLastFiveInput.value = '';
+      }
+    });
+  });
+
   form.onsubmit = e => {
     e.preventDefault();
     
@@ -616,6 +639,8 @@
         planGroup.style.display = 'none';
         singleDatesGroup.style.display = 'none';
         taipingDetailsGroup.style.display = 'none';
+        bankDetailsGroup.style.display = 'none';
+        bankLastFiveInput.required = false;
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
         window.scrollTo({ top: 0, behavior: 'smooth' });
