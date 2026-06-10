@@ -643,6 +643,10 @@
     
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
+        // 加入彈出式視窗
+        alert('報名成功！請至信箱查看確認副本。');
+        
+        // 保留原本的文字提示與表單重置功能
         msg.innerText = '報名成功，請至信箱查看確認副本。'; 
         msg.style.display = 'block'; 
         msg.className = 'success';
