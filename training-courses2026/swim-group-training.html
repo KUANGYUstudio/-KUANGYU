@@ -7,28 +7,28 @@
   
   <style>
     /* ==========================================
-       CSS 樣式：多巴胺亮藍綠沁涼版
+       CSS 樣式：粉藍綠輕莫蘭迪版
        ========================================== */
     
     :root {
-      /* 多巴胺水藍 (表單區與按鈕) */
-      --blue-main: #00c4cc;
-      --blue-dark: #007a80;
-      --blue-light: #e0f9fa;
-      --blue-border: #a3ebed;
-      --blue-bg: #f0fcfc;
+      /* 粉藍色系 (表單區與按鈕) */
+      --blue-main: #7ca8b8;
+      --blue-dark: #4b6d7a;
+      --blue-light: #f0f5f7;
+      --blue-border: #cad6db;
+      --blue-bg: #f7fafb;
 
-      /* 多巴胺薄荷綠 (課表區) */
-      --teal-main: #00d2a1;
-      --teal-dark: #008062;
-      --teal-light: #e0faf3;
-      --teal-border: #a3f0da;
-      --teal-bg: #f2fdf9;
+      /* 粉水綠色系 (課表區) */
+      --teal-main: #8abdb3;
+      --teal-dark: #527a73;
+      --teal-light: #f2f7f6;
+      --teal-border: #c8deda;
+      --teal-bg: #f8fbfb;
     }
 
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background-color: #ebf5f5; 
+      background-color: #f2f5f6; 
       color: #333333; 
       margin: 0; 
       padding: 60px 20px; 
@@ -42,7 +42,7 @@
       background: #ffffff; 
       padding: 50px 60px; 
       border-radius: 8px; 
-      box-shadow: 0 4px 24px rgba(0, 196, 204, 0.08); 
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03); 
     }
 
     @media (max-width: 600px) {
@@ -129,7 +129,7 @@
 
     .highlight-row td,
     .highlight-row td strong {
-      color: #005944 !important;
+      color: #3b5c56 !important;
     }
 
     /* 課表注意事項 */
@@ -197,7 +197,7 @@
       -webkit-appearance: none;
       appearance: none;
       padding: 12px 14px; 
-      border: 1px solid #d1dbde; 
+      border: 1px solid #d1dadd; 
       border-radius: 6px; 
       background-color: #fff;
       box-sizing: border-box; 
@@ -213,7 +213,7 @@
     textarea:focus {
       outline: none;
       border-color: var(--blue-main);
-      box-shadow: 0 0 0 3px rgba(0, 196, 204, 0.15);
+      box-shadow: 0 0 0 3px rgba(124, 168, 184, 0.15);
     }
     
     .option-group { 
@@ -294,20 +294,15 @@
       cursor: pointer; 
       margin-top: 36px; 
       transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0, 196, 204, 0.2);
     }
     
     button:hover {
-      background: #00aeb5;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(0, 196, 204, 0.3);
+      background: #6a95a4;
     }
 
     button:disabled { 
-      background: #c2e8e9; 
+      background: #c3d3d9; 
       cursor: not-allowed;
-      box-shadow: none;
-      transform: none;
     }
     
     #message { 
@@ -332,7 +327,7 @@
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 30, 30, 0.4);
+      background: rgba(0, 0, 0, 0.4);
       z-index: 1000;
       align-items: center;
       justify-content: center;
@@ -348,7 +343,7 @@
       padding: 30px 40px;
       border-radius: 8px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 196, 204, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       max-width: 80%;
       transform: translateY(-20px);
       transition: transform 0.3s ease;
@@ -387,7 +382,7 @@
       transition: background 0.2s;
     }
     .modal-btn:hover {
-      background: #00aeb5;
+      background: #6a95a4;
     }
   </style>
 </head>
