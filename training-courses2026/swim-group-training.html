@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 光聿游泳團練｜季度技術優化與特訓班</title>
+  
+  <style>
+    /* ==========================================
+       CSS 樣式：雙色莫蘭迪極簡版 (課表水綠 x 表單藍)
+       ========================================== */
+    
+    :root {
+      /* 莫蘭迪藍 (表單區與按鈕) */
+      --blue-main: #5b7c8d;
+      --blue-dark: #24333e;
+      --blue-light: #ebf0f3;
+      --blue-border: #dbe3e8;
+      --blue-bg: #f7fafc;
+
+      /* 莫蘭迪水綠 (課表區 - 沿用原 pink 變數名稱方便維護) */
+      --pink-main: #6e8b8e;
+      --pink-dark: #2c383a;
+      --pink-light: #edf2f2;
+      --pink-border: #dadfe0;
+      --pink-bg: #f8f9f9;
+    }
+
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background-color: #f4f6f8; 
+      color: #333333; 
+      margin: 0; 
+      padding: 60px 20px; 
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+    }
+    
+    .container { 
+      max-width: 680px; 
+      margin: 0 auto; 
+      background: #ffffff; 
+      padding: 50px 60px; 
+      border-radius: 8px; 
+      box-shadow: 0 4px 24px rgba(0,0,0,0.04); 
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 40px 24px; }
+      body { padding: 30px 15px; }
+    }
+    
+    /* 主標題 */
+    h1 { 
+      font-size: 26px; 
+      font-weight: 600; 
+      letter-spacing: 0.12em;
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--pink-dark);
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--pink-border);
+    }
+
+    /* ==========================================
+       上半部：課表區塊 (莫蘭迪水綠)
+       ========================================== */
+    .schedule-section {
+      margin-bottom: 50px;
+    }
+
+    .schedule-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--pink-dark);
+      margin-bottom: 16px;
+      letter-spacing: 0.08em;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--pink-border);
+      border-radius: 6px;
+      background-color: var(--pink-bg);
+    }
+
+    .schedule-table {
+      width: 100%;
+      min-width: 500px;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    .schedule-table th {
+      text-align: left;
+      background-color: var(--pink-border);
+      color: var(--pink-dark);
+      font-weight: 600;
+      padding: 14px 16px;
+      white-space: nowrap; 
+    }
+
+    .schedule-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--pink-border);
+      color: #444;
+      vertical-align: middle;
+    }
+    
+    .schedule-table td:first-child,
+    .schedule-table td:last-child {
+      white-space: nowrap;
+    }
+
+    .schedule-table td strong {
+      color: var(--pink-dark);
+      font-weight: 600;
+      display: block;
+    }
+
+    .sub-text {
+      display: block;
+      font-size: 13.5px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .highlight-row td,
+    .highlight-row td strong {
+      color: #2c383a !important;
+    }
+
+    /* 課表注意事項 */
+    .note { 
+      font-size: 13.5px; 
+      color: #777; 
+      margin-top: 14px;
+      line-height: 1.7; 
+    }
+
+    /* ==========================================
+       下半部：表單區塊 (莫蘭迪藍)
+       ========================================== */
+
+    .section-title { 
+      font-size: 15px; 
+      font-weight: 600; 
+      color: var(--blue-dark);
+      margin: 50px 0 24px; 
+      padding: 14px 18px;
+      background-color: var(--blue-light);
+      border-left: 4px solid var(--blue-main); 
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+    }
+    
+    .form-group { 
+      margin-bottom: 20px; 
+    }
+    
+    .form-row { 
+      display: flex; 
+      gap: 20px; 
+      margin-bottom: 20px; 
+    }
+    
+    .form-row .form-group { 
+      flex: 1; 
+      margin-bottom: 0; 
+    }
+
+    @media (max-width: 600px) {
+      .form-row { 
+        flex-direction: column; 
+        gap: 20px; 
+        margin-bottom: 20px; 
+      }
+    }
+    
+    label.field-label { 
+      display: block; 
+      font-weight: 600; 
+      font-size: 14px; 
+      color: #444;
+      margin-bottom: 6px; 
+    }
+    
+    input[type="text"], 
+    input[type="date"], 
+    input[type="email"] { 
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      padding: 12px 14px; 
+      border: 1px solid #d1d9e0; 
+      border-radius: 6px; 
+      background-color: #fff;
+      box-sizing: border-box; 
+      font-size: 15px;
+      color: #333;
+      transition: all 0.2s ease;
+    }
+    
+    input[type="text"]:focus, 
+    input[type="date"]:focus, 
+    input[type="email"]:focus {
+      outline: none;
+      border-color: var(--blue-main);
+      box-shadow: 0 0 0 3px rgba(91, 124, 141, 0.15);
+    }
+    
+    .option-group { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      margin-top: 4px;
+    }
+    
+    .option-group.row-layout {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* 付款方式專用網格 */
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .option-label { 
+      font-weight: 400; 
+      font-size: 15px; 
+      color: #333;
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      cursor: pointer;
+      margin-bottom: 0;
+    }
+    
+    .payment-full {
+      margin-top: 5px;
+    }
+
+    input[type="radio"], input[type="checkbox"] {
+      accent-color: var(--blue-main);
+      width: 18px; 
+      height: 18px;
+      cursor: pointer;
+      margin: 0;
+    }
+    
+    .dynamic-panel {
+      display: none;
+      padding: 20px; 
+      background: var(--blue-bg); 
+      border: 1px solid var(--blue-border);
+      border-radius: 6px; 
+      margin-bottom: 20px;
+      margin-top: 8px;
+    }
+
+    .bank-info { 
+      background: var(--blue-bg); 
+      border: 1px solid var(--blue-border); 
+      padding: 20px; 
+      border-radius: 6px; 
+      font-size: 14.5px; 
+      margin-top: 0; 
+      margin-bottom: 16px;
+      line-height: 1.8;
+      color: #444;
+    }
+    
+    button { 
+      width: 100%; 
+      padding: 16px; 
+      background: var(--blue-main);
+      color: #fff; 
+      border: none; 
+      border-radius: 6px; 
+      font-size: 16px; 
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      cursor: pointer; 
+      margin-top: 36px; 
+      transition: all 0.2s ease;
+    }
+    
+    button:hover {
+      background: #4a6675;
+    }
+
+    button:disabled { 
+      background: #c5d0d6; 
+      cursor: not-allowed;
+    }
+    
+    #message { 
+      margin-top: 20px; 
+      padding: 16px; 
+      text-align: center; 
+      border-radius: 6px; 
+      display: none; 
+      font-size: 15px;
+    }
+    
+    .success { 
+      background: #f0f4f2; 
+      color: #4a6c59; 
+      border: 1px solid #dce8e1;
+    }
+
+    /* ==========================================
+       自訂彈出視窗樣式
+       ========================================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      max-width: 80%;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.show .modal-content {
+      transform: translateY(0);
+    }
+    .modal-icon {
+      width: 50px;
+      height: 50px;
+      background: #f0f4f2;
+      color: #4a6c59;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 15px;
+    }
+    .modal-text {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 24px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    .modal-btn {
+      background: var(--blue-main);
+      color: #fff;
+      border: none;
+      padding: 10px 32px;
+      border-radius: 6px;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .modal-btn:hover {
+      background: #4a6675;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <h1>光聿游泳團練<br>季度技術優化班</h1>
+
+  <div class="schedule-section">
+    <div class="schedule-title">課程規劃總覽</div>
+    <div class="table-responsive">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>訓練週期</th>
+            <th>核心主軸</th>
+            <th>預期目標</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>第 1 - 4 週 (第 1 階段)</td>
+            <td>
+              <strong>水感建立與技術優化</strong>
+            </td>
+            <td>捷式效率提升、現場泳力測驗與分流</td>
+          </tr>
+          <tr>
+            <td>第 5 - 8 週 (第 2 階段)</td>
+            <td>
+              <strong>速度配速與續航力拆解</strong>
+            </td>
+            <td>建立穩定配速、雙水道分組專項訓練</td>
+          </tr>
+          <tr>
+            <td>第 9 - 12 週 (第 3 階段)</td>
+            <td>
+              <strong>完整課表執行與落實</strong>
+            </td>
+            <td>高效技術落實、長距離有氧耐力與突破</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      注意事項：<br>
+      ※ 訓練時間：每週四早上 06:30 - 08:00（每堂 90 分鐘，共 12 堂）。<br>
+      ※ 招生人數：8 人開班，12 人額滿（每水道僅控管 5-6 人，保證訓練品質）。<br>
+      ※ 請假機制：每期請假以 2 次為限，請務必於課程前一天提出（教練將提供線上課表供學員自主練習，不另行補課）。<br>
+      ※ 費用說明：本課程為一期預付季度制，開班後恕不接受單堂退費、請假扣款或轉讓他人。包水道費用已包含於學費中，進場不需額外支付門票。
+    </div>
+  </div>
+  
+  <form id="trainingForm">
+    
+    <div class="section-title">01 / 基本與保險資料</div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="field-label">姓名</label>
+        <input type="text" name="name" required>
+      </div>
+      <div class="form-group">
+        <label class="field-label">性別</label>
+        <div class="option-group row-layout">
+          <label class="option-label"><input type="radio" name="gender" value="男" required><span>男</span></label>
+          <label class="option-label"><input type="radio" name="gender" value="女"><span>女</span></label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="field-label">國籍</label>
+        <input type="text" name="nationality" value="台灣" required>
+      </div>
+      <div class="form-group">
+        <label class="field-label">出生年月日</label>
+        <input type="date" name="dob" required>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="field-label">身分證 / 護照號碼</label>
+      <input type="text" name="idNumber" required>
+    </div>
+    
+    <div class="form-group">
+      <label class="field-label">Email 信箱</label>
+      <input type="email" name="email" required>
+    </div>
+
+    <div class="section-title">02 / 緊急聯絡資訊</div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="field-label">聯絡人姓名</label>
+        <input type="text" name="emergName" required>
+      </div>
+      <div class="form-group">
+        <label class="field-label">關係</label>
+        <input type="text" name="emergRel" required>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="field-label">聯絡人電話</label>
+      <input type="text" name="emergPhone" required>
+    </div>
+
+    <div class="section-title">03 / 報名身分與門檻確認</div>
+    
+    <div class="form-group">
+      <label class="field-label">報名身分</label>
+      <div class="option-group row-layout">
+        <label class="option-label"><input type="radio" name="identity" value="光聿學員" required><span>光聿學員</span></label>
+        <label class="option-label"><input type="radio" name="identity" value="非學員"><span>非學員</span></label>
+      </div>
+    </div>
+    
+    <div id="planGroup" class="dynamic-panel">
+      <label class="field-label" style="color: var(--blue-dark);">選擇報名方案</label>
+      <div class="option-group" id="planOptions"></div>
+    </div>
+
+    <div class="form-group" style="margin-top: 24px;">
+      <label class="field-label">報名門檻自我確認</label>
+      <div class="option-group">
+        <label class="option-label">
+          <input type="checkbox" name="prerequisite" value="確認符合門檻" required>
+          <span style="font-size: 14.5px; color: #444;">我已確認具備【連續游完 200 公尺不休息】或【熟練捷式換氣】之能力。並理解第一堂課將進行現場泳力測驗與分流。</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section-title">04 / 付款方式</div>
+    
+    <div class="payment-grid">
+      <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" required><span>匯款</span></label>
+      <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
+      <label class="option-label"><input type="radio" name="paymentMethod" value="iPass Money"><span>iPass Money</span></label>
+      <label class="option-label"><input type="radio" name="paymentMethod" value="LINE PAY"><span>LINE PAY</span></label>
+    </div>
+    <div class="payment-full">
+      <label class="option-label"><input type="radio" name="paymentMethod" value="光聿學員扣堂數"><span>光聿學員扣堂數 (由教練扣除堂數)</span></label>
+    </div>
+    
+    <div id="bankDetailsGroup" class="dynamic-panel">
+      <div class="bank-info">
+        <strong style="color: var(--blue-dark); font-size: 15px;">匯款帳戶資訊</strong><br>
+        銀行：國泰世華 (013)<br>
+        帳號：269506136805<br>
+        戶名：費聿凡
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="field-label">轉帳帳號後五碼</label>
+        <input type="text" name="bankLastFive" placeholder="請輸入匯款帳號後五碼">
+      </div>
+    </div>
+
+    <div class="section-title">05 / 其他</div>
+    
+    <div class="form-group">
+      <label class="field-label">對本次游泳團練的期望或過去游泳經歷？（選填）</label>
+      <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
+    </div>
+    
+    <button type="submit" id="submitBtn">確認送出報名</button>
+    <div id="message"></div>
+    
+  </form>
+</div>
+
+<div class="modal-overlay" id="customAlert">
+  <div class="modal-content">
+    <div class="modal-icon">✓</div>
+    <div class="modal-text">報名成功！請至信箱查看報名確認信。</div>
+    <button class="modal-btn" onclick="closeAlert()">確定</button>
+  </div>
+</div>
+
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyyXKq170lsclsdNMy4C0L-AQGN93QXKQDG2A8emAwDQ2KMj51wl3qpaFmYDcXaib0wDg/exec';
+  
+  const form = document.getElementById('trainingForm');
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('message');
+
+  const planGroup = document.getElementById('planGroup');
+  const planOptionsDiv = document.getElementById('planOptions');
+  const bankDetailsGroup = document.getElementById('bankDetailsGroup');
+  const bankLastFiveInput = document.querySelector('input[name="bankLastFive"]');
+
+  function createOptionHtml(type, name, value, label, required = false) {
+    return `
+      <label class="option-label">
+        <input type="${type}" name="${name}" value="${value}" ${required ? 'required' : ''}>
+        <span>${label}</span>
+      </label>
+    `;
+  }
+
+  // 關閉自訂彈出視窗
+  function closeAlert() {
+    document.getElementById('customAlert').classList.remove('show');
+    setTimeout(() => {
+      document.getElementById('customAlert').style.display = 'none';
+    }, 300);
+  }
+
+  // 報名身分切換邏輯
+  document.querySelectorAll('input[name="identity"]').forEach(r => {
+    r.addEventListener('change', (e) => {
+      planGroup.style.display = 'block';
+      
+      if(e.target.value === '光聿學員') {
+        planOptionsDiv.innerHTML = `
+          ${createOptionHtml('radio', 'planRaw', '完整一期 12 堂課程（費用 $7,200）', '完整一期 12 堂課程（費用 $7,200）', true)}
+          ${createOptionHtml('radio', 'planRaw', '光聿學員扣堂數（由教練後續扣除）', '光聿學員扣堂數（由教練後續扣除）')}
+        `;
+      } else {
+        planOptionsDiv.innerHTML = `
+          ${createOptionHtml('radio', 'planRaw', '完整一期 12 堂課程（費用 $7,200）', '完整一期 12 堂課程（費用 $7,200）', true)}
+        `;
+      }
+    });
+  });
+
+  // 付款方式切換邏輯
+  document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
+    r.addEventListener('change', (e) => {
+      if (e.target.value === '匯款') {
+        bankDetailsGroup.style.display = 'block';
+        bankLastFiveInput.required = true;
+      } else {
+        bankDetailsGroup.style.display = 'none';
+        bankLastFiveInput.required = false;
+        bankLastFiveInput.value = '';
+      }
+    });
+  });
+
+  form.onsubmit = e => {
+    e.preventDefault();
+    
+    const planRawEl = document.querySelector('input[name="planRaw"]:checked');
+    if (!planRawEl) { alert('請選擇報名方案。'); return; }
+
+    btn.disabled = true; 
+    btn.innerText = '處理中...';
+    
+    const formData = new FormData(form); 
+    const identity = document.querySelector('input[name="identity"]').value;
+    formData.set('plan', `【${identity}】${planRawEl.value}`);
+    
+    fetch(scriptURL, { method: 'POST', body: formData })
+      .then(() => {
+        // 觸發自訂美化視窗
+        const modal = document.getElementById('customAlert');
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
+        
+        // 保留原本的文字提示與表單重置功能
+        msg.innerText = '報名成功，請至信箱查看報名確認信。'; 
+        msg.style.display = 'block'; 
+        msg.className = 'success';
+        form.reset(); 
+        planGroup.style.display = 'none';
+        bankDetailsGroup.style.display = 'none';
+        bankLastFiveInput.required = false;
+        btn.disabled = false; 
+        btn.innerText = '確認送出報名';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      })
+      .catch(() => {
+        alert('傳送失敗，請連繫工作室。'); 
+        btn.disabled = false; 
+        btn.innerText = '確認送出報名';
+      });
+  };
+</script>
+
+</body>
+</html>
