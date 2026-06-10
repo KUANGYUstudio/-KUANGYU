@@ -7,18 +7,18 @@
   
   <style>
     /* ==========================================
-       CSS 樣式：雙色莫蘭迪極簡版 (課表藍 x 表單粉)
+       CSS 樣式：雙色莫蘭迪極簡版 (課表粉 x 表單藍)
        ========================================== */
     
     :root {
-      /* 莫蘭迪藍 (課表區) */
+      /* 莫蘭迪藍 (表單區與按鈕) */
       --blue-main: #6b8293;
       --blue-dark: #2c3e50;
       --blue-light: #eef2f5;
       --blue-border: #e1e5e9;
       --blue-bg: #fafbfc;
 
-      /* 莫蘭迪桃紅 (表單區) */
+      /* 莫蘭迪桃紅 (課表區) */
       --pink-main: #b8838a;
       --pink-dark: #4a3336;
       --pink-light: #f5ebeb;
@@ -57,13 +57,13 @@
       letter-spacing: 0.12em;
       text-align: center;
       margin-bottom: 40px;
-      color: var(--blue-dark);
+      color: var(--pink-dark);
       padding-bottom: 20px;
-      border-bottom: 1px solid var(--blue-border);
+      border-bottom: 1px solid var(--pink-border);
     }
 
     /* ==========================================
-       上半部：課表區塊 (莫蘭迪藍)
+       上半部：課表區塊 (莫蘭迪桃紅)
        ========================================== */
     .schedule-section {
       margin-bottom: 50px;
@@ -72,7 +72,7 @@
     .schedule-title {
       font-size: 16px;
       font-weight: 600;
-      color: var(--blue-dark);
+      color: var(--pink-dark);
       margin-bottom: 16px;
       letter-spacing: 0.08em;
     }
@@ -81,9 +81,9 @@
       width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--blue-border);
+      border: 1px solid var(--pink-border);
       border-radius: 6px;
-      background-color: var(--blue-bg);
+      background-color: var(--pink-bg);
     }
 
     .schedule-table {
@@ -95,8 +95,8 @@
 
     .schedule-table th {
       text-align: left;
-      background-color: var(--blue-border);
-      color: var(--blue-dark);
+      background-color: var(--pink-border);
+      color: var(--pink-dark);
       font-weight: 600;
       padding: 14px 16px;
       white-space: nowrap; 
@@ -104,7 +104,7 @@
 
     .schedule-table td {
       padding: 14px 16px;
-      border-bottom: 1px solid var(--blue-border);
+      border-bottom: 1px solid var(--pink-border);
       color: #444;
       vertical-align: middle;
     }
@@ -115,7 +115,7 @@
     }
 
     .schedule-table td strong {
-      color: var(--blue-dark);
+      color: var(--pink-dark);
       font-weight: 600;
       display: block;
     }
@@ -128,7 +128,7 @@
     }
 
     .highlight-row {
-      background-color: var(--blue-light) !important;
+      background-color: var(--pink-light) !important;
     }
 
     /* 課表注意事項 */
@@ -140,17 +140,17 @@
     }
 
     /* ==========================================
-       下半部：表單區塊 (莫蘭迪桃紅)
+       下半部：表單區塊 (莫蘭迪藍)
        ========================================== */
 
     .section-title { 
       font-size: 15px; 
       font-weight: 600; 
-      color: var(--pink-dark);
+      color: var(--blue-dark);
       margin: 50px 0 24px; 
       padding: 14px 18px;
-      background-color: var(--pink-light);
-      border-left: 4px solid var(--pink-main); 
+      background-color: var(--blue-light);
+      border-left: 4px solid var(--blue-main); 
       border-radius: 4px;
       letter-spacing: 0.08em;
     }
@@ -204,8 +204,8 @@
     input[type="date"]:focus, 
     input[type="email"]:focus {
       outline: none;
-      border-color: var(--pink-main);
-      box-shadow: 0 0 0 3px rgba(184, 131, 138, 0.15);
+      border-color: var(--blue-main);
+      box-shadow: 0 0 0 3px rgba(107, 130, 147, 0.15);
     }
     
     .option-group { 
@@ -233,7 +233,7 @@
     }
 
     input[type="radio"], input[type="checkbox"] {
-      accent-color: var(--pink-main);
+      accent-color: var(--blue-main);
       width: 18px; 
       height: 18px;
       cursor: pointer;
@@ -243,16 +243,16 @@
     .dynamic-panel {
       display: none;
       padding: 20px; 
-      background: var(--pink-bg); 
-      border: 1px solid var(--pink-border);
+      background: var(--blue-bg); 
+      border: 1px solid var(--blue-border);
       border-radius: 6px; 
       margin-bottom: 20px;
       margin-top: 8px;
     }
 
     .bank-info { 
-      background: var(--pink-bg); 
-      border: 1px solid var(--pink-border); 
+      background: var(--blue-bg); 
+      border: 1px solid var(--blue-border); 
       padding: 20px; 
       border-radius: 6px; 
       font-size: 14.5px; 
@@ -281,7 +281,7 @@
     }
 
     button:disabled { 
-      background: #d6c5c7; 
+      background: #c5d0d6; 
       cursor: not-allowed;
     }
     
@@ -295,9 +295,9 @@
     }
     
     .success { 
-      background: #f7eff0; 
-      color: var(--pink-dark); 
-      border: 1px solid var(--pink-border);
+      background: #f0f4f2; 
+      color: #4a6c59; 
+      border: 1px solid #dce8e1;
     }
   </style>
 </head>
@@ -443,13 +443,13 @@
     </div>
     
     <div id="planGroup" class="dynamic-panel">
-      <label class="field-label" style="color: var(--pink-dark);">報名方案</label>
+      <label class="field-label" style="color: var(--blue-dark);">報名方案</label>
       <div class="option-group" id="planOptions">
         </div>
     </div>
     
     <div id="singleDatesGroup" class="dynamic-panel">
-      <label class="field-label" style="color: var(--pink-dark);">請勾選單次參加日期</label>
+      <label class="field-label" style="color: var(--blue-dark);">請勾選單次參加日期</label>
       <div class="option-group">
         <label class="option-label"><input type="checkbox" name="singleDates" value="6/20"><span>6/20 (六) 期初測驗＋風櫃嘴</span></label>
         <label class="option-label"><input type="checkbox" name="singleDates" value="8/8"><span>8/8 (六) 碧山巖／汐萬路</span></label>
@@ -466,14 +466,14 @@
     </div>
     
     <div id="taipingDetailsGroup" class="dynamic-panel">
-      <label class="field-label" style="color: var(--pink-dark);">偏好日期</label>
+      <label class="field-label" style="color: var(--blue-dark);">偏好日期</label>
       <div class="option-group row-layout" style="margin-bottom: 20px;">
         <label class="option-label"><input type="radio" name="taipingDate" value="偏好 7/4"><span>7/4</span></label>
         <label class="option-label"><input type="radio" name="taipingDate" value="偏好 8/8"><span>8/8</span></label>
         <label class="option-label"><input type="radio" name="taipingDate" value="皆可"><span>皆可</span></label>
       </div>
 
-      <label class="field-label" style="color: var(--pink-dark);">保母車需求</label>
+      <label class="field-label" style="color: var(--blue-dark);">保母車需求</label>
       <div class="option-group">
         <label class="option-label"><input type="radio" name="needVan" value="需要保母車"><span>需要教練協助安排，7人成車</span></label>
         <label class="option-label"><input type="radio" name="needVan" value="不需要，自行前往"><span>不需要，自行前往</span></label>
@@ -499,7 +499,7 @@
     </div>
     
     <div class="bank-info">
-      <strong style="color: var(--pink-dark); font-size: 15px;">匯款帳戶資訊</strong><br>
+      <strong style="color: var(--blue-dark); font-size: 15px;">匯款帳戶資訊</strong><br>
       銀行：國泰世華 (013)<br>
       帳號：269506136805<br>
       戶名：費聿凡
