@@ -278,45 +278,6 @@
       line-height: 1.8;
       color: #444;
     }
-    
-    button { 
-      width: 100%; 
-      padding: 16px; 
-      background: var(--blue-main);
-      color: #fff; 
-      border: none; 
-      border-radius: 6px; 
-      font-size: 16px; 
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      cursor: pointer; 
-      margin-top: 36px; 
-      transition: all 0.2s ease;
-    }
-    
-    button:hover {
-      background: #5a7080;
-    }
-
-    button:disabled { 
-      background: #c5d0d6; 
-      cursor: not-allowed;
-    }
-    
-    #message { 
-      margin-top: 20px; 
-      padding: 16px; 
-      text-align: center; 
-      border-radius: 6px; 
-      display: none; 
-      font-size: 15px;
-    }
-    
-    .success { 
-      background: #f0f4f2; 
-      color: #4a6c59; 
-      border: 1px solid #dce8e1;
-    }
 
     /* ==========================================
        自訂彈出視窗樣式
@@ -381,6 +342,86 @@
     }
     .modal-btn:hover {
       background: #5a7080;
+    }
+
+    /* ==========================================
+       折疊選單樣式 (安全聲明專用)
+       ========================================== */
+    .accordion-header {
+      background-color: var(--blue-light);
+      color: var(--blue-dark);
+      padding: 16px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      border: 1px solid var(--blue-border);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.2s ease, border-radius 0.2s ease;
+    }
+    .accordion-header:hover {
+      background-color: #e2e8ed;
+    }
+    .accordion-header.active {
+      border-radius: 6px 6px 0 0;
+      border-bottom: none;
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    .accordion-inner {
+      padding: 20px;
+      border: 1px solid var(--blue-border);
+      border-top: none;
+      background-color: #fff;
+      border-radius: 0 0 6px 6px;
+      font-size: 14px;
+      color: #444;
+      line-height: 1.8;
+    }
+
+    /* 送出按鈕 */
+    button[type="submit"] { 
+      width: 100%; 
+      padding: 16px; 
+      background: var(--blue-main);
+      color: #fff; 
+      border: none; 
+      border-radius: 6px; 
+      font-size: 16px; 
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      cursor: pointer; 
+      margin-top: 36px; 
+      transition: all 0.2s ease;
+    }
+    
+    button[type="submit"]:hover {
+      background: #5a7080;
+    }
+
+    button[type="submit"]:disabled { 
+      background: #c5d0d6; 
+      cursor: not-allowed;
+    }
+    
+    #message { 
+      margin-top: 20px; 
+      padding: 16px; 
+      text-align: center; 
+      border-radius: 6px; 
+      display: none; 
+      font-size: 15px;
+    }
+    
+    .success { 
+      background: #f0f4f2; 
+      color: #4a6c59; 
+      border: 1px solid #dce8e1;
     }
   </style>
 </head>
@@ -604,7 +645,24 @@
       <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
     </div>
 
-    <div class="section-title">06 / 請假與退費規範聲明</div>
+    <div class="section-title">06 / 安全、請假與退費規範聲明</div>
+
+    <div style="margin-bottom: 20px;">
+      <div class="accordion-header" id="safetyBtn">
+        <span>戶外騎乘安全與權益聲明（點此展開閱讀）</span>
+        <span id="safetyIcon">＋</span>
+      </div>
+      <div class="accordion-content" id="safetyContent">
+        <div class="accordion-inner">
+          <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">1. 裝備與安全強制規範</strong>
+          戶外課程皆於開放道路進行，請務必全程佩戴安全帽。出發前請確認自身車況（煞車、變速、胎壓正常），並隨車攜帶基本補胎工具與內胎，以確保基本騎乘安全。<br><br>
+          <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">2. 健康聲明與風險自負</strong>
+          請評估自身健康狀況良好，無隱瞞不適合高強度耐力運動之心血管病史。戶外騎乘具有潛在交通風險，工作室將協助造冊投保，惟學員仍須對自身騎乘行為負起最終安全責任。<br><br>
+          <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">3. 影像與肖像權授權</strong>
+          課程與移地訓練過程中，教練與工作人員將進行側拍紀錄。完成報名即代表同意相關照片與影片授權光聿工作室用於社群分享、活動紀錄或宣傳使用。
+        </div>
+      </div>
+    </div>
     
     <div class="form-group" style="background: var(--blue-bg); border: 1px solid var(--blue-border); padding: 20px; border-radius: 6px; font-size: 14px; color: #444; line-height: 1.8; margin-bottom: 20px;">
       
@@ -640,7 +698,7 @@
     <div class="form-group" style="margin-bottom: 30px;">
       <label class="option-label">
         <input type="checkbox" name="agreeTerms" required style="width: 20px; height: 20px; accent-color: var(--blue-main);">
-        <span style="font-weight: 600; color: var(--blue-dark); font-size: 15px; margin-left: 4px;">我已詳閱並同意上述請假與退費規範</span>
+        <span style="font-weight: 600; color: var(--blue-dark); font-size: 15px; margin-left: 4px;">我已詳閱並同意上述安全聲明及請假退費規範</span>
       </label>
     </div>
     
@@ -687,6 +745,24 @@
     setTimeout(() => {
       document.getElementById('customAlert').style.display = 'none';
     }, 300);
+  }
+
+  // 安全聲明下拉滑動邏輯 (Accordion)
+  const safetyBtn = document.getElementById('safetyBtn');
+  const safetyContent = document.getElementById('safetyContent');
+  const safetyIcon = document.getElementById('safetyIcon');
+
+  if (safetyBtn) {
+    safetyBtn.addEventListener('click', () => {
+      safetyBtn.classList.toggle('active');
+      if (safetyContent.style.maxHeight) {
+        safetyContent.style.maxHeight = null;
+        safetyIcon.innerText = '＋';
+      } else {
+        safetyContent.style.maxHeight = safetyContent.scrollHeight + "px";
+        safetyIcon.innerText = '－';
+      }
+    });
   }
 
   document.querySelectorAll('input[name="identity"]').forEach(r => {
@@ -793,6 +869,14 @@
         taipingDetailsGroup.style.display = 'none';
         bankDetailsGroup.style.display = 'none';
         bankLastFiveInput.required = false;
+        
+        // 把安全聲明下拉選單收合回去
+        if (safetyContent.style.maxHeight) {
+          safetyBtn.classList.remove('active');
+          safetyContent.style.maxHeight = null;
+          safetyIcon.innerText = '＋';
+        }
+
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
         window.scrollTo({ top: 0, behavior: 'smooth' });
