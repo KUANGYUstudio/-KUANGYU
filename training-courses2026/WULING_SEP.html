@@ -50,6 +50,17 @@
       .container { padding: 40px 24px; }
       body { padding: 30px 15px; }
     }
+
+    /* Logo 樣式 */
+    .main-logo { 
+      display: block; 
+      margin: 0 auto 5px; 
+      width: 40px; 
+      height: auto; 
+    }
+    @media (min-width: 751px) { 
+      .main-logo { width: 60px; margin-bottom: 10px; } 
+    }
     
     /* 主標題 */
     h1 { 
@@ -57,6 +68,7 @@
       font-weight: 600; 
       letter-spacing: 0.12em;
       text-align: center;
+      margin-top: 0;
       margin-bottom: 40px;
       color: var(--pink-dark);
       padding-bottom: 20px;
@@ -287,11 +299,10 @@
       border-radius: 8px;
       background-color: #fff;
       transition: all 0.3s ease;
-      margin-bottom: 12px; /* 縮減外部距離 */
+      margin-bottom: 12px;
       overflow: hidden;
     }
 
-    /* 勾選後的變色狀態 */
     .policy-box.is-checked {
       background-color: var(--blue-tint);
       border-color: var(--blue-main);
@@ -302,10 +313,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 20px; /* 縮減內部空間 */
+      padding: 14px 20px;
     }
 
-    /* 自訂核取方塊的容器 */
     .custom-checkbox-container {
       display: flex;
       align-items: center;
@@ -315,7 +325,6 @@
       flex: 1;
     }
 
-    /* 隱藏原生方塊 */
     .custom-checkbox-container input[type="checkbox"] {
       position: absolute;
       opacity: 0;
@@ -324,7 +333,6 @@
       width: 0;
     }
 
-    /* 自訂外框 */
     .custom-checkmark {
       height: 22px;
       width: 22px;
@@ -339,13 +347,11 @@
       flex-shrink: 0;
     }
 
-    /* 勾選後的方塊樣式 */
     .policy-box.is-checked .custom-checkmark {
       background-color: var(--blue-main);
       border-color: var(--blue-main);
     }
 
-    /* 打勾的圖案 */
     .custom-checkmark:after {
       content: "";
       display: none;
@@ -361,7 +367,6 @@
       display: block;
     }
 
-    /* 文字樣式 */
     .checkbox-text {
       font-weight: 600;
       color: var(--blue-dark);
@@ -369,7 +374,6 @@
       line-height: 1.4;
     }
 
-    /* 右側的展開按鈕 */
     .expand-toggle {
       cursor: pointer;
       color: var(--blue-main);
@@ -389,7 +393,6 @@
       background-color: rgba(107, 130, 147, 0.15);
     }
 
-    /* 下拉內容區塊 */
     .policy-content {
       max-height: 0;
       overflow: hidden;
@@ -397,7 +400,6 @@
       border-top: 1px solid transparent;
     }
 
-    /* 展開時顯示上方分隔線 */
     .policy-box.is-expanded .policy-content {
       border-top-color: var(--blue-border);
       transition: max-height 0.4s ease-in-out;
@@ -412,7 +414,7 @@
     }
 
     /* ==========================================
-       按鈕與提示訊息
+       版權與按鈕
        ========================================== */
     button[type="submit"] { 
       width: 100%; 
@@ -426,7 +428,7 @@
       letter-spacing: 0.15em;
       cursor: pointer; 
       margin-top: 36px;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       transition: all 0.2s ease;
     }
     
@@ -439,6 +441,14 @@
       cursor: not-allowed;
     }
     
+    .footer-copy {
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+      letter-spacing: 0.05em;
+      margin-top: 20px;
+    }
+
     #message { 
       margin-top: 10px; 
       padding: 16px; 
@@ -522,6 +532,7 @@
 
 <div class="container">
   
+  <img src="../power-training/logo_icon.png" alt="KUANGYU Logo" class="main-logo">
   <h1>2026崇越武嶺盃<br>爬坡特訓</h1>
 
   <div class="schedule-section">
@@ -588,7 +599,7 @@
       ※ 太平山移地訓練與雪巴仙山站為自由參加。<br>
       ※ 太平山移地訓練可由教練統一安排保母車。<br>
       ※ 雪巴仙山站可自行報名或一起團報。<br>
-      ※ 雨備方案：如遇天候不佳，則轉為室內功率課。
+      ※ 雨備方案：如遇天候不佳，則轉為室內功率訓練。
     </div>
   </div>
   
@@ -617,7 +628,7 @@
       </div>
       <div class="form-group">
         <label class="field-label">出生年月日</label>
-        <input type="date" name="dob" required>
+        <input type="text" name="dob" placeholder="年 / 月 / 日" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" required>
       </div>
     </div>
     
@@ -824,6 +835,10 @@
 
     <button type="submit" id="submitBtn">確認送出報名</button>
     <div id="message"></div>
+
+    <div class="footer-copy">
+      Copyright &copy; 2026 光聿 KUANGYU
+    </div>
     
   </form>
 </div>
