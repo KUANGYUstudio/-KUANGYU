@@ -17,6 +17,7 @@
       --blue-light: #eef2f5;
       --blue-border: #e1e5e9;
       --blue-bg: #fafbfc;
+      --blue-tint: #f0f4f7; /* 勾選後的微藍底色 */
 
       /* 莫蘭迪桃紅 (課表區) */
       --pink-main: #b8838a;
@@ -280,8 +281,179 @@
     }
 
     /* ==========================================
-       自訂彈出視窗樣式
+       銀行級自訂條款卡片 (Checkbox + Accordion)
        ========================================== */
+    .policy-box {
+      border: 1px solid #d1d9e0;
+      border-radius: 8px;
+      background-color: #fff;
+      transition: all 0.3s ease;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+
+    /* 勾選後的變色狀態 */
+    .policy-box.is-checked {
+      background-color: var(--blue-tint);
+      border-color: var(--blue-main);
+      box-shadow: 0 2px 10px rgba(107, 130, 147, 0.1);
+    }
+
+    .policy-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+    }
+
+    /* 自訂核取方塊的容器 */
+    .custom-checkbox-container {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+      flex: 1;
+    }
+
+    /* 隱藏原生方塊 */
+    .custom-checkbox-container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    /* 自訂外框 */
+    .custom-checkmark {
+      height: 22px;
+      width: 22px;
+      background-color: #fff;
+      border: 2px solid #c5d0d6;
+      border-radius: 5px;
+      margin-right: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    /* 勾選後的方塊樣式 */
+    .policy-box.is-checked .custom-checkmark {
+      background-color: var(--blue-main);
+      border-color: var(--blue-main);
+    }
+
+    /* 打勾的圖案 (利用邊框旋轉製作) */
+    .custom-checkmark:after {
+      content: "";
+      display: none;
+      width: 5px;
+      height: 11px;
+      border: solid white;
+      border-width: 0 2.5px 2.5px 0;
+      transform: rotate(45deg);
+      margin-bottom: 2px;
+    }
+
+    .policy-box.is-checked .custom-checkmark:after {
+      display: block;
+    }
+
+    /* 文字樣式 */
+    .checkbox-text {
+      font-weight: 600;
+      color: var(--blue-dark);
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    /* 右側的展開按鈕 */
+    .expand-toggle {
+      cursor: pointer;
+      color: var(--blue-main);
+      font-weight: bold;
+      font-size: 20px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-left: 10px;
+      transition: background-color 0.2s;
+    }
+
+    .expand-toggle:hover {
+      background-color: rgba(107, 130, 147, 0.15);
+    }
+
+    /* 下拉內容區塊 */
+    .policy-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+      border-top: 1px solid transparent;
+    }
+
+    /* 展開時顯示上方分隔線 */
+    .policy-box.is-expanded .policy-content {
+      border-top-color: var(--blue-border);
+      transition: max-height 0.4s ease-in-out;
+    }
+
+    .policy-inner {
+      padding: 24px 20px;
+      font-size: 14px;
+      color: #444;
+      line-height: 1.8;
+      background-color: var(--blue-bg);
+    }
+
+    /* ==========================================
+       按鈕與提示訊息
+       ========================================== */
+    button[type="submit"] { 
+      width: 100%; 
+      padding: 16px; 
+      background: var(--blue-main);
+      color: #fff; 
+      border: none; 
+      border-radius: 6px; 
+      font-size: 16px; 
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      cursor: pointer; 
+      transition: all 0.2s ease;
+    }
+    
+    button[type="submit"]:hover {
+      background: #5a7080;
+    }
+
+    button[type="submit"]:disabled { 
+      background: #c5d0d6; 
+      cursor: not-allowed;
+    }
+    
+    #message { 
+      margin-top: 20px; 
+      padding: 16px; 
+      text-align: center; 
+      border-radius: 6px; 
+      display: none; 
+      font-size: 15px;
+    }
+    
+    .success { 
+      background: #f0f4f2; 
+      color: #4a6c59; 
+      border: 1px solid #dce8e1;
+    }
+
+    /* 自訂彈出視窗樣式 */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -342,86 +514,6 @@
     }
     .modal-btn:hover {
       background: #5a7080;
-    }
-
-    /* ==========================================
-       折疊選單樣式 (安全聲明專用)
-       ========================================== */
-    .accordion-header {
-      background-color: var(--blue-light);
-      color: var(--blue-dark);
-      padding: 16px 20px;
-      font-size: 15px;
-      font-weight: 600;
-      border: 1px solid var(--blue-border);
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background-color 0.2s ease, border-radius 0.2s ease;
-    }
-    .accordion-header:hover {
-      background-color: #e2e8ed;
-    }
-    .accordion-header.active {
-      border-radius: 6px 6px 0 0;
-      border-bottom: none;
-    }
-    .accordion-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-    }
-    .accordion-inner {
-      padding: 20px;
-      border: 1px solid var(--blue-border);
-      border-top: none;
-      background-color: #fff;
-      border-radius: 0 0 6px 6px;
-      font-size: 14px;
-      color: #444;
-      line-height: 1.8;
-    }
-
-    /* 送出按鈕 */
-    button[type="submit"] { 
-      width: 100%; 
-      padding: 16px; 
-      background: var(--blue-main);
-      color: #fff; 
-      border: none; 
-      border-radius: 6px; 
-      font-size: 16px; 
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      cursor: pointer; 
-      margin-top: 36px; 
-      transition: all 0.2s ease;
-    }
-    
-    button[type="submit"]:hover {
-      background: #5a7080;
-    }
-
-    button[type="submit"]:disabled { 
-      background: #c5d0d6; 
-      cursor: not-allowed;
-    }
-    
-    #message { 
-      margin-top: 20px; 
-      padding: 16px; 
-      text-align: center; 
-      border-radius: 6px; 
-      display: none; 
-      font-size: 15px;
-    }
-    
-    .success { 
-      background: #f0f4f2; 
-      color: #4a6c59; 
-      border: 1px solid #dce8e1;
     }
   </style>
 </head>
@@ -645,61 +737,52 @@
       <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
     </div>
 
-    <div class="section-title">06 / 安全、請假與退費規範聲明</div>
+    <div class="section-title">06 / 同意聲明與規範</div>
 
-    <div style="margin-bottom: 20px;">
-      <div class="accordion-header" id="safetyBtn">
-        <span>戶外騎乘安全與權益聲明（點此展開閱讀）</span>
-        <span id="safetyIcon">＋</span>
+    <div class="policy-box" id="policyBox">
+      
+      <div class="policy-header">
+        <label class="custom-checkbox-container">
+          <input type="checkbox" name="agreeTerms" id="agreeCheckbox" required>
+          <span class="custom-checkmark"></span>
+          <span class="checkbox-text">我已詳閱並同意安全、請假與退費規範</span>
+        </label>
+        <div class="expand-toggle" id="expandBtn" title="點擊展開/收合細則">
+          <span id="expandIcon" style="line-height: 1;">＋</span>
+        </div>
       </div>
-      <div class="accordion-content" id="safetyContent">
-        <div class="accordion-inner">
+
+      <div class="policy-content" id="policyContent">
+        <div class="policy-inner">
+          <strong style="color: var(--blue-dark); font-size: 15px; display: block; margin-bottom: 8px;">【戶外騎乘安全聲明】</strong>
           <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">1. 裝備與安全強制規範</strong>
           戶外課程皆於開放道路進行，請務必全程佩戴安全帽。出發前請確認自身車況（煞車、變速、胎壓正常），並隨車攜帶基本補胎工具與內胎，以確保基本騎乘安全。<br><br>
           <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">2. 健康聲明與風險自負</strong>
           請評估自身健康狀況良好，無隱瞞不適合高強度耐力運動之心血管病史。戶外騎乘具有潛在交通風險，工作室將協助造冊投保，惟學員仍須對自身騎乘行為負起最終安全責任。<br><br>
           <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">3. 影像與肖像權授權</strong>
-          課程與移地訓練過程中，教練與工作人員將進行側拍紀錄。完成報名即代表同意相關照片與影片授權光聿工作室用於社群分享、活動紀錄或宣傳使用。
+          課程與移地訓練過程中，教練與工作人員將進行側拍紀錄。完成報名即代表同意相關照片與影片授權光聿工作室用於社群分享、活動紀錄或宣傳使用。<strong>若有特殊考量不便入鏡，請務必於課前主動告知教練。</strong>
+          
+          <div style="border-top: 1px dashed #d1d9e0; margin: 20px 0;"></div>
+
+          <strong style="color: var(--blue-dark); font-size: 15px; display: block; margin-bottom: 8px;">【課前聲明與退費機制】</strong>
+          所有週末課程日期皆已提早公告定案，相關行政作業與保險均需提前安排，請務必提早保留時間。因課程為戶外團騎，除不可抗力之緊急狀況外，因個人因素請假恕無法提供補課或由他人遞補。<br><br>
+
+          <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ 爬坡特訓班（全報方案）</strong>
+          因享有專屬優惠，自 6/20 首次課程開始後，恕不接受中途退費或退還堂數。<br><br>
+
+          <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ （非學員）單次課程退費</strong>
+          以該次課程日期為基準。於課程 7 天前取消者，退還該次費用之 90%；於課程 3 天前取消者，退還 50%；於課程 3 天內取消者，恕不予退費。<br><br>
+
+          <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ （光聿學員）單次堂數退還</strong>
+          於課程 7 天前通知取消者，免扣該次堂數。於課程 7 天內通知取消者，因相關資源皆已配置定案，將照常扣除該次堂數。
+
+          <div style="border-top: 1px dashed #d1d9e0; margin: 20px 0 16px;"></div>
+          
+          <div style="font-weight: 600; color: var(--blue-dark); text-align: center;">
+            如有任何疑問或困難，請務必告知教練！
+          </div>
         </div>
       </div>
-    </div>
-    
-    <div class="form-group" style="background: var(--blue-bg); border: 1px solid var(--blue-border); padding: 20px; border-radius: 6px; font-size: 14px; color: #444; line-height: 1.8; margin-bottom: 20px;">
-      
-      <div style="font-weight: 600; color: var(--blue-dark); margin-bottom: 12px;">
-        【課前聲明】<br>
-        所有週末課程日期皆已提早公告定案，相關行政作業與保險均需提前安排，請務必提早保留時間。因課程為戶外團騎，除不可抗力之緊急狀況外，因個人因素請假恕無法提供補課或由他人遞補。各方案之退費與取消機制請見下方說明。
-      </div>
-      
-      <div style="border-top: 1px dashed #d1d9e0; margin-bottom: 14px;"></div>
-
-      <div style="margin-bottom: 14px;">
-        <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ 爬坡特訓班（全報方案）</strong>
-        因享有專屬優惠，自 6/20 首次課程開始後，恕不接受中途退費或退還堂數。
-      </div>
-
-      <div style="margin-bottom: 14px;">
-        <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ （非學員）單次課程退費</strong>
-        以該次課程日期為基準。於課程 7 天前取消者，退還該次費用之 90%；於課程 3 天前取消者，退還 50%；於課程 3 天內取消者，恕不予退費。
-      </div>
-
-      <div style="margin-bottom: 14px;">
-        <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ （光聿學員）單次堂數退還</strong>
-        於課程 7 天前通知取消者，免扣該次堂數。於課程 7 天內通知取消者，因相關資源皆已配置定案，將照常扣除該次堂數。
-      </div>
-
-      <div style="border-top: 1px dashed #d1d9e0; margin-top: 12px; margin-bottom: 12px;"></div>
-      
-      <div style="font-weight: 600; color: var(--blue-dark);">
-        如有任何疑問或困難，請務必告知教練！
-      </div>
-    </div>
-
-    <div class="form-group" style="margin-bottom: 30px;">
-      <label class="option-label">
-        <input type="checkbox" name="agreeTerms" required style="width: 20px; height: 20px; accent-color: var(--blue-main);">
-        <span style="font-weight: 600; color: var(--blue-dark); font-size: 15px; margin-left: 4px;">我已詳閱並同意上述安全聲明及請假退費規範</span>
-      </label>
     </div>
     
     <button type="submit" id="submitBtn">確認送出報名</button>
@@ -747,23 +830,33 @@
     }, 300);
   }
 
-  // 安全聲明下拉滑動邏輯 (Accordion)
-  const safetyBtn = document.getElementById('safetyBtn');
-  const safetyContent = document.getElementById('safetyContent');
-  const safetyIcon = document.getElementById('safetyIcon');
+  // 銀行級動態條款卡片邏輯
+  const agreeCheckbox = document.getElementById('agreeCheckbox');
+  const policyBox = document.getElementById('policyBox');
+  const expandBtn = document.getElementById('expandBtn');
+  const policyContent = document.getElementById('policyContent');
+  const expandIcon = document.getElementById('expandIcon');
 
-  if (safetyBtn) {
-    safetyBtn.addEventListener('click', () => {
-      safetyBtn.classList.toggle('active');
-      if (safetyContent.style.maxHeight) {
-        safetyContent.style.maxHeight = null;
-        safetyIcon.innerText = '＋';
-      } else {
-        safetyContent.style.maxHeight = safetyContent.scrollHeight + "px";
-        safetyIcon.innerText = '－';
-      }
-    });
-  }
+  // 處理勾選變色
+  agreeCheckbox.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      policyBox.classList.add('is-checked');
+    } else {
+      policyBox.classList.remove('is-checked');
+    }
+  });
+
+  // 處理點擊「＋」號展開收合
+  expandBtn.addEventListener('click', () => {
+    policyBox.classList.toggle('is-expanded');
+    if (policyContent.style.maxHeight) {
+      policyContent.style.maxHeight = null;
+      expandIcon.innerText = '＋';
+    } else {
+      policyContent.style.maxHeight = policyContent.scrollHeight + "px";
+      expandIcon.innerText = '－';
+    }
+  });
 
   document.querySelectorAll('input[name="identity"]').forEach(r => {
     r.addEventListener('change', (e) => {
@@ -854,15 +947,10 @@
     
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        // 觸發自訂美化視窗
         const modal = document.getElementById('customAlert');
         modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('show'), 10);
         
-        // 保留原本的文字提示與表單重置功能
-        msg.innerText = '報名成功，請至信箱查看報名確認信。'; 
-        msg.style.display = 'block'; 
-        msg.className = 'success';
         form.reset(); 
         planGroup.style.display = 'none';
         singleDatesGroup.style.display = 'none';
@@ -870,11 +958,12 @@
         bankDetailsGroup.style.display = 'none';
         bankLastFiveInput.required = false;
         
-        // 把安全聲明下拉選單收合回去
-        if (safetyContent.style.maxHeight) {
-          safetyBtn.classList.remove('active');
-          safetyContent.style.maxHeight = null;
-          safetyIcon.innerText = '＋';
+        // 恢復同意卡片的原始未勾選狀態
+        policyBox.classList.remove('is-checked');
+        if (policyContent.style.maxHeight) {
+          policyBox.classList.remove('is-expanded');
+          policyContent.style.maxHeight = null;
+          expandIcon.innerText = '＋';
         }
 
         btn.disabled = false; 
