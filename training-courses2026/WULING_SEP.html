@@ -25,6 +25,9 @@
       --pink-light: #f5ebeb;
       --pink-border: #ebdada;
       --pink-bg: #fcf9f9;
+      
+      /* 錯誤提示紅 */
+      --error-color: #d6556d;
     }
 
     body { 
@@ -225,6 +228,18 @@
       border-color: var(--blue-main);
       box-shadow: 0 0 0 3px rgba(107, 130, 147, 0.15);
     }
+
+    /* 錯誤驗證樣式 (紅框) */
+    input.error-border {
+      border-color: var(--error-color) !important;
+      box-shadow: 0 0 0 3px rgba(214, 85, 109, 0.15) !important;
+    }
+    .group-error-border {
+      outline: 2px dashed var(--error-color) !important;
+      outline-offset: 8px;
+      border-radius: 4px;
+      transition: outline 0.2s ease;
+    }
     
     .option-group { 
       display: flex; 
@@ -261,7 +276,7 @@
       margin-top: 5px;
     }
 
-    input[type="radio"] {
+    input[type="radio"], input[type="checkbox"] {
       accent-color: var(--blue-main);
       width: 18px; 
       height: 18px;
@@ -458,13 +473,7 @@
       font-size: 15px;
     }
     
-    .success { 
-      background: #f0f4f2; 
-      color: #4a6c59; 
-      border: 1px solid #dce8e1;
-    }
-
-    /* 自訂彈出視窗樣式 */
+    /* 自訂動態彈出視窗樣式 */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -496,13 +505,12 @@
     .modal-icon {
       width: 50px;
       height: 50px;
-      background: #f0f4f2;
-      color: #4a6c59;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 24px;
+      font-weight: bold;
       margin: 0 auto 15px;
     }
     .modal-text {
@@ -511,6 +519,7 @@
       margin-bottom: 24px;
       font-weight: 500;
       letter-spacing: 0.05em;
+      line-height: 1.5;
     }
     .modal-btn {
       background: var(--blue-main);
@@ -603,7 +612,7 @@
     </div>
   </div>
   
-  <form id="trainingForm">
+  <form id="trainingForm" novalidate>
     
     <div class="section-title">01 / 基本與保險資料</div>
     
@@ -775,7 +784,7 @@
 
           <div style="margin-bottom: 14px;">
             <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ （非學員）單次課程退費</strong>
-            以該次課程日期為基準。於課程 7 天前取消者，退還該次費用之 90%；於課程 3 天前取消者，退還 50%；於課程 3 天內取消者，恕不予退費。
+            以該次課程日期為基準。於課程 7 天前取消者，退還該次費用之 90%；於課程 3 分前取消者，退還 50%；於課程 3 天內取消者，恕不予退費。
           </div>
 
           <div style="margin-bottom: 0;">
@@ -845,8 +854,8 @@
 
 <div class="modal-overlay" id="customAlert">
   <div class="modal-content">
-    <div class="modal-icon">✓</div>
-    <div class="modal-text">報名成功！請至信箱查看報名確認信。</div>
+    <div class="modal-icon" id="alertIcon"></div>
+    <div class="modal-text" id="alertText"></div>
     <button class="modal-btn" onclick="closeAlert()">確定</button>
   </div>
 </div>
@@ -856,7 +865,6 @@
   
   const form = document.getElementById('trainingForm');
   const btn = document.getElementById('submitBtn');
-  const msg = document.getElementById('message');
 
   const planGroup = document.getElementById('planGroup');
   const planOptionsDiv = document.getElementById('planOptions');
@@ -874,11 +882,33 @@
     `;
   }
 
+  // 共用彈窗函式：可切換成功(綠色打勾)或錯誤(紅色驚嘆號)
+  function showAlert(message, isSuccess = false) {
+    const modal = document.getElementById('customAlert');
+    const icon = document.getElementById('alertIcon');
+    const text = document.getElementById('alertText');
+
+    text.innerText = message;
+    if (isSuccess) {
+      icon.innerText = '✓';
+      icon.style.color = '#4a6c59';
+      icon.style.backgroundColor = '#f0f4f2';
+    } else {
+      icon.innerText = '!';
+      icon.style.color = '#d6556d';
+      icon.style.backgroundColor = '#fdeef1';
+    }
+
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+  }
+
   // 關閉自訂彈出視窗
   function closeAlert() {
-    document.getElementById('customAlert').classList.remove('show');
+    const modal = document.getElementById('customAlert');
+    modal.classList.remove('show');
     setTimeout(() => {
-      document.getElementById('customAlert').style.display = 'none';
+      modal.style.display = 'none';
     }, 300);
   }
 
@@ -968,16 +998,62 @@
     });
   });
 
+  // 表單自訂驗證與送出處理
   form.onsubmit = e => {
     e.preventDefault();
-    
+
+    // 1. 清除畫面上所有的錯誤紅框
+    document.querySelectorAll('.error-border').forEach(el => el.classList.remove('error-border'));
+    document.querySelectorAll('.group-error-border').forEach(el => el.classList.remove('group-error-border'));
+
+    // 2. 攔截原生的 required 檢查，加上自訂錯誤呈現
+    const requiredInputs = Array.from(form.querySelectorAll('[required]'));
+    const policyMapping = {
+      'agreeRefund': '課前聲明與退費機制',
+      'agreeSafety': '戶外騎乘安全聲明',
+      'agreeImage': '影像與肖像權授權'
+    };
+
+    for (let input of requiredInputs) {
+      if (!input.checkValidity()) {
+        // 如果是條款未勾選，顯示自訂彈窗
+        if (policyMapping[input.name]) {
+          showAlert(`請詳閱「${policyMapping[input.name]}」並勾選`, false);
+          return;
+        }
+
+        // 如果是選擇題 (radio/checkbox)，將外圍群組加上紅框虛線，並平滑捲動
+        if (input.type === 'radio' || input.type === 'checkbox') {
+          const group = input.closest('.option-group') || input.closest('.payment-grid') || input.parentElement;
+          if (group) group.classList.add('group-error-border');
+          group.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        // 一般輸入框，加上實體紅框並直接 focus 游標
+        input.classList.add('error-border');
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        input.focus({ preventScroll: true });
+        return;
+      }
+    }
+
+    // 3. 檢查進階動態邏輯 (未選方案等)
     const planRawEl = document.querySelector('input[name="planRaw"]:checked');
-    if (!planRawEl) { alert('請選擇報名方案。'); return; }
+    if (!planRawEl) { 
+      document.getElementById('planOptions').classList.add('group-error-border');
+      document.getElementById('planGroup').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showAlert('請選擇報名方案。', false); 
+      return; 
+    }
 
     let selectedDates = []; 
     document.querySelectorAll('input[name="singleDates"]:checked').forEach(c => selectedDates.push(c.value));
     if (planRawEl.value.includes('單次') && selectedDates.length === 0) {
-      alert('選擇單次報名方案，請至少勾選一個日期。'); return;
+      document.querySelector('#singleDatesGroup .option-group').classList.add('group-error-border');
+      document.getElementById('singleDatesGroup').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showAlert('選擇單次報名方案，請至少勾選一個日期。', false); 
+      return;
     }
 
     const taipingIntent = document.querySelector('input[name="taipingIntent"]:checked').value;
@@ -986,11 +1062,15 @@
       const taipingDateEl = document.querySelector('input[name="taipingDate"]:checked');
       const needVanEl = document.querySelector('input[name="needVan"]:checked');
       if (!taipingDateEl || !needVanEl) {
-        alert('請完整勾選太平山移地訓練的細節。'); return;
+        document.getElementById('taipingDetailsGroup').classList.add('group-error-border');
+        document.getElementById('taipingDetailsGroup').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showAlert('請完整勾選太平山移地訓練的細節。', false); 
+        return;
       }
       finalTaiping = `參加（${taipingDateEl.value}）`;
     }
 
+    // 4. 通過所有驗證，準備送出
     btn.disabled = true; 
     btn.innerText = '處理中...';
     
@@ -1002,9 +1082,8 @@
     
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        const modal = document.getElementById('customAlert');
-        modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('show'), 10);
+        // 呼叫成功的綠色彈窗
+        showAlert('報名成功！請至信箱查看報名確認信。', true);
         
         form.reset(); 
         planGroup.style.display = 'none';
@@ -1028,7 +1107,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       })
       .catch(() => {
-        alert('傳送失敗，請連繫工作室。'); 
+        showAlert('傳送失敗，請連繫工作室。', false); 
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
       });
