@@ -82,7 +82,7 @@
        上半部：課表區塊 (莫蘭迪桃紅)
        ========================================== */
     .schedule-section {
-      margin-bottom: 50px;
+      margin-bottom: 40px;
     }
 
     .schedule-title {
@@ -154,6 +154,78 @@
       color: #777; 
       margin-top: 10px;
       line-height: 1.6; 
+    }
+
+    /* ==========================================
+       新增：費用說明區塊
+       ========================================== */
+    .fee-section {
+      margin-bottom: 50px;
+    }
+
+    .fee-grid {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .fee-card {
+      flex: 1;
+      min-width: 250px;
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .fee-card.student-card {
+      background-color: var(--blue-bg);
+      border: 1px solid var(--blue-border);
+    }
+
+    .fee-card.non-student-card {
+      background-color: var(--pink-bg);
+      border: 1px solid var(--pink-border);
+    }
+
+    .fee-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .student-card .fee-card-title { color: var(--blue-dark); }
+    .non-student-card .fee-card-title { color: var(--pink-dark); }
+
+    .fee-item {
+      margin-bottom: 14px;
+    }
+
+    .fee-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .fee-item-title {
+      color: #444;
+      font-size: 15px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .fee-item-price {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .fee-item-price.highlight {
+      color: var(--error-color);
+    }
+
+    .fee-item-price.normal {
+      color: #666;
     }
 
     /* ==========================================
@@ -611,7 +683,43 @@
       ※ 雨備方案：如遇天候不佳，則轉為室內功率訓練。
     </div>
   </div>
-  
+
+  <div class="fee-section">
+    <div class="schedule-title" style="color: var(--blue-dark); border-bottom: 2px solid var(--blue-light); padding-bottom: 12px; margin-bottom: 20px;">費用說明</div>
+    <div class="fee-grid">
+      
+      <div class="fee-card student-card">
+        <div class="fee-card-title">
+          <span style="display:inline-block; width:6px; height:16px; background:var(--blue-main); border-radius:3px;"></span>
+          光聿學員
+        </div>
+        <div class="fee-item">
+          <span class="fee-item-title">武嶺特訓包（三次全報）</span>
+          <span class="fee-item-price highlight">扣 5 堂課</span>
+        </div>
+        <div class="fee-item">
+          <span class="fee-item-title">單次彈性報名</span>
+          <span class="fee-item-price normal">每次扣 2 堂課</span>
+        </div>
+      </div>
+
+      <div class="fee-card non-student-card">
+        <div class="fee-card-title">
+          <span style="display:inline-block; width:6px; height:16px; background:var(--pink-main); border-radius:3px;"></span>
+          非學員
+        </div>
+        <div class="fee-item">
+          <span class="fee-item-title">武嶺特訓包（三次全報）</span>
+          <span class="fee-item-price highlight">特惠 $3,600</span>
+        </div>
+        <div class="fee-item">
+          <span class="fee-item-title">單次彈性報名</span>
+          <span class="fee-item-price normal">單次 $1,300</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
   <form id="trainingForm" novalidate>
     
     <div class="section-title">01 / 基本與保險資料</div>
