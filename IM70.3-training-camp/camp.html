@@ -27,23 +27,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-200 selection:text-orange-900">
 
-    <nav class="fixed w-full z-50 glass-card border-b border-gray-200 shadow-sm no-print">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-swimmer text-orange-600 text-xl"></i>
-                    <span class="font-bold text-xl tracking-tight text-slate-800">川岳中醫 <span class="text-gray-400 font-light">x</span> 光聿KUANGYU</span>
-                </div>
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#about" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">企劃摘要</a>
-                    <a href="#pricing" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">方案定價</a>
-                    <a href="#schedule" class="text-sm font-medium text-gray-600 hover:text-orange-600 transition">重要時程</a>
-                    <a href="registration.html" class="text-sm font-bold bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition shadow-sm">立即報名</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <header class="gradient-bg pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
         <div class="max-w-4xl mx-auto text-center relative z-10">
@@ -95,7 +78,24 @@
             </div>
         </section>
 
-        <section class="mb-20">
+        <div class="sticky top-0 z-50 bg-slate-50/90 backdrop-blur-md py-4 border-b border-slate-200/50 shadow-sm no-print transition-all">
+            <div class="max-w-4xl mx-auto px-4 flex flex-wrap justify-center gap-3">
+                <a href="#eligibility" class="bg-white border border-gray-200 text-slate-600 text-sm font-medium px-5 py-2 rounded-full hover:border-orange-500 hover:text-orange-600 hover:shadow-sm transition whitespace-nowrap">
+                    參加資格
+                </a>
+                <a href="#training-plan" class="bg-white border border-gray-200 text-slate-600 text-sm font-medium px-5 py-2 rounded-full hover:border-orange-500 hover:text-orange-600 hover:shadow-sm transition whitespace-nowrap">
+                    16 週訓練總覽
+                </a>
+                <a href="#pricing" class="bg-white border border-gray-200 text-slate-600 text-sm font-medium px-5 py-2 rounded-full hover:border-orange-500 hover:text-orange-600 hover:shadow-sm transition whitespace-nowrap">
+                    訓練方案
+                </a>
+                <a href="#schedule" class="bg-white border border-gray-200 text-slate-600 text-sm font-medium px-5 py-2 rounded-full hover:border-orange-500 hover:text-orange-600 hover:shadow-sm transition whitespace-nowrap">
+                    重要時程
+                </a>
+            </div>
+        </div>
+        
+        <section id="eligibility" class="mb-20 scroll-mt-24">
             <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
                 <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center">
                     <i class="fas fa-user-check text-orange-600 mr-2"></i> 參加資格
@@ -124,7 +124,7 @@
             </div>
         </section>
 
-        <section id="training-plan" class="mb-20">
+        <section id="training-plan" class="mb-20 scroll-mt-24">
             <div class="max-w-4xl mx-auto px-4 sm:px-0">
                 <h2 class="text-3xl font-bold mb-8 text-slate-800 text-center">16 週週期化訓練總覽</h2>
                 <div class="space-y-6">
@@ -215,7 +215,7 @@
 
         <div class="page-break"></div>
 
-        <section id="pricing" class="mb-20">
+        <section id="pricing" class="mb-20 scroll-mt-24">
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold text-slate-800 mb-4">訓練方案定價</h2>
                 <p class="text-gray-500">提供三種客製化層次，精準符合您的備賽需求</p>
@@ -347,7 +347,7 @@
 
         <div class="page-break"></div>
 
-        <section id="schedule" class="mb-20">
+        <section id="schedule" class="mb-20 scroll-mt-24">
             <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">重要時程</h2>
             <div class="relative border-l-2 border-orange-200 ml-3 md:ml-6 space-y-8 max-w-3xl mx-auto">
                 
