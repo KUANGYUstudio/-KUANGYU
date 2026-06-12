@@ -108,8 +108,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">鐵人三項經驗</label>
-                        <input type="text" name="experience" required placeholder="例如：無經驗、曾完成標鐵、初鐵等" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">51.5km 最佳完賽成績 (總時間與單項拆解)</label>
+                        <input type="text" name="experience" required placeholder="例如：總時間 3:15 / 游泳 40分 / 單車 1:15 / 跑步 1:10" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition">
                     </div>
                 </div>
 
@@ -118,7 +118,18 @@
                     <textarea name="notes" rows="3" placeholder="如有特殊飲食習慣、過敏史或特殊需求請註記" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-slate-800 outline-none transition resize-none"></textarea>
                 </div>
 
-                <div class="pt-4">
+                <div class="flex items-start bg-slate-50 p-4 rounded-lg border border-gray-200">
+                    <div class="flex items-center h-5">
+                        <input id="declaration" name="declaration" type="checkbox" required class="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 rounded transition cursor-pointer">
+                    </div>
+                    <div class="ml-3 text-sm">
+                        <label for="declaration" class="font-medium text-slate-700 cursor-pointer select-none">
+                            我確認已完整完賽過至少一場 51.5km 標準鐵人賽事，且開營前具備連續使用捷泳（自由式）1000 公尺以上之能力。我理解本訓練營聚焦於高強度體能與水感優化，不接受純蛙泳參與團練，亦無基礎捷泳教學。
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-2">
                     <button type="submit" id="submitBtn" class="w-full gradient-bg text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition transform active:scale-[0.98]">
                         確認送出報名
                     </button>
