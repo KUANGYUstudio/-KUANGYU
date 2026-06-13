@@ -13,6 +13,20 @@
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* 條款卡片動態式樣 */
+        .policy-box.is-checked {
+            background-color: #fff7ed;
+            border-color: #f97316;
+        }
+        .policy-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, border-color 0.3s;
+        }
+        .policy-box.is-expanded .policy-content {
+            border-top-color: #e2e8f0;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-200 selection:text-orange-900">
@@ -41,9 +55,8 @@
                 <p class="text-orange-100 text-sm mt-2">請填寫以下完整資訊，我們將於收到報名後儘速與您聯絡</p>
             </div>
             
-            <form id="signUpForm" class="p-8 space-y-6">
+            <form id="signUpForm" class="p-8 space-y-6" novalidate>
                 
-                <!-- 01 / 基本與保險資料 -->
                 <div>
                     <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center">
                         <i class="fas fa-id-card text-sky-500 mr-2 w-5"></i> 01 / 基本與保險資料
@@ -97,7 +110,6 @@
                     </div>
                 </div>
 
-                <!-- 02 / 緊急聯絡資訊 -->
                 <div class="pt-4 border-t border-gray-100">
                     <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center">
                         <i class="fas fa-phone-alt text-sky-500 mr-2 w-5"></i> 02 / 緊急聯絡資訊
@@ -120,7 +132,6 @@
                     </div>
                 </div>
 
-                <!-- 03 / 方案與能力調查 -->
                 <div class="pt-4 border-t border-gray-100">
                     <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center">
                         <i class="fas fa-layer-group text-sky-500 mr-2 w-5"></i> 03 / 方案與能力調查
@@ -154,7 +165,6 @@
                     </div>
                 </div>
 
-                <!-- 04 / 付款方式 -->
                 <div class="pt-4 border-t border-gray-100">
                     <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center">
                         <i class="fas fa-wallet text-sky-500 mr-2 w-5"></i> 04 / 付款方式
@@ -177,7 +187,6 @@
                     </div>
                 </div>
 
-                <!-- 05 / 其他備註 -->
                 <div class="pt-4 border-t border-gray-100">
                     <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center">
                         <i class="fas fa-comment-dots text-sky-500 mr-2 w-5"></i> 05 / 其他備註
@@ -188,58 +197,95 @@
                     </div>
                 </div>
 
-                <!-- 06 / 同意聲明與規範 -->
                 <div class="pt-4 border-t border-gray-100">
                     <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center">
                         <i class="fas fa-check-square text-sky-500 mr-2 w-5"></i> 06 / 同意聲明與規範
                     </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-start bg-slate-50 p-4 rounded-lg border border-gray-200">
-                            <div class="flex items-center h-5">
-                                <input id="agreeQualification" name="agreeQualification" type="checkbox" required class="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 rounded transition cursor-pointer">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="agreeQualification" class="font-medium text-slate-700 cursor-pointer select-none">
-                                    我確認已完整完賽過至少一場 51.5km 標準鐵人賽事，且具備連續使用捷泳（自由式）1000 公尺以上之能力。
+                    <div class="space-y-4">
+                        
+                        <div class="policy-box border border-gray-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+                            <div class="flex items-center justify-between p-4">
+                                <label class="flex items-center cursor-pointer select-none flex-grow">
+                                    <input type="checkbox" name="agreeQualification" required class="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                    <span class="ml-3 text-sm font-bold text-slate-800">我已確認具備 51.5km 鐵人完賽資格細則</span>
                                 </label>
+                                <div class="expand-toggle text-orange-600 font-bold text-xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-orange-50 cursor-pointer transition">
+                                    <span>＋</span>
+                                </div>
+                            </div>
+                            <div class="policy-content border-t border-transparent bg-slate-50/60">
+                                <div class="p-5 text-sm text-slate-600 leading-relaxed space-y-2">
+                                    <p class="font-medium text-slate-800">※ 資格強制規範：</p>
+                                    <p>本訓練營聚焦於高強度體能與開放水域技術優化，學員需於開訓前具備連續使用捷泳（自由式）1000 公尺以上之基礎能力。現場不接受純蛙泳參與團練，亦不提供基礎捷泳教學，請務必確認自身實力。</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-start bg-slate-50 p-4 rounded-lg border border-gray-200">
-                            <div class="flex items-center h-5">
-                                <input id="agreeRefund" name="agreeRefund" type="checkbox" required class="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 rounded transition cursor-pointer">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="agreeRefund" class="font-medium text-slate-700 cursor-pointer select-none">
-                                    我已詳閱並同意報名與退費機制（開訓後因個人因素恕不提供中途退費或遞補）。
+
+                        <div class="policy-box border border-gray-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+                            <div class="flex items-center justify-between p-4">
+                                <label class="flex items-center cursor-pointer select-none flex-grow">
+                                    <input type="checkbox" name="agreeRefund" required class="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                    <span class="ml-3 text-sm font-bold text-slate-800">我已詳閱並同意報名與退費機制細則</span>
                                 </label>
+                                <div class="expand-toggle text-orange-600 font-bold text-xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-orange-50 cursor-pointer transition">
+                                    <span>＋</span>
+                                </div>
+                            </div>
+                            <div class="policy-content border-t border-transparent bg-slate-50/60">
+                                <div class="p-5 text-sm text-slate-600 leading-relaxed space-y-2">
+                                    <strong class="text-slate-800 block mb-2">所有移地團練與醫療場地均已提前造冊安排，相關行政作業需提早規劃：</strong>
+                                    <p>1. 訓練營為 16 週科學化連續週期課表，自正式開訓日開始後，因個人因素（如工作、出差、自主受傷等）中途請假或退出，恕無法提供退費、延期或由他人遞補。</p>
+                                    <p>2. 若因不可抗力天候因素（如颱風、天然災害）導致實體移地團練無法進行，光聿工作室將啟動雨備方案，統一轉為室內功率功率訓練課表進行，不另行退費。</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-start bg-slate-50 p-4 rounded-lg border border-gray-200">
-                            <div class="flex items-center h-5">
-                                <input id="agreeSafety" name="agreeSafety" type="checkbox" required class="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 rounded transition cursor-pointer">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="agreeSafety" class="font-medium text-slate-700 cursor-pointer select-none">
-                                    我確認自身健康狀況良好，並同意戶外訓練安全聲明（配合教練指示，對自身安全負最終責任）。
+
+                        <div class="policy-box border border-gray-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+                            <div class="flex items-center justify-between p-4">
+                                <label class="flex items-center cursor-pointer select-none flex-grow">
+                                    <input type="checkbox" name="agreeSafety" required class="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                    <span class="ml-3 text-sm font-bold text-slate-800">我已詳閱並同意戶外訓練安全聲明細則</span>
                                 </label>
+                                <div class="expand-toggle text-orange-600 font-bold text-xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-orange-50 cursor-pointer transition">
+                                    <span>＋</span>
+                                </div>
+                            </div>
+                            <div class="policy-content border-t border-transparent bg-slate-50/60">
+                                <div class="p-5 text-sm text-slate-600 leading-relaxed space-y-3">
+                                    <div>
+                                        <strong class="text-slate-800 block mb-1">1. 裝備與交通強制規範</strong>
+                                        戶外自由車外騎與開放水域海泳課程均具有潛在交通風險，學員於外騎課程請務必全程佩戴安全帽，海泳課程強制全程攜帶魚雷浮標。出發前請確認自身車況煞車及胎壓正常。
+                                    </div>
+                                    <div>
+                                        <strong class="text-slate-800 block mb-1">2. 健康聲明與風險自負</strong>
+                                        請確認自身健康狀況良好，無隱瞞不適合高強度耐力運動之心血管病史。團隊將協助造冊投保意外險，惟學員於開放道路與開放水域仍須嚴格遵守交通法規與教練指示，對自身行為負最終安全責任。
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-start bg-slate-50 p-4 rounded-lg border border-gray-200">
-                            <div class="flex items-center h-5">
-                                <input id="agreeImage" name="agreeImage" type="checkbox" required class="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 rounded transition cursor-pointer">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="agreeImage" class="font-medium text-slate-700 cursor-pointer select-none">
-                                    我同意授權訓練營側拍影像，供川岳與光聿團隊作為社群分享及活動宣傳使用。
+
+                        <div class="policy-box border border-gray-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+                            <div class="flex items-center justify-between p-4">
+                                <label class="flex items-center cursor-pointer select-none flex-grow">
+                                    <input type="checkbox" name="agreeImage" required class="w-4 h-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                    <span class="ml-3 text-sm font-bold text-slate-800">我已詳閱並同意影像與肖像權授權細則</span>
                                 </label>
+                                <div class="expand-toggle text-orange-600 font-bold text-xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-orange-50 cursor-pointer transition">
+                                    <span>＋</span>
+                                </div>
+                            </div>
+                            <div class="policy-content border-t border-transparent bg-slate-50/60">
+                                <div class="p-5 text-sm text-slate-600 leading-relaxed">
+                                    課程與實體移地訓練過程中，教練與工作人員將進行動態與靜態影像側拍紀錄。完成報名即代表同意相關照片與影片無償授權川岳中醫與光聿工作室團隊，用於社群分享、活動紀錄、行銷或宣傳使用。若有特殊考量不便入鏡，請務必於課前主動告知教練。
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
-                <!-- 按鈕與提示 -->
-                <div class="pt-2">
-                    <button type="submit" id="submitBtn" class="w-full gradient-bg text-white font-bold py-3 px-6 rounded-lg shadow-md hover:opacity-90 transition transform active:scale-[0.98]">
+                <div class="pt-4">
+                    <button type="submit" id="submitBtn" class="w-full gradient-bg text-white font-bold py-4 px-6 rounded-lg shadow-md hover:opacity-90 transition transform active:scale-[0.98] text-lg tracking-widest">
                         確認送出報名
                     </button>
                     <p id="statusMsg" class="text-center text-sm font-medium mt-4 hidden"></p>
@@ -254,6 +300,7 @@
     </footer>
 
     <script>
+        // 處理匯款欄位的顯示與隱藏
         const paymentMethodSelect = document.getElementById('paymentMethod');
         const bankDetails = document.getElementById('bankDetails');
         const bankLastFiveInput = document.getElementById('bankLastFiveInput');
@@ -269,6 +316,37 @@
             }
         });
 
+        // 處理多組動態條款卡片折疊邏輯
+        const policyBoxes = document.querySelectorAll('.policy-box');
+        policyBoxes.forEach(box => {
+            const checkbox = box.querySelector('.policy-checkbox');
+            const expandBtn = box.querySelector('.expand-toggle');
+            const content = box.querySelector('.policy-content');
+            const icon = expandBtn.querySelector('span');
+
+            // 勾選時卡片底色與邊框變色
+            checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    box.classList.add('is-checked');
+                } else {
+                    box.classList.remove('is-checked');
+                }
+            });
+
+            // 點擊 ＋/－ 號展開或收合
+            expandBtn.addEventListener('click', (e) => {
+                box.classList.toggle('is-expanded');
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.innerText = '＋';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.innerText = '－';
+                }
+            });
+        });
+
+        // 表單送出處理
         document.getElementById('signUpForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -277,6 +355,37 @@
             const statusMsg = document.getElementById('statusMsg');
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbyxcVuvzxcV28ddUvu4LO9c7d3lqQT2AIzD29e3LlnEpI_g1E3o3ecFvE5G-3WL9hms1g/exec';
             
+            // 原生欄位驗證與自訂紅框效果
+            document.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500', 'ring-2', 'ring-red-200'));
+            
+            if (!form.checkValidity()) {
+                const invalidInputs = form.querySelectorAll(':invalid');
+                // 優先檢查條款勾選狀況
+                for (let input of invalidInputs) {
+                    if (input.classList.contains('policy-checkbox')) {
+                        const box = input.closest('.policy-box');
+                        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // 自動幫學員展開未勾選的條款細則
+                        const content = box.querySelector('.policy-content');
+                        const icon = box.querySelector('.expand-toggle span');
+                        box.classList.add('is-expanded');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.innerText = '－';
+                        
+                        statusMsg.textContent = '請詳細閱讀規範條款並勾選同意。';
+                        statusMsg.className = 'text-center text-sm font-medium mt-4 text-red-600 block';
+                        return;
+                    }
+                }
+                
+                // 一般輸入框未填紅框提示
+                const firstInvalid = invalidInputs[0];
+                firstInvalid.classList.add('border-red-500', 'ring-2', 'ring-red-200');
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstInvalid.focus({ preventScroll: true });
+                return;
+            }
+
             submitBtn.disabled = true;
             submitBtn.textContent = '資料傳送中...';
             statusMsg.textContent = '正在為您處理報名資訊，請稍候...';
@@ -295,6 +404,11 @@
                 submitBtn.textContent = '提交成功';
                 form.reset();
                 bankDetails.classList.add('hidden');
+                policyBoxes.forEach(box => {
+                    box.classList.remove('is-checked', 'is-expanded');
+                    box.querySelector('.policy-content').style.maxHeight = null;
+                    box.querySelector('.expand-toggle span').innerText = '＋';
+                });
             })
             .catch(error => {
                 console.error('Error:', error);
