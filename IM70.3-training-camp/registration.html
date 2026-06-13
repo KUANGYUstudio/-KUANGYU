@@ -231,23 +231,27 @@
                         <h3 class="text-lg font-bold text-slate-900 tracking-wider">付款方式</h3>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">繳費方式</label>
-                            <select name="paymentMethod" id="paymentMethod" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 appearance-none">
-                                <option value="" disabled selected>請選擇付款方式</option>
-                                <option value="匯款">銀行匯款 / ATM 轉帳</option>
-                                <option value="現金">現場現金繳納</option>
-                                <option value="LINE PAY">LINE PAY</option>
-                            </select>
-                        </div>
-                        <div id="bankDetails" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-5">
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">轉帳帳號後五碼</label>
-                            <input type="text" name="bankLastFive" id="bankLastFiveInput" placeholder="請輸入以便對帳" class="w-full px-4 py-2 mb-3 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                            <div class="text-sm text-slate-500 space-y-1">
-                                <p>銀行：國泰世華 (013)</p>
-                                <p>帳號：269506136805</p>
-                                <p>戶名：費聿凡</p>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="p-6 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row gap-6 items-start">
+                            <div class="w-full md:w-1/2">
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">繳費方式</label>
+                                <div class="flex items-center mb-4">
+                                    <div class="w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center mr-3 shadow-sm">
+                                        <div class="w-2 h-2 bg-white rounded-full"></div>
+                                    </div>
+                                    <span class="text-slate-800 font-bold text-lg">銀行匯款 / ATM 轉帳</span>
+                                    <input type="hidden" name="paymentMethod" value="匯款">
+                                </div>
+                                <div class="text-sm text-slate-600 space-y-2 bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                    <p><span class="font-bold text-slate-500 mr-2">銀行</span> 測試銀行 (000)</p>
+                                    <p><span class="font-bold text-slate-500 mr-2">帳號</span> 1234567890123</p>
+                                    <p><span class="font-bold text-slate-500 mr-2">戶名</span> 某某某股份有限公司</p>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/2 md:mt-8">
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">請提供匯款帳號後五碼</label>
+                                <input type="text" name="bankLastFive" required placeholder="請輸入對帳用後五碼" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                                <p class="text-xs text-slate-400 mt-2">※ 財務對帳必填項目</p>
                             </div>
                         </div>
                     </div>
@@ -368,22 +372,6 @@
     </footer>
 
     <script>
-        // 處理匯款欄位的顯示與隱藏
-        const paymentMethodSelect = document.getElementById('paymentMethod');
-        const bankDetails = document.getElementById('bankDetails');
-        const bankLastFiveInput = document.getElementById('bankLastFiveInput');
-
-        paymentMethodSelect.addEventListener('change', function(e) {
-            if (e.target.value === '匯款') {
-                bankDetails.classList.remove('hidden');
-                bankLastFiveInput.setAttribute('required', 'required');
-            } else {
-                bankDetails.classList.add('hidden');
-                bankLastFiveInput.removeAttribute('required');
-                bankLastFiveInput.value = '';
-            }
-        });
-
         // 處理多組動態條款卡片折疊邏輯
         const policyBoxes = document.querySelectorAll('.policy-box');
         policyBoxes.forEach(box => {
@@ -471,7 +459,6 @@
                 statusMsg.className = 'text-center text-sm font-bold mt-5 text-emerald-600 block';
                 submitBtn.textContent = '提交成功';
                 form.reset();
-                bankDetails.classList.add('hidden');
                 policyBoxes.forEach(box => {
                     box.classList.remove('is-checked', 'is-expanded');
                     box.querySelector('.policy-content').style.maxHeight = null;
