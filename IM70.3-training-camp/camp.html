@@ -15,20 +15,6 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 頁籤切換特效 */
-        .tab-btn { transition: all 0.3s ease; cursor: pointer; }
-        .tab-btn.active { background-color: #f97316; color: white; border-color: #f97316; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .tab-btn:not(.active) { background-color: #fff7ed; color: #c2410c; border-color: #fed7aa; }
-        .tab-btn:not(.active):hover { background-color: #fed7aa; color: #000; border-color: #fb923c; }
-        
-        .tab-content { display: none; animation: fadeIn 0.4s ease-out forwards; }
-        .tab-content.active { display: block; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         @media print {
             body { -webkit-print-color-adjust: exact; }
             .no-print { display: none !important; }
@@ -93,18 +79,18 @@
         <div class="sticky top-0 z-50 bg-slate-50/90 backdrop-blur-md py-4 border-b border-slate-200/50 shadow-sm no-print transition-all">
             <div class="max-w-4xl mx-auto flex items-center space-x-3 overflow-x-auto hide-scrollbar sm:justify-center px-4 snap-x snap-mandatory">
                 
-                <button data-target="eligibility" class="tab-btn active text-sm font-bold px-6 py-2.5 rounded-full border whitespace-nowrap snap-center outline-none">
+                <a href="#eligibility" class="bg-orange-50 border border-orange-200 text-orange-700 text-sm font-bold px-6 py-2.5 rounded-full hover:bg-orange-200 hover:text-black hover:border-orange-400 hover:shadow-md transition whitespace-nowrap active:scale-[0.98] snap-center">
                     參加資格
-                </button>
-                <button data-target="training-plan" class="tab-btn text-sm font-bold px-6 py-2.5 rounded-full border whitespace-nowrap snap-center outline-none">
+                </a>
+                <a href="#training-plan" class="bg-orange-50 border border-orange-200 text-orange-700 text-sm font-bold px-6 py-2.5 rounded-full hover:bg-orange-200 hover:text-black hover:border-orange-400 hover:shadow-md transition whitespace-nowrap active:scale-[0.98] snap-center">
                     16 週訓練總覽
-                </button>
-                <button data-target="pricing" class="tab-btn text-sm font-bold px-6 py-2.5 rounded-full border whitespace-nowrap snap-center outline-none">
+                </a>
+                <a href="#pricing" class="bg-orange-50 border border-orange-200 text-orange-700 text-sm font-bold px-6 py-2.5 rounded-full hover:bg-orange-200 hover:text-black hover:border-orange-400 hover:shadow-md transition whitespace-nowrap active:scale-[0.98] snap-center">
                     訓練方案
-                </button>
-                <button data-target="schedule" class="tab-btn text-sm font-bold px-6 py-2.5 rounded-full border whitespace-nowrap snap-center outline-none">
+                </a>
+                <a href="#schedule" class="bg-orange-50 border border-orange-200 text-orange-700 text-sm font-bold px-6 py-2.5 rounded-full hover:bg-orange-200 hover:text-black hover:border-orange-400 hover:shadow-md transition whitespace-nowrap active:scale-[0.98] snap-center">
                     重要時程
-                </button>
+                </a>
                 
             </div>
         </div>
@@ -391,53 +377,9 @@
 
     </main>
 
-    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm no-print mt-auto">
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm no-print">
         <p>Copyright &copy; 2026 川岳中醫 x 光聿KUANGYU. All rights reserved.</p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const btns = document.querySelectorAll('.tab-btn');
-            // 定義要被切換的四個區塊 ID
-            const sections = ['eligibility', 'training-plan', 'pricing', 'schedule'].map(id => document.getElementById(id));
-
-            // 初始化：套用隱藏樣式，只顯示第一個「參加資格」
-            sections.forEach((sec, index) => {
-                if (!sec) return;
-                sec.classList.add('tab-content');
-                if (index === 0) {
-                    sec.classList.add('active');
-                }
-            });
-
-            // 綁定按鈕點擊事件
-            btns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const targetId = btn.getAttribute('data-target');
-                    
-                    // 1. 切換按鈕的顏色狀態
-                    btns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    // 2. 切換下方區塊的顯示與隱藏
-                    sections.forEach(sec => {
-                        if (!sec) return;
-                        if (sec.id === targetId) {
-                            sec.classList.add('active');
-                        } else {
-                            sec.classList.remove('active');
-                        }
-                    });
-
-                    // 3. 點擊後讓畫面平滑滾動對齊 (扣除導覽列的 80px 高度)
-                    const targetElement = document.getElementById(targetId);
-                    if(targetElement) {
-                        const y = targetElement.getBoundingClientRect().top + window.pageYOffset - 80;
-                        window.scrollTo({top: y, behavior: 'smooth'});
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>
