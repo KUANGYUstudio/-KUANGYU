@@ -65,12 +65,11 @@
         
         <section class="bg-white rounded-3xl premium-shadow border border-slate-100 overflow-hidden">
             
-            <div class="bg-slate-900 px-8 py-12 md:px-12 md:py-16 relative overflow-hidden text-center">
+            <div class="bg-slate-900 px-8 py-8 md:px-12 md:py-10 relative overflow-hidden text-center">
                 <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-orange-400 via-transparent to-transparent"></div>
                 <div class="relative z-10">
                     <p class="text-orange-500 font-bold text-sm tracking-[0.3em] uppercase mb-4">Registration Form</p>
-                    <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight mb-3">IM 70.3 墾丁訓練營</h2>
-                    <p class="text-slate-400 text-sm md:text-base font-light tracking-wide">請填寫以下完整資訊，我們將於收到報名後儘速與您聯絡</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight">IM 70.3 墾丁訓練營</h2>
                 </div>
             </div>
             
@@ -89,12 +88,17 @@
                                 <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
                             </div>
                             <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">性別</label>
-                                <select name="gender" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 appearance-none">
-                                    <option value="" disabled selected>請選擇</option>
-                                    <option value="男">男</option>
-                                    <option value="女">女</option>
-                                </select>
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">生理性別</label>
+                                <div class="flex space-x-6 mt-3">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="gender" value="男" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
+                                        <span class="ml-2 text-slate-800 font-medium">男</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="gender" value="女" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
+                                        <span class="ml-2 text-slate-800 font-medium">女</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
@@ -105,7 +109,7 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">出生年月日</label>
-                                <input type="date" name="dob" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                <input type="text" name="dob" onfocus="(this.type='date')" onblur="(if(!this.value) this.type='text')" required placeholder="年 / 月 / 日" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-400">
                             </div>
                         </div>
 
@@ -162,16 +166,25 @@
                     </div>
                     
                     <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">報名方案</label>
-                                <select name="plan" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-900 font-medium appearance-none">
-                                    <option value="" disabled selected>請選擇方案</option>
-                                    <option value="基本方案">基本方案 (NT$25,000)</option>
-                                    <option value="進階方案">進階方案 (NT$45,000)</option>
-                                    <option value="VIP方案">VIP方案 (NT$55,000)</option>
-                                </select>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">報名方案</label>
+                            <div class="space-y-3">
+                                <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
+                                    <input type="radio" name="plan" value="基本方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
+                                    <span class="ml-3 text-slate-800 font-medium">基本方案 (NT$25,000)</span>
+                                </label>
+                                <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
+                                    <input type="radio" name="plan" value="進階方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
+                                    <span class="ml-3 text-slate-800 font-medium">進階方案 (NT$45,000)</span>
+                                </label>
+                                <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
+                                    <input type="radio" name="plan" value="VIP方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
+                                    <span class="ml-3 text-slate-800 font-medium">VIP方案 (NT$55,000)</span>
+                                </label>
                             </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">三鐵衣尺寸</label>
                                 <select name="size" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 appearance-none">
@@ -185,9 +198,29 @@
                                 </select>
                             </div>
                         </div>
+
                         <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">51.5km 最佳完賽成績 <span class="text-xs font-normal text-slate-400 normal-case">(總時間與單項拆解)</span></label>
-                            <input type="text" name="experience" required placeholder="總時間 3:15 / 游泳 40分 / 單車 1:15 / 跑步 1:10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">51.5km 最佳完賽成績 <span class="text-xs font-normal text-slate-400 normal-case">(選填，無經驗可留白)</span></label>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">總時間</label>
+                                    <input type="text" name="expTotal" placeholder="例如：3:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                                </div>
+                                <div class="grid grid-cols-3 gap-3 md:gap-6">
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">游泳</label>
+                                        <input type="text" name="expSwim" placeholder="40分" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">單車</label>
+                                        <input type="text" name="expBike" placeholder="1:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">跑步</label>
+                                        <input type="text" name="expRun" placeholder="1:10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -242,7 +275,7 @@
                         <div class="policy-box border border-slate-200 rounded-xl bg-white">
                             <div class="flex items-center justify-between p-4 md:p-5">
                                 <label class="flex items-center cursor-pointer select-none flex-grow">
-                                    <input type="checkbox" name="agreeQualification" required class="w-5 h-5 text-orange-600 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                    <input type="checkbox" name="agreeQualification" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
                                     <span class="ml-4 text-sm font-bold text-slate-800">我已確認具備 51.5km 鐵人完賽資格細則</span>
                                 </label>
                                 <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
@@ -260,7 +293,7 @@
                         <div class="policy-box border border-slate-200 rounded-xl bg-white">
                             <div class="flex items-center justify-between p-4 md:p-5">
                                 <label class="flex items-center cursor-pointer select-none flex-grow">
-                                    <input type="checkbox" name="agreeRefund" required class="w-5 h-5 text-orange-600 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                    <input type="checkbox" name="agreeRefund" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
                                     <span class="ml-4 text-sm font-bold text-slate-800">我已詳閱並同意報名與退費機制細則</span>
                                 </label>
                                 <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
@@ -279,7 +312,7 @@
                         <div class="policy-box border border-slate-200 rounded-xl bg-white">
                             <div class="flex items-center justify-between p-4 md:p-5">
                                 <label class="flex items-center cursor-pointer select-none flex-grow">
-                                    <input type="checkbox" name="agreeSafety" required class="w-5 h-5 text-orange-600 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                    <input type="checkbox" name="agreeSafety" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
                                     <span class="ml-4 text-sm font-bold text-slate-800">我已詳閱並同意戶外訓練安全聲明細則</span>
                                 </label>
                                 <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
@@ -303,7 +336,7 @@
                         <div class="policy-box border border-slate-200 rounded-xl bg-white">
                             <div class="flex items-center justify-between p-4 md:p-5">
                                 <label class="flex items-center cursor-pointer select-none flex-grow">
-                                    <input type="checkbox" name="agreeImage" required class="w-5 h-5 text-orange-600 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                    <input type="checkbox" name="agreeImage" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
                                     <span class="ml-4 text-sm font-bold text-slate-800">我已詳閱並同意影像與肖像權授權細則</span>
                                 </label>
                                 <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
