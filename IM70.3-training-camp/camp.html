@@ -69,7 +69,6 @@
             </div>
             <!-- 移除方方案連結，還原立刻報名按鈕 -->
             <div class="flex items-center gap-3">
-                <a href="#schedule" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-iron-orange-600 transition">時程</a>
                 <a href="registration.html" class="gradient-bg text-white text-xs sm:text-sm font-bold px-4 py-2 sm:px-5 sm:py-2.5 rounded-full hover:opacity-90 transition transform active:scale-[0.98] shadow-sm">
                     立即報名
                 </a>
@@ -97,23 +96,30 @@
 
             <!-- 修改點 (1) 頂部資訊：數據標籤改為特定格式的四行 -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-2xl mx-auto text-center mb-8">
-                <div class="bg-white/90 p-4 rounded-xl border border-white/20 shadow-lg backdrop-blur-sm group hover:bg-white transition flex flex-col items-center gap-2">
-                    <i class="far fa-calendar-alt text-lg text-iron-orange-600 transition group-hover:scale-110"></i>
-                    <p class="text-sm sm:text-base font-bold text-slate-950">賽事日期：<strong class="text-iron-orange-700">11/01</strong></p>
-                </div>
-                <div class="bg-white/90 p-4 rounded-xl border border-white/20 shadow-lg backdrop-blur-sm group hover:bg-white transition flex flex-col items-center gap-2">
-                    <i class="far fa-clock text-lg text-iron-orange-600 transition group-hover:scale-110"></i>
-                    <p class="text-sm sm:text-base font-bold text-slate-950">開訓日期：<strong class="text-iron-orange-700">07/13</strong></p>
-                </div>
-                <div class="bg-white/90 p-4 rounded-xl border border-white/20 shadow-lg backdrop-blur-sm group hover:bg-white transition flex flex-col items-center gap-2">
-                    <i class="fas fa-stopwatch text-lg text-iron-orange-600 transition group-hover:scale-110"></i>
-                    <p class="text-sm sm:text-base font-bold text-slate-950">訓練週期：<strong class="text-iron-orange-700">16週</strong></p>
-                </div>
-                <div class="bg-white/90 p-4 rounded-xl border border-white/20 shadow-lg backdrop-blur-sm group hover:bg-white transition flex flex-col items-center gap-2">
-                    <i class="fas fa-users text-lg text-iron-orange-600 transition group-hover:scale-110"></i>
-                    <p class="text-sm sm:text-base font-bold text-slate-950">滿8人開班／<strong class="text-iron-orange-700">20人額滿</strong></p>
-                </div>
-            </div>
+    <!-- 將 p-4 改為 py-2 px-4 -->
+    <div class="bg-white/90 py-2 px-4 rounded-xl border border-white/20 shadow-lg backdrop-blur-sm group hover:bg-white transition flex flex-col items-center gap-2">
+        <i class="far fa-calendar-alt text-lg text-iron-orange-600 transition group-hover:scale-110"></i>
+        <p class="text-sm sm:text-base font-bold text-slate-950">賽事日期：<strong class="text-iron-orange-700">11/01</strong></p>
+    </div>
+
+    <!-- 將 p-4 改為 py-2 px-4 -->
+    <div class="bg-white/90 py-2 px-4 rounded-xl border border-white/20 shadow-lg backdrop-blur-sm group hover:bg-white transition flex flex-col items-center gap-2">
+        <i class="far fa-clock text-lg text-iron-orange-600 transition group-hover:scale-110"></i>
+        <p class="text-sm sm:text-base font-bold text-slate-950">開訓日期：<strong class="text-iron-orange-700">07/13</strong></p>
+    </div>
+
+    <!-- 將 p-4 改為 py-2 px-4 -->
+    <div class="bg-white/90 py-2 px-4 rounded-xl border border-white/20 shadow-lg backdrop-blur-sm group hover:bg-white transition flex flex-col items-center gap-2">
+        <i class="fas fa-stopwatch text-lg text-iron-orange-600 transition group-hover:scale-110"></i>
+        <p class="text-sm sm:text-base font-bold text-slate-950">訓練週期：<strong class="text-iron-orange-700">16週</strong></p>
+    </div>
+
+    <!-- 將 p-4 改為 py-2 px-4 -->
+    <div class="bg-white/90 py-2 px-4 rounded-xl border border-white/20 shadow-lg backdrop-blur-sm group hover:bg-white transition flex flex-col items-center gap-2">
+        <i class="fas fa-users text-lg text-iron-orange-600 transition group-hover:scale-110"></i>
+        <p class="text-sm sm:text-base font-bold text-slate-950">滿8人開班／<strong class="text-iron-orange-700">20人額滿</strong></p>
+    </div>
+</div>
             
             </div>
     </header>
