@@ -45,12 +45,20 @@
             .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl { box-shadow: none !important; border: 1px solid #e5e7eb !important; }
             .gradient-bg { background: #f97316 !important; }
             section { page-break-inside: avoid; }
+            /* 修正列印時 VIP 卡片底色問題 */
+            .bg-slate-950 { background-color: white !important; color: black !important; border: 1px solid #e5e7eb !important; }
+            .bg-slate-900 { background-color: #f8fafc !important; color: #1e293b !important; }
+            .text-white, .text-slate-300, .text-slate-400, .text-slate-500 { color: black !important; }
+            .text-amber-300, .text-amber-200 { color: #854d0e !important; }
+            .border-slate-800\/50, .print\:border-slate-100 { border-color: #e5e7eb !important; }
+            .print\:bg-amber-100 { background-color: #fef3c7 !important; }
+            .print\:text-amber-800 { color: #92400e !important; }
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-200 selection:text-orange-900 text-sm sm:text-base">
 
-    <!-- 優化導覽列尺寸 -->
+    <!-- 導覽列：已移除右側報名按鈕 -->
     <nav class="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-slate-100 no-print">
         <div class="max-w-7xl mx-auto px-4 py-2 sm:py-3 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -59,8 +67,9 @@
                 </div>
                 <span class="font-black text-lg sm:text-xl text-slate-950 tracking-tight">IM 70.3 <span class="text-iron-orange-600">墾丁</span></span>
             </div>
-            <div class="flex items-center gap-2 sm:gap-3">
-                <a href="#pricing" class="text-xs font-medium text-slate-600 hover:text-iron-orange-600 transition">方案</a>
+            <div class="flex items-center gap-3">
+                <a href="#pricing" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-iron-orange-600 transition">方案</a>
+                <a href="#schedule" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-iron-orange-600 transition">時程</a>
                 <a href="registration.html" class="gradient-bg text-white text-xs sm:text-sm font-bold px-4 py-2 sm:px-5 sm:py-2.5 rounded-full hover:opacity-90 transition transform active:scale-[0.98] shadow-sm">
                     立即報名
                 </a>
@@ -68,8 +77,8 @@
         </div>
     </nav>
 
-    <!-- 優化 Header 尺寸與間距 -->
-    <header class="gradient-bg pt-10 sm:pt-16 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- 頁首：已移除下方的「查看訓練方案」按鈕 -->
+    <header class="gradient-bg pt-10 sm:pt-16 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
         <div class="absolute -top-20 -left-20 w-40 h-40 bg-white opacity-10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-20 -right-20 w-50 h-50 bg-orange-300 opacity-20 rounded-full blur-3xl"></div>
@@ -78,18 +87,15 @@
             <div class="inline-flex items-center bg-white/20 text-white text-xs font-bold px-3 py-1 sm:px-4 sm:py-1.5 rounded-full backdrop-blur-sm mb-3 sm:mb-4 border border-white/20 tracking-wider">
                 2026 年度 鐵人挑戰首選
             </div>
-            <!-- 手機版大標題縮小 text-3xl -->
             <h1 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-4 sm:mb-6 tracking-tight">
                 IM 70.3 墾丁<br />
                 <span class="text-orange-100">鐵人三項訓練營</span>
             </h1>
-            <!-- 手機版說明文字縮小 text-base -->
             <p class="text-base sm:text-lg md:text-2xl text-orange-50 mb-8 sm:mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
-                結合「光聿科學化訓練」與「川岳專業醫療恢復」，打造 16 週一站式備賽完美週期。
+                結合「光聿鐵人訓練」與「川岳醫療恢復」，<br />打造 16 週一站式鐵人備賽訓練。
             </p>
 
-            <!-- 數據標籤尺寸縮小 px-4 py-2 -->
-            <div class="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm font-bold text-slate-900 mb-10 sm:mb-12">
+            <div class="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm font-bold text-slate-900">
                 <div class="flex items-center bg-white/90 px-4 py-2 sm:px-5 sm:py-3 rounded-lg sm:rounded-xl border border-white/20 shadow-lg backdrop-blur-sm group hover:bg-white transition">
                     <i class="far fa-calendar-alt w-4 text-center mr-2 text-iron-orange-600 text-base transition group-hover:scale-110"></i> 賽事：2026/11/01
                 </div>
@@ -100,18 +106,11 @@
                     <i class="fas fa-users w-4 text-center mr-2 text-iron-orange-600 text-base transition group-hover:scale-110"></i> 招募：滿 8 人開班 / 上限 20 人
                 </div>
             </div>
-
-            <!-- Header 區塊行動呼籲縮小 px-6 py-3 -->
-            <a href="#pricing" class="inline-flex items-center gap-2 bg-white text-iron-orange-700 text-base sm:text-lg font-extrabold px-6 py-3 sm:px-10 sm:py-4 rounded-lg sm:rounded-xl hover:bg-orange-50 transition transform active:scale-[0.98] shadow-xl hover:shadow-2xl">
-                查看訓練方案 <i class="fas fa-arrow-down text-sm mt-0.5"></i>
-            </a>
-
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         
-        <!-- About 區塊修正間距 (-mt-12) -->
         <section id="about" class="mb-12 sm:mb-16 -mt-12 relative z-10 no-print">
             <div class="max-w-5xl mx-auto">
                 <div class="bg-white p-6 sm:p-10 md:p-12 rounded-2xl sm:rounded-3xl border border-slate-100 shadow-xl">
@@ -119,17 +118,15 @@
                         專業訓練 <span class="text-iron-orange-500">x</span> 醫療恢復
                     </h2>
                     
-                    <!-- 說明文字手機版縮小 text-sm -->
                     <div class="max-w-3xl mx-auto text-slate-600 mb-10 sm:mb-12 leading-relaxed text-center md:text-left text-sm sm:text-base md:text-lg space-y-3">
                         <p>
-                            本訓練營專為 2026 年 IM 70.3 墾丁站或下半年 113 公里鐵人賽的選手設計。
+                            本次訓練營為 2026年 IM 70.3 墾丁或下半年113公里鐵人賽的參賽選手，
                         </p>
                         <p>
-                            我們導入專業團隊，提供從「體能建立、技術突破」到「賽後修復、傷痛預防」的完整週期服務，讓您健康無傷地完成挑戰！
+                            提供從「體能建立、技術突破」到「賽後修復、傷痛預防」的完整週期！
                         </p>
                     </div>
 
-                    <!-- 卡片內部尺寸縮小 p-6, Icon size w-12 h-12 -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
                         <div class="bg-orange-50 p-6 sm:p-8 rounded-xl sm:rounded-2xl border border-orange-100 transition hover:border-orange-200 hover:shadow-md group flex gap-4 sm:gap-5 items-start">
                             <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-xl flex items-center justify-center border border-orange-100 shadow-inner shrink-0 mt-1">
@@ -137,7 +134,7 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-lg sm:text-xl text-iron-orange-950 mb-1.5 flex items-center">光聿 KUANGYU</h4>
-                                <p class="text-xs sm:text-sm text-iron-orange-800 leading-relaxed">主導 16 週科學化課表設計、線上數據監控與實體團練。</p>
+                                <p class="text-xs sm:text-sm text-iron-orange-800 leading-relaxed">主導 16 週科學化課表設計、線上數據監控與實體移地團練。</p>
                             </div>
                         </div>
                         <div class="bg-slate-100 p-6 sm:p-8 rounded-xl sm:rounded-2xl border border-slate-200 transition hover:border-slate-300 hover:shadow-md group flex gap-4 sm:gap-5 items-start">
@@ -146,7 +143,7 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-lg sm:text-xl text-slate-950 mb-1.5 flex items-center">川岳中醫</h4>
-                                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">提供室內場地、一對一肌力專項指導與醫療修復服務。</p>
+                                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">提供室內訓練場地、一對一肌力專項指導與頂級醫療修復。</p>
                             </div>
                         </div>
                     </div>
@@ -154,23 +151,12 @@
             </div>
         </section>
 
-        <!-- 滾動導覽列修正 px-5 py-2 -->
         <div class="sticky top-[53px] sm:top-[73px] z-40 bg-slate-50/95 backdrop-blur-sm py-3 sm:py-4 border-b border-slate-200/50 mb-10 sm:mb-12 no-print transition-all">
             <div class="max-w-4xl mx-auto flex items-center space-x-2 sm:space-x-3 overflow-x-auto hide-scrollbar sm:justify-center px-4 snap-x snap-mandatory">
-                
-                <a href="#eligibility" class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold px-5 py-2 sm:px-6 sm:py-2.5 rounded-full hover:bg-orange-50 hover:text-iron-orange-700 hover:border-orange-200 transition whitespace-nowrap active:scale-[0.98] snap-center shadow-sm">
-                    參加資格
-                </a>
-                <a href="#training-plan" class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold px-5 py-2 sm:px-6 sm:py-2.5 rounded-full hover:bg-orange-50 hover:text-iron-orange-700 hover:border-orange-200 transition whitespace-nowrap active:scale-[0.98] snap-center shadow-sm">
-                    訓練總覽
-                </a>
-                <a href="#pricing" class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold px-5 py-2 sm:px-6 sm:py-2.5 rounded-full hover:bg-orange-50 hover:text-iron-orange-700 hover:border-orange-200 transition whitespace-nowrap active:scale-[0.98] snap-center shadow-sm">
-                    訓練方案
-                </a>
-                <a href="#schedule" class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold px-5 py-2 sm:px-6 sm:py-2.5 rounded-full hover:bg-orange-50 hover:text-iron-orange-700 hover:border-orange-200 transition whitespace-nowrap active:scale-[0.98] snap-center shadow-sm">
-                    重要時程
-                </a>
-                
+                <a href="#eligibility" class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold px-5 py-2 sm:px-6 sm:py-2.5 rounded-full hover:bg-orange-50 hover:text-iron-orange-700 hover:border-orange-200 transition whitespace-nowrap active:scale-[0.98] snap-center shadow-sm">參加資格</a>
+                <a href="#training-plan" class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold px-5 py-2 sm:px-6 sm:py-2.5 rounded-full hover:bg-orange-50 hover:text-iron-orange-700 hover:border-orange-200 transition whitespace-nowrap active:scale-[0.98] snap-center shadow-sm">訓練總覽</a>
+                <a href="#pricing" class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold px-5 py-2 sm:px-6 sm:py-2.5 rounded-full hover:bg-orange-50 hover:text-iron-orange-700 hover:border-orange-200 transition whitespace-nowrap active:scale-[0.98] snap-center shadow-sm">訓練方案</a>
+                <a href="#schedule" class="bg-white border border-slate-200 text-slate-700 text-xs sm:text-sm font-bold px-5 py-2 sm:px-6 sm:py-2.5 rounded-full hover:bg-orange-50 hover:text-iron-orange-700 hover:border-orange-200 transition whitespace-nowrap active:scale-[0.98] snap-center shadow-sm">重要時程</a>
             </div>
         </div>
         
@@ -183,15 +169,9 @@
                     參加資格
                 </h3>
                 <div class="text-slate-700 text-sm sm:text-base md:text-lg space-y-4 sm:space-y-5 leading-relaxed">
-                    <p class="flex items-start">
-                        <i class="fas fa-check-circle text-iron-orange-500 mt-1 mr-2.5 sm:mr-3 text-base sm:text-lg shrink-0"></i>
-                        <span>需完成至少一場 <strong class="text-slate-900">51.5 公里</strong> 鐵人三項賽。</span>
-                    </p>
+                    <p class="flex items-start"><i class="fas fa-check-circle text-iron-orange-500 mt-1 mr-2.5 sm:mr-3 text-base sm:text-lg shrink-0"></i><span>需完成至少一場 <strong class="text-slate-900">51.5 公里</strong> 鐵人三項賽。</span></p>
                     <div class="bg-slate-50 p-5 sm:p-6 rounded-xl border border-slate-100">
-                        <p class="flex items-start font-bold text-slate-900 mb-3 sm:mb-4">
-                            <i class="fas fa-check-circle text-iron-orange-500 mt-1 mr-2.5 sm:mr-3 text-base sm:text-lg shrink-0"></i>
-                            <span>有規律運動習慣，且具備單項能力：</span>
-                        </p>
+                        <p class="flex items-start font-bold text-slate-900 mb-3 sm:mb-4"><i class="fas fa-check-circle text-iron-orange-500 mt-1 mr-2.5 sm:mr-3 text-base sm:text-lg shrink-0"></i><span>有規律運動習慣，且具備單項能力：</span></p>
                         <ul class="pl-8 sm:pl-10 space-y-2 sm:space-y-3 text-slate-700 list-disc text-sm sm:text-base">
                             <li>可連續捷泳（自由式）<strong class="text-slate-900">1000 公尺</strong>。</li>
                             <li>可連續慢跑 <strong class="text-slate-900">60 分鐘</strong>。</li>
@@ -211,72 +191,51 @@
                 <h2 class="text-2xl sm:text-3xl font-black mb-8 sm:mb-10 text-slate-950 text-center tracking-tight">16 週週期化訓練總覽</h2>
                 <div class="space-y-4 sm:space-y-5 mt-6 relative">
                     <div class="absolute top-0 bottom-0 left-1 w-1 bg-slate-200 rounded-full no-print"></div>
-                    
                     <div class="bg-white p-5 rounded-lg border border-slate-100 shadow-sm relative overflow-hidden transition hover:shadow-md flex items-start gap-4">
                         <div class="absolute top-0 left-0 bottom-0 w-1.5 h-full bg-slate-300"></div>
                         <div class="ml-1 flex-grow">
-                            <div class="flex items-center justify-between gap-3 mb-1.5">
-                                <h3 class="text-lg font-bold text-slate-950">基礎期 1 (Base)</h3>
-                                <span class="bg-slate-100 text-slate-600 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W1-W4</span>
-                            </div>
+                            <div class="flex items-center justify-between gap-3 mb-1.5"><h3 class="text-lg font-bold text-slate-950">基礎期 1 (Base)</h3><span class="bg-slate-100 text-slate-600 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W1-W4</span></div>
                             <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">建立有氧耐力基礎，強化三項巡航技術。</p>
                         </div>
                     </div>
-
                     <div class="bg-white p-5 rounded-lg border border-slate-100 shadow-sm relative overflow-hidden transition hover:shadow-md flex items-start gap-4">
                         <div class="absolute top-0 left-0 bottom-0 w-1.5 h-full bg-slate-500"></div>
                         <div class="ml-1 flex-grow">
-                            <div class="flex items-center justify-between gap-3 mb-1.5">
-                                <h3 class="text-lg font-bold text-slate-950">基礎期 2 (Base+)</h3>
-                                <span class="bg-slate-100 text-slate-600 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W5-W6</span>
-                            </div>
+                            <div class="flex items-center justify-between gap-3 mb-1.5"><h3 class="text-lg font-bold text-slate-950">基礎期 2 (Base+)</h3><span class="bg-slate-100 text-slate-600 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W5-W6</span></div>
                             <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">拉長巡航里程，提高 Zone 2 耐力比重。</p>
                         </div>
                     </div>
-
                     <div class="bg-white p-5 rounded-lg border border-slate-100 shadow-sm relative overflow-hidden transition hover:shadow-md flex items-start gap-4">
                         <div class="absolute top-0 left-0 bottom-0 w-1.5 h-full bg-iron-orange-400"></div>
                         <div class="ml-1 flex-grow">
-                            <div class="flex items-center justify-between gap-3 mb-1.5">
-                                <h3 class="text-lg font-bold text-slate-950">高效進展期 (Build)</h3>
-                                <span class="bg-orange-100 text-iron-orange-700 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W7-W10</span>
-                            </div>
+                            <div class="flex items-center justify-between gap-3 mb-1.5"><h3 class="text-lg font-bold text-slate-950">高效進展期 (Build)</h3><span class="bg-orange-100 text-iron-orange-700 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W7-W10</span></div>
                             <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">導入乳酸閾值（Zone 4）訓練，推高無氧上限。</p>
                         </div>
                     </div>
-
                     <div class="bg-white p-5 rounded-lg border border-slate-100 shadow-sm relative overflow-hidden transition hover:shadow-md flex items-start gap-4">
                         <div class="absolute top-0 left-0 bottom-0 w-1.5 h-full bg-iron-orange-600"></div>
                         <div class="ml-1 flex-grow">
-                            <div class="flex items-center justify-between gap-3 mb-1.5">
-                                <h3 class="text-lg font-bold text-slate-950">巔峰期 (Peak)</h3>
-                                <span class="bg-orange-100 text-iron-orange-700 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W11-W13</span>
-                            </div>
+                            <div class="flex items-center justify-between gap-3 mb-1.5"><h3 class="text-lg font-bold text-slate-950">巔峰期 (Peak)</h3><span class="bg-orange-100 text-iron-orange-700 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W11-W13</span></div>
                             <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">模擬目標配速 (Zone 3) 訓練。轉換跑達最大量。</p>
                         </div>
                     </div>
-
                     <div class="bg-white p-5 rounded-lg border border-slate-100 shadow-sm relative overflow-hidden transition hover:shadow-md flex items-start gap-4">
                         <div class="absolute top-0 left-0 bottom-0 w-1.5 h-full bg-red-600"></div>
                         <div class="ml-1 flex-grow">
-                            <div class="flex items-center justify-between gap-3 mb-1.5">
-                                <h3 class="text-lg font-bold text-slate-950">黃金調整期 (Taper)</h3>
-                                <span class="bg-red-50 text-red-600 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W14-W16</span>
-                            </div>
+                            <div class="flex items-center justify-between gap-3 mb-1.5"><h3 class="text-lg font-bold text-slate-950">黃金調整期 (Taper)</h3><span class="bg-red-50 text-red-600 px-3 py-0.5 rounded-full text-xs font-bold shrink-0">W14-W16</span></div>
                             <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">時數調降，維持強度。讓出身體完全恢復。</p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
         <div class="page-break"></div>
 
-        <section id="pricing" class="mb-16 sm:mb-20 scroll-mt-24 sm:scroll-mt-28">
+        <section id="pricing" class="mb-16 sm:mb-20 scroll-mt-24 sm:scroll-mt-28 px-4 sm:px-0">
             <div class="text-center mb-8 sm:mb-10">
                 <h2 class="text-3xl sm:text-4xl font-black text-slate-950 mb-3 sm:mb-4 tracking-tight">訓練方案</h2>
-                <p class="text-slate-600 text-base sm:text-lg max-w-xl mx-auto px-4">我們提供三種層級的方案，無論您的目標是健康完賽或是突破 PB。</p>
+                <p class="text-slate-600 text-base sm:text-lg max-w-xl mx-auto px-4">提供三種客製化方案，精準符合您的備賽需求</p>
             </div>
             
             <div class="flex items-center justify-center space-x-2 text-iron-orange-600 text-xs font-bold mb-5 lg:hidden animate-pulse no-print">
@@ -284,112 +243,118 @@
                 <i class="fas fa-arrow-right text-sm mt-0.5"></i>
             </div>
             
-            <!-- 調整卡片尺寸 p-6, Title text-2xl, Price text-4xl -->
             <div class="flex overflow-x-auto lg:grid lg:grid-cols-3 gap-6 sm:gap-8 pt-2 pb-8 hide-scrollbar snap-x snap-mandatory px-4 sm:px-0">
                 
-                <!-- 基本方案修正版 -->
-                <div class="min-w-[75vw] sm:min-w-[420px] lg:min-w-0 snap-center bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
+                <!-- 基本方案：內容完全還原 -->
+                <div class="min-w-[85vw] sm:min-w-[420px] lg:min-w-0 snap-center bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-slate-100 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
                     <div class="p-6 sm:p-8 pb-5 sm:pb-6 border-b border-slate-100 flex-grow">
                         <h3 class="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">基本方案</h3>
-                        <p class="text-iron-orange-600 text-xs font-bold mt-2 bg-orange-50 inline-block px-3 py-1 rounded-full">週期化課表，穩定前進</p>
+                        <p class="text-iron-orange-600 text-xs font-bold mt-2 bg-orange-50 inline-block px-3 py-1.5 rounded-full tracking-wider">週期化課表，穩定訓練、穩定進步</p>
                         <div class="my-5 sm:my-6">
                             <span class="text-slate-400 text-xs font-medium">NT$</span>
                             <span class="text-4xl sm:text-5xl font-black text-slate-950 tracking-tight">25,000</span>
                             <span class="text-slate-500 text-xs font-medium">/早鳥價</span>
                         </div>
                         <p class="text-xs text-slate-400 line-through">原價 NT$29,200</p>
-                        
-                        <a href="registration.html?plan=basic" class="block w-full text-center mt-6 sm:mt-8 border-2 border-slate-200 text-slate-700 text-xs sm:text-sm font-bold py-3 px-5 sm:py-3.5 sm:px-6 rounded-lg sm:rounded-xl hover:bg-slate-50 transition active:scale-[0.98]">
-                            選擇此方案
-                        </a>
                     </div>
-                    <div class="p-6 sm:p-8 bg-slate-50/50">
-                        <ul class="space-y-3 sm:space-y-4 text-xs sm:text-sm text-slate-700">
+                    <div class="p-6 sm:p-8 flex-grow bg-slate-50/50">
+                        <ul class="space-y-4 text-xs sm:text-sm text-slate-700">
                             <li>
-                                <div class="font-bold text-slate-950 mb-1.5 flex items-center"><i class="fas fa-stopwatch text-iron-orange-500 w-5 text-sm shrink-0"></i> 光聿訓練</div>
-                                <div class="pl-5 space-y-1.5">
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-0.5 w-3.5 text-center shrink-0"></i> 16週 線上週期化課表</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-0.5 w-3.5 text-center shrink-0"></i> 每週 1 次 游泳團練</div>
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-0.5 w-3.5 text-center shrink-0"></i>  8次 週末移地團練</div>
+                                <div class="font-bold text-slate-950 mb-2 flex items-center"><i class="fas fa-stopwatch text-iron-orange-500 w-6 text-base shrink-0"></i> 光聿訓練</div>
+                                <div class="pl-6 space-y-1.5">
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 16週 線上課表</div>
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 16次 游泳團練 (每週 1 次)</div>
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i>  8次 週末團練 (海泳/外騎/跑山)</div>
                                 </div>
                             </li>
                             <li class="pt-3 border-t border-slate-100">
-                                <div class="font-bold text-slate-950 mb-1.5 flex items-center"><i class="fas fa-gift text-iron-orange-500 w-5 text-sm shrink-0"></i> 豐富報名禮</div>
-                                <div class="pl-5 space-y-1.5">
-                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2 mt-0.5 w-3.5 text-center shrink-0"></i> Alé 專屬鐵人服 一套</div>
-                                    <div class="flex items-start text-slate-500"><i class="fas fa-plus text-slate-400 mr-2 mt-0.5 w-3.5 text-center shrink-0"></i> Garmin / UP Sports 補給折扣</div>
+                                <div class="font-bold text-slate-950 mb-2 flex items-center"><i class="fas fa-gift text-iron-orange-500 w-6 text-base shrink-0"></i> 報名禮</div>
+                                <div class="pl-6 space-y-1.5">
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> Alé 專屬鐵人服 一套</div>
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> Garmin 折扣碼</div>
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> UP Sports補給大禮包</div>
+                                    <div class="flex items-start text-slate-600"><i class="fas fa-plus text-slate-400 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> COMPRESSPORT/BONT/BLUE70 八折券</div>
+                                </div>
+                            </li>
+                            <li class="pt-3 border-t border-slate-100">
+                                <div class="font-bold text-slate-950 mb-2 flex items-center"><i class="fas fa-leaf text-iron-orange-500 w-6 text-base shrink-0"></i> 川岳體驗</div>
+                                <div class="pl-6 space-y-1.5 text-slate-600">
+                                    <div class="flex items-start"><i class="fas fa-plus text-slate-400 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 高壓氧 體驗 1 次 (30分鐘)</div>
+                                    <div class="flex items-start"><i class="fas fa-plus text-slate-400 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 岩盤浴 體驗 1 次 (30分鐘)</div>
+                                    <div class="flex items-start"><i class="fas fa-plus text-slate-400 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 運動按摩 體驗 1 次 (30分鐘)</div>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- 進階方案修正版 -->
-                <div class="min-w-[75vw] sm:min-w-[420px] lg:min-w-0 snap-center bg-white rounded-2xl sm:rounded-3xl shadow-lg border-4 border-iron-orange-300 overflow-hidden flex flex-col relative transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
-                    <div class="absolute top-0 right-0 bg-iron-orange-500 text-white text-xs font-bold px-4 py-1.5 sm:px-5 sm:py-2 rounded-bl-xl sm:rounded-bl-2xl tracking-wider z-10 shadow-md">人氣熱門</div>
+                <!-- 進階方案：內容完全還原 -->
+                <div class="min-w-[85vw] sm:min-w-[420px] lg:min-w-0 snap-center bg-white rounded-2xl sm:rounded-3xl shadow-lg border-4 border-iron-orange-300 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group">
                     <div class="p-6 sm:p-8 pb-5 sm:pb-6 border-b border-slate-100 flex-grow">
                         <h3 class="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">進階方案</h3>
-                        <p class="text-iron-orange-600 text-xs font-bold mt-2 bg-orange-50 inline-block px-3 py-1 rounded-full">全面訓練，建立強大系統</p>
+                        <p class="text-iron-orange-600 text-xs font-bold mt-2 bg-orange-50 inline-block px-3 py-1.5 rounded-full tracking-wider">全面提升、建立完整體能系統</p>
                         <div class="my-5 sm:my-6">
                             <span class="text-slate-400 text-xs font-medium">NT$</span>
                             <span class="text-4xl sm:text-5xl font-black text-slate-950 tracking-tight">45,000</span>
                             <span class="text-slate-500 text-xs font-medium">/早鳥價</span>
                         </div>
                         <p class="text-xs text-slate-400 line-through">原價 NT$48,400</p>
-                        
-                        <a href="registration.html?plan=advanced" class="block w-full text-center mt-6 sm:mt-8 gradient-bg text-white text-xs sm:text-sm font-bold py-3 px-5 sm:py-3.5 sm:px-6 rounded-lg sm:rounded-xl hover:opacity-90 transition active:scale-[0.98] shadow-md">
-                            立即報名此方案
-                        </a>
                     </div>
-                    <div class="p-6 sm:p-8 bg-slate-50/50">
-                        <ul class="space-y-3 sm:space-y-4 text-xs sm:text-sm text-slate-700">
+                    <div class="p-6 sm:p-8 flex-grow bg-slate-50/50">
+                        <ul class="space-y-4 text-xs sm:text-sm text-slate-700">
                             <li>
-                                <div class="font-bold text-slate-950 mb-1.5 flex items-center"><i class="fas fa-check-double text-iron-orange-500 w-5 text-sm shrink-0"></i> 包含【基本方案】</div>
-                            </li>
-                            <li class="pt-3 border-t border-slate-100">
-                                <div class="font-bold text-slate-950 mb-1.5 flex items-center"><i class="fas fa-dumbbell text-iron-orange-500 w-5 text-sm shrink-0"></i> 川岳肌力指導</div>
-                                <div class="pl-5 space-y-1.5 font-medium text-slate-800">
-                                    <div class="flex items-start"><i class="fas fa-arrow-right text-iron-orange-500 mr-2 mt-0.5 w-3.5 text-center shrink-0"></i> 1對1 肌力專項訓練共16堂</div>
+                                <div class="font-bold text-slate-950 mb-2 flex items-center"><i class="fas fa-layer-group text-iron-orange-500 w-6 text-base shrink-0"></i> 基礎心肺</div>
+                                <div class="pl-6 space-y-1.5">
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 包含【基礎方案】所有項目</div>
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 包含 報名禮</div>
                                 </div>
                             </li>
                             <li class="pt-3 border-t border-slate-100">
-                                <div class="font-bold text-slate-950 mb-1.5 flex items-center"><i class="fas fa-leaf text-iron-orange-500 w-5 text-sm shrink-0"></i> 醫療恢復體驗</div>
-                                <div class="pl-5 space-y-1.5 text-slate-600">
-                                    <div class="flex items-start text-slate-500"><i class="fas fa-plus text-slate-400 mr-2 mt-0.5 w-3.5 text-center shrink-0"></i> 高壓氧/岩盤浴/按摩 體驗各1次</div>
+                                <div class="font-bold text-slate-950 mb-2 flex items-center"><i class="fas fa-dumbbell text-iron-orange-500 w-6 text-base shrink-0"></i> 川岳健身房</div>
+                                <div class="pl-6 space-y-1.5">
+                                    <div class="flex items-start font-medium text-slate-800"><i class="fas fa-arrow-right text-iron-orange-500 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 一對一 肌力訓練（每週 1 堂）</div>
+                                </div>
+                            </li>
+                            <li class="pt-3 border-t border-slate-100">
+                                <div class="font-bold text-slate-950 mb-2 flex items-center"><i class="fas fa-leaf text-iron-orange-500 w-6 text-base shrink-0"></i> 川岳體驗</div>
+                                <div class="pl-6 space-y-1.5 text-slate-600">
+                                    <div class="flex items-start"><i class="fas fa-plus text-slate-400 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 高壓氧 體驗 1 次 (30分鐘)</div>
+                                    <div class="flex items-start"><i class="fas fa-plus text-slate-400 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 岩盤浴 體驗 1 次 (30分鐘)</div>
+                                    <div class="flex items-start"><i class="fas fa-plus text-slate-400 mr-2.5 mt-0.5 w-4 text-center shrink-0"></i> 運動按摩 體驗 1 次 (30分鐘)</div>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- VIP方案修正版 -->
-                <div class="min-w-[75vw] sm:min-w-[420px] lg:min-w-0 snap-center bg-slate-950 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-800 overflow-hidden flex flex-col relative transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group text-white print:border-slate-200 print:text-slate-800 px-4 sm:px-0">
-                    <div class="absolute top-0 right-0 bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 text-xs font-black px-4 py-1.5 sm:px-5 sm:py-2 rounded-bl-xl sm:rounded-bl-2xl tracking-wider z-10 shadow-md">尊榮首選</div>
-                    <div class="p-6 sm:p-8 pb-5 sm:pb-6 border-b border-slate-800/50 flex-grow">
-                        <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight print:text-slate-950 tracking-tight">VIP方案</h3>
-                        <p class="text-amber-300 text-xs font-bold mt-2 bg-amber-950 inline-block px-3 py-1 rounded-full print:bg-amber-100 print:text-amber-800">頂級訓練與恢復</p>
+                <!-- VIP方案：內容完全還原 -->
+                <div class="min-w-[85vw] sm:min-w-[420px] lg:min-w-0 snap-center bg-slate-950 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-800 overflow-hidden flex flex-col relative transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group text-white print:border-slate-200 print:text-slate-800">
+                    <div class="absolute top-0 right-0 bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 text-xs font-black px-4 py-1.5 sm:px-5 sm:py-2 rounded-bl-xl sm:rounded-bl-2xl tracking-wider z-10 shadow-md print:bg-none print:text-black print:border print:border-slate-200">尊榮首選</div>
+                    <div class="p-6 sm:p-8 pb-5 sm:pb-6 border-b border-slate-800/50 print:border-slate-100 flex-grow">
+                        <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight print:text-slate-950">VIP方案</h3>
+                        <p class="text-amber-300 text-xs font-bold mt-2 bg-amber-950 inline-block px-3 py-1.5 rounded-full tracking-wider print:bg-amber-100 print:text-amber-800">完整訓練與體能建立、高品質恢復</p>
                         <div class="my-5 sm:my-6">
                             <span class="text-slate-500 text-xs font-medium">NT$</span>
                             <span class="text-4xl sm:text-5xl font-black text-white tracking-tight print:text-slate-950 tracking-tight">55,000</span>
                             <span class="text-slate-400 text-xs font-medium">/早鳥價</span>
                         </div>
                         <p class="text-xs text-slate-500 line-through">原價 NT$59,200</p>
-                        
-                        <a href="registration.html?plan=vip" class="block w-full text-center mt-6 sm:mt-8 bg-gradient-to-r from-amber-400 to-amber-600 text-slate-950 Text-xs sm:text-sm font-black py-3 px-5 sm:py-3.5 sm:px-6 rounded-lg sm:rounded-xl hover:opacity-90 transition active:scale-[0.98] shadow-md">
-                            選擇此 VIP 方案
-                        </a>
                     </div>
-                    <div class="p-6 sm:p-8 bg-slate-900 print:bg-slate-50">
-                        <ul class="space-y-3 sm:space-y-4 text-xs sm:text-sm text-slate-300 print:text-slate-700 overflow-visible">
+                    <div class="p-6 sm:p-8 flex-grow bg-slate-900 print:bg-slate-50">
+                        <ul class="space-y-4 text-xs sm:text-sm text-slate-300 print:text-slate-700 overflow-visible">
                             <li>
-                                <div class="font-bold text-white mb-1.5 flex items-center print:text-slate-950"><i class="fas fa-check-double text-amber-400 w-5 text-sm shrink-0"></i> 包含【進階方案】</div>
-                                <div class="pl-5 text-slate-400 print:text-slate-600">含肌力訓練 16 堂。</div>
+                                <div class="font-bold text-white mb-2 flex items-center print:text-slate-950"><i class="fas fa-layer-group text-amber-400 w-6 text-base shrink-0 print:text-amber-600"></i> 完整系統</div>
+                                <div class="pl-6 space-y-1.5">
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0 print:text-green-600"></i> 包含【進階方案】所有項目</div>
+                                    <div class="flex items-start"><i class="fas fa-check text-green-500 mr-2.5 mt-0.5 w-4 text-center shrink-0 print:text-green-600"></i> 包含 報名禮</div>
+                                </div>
                             </li>
                             <li class="pt-3 border-t border-slate-800/50 print:border-slate-100 overflow-visible">
-                                <div class="font-bold text-white mb-1.5 flex items-center print:text-slate-950"><i class="fas fa-spa text-amber-400 w-5 text-sm shrink-0"></i> 川岳尊榮恢復</div>
-                                <div class="pl-5 space-y-1.5 font-medium text-amber-200 print:text-slate-900">
-                                    <div class="flex items-start"><i class="fas fa-arrow-up text-amber-400 mr-2 mt-0.5 w-3.5 text-center shrink-0"></i> 高壓氧/岩盤浴 完整療程（各5次）</div>
-                                    <div class="flex items-start"><i class="fas fa-arrow-up text-amber-400 mr-2 mt-0.5 w-3.5 text-center shrink-0"></i> 專項運動按摩 完整療程（共3次）</div>
+                                <div class="font-bold text-white mb-2 flex items-center print:text-slate-950"><i class="fas fa-spa text-amber-400 w-6 text-base shrink-0 print:text-amber-600"></i> 川岳尊榮恢復升級</div>
+                                <div class="pl-6 space-y-2 font-medium text-amber-200 print:text-slate-900">
+                                    <div class="flex items-start"><i class="fas fa-arrow-up text-amber-400 mr-2 mt-0.5 w-4 text-center shrink-0 print:text-amber-600"></i> 高壓氧 完整療程：4次+贈送1次（共5次）</div>
+                                    <div class="flex items-start"><i class="fas fa-arrow-up text-amber-400 mr-2 mt-0.5 w-4 text-center shrink-0 print:text-amber-600"></i> 岩盤浴 完整療程：4次+贈送1次（共5次）</div>
+                                    <div class="flex items-start"><i class="fas fa-arrow-up text-amber-400 mr-2 mt-0.5 w-4 text-center shrink-0 print:text-amber-600"></i> 運動按摩：2次+贈送1次（共3次）</div>
                                 </div>
                             </li>
                         </ul>
@@ -403,38 +368,33 @@
 
         <section id="schedule" class="mb-16 sm:mb-20 scroll-mt-24 sm:scroll-mt-28">
             <h2 class="text-2xl sm:text-3xl font-black text-center mb-12 sm:mb-16 text-slate-950 tracking-tight">重要時程</h2>
-            
             <div class="relative border-l-2 border-slate-200 ml-5 sm:ml-10 space-y-10 sm:space-y-12 max-w-3xl mx-auto mt-6">
-                
                 <div class="relative pl-8 sm:pl-10 group">
                     <div class="absolute w-8 h-8 sm:w-10 sm:h-10 bg-slate-800 rounded-full -left-[17px] sm:-left-[21px] top-0 border-4 border-white shadow-lg flex items-center justify-center transition group-hover:scale-110">
                         <i class="fas fa-bullhorn text-white text-sm sm:text-base"></i>
                     </div>
                     <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-lg relative transition hover:border-orange-100 hover:shadow-xl">
                         <span class="text-sm font-bold text-iron-orange-600 tracking-wider">6/21 (日)</span>
-                        <h4 class="text-lg sm:text-xl font-bold text-slate-950 mt-1 mb-2.5">實體招生說明會</h4>
-                        <p class="text-slate-700 text-xs sm:text-sm">地點：川岳中醫場館。我們將現場說明課表規劃與核心安排，歡迎參加！</p>
+                        <h4 class="text-lg sm:text-xl font-bold text-slate-950 mt-1 mb-2.5">實體說明會</h4>
+                        <p class="text-slate-700 text-xs sm:text-sm">歡迎來到川岳場館體驗，我們將現場為您詳細說明課表規劃與核心規劃。</p>
                     </div>
                 </div>
-
                 <div class="relative pl-8 sm:pl-10 group">
                     <div class="absolute w-6 h-6 bg-iron-orange-500 rounded-full -left-[13px] top-1.5 border-4 border-white shadow-md transition group-hover:scale-110"></div>
                     <div class="bg-white p-5 rounded-xl border border-slate-100 shadow transition hover:border-slate-200">
                         <span class="text-sm font-bold text-iron-orange-600 tracking-wider">6/24 (三) 24:00</span>
                         <h4 class="text-lg sm:text-xl font-bold text-slate-950 mt-1 mb-2.5">早鳥優惠截止</h4>
-                        <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">請把握時間完成報名，立享最優價格。</p>
+                        <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">說明會後保留 3 天專屬優惠期限，請把握時間完成報名手續。</p>
                     </div>
                 </div>
-
                 <div class="relative pl-8 sm:pl-10 group">
                     <div class="absolute w-6 h-6 bg-slate-300 rounded-full -left-[13px] top-1.5 border-4 border-white shadow-md transition group-hover:scale-110 print:bg-slate-200"></div>
                     <div class="bg-white p-5 rounded-xl border border-slate-100 shadow transition hover:border-slate-200">
                         <span class="text-sm font-bold text-slate-500 tracking-wider">7/05 (日) 24:00</span>
                         <h4 class="text-lg sm:text-xl font-bold text-slate-950 mt-1 mb-2.5">報名全面截止</h4>
-                        <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">額滿將不再受理。最後席次請儘早把握！</p>
+                        <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">招募名額設有上限，額滿將不再受理報名。</p>
                     </div>
                 </div>
-
                 <div class="relative pl-8 sm:pl-10 group">
                     <div class="absolute w-8 h-8 sm:w-10 sm:h-10 gradient-bg rounded-full -left-[17px] sm:-left-[21px] top-0 border-4 border-white shadow-lg flex items-center justify-center transition group-hover:scale-110 print:gradient-bg">
                         <i class="fas fa-flag-checkered text-white text-sm sm:text-base"></i>
@@ -442,24 +402,22 @@
                     <div class="gradient-bg p-6 sm:p-8 rounded-xl shadow-xl text-white relative overflow-hidden print:gradient-bg">
                         <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
                         <span class="text-sm font-bold text-orange-100 tracking-wider">7/13 (一) 06:30</span>
-                        <h4 class="text-xl sm:text-2xl font-black text-white mt-1.5 mb-2.5">正式開訓</h4>
-                        <p class="text-orange-50 text-xs sm:text-sm leading-relaxed">展開 16 週的密集訓練與恢復，為賽事打下堅實基礎。</p>
+                        <h4 class="text-xl sm:text-2xl font-black text-white mt-1.5 mb-2.5 leading-tight tracking-tight">正式開訓</h4>
+                        <p class="text-orange-50 text-xs sm:text-sm leading-relaxed">展開 16 週的密集訓練與恢復療程，為賽事打下堅實基礎。</p>
                     </div>
                 </div>
-                
             </div>
         </section>
 
-        <!-- Final CTA section 尺寸修正版 -->
         <section class="max-w-4xl mx-auto text-center py-12 sm:py-16 no-print">
             <div class="bg-white p-8 sm:p-12 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-100 relative overflow-hidden px-4 sm:px-0">
                 <div class="absolute -top-10 -left-10 w-40 h-40 bg-orange-100 rounded-full blur-3xl opacity-60"></div>
                 <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-orange-100 rounded-full blur-3xl opacity-60"></div>
                 <div class="relative z-10 px-4 sm:px-0">
-                    <h3 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 mb-5 sm:mb-6 tracking-tight">準備好迎戰 IM 70.3 墾丁了嗎？</h3>
-                    <p class="text-sm sm:text-base md:text-lg text-slate-600 mb-8 sm:mb-10 max-w-xl mx-auto">立即選擇最適合您的方案，加入我們，踏出科學化訓練的第一步。</p>
+                    <h3 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 mb-5 sm:mb-6 tracking-tight leading-tight">準備好迎戰 IM 70.3 墾丁站了嗎？</h3>
+                    <p class="text-sm sm:text-base md:text-lg text-slate-600 mb-8 sm:mb-10 max-w-xl mx-auto px-4">立即選擇最適合您的方案，加入我們，踏出科學化訓練的第一步。</p>
                     <a href="registration.html" class="inline-flex items-center gap-2 gradient-bg text-white font-black text-lg sm:text-xl py-4 px-10 sm:py-5 sm:px-16 rounded-lg sm:rounded-xl shadow-lg hover:shadow-2xl transition transform active:scale-[0.98]">
-                        立即開始訓練 <i class="fas fa-chevron-right text-sm mt-0.5"></i>
+                        立即開始訓練 <i class="fas fa-chevron-right text-base mt-0.5"></i>
                     </a>
                 </div>
             </div>
