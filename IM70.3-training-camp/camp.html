@@ -55,8 +55,8 @@
         <div class="max-w-7xl mx-auto px-4 py-2 sm:py-3 flex items-center justify-between">
             <div class="flex items-center gap-2.5 sm:gap-3">
                 <div class="flex items-center shrink-0">
-                    <!-- 替換為 logo_icon.png -->
-                    <img src="../power-training/logo_icon.png" alt="Icon" class="h-7 sm:h-8 w-auto object-contain">
+                    <!-- 縮小 logo_icon.png -->
+                    <img src="../power-training/logo_icon.png" alt="Icon" class="h-5 sm:h-6 w-auto object-contain">
                 </div>
                 <span class="font-black text-lg sm:text-xl text-slate-950 tracking-tight">IM70.3墾丁 <span class="text-iron-orange-600">訓練營</span></span>
             </div>
@@ -131,12 +131,11 @@
                     
                     <!-- 光聿 KUANGYU 卡片 -->
                     <div class="bg-orange-50 p-6 sm:p-8 rounded-xl sm:rounded-2xl border border-orange-100 transition hover:border-orange-200 hover:shadow-md group flex gap-4 sm:gap-5 items-center text-left">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-xl flex items-center justify-center border border-orange-100 shadow-inner shrink-0 overflow-hidden p-2">
-                            <!-- 放入 KUANGYU_logo.png，設定滿版並保持比例 -->
+                        <!-- 移除白底、框線、陰影，並加大尺寸 -->
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shrink-0 overflow-hidden">
                             <img src="../power-training/KUANGYU_logo.png" alt="KUANGYU" class="w-full h-full object-contain transition group-hover:scale-110">
                         </div>
                         <div class="min-w-0">
-                            <!-- 字體縮小為 text-base sm:text-lg 並加上 whitespace-nowrap -->
                             <h4 class="font-bold text-base sm:text-lg text-iron-orange-950 mb-1.5 flex items-center whitespace-nowrap">光聿 KUANGYU</h4>
                             <p class="text-xs sm:text-sm text-iron-orange-800 leading-relaxed">16週專業課表設計<br>數據監控與簡易諮詢<br>實體團練</p>
                         </div>
@@ -148,7 +147,6 @@
                             <i class="fas fa-clinic-medical text-2xl sm:text-3xl text-slate-700 transition group-hover:scale-110"></i>
                         </div>
                         <div class="min-w-0">
-                            <!-- 字體縮小為 text-base sm:text-lg 並加上 whitespace-nowrap -->
                             <h4 class="font-bold text-base sm:text-lg text-slate-950 mb-1.5 flex items-center whitespace-nowrap">川岳中醫</h4>
                             <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">提供訓練場地<br>一對一肌力指導<br>頂級醫療修復</p>
                         </div>
