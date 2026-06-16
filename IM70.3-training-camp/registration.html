@@ -90,6 +90,7 @@
             
             <form id="signUpForm" class="px-6 py-10 md:px-12 md:py-12 space-y-12" novalidate>
                 
+                <!-- 01 方案選擇 -->
                 <div class="relative">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">01</span>
@@ -98,10 +99,11 @@
                     
                     <div class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                            <!-- 說明會選項 -->
                             <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors relative overflow-hidden">
                                 <div class="absolute top-0 right-0 bg-slate-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg tracking-wider z-10">免費參加</div>
-                                <input type="radio" name="plan" value="實體招生說明會" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
-                                <span class="ml-3 text-slate-800 font-bold text-sm">實體招生說明會</span>
+                                <input type="radio" name="plan" value="僅報名實體說明會" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
+                                <span class="ml-3 text-slate-800 font-bold text-sm">僅報名實體說明會</span>
                             </label>
                             
                             <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
@@ -120,12 +122,23 @@
                                 <span class="ml-3 text-slate-800 font-bold text-sm">VIP方案</span>
                             </label>
                         </div>
+
+                        <!-- 方案詳細內容顯示區 -->
                         <div id="planDetailBox" class="hidden mt-3 p-5 bg-white border border-slate-200 shadow-inner rounded-xl text-sm text-slate-700 leading-relaxed transition-all">
                             <div id="planDetailText"></div>
+                        </div>
+
+                        <!-- 報名訓練營附帶打勾參加說明會 -->
+                        <div id="extraSessionWrapper" class="hidden mt-4 p-4 bg-orange-50 border border-orange-200 rounded-xl transition-all fade-in-section">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" name="attendInfoSession" value="是" class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500">
+                                <span class="ml-3 text-sm font-bold text-iron-orange-800">我也要同時報名參加 6/21 (日) 實體招生說明會 (免費)</span>
+                            </label>
                         </div>
                     </div>
                 </div>
 
+                <!-- 02 基本聯絡資訊 -->
                 <div id="contactSection" class="relative hidden fade-in-section">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">02</span>
@@ -146,11 +159,13 @@
                             <input type="email" name="email" required placeholder="example@mail.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
                         </div>
                         
+                        <!-- 訓練營顯示：LINE ID -->
                         <div id="lineIdWrapper">
                             <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">LINE ID <span class="text-xs font-normal text-slate-400 normal-case">(加入群組與通知用)</span></label>
                             <input type="text" name="lineId" id="lineIdInput" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
                         </div>
 
+                        <!-- 說明會顯示：預計報名賽事調查 -->
                         <div id="targetRaceWrapper" class="hidden">
                             <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">您預計報名哪一場賽事？</label>
                             <input type="text" name="targetRace" id="targetRaceInput" placeholder="例如：IM 70.3 墾丁、下半年113等" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
@@ -158,9 +173,10 @@
                     </div>
                 </div>
 
+                <!-- 03 參訓與保險資料 (僅訓練營) -->
                 <div id="campSection1" class="relative hidden fade-in-section camp-only-section">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
-                        <span class="text-3xl font-black text-orange-500/40 Artis leading-none mr-4">03</span>
+                        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">03</span>
                         <h3 class="text-lg font-bold text-slate-900 tracking-wider">參訓與保險資料</h3>
                     </div>
                     
@@ -257,6 +273,7 @@
                     </div>
                 </div>
 
+                <!-- 04 繳費與其他備註 (僅訓練營) -->
                 <div id="campSection2" class="relative hidden fade-in-section camp-only-section">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">04</span>
@@ -293,6 +310,7 @@
                     </div>
                 </div>
 
+                <!-- 05 同意聲明與規範 (僅訓練營) -->
                 <div id="campSection3" class="relative hidden fade-in-section camp-only-section">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">05</span>
@@ -380,6 +398,7 @@
                     </div>
                 </div>
 
+                <!-- 送出按鈕 -->
                 <div id="submitWrapper" class="pt-8 hidden fade-in-section">
                     <button type="submit" id="submitBtn" class="w-full gradient-bg hover:opacity-90 text-white font-bold py-5 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-[0.99] text-lg tracking-widest">
                         確認送出報名
@@ -445,14 +464,16 @@
         const submitWrapper = document.getElementById('submitWrapper');
         const submitBtn = document.getElementById('submitBtn');
 
-        // 聯絡資訊內部切換格子
+        // 聯絡資訊內部切換格子 與 附帶打勾
         const lineIdWrapper = document.getElementById('lineIdWrapper');
         const lineIdInput = document.getElementById('lineIdInput');
         const targetRaceWrapper = document.getElementById('targetRaceWrapper');
         const targetRaceInput = document.getElementById('targetRaceInput');
+        const extraSessionWrapper = document.getElementById('extraSessionWrapper');
+        const extraSessionInput = document.querySelector('input[name="attendInfoSession"]');
 
         const planDescriptions = {
-            '實體招生說明會': `
+            '僅報名實體說明會': `
                 <div class="space-y-2">
                     <p class="font-bold text-orange-600 text-base">實體招生說明會</p>
                     <p class="text-sm text-slate-700">免費參加。將由教練親自說明訓練營課表規劃、醫療恢復機制，並開放現場 Q&A 問答交流。</p>
@@ -508,11 +529,15 @@
                 contactSection.classList.remove('hidden');
                 submitWrapper.classList.remove('hidden');
 
-                if(selectedPlan === '實體招生說明會') {
+                if(selectedPlan === '僅報名實體說明會') {
                     toggleCampFields(false);
                     submitBtn.textContent = '送出說明會報名';
                     
-                    // 說明會模式：隱藏 LINE ID、啟用賽事調查欄位並設為必填
+                    // 說明會模式：隱藏附帶打勾
+                    extraSessionWrapper.classList.add('hidden');
+                    extraSessionInput.checked = false;
+
+                    // 隱藏 LINE ID、啟用賽事調查欄位並設為必填
                     lineIdWrapper.classList.add('hidden');
                     lineIdInput.disabled = true;
                     lineIdInput.required = false;
@@ -524,7 +549,10 @@
                     toggleCampFields(true);
                     submitBtn.textContent = '確認送出報名';
                     
-                    // 訓練營模式：啟用 LINE ID 並設為必填、隱藏賽事調查
+                    // 訓練營模式：顯示附帶參加說明會的打勾選項
+                    extraSessionWrapper.classList.remove('hidden');
+
+                    // 啟用 LINE ID 並設為必填、隱藏賽事調查
                     lineIdWrapper.classList.remove('hidden');
                     lineIdInput.disabled = false;
                     lineIdInput.required = true;
@@ -589,6 +617,7 @@
                 submitBtn.textContent = '提交成功';
                 form.reset();
                 planDetailBox.classList.add('hidden');
+                extraSessionWrapper.classList.add('hidden');
                 contactSection.classList.add('hidden');
                 toggleCampFields(false);
                 submitWrapper.classList.add('hidden');
@@ -605,7 +634,7 @@
                 submitBtn.disabled = false;
                 
                 const currentPlan = document.querySelector('input[name="plan"]:checked')?.value;
-                submitBtn.textContent = (currentPlan === '實體招生說明會') ? '送出說明會報名' : '確認送出報名';
+                submitBtn.textContent = (currentPlan === '僅報名實體說明會') ? '送出說明會報名' : '確認送出報名';
             });
         });
     </script>
