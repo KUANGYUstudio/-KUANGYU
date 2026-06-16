@@ -38,9 +38,18 @@
         
         /* 輸入框過渡效果 */
         input, select, textarea { transition: all 0.2s ease-in-out; }
+
+        /* 動態顯示區塊的淡入效果 */
+        .fade-in-section {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-100 selection:text-orange-900">
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-200 selection:text-orange-900">
 
     <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -84,14 +93,90 @@
                 <div class="relative">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">01</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">基本與保險資料</h3>
+                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">選擇報名項目</h3>
                     </div>
                     
                     <div class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                            <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors relative overflow-hidden">
+                                <div class="absolute top-0 right-0 bg-slate-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg tracking-wider z-10">免費參加</div>
+                                <input type="radio" name="plan" value="實體招生說明會" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
+                                <span class="ml-3 text-slate-800 font-bold text-sm">實體招生說明會</span>
+                            </label>
+                            
+                            <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
+                                <input type="radio" name="plan" value="基本方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
+                                <span class="ml-3 text-slate-800 font-bold text-sm">基本方案</span>
+                            </label>
+                            
+                            <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
+                                <input type="radio" name="plan" value="進階方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
+                                <span class="ml-3 text-slate-800 font-bold text-sm">進階方案</span>
+                            </label>
+                            
+                            <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors relative overflow-hidden">
+                                <div class="absolute top-0 right-0 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg tracking-wider z-10">尊榮首選</div>
+                                <input type="radio" name="plan" value="VIP方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
+                                <span class="ml-3 text-slate-800 font-bold text-sm">VIP方案</span>
+                            </label>
+                        </div>
+                        <div id="planDetailBox" class="hidden mt-3 p-5 bg-white border border-slate-200 shadow-inner rounded-xl text-sm text-slate-700 leading-relaxed transition-all">
+                            <div id="planDetailText"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="contactSection" class="relative hidden fade-in-section">
+                    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
+                        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">02</span>
+                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">聯絡資訊</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">姓名</label>
+                            <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">聯絡電話</label>
+                            <input type="tel" name="phone" required placeholder="0912345678" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Email</label>
+                            <input type="email" name="email" required placeholder="example@mail.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                        </div>
+                        
+                        <div id="lineIdWrapper">
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">LINE ID <span class="text-xs font-normal text-slate-400 normal-case">(加入群組與通知用)</span></label>
+                            <input type="text" name="lineId" id="lineIdInput" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                        </div>
+
+                        <div id="targetRaceWrapper" class="hidden">
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">您預計報名哪一場賽事？</label>
+                            <input type="text" name="targetRace" id="targetRaceInput" placeholder="例如：IM 70.3 墾丁、下半年113等" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="campSection1" class="relative hidden fade-in-section camp-only-section">
+                    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
+                        <span class="text-3xl font-black text-orange-500/40 Artis leading-none mr-4">03</span>
+                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">參訓與保險資料</h3>
+                    </div>
+                    
+                    <div class="space-y-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">姓名</label>
-                                <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">身分證字號 / 護照號碼 <span class="text-xs font-normal text-slate-400 normal-case">(保險用)</span></label>
+                                <input type="text" name="idNumber" required placeholder="A123456789" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 uppercase placeholder-slate-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">出生年月日</label>
+                                <input type="text" name="dob" onfocus="(this.type='date')" onblur="(if(!this.value) this.type='text')" required placeholder="年 / 月 / 日" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-400">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">國籍</label>
+                                <input type="text" name="nationality" value="台灣" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">生理性別</label>
@@ -108,88 +193,21 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">國籍</label>
-                                <input type="text" name="nationality" value="台灣" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">出生年月日</label>
-                                <input type="text" name="dob" onfocus="(this.type='date')" onblur="(if(!this.value) this.type='text')" required placeholder="年 / 月 / 日" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-400">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">身分證字號 / 護照號碼 <span class="text-xs font-normal text-slate-400 normal-case">(保險用)</span></label>
-                                <input type="text" name="idNumber" required placeholder="A123456789" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 uppercase placeholder-slate-300">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">聯絡電話</label>
-                                <input type="tel" name="phone" required placeholder="0912345678" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Email</label>
-                                <input type="email" name="email" required placeholder="example@mail.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">LINE ID <span class="text-xs font-normal text-slate-400 normal-case">(加入群組用)</span></label>
-                                <input type="text" name="lineId" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative">
-                    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
-                        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">02</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">緊急聯絡資訊</h3>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">聯絡人姓名</label>
-                            <input type="text" name="emergName" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">關係</label>
-                            <input type="text" name="emergRel" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">聯絡人電話</label>
-                            <input type="tel" name="emergPhone" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative">
-                    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
-                        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">03</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">方案與能力調查</h3>
-                    </div>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">報名方案</label>
-                            <div class="space-y-3">
-                                <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
-                                    <input type="radio" name="plan" value="基本方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
-                                    <span class="ml-3 text-slate-800 font-medium">基本方案 (NT$25,000)</span>
-                                </label>
-                                <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
-                                    <input type="radio" name="plan" value="進階方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
-                                    <span class="ml-3 text-slate-800 font-medium">進階方案 (NT$45,000)</span>
-                                </label>
-                                <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
-                                    <input type="radio" name="plan" value="VIP方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
-                                    <span class="ml-3 text-slate-800 font-medium">VIP方案 (NT$55,000)</span>
-                                </label>
-                            </div>
-                            <div id="planDetailBox" class="hidden mt-3 p-5 bg-white border border-slate-200 shadow-inner rounded-xl text-sm text-slate-700 leading-relaxed transition-all">
-                                <div id="planDetailText"></div>
+                        <div class="bg-slate-50 p-5 border border-slate-200 rounded-xl">
+                            <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>緊急聯絡資訊</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">聯絡人姓名</label>
+                                    <input type="text" name="emergName" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">關係</label>
+                                    <input type="text" name="emergRel" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">聯絡電話</label>
+                                    <input type="tel" name="emergPhone" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                </div>
                             </div>
                         </div>
 
@@ -239,13 +257,13 @@
                     </div>
                 </div>
 
-                <div class="relative">
+                <div id="campSection2" class="relative hidden fade-in-section camp-only-section">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">04</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">付款方式</h3>
+                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">繳費與其他備註</h3>
                     </div>
                     
-                    <div class="grid grid-cols-1 gap-6">
+                    <div class="grid grid-cols-1 gap-8">
                         <div class="p-6 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row gap-6 items-start">
                             <div class="w-full md:w-1/2">
                                 <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">繳費方式</label>
@@ -267,24 +285,17 @@
                                 <input type="text" name="bankLastFive" required placeholder="請輸入對帳用後五碼" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
                             </div>
                         </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">備註 <span class="text-xs font-normal text-slate-400 normal-case">(選填)</span></label>
+                            <textarea name="notes" rows="3" placeholder="如有特殊飲食習慣、過敏史或特殊需求請註記" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 resize-none placeholder-slate-300"></textarea>
+                        </div>
                     </div>
                 </div>
 
-                <div class="relative">
+                <div id="campSection3" class="relative hidden fade-in-section camp-only-section">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">05</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">其他備註</h3>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">備註 <span class="text-xs font-normal text-slate-400 normal-case">(選填)</span></label>
-                        <textarea name="notes" rows="3" placeholder="如有特殊飲食習慣、過敏史或特殊需求請註記" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 resize-none placeholder-slate-300"></textarea>
-                    </div>
-                </div>
-
-                <div class="relative">
-                    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
-                        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">06</span>
                         <h3 class="text-lg font-bold text-slate-900 tracking-wider">同意聲明與規範</h3>
                     </div>
                     
@@ -369,7 +380,7 @@
                     </div>
                 </div>
 
-                <div class="pt-8">
+                <div id="submitWrapper" class="pt-8 hidden fade-in-section">
                     <button type="submit" id="submitBtn" class="w-full gradient-bg hover:opacity-90 text-white font-bold py-5 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-[0.99] text-lg tracking-widest">
                         確認送出報名
                     </button>
@@ -393,7 +404,6 @@
             const content = box.querySelector('.policy-content');
             const icon = expandBtn.querySelector('i');
 
-            // 勾選時卡片底色與邊框變色
             checkbox.addEventListener('change', (e) => {
                 if (e.target.checked) {
                     box.classList.add('is-checked');
@@ -402,7 +412,6 @@
                 }
             });
 
-            // 點擊展開或收合
             expandBtn.addEventListener('click', (e) => {
                 box.classList.toggle('is-expanded');
                 if (content.style.maxHeight) {
@@ -415,7 +424,7 @@
             });
         });
 
-        // 1. 處理生理性別與三鐵衣尺寸的連動
+        // 處理生理性別與三鐵衣尺寸的連動
         const genderRadios = document.querySelectorAll('input[name="gender"]');
         const sizeSection = document.getElementById('sizeSection');
         const genderLabel = document.getElementById('genderLabel');
@@ -424,20 +433,33 @@
             radio.addEventListener('change', function(e) {
                 sizeSection.classList.remove('hidden');
                 genderLabel.textContent = `(${e.target.value}款)`;
-                // 之後可在此處加入切換男女尺寸表圖片的邏輯
             });
         });
 
-        // 2. 處理方案點選後的內容顯示
+        // 動態切換表單顯示邏輯
         const planRadios = document.querySelectorAll('.plan-radio');
         const planDetailBox = document.getElementById('planDetailBox');
         const planDetailText = document.getElementById('planDetailText');
+        const contactSection = document.getElementById('contactSection');
+        const campSections = document.querySelectorAll('.camp-only-section');
+        const submitWrapper = document.getElementById('submitWrapper');
+        const submitBtn = document.getElementById('submitBtn');
 
-        // ★ 這裡可以修改你想要的方案說明文字 ★
+        // 聯絡資訊內部切換格子
+        const lineIdWrapper = document.getElementById('lineIdWrapper');
+        const lineIdInput = document.getElementById('lineIdInput');
+        const targetRaceWrapper = document.getElementById('targetRaceWrapper');
+        const targetRaceInput = document.getElementById('targetRaceInput');
+
         const planDescriptions = {
+            '實體招生說明會': `
+                <div class="space-y-2">
+                    <p class="font-bold text-orange-600 text-base">實體招生說明會</p>
+                    <p class="text-sm text-slate-700">免費參加。將由教練親自說明訓練營課表規劃、醫療恢復機制，並開放現場 Q&A 問答交流。</p>
+                </div>`,
             '基本方案': `
                 <div class="space-y-2">
-                    <p class="font-bold text-orange-600 text-base">基礎方案</p>
+                    <p class="font-bold text-orange-600 text-base">基礎方案 (NT$25,000)</p>
                     <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
                         <li>16週線上課表</li>
                         <li>16次游泳團練</li>
@@ -448,7 +470,7 @@
                 </div>`,
             '進階方案': `
                 <div class="space-y-2">
-                    <p class="font-bold text-orange-600 text-base">進階方案</p>
+                    <p class="font-bold text-orange-600 text-base">進階方案 (NT$45,000)</p>
                     <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
                         <li>包含 基礎方案 全項目</li>
                         <li>16堂 一對一肌力訓練</li>
@@ -456,7 +478,7 @@
                 </div>`,
             'VIP方案': `
                 <div class="space-y-2">
-                    <p class="font-bold text-orange-600 text-base">VIP方案</p>
+                    <p class="font-bold text-orange-600 text-base">VIP方案 (NT$55,000)</p>
                     <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
                         <li>包含 進階方案 全項目</li>
                         <li>高壓氧｜岩盤浴 完整療程 各5次</li>
@@ -465,10 +487,52 @@
                 </div>`
         };
 
+        function toggleCampFields(show) {
+            campSections.forEach(section => {
+                if(show) {
+                    section.classList.remove('hidden');
+                    section.querySelectorAll('input, select, textarea').forEach(el => el.disabled = false);
+                } else {
+                    section.classList.add('hidden');
+                    section.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
+                }
+            });
+        }
+
         planRadios.forEach(radio => {
             radio.addEventListener('change', function(e) {
+                const selectedPlan = e.target.value;
+                
                 planDetailBox.classList.remove('hidden');
-                planDetailText.innerHTML = planDescriptions[e.target.value];
+                planDetailText.innerHTML = planDescriptions[selectedPlan];
+                contactSection.classList.remove('hidden');
+                submitWrapper.classList.remove('hidden');
+
+                if(selectedPlan === '實體招生說明會') {
+                    toggleCampFields(false);
+                    submitBtn.textContent = '送出說明會報名';
+                    
+                    // 說明會模式：隱藏 LINE ID、啟用賽事調查欄位並設為必填
+                    lineIdWrapper.classList.add('hidden');
+                    lineIdInput.disabled = true;
+                    lineIdInput.required = false;
+
+                    targetRaceWrapper.classList.remove('hidden');
+                    targetRaceInput.disabled = false;
+                    targetRaceInput.required = true;
+                } else {
+                    toggleCampFields(true);
+                    submitBtn.textContent = '確認送出報名';
+                    
+                    // 訓練營模式：啟用 LINE ID 並設為必填、隱藏賽事調查
+                    lineIdWrapper.classList.remove('hidden');
+                    lineIdInput.disabled = false;
+                    lineIdInput.required = true;
+
+                    targetRaceWrapper.classList.add('hidden');
+                    targetRaceInput.disabled = true;
+                    targetRaceInput.required = false;
+                }
             });
         });
         
@@ -477,21 +541,17 @@
             e.preventDefault();
             
             const form = e.target;
-            const submitBtn = document.getElementById('submitBtn');
             const statusMsg = document.getElementById('statusMsg');
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbyxcVuvzxcV28ddUvu4LO9c7d3lqQT2AIzD29e3LlnEpI_g1E3o3ecFvE5G-3WL9hms1g/exec';
             
-            // 原生欄位驗證與自訂紅框效果
             document.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500', 'ring-2', 'ring-red-200'));
             
             if (!form.checkValidity()) {
                 const invalidInputs = form.querySelectorAll(':invalid');
-                // 優先檢查條款勾選狀況
                 for (let input of invalidInputs) {
                     if (input.classList.contains('policy-checkbox')) {
                         const box = input.closest('.policy-box');
                         box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        // 自動幫學員展開未勾選的條款細則
                         const content = box.querySelector('.policy-content');
                         const icon = box.querySelector('.expand-toggle i');
                         box.classList.add('is-expanded');
@@ -504,7 +564,6 @@
                     }
                 }
                 
-                // 一般輸入框未填紅框提示
                 const firstInvalid = invalidInputs[0];
                 firstInvalid.classList.add('border-red-500', 'ring-2', 'ring-red-200');
                 firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -529,6 +588,10 @@
                 statusMsg.className = 'text-center text-sm font-bold mt-5 text-emerald-600 block';
                 submitBtn.textContent = '提交成功';
                 form.reset();
+                planDetailBox.classList.add('hidden');
+                contactSection.classList.add('hidden');
+                toggleCampFields(false);
+                submitWrapper.classList.add('hidden');
                 policyBoxes.forEach(box => {
                     box.classList.remove('is-checked', 'is-expanded');
                     box.querySelector('.policy-content').style.maxHeight = null;
@@ -540,7 +603,9 @@
                 statusMsg.textContent = '系統提交失敗，請檢查網路連線或稍後再試。';
                 statusMsg.className = 'text-center text-sm font-bold mt-5 text-red-600 block';
                 submitBtn.disabled = false;
-                submitBtn.textContent = '確認送出報名';
+                
+                const currentPlan = document.querySelector('input[name="plan"]:checked')?.value;
+                submitBtn.textContent = (currentPlan === '實體招生說明會') ? '送出說明會報名' : '確認送出報名';
             });
         });
     </script>
