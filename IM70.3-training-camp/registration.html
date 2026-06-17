@@ -25,6 +25,22 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-orange-200 selection:text-orange-900">
 
+    <div id="successModal" class="fixed inset-0 z-[100] hidden items-center justify-center">
+        <div id="modalBackdrop" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+        <div id="modalContent" class="relative bg-white rounded-3xl shadow-2xl w-[90%] max-w-sm p-8 text-center transform scale-95 opacity-0 transition-all duration-300">
+            <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-green-100">
+                <i class="fas fa-check text-4xl text-green-500"></i>
+            </div>
+            <h3 class="text-2xl font-black text-slate-900 mb-3 tracking-tight">報名成功！</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-8 font-medium">
+                報名資料已成功送出。<br>請至您的信箱收取確認信，<br>我們將儘速與您聯絡。
+            </p>
+            <button type="button" onclick="closeSuccessModal()" class="w-full gradient-bg hover:opacity-90 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition transform active:scale-[0.98] tracking-widest text-base">
+                我知道了
+            </button>
+        </div>
+    </div>
+
     <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
@@ -372,6 +388,35 @@
 
         const submitBtn = document.getElementById('submitBtn');
         const statusMsg = document.getElementById('statusMsg');
+        
+        // 彈出視窗控制邏輯
+        const successModal = document.getElementById('successModal');
+        const modalBackdrop = document.getElementById('modalBackdrop');
+        const modalContent = document.getElementById('modalContent');
+
+        function showSuccessModal() {
+            successModal.classList.remove('hidden');
+            successModal.classList.add('flex');
+            // 強制重繪以確保動畫生效
+            void successModal.offsetWidth;
+            modalBackdrop.classList.remove('opacity-0');
+            modalBackdrop.classList.add('opacity-100');
+            modalContent.classList.remove('opacity-0', 'scale-95');
+            modalContent.classList.add('opacity-100', 'scale-100');
+        }
+
+        function closeSuccessModal() {
+            modalBackdrop.classList.remove('opacity-100');
+            modalBackdrop.classList.add('opacity-0');
+            modalContent.classList.remove('opacity-100', 'scale-100');
+            modalContent.classList.add('opacity-0', 'scale-95');
+            
+            // 等待動畫結束後隱藏
+            setTimeout(() => {
+                successModal.classList.add('hidden');
+                successModal.classList.remove('flex');
+            }, 300);
+        }
 
         // 進站即時詢問後台是否額滿
         fetch(SCRIPT_URL + '?action=checkStatus')
@@ -529,8 +574,8 @@
                 mode: 'no-cors'
             })
             .then(() => {
-                // 加入彈出視窗功能
-                alert('報名資料已成功送出！請至您的信箱收取確認信，我們將儘速與您聯絡。');
+                // 呼叫專屬的高質感彈出視窗
+                showSuccessModal();
                 
                 statusMsg.textContent = '報名資料已成功送出！我們將儘速與您聯絡。';
                 statusMsg.className = 'text-center text-sm font-bold mt-5 text-emerald-600 block';
@@ -551,7 +596,6 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('系統提交失敗，請檢查網路連線或稍後再試。');
                 statusMsg.textContent = '系統提交失敗，請檢查網路連線或稍後再試。';
                 statusMsg.className = 'text-center text-sm font-bold mt-5 text-red-600 block';
                 submitBtn.disabled = false;
