@@ -319,7 +319,7 @@
                                             <strong class="text-slate-900 block text-base mb-2">【開訓前退費標準】</strong>
                                             <p class="mb-2">所有的團練與保險事宜均需提前造冊安排，若於開訓前因故無法參加，退費標準如下（參酌消保法相關規範）：</p>
                                             <ul class="list-disc pl-5 space-y-1.5 text-slate-700">
-                                                <li>開訓日 <strong class="text-slate-900">14 天前 (含)</strong> 提出申請：全額退費。</li>
+                                                <li>開訓日 <strong class="text-slate-900">14 天前 (含)</strong> 提出申請：全額退費（需扣除行政手續費 NT$1,000）。</li>
                                                 <li>開訓日 <strong class="text-slate-900">7 至 13 天前</strong> 提出申請：退還總費用之 80%。</li>
                                                 <li>開訓日 <strong class="text-slate-900">1 至 6 天前</strong> 提出申請：退還總費用之 70%。</li>
                                             </ul>
@@ -394,13 +394,11 @@
     </footer>
 
     <script>
-        // 【極度重要】確保這裡的網址與您 Google Apps Script 重新部署後的新網址完全一致
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxcVuvzxcV28ddUvu4LO9c7d3lqQT2AIzD29e3LlnEpI_g1E3o3ecFvE5G-3WL9hms1g/exec';
 
         const submitBtn = document.getElementById('submitBtn');
         const statusMsg = document.getElementById('statusMsg');
         
-        // 彈出視窗控制邏輯
         const successModal = document.getElementById('successModal');
         const modalBackdrop = document.getElementById('modalBackdrop');
         const modalContent = document.getElementById('modalContent');
@@ -408,7 +406,6 @@
         function showSuccessModal() {
             successModal.classList.remove('hidden');
             successModal.classList.add('flex');
-            // 強制重繪以確保動畫生效
             void successModal.offsetWidth;
             modalBackdrop.classList.remove('opacity-0');
             modalBackdrop.classList.add('opacity-100');
@@ -422,11 +419,9 @@
             modalContent.classList.remove('opacity-100', 'scale-100');
             modalContent.classList.add('opacity-0', 'scale-95');
             
-            // 等待動畫結束後隱藏並跳轉
             setTimeout(() => {
                 successModal.classList.add('hidden');
                 successModal.classList.remove('flex');
-                // 新增跳轉到簡章頁面
                 window.location.href = 'camp.html';
             }, 300);
         }
@@ -530,13 +525,21 @@
         planRadios.forEach(radio => {
             radio.addEventListener('change', function(e) {
                 const selectedPlan = e.target.value;
-                
-                // 顯示方案說明
                 planDetailBox.classList.remove('hidden');
                 planDetailText.innerHTML = planDescriptions[selectedPlan];
-                
-                // 展開完整表單區塊
                 formContentWrapper.classList.remove('hidden');
+            });
+        });
+
+        // 即時偵測器：當使用者開始輸入或選擇時，立刻移除紅框與下方警告文字
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
+                statusMsg.classList.add('hidden');
+            });
+            input.addEventListener('change', function() {
+                this.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
+                statusMsg.classList.add('hidden');
             });
         });
         
@@ -587,7 +590,6 @@
                 mode: 'no-cors'
             })
             .then(() => {
-                // 呼叫專屬的高質感彈出視窗
                 showSuccessModal();
                 
                 statusMsg.textContent = '報名資料已成功送出！我們將儘速與您聯絡。';
@@ -595,7 +597,6 @@
                 submitBtn.textContent = '提交成功';
                 form.reset();
                 
-                // 重置版面狀態
                 planDetailBox.classList.add('hidden');
                 formContentWrapper.classList.add('hidden');
                 sizeSection.classList.add('hidden');
