@@ -132,121 +132,108 @@
                         <div id="extraSessionWrapper" class="hidden mt-4 p-4 bg-orange-50 border border-orange-200 rounded-xl transition-all fade-in-section">
                             <label class="flex items-center cursor-pointer">
                                 <input type="checkbox" name="attendInfoSession" value="是" class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500">
-                                <span class="ml-3 text-sm font-bold text-iron-orange-800">我也要報名 6/21 (日) 實體招生說明會 (免費)</span>
+                                <span class="ml-3 text-sm font-bold text-iron-orange-800">我也要同時報名參加 6/21 (日) 實體招生說明會 (免費)</span>
                             </label>
                         </div>
                     </div>
                 </div>
 
-                <!-- 02 基本聯絡資訊 -->
+                <!-- 02 基本資料 (整合聯絡資訊與保險資料) -->
                 <div id="contactSection" class="relative hidden fade-in-section">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">02</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">聯絡資訊</h3>
+                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">基本資料</h3>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">姓名</label>
-                            <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">聯絡電話</label>
-                            <input type="tel" name="phone" required placeholder="0912345678" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Email</label>
-                            <input type="email" name="email" required placeholder="example@mail.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                        </div>
-                        
-                        <!-- 訓練營顯示：LINE ID -->
-                        <div id="lineIdWrapper">
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">LINE ID <span class="text-xs font-normal text-slate-400 normal-case">(加入群組與通知用)</span></label>
-                            <input type="text" name="lineId" id="lineIdInput" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                    <div class="space-y-8">
+                        <!-- 上半部：所有報名者都必填的基本聯絡方式 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">姓名</label>
+                                <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">聯絡電話</label>
+                                <input type="tel" name="phone" required placeholder="0912345678" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Email</label>
+                                <input type="email" name="email" required placeholder="example@mail.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                            </div>
+                            
+                            <!-- 訓練營顯示：LINE ID -->
+                            <div id="lineIdWrapper">
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">LINE ID <span class="text-xs font-normal text-slate-400 normal-case">(加入群組與通知用)</span></label>
+                                <input type="text" name="lineId" id="lineIdInput" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                            </div>
+
+                            <!-- 說明會顯示：預計報名賽事調查 -->
+                            <div id="targetRaceWrapper" class="hidden">
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">您預計報名哪一場賽事？</label>
+                                <input type="text" name="targetRace" id="targetRaceInput" placeholder="例如：IM 70.3 墾丁、下半年113等" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                            </div>
                         </div>
 
-                        <!-- 說明會顯示：預計報名賽事調查 -->
-                        <div id="targetRaceWrapper" class="hidden">
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">您預計報名哪一場賽事？</label>
-                            <input type="text" name="targetRace" id="targetRaceInput" placeholder="例如：IM 70.3 墾丁、下半年113等" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                        <!-- 下半部：僅訓練營必填的詳細身分與緊急聯絡人 (說明會不顯示) -->
+                        <div class="camp-only-section space-y-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-100">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">身分證字號 / 護照號碼 <span class="text-xs font-normal text-slate-400 normal-case">(保險用)</span></label>
+                                    <input type="text" name="idNumber" required placeholder="A123456789" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 uppercase placeholder-slate-300">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">出生年月日</label>
+                                    <input type="text" name="dob" onfocus="(this.type='date')" onblur="(if(!this.value) this.type='text')" required placeholder="年 / 月 / 日" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">國籍</label>
+                                    <input type="text" name="nationality" value="台灣" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">生理性別</label>
+                                    <div class="flex space-x-6 mt-3">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="gender" value="男" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
+                                            <span class="ml-2 text-slate-800 font-medium">男</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="gender" value="女" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
+                                            <span class="ml-2 text-slate-800 font-medium">女</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 緊急聯絡人 -->
+                            <div class="bg-slate-50 p-5 border border-slate-200 rounded-xl">
+                                <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>緊急聯絡資訊</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">聯絡人姓名</label>
+                                        <input type="text" name="emergName" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">關係</label>
+                                        <input type="text" name="emergRel" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">聯絡電話</label>
+                                        <input type="tel" name="emergPhone" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 03 參訓與保險資料 (僅訓練營) -->
+                <!-- 03 賽事成績 (僅訓練營) -->
                 <div id="campSection1" class="relative hidden fade-in-section camp-only-section">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">03</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">參訓與保險資料</h3>
+                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">賽事成績</h3>
                     </div>
                     
                     <div class="space-y-8">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">身分證字號 / 護照號碼 <span class="text-xs font-normal text-slate-400 normal-case">(保險用)</span></label>
-                                <input type="text" name="idNumber" required placeholder="A123456789" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 uppercase placeholder-slate-300">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">出生年月日</label>
-                                <input type="text" name="dob" onfocus="(this.type='date')" onblur="(if(!this.value) this.type='text')" required placeholder="年 / 月 / 日" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-400">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">國籍</label>
-                                <input type="text" name="nationality" value="台灣" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">生理性別</label>
-                                <div class="flex space-x-6 mt-3">
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="radio" name="gender" value="男" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
-                                        <span class="ml-2 text-slate-800 font-medium">男</span>
-                                    </label>
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="radio" name="gender" value="女" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
-                                        <span class="ml-2 text-slate-800 font-medium">女</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-50 p-5 border border-slate-200 rounded-xl">
-                            <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>緊急聯絡資訊</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-500 mb-1">聯絡人姓名</label>
-                                    <input type="text" name="emergName" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-500 mb-1">關係</label>
-                                    <input type="text" name="emergRel" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-500 mb-1">聯絡電話</label>
-                                    <input type="tel" name="emergPhone" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="sizeSection" class="hidden bg-slate-50 p-5 border border-slate-200 rounded-xl">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">三鐵衣尺寸 <span id="genderLabel" class="text-orange-500 ml-1"></span></label>
-                                    <select name="size" id="sizeSelect" required class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 appearance-none">
-                                        <option value="" disabled selected>請選擇尺寸</option>
-                                        <option value="XS">XS</option>
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>
-                                        <option value="L">L</option>
-                                        <option value="XL">XL</option>
-                                        <option value="XXL">XXL</option>
-                                    </select>
-                                </div>
-                                <div class="flex flex-col justify-center items-center h-full border border-slate-200 rounded-xl p-4 bg-white min-h-[80px]">
-                                    <a href="#" class="text-sm text-orange-600 font-bold hover:underline">查看尺寸對照表 (PDF)</a>
-                                </div>
-                            </div>
-                        </div>
-
                         <div>
                             <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">51.5km 或 113km 最佳完賽成績</label>
                             <div class="space-y-4">
@@ -267,6 +254,27 @@
                                         <label class="block text-xs font-medium text-slate-500 mb-1">跑步</label>
                                         <input type="text" name="expRun" placeholder="1:10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 專屬三鐵衣尺寸 -->
+                        <div id="sizeSection" class="hidden bg-slate-50 p-5 border border-slate-200 rounded-xl mt-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">專屬三鐵衣尺寸 <span id="genderLabel" class="text-orange-500 ml-1"></span></label>
+                                    <select name="size" id="sizeSelect" required class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 appearance-none">
+                                        <option value="" disabled selected>請選擇尺寸</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col justify-center items-center h-full border border-slate-200 rounded-xl p-4 bg-white min-h-[80px]">
+                                    <a href="#" class="text-sm text-orange-600 font-bold hover:underline">查看尺寸對照表 (PDF)</a>
                                 </div>
                             </div>
                         </div>
@@ -292,9 +300,9 @@
                                     <input type="hidden" name="paymentMethod" value="匯款">
                                 </div>
                                 <div class="text-sm text-slate-600 space-y-2 bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
-                                    <p><span class="font-bold text-slate-500 mr-2">銀行</span> 測試銀行 (000)</p>
-                                    <p><span class="font-bold text-slate-500 mr-2">帳號</span> 1234567890123</p>
-                                    <p><span class="font-bold text-slate-500 mr-2">戶名</span> 某某某股份有限公司</p>
+                                    <p><span class="font-bold text-slate-500 mr-2">銀行</span> 國泰世華 (013)</p>
+                                    <p><span class="font-bold text-slate-500 mr-2">帳號</span> 269506136805</p>
+                                    <p><span class="font-bold text-slate-500 mr-2">戶名</span> 費聿凡</p>
                                 </div>
                             </div>
                             <div class="w-full md:w-1/2 md:mt-8">
@@ -305,7 +313,7 @@
 
                         <div>
                             <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">備註 <span class="text-xs font-normal text-slate-400 normal-case">(選填)</span></label>
-                            <textarea name="notes" rows="3" placeholder="如有特殊飲食習慣、過敏史或特殊需求請註記" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 resize-none placeholder-slate-300"></textarea>
+                            <textarea name="notes" rows="3" placeholder="如有舊傷、特殊飲食習慣，或有其他想先讓教練知道的事情請於此註記" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 resize-none placeholder-slate-400"></textarea>
                         </div>
                     </div>
                 </div>
