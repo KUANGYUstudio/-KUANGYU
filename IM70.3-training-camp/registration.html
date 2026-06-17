@@ -529,6 +529,9 @@
                 mode: 'no-cors'
             })
             .then(() => {
+                // 加入彈出視窗功能
+                alert('報名資料已成功送出！請至您的信箱收取確認信，我們將儘速與您聯絡。');
+                
                 statusMsg.textContent = '報名資料已成功送出！我們將儘速與您聯絡。';
                 statusMsg.className = 'text-center text-sm font-bold mt-5 text-emerald-600 block';
                 submitBtn.textContent = '提交成功';
@@ -548,6 +551,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('系統提交失敗，請檢查網路連線或稍後再試。');
                 statusMsg.textContent = '系統提交失敗，請檢查網路連線或稍後再試。';
                 statusMsg.className = 'text-center text-sm font-bold mt-5 text-red-600 block';
                 submitBtn.disabled = false;
