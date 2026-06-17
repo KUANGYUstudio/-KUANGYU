@@ -90,6 +90,7 @@
             
             <form id="signUpForm" class="px-6 py-10 md:px-12 md:py-12 space-y-12" novalidate>
                 
+                <!-- 01 方案選擇 -->
                 <div class="relative">
                     <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
                         <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">01</span>
@@ -97,13 +98,7 @@
                     </div>
                     
                     <div class="space-y-6">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                            <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors relative overflow-hidden">
-                                <div class="absolute top-0 right-0 bg-slate-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg tracking-wider z-10">免費參加</div>
-                                <input type="radio" name="plan" value="僅報名實體說明會" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
-                                <span class="ml-3 text-slate-800 font-bold text-sm">僅報名實體說明會</span>
-                            </label>
-                            
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                             <label class="flex items-center p-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-white transition-colors">
                                 <input type="radio" name="plan" value="基本方案" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500 plan-radio">
                                 <span class="ml-3 text-slate-800 font-bold text-sm">基本方案</span>
@@ -121,286 +116,284 @@
                             </label>
                         </div>
 
+                        <!-- 方案詳細內容顯示區 -->
                         <div id="planDetailBox" class="hidden mt-3 p-5 bg-white border border-slate-200 shadow-inner rounded-xl text-sm text-slate-700 leading-relaxed transition-all">
                             <div id="planDetailText"></div>
                         </div>
-
-                        <div id="extraSessionWrapper" class="hidden mt-4 p-4 bg-orange-50 border border-orange-200 rounded-xl transition-all fade-in-section">
-                            <label class="flex items-center cursor-pointer">
-                                <input type="checkbox" name="attendInfoSession" value="是" class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500">
-                                <span class="ml-3 text-sm font-bold text-iron-orange-800">我也要報名 6/21 (日) 實體招生說明會 (免費)</span>
-                            </label>
-                        </div>
                     </div>
                 </div>
 
-                <div id="contactSection" class="relative hidden fade-in-section">
-                    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
-                        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">02</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">基本資料</h3>
-                    </div>
+                <!-- 02 基本資料 -->
+                <div id="formContentWrapper" class="hidden space-y-12 fade-in-section">
                     
-                    <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">姓名</label>
-                                <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                            </div>
-
-                            <div class="camp-only-section hidden">
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">生理性別</label>
-                                <div class="flex space-x-6 mt-3">
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="radio" name="gender" value="男" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
-                                        <span class="ml-2 text-slate-800 font-medium">男</span>
-                                    </label>
-                                    <label class="flex items-center cursor-pointer">
-                                        <input type="radio" name="gender" value="女" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
-                                        <span class="ml-2 text-slate-800 font-medium">女</span>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="camp-only-section hidden">
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">身分證字號 / 護照號碼 <span class="text-xs font-normal text-slate-400 normal-case">(保險用)</span></label>
-                                <input type="text" name="idNumber" required placeholder="A123456789" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 uppercase placeholder-slate-300">
-                            </div>
-                            
-                            <div class="camp-only-section hidden">
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">出生年月日</label>
-                                <input type="text" name="dob" onfocus="(this.type='date')" onblur="(if(!this.value) this.type='text')" required placeholder="年 / 月 / 日" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-400">
-                            </div>
-
-                            <div class="camp-only-section hidden">
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">國籍</label>
-                                <input type="text" name="nationality" value="台灣" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                            </div>
+                    <div class="relative">
+                        <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
+                            <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">02</span>
+                            <h3 class="text-lg font-bold text-slate-900 tracking-wider">基本資料</h3>
                         </div>
-
-                        <div class="pt-6 border-t border-slate-100">
+                        
+                        <div class="space-y-8">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">聯絡電話</label>
-                                    <input type="tel" name="phone" required placeholder="0912345678" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Email</label>
-                                    <input type="email" name="email" required placeholder="example@mail.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">姓名</label>
+                                    <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
                                 </div>
                                 
-                                <div id="lineIdWrapper">
-                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">LINE ID <span class="text-xs font-normal text-slate-400 normal-case">(加入群組與通知用)</span></label>
-                                    <input type="text" name="lineId" id="lineIdInput" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">生理性別</label>
+                                    <div class="flex space-x-6 mt-3">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="gender" value="男" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
+                                            <span class="ml-2 text-slate-800 font-medium">男</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="radio" name="gender" value="女" required class="w-5 h-5 accent-orange-500 border-slate-300 focus:ring-orange-500">
+                                            <span class="ml-2 text-slate-800 font-medium">女</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">身分證字號 / 護照號碼 <span class="text-xs font-normal text-slate-400 normal-case">(保險用)</span></label>
+                                    <input type="text" name="idNumber" required placeholder="A123456789" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 uppercase placeholder-slate-300">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">出生年月日</label>
+                                    <input type="text" name="dob" onfocus="(this.type='date')" onblur="(if(!this.value) this.type='text')" required placeholder="年 / 月 / 日" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-400">
                                 </div>
 
-                                <div id="targetRaceWrapper" class="hidden">
-                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">您預計報名哪一場賽事？</label>
-                                    <input type="text" name="targetRace" id="targetRaceInput" placeholder="例如：IM 70.3 墾丁、巴歌浪113等" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">國籍</label>
+                                    <input type="text" name="nationality" value="台灣" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="camp-only-section hidden bg-slate-50 p-5 border border-slate-200 rounded-xl mt-2">
-                            <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>緊急聯絡資訊</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-500 mb-1">聯絡人姓名</label>
-                                    <input type="text" name="emergName" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-500 mb-1">緊急聯絡人關係</label>
-                                    <input type="text" name="emergRel" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-500 mb-1">緊急聯絡人電話</label>
-                                    <input type="tel" name="emergPhone" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="campSection1" class="relative hidden fade-in-section camp-only-section">
-                    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
-                        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">03</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">賽事成績</h3>
-                    </div>
-                    
-                    <div class="space-y-8">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">51.5km 或 113km 最佳完賽成績</label>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-500 mb-1">總時間</label>
-                                    <input type="text" name="expTotal" placeholder="例如：3:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                                </div>
-                                <div class="grid grid-cols-3 gap-3 md:gap-6">
+                            <div class="pt-6 border-t border-slate-100">
+                                <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-address-book text-orange-500 mr-2"></i>聯絡資訊</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label class="block text-xs font-medium text-slate-500 mb-1">游泳</label>
-                                        <input type="text" name="expSwim" placeholder="40分" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                        <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">聯絡電話</label>
+                                        <input type="tel" name="phone" required placeholder="0912345678" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-medium text-slate-500 mb-1">單車</label>
-                                        <input type="text" name="expBike" placeholder="1:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                        <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Email</label>
+                                        <input type="email" name="email" required placeholder="example@mail.com" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-medium text-slate-500 mb-1">跑步</label>
-                                        <input type="text" name="expRun" placeholder="1:10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                        <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">LINE ID <span class="text-xs font-normal text-slate-400 normal-case">(加入群組與通知用)</span></label>
+                                        <input type="text" name="lineId" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div id="sizeSection" class="hidden bg-slate-50 p-5 border border-slate-200 rounded-xl mt-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                                <div>
-                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">專屬三鐵衣尺寸 <span id="genderLabel" class="text-orange-500 ml-1"></span></label>
-                                    <select name="size" id="sizeSelect" required class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 appearance-none">
-                                        <option value="" disabled selected>請選擇尺寸</option>
-                                        <option value="XS">XS</option>
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>
-                                        <option value="L">L</option>
-                                        <option value="XL">XL</option>
-                                        <option value="XXL">XXL</option>
-                                    </select>
-                                </div>
-                                <div class="flex flex-col justify-center items-center h-full border border-slate-200 rounded-xl p-4 bg-white min-h-[80px]">
-                                    <a href="#" class="text-sm text-orange-600 font-bold hover:underline">查看尺寸對照表 (PDF)</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="campSection2" class="relative hidden fade-in-section camp-only-section">
-                    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
-                        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">04</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">繳費與其他備註</h3>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 gap-8">
-                        <div class="p-6 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row gap-6 items-start">
-                            <div class="w-full md:w-1/2">
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">繳費方式</label>
-                                <div class="flex items-center mb-4">
-                                    <div class="w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center mr-3 shadow-sm">
-                                        <div class="w-2 h-2 bg-white rounded-full"></div>
-                                    </div>
-                                    <span class="text-slate-800 font-bold text-lg">銀行匯款 / ATM 轉帳</span>
-                                    <input type="hidden" name="paymentMethod" value="匯款">
-                                </div>
-                                <div class="text-sm text-slate-600 space-y-2 bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
-                                    <p><span class="font-bold text-slate-500 mr-2">銀行</span> 國泰世華 (013)</p>
-                                    <p><span class="font-bold text-slate-500 mr-2">帳號</span> 269506136805</p>
-                                    <p><span class="font-bold text-slate-500 mr-2">戶名</span> 費聿凡</p>
-                                </div>
-                            </div>
-                            <div class="w-full md:w-1/2 md:mt-8">
-                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">請提供匯款帳號後五碼</label>
-                                <input type="text" name="bankLastFive" required placeholder="請輸入對帳用後五碼" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">備註 <span class="text-xs font-normal text-slate-400 normal-case">(選填)</span></label>
-                            <textarea name="notes" rows="3" placeholder="如有舊傷、特殊飲食習慣，或有其他想先讓教練知道的事情請於此註記" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 resize-none placeholder-slate-400"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="campSection3" class="relative hidden fade-in-section camp-only-section">
-                    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
-                        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">05</span>
-                        <h3 class="text-lg font-bold text-slate-900 tracking-wider">同意聲明與規範</h3>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div class="policy-box border border-slate-200 rounded-xl bg-white">
-                            <div class="flex items-center justify-between p-4 md:p-5">
-                                <label class="flex items-center cursor-pointer select-none flex-grow">
-                                    <input type="checkbox" name="agreeQualification" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
-                                    <span class="ml-4 text-sm font-bold text-slate-800">我已確認具備 51.5km 鐵人完賽資格細則</span>
-                                </label>
-                                <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
-                                    <i class="fas fa-chevron-down text-sm transition-transform duration-300 transform"></i>
-                                </div>
-                            </div>
-                            <div class="policy-content bg-slate-50/50">
-                                <div class="p-5 text-sm text-slate-600 leading-relaxed">
-                                    <p class="font-bold text-slate-900 mb-2">※ 資格強制規範：</p>
-                                    <p>本訓練營聚焦於高強度體能與開放水域技術優化，學員需於開訓前具備連續使用捷泳（自由式）1000 公尺以上之基礎能力。現場不接受純蛙泳參與團練，亦不提供基礎捷泳教學，請務必確認自身實力。</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="policy-box border border-slate-200 rounded-xl bg-white">
-                            <div class="flex items-center justify-between p-4 md:p-5">
-                                <label class="flex items-center cursor-pointer select-none flex-grow">
-                                    <input type="checkbox" name="agreeRefund" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
-                                    <span class="ml-4 text-sm font-bold text-slate-800">我已詳閱並同意報名與退費機制細則</span>
-                                </label>
-                                <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
-                                    <i class="fas fa-chevron-down text-sm transition-transform duration-300 transform"></i>
-                                </div>
-                            </div>
-                            <div class="policy-content bg-slate-50/50">
-                                <div class="p-5 text-sm text-slate-600 leading-relaxed space-y-3">
-                                    <strong class="text-slate-900 block">所有移地團練與醫療場地均已提前造冊安排，相關行政作業需提早規劃：</strong>
-                                    <p>1. 訓練營為 16 週科學化連續週期課表，自正式開訓日開始後，因個人因素（如工作、出差、自主受傷等）中途請假或退出，恕無法提供退費、延期或由他人遞補。</p>
-                                    <p>2. 若因不可抗力天候因素（如颱風、天然災害）導致實體移地團練無法進行，光聿工作室將啟動雨備方案，統一轉為室內功率訓練課表進行，不另行退費。</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="policy-box border border-slate-200 rounded-xl bg-white">
-                            <div class="flex items-center justify-between p-4 md:p-5">
-                                <label class="flex items-center cursor-pointer select-none flex-grow">
-                                    <input type="checkbox" name="agreeSafety" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
-                                    <span class="ml-4 text-sm font-bold text-slate-800">我已詳閱並同意戶外訓練安全聲明細則</span>
-                                </label>
-                                <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
-                                    <i class="fas fa-chevron-down text-sm transition-transform duration-300 transform"></i>
-                                </div>
-                            </div>
-                            <div class="policy-content bg-slate-50/50">
-                                <div class="p-5 text-sm text-slate-600 leading-relaxed space-y-4">
+                            <div class="bg-slate-50 p-5 border border-slate-200 rounded-xl mt-2">
+                                <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>緊急聯絡資訊</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
-                                        <strong class="text-slate-900 block mb-1">1. 裝備與交通強制規範</strong>
-                                        戶外自由車外騎與開放水域海泳課程均具有潛在交通風險，學員於外騎課程請務必全程佩戴安全帽，海泳課程強制全程攜帶魚雷浮標。出發前請確認自身車況煞車及胎壓正常。
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">聯絡人姓名</label>
+                                        <input type="text" name="emergName" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
                                     </div>
                                     <div>
-                                        <strong class="text-slate-900 block mb-1">2. 健康聲明與風險自負</strong>
-                                        請確認自身健康狀況良好，無隱瞞不適合高強度耐力運動之心血管病史。團隊將協助造冊投保意外險，惟學員於開放道路與開放水域仍須嚴格遵守交通法規與教練指示，對自身行為負最終安全責任。
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">關係</label>
+                                        <input type="text" name="emergRel" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">聯絡電話</label>
+                                        <input type="tel" name="emergPhone" required class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800">
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="policy-box border border-slate-200 rounded-xl bg-white">
-                            <div class="flex items-center justify-between p-4 md:p-5">
-                                <label class="flex items-center cursor-pointer select-none flex-grow">
-                                    <input type="checkbox" name="agreeImage" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
-                                    <span class="ml-4 text-sm font-bold text-slate-800">我已詳閱並同意影像與肖像權授權細則</span>
-                                </label>
-                                <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
-                                    <i class="fas fa-chevron-down text-sm transition-transform duration-300 transform"></i>
+                    <!-- 03 賽事成績 -->
+                    <div class="relative">
+                        <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
+                            <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">03</span>
+                            <h3 class="text-lg font-bold text-slate-900 tracking-wider">賽事成績</h3>
+                        </div>
+                        
+                        <div class="space-y-8">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">51.5km 或 113km 最佳完賽成績</label>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">總時間</label>
+                                        <input type="text" name="expTotal" placeholder="例如：3:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-3 md:gap-6">
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-500 mb-1">游泳</label>
+                                            <input type="text" name="expSwim" placeholder="40分" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-500 mb-1">單車</label>
+                                            <input type="text" name="expBike" placeholder="1:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-500 mb-1">跑步</label>
+                                            <input type="text" name="expRun" placeholder="1:10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="policy-content bg-slate-50/50">
-                                <div class="p-5 text-sm text-slate-600 leading-relaxed">
-                                    課程與實體移地訓練過程中，教練與工作人員將進行動態與靜態影像側拍紀錄。完成報名即代表同意相關照片與影片無償授權川岳中醫與光聿工作室團隊，用於社群分享、活動紀錄、行銷或宣傳使用。若有特殊考量不便入鏡，請務必於課前主動告知教練。
+
+                            <div id="sizeSection" class="hidden bg-slate-50 p-5 border border-slate-200 rounded-xl mt-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                                    <div>
+                                        <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">專屬三鐵衣尺寸 <span id="genderLabel" class="text-orange-500 ml-1"></span></label>
+                                        <select name="size" id="sizeSelect" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 appearance-none">
+                                            <option value="" disabled selected>請選擇尺寸</option>
+                                            <option value="XS">XS</option>
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
+                                            <option value="XL">XL</option>
+                                            <option value="XXL">XXL</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col justify-center items-center h-full border border-slate-200 rounded-xl p-4 bg-white min-h-[80px]">
+                                        <a href="#" class="text-sm text-orange-600 font-bold hover:underline">查看尺寸對照表 (PDF)</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div id="submitWrapper" class="pt-8 hidden fade-in-section">
-                    <button type="submit" id="submitBtn" class="w-full gradient-bg hover:opacity-90 text-white font-bold py-5 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-[0.99] text-lg tracking-widest">
-                        確認送出報名
-                    </button>
-                    <p id="statusMsg" class="text-center text-sm font-bold mt-5 hidden"></p>
+                    <!-- 04 繳費與其他備註 -->
+                    <div class="relative">
+                        <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
+                            <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">04</span>
+                            <h3 class="text-lg font-bold text-slate-900 tracking-wider">繳費與其他備註</h3>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 gap-8">
+                            <div class="p-6 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row gap-6 items-start">
+                                <div class="w-full md:w-1/2">
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">繳費方式</label>
+                                    <div class="flex items-center mb-4">
+                                        <div class="w-5 h-5 rounded-full bg-orange-500 flex items-center justify-center mr-3 shadow-sm">
+                                            <div class="w-2 h-2 bg-white rounded-full"></div>
+                                        </div>
+                                        <span class="text-slate-800 font-bold text-lg">銀行匯款 / ATM 轉帳</span>
+                                        <input type="hidden" name="paymentMethod" value="匯款">
+                                    </div>
+                                    <div class="text-sm text-slate-600 space-y-2 bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                        <p><span class="font-bold text-slate-500 mr-2">銀行</span> 國泰世華 (013)</p>
+                                        <p><span class="font-bold text-slate-500 mr-2">帳號</span> 269506136805</p>
+                                        <p><span class="font-bold text-slate-500 mr-2">戶名</span> 費聿凡</p>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2 md:mt-8">
+                                    <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">請提供匯款帳號後五碼</label>
+                                    <input type="text" name="bankLastFive" required placeholder="請輸入對帳用後五碼" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">備註 <span class="text-xs font-normal text-slate-400 normal-case">(選填)</span></label>
+                                <textarea name="notes" rows="3" placeholder="如有舊傷、特殊飲食習慣，或有其他想先讓教練知道的事情請於此註記" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 resize-none placeholder-slate-400"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 05 同意聲明與規範 -->
+                    <div class="relative">
+                        <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
+                            <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">05</span>
+                            <h3 class="text-lg font-bold text-slate-900 tracking-wider">同意聲明與規範</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="policy-box border border-slate-200 rounded-xl bg-white">
+                                <div class="flex items-center justify-between p-4 md:p-5">
+                                    <label class="flex items-center cursor-pointer select-none flex-grow">
+                                        <input type="checkbox" name="agreeQualification" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                        <span class="ml-4 text-sm font-bold text-slate-800">我已確認具備 51.5km 鐵人完賽資格細則</span>
+                                    </label>
+                                    <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
+                                        <i class="fas fa-chevron-down text-sm transition-transform duration-300 transform"></i>
+                                    </div>
+                                </div>
+                                <div class="policy-content bg-slate-50/50">
+                                    <div class="p-5 text-sm text-slate-600 leading-relaxed">
+                                        <p class="font-bold text-slate-900 mb-2">※ 資格強制規範：</p>
+                                        <p>本訓練營聚焦於高強度體能與開放水域技術優化，學員需於開訓前具備連續使用捷泳（自由式）1000 公尺以上之基礎能力。現場不接受純蛙泳參與團練，亦不提供基礎捷泳教學，請務必確認自身實力。</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="policy-box border border-slate-200 rounded-xl bg-white">
+                                <div class="flex items-center justify-between p-4 md:p-5">
+                                    <label class="flex items-center cursor-pointer select-none flex-grow">
+                                        <input type="checkbox" name="agreeRefund" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                        <span class="ml-4 text-sm font-bold text-slate-800">我已詳閱並同意報名與退費機制細則</span>
+                                    </label>
+                                    <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
+                                        <i class="fas fa-chevron-down text-sm transition-transform duration-300 transform"></i>
+                                    </div>
+                                </div>
+                                <div class="policy-content bg-slate-50/50">
+                                    <div class="p-5 text-sm text-slate-600 leading-relaxed space-y-3">
+                                        <strong class="text-slate-900 block">所有移地團練與醫療場地均已提前造冊安排，相關行政作業需提早規劃：</strong>
+                                        <p>1. 訓練營為 16 週科學化連續週期課表，自正式開訓日開始後，因個人因素（如工作、出差、自主受傷等）中途請假或退出，恕無法提供退費、延期或由他人遞補。</p>
+                                        <p>2. 若因不可抗力天候因素（如颱風、天然災害）導致實體移地團練無法進行，光聿工作室將啟動雨備方案，統一轉為室內功率訓練課表進行，不另行退費。</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="policy-box border border-slate-200 rounded-xl bg-white">
+                                <div class="flex items-center justify-between p-4 md:p-5">
+                                    <label class="flex items-center cursor-pointer select-none flex-grow">
+                                        <input type="checkbox" name="agreeSafety" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                        <span class="ml-4 text-sm font-bold text-slate-800">我已詳閱並同意戶外訓練安全聲明細則</span>
+                                    </label>
+                                    <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
+                                        <i class="fas fa-chevron-down text-sm transition-transform duration-300 transform"></i>
+                                    </div>
+                                </div>
+                                <div class="policy-content bg-slate-50/50">
+                                    <div class="p-5 text-sm text-slate-600 leading-relaxed space-y-4">
+                                        <div>
+                                            <strong class="text-slate-900 block mb-1">1. 裝備與交通強制規範</strong>
+                                            戶外自由車外騎與開放水域海泳課程均具有潛在交通風險，學員於外騎課程請務必全程佩戴安全帽，海泳課程強制全程攜帶魚雷浮標。出發前請確認自身車況煞車及胎壓正常。
+                                        </div>
+                                        <div>
+                                            <strong class="text-slate-900 block mb-1">2. 健康聲明與風險自負</strong>
+                                            請確認自身健康狀況良好，無隱瞞不適合高強度耐力運動之心血管病史。團隊將協助造冊投保意外險，惟學員於開放道路與開放水域仍須嚴格遵守交通法規與教練指示，對自身行為負最終安全責任。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="policy-box border border-slate-200 rounded-xl bg-white">
+                                <div class="flex items-center justify-between p-4 md:p-5">
+                                    <label class="flex items-center cursor-pointer select-none flex-grow">
+                                        <input type="checkbox" name="agreeImage" required class="w-5 h-5 accent-orange-500 border-slate-300 rounded focus:ring-orange-500 cursor-pointer policy-checkbox">
+                                        <span class="ml-4 text-sm font-bold text-slate-800">我已詳閱並同意影像與肖像權授權細則</span>
+                                    </label>
+                                    <div class="expand-toggle text-slate-400 hover:text-orange-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 cursor-pointer transition">
+                                        <i class="fas fa-chevron-down text-sm transition-transform duration-300 transform"></i>
+                                    </div>
+                                </div>
+                                <div class="policy-content bg-slate-50/50">
+                                    <div class="p-5 text-sm text-slate-600 leading-relaxed">
+                                        課程與實體移地訓練過程中，教練與工作人員將進行動態與靜態影像側拍紀錄。完成報名即代表同意相關照片與影片無償授權川岳中醫與光聿工作室團隊，用於社群分享、活動紀錄、行銷或宣傳使用。若有特殊考量不便入鏡，請務必於課前主動告知教練。
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 送出按鈕 -->
+                    <div class="pt-8">
+                        <button type="submit" id="submitBtn" class="w-full gradient-bg hover:opacity-90 text-white font-bold py-5 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-[0.99] text-lg tracking-widest">
+                            確認送出報名
+                        </button>
+                        <p id="statusMsg" class="text-center text-sm font-bold mt-5 hidden"></p>
+                    </div>
+
                 </div>
             </form>
         </section>
@@ -443,11 +436,13 @@
         // 處理生理性別與三鐵衣尺寸的連動
         const genderRadios = document.querySelectorAll('input[name="gender"]');
         const sizeSection = document.getElementById('sizeSection');
+        const sizeSelect = document.getElementById('sizeSelect');
         const genderLabel = document.getElementById('genderLabel');
 
         genderRadios.forEach(radio => {
             radio.addEventListener('change', function(e) {
                 sizeSection.classList.remove('hidden');
+                sizeSelect.required = true;
                 genderLabel.textContent = `(${e.target.value}款)`;
             });
         });
@@ -456,25 +451,10 @@
         const planRadios = document.querySelectorAll('.plan-radio');
         const planDetailBox = document.getElementById('planDetailBox');
         const planDetailText = document.getElementById('planDetailText');
-        const contactSection = document.getElementById('contactSection');
-        const campSections = document.querySelectorAll('.camp-only-section');
-        const submitWrapper = document.getElementById('submitWrapper');
+        const formContentWrapper = document.getElementById('formContentWrapper');
         const submitBtn = document.getElementById('submitBtn');
 
-        // 聯絡資訊內部切換格子 與 附帶打勾
-        const lineIdWrapper = document.getElementById('lineIdWrapper');
-        const lineIdInput = document.getElementById('lineIdInput');
-        const targetRaceWrapper = document.getElementById('targetRaceWrapper');
-        const targetRaceInput = document.getElementById('targetRaceInput');
-        const extraSessionWrapper = document.getElementById('extraSessionWrapper');
-        const extraSessionInput = document.querySelector('input[name="attendInfoSession"]');
-
         const planDescriptions = {
-            '僅報名實體說明會': `
-                <div class="space-y-2">
-                    <p class="font-bold text-orange-600 text-base">實體招生說明會</p>
-                    <p class="text-sm text-slate-700">免費參加。將由教練親自說明訓練營課表規劃、醫療恢復機制，並開放現場 Q&A 問答交流。</p>
-                </div>`,
             '基本方案': `
                 <div class="space-y-2">
                     <p class="font-bold text-orange-600 text-base">基礎方案 (NT$25,000)</p>
@@ -505,59 +485,16 @@
                 </div>`
         };
 
-        function toggleCampFields(show) {
-            campSections.forEach(section => {
-                if(show) {
-                    section.classList.remove('hidden');
-                    section.querySelectorAll('input, select, textarea').forEach(el => el.disabled = false);
-                } else {
-                    section.classList.add('hidden');
-                    section.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
-                }
-            });
-        }
-
         planRadios.forEach(radio => {
             radio.addEventListener('change', function(e) {
                 const selectedPlan = e.target.value;
                 
+                // 顯示方案說明
                 planDetailBox.classList.remove('hidden');
                 planDetailText.innerHTML = planDescriptions[selectedPlan];
-                contactSection.classList.remove('hidden');
-                submitWrapper.classList.remove('hidden');
-
-                if(selectedPlan === '僅報名實體說明會') {
-                    toggleCampFields(false);
-                    submitBtn.textContent = '送出說明會報名';
-                    
-                    // 說明會模式：隱藏附帶打勾
-                    extraSessionWrapper.classList.add('hidden');
-                    extraSessionInput.checked = false;
-
-                    // 隱藏 LINE ID、啟用賽事調查欄位並設為必填
-                    lineIdWrapper.classList.add('hidden');
-                    lineIdInput.disabled = true;
-                    lineIdInput.required = false;
-
-                    targetRaceWrapper.classList.remove('hidden');
-                    targetRaceInput.disabled = false;
-                    targetRaceInput.required = true;
-                } else {
-                    toggleCampFields(true);
-                    submitBtn.textContent = '確認送出報名';
-                    
-                    // 訓練營模式：顯示附帶參加說明會的打勾選項
-                    extraSessionWrapper.classList.remove('hidden');
-
-                    // 啟用 LINE ID 並設為必填、隱藏賽事調查
-                    lineIdWrapper.classList.remove('hidden');
-                    lineIdInput.disabled = false;
-                    lineIdInput.required = true;
-
-                    targetRaceWrapper.classList.add('hidden');
-                    targetRaceInput.disabled = true;
-                    targetRaceInput.required = false;
-                }
+                
+                // 展開完整表單區塊
+                formContentWrapper.classList.remove('hidden');
             });
         });
         
@@ -613,11 +550,13 @@
                 statusMsg.className = 'text-center text-sm font-bold mt-5 text-emerald-600 block';
                 submitBtn.textContent = '提交成功';
                 form.reset();
+                
+                // 重置版面狀態
                 planDetailBox.classList.add('hidden');
-                extraSessionWrapper.classList.add('hidden');
-                contactSection.classList.add('hidden');
-                toggleCampFields(false);
-                submitWrapper.classList.add('hidden');
+                formContentWrapper.classList.add('hidden');
+                sizeSection.classList.add('hidden');
+                genderLabel.textContent = '';
+                
                 policyBoxes.forEach(box => {
                     box.classList.remove('is-checked', 'is-expanded');
                     box.querySelector('.policy-content').style.maxHeight = null;
@@ -629,9 +568,7 @@
                 statusMsg.textContent = '系統提交失敗，請檢查網路連線或稍後再試。';
                 statusMsg.className = 'text-center text-sm font-bold mt-5 text-red-600 block';
                 submitBtn.disabled = false;
-                
-                const currentPlan = document.querySelector('input[name="plan"]:checked')?.value;
-                submitBtn.textContent = (currentPlan === '僅報名實體說明會') ? '送出說明會報名' : '確認送出報名';
+                submitBtn.textContent = '確認送出報名';
             });
         });
     </script>
