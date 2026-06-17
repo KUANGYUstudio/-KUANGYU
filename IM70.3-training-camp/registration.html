@@ -422,10 +422,12 @@
             modalContent.classList.remove('opacity-100', 'scale-100');
             modalContent.classList.add('opacity-0', 'scale-95');
             
-            // 等待動畫結束後隱藏
+            // 等待動畫結束後隱藏並跳轉
             setTimeout(() => {
                 successModal.classList.add('hidden');
                 successModal.classList.remove('flex');
+                // 新增跳轉到簡章頁面
+                window.location.href = 'camp.html';
             }, 300);
         }
 
