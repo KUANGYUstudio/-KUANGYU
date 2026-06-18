@@ -95,6 +95,7 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+        
         <section id="about" class="mb-12 sm:mb-16 -mt-8 relative z-10 no-print">
             <div class="max-w-2xl mx-auto bg-white p-6 sm:p-8 sm:p-10 md:p-12 rounded-2xl sm:rounded-3xl border border-slate-100 shadow-xl text-center">
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-black mb-6 sm:mb-8 text-slate-950 tracking-tight">
@@ -239,7 +240,7 @@
                                         <span class="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-orange-200/80 text-orange-900 flex items-center justify-center text-[9px] sm:text-[10px] font-bold pb-[1px] mb-0.5">日</span>
                                     </div>
                                     <div class="flex items-end gap-1.5">
-                                        <span class="text-xl sm:text-2xl font-black text-iron-orange-600 leading-none">15</span>
+                                        <span class="text-xl sm:text-2xl font-black text-iron-orange-600 logic-none">15</span>
                                         <span class="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-orange-200/80 text-orange-900 flex items-center justify-center text-[9px] sm:text-[10px] font-bold pb-[1px] mb-0.5">六</span>
                                     </div>
                                     <div class="flex items-end gap-1.5">
@@ -293,25 +294,25 @@
             </div>
         </section>
 
-    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 my-24">
-        
-        <div class="text-center mb-12">
-            <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">專業教練陣容</h2>
-            <div class="w-12 h-1 bg-orange-500 mx-auto mt-4 rounded-full"></div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+        <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 my-24">
             
-            <a href="https://www.instagram.com/mikeliu0606/" target="_blank" class="w-full flex justify-center hover:-translate-y-2 transition-transform duration-300 group">
-                <img src="coach01.png" alt="劉光武 教練" class="w-[90%] h-auto rounded-3xl premium-shadow border border-slate-100 object-contain group-hover:shadow-2xl transition-shadow duration-300">
-            </a>
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">專業教練陣容</h2>
+                <div class="w-12 h-1 bg-orange-500 mx-auto mt-4 rounded-full"></div>
+            </div>
 
-            <a href="https://www.instagram.com/mimivirous/" target="_blank" class="w-full flex justify-center hover:-translate-y-2 transition-transform duration-300 group">
-                <img src="coach02.png" alt="費聿凡 教練" class="w-[90%] h-auto rounded-3xl premium-shadow border border-slate-100 object-contain group-hover:shadow-2xl transition-shadow duration-300">
-            </a>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12">
+                
+                <a href="https://www.instagram.com/mikeliu0606/" target="_blank" class="w-full flex justify-center hover:-translate-y-2 transition-transform duration-300 group">
+                    <img src="coach01.png" alt="劉光武 教練" class="w-[90%] h-auto rounded-3xl premium-shadow border border-slate-100 object-contain group-hover:shadow-2xl transition-shadow duration-300">
+                </a>
 
-        </div>
-    </section>
+                <a href="https://www.instagram.com/mimivirous/" target="_blank" class="w-full flex justify-center hover:-translate-y-2 transition-transform duration-300 group">
+                    <img src="coach02.png" alt="費聿凡 教練" class="w-[90%] h-auto rounded-3xl premium-shadow border border-slate-100 object-contain group-hover:shadow-2xl transition-shadow duration-300">
+                </a>
+
+            </div>
+        </section>
 
         <div class="page-break"></div>
 
@@ -574,7 +575,6 @@
 
     </main>
 
-    <!-- 頁尾區塊 -->
     <footer class="bg-[#0f172a] py-8 sm:py-10 border-t border-slate-800 no-print">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
             
@@ -598,24 +598,72 @@
     </footer>
     
     <script>
-        // 【極度重要】請在這裡貼上您剛剛部署獲得的全新「網頁應用程式網址」
+        // 【後台連線設定】
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxcVuvzxcV28ddUvu4LO9c7d3lqQT2AIzD29e3LlnEpI_g1E3o3ecFvE5G-3WL9hms1g/exec';
         
-        // 進站即時詢問後台是否額滿
-        fetch(SCRIPT_URL + '?action=checkStatus')
-            .then(res => res.json())
-            .then(data => {
-                if (data.isFull) {
-                    // 如果額滿，把畫面上所有有 'apply-btn' 標籤的按鈕變灰並鎖定
-                    document.querySelectorAll('.apply-btn').forEach(btn => {
-                        btn.textContent = '本梯次已額滿';
-                        btn.classList.remove('gradient-bg', 'text-white', 'hover:opacity-90', 'hover:shadow-2xl', 'active:scale-[0.98]');
-                        btn.classList.add('bg-slate-300', 'text-slate-500', 'cursor-not-allowed');
-                        btn.removeAttribute('href'); // 取消連結功能
-                    });
-                }
-            })
-            .catch(err => console.error('連線後台狀態失敗'));
+        window.addEventListener('load', function() {
+            const now = new Date();
+
+            // --- 功能一：早鳥價格自動切換指令 ---
+            // 設定早鳥結束時間：2026年6月30日 24:00 (即 7月1日 00:00:00)
+            const earlyBirdDeadline = new Date(2026, 6, 1); // 6 代表 7 月
+
+            if (now >= earlyBirdDeadline) {
+                // 1. 更新基本方案
+                const priceBasic = document.getElementById('price-basic');
+                const labelBasic = document.getElementById('label-basic');
+                const noteBasic = document.getElementById('note-basic');
+                if(priceBasic) priceBasic.textContent = 'NT$29,200';
+                if(labelBasic) labelBasic.innerHTML = ''; 
+                if(noteBasic) noteBasic.classList.add('hidden'); 
+
+                // 2. 更新進階方案
+                const priceAdvanced = document.getElementById('price-advanced');
+                const labelAdvanced = document.getElementById('label-advanced');
+                const noteAdvanced = document.getElementById('note-advanced');
+                if(priceAdvanced) priceAdvanced.textContent = 'NT$48,400';
+                if(labelAdvanced) labelAdvanced.innerHTML = '';
+                if(noteAdvanced) noteAdvanced.classList.add('hidden');
+
+                // 3. 更新 VIP 方案
+                const priceVip = document.getElementById('price-vip');
+                const labelVip = document.getElementById('label-vip');
+                const noteVip = document.getElementById('note-vip');
+                if(priceVip) priceVip.textContent = 'NT$59,200';
+                if(labelVip) labelVip.innerHTML = '';
+                if(noteVip) noteVip.classList.add('hidden');
+            }
+
+            // --- 功能二：報名截止自動切換按鈕 ---
+            // 設定全面截止時間：2026年7月10日 24:00 (即 7月11日 00:00:00)
+            const closeDeadline = new Date(2026, 6, 11); 
+
+            if (now >= closeDeadline) {
+                document.querySelectorAll('.apply-btn').forEach(btn => {
+                    btn.textContent = '報名截止';
+                    // 移除原本的樣式與互動效果
+                    btn.classList.remove('gradient-bg', 'text-white', 'hover:opacity-90', 'hover:shadow-2xl', 'active:scale-[0.98]');
+                    // 加入截止後的灰色停用樣式
+                    btn.classList.add('bg-slate-300', 'text-slate-500', 'cursor-not-allowed');
+                    btn.removeAttribute('href'); // 移除跳轉連結，防止進入報名表
+                });
+            } else {
+                // --- 功能三：若尚未截止，才向後台詢問是否額滿 ---
+                fetch(SCRIPT_URL + '?action=checkStatus')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.isFull) {
+                            document.querySelectorAll('.apply-btn').forEach(btn => {
+                                btn.textContent = '本梯次已額滿';
+                                btn.classList.remove('gradient-bg', 'text-white', 'hover:opacity-90', 'hover:shadow-2xl', 'active:scale-[0.98]');
+                                btn.classList.add('bg-slate-300', 'text-slate-500', 'cursor-not-allowed');
+                                btn.removeAttribute('href');
+                            });
+                        }
+                    })
+                    .catch(err => console.error('連線後台狀態失敗'));
+            }
+        });
     </script>
 </body>
 </html>
