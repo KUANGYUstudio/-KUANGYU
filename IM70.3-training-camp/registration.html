@@ -142,7 +142,7 @@
                                 
                                 <div>
                                     <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">出生年月日</label>
-                                    <input type="text" name="dob" onfocus="(this.type='date')" onblur="(if(!this.value) this.type='text')" required placeholder="年 / 月 / 日" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-400">
+                                    <input type="text" name="dob" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" required placeholder="年 / 月 / 日" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-400">
                                 </div>
 
                                 <div>
@@ -188,42 +188,41 @@
                     </div>
 
                     <div class="relative">
-    <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
-        <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">03</span>
-        <h3 class="text-lg font-bold text-slate-900 tracking-wider">賽事成績</h3>
-    </div>
-    
-    <div class="space-y-8">
-        <div>
-            <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">51.5km 或 113km 最佳完賽成績</label>
-            <div class="space-y-4">
-                <!-- 新增：賽事名稱 -->
-                <div>
-                    <label class="block text-xs font-medium text-slate-500 mb-1">賽事名稱</label>
-                    <input type="text" name="raceName" required placeholder="例如：2025 普悠瑪 51.5" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-500 mb-1">總時間</label>
-                    <input type="text" name="expTotal" placeholder="例如：3:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
-                </div>
-                <div class="grid grid-cols-3 gap-3 md:gap-6">
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">游泳</label>
-                        <input type="text" name="expSwim" placeholder="40分" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                        <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
+                            <span class="text-3xl font-black text-orange-500/40 leading-none mr-4">03</span>
+                            <h3 class="text-lg font-bold text-slate-900 tracking-wider">賽事成績</h3>
+                        </div>
+                        
+                        <div class="space-y-8">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">51.5km 或 113km 最佳完賽成績</label>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">賽事名稱</label>
+                                        <input type="text" name="raceName" required placeholder="例如：2025 普悠瑪 51.5" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-500 mb-1">總時間</label>
+                                        <input type="text" name="expTotal" placeholder="例如：3:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300">
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-3 md:gap-6">
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-500 mb-1">游泳</label>
+                                            <input type="text" name="expSwim" placeholder="40分" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-500 mb-1">單車</label>
+                                            <input type="text" name="expBike" placeholder="1:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-500 mb-1">跑步</label>
+                                            <input type="text" name="expRun" placeholder="1:10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">單車</label>
-                        <input type="text" name="expBike" placeholder="1:15" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-slate-500 mb-1">跑步</label>
-                        <input type="text" name="expRun" placeholder="1:10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none text-slate-800 placeholder-slate-300 text-center">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
                     <div class="relative">
                         <div class="flex items-end mb-8 border-b border-slate-100 pb-4">
@@ -279,7 +278,7 @@
                                     </div>
                                 </div>
                                 <div class="policy-content bg-slate-50/50">
-                                    <div class="p-5 text-sm text-slate-600 luminal-relaxed">
+                                    <div class="p-5 text-sm text-slate-600 leading-relaxed">
                                         <p class="font-bold text-slate-900 mb-2">※ 資格強制規範：</p>
                                         <p>本訓練營聚焦於提升體能與游泳技術優化，學員需於開訓前具備連續使用捷泳（自由式）1000 公尺以上之基礎能力。不接受純蛙泳參與團練，亦不提供基礎捷泳教學，請務必確認自身狀況。</p>
                                     </div>
@@ -302,7 +301,7 @@
                                             <strong class="text-slate-900 block text-base mb-2">【開訓前退費標準】</strong>
                                             <p class="mb-2">所有的團練與保險事宜均需提前造冊安排，若於開訓前因故無法參加，退費標準如下（參酌消保法相關規範）：</p>
                                             <ul class="list-disc pl-5 space-y-1.5 text-slate-700">
-                                                <li>開訓日 <strong class="text-slate-900">14 天前 (含)</strong> 提出申請：全額退費（需扣除行政手續費 NT$1,000）。</li>
+                                                <li>開訓日 <strong class="text-slate-900">14 天前 (含)</strong> 提出申請：全額退費。</li>
                                                 <li>開訓日 <strong class="text-slate-900">7 至 13 天前</strong> 提出申請：退還總費用之 80%。</li>
                                                 <li>開訓日 <strong class="text-slate-900">1 至 6 天前</strong> 提出申請：退還總費用之 70%。</li>
                                             </ul>
@@ -352,7 +351,7 @@
                                 </div>
                                 <div class="policy-content bg-slate-50/50">
                                     <div class="p-5 text-sm text-slate-600 leading-relaxed">
-                                        課程與實體移地訓練過程中，教練與工作人員將進行動態與靜態影像側拍紀錄。完成報名即代表同意相關照片與影片無償授權川岳中醫醫療運動中心與光聿KUANGYU团队，用於社群分享、活動紀錄、行銷或宣傳使用。若有特殊考量不便入鏡，請務必於課前主動告知教練。
+                                        課程與實體移地訓練過程中，教練與工作人員將進行動態與靜態影像側拍紀錄。完成報名即代表同意相關照片與影片無償授權川岳中醫醫療運動中心與光聿KUANGYU團隊，用於社群分享、活動紀錄、行銷或宣傳使用。若有特殊考量不便入鏡，請務必於課前主動告知教練。
                                     </div>
                                 </div>
                             </div>
