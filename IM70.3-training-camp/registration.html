@@ -7,13 +7,34 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'iron-orange': {
+                            50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c',
+                            500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12', 950: '#431407',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #f97316 0%, #c2410c 100%); }
-        .glass-nav { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .premium-shadow { box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.05); }
+        .gradient-bg { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @media print {
+            body { -webkit-print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            .page-break { page-break-before: always; }
+            .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl { box-shadow: none !important; border: 1px solid #e5e7eb !important; }
+            .gradient-bg { background: #f97316 !important; }
+            section { page-break-inside: avoid; }
+        }
         .policy-box { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .policy-box.is-checked { background-color: #fafaf9; border-color: #ea580c; }
         .policy-content { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s; opacity: 0; }
@@ -41,7 +62,7 @@
         </div>
     </div>
 
-    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300 no-print">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center">
@@ -152,6 +173,7 @@
                             </div>
 
                             <div class="pt-6 border-t border-slate-100">
+                                <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-address-book text-orange-500 mr-2"></i>聯絡資訊</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">聯絡電話</label>
@@ -169,6 +191,7 @@
                             </div>
 
                             <div class="bg-slate-50 p-5 border border-slate-200 rounded-xl mt-2">
+                                <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-exclamation-circle text-orange-500 mr-2"></i>緊急聯絡資訊</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-xs font-medium text-slate-500 mb-1">緊急聯絡人姓名</label>
@@ -419,7 +442,7 @@
                     <p class="font-bold text-orange-600 text-base">基礎方案 (NT$25,000)</p>
                     <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
                         <li>16週線上課表</li>
-                        <li>16次游泳團練（川岳中醫醫療運動中心）<br><span class="text-xs text-orange-600 font-bold bg-orange-100/50 px-2 py-0.5 rounded inline-block mt-1">每週二 06:30-08:00</span></li>
+                        <li>16次游泳團練 <a href="https://share.google/PUSy8YMC2Tv8SO2lE" target="_blank" class="text-orange-600 hover:text-orange-700 underline decoration-orange-300 underline-offset-2 transition-colors">（川岳中醫醫療運動中心）</a><br><span class="text-xs text-orange-600 font-bold bg-orange-100/50 px-2 py-0.5 rounded inline-block mt-1">每週二 06:30-08:00</span></li>
                         <li>8次周末團練</li>
                         <li>報名禮</li>
                         <li>高壓氧｜岩盤浴｜運動按摩 各30分鐘</li>
