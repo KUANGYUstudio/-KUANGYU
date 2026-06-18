@@ -276,7 +276,7 @@
                                     </div>
                                 </div>
                                 <div class="policy-content bg-slate-50/50">
-                                    <div class="p-5 text-sm text-slate-600 leading-relaxed">
+                                    <div class="p-5 text-sm text-slate-600 luminal-relaxed">
                                         <p class="font-bold text-slate-900 mb-2">※ 資格強制規範：</p>
                                         <p>本訓練營聚焦於提升體能與游泳技術優化，學員需於開訓前具備連續使用捷泳（自由式）1000 公尺以上之基礎能力。不接受純蛙泳參與團練，亦不提供基礎捷泳教學，請務必確認自身狀況。</p>
                                     </div>
@@ -349,7 +349,7 @@
                                 </div>
                                 <div class="policy-content bg-slate-50/50">
                                     <div class="p-5 text-sm text-slate-600 leading-relaxed">
-                                        課程與實體移地訓練過程中，教練與工作人員將進行動態與靜態影像側拍紀錄。完成報名即代表同意相關照片與影片無償授權川岳中醫醫療運動中心與光聿KUANGYU團隊，用於社群分享、活動紀錄、行銷或宣傳使用。若有特殊考量不便入鏡，請務必於課前主動告知教練。
+                                        課程與實體移地訓練過程中，教練與工作人員將進行動態與靜態影像側拍紀錄。完成報名即代表同意相關照片與影片無償授權川岳中醫醫療運動中心與光聿KUANGYU团队，用於社群分享、活動紀錄、行銷或宣傳使用。若有特殊考量不便入鏡，請務必於課前主動告知教練。
                                     </div>
                                 </div>
                             </div>
@@ -406,22 +406,77 @@
             }, 300);
         }
 
-        // 進站即時詢問後台是否額滿
-        fetch(SCRIPT_URL + '?action=checkStatus')
-            .then(res => res.json())
-            .then(data => {
-                if (data.isFull) {
-                    submitBtn.textContent = '本梯次名額已滿';
-                    submitBtn.disabled = true;
-                    submitBtn.classList.remove('gradient-bg', 'hover:opacity-90', 'hover:shadow-xl', 'active:scale-[0.99]');
-                    submitBtn.classList.add('bg-slate-300', 'text-slate-500', 'cursor-not-allowed');
-                    
-                    statusMsg.textContent = '非常抱歉，本次訓練營 20 人名額已滿，感謝您的支持！';
-                    statusMsg.className = 'text-center text-sm font-bold mt-5 text-red-600 block';
-                    statusMsg.classList.remove('hidden');
-                }
-            })
-            .catch(err => console.error('連線後台狀態失敗'));
+        // --- 全域變數：根據日期動態決定價格文本 ---
+        const now = new Date();
+        const earlyBirdDeadline = new Date(2026, 6, 1); // 6 代表 7 月 1 日 00:00:00
+        const isEarlyBirdActive = now < earlyBirdDeadline;
+
+        const planDescriptions = {
+            '基本方案': `
+                <div class="space-y-2">
+                    <p class="font-bold text-orange-600 text-base">基本方案 (${isEarlyBirdActive ? '早鳥價 NT$25,000' : '原價 NT$29,200'})</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                        <li>16週線上課表</li>
+                        <li>16次游泳團練 <span class="text-xs text-orange-600 font-bold bg-orange-100/50 px-2 py-0.5 rounded inline-block ml-1">每週二 06:30-08:00</span></li>
+                        <li>8次周末團練</li>
+                        <li>報名禮</li>
+                        <li>高壓氧｜岩盤浴｜運動按摩 各30分鐘</li>
+                    </ul>
+                </div>`,
+            '進階方案': `
+                <div class="space-y-2">
+                    <p class="font-bold text-orange-600 text-base">進階方案 (${isEarlyBirdActive ? '早鳥價 NT$45,000' : '原價 NT$48,400'})</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                        <li>包含 基礎方案 全項目</li>
+                        <li>16堂 一對一肌力訓練</li>
+                    </ul>
+                </div>`,
+            'VIP方案': `
+                <div class="space-y-2">
+                    <p class="font-bold text-orange-600 text-base">VIP方案 (${isEarlyBirdActive ? '早鳥價 NT$55,000' : '原價 NT$59,200'})</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                        <li>包含 進階方案 全項目</li>
+                        <li>高壓氧｜岩盤浴 完整療程 各5次</li>
+                        <li>運動按摩 60分鐘 共3次</li>
+                    </ul>
+                </div>`
+        };
+
+        // --- 全面報名截止防禦檢查 ---
+        const closeDeadline = new Date(2026, 6, 11, 0, 0, 0); // 7/11 00:00 (即 7/10 24:00)
+
+        if (now >= closeDeadline) {
+            // 立即執行截止阻斷
+            window.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('signUpForm').innerHTML = `
+                    <div class="text-center py-16 px-4">
+                        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-calendar-times text-3xl text-slate-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">本梯次報名已截止</h3>
+                        <p class="text-slate-500 text-sm max-w-sm mx-auto leading-relaxed">非常抱歉，IM 70.3 墾丁鐵人三項訓練營已於 7 月 10 日 24:00 全面截止報名。感謝您的支持！</p>
+                        <a href="camp.html" class="inline-block mt-6 bg-slate-800 text-white font-bold text-sm px-6 py-2.5 rounded-xl hover:bg-slate-700 transition">返回招生簡章</a>
+                    </div>
+                `;
+            });
+        } else {
+            // 如果尚未截止，才進行後台額滿狀態檢查
+            fetch(SCRIPT_URL + '?action=checkStatus')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.isFull) {
+                        submitBtn.textContent = '本梯次名額已滿';
+                        submitBtn.disabled = true;
+                        submitBtn.classList.remove('gradient-bg', 'hover:opacity-90', 'hover:shadow-xl', 'active:scale-[0.99]');
+                        submitBtn.classList.add('bg-slate-300', 'text-slate-500', 'cursor-not-allowed');
+                        
+                        statusMsg.textContent = '非常抱歉，本次訓練營 20 人名額已滿，感謝您的支持！';
+                        statusMsg.className = 'text-center text-sm font-bold mt-5 text-red-600 block';
+                        statusMsg.classList.remove('hidden');
+                    }
+                })
+                .catch(err => console.error('連線後台狀態失敗'));
+        }
 
         // 處理多組動態條款卡片折疊邏輯
         const policyBoxes = document.querySelectorAll('.policy-box');
@@ -456,37 +511,6 @@
         const planDetailBox = document.getElementById('planDetailBox');
         const planDetailText = document.getElementById('planDetailText');
         const formContentWrapper = document.getElementById('formContentWrapper');
-
-        const planDescriptions = {
-            '基本方案': `
-                <div class="space-y-2">
-                    <p class="font-bold text-orange-600 text-base">基礎方案 (NT$25,000)</p>
-                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
-                        <li>16週線上課表</li>
-                        <li>16次游泳團練 <span class="text-xs text-orange-600 font-bold bg-orange-100/50 px-2 py-0.5 rounded inline-block ml-1">每週二 06:30-08:00</span></li>
-                        <li>8次周末團練</li>
-                        <li>報名禮</li>
-                        <li>高壓氧｜岩盤浴｜運動按摩 各30分鐘</li>
-                    </ul>
-                </div>`,
-            '進階方案': `
-                <div class="space-y-2">
-                    <p class="font-bold text-orange-600 text-base">進階方案 (NT$45,000)</p>
-                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
-                        <li>包含 基礎方案 全項目</li>
-                        <li>16堂 一對一肌力訓練</li>
-                    </ul>
-                </div>`,
-            'VIP方案': `
-                <div class="space-y-2">
-                    <p class="font-bold text-orange-600 text-base">VIP方案 (NT$55,000)</p>
-                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
-                        <li>包含 進階方案 全項目</li>
-                        <li>高壓氧｜岩盤浴 完整療程 各5次</li>
-                        <li>運動按摩 60分鐘 共3次</li>
-                    </ul>
-                </div>`
-        };
 
         planRadios.forEach(radio => {
             radio.addEventListener('change', function(e) {
@@ -581,6 +605,5 @@
             });
         });
     </script>
-
 </body>
 </html>
