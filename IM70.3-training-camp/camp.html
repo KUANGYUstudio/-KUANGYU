@@ -398,15 +398,16 @@
             </div>
             
             <div class="flex overflow-x-auto lg:grid lg:grid-cols-3 gap-6 pt-2 pb-8 hide-scrollbar snap-x snap-mandatory">
+                
                 <div class="min-w-[85vw] sm:min-w-[400px] lg:min-w-0 snap-center bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-400 hover:bg-orange-50/10 group">
                     <div class="pt-5 px-5 pb-3 text-center border-b border-gray-100">
                         <h3 class="text-2xl font-bold text-slate-800">基本方案</h3>
                         <p class="text-orange-600 text-xs font-medium mt-1.5 bg-orange-50 inline-block px-3 py-1 rounded-full">週期化課表，穩定訓練、穩定進步</p>
-                        <div class="my-3">
-                            <span class="text-3xl font-black text-slate-800">NT$25,000</span>
-                            <span class="text-gray-400 text-sm font-medium">/早鳥價</span>
+                        <div class="my-3 flex items-end justify-center">
+                            <span id="price-basic" class="text-3xl font-black text-slate-800">NT$25,000</span>
+                            <span id="label-basic" class="text-gray-400 text-sm font-medium ml-1">/早鳥價</span>
                         </div>
-                        <p class="text-xs text-gray-400">原價 NT$29,200</p>
+                        <p id="note-basic" class="text-xs text-gray-400">原價 NT$29,200</p>
                     </div>
                     <div class="p-5 flex-grow bg-gray-50/50">
                         <ul class="space-y-3 text-sm text-gray-600">
@@ -444,11 +445,11 @@
                     <div class="pt-5 px-5 pb-3 text-center border-b border-gray-100">
                         <h3 class="text-2xl font-bold text-slate-800">進階方案</h3>
                         <p class="text-orange-600 text-xs font-medium mt-1.5 bg-orange-50 inline-block px-3 py-1 rounded-full">全面提升、建立完整體能系統</p>
-                        <div class="my-3">
-                            <span class="text-3xl font-black text-slate-800">NT$45,000</span>
-                            <span class="text-gray-400 text-sm font-medium">/早鳥價</span>
+                        <div class="my-3 flex items-end justify-center">
+                            <span id="price-advanced" class="text-3xl font-black text-slate-800">NT$45,000</span>
+                            <span id="label-advanced" class="text-gray-400 text-sm font-medium ml-1">/早鳥價</span>
                         </div>
-                        <p class="text-xs text-gray-400">原價 NT$48,400</p>
+                        <p id="note-advanced" class="text-xs text-gray-400">原價 NT$48,400</p>
                     </div>
                     <div class="p-5 flex-grow bg-gray-50/50">
                         <ul class="space-y-3 text-sm text-gray-600">
@@ -482,11 +483,11 @@
                     <div class="pt-5 px-5 pb-3 text-center border-b border-gray-100">
                         <h3 class="text-2xl font-bold text-slate-800">VIP方案</h3>
                         <p class="text-orange-600 text-xs font-medium mt-1.5 bg-orange-50 inline-block px-3 py-1 rounded-full">完整專項體能和肌力建立、高品質恢復</p>
-                        <div class="my-3">
-                            <span class="text-3xl font-black text-slate-800">NT$55,000</span>
-                            <span class="text-gray-400 text-sm font-medium">/早鳥價</span>
+                        <div class="my-3 flex items-end justify-center">
+                            <span id="price-vip" class="text-3xl font-black text-slate-800">NT$55,000</span>
+                            <span id="label-vip" class="text-gray-400 text-sm font-medium ml-1">/早鳥價</span>
                         </div>
-                        <p class="text-xs text-gray-400">原價 NT$59,200</p>
+                        <p id="note-vip" class="text-xs text-gray-400">原價 NT$59,200</p>
                     </div>
                     <div class="p-5 flex-grow bg-gray-50/50">
                         <ul class="space-y-3 text-sm text-gray-600">
