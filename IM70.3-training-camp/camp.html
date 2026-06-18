@@ -291,146 +291,103 @@
             </div>
         </section>
 
-        <!-- 頂尖教練陣容介紹區塊 -->
-    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 my-24 space-y-16">
+        <!-- 專業教練介紹區塊 (精簡版) -->
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 my-24">
         
         <!-- 區塊標題 -->
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">專業教練陣容</h2>
-            <div class="w-16 h-1.5 bg-orange-500 mx-auto mt-4 rounded-full"></div>
+            <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">專業教練陣容</h2>
+            <div class="w-12 h-1 bg-orange-500 mx-auto mt-4 rounded-full"></div>
         </div>
 
-        <!-- 教練 01：光武教練 (照片在右) -->
-        <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 rounded-3xl premium-shadow border border-slate-800 p-8 md:p-12 relative overflow-hidden lg:overflow-visible flex flex-col lg:flex-row items-center gap-12 transition-transform duration-500 hover:-translate-y-1">
+        <!-- 雙卡片網格排版 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
-            <!-- 背景浮雕數字 -->
-            <div class="absolute right-4 bottom-0 text-[10rem] md:text-[14rem] font-black text-slate-800/20 select-none pointer-events-none leading-none tracking-tighter z-0">
-                01
-            </div>
-
-            <!-- 左側文字區 -->
-            <div class="w-full lg:w-3/5 space-y-8 text-white relative z-10 order-2 lg:order-1">
-                <div class="space-y-2">
-                    <span class="text-orange-500 font-black text-xs tracking-[0.3em] uppercase block">Head Coach</span>
-                    <h3 class="text-4xl md:text-5xl font-black tracking-tight text-white flex items-baseline gap-3">
-                        光武教練 <span class="text-xl font-normal text-slate-400">Coach Guangwu</span>
-                    </h3>
-                    <p class="text-slate-300 font-medium text-base">光聿 KUANGYU 共同創辦人 ｜ 鐵人三項總教練</p>
-                </div>
-
-                <div class="space-y-6 border-t border-b border-slate-800 py-8">
-                    <!-- 數據一 -->
+            <!-- 光武教練 -->
+            <div class="bg-white rounded-2xl border border-slate-100 premium-shadow p-8 flex flex-col h-full hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+                <!-- 頂部橘色裝飾線 -->
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-orange-400"></div>
+                
+                <div class="flex items-center gap-5 mb-6">
+                    <!-- 教練大頭照：請將檔案命名為 coach_guangwu.jpg -->
+                    <img src="coach_guangwu.jpg" alt="劉光武 教練" class="w-20 h-20 rounded-full object-cover border-2 border-slate-50 shadow-sm">
                     <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="bg-orange-600 text-white text-[10px] font-black px-2 py-0.5 rounded tracking-wider uppercase">Personal Best</span>
-                            <span class="text-slate-400 text-xs font-bold tracking-widest uppercase">226km 最佳完賽紀錄</span>
-                        </div>
-                        <div class="text-5xl md:text-6xl font-black text-white tracking-tighter font-mono">
-                            10:30:15
-                        </div>
-                        <div class="w-full h-1.5 bg-slate-800 mt-2 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-orange-500 to-orange-600 h-full w-[95%]"></div>
-                        </div>
+                        <span class="text-orange-600 font-bold text-xs tracking-widest uppercase">Head Coach</span>
+                        <h3 class="text-2xl font-black text-slate-900 mt-1">劉光武</h3>
                     </div>
                 </div>
 
-                <div class="space-y-4 text-sm text-slate-300">
-                    <p class="font-bold text-slate-100 text-base tracking-wider">專業資歷與核心證照：</p>
-                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 list-none pl-0">
-                        <li class="flex items-center gap-2.5">
-                            <i class="fas fa-certificate text-orange-500 text-xs"></i> 國際鐵人三項教練認證
-                        </li>
-                        <li class="flex items-center gap-2.5">
-                            <i class="fas fa-certificate text-orange-500 text-xs"></i> 游泳動作矯正與水感開發
-                        </li>
-                        <li class="flex items-center gap-2.5">
-                            <i class="fas fa-certificate text-orange-500 text-xs"></i> 科學化週期課表編排
-                        </li>
-                    </ul>
+                <p class="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
+                    素人選手出生，專長鐵人三項運動，與費聿凡為「光聿工作室」共同創辦人，致力於推動健康無痛的運動生活，喜愛研究訓練、追求挑戰，希望藉由自身經驗發展出更有效的訓練系統，讓忙碌的現代人也能勇於追求進步、達成自我實現！
+                </p>
+
+                <div class="space-y-5 text-sm">
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 border-l-2 border-orange-500 pl-2">【證照】</h4>
+                        <ul class="list-none space-y-1 text-slate-600 pl-3">
+                            <li>中華民國鐵人三項Ａ級教練證照</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 border-l-2 border-orange-500 pl-2">【經歷】</h4>
+                        <ul class="list-none space-y-1.5 text-slate-600 pl-3">
+                            <li>2019 法國尼斯 IRONMAN 70.3 世錦賽選手</li>
+                            <li>2021 台東超鐵 226 km 總排第4名</li>
+                            <li>2022 台東普悠瑪鐵人賽 226 km 總排第2名</li>
+                            <li>2022 墾丁 IRONMAN 70.3 總排第2名</li>
+                            <li>2022 夏威夷 KONA IRONMAN 世錦賽選手</li>
+                            <li>2024 紐西蘭 IRONMAN 70.3 世錦賽選手</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 border-l-2 border-orange-500 pl-2">【專長】</h4>
+                        <p class="text-slate-600 pl-3">鐵人三項訓練、自行車訓練、跑步訓練</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- 右側照片區 -->
-            <div class="w-full lg:w-2/5 flex justify-center relative z-10 order-1 lg:order-2 mt-8 lg:mt-0">
-                <div class="absolute inset-0 bg-gradient-to-t from-orange-600/20 to-transparent rounded-2xl transform lg:rotate-3 border border-orange-500/20 pointer-events-none z-0"></div>
-                <img src="coach_guangwu.png" alt="Coach Guangwu" class="w-full max-w-[280px] md:max-w-[320px] h-auto object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.6)] relative z-10 lg:-mt-12 lg:-mb-12">
+            <!-- 聿凡教練 -->
+            <div class="bg-white rounded-2xl border border-slate-100 premium-shadow p-8 flex flex-col h-full hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+                <!-- 頂部橘黃色裝飾線 -->
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-amber-500"></div>
+                
+                <div class="flex items-center gap-5 mb-6">
+                    <!-- 教練大頭照：請將檔案命名為 coach_yufan.jpg -->
+                    <img src="coach_yufan.jpg" alt="費聿凡 教練" class="w-20 h-20 rounded-full object-cover border-2 border-slate-50 shadow-sm">
+                    <div>
+                        <span class="text-orange-600 font-bold text-xs tracking-widest uppercase">Head Coach</span>
+                        <h3 class="text-2xl font-black text-slate-900 mt-1">費聿凡</h3>
+                    </div>
+                </div>
+
+                <p class="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
+                    心理系畢業後，一頭栽進鐵人三項拔不出來，短暫成為鐵人三項國手後退役，之後一直埋首於教學與姿勢調整等專業，期盼帶給大家更不一樣的運動體驗！
+                </p>
+
+                <div class="space-y-5 text-sm">
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 border-l-2 border-amber-500 pl-2">【證照】</h4>
+                        <ul class="list-none space-y-1 text-slate-600 pl-3">
+                            <li>中華民國鐵人三項B級教練證照</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 border-l-2 border-amber-500 pl-2">【經歷】</h4>
+                        <ul class="list-none space-y-1.5 text-slate-600 pl-3">
+                            <li>2012 世界大學鐵人三項錦標賽－中華代表隊</li>
+                            <li>2017 日本村上亞洲盃－中華台北代表隊</li>
+                            <li>2022 台東 IRONMAN 70.3 分組第一名</li>
+                            <li>2022 澎湖 IRONMAN 總排第7名</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 border-l-2 border-amber-500 pl-2">【專長】</h4>
+                        <p class="text-slate-600 pl-3">鐵人三項訓練、姿勢調整、運動按摩</p>
+                    </div>
+                </div>
             </div>
+
         </div>
-
-        <!-- 教練 02：聿凡教練 (照片在左) -->
-        <div class="bg-gradient-to-bl from-slate-900 via-slate-950 to-slate-900 rounded-3xl premium-shadow border border-slate-800 p-8 md:p-12 relative overflow-hidden lg:overflow-visible flex flex-col lg:flex-row items-center gap-12 transition-transform duration-500 hover:-translate-y-1">
-            
-            <!-- 背景浮雕數字 -->
-            <div class="absolute left-4 top-4 text-[10rem] md:text-[14rem] font-black text-slate-800/20 select-none pointer-events-none leading-none tracking-tighter z-0">
-                02
-            </div>
-
-            <!-- 左側照片區 (手機版會在上方) -->
-            <div class="w-full lg:w-2/5 flex justify-center relative z-10 order-1 lg:order-1 mt-8 lg:mt-0">
-                <div class="absolute inset-0 bg-gradient-to-t from-amber-600/20 to-transparent rounded-2xl transform lg:-rotate-3 border border-amber-500/20 pointer-events-none z-0"></div>
-                <img src="coach_yufan.png" alt="Coach Yufan" class="w-full max-w-[280px] md:max-w-[320px] h-auto object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.6)] relative z-10 lg:-mt-12 lg:-mb-12">
-            </div>
-
-            <!-- 右側文字區 -->
-            <div class="w-full lg:w-3/5 space-y-8 text-white relative z-10 order-2 lg:order-2">
-                <div class="space-y-2">
-                    <span class="text-amber-500 font-black text-xs tracking-[0.3em] uppercase block">Strength & Recovery Coach</span>
-                    <h3 class="text-4xl md:text-5xl font-black tracking-tight text-white flex items-baseline gap-3">
-                        聿凡教練 <span class="text-xl font-normal text-slate-400">Coach Yufan</span>
-                    </h3>
-                    <p class="text-slate-300 font-medium text-base">光聿 KUANGYU 共同創辦人 ｜ 耐力運動科學化教練</p>
-                </div>
-
-                <div class="space-y-6 border-t border-b border-slate-800 py-8">
-                    <!-- 數據一 -->
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="bg-orange-600 text-white text-[10px] font-black px-2 py-0.5 rounded tracking-wider uppercase">Personal Best</span>
-                            <span class="text-slate-400 text-xs font-bold tracking-widest uppercase">113km 最佳完賽紀錄</span>
-                        </div>
-                        <div class="text-5xl md:text-6xl font-black text-white tracking-tighter font-mono">
-                            4:45:27
-                        </div>
-                        <div class="w-full h-1.5 bg-slate-800 mt-2 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-orange-500 to-orange-600 h-full w-[92%]"></div>
-                        </div>
-                    </div>
-
-                    <!-- 數據二 -->
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="bg-amber-500 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded tracking-wider uppercase">Threshold</span>
-                            <span class="text-slate-400 text-xs font-bold tracking-widest uppercase">自行車 FTP 瓦數值</span>
-                        </div>
-                        <div class="text-5xl md:text-6xl font-black text-white tracking-tighter font-mono flex items-baseline gap-1">
-                            245<span class="text-xl font-bold text-slate-400 uppercase ml-1">Watts</span>
-                        </div>
-                        <div class="w-full h-1.5 bg-slate-800 mt-2 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-full w-[85%]"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="space-y-4 text-sm text-slate-300">
-                    <p class="font-bold text-slate-100 text-base tracking-wider">專業資歷與核心證照：</p>
-                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 list-none pl-0">
-                        <li class="flex items-center gap-2.5">
-                            <i class="fas fa-certificate text-amber-500 text-xs"></i> 國家級自行車教練認證
-                        </li>
-                        <li class="flex items-center gap-2.5">
-                            <i class="fas fa-certificate text-amber-500 text-xs"></i> TrainingPeaks 認證科學化教練
-                        </li>
-                        <li class="flex items-center gap-2.5">
-                            <i class="fas fa-certificate text-amber-500 text-xs"></i> 專業運動按摩與科學化恢復防護
-                        </li>
-                        <li class="flex items-center gap-2.5">
-                            <i class="fas fa-certificate text-amber-500 text-xs"></i> SmO2 肌氧偵測與資料分析
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
     </section>
 
         <div class="page-break"></div>
