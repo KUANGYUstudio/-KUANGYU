@@ -7,28 +7,28 @@
   
   <style>
     /* ==========================================
-       CSS 樣式：粉藍綠輕莫蘭迪版
+       CSS 樣式：多巴胺亮藍綠色系 (課表薄荷綠 x 表單亮青)
        ========================================== */
     
     :root {
-      /* 粉藍色系 (表單區與按鈕) */
-      --blue-main: #7ca8b8;
-      --blue-dark: #4b6d7a;
-      --blue-light: #f0f5f7;
-      --blue-border: #cad6db;
-      --blue-bg: #f7fafb;
+      /* 多巴胺亮青色 (表單區與按鈕) */
+      --blue-main: #00cbd6;
+      --blue-dark: #132228;
+      --blue-light: #edfbfb;
+      --blue-border: #bcecf0;
+      --blue-bg: #f4fdfd;
 
-      /* 粉水綠色系 (課表區) */
-      --teal-main: #8abdb3;
-      --teal-dark: #527a73;
-      --teal-light: #f2f7f6;
-      --teal-border: #c8deda;
-      --teal-bg: #f8fbfb;
+      /* 多巴胺薄荷綠 (課表區 - 沿用原 pink 變數名稱方便維護程式碼) */
+      --pink-main: #2ee5b5;
+      --pink-dark: #132228;
+      --pink-light: #e8fcf6;
+      --pink-border: #bcf5e3;
+      --pink-bg: #f2fdf9;
     }
 
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background-color: #f2f5f6; 
+      background-color: #f4f6f8; 
       color: #333333; 
       margin: 0; 
       padding: 60px 20px; 
@@ -42,7 +42,7 @@
       background: #ffffff; 
       padding: 50px 60px; 
       border-radius: 8px; 
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03); 
+      box-shadow: 0 4px 24px rgba(0,0,0,0.04); 
     }
 
     @media (max-width: 600px) {
@@ -57,9 +57,9 @@
       letter-spacing: 0.12em;
       text-align: center;
       margin-bottom: 40px;
-      color: var(--teal-dark);
+      color: var(--pink-dark);
       padding-bottom: 20px;
-      border-bottom: 1px solid var(--teal-border);
+      border-bottom: 1px solid var(--pink-border);
     }
 
     /* ==========================================
@@ -72,7 +72,7 @@
     .schedule-title {
       font-size: 16px;
       font-weight: 600;
-      color: var(--teal-dark);
+      color: var(--pink-dark);
       margin-bottom: 16px;
       letter-spacing: 0.08em;
     }
@@ -81,9 +81,9 @@
       width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--teal-border);
+      border: 1px solid var(--pink-border);
       border-radius: 6px;
-      background-color: var(--teal-bg);
+      background-color: var(--pink-bg);
     }
 
     .schedule-table {
@@ -95,8 +95,8 @@
 
     .schedule-table th {
       text-align: left;
-      background-color: var(--teal-border);
-      color: var(--teal-dark);
+      background-color: var(--pink-border);
+      color: var(--pink-dark);
       font-weight: 600;
       padding: 14px 16px;
       white-space: nowrap; 
@@ -104,7 +104,7 @@
 
     .schedule-table td {
       padding: 14px 16px;
-      border-bottom: 1px solid var(--teal-border);
+      border-bottom: 1px solid var(--pink-border);
       color: #444;
       vertical-align: middle;
     }
@@ -115,7 +115,7 @@
     }
 
     .schedule-table td strong {
-      color: var(--teal-dark);
+      color: var(--pink-dark);
       font-weight: 600;
       display: block;
     }
@@ -129,7 +129,7 @@
 
     .highlight-row td,
     .highlight-row td strong {
-      color: #3b5c56 !important;
+      color: #132228 !important;
     }
 
     /* 課表注意事項 */
@@ -189,31 +189,28 @@
     
     input[type="text"], 
     input[type="date"], 
-    input[type="email"],
-    textarea { 
+    input[type="email"] { 
       display: block;
       width: 100%;
       max-width: 100%;
       -webkit-appearance: none;
       appearance: none;
       padding: 12px 14px; 
-      border: 1px solid #d1dadd; 
+      border: 1px solid #d1d9e0; 
       border-radius: 6px; 
       background-color: #fff;
       box-sizing: border-box; 
       font-size: 15px;
       color: #333;
       transition: all 0.2s ease;
-      font-family: inherit;
     }
     
     input[type="text"]:focus, 
     input[type="date"]:focus, 
-    input[type="email"]:focus,
-    textarea:focus {
+    input[type="email"]:focus {
       outline: none;
       border-color: var(--blue-main);
-      box-shadow: 0 0 0 3px rgba(124, 168, 184, 0.15);
+      box-shadow: 0 0 0 3px rgba(0, 203, 214, 0.15);
     }
     
     .option-group { 
@@ -270,7 +267,7 @@
     }
 
     .bank-info { 
-      background: #ffffff; 
+      background: var(--blue-bg); 
       border: 1px solid var(--blue-border); 
       padding: 20px; 
       border-radius: 6px; 
@@ -297,11 +294,11 @@
     }
     
     button:hover {
-      background: #6a95a4;
+      background: #00adb7;
     }
 
     button:disabled { 
-      background: #c3d3d9; 
+      background: #c5d0d6; 
       cursor: not-allowed;
     }
     
@@ -315,9 +312,9 @@
     }
     
     .success { 
-      background: var(--teal-bg); 
-      color: var(--teal-dark); 
-      border: 1px solid var(--teal-border);
+      background: var(--pink-bg); 
+      color: var(--pink-dark); 
+      border: 1px solid var(--pink-border);
     }
 
     /* ==========================================
@@ -343,7 +340,7 @@
       padding: 30px 40px;
       border-radius: 8px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       max-width: 80%;
       transform: translateY(-20px);
       transition: transform 0.3s ease;
@@ -354,8 +351,8 @@
     .modal-icon {
       width: 50px;
       height: 50px;
-      background: var(--teal-bg);
-      color: var(--teal-main);
+      background: var(--pink-bg);
+      color: var(--pink-dark);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -382,7 +379,7 @@
       transition: background 0.2s;
     }
     .modal-btn:hover {
-      background: #6a95a4;
+      background: #00adb7;
     }
   </style>
 </head>
@@ -393,44 +390,44 @@
   <h1>光聿游泳團練<br>季度技術優化班</h1>
 
   <div class="schedule-section">
-    <div class="schedule-title">課程規劃總覽</div>
+    <div class="schedule-title">單堂團練排程</div>
     <div class="table-responsive">
       <table class="schedule-table">
         <thead>
           <tr>
-            <th>訓練週期</th>
-            <th>核心主軸</th>
-            <th>預期目標</th>
+            <th>團練時間</th>
+            <th>核心訓練項目</th>
+            <th>預期訓練內容</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>第 1 - 4 週 (第 1 階段)</td>
+            <td>06:30 - 06:50</td>
             <td>
-              <strong>水感建立與技術優化</strong>
+              <strong>陸上熱身 ＋ 核心啟動</strong>
             </td>
-            <td>捷式效率提升、現場泳力測驗與分流</td>
+            <td>喚醒特定肌群，建立良好的水準線體態準備。</td>
           </tr>
           <tr>
-            <td>第 5 - 8 週 (第 2 階段)</td>
+            <td>06:50 - 07:50</td>
             <td>
-              <strong>速度配速與續航力拆解</strong>
+              <strong>水感技術訓練</strong>
             </td>
-            <td>建立穩定配速、雙水道分組專項訓練</td>
+            <td>主攻捷式效率優化、課表執行與雙水道分組專項特訓。</td>
           </tr>
           <tr>
-            <td>第 9 - 12 週 (第 3 階段)</td>
+            <td>07:50 - 08:00</td>
             <td>
-              <strong>完整課表執行與落實</strong>
+              <strong>速度訓練 ＋ 緩和</strong>
             </td>
-            <td>高效技術落實、長距離有氧耐力與突破</td>
+            <td>高強度速度突破、爆發力維持，以及最後的收操放鬆。</td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="note">
       注意事項：<br>
-      ※ 訓練時間：每週四早上 06:30 - 08:00（每堂 90 分鐘，共 12 堂）。<br>
+      ※ 訓練時間：每週五早上 06:30 - 08:00（每堂 90 分鐘，共 12 堂）。<br>
       ※ 招生人數：8 人開班，12 人額滿（每水道僅控管 5-6 人，保證訓練品質）。<br>
       ※ 請假機制：每期請假以 2 次為限，請務必於課程前一天提出（教練將提供線上課表供學員自主練習，不另行補課）。<br>
       ※ 費用說明：本課程為一期預付季度制，開班後恕不接受單堂退費、請假扣款或轉讓他人。包水道費用已包含於學費中，進場不需額外支付門票。
@@ -548,7 +545,7 @@
     
     <div class="form-group">
       <label class="field-label">對本次游泳團練的期望或過去游泳經歷？（選填）</label>
-      <textarea name="remarks" rows="3"></textarea>
+      <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
     </div>
     
     <button type="submit" id="submitBtn">確認送出報名</button>
