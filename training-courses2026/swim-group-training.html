@@ -56,10 +56,37 @@
       font-weight: 600; 
       letter-spacing: 0.12em;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       color: var(--pink-dark);
       padding-bottom: 20px;
       border-bottom: 1px solid var(--pink-border);
+    }
+
+    /* ==========================================
+       課程資訊摘要區塊
+       ========================================== */
+    .course-summary {
+      background-color: var(--blue-light);
+      border: 1px solid var(--blue-border);
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      color: var(--blue-dark);
+    }
+
+    .summary-item {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .summary-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .summary-item strong {
+      font-weight: 600;
+      margin-right: 6px;
+      color: var(--blue-dark);
     }
 
     /* ==========================================
@@ -372,6 +399,12 @@
   
   <h1>光聿游泳團練<br>季度技術優化班</h1>
 
+  <div class="course-summary">
+    <div class="summary-item"><strong>訓練時間：</strong>每週五早上 06:30 - 08:00</div>
+    <div class="summary-item"><strong>課程堂數：</strong>一期共 12 堂</div>
+    <div class="summary-item"><strong>課程費用：</strong>$7,800 / 人</div>
+  </div>
+
   <div class="schedule-section">
     <div class="schedule-title">單堂團練排程</div>
     <div class="table-responsive">
@@ -410,10 +443,8 @@
     </div>
     <div class="note">
       注意事項：<br>
-      ※ 訓練時間：每週五早上 06:30 - 08:00（每堂 90 分鐘，共 12 堂）。<br>
-      ※ 招生人數：8 人開班，12 人額滿（每水道僅控管 5-6 人，保證訓練品質）。<br>
       ※ 請假機制：每期請假以 2 次為限，請務必於課程前一天提出（教練將提供線上課表供學員自主練習，不另行補課）。<br>
-      ※ 費用說明：本課程為一期預付季度制，開班後恕不接受單堂退費、請假扣款或轉讓他人。包水道費用已包含於學費中，進場不需額外支付門票。
+      ※ 費用說明：本課程為一期預付季度制，開班後恕不接受單堂退費、請假扣款或轉讓他人。
     </div>
   </div>
   
@@ -523,7 +554,7 @@
 
 <div class="modal-overlay" id="customAlert">
   <div class="modal-content">
-    <div class="modal-icon">✓</div>
+    <div class="modal-icon">V</div>
     <div class="modal-text">報名成功！請至信箱查看報名確認信。</div>
     <button class="modal-btn" onclick="closeAlert()">確定</button>
   </div>
