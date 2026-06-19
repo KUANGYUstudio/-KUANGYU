@@ -7,23 +7,23 @@
   
   <style>
     /* ==========================================
-       CSS 樣式：雙色莫蘭迪極簡版 (課表水綠 x 表單藍)
+       CSS 樣式：沈穩粉桃紅 (課表) x 清透水藍綠 (表單)
        ========================================== */
     
     :root {
-      /* 莫蘭迪藍 (表單區與按鈕) */
-      --blue-main: #5b7c8d;
-      --blue-dark: #24333e;
-      --blue-light: #ebf0f3;
-      --blue-border: #dbe3e8;
-      --blue-bg: #f7fafc;
+      /* 清透水藍綠 (表單區與按鈕) */
+      --blue-main: #4cb3b8;
+      --blue-dark: #2a686b;
+      --blue-light: #eaf6f7;
+      --blue-border: #c0e6e8;
+      --blue-bg: #f4fbfb;
 
-      /* 莫蘭迪水綠 (課表區) */
-      --pink-main: #6e8b8e;
-      --pink-dark: #2c383a;
-      --pink-light: #edf2f2;
-      --pink-border: #dadfe0;
-      --pink-bg: #f8f9f9;
+      /* 沈穩粉桃紅 (課表區) */
+      --pink-main: #c47c88;
+      --pink-dark: #7a4650;
+      --pink-light: #f8eef0;
+      --pink-border: #e8cdd2;
+      --pink-bg: #fcf7f8;
     }
 
     body { 
@@ -196,7 +196,7 @@
     input[type="email"]:focus {
       outline: none;
       border-color: var(--blue-main);
-      box-shadow: 0 0 0 3px rgba(91, 124, 141, 0.15);
+      box-shadow: 0 0 0 3px rgba(76, 179, 184, 0.15);
     }
     
     .option-group { 
@@ -277,7 +277,7 @@
     }
     
     button:hover {
-      background: #4a6675;
+      background: #3b9397;
     }
 
     button:disabled { 
@@ -295,9 +295,9 @@
     }
     
     .success { 
-      background: #f0f4f2; 
-      color: #4a6c59; 
-      border: 1px solid #dce8e1;
+      background: var(--pink-bg); 
+      color: var(--pink-dark); 
+      border: 1px solid var(--pink-border);
     }
 
     /* ==========================================
@@ -334,8 +334,8 @@
     .modal-icon {
       width: 50px;
       height: 50px;
-      background: #f0f4f2;
-      color: #4a6c59;
+      background: var(--blue-light);
+      color: var(--blue-dark);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -362,7 +362,7 @@
       transition: background 0.2s;
     }
     .modal-btn:hover {
-      background: #4a6675;
+      background: #3b9397;
     }
   </style>
 </head>
