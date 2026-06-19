@@ -56,37 +56,60 @@
       font-weight: 600; 
       letter-spacing: 0.12em;
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       color: var(--pink-dark);
       padding-bottom: 20px;
       border-bottom: 1px solid var(--pink-border);
     }
 
     /* ==========================================
-       課程資訊摘要區塊
+       課程資訊摘要區塊 (無邊框字體層次排版)
        ========================================== */
-    .course-summary {
-      background-color: var(--blue-light);
-      border: 1px solid var(--blue-border);
-      border-radius: 6px;
-      padding: 20px 24px;
-      margin-bottom: 40px;
-      color: var(--blue-dark);
+    .course-info-naked {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-bottom: 45px;
     }
 
-    .summary-item {
-      font-size: 15px;
-      margin-bottom: 8px;
+    @media (max-width: 600px) {
+      .course-info-naked {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
     }
 
-    .summary-item:last-child {
-      margin-bottom: 0;
+    .info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .summary-item strong {
+    .info-label {
+      font-size: 13px;
+      color: #888;
       font-weight: 600;
-      margin-right: 6px;
+      letter-spacing: 0.1em;
+    }
+
+    .info-value {
+      font-size: 17px;
+      font-weight: 700;
       color: var(--blue-dark);
+      letter-spacing: 0.04em;
+    }
+
+    .info-value a {
+      color: var(--blue-main);
+      text-decoration: none;
+      border-bottom: 2px solid var(--blue-light);
+      padding-bottom: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .info-value a:hover {
+      color: var(--blue-dark);
+      border-bottom-color: var(--blue-dark);
     }
 
     /* ==========================================
@@ -399,10 +422,26 @@
   
   <h1>光聿游泳團練<br>季度技術優化班</h1>
 
-  <div class="course-summary">
-    <div class="summary-item"><strong>訓練時間：</strong>每週五早上 06:30 - 08:00</div>
-    <div class="summary-item"><strong>課程堂數：</strong>一期共 12 堂</div>
-    <div class="summary-item"><strong>課程費用：</strong>$7,800 / 人</div>
+  <!-- 全新無邊框字體層次排版 -->
+  <div class="course-info-naked">
+    <div class="info-group">
+      <div class="info-label">訓練時間</div>
+      <div class="info-value">每週五早上 06:30 - 08:00</div>
+    </div>
+    <div class="info-group">
+      <div class="info-label">訓練地點</div>
+      <div class="info-value">
+        <a href="https://maps.app.goo.gl/w8Cet4BW3KBswusL9" target="_blank">川岳中醫醫療運動中心</a>
+      </div>
+    </div>
+    <div class="info-group">
+      <div class="info-label">課程堂數</div>
+      <div class="info-value">一期共 12 堂</div>
+    </div>
+    <div class="info-group">
+      <div class="info-label">課程費用</div>
+      <div class="info-value">$7,800 / 人</div>
+    </div>
   </div>
 
   <div class="schedule-section">
