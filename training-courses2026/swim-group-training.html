@@ -113,7 +113,7 @@
     }
 
     /* ==========================================
-       上半部：課表區塊
+       上半部：條列式課表區塊
        ========================================== */
     .schedule-section {
       margin-bottom: 50px;
@@ -125,57 +125,69 @@
       color: var(--pink-dark);
       margin-bottom: 16px;
       letter-spacing: 0.08em;
+      text-align: center;
     }
 
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+    .date-list-container {
+      background-color: var(--pink-bg);
       border: 1px solid var(--pink-border);
       border-radius: 6px;
-      background-color: var(--pink-bg);
+      padding: 10px 30px;
+      margin-bottom: 20px;
     }
 
-    .schedule-table {
-      width: 100%;
-      min-width: 500px;
-      border-collapse: collapse;
-      font-size: 15px;
-    }
-
-    .schedule-table th {
-      text-align: left;
-      background-color: var(--pink-border);
-      color: var(--pink-dark);
-      font-weight: 600;
-      padding: 14px 16px;
-      white-space: nowrap; 
-    }
-
-    .schedule-table td {
-      padding: 14px 16px;
+    .date-row {
+      display: flex;
+      align-items: center;
       border-bottom: 1px solid var(--pink-border);
-      color: #444;
-      vertical-align: middle;
-    }
-    
-    .schedule-table td:first-child,
-    .schedule-table td:last-child {
-      white-space: nowrap;
+      padding: 20px 0;
     }
 
-    .schedule-table td strong {
-      color: var(--pink-dark);
+    .date-row:last-child {
+      border-bottom: none;
+    }
+
+    .month-label {
+      font-size: 16px;
       font-weight: 600;
-      display: block;
+      color: #555;
+      width: 70px;
+      flex-shrink: 0;
+    }
+
+    .days-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .day-badge {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .day-number {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--pink-dark);
+    }
+
+    .day-week {
+      font-size: 13px;
+      color: var(--pink-dark);
+      background: var(--pink-light);
+      padding: 2px 6px;
+      border-radius: 12px;
     }
 
     /* 課表注意事項 */
     .note { 
       font-size: 13.5px; 
-      color: #777; 
-      margin-top: 14px;
+      color: #555; 
+      margin-top: 20px;
       line-height: 1.7; 
+      padding: 0 10px;
     }
 
     /* ==========================================
@@ -444,46 +456,50 @@
   </div>
 
   <div class="schedule-section">
-    <div class="schedule-title">單堂團練排程</div>
-    <div class="table-responsive">
-      <table class="schedule-table">
-        <thead>
-          <tr>
-            <th>團練時間</th>
-            <th>核心訓練項目</th>
-            <th>預期訓練內容</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>06:30 - 06:50</td>
-            <td>
-              <strong>陸上熱身 ＋ 核心啟動</strong>
-            </td>
-            <td>喚醒特定肌群，建立良好的水準線體態準備。</td>
-          </tr>
-          <tr>
-            <td>06:50 - 07:50</td>
-            <td>
-              <strong>水感技術訓練</strong>
-            </td>
-            <td>主攻捷式效率優化、課表執行與雙水道分組專項特訓。</td>
-          </tr>
-          <tr>
-            <td>07:50 - 08:00</td>
-            <td>
-              <strong>速度訓練 ＋ 緩和</strong>
-            </td>
-            <td>高強度速度突破、爆發力維持，以及最後的收操放鬆。</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="schedule-title">季度實體團練日程</div>
+    <div class="date-list-container">
+      
+      <div class="date-row">
+        <div class="month-label">7月</div>
+        <div class="days-wrapper">
+          <div class="day-badge"><span class="day-number">03</span><span class="day-week">五</span></div>
+          <div class="day-badge"><span class="day-number">10</span><span class="day-week">五</span></div>
+          <div class="day-badge"><span class="day-number">17</span><span class="day-week">五</span></div>
+          <div class="day-badge"><span class="day-number">24</span><span class="day-week">五</span></div>
+          <div class="day-badge"><span class="day-number">31</span><span class="day-week">五</span></div>
+        </div>
+      </div>
+      
+      <div class="date-row">
+        <div class="month-label">8月</div>
+        <div class="days-wrapper">
+          <div class="day-badge"><span class="day-number">07</span><span class="day-week">五</span></div>
+          <div class="day-badge"><span class="day-number">14</span><span class="day-week">五</span></div>
+          <div class="day-badge"><span class="day-number">21</span><span class="day-week">五</span></div>
+          <div class="day-badge"><span class="day-number">28</span><span class="day-week">五</span></div>
+        </div>
+      </div>
+
+      <div class="date-row">
+        <div class="month-label">9月</div>
+        <div class="days-wrapper">
+          <div class="day-badge"><span class="day-number">11</span><span class="day-week">五</span></div>
+          <div class="day-badge"><span class="day-number">18</span><span class="day-week">五</span></div>
+        </div>
+      </div>
+
+      <div class="date-row">
+        <div class="month-label">10月</div>
+        <div class="days-wrapper">
+          <div class="day-badge"><span class="day-number">02</span><span class="day-week">五</span></div>
+        </div>
+      </div>
+
     </div>
+    
     <div class="note">
-      注意事項：<br>
-      ※ 停課公告：9/4（合歡山馬拉松）、9/25（中秋節）暫停一次，當週課程順延。<br>
-      ※ 請假機制：每期請假以 2 次為限，請務必於課程前一天提出（教練將提供線上課表供學員自主練習，不另行補課）。<br>
-      ※ 費用說明：本課程為一期預付季度制，開班後恕不接受單堂退費、請假扣款或轉讓他人。
+      請假機制：本課程具備連貫性進度，為維持訓練品質，請盡量避免缺席。如需請假請務必於前一天告知，教練將提供課表供自主練習，恕不另行安排補課或退費。<br><br>
+      費用說明：本課程為一期預付季度制，開班後恕不接受單堂退費、請假扣款或轉讓他人。
     </div>
   </div>
   
