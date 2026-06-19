@@ -113,7 +113,7 @@
     }
 
     /* ==========================================
-       上半部：條列式課表區塊
+       上半部：課表與日程區塊
        ========================================== */
     .schedule-section {
       margin-bottom: 50px;
@@ -128,6 +128,53 @@
       text-align: center;
     }
 
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--pink-border);
+      border-radius: 6px;
+      background-color: var(--pink-bg);
+      margin-bottom: 40px;
+    }
+
+    .schedule-table {
+      width: 100%;
+      min-width: 500px;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    .schedule-table th {
+      text-align: left;
+      background-color: var(--pink-border);
+      color: var(--pink-dark);
+      font-weight: 600;
+      padding: 14px 16px;
+      white-space: nowrap; 
+    }
+
+    .schedule-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--pink-border);
+      color: #444;
+      vertical-align: middle;
+      line-height: 1.6;
+    }
+    
+    /* 確保第一欄(時間)與第二欄(項目)不換行，空間留給第三欄 */
+    .schedule-table td:nth-child(1),
+    .schedule-table td:nth-child(2) {
+      white-space: nowrap;
+    }
+
+    .schedule-table td strong {
+      color: var(--pink-dark);
+      font-weight: 600;
+      display: block;
+    }
+
+    /* 條列式日程表設計 */
     .date-list-container {
       background-color: var(--pink-bg);
       border: 1px solid var(--pink-border);
@@ -456,6 +503,45 @@
   </div>
 
   <div class="schedule-section">
+    
+    <!-- 單堂團練排程 (新增的區塊，且已優化欄寬) -->
+    <div class="schedule-title">單堂團練排程</div>
+    <div class="table-responsive">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>團練時間</th>
+            <th>核心訓練項目</th>
+            <th>預期訓練內容</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>06:30 - 06:50</td>
+            <td>
+              <strong>陸上熱身 ＋ 核心啟動</strong>
+            </td>
+            <td>喚醒特定肌群，建立良好的水準線體態準備。</td>
+          </tr>
+          <tr>
+            <td>06:50 - 07:50</td>
+            <td>
+              <strong>水感技術訓練</strong>
+            </td>
+            <td>主攻捷式效率優化、課表執行與雙水道分組專項特訓。</td>
+          </tr>
+          <tr>
+            <td>07:50 - 08:00</td>
+            <td>
+              <strong>速度訓練 ＋ 緩和</strong>
+            </td>
+            <td>高強度速度突破、爆發力維持，以及最後的收操放鬆。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 季度實體團練日程 -->
     <div class="schedule-title">季度實體團練日程</div>
     <div class="date-list-container">
       
