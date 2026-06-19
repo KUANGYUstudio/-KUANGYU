@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026 光聿游泳團練｜季度技術優化與特訓班</title>
+  <title>2026 光聿游泳團練｜季度技術優化班</title>
   
   <style>
     /* ==========================================
-       CSS 樣式：多巴胺亮藍綠色系 (課表薄荷綠 x 表單亮青)
+       CSS 樣式：雙色莫蘭迪極簡版 (課表水綠 x 表單藍)
        ========================================== */
     
     :root {
-      /* 多巴胺亮青色 (表單區與按鈕) */
-      --blue-main: #00cbd6;
-      --blue-dark: #132228;
-      --blue-light: #edfbfb;
-      --blue-border: #bcecf0;
-      --blue-bg: #f4fdfd;
+      /* 莫蘭迪藍 (表單區與按鈕) */
+      --blue-main: #5b7c8d;
+      --blue-dark: #24333e;
+      --blue-light: #ebf0f3;
+      --blue-border: #dbe3e8;
+      --blue-bg: #f7fafc;
 
-      /* 多巴胺薄荷綠 (課表區 - 沿用原 pink 變數名稱方便維護程式碼) */
-      --pink-main: #2ee5b5;
-      --pink-dark: #132228;
-      --pink-light: #e8fcf6;
-      --pink-border: #bcf5e3;
-      --pink-bg: #f2fdf9;
+      /* 莫蘭迪水綠 (課表區) */
+      --pink-main: #6e8b8e;
+      --pink-dark: #2c383a;
+      --pink-light: #edf2f2;
+      --pink-border: #dadfe0;
+      --pink-bg: #f8f9f9;
     }
 
     body { 
@@ -120,18 +120,6 @@
       display: block;
     }
 
-    .sub-text {
-      display: block;
-      font-size: 13.5px;
-      color: #888;
-      margin-top: 4px;
-    }
-
-    .highlight-row td,
-    .highlight-row td strong {
-      color: #132228 !important;
-    }
-
     /* 課表注意事項 */
     .note { 
       font-size: 13.5px; 
@@ -188,7 +176,6 @@
     }
     
     input[type="text"], 
-    input[type="date"], 
     input[type="email"] { 
       display: block;
       width: 100%;
@@ -206,11 +193,10 @@
     }
     
     input[type="text"]:focus, 
-    input[type="date"]:focus, 
     input[type="email"]:focus {
       outline: none;
       border-color: var(--blue-main);
-      box-shadow: 0 0 0 3px rgba(0, 203, 214, 0.15);
+      box-shadow: 0 0 0 3px rgba(91, 124, 141, 0.15);
     }
     
     .option-group { 
@@ -226,6 +212,7 @@
       gap: 20px;
     }
 
+    /* 付款方式專用網格 */
     .payment-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -242,10 +229,6 @@
       gap: 8px; 
       cursor: pointer;
       margin-bottom: 0;
-    }
-    
-    .payment-full {
-      margin-top: 5px;
     }
 
     input[type="radio"], input[type="checkbox"] {
@@ -294,7 +277,7 @@
     }
     
     button:hover {
-      background: #00adb7;
+      background: #4a6675;
     }
 
     button:disabled { 
@@ -312,9 +295,9 @@
     }
     
     .success { 
-      background: var(--pink-bg); 
-      color: var(--pink-dark); 
-      border: 1px solid var(--pink-border);
+      background: #f0f4f2; 
+      color: #4a6c59; 
+      border: 1px solid #dce8e1;
     }
 
     /* ==========================================
@@ -351,8 +334,8 @@
     .modal-icon {
       width: 50px;
       height: 50px;
-      background: var(--pink-bg);
-      color: var(--pink-dark);
+      background: #f0f4f2;
+      color: #4a6c59;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -379,7 +362,7 @@
       transition: background 0.2s;
     }
     .modal-btn:hover {
-      background: #00adb7;
+      background: #4a6675;
     }
   </style>
 </head>
@@ -436,7 +419,7 @@
   
   <form id="trainingForm">
     
-    <div class="section-title">01 / 基本與保險資料</div>
+    <div class="section-title">01 / 基本與聯繫資料</div>
     
     <div class="form-row">
       <div class="form-group">
@@ -454,23 +437,13 @@
     
     <div class="form-row">
       <div class="form-group">
-        <label class="field-label">國籍</label>
-        <input type="text" name="nationality" value="台灣" required>
+        <label class="field-label">LINE ID</label>
+        <input type="text" name="lineId" required>
       </div>
       <div class="form-group">
-        <label class="field-label">出生年月日</label>
-        <input type="date" name="dob" required>
+        <label class="field-label">Email 信箱</label>
+        <input type="email" name="email" required>
       </div>
-    </div>
-    
-    <div class="form-group">
-      <label class="field-label">身分證 / 護照號碼</label>
-      <input type="text" name="idNumber" required>
-    </div>
-    
-    <div class="form-group">
-      <label class="field-label">Email 信箱</label>
-      <input type="email" name="email" required>
     </div>
 
     <div class="section-title">02 / 緊急聯絡資訊</div>
@@ -491,27 +464,24 @@
       <input type="text" name="emergPhone" required>
     </div>
 
-    <div class="section-title">03 / 報名身分與門檻確認</div>
+    <div class="section-title">03 / 門檻確認與方案</div>
     
     <div class="form-group">
-      <label class="field-label">報名身分</label>
-      <div class="option-group row-layout">
-        <label class="option-label"><input type="radio" name="identity" value="光聿學員" required><span>光聿學員</span></label>
-        <label class="option-label"><input type="radio" name="identity" value="非學員"><span>非學員</span></label>
-      </div>
-    </div>
-    
-    <div id="planGroup" class="dynamic-panel">
-      <label class="field-label" style="color: var(--blue-dark);">選擇報名方案</label>
-      <div class="option-group" id="planOptions"></div>
-    </div>
-
-    <div class="form-group" style="margin-top: 24px;">
       <label class="field-label">報名門檻自我確認</label>
       <div class="option-group">
         <label class="option-label">
           <input type="checkbox" name="prerequisite" value="確認符合門檻" required>
-          <span style="font-size: 14.5px; color: #444;">我已確認具備【連續游完 200 公尺不休息】或【熟練捷式換氣】之能力。並理解第一堂課將進行現場泳力測驗與分流。</span>
+          <span style="font-size: 14.5px; color: #444;">我已確認具備【連續游完 200 公尺不休息】或【熟練捷式換氣】之能力，並理解第一堂課將進行現場泳力測驗。</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-top: 24px;">
+      <label class="field-label">方案選擇</label>
+      <div class="option-group">
+        <label class="option-label">
+          <input type="radio" name="plan" value="完整一期 12 堂課程（費用 $7,800）" checked required>
+          <span>完整一期 12 堂課程（費用 $7,800）</span>
         </label>
       </div>
     </div>
@@ -523,9 +493,6 @@
       <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
       <label class="option-label"><input type="radio" name="paymentMethod" value="iPass Money"><span>iPass Money</span></label>
       <label class="option-label"><input type="radio" name="paymentMethod" value="LINE PAY"><span>LINE PAY</span></label>
-    </div>
-    <div class="payment-full">
-      <label class="option-label"><input type="radio" name="paymentMethod" value="光聿學員扣堂數"><span>光聿學員扣堂數 (由教練扣除堂數)</span></label>
     </div>
     
     <div id="bankDetailsGroup" class="dynamic-panel">
@@ -569,19 +536,8 @@
   const btn = document.getElementById('submitBtn');
   const msg = document.getElementById('message');
 
-  const planGroup = document.getElementById('planGroup');
-  const planOptionsDiv = document.getElementById('planOptions');
   const bankDetailsGroup = document.getElementById('bankDetailsGroup');
   const bankLastFiveInput = document.querySelector('input[name="bankLastFive"]');
-
-  function createOptionHtml(type, name, value, label, required = false) {
-    return `
-      <label class="option-label">
-        <input type="${type}" name="${name}" value="${value}" ${required ? 'required' : ''}>
-        <span>${label}</span>
-      </label>
-    `;
-  }
 
   // 關閉自訂彈出視窗
   function closeAlert() {
@@ -591,25 +547,7 @@
     }, 300);
   }
 
-  // 報名身分切換邏輯
-  document.querySelectorAll('input[name="identity"]').forEach(r => {
-    r.addEventListener('change', (e) => {
-      planGroup.style.display = 'block';
-      
-      if(e.target.value === '光聿學員') {
-        planOptionsDiv.innerHTML = `
-          ${createOptionHtml('radio', 'planRaw', '完整一期 12 堂課程（費用 $7,200）', '完整一期 12 堂課程（費用 $7,200）', true)}
-          ${createOptionHtml('radio', 'planRaw', '光聿學員扣堂數（由教練後續扣除）', '光聿學員扣堂數（由教練後續扣除）')}
-        `;
-      } else {
-        planOptionsDiv.innerHTML = `
-          ${createOptionHtml('radio', 'planRaw', '完整一期 12 堂課程（費用 $7,200）', '完整一期 12 堂課程（費用 $7,200）', true)}
-        `;
-      }
-    });
-  });
-
-  // 付款方式切換邏輯
+  // 付款方式切換邏輯 (顯示/隱藏匯款資訊)
   document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
     r.addEventListener('change', (e) => {
       if (e.target.value === '匯款') {
@@ -625,16 +563,11 @@
 
   form.onsubmit = e => {
     e.preventDefault();
-    
-    const planRawEl = document.querySelector('input[name="planRaw"]:checked');
-    if (!planRawEl) { alert('請選擇報名方案。'); return; }
 
     btn.disabled = true; 
     btn.innerText = '處理中...';
     
     const formData = new FormData(form); 
-    const identity = document.querySelector('input[name="identity"]').value;
-    formData.set('plan', `【${identity}】${planRawEl.value}`);
     
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
@@ -647,8 +580,8 @@
         msg.innerText = '報名成功，請至信箱查看報名確認信。'; 
         msg.style.display = 'block'; 
         msg.className = 'success';
+        
         form.reset(); 
-        planGroup.style.display = 'none';
         bankDetailsGroup.style.display = 'none';
         bankLastFiveInput.required = false;
         btn.disabled = false; 
