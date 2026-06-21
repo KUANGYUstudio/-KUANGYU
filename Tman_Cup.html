@@ -110,9 +110,55 @@
       font-weight: 600;
       margin-right: 4px;
     }
+    
+    .event-info-box .info-list li {
+      margin-bottom: 4px;
+    }
 
     /* ==========================================
-       距離與限時表格
+       日程表表格 (莫蘭迪桃紅)
+       ========================================== */
+    .schedule-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--pink-border);
+      border-radius: 8px;
+      background-color: var(--pink-bg);
+      margin-bottom: 40px;
+    }
+
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 15px;
+    }
+
+    .schedule-table th {
+      background-color: var(--pink-light);
+      color: var(--pink-dark);
+      font-weight: 600;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--pink-border);
+      white-space: nowrap;
+    }
+
+    .schedule-table td {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--pink-border);
+      color: #444;
+    }
+
+    .schedule-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .schedule-table td strong {
+      color: var(--pink-dark);
+      font-weight: 600;
+    }
+
+    /* ==========================================
+       距離與限時表格 (莫蘭迪藍)
        ========================================== */
     .distance-section {
       margin-bottom: 50px;
@@ -163,12 +209,19 @@
       margin-bottom: 50px;
     }
 
-    .schedule-title {
+    .section-header {
       font-size: 16px;
       font-weight: 600;
       color: var(--blue-dark);
       margin-bottom: 16px;
       letter-spacing: 0.08em;
+      border-bottom: 2px solid var(--blue-light);
+      padding-bottom: 12px;
+    }
+
+    .section-header.pink {
+      color: var(--pink-dark);
+      border-bottom: 2px solid var(--pink-light);
     }
 
     .fee-grid {
@@ -611,12 +664,66 @@
     <ul class="info-list">
       <li><strong>賽事日期：</strong>2026 年 8 月 30 日（星期日）</li>
       <li><strong>賽事地點：</strong>微風運河（成蘆橋下）</li>
+      <li><strong>報到方式：</strong>早上 05:30~06:30 僅提供現場報到</li>
+      <li><strong>獎勵辦法：</strong>本活動無分齡組別，敘獎為男子/女子個人組各取前三名，接力組各取一名於餐廳表揚。</li>
       <li><strong>報名截止：</strong>2026 年 6 月 30 日（星期二）或額滿為止</li>
     </ul>
   </div>
 
+  <div class="schedule-section">
+    <div class="section-header pink">比賽日程表 (8/30 星期日)</div>
+    <div class="schedule-table-wrapper">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th style="width: 100px;">時間</th>
+            <th>活動內容</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>05:30</strong></td>
+            <td>現場報到 / 轉換區開放</td>
+          </tr>
+          <tr>
+            <td><strong>06:30</strong></td>
+            <td>報到結束、轉換區關閉，進行人員管制</td>
+          </tr>
+          <tr>
+            <td><strong>06:40</strong></td>
+            <td>開幕暨裁判長提醒</td>
+          </tr>
+          <tr>
+            <td><strong>07:00</strong></td>
+            <td>選手集體出發</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--error-color);">09:30</strong></td>
+            <td>未開始進行路跑，判定 DNF</td>
+          </tr>
+          <tr>
+            <td><strong>10:30</strong></td>
+            <td>轉換區開放選手領取物品</td>
+          </tr>
+          <tr>
+            <td><strong>11:00</strong></td>
+            <td>賽事結束</td>
+          </tr>
+          <tr>
+            <td><strong>11:30</strong></td>
+            <td>轉換區領取物品結束、活動結束</td>
+          </tr>
+          <tr>
+            <td><strong>11:40</strong></td>
+            <td>用餐前進行頒獎典禮</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="distance-section">
-    <div class="schedule-title" style="border-bottom: 2px solid var(--blue-light); padding-bottom: 12px; margin-bottom: 20px;">競賽距離與限時 (個人組 / 接力組)</div>
+    <div class="section-header">競賽距離與限時 (個人組 / 接力組)</div>
     <div class="distance-table-wrapper">
       <table class="distance-table">
         <thead>
@@ -653,7 +760,7 @@
   </div>
 
   <div class="fee-section">
-    <div class="schedule-title" style="border-bottom: 2px solid var(--blue-light); padding-bottom: 12px; margin-bottom: 20px;">費用與組別說明 (費用不含餐費)</div>
+    <div class="section-header">費用與組別說明 (費用不含餐費)</div>
     
     <div class="fee-grid">
       <div class="fee-card student-card">
@@ -692,7 +799,6 @@
       <p><strong>※ 費用包含：</strong>場地費、線上成績下載、號碼布、貼紙、保險、補給飲料、志工餐費、完賽衣等。</p>
       <p class="warning">※ 晶片於終點處回收，遺失未繳回須負擔賠償之責任！</p>
     </div>
-
   </div>
 
   <form id="registrationForm" novalidate>
@@ -856,13 +962,11 @@
 </div>
 
 <script>
-  // 填入後端 Google Apps Script URL
   const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
   
   const form = document.getElementById('registrationForm');
   const btn = document.getElementById('submitBtn');
 
-  // 共用彈窗函式
   function showAlert(message, isSuccess = false) {
     const modal = document.getElementById('customAlert');
     const icon = document.getElementById('alertIcon');
@@ -883,7 +987,6 @@
     setTimeout(() => modal.classList.add('show'), 10);
   }
 
-  // 關閉彈出視窗
   function closeAlert() {
     const modal = document.getElementById('customAlert');
     modal.classList.remove('show');
@@ -892,7 +995,6 @@
     }, 300);
   }
 
-  // 處理自訂條款卡片邏輯
   const policyBoxes = document.querySelectorAll('.policy-box');
   
   policyBoxes.forEach(box => {
@@ -921,11 +1023,9 @@
     });
   });
 
-  // 表單自訂驗證與送出處理
   form.onsubmit = e => {
     e.preventDefault();
 
-    // 清除畫面上所有的錯誤紅框
     document.querySelectorAll('.error-border').forEach(el => el.classList.remove('error-border'));
     document.querySelectorAll('.group-error-border').forEach(el => el.classList.remove('group-error-border'));
 
@@ -957,7 +1057,6 @@
     
     const formData = new FormData(form); 
     
-    // 如有串接後端 API 可將註解打開
     /*
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
@@ -980,7 +1079,6 @@
       });
     */
 
-    // 模擬成功送出
     setTimeout(() => {
       showAlert('報名成功！資料已送出。', true);
       btn.disabled = false; 
