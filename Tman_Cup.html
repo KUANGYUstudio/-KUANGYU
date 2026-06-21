@@ -105,10 +105,19 @@
       color: var(--tman-black);
       font-weight: 700;
       margin-right: 4px;
+      min-width: 80px;
+      display: inline-block;
+      vertical-align: top;
     }
     
+    .event-info-box .info-list span {
+      display: inline-block;
+      width: calc(100% - 90px);
+    }
+
     .event-info-box .info-list li {
-      margin-bottom: 4px;
+      margin-bottom: 8px;
+      display: flex;
     }
 
     /* ==========================================
@@ -713,11 +722,13 @@
     <div class="intro-text">Tman 鐵人隊 誠摯地邀請您參加</div>
     <div class="event-name">2026 第11屆 TMAN盃 鐵人三項聯誼賽</div>
     <ul class="info-list">
-      <li><strong>賽事日期：</strong>2026 年 8 月 30 日（星期日）</li>
-      <li><strong>賽事地點：</strong>金山磺港</li>
-      <li><strong>報到方式：</strong>早上 05:30~06:30 僅提供現場報到</li>
-      <li><strong>獎勵辦法：</strong>本活動無分齡組別，敘獎為男子/女子個人組各取前三名，接力組各取一名於餐廳表揚。</li>
-      <li><strong>報名截止：</strong>2026 年 6 月 30 日（星期二）或額滿為止</li>
+      <li><strong>賽事日期：</strong><span>2026 年 8 月 30 日（星期日）AM 07:00</span></li>
+      <li><strong>賽事地點：</strong><span>金山磺港漁港<br>（會場：金山海灣餐廳前廣場，新北市金山區磺港路 326 號之一）</span></li>
+      <li><strong>參加資格：</strong><span>TMAN 鐵人協會會員及各方好手</span></li>
+      <li><strong>參賽名額：</strong><span>個人組 140 名，接力組 20 組 (額滿為止)</span></li>
+      <li><strong>報到方式：</strong><span>早上 05:30~06:30 僅提供現場報到</span></li>
+      <li><strong>獎勵辦法：</strong><span>本活動無分齡組別，敘獎為男子/女子個人組各取前三名，接力組各取一名於餐廳表揚。</span></li>
+      <li><strong>報名時間：</strong><span>2026 年 6 月 2 日至 7 月 15 日（或額滿為止）</span></li>
     </ul>
   </div>
 
@@ -781,29 +792,26 @@
           <tr>
             <th>項目</th>
             <th>距離</th>
-            <th>限時</th>
+            <th>限時說明</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>游泳</strong></td>
             <td>1500m</td>
-            <td>50 分鐘</td>
+            <td rowspan="4" style="vertical-align: middle; line-height: 1.8;">總限時：<strong>4 小時</strong><br>（各項距離以實際路線為主）</td>
           </tr>
           <tr>
             <td><strong>自由車</strong></td>
-            <td>40km</td>
-            <td>100 分鐘</td>
+            <td>35km</td>
           </tr>
           <tr>
             <td><strong>路跑</strong></td>
-            <td>10km</td>
-            <td>80 分鐘</td>
+            <td>9km</td>
           </tr>
           <tr style="background-color: var(--tman-yellow-light);">
             <td><strong>總計</strong></td>
-            <td><strong>51.5km</strong></td>
-            <td><strong>3 小時 50 分鐘</strong></td>
+            <td><strong>45.5km</strong></td>
           </tr>
         </tbody>
       </table>
