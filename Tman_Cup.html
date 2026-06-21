@@ -117,19 +117,17 @@
       color: var(--tman-black);
       font-weight: 700;
       margin-right: 4px;
-      min-width: 80px;
-      display: inline-block;
-      vertical-align: top;
+      flex: 0 0 90px; /* 將標題寬度加大至 90px，且鎖定不允許被擠壓 */
     }
     
     .event-info-box .info-list span {
-      display: inline-block;
-      width: calc(100% - 90px);
+      flex: 1; /* 讓右側的說明文字自動填滿所有剩下的空間 */
     }
 
     .event-info-box .info-list li {
       margin-bottom: 8px;
       display: flex;
+      align-items: flex-start; /* 確保左右兩邊的文字都對齊最上方 */
     }
 
     /* 資訊區塊內的超連結樣式 */
