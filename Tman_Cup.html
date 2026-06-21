@@ -501,139 +501,6 @@
       cursor: pointer;
       margin: 0;
     }
-    
-    .bank-info { 
-      background: var(--tman-bg); 
-      border: 1px solid var(--tman-gray-border); 
-      padding: 20px; 
-      border-radius: 6px; 
-      font-size: 14.5px; 
-      margin-top: 0; 
-      margin-bottom: 16px;
-      line-height: 1.8;
-      color: #444;
-    }
-
-    /* ==========================================
-       自訂條款卡片 (Checkbox + Accordion)
-       ========================================== */
-    .policy-box {
-      border: 1px solid var(--tman-gray-border);
-      border-radius: 8px;
-      background-color: #fff;
-      transition: all 0.3s ease;
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
-
-    .policy-box.is-checked {
-      background-color: var(--tman-yellow-light);
-      border-color: var(--tman-yellow);
-    }
-
-    .policy-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-    }
-
-    .custom-checkbox-container {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      position: relative;
-      user-select: none;
-      flex: 1;
-    }
-
-    .custom-checkbox-container input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0;
-      width: 0;
-    }
-
-    .custom-checkmark {
-      height: 22px;
-      width: 22px;
-      background-color: #fff;
-      border: 2px solid var(--tman-gray-border);
-      border-radius: 5px;
-      margin-right: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-
-    .policy-box.is-checked .custom-checkmark {
-      background-color: var(--tman-yellow);
-      border-color: var(--tman-yellow);
-    }
-
-    .custom-checkmark:after {
-      content: "";
-      display: none;
-      width: 5px;
-      height: 11px;
-      border: solid var(--tman-black);
-      border-width: 0 2.5px 2.5px 0;
-      transform: rotate(45deg);
-      margin-bottom: 2px;
-    }
-
-    .policy-box.is-checked .custom-checkmark:after {
-      display: block;
-    }
-
-    .checkbox-text {
-      font-weight: 700;
-      color: var(--tman-black);
-      font-size: 15px;
-      line-height: 1.4;
-    }
-
-    .expand-toggle {
-      cursor: pointer;
-      color: var(--tman-black);
-      font-weight: bold;
-      font-size: 20px;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      margin-left: 10px;
-      transition: background-color 0.2s;
-    }
-
-    .expand-toggle:hover {
-      background-color: rgba(0, 0, 0, 0.05);
-    }
-
-    .policy-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
-      border-top: 1px solid transparent;
-    }
-
-    .policy-box.is-expanded .policy-content {
-      border-top-color: var(--tman-gray-border);
-      transition: max-height 0.4s ease-in-out;
-    }
-
-    .policy-inner {
-      padding: 24px 20px;
-      font-size: 14px;
-      color: #444;
-      line-height: 1.8;
-      background-color: var(--tman-bg);
-    }
 
     /* ==========================================
        版權與按鈕
@@ -916,7 +783,12 @@
 
   <form id="registrationForm" novalidate>
     
-    <div class="section-title">01 / 報名與基本資料</div>
+    <div class="section-title">01 / 報名組別</div>
+    
+    <div class="form-group">
+      <label class="field-label">團體名稱</label>
+      <input type="text" name="teamName" required>
+    </div>
 
     <div class="form-group">
       <label class="field-label">報名組別選項 (非會員)</label>
@@ -926,6 +798,8 @@
         <label class="option-label"><input type="radio" name="registrationOption" value="接力組"><span>接力組 (原價$3900，團報$3600，須至少一位女生)</span></label>
       </div>
     </div>
+
+    <div class="section-title">02 / 基本資料</div>
 
     <div class="form-row">
       <div class="form-group">
@@ -980,7 +854,7 @@
       </div>
     </div>
 
-    <div class="section-title">02 / 緊急聯絡資訊</div>
+    <div class="section-title">03 / 緊急聯絡資訊</div>
     
     <div class="form-row">
       <div class="form-group">
@@ -998,7 +872,7 @@
       <input type="text" name="emergRel" required>
     </div>
 
-    <div class="section-title">03 / 加購選項</div>
+    <div class="section-title">04 / 加購選項</div>
 
     <div class="form-row">
       <div class="form-group">
@@ -1011,43 +885,6 @@
         <div class="option-group row-layout" style="margin-top: 28px;">
           <label class="option-label"><input type="radio" name="vegetarian" value="是" required><span>是</span></label>
           <label class="option-label"><input type="radio" name="vegetarian" value="否"><span>否</span></label>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-title">04 / 匯款資訊</div>
-    
-    <div class="bank-info">
-      <strong style="color: var(--tman-black); font-size: 15px;">大會指定匯款帳戶</strong><br>
-      銀行：遠東國際商業銀行 (代碼 805)<br>
-      帳號：00100400400901<br>
-      戶名：賴孟祥
-    </div>
-    
-    <div class="form-group">
-      <label class="field-label">轉帳帳號後五碼</label>
-      <input type="text" name="bankLastFive" placeholder="請輸入匯款帳號後五碼" required>
-    </div>
-
-    <div class="section-title">05 / 參賽同意聲明</div>
-
-    <div class="policy-box" style="margin-bottom: 24px;">
-      <div class="policy-header">
-        <label class="custom-checkbox-container">
-          <input type="checkbox" name="agreeRule" class="policy-checkbox" required>
-          <span class="custom-checkmark"></span>
-          <span class="checkbox-text">我已詳閱並同意賽事規範與退費機制</span>
-        </label>
-        <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
-          <span>＋</span>
-        </div>
-      </div>
-      <div class="policy-content">
-        <div class="policy-inner">
-          <strong style="color: var(--tman-black); display: block; margin-bottom: 12px; font-size: 15px;">
-            報名前請務必確認個人健康狀況，並遵守大會各項安全與競賽規定。
-          </strong>
-          完成繳費報名後，相關行政作業與保險均需提前安排。退費機制將依照大會統一公告之標準辦理。如有任何變更，需於大會規定之期限內提出申請，逾期恕不受理。
         </div>
       </div>
     </div>
@@ -1103,34 +940,6 @@
     }, 300);
   }
 
-  const policyBoxes = document.querySelectorAll('.policy-box');
-  
-  policyBoxes.forEach(box => {
-    const checkbox = box.querySelector('.policy-checkbox');
-    const expandBtn = box.querySelector('.policy-expand-btn');
-    const content = box.querySelector('.policy-content');
-    const icon = expandBtn.querySelector('span');
-
-    checkbox.addEventListener('change', (e) => {
-      if (e.target.checked) {
-        box.classList.add('is-checked');
-      } else {
-        box.classList.remove('is-checked');
-      }
-    });
-
-    expandBtn.addEventListener('click', () => {
-      box.classList.toggle('is-expanded');
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-        icon.innerText = '＋';
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-        icon.innerText = '－';
-      }
-    });
-  });
-
   form.onsubmit = e => {
     e.preventDefault();
 
@@ -1141,11 +950,6 @@
     
     for (let input of requiredInputs) {
       if (!input.checkValidity()) {
-        if (input.name === 'agreeRule') {
-          showAlert(`請詳閱「賽事規範與退費機制」並勾選`, false);
-          return;
-        }
-
         if (input.type === 'radio' || input.type === 'checkbox') {
           const group = input.closest('.option-group') || input.parentElement;
           if (group) group.classList.add('group-error-border');
@@ -1169,12 +973,6 @@
       .then(() => {
         showAlert('報名成功！資料已送出。', true);
         form.reset(); 
-        policyBoxes.forEach(box => {
-          box.classList.remove('is-checked');
-          box.classList.remove('is-expanded');
-          box.querySelector('.policy-content').style.maxHeight = null;
-          box.querySelector('.policy-expand-btn span').innerText = '＋';
-        });
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
         window.scrollTo({ top: 0, behavior: 'smooth' });
