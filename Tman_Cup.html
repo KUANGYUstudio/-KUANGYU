@@ -61,10 +61,54 @@
       letter-spacing: 0.12em;
       text-align: center;
       margin-top: 0;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       color: var(--blue-dark);
       padding-bottom: 20px;
       border-bottom: 1px solid var(--blue-border);
+    }
+
+    /* ==========================================
+       新增：賽事資訊區塊
+       ========================================== */
+    .event-info-box {
+      background-color: var(--blue-bg);
+      border: 1px solid var(--blue-border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .event-info-box .intro-text {
+      font-size: 14.5px;
+      color: #666;
+      margin-bottom: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .event-info-box .event-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--blue-dark);
+      margin-bottom: 20px;
+      letter-spacing: 0.08em;
+    }
+
+    .event-info-box .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 15px;
+      color: #444;
+      line-height: 1.8;
+      display: inline-block;
+      text-align: left;
+    }
+
+    .event-info-box .info-list strong {
+      color: var(--blue-dark);
+      font-weight: 600;
+      margin-right: 4px;
     }
 
     /* ==========================================
@@ -498,6 +542,16 @@
 
 <div class="container">
   <h1>2026 第11屆 TMAN盃<br>賽事報名</h1>
+
+  <div class="event-info-box">
+    <div class="intro-text">Tman 鐵人隊 誠摯地邀請您參加</div>
+    <div class="event-name">2026 第11屆 TMAN盃 鐵人三項聯誼賽</div>
+    <ul class="info-list">
+      <li><strong>賽事日期：</strong>2026 年 8 月 30 日（星期日）</li>
+      <li><strong>賽事地點：</strong>微風運河（成蘆橋下）</li>
+      <li><strong>報名截止：</strong>2026 年 6 月 30 日（星期二）或額滿為止</li>
+    </ul>
+  </div>
 
   <div class="fee-section">
     <div class="schedule-title" style="border-bottom: 2px solid var(--blue-light); padding-bottom: 12px; margin-bottom: 20px;">費用與組別說明 (費用不含餐費)</div>
