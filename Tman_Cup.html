@@ -48,6 +48,18 @@
     @media (max-width: 600px) {
       .container { padding: 40px 24px; }
       body { padding: 30px 15px; }
+      
+      /* 縮小手機版日程表整體的左右內邊距 */
+      .schedule-table th,
+      .schedule-table td {
+        padding: 12px 10px; 
+      }
+
+      /* 強制縮窄時間欄位(第一欄)的寬度 */
+      .schedule-table th:first-child,
+      .schedule-table td:first-child {
+        width: 65px !important; 
+      }
     }
     
     /* 主標題 */
