@@ -757,8 +757,9 @@
     <ul class="info-list">
       <li><strong>賽事日期：</strong><span>2026年8月30日（日）AM 07:00</span></li>
       <li><strong>賽事地點：</strong><span>金山磺港漁港</span></li>
-      <li><strong>集合會場：</strong><span><a href="https://maps.app.goo.gl/E87RuUfTNDdPYutEA" target="_blank" rel="noopener noreferrer">金山海灣餐廳前廣場</a></span></li>
-      <li><strong>報到方式：</strong><span>現場報到</span></li>
+      <li><strong>集合會場：</strong><span><a href="https://maps.app.goo.gl/E87RuUfTNDdPYutEA" target="_blank" rel="noopener noreferrer">金山海灣餐廳前廣場</a>，新北市金山區磺港路 326 號之一</span></li>
+      <li><strong>參賽名額：</strong><span>個人組 140 名，接力組 20 組 (額滿為止)</span></li>
+      <li><strong>報到方式：</strong><span>早上 05:30~06:30 現場報到</span></li>
       <li><strong>獎勵辦法：</strong><span>本活動無分齡組別，敘獎為男子/女子個人組各取前三名，接力組取一名於餐廳表揚。</span></li>
       <li><strong>報名時間：</strong><span>2026 年 7 月 15 日止（或額滿為止）</span></li>
     </ul>
@@ -895,7 +896,7 @@
   <div class="rules-section">
     <div class="section-header">賽事規則與注意事項</div>
     <div class="rules-content-box">
-      <h3>活動規則</h3>
+      <h3>十二、 活動規則</h3>
       <ol>
         <li><strong style="color: var(--error-color);">本活動游泳為海泳，下水須攜帶魚雷浮標或跟屁蟲浮球。</strong></li>
         <li>本活動非正規鐵人三項賽事，唯活動程序按照游泳、自由車、路跑之順序進行，參賽選手除號碼布由大會提供指定使用外，其餘裝備(泳帽、自由車、安全帽、路跑服裝等)應由選手自行準備，始可參賽。為響應環保，本次賽事不提供紙杯，請選手自備環保杯或水壺。使用電輔車不列入排名。</li>
@@ -903,7 +904,7 @@
         <li>本活動為社團團練聯誼性質，無申請路權，選手請務必遵守交通號誌，注意來往車輛、個人安全並嚴禁跟車。</li>
       </ol>
 
-      <h3>重要注意事項</h3>
+      <h3>十三、 重要注意事項</h3>
       <ul>
         <li>為防止意外，身體不適者請勿勉強參加，大會權視選手體能狀況，中止選手繼續比賽或取消選手，選手不得有異議，否則一切責任自負。</li>
         <li>活動前如遇颱風或不可抗力之天然災害，主辦單位為考量選手及參與者安全，有權宣布取消、延期或調整活動路線，相關變更通知請密切注意。</li>
@@ -915,27 +916,30 @@
 
   <form id="registrationForm" novalidate>
     
-    <div class="section-title">01 / 基本與聯絡資料</div>
+    <div class="section-title">01 / 報名與基本資料</div>
     
-    <div class="form-row">
-      <div class="form-group">
-        <label class="field-label">團體名稱</label>
-        <input type="text" name="teamName" required>
+    <div class="form-group">
+      <label class="field-label">團體名稱</label>
+      <input type="text" name="teamName" required>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">報名組別選項 (非會員)</label>
+      <div class="option-group">
+        <label class="option-label"><input type="radio" name="registrationOption" value="男子個人" required><span>男子個人 (原價$2400，團報$2160)</span></label>
+        <label class="option-label"><input type="radio" name="registrationOption" value="女子個人"><span>女子個人 (原價$2400，團報$2160)</span></label>
+        <label class="option-label"><input type="radio" name="registrationOption" value="接力組"><span>接力組 (原價$3900，團報$3600，須至少一位女生)</span></label>
       </div>
+    </div>
+
+    <div class="form-row">
       <div class="form-group">
         <label class="field-label">姓名</label>
         <input type="text" name="name" required>
       </div>
-    </div>
-    
-    <div class="form-row">
       <div class="form-group">
         <label class="field-label">身份證字號</label>
         <input type="text" name="idNumber" required>
-      </div>
-      <div class="form-group">
-        <label class="field-label">出生年月日</label>
-        <input type="text" name="dob" placeholder="西元 ex.1999/01/01" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" required>
       </div>
     </div>
     
@@ -952,41 +956,56 @@
 
     <div class="form-row">
       <div class="form-group">
+        <label class="field-label">出生年月日</label>
+        <input type="text" name="dob" placeholder="西元 ex.1999/01/01" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" required>
+      </div>
+      <div class="form-group">
         <label class="field-label">FB暱稱</label>
         <input type="text" name="fbName">
       </div>
+    </div>
+
+    <div class="form-row">
       <div class="form-group">
         <label class="field-label">Line ID</label>
         <input type="text" name="lineId">
       </div>
-    </div>
-
-    <div class="form-group">
-      <label class="field-label">完賽衣尺寸</label>
-      <select name="shirtSize" required>
-        <option value="" disabled selected>請選擇尺寸 (2XS - 2XL)</option>
-        <option value="2XS">2XS</option>
-        <option value="XS">XS</option>
-        <option value="S">S</option>
-        <option value="M">M</option>
-        <option value="L">L</option>
-        <option value="XL">XL</option>
-        <option value="2XL">2XL</option>
-      </select>
-    </div>
-
-    <div class="section-title">02 / 報名選項與加購</div>
-    
-    <div class="form-group">
-      <label class="field-label">報名組別選項 (非會員)</label>
-      <div class="option-group">
-        <label class="option-label"><input type="radio" name="registrationOption" value="男子個人" required><span>男子個人 (原價$2400，團報$2160)</span></label>
-        <label class="option-label"><input type="radio" name="registrationOption" value="女子個人"><span>女子個人 (原價$2400，團報$2160)</span></label>
-        <label class="option-label"><input type="radio" name="registrationOption" value="接力組"><span>接力組 (原價$3900，團報$3600，須至少一位女生)</span></label>
+      <div class="form-group">
+        <label class="field-label">完賽衣尺寸</label>
+        <select name="shirtSize" required>
+          <option value="" disabled selected>請選擇尺寸 (2XS - 2XL)</option>
+          <option value="2XS">2XS</option>
+          <option value="XS">XS</option>
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+          <option value="2XL">2XL</option>
+        </select>
       </div>
     </div>
 
-    <div class="form-row" style="margin-top: 24px;">
+    <div class="section-title">02 / 緊急聯絡資訊</div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="field-label">聯絡人姓名</label>
+        <input type="text" name="emergName" required>
+      </div>
+      <div class="form-group">
+        <label class="field-label">聯絡人電話</label>
+        <input type="text" name="emergPhone" required>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="field-label">緊急聯絡人關係</label>
+      <input type="text" name="emergRel" required>
+    </div>
+
+    <div class="section-title">03 / 加購選項</div>
+
+    <div class="form-row">
       <div class="form-group">
         <label class="field-label">加購 賽後餐會</label>
         <span class="note-text" style="margin-bottom: 8px;">不分年紀，佔位者費用 $700/人</span>
@@ -999,24 +1018,6 @@
           <label class="option-label"><input type="radio" name="vegetarian" value="否"><span>否</span></label>
         </div>
       </div>
-    </div>
-
-    <div class="section-title">03 / 緊急聯絡資訊</div>
-    
-    <div class="form-row">
-      <div class="form-group">
-        <label class="field-label">聯絡人姓名</label>
-        <input type="text" name="emergName" required>
-      </div>
-      <div class="form-group">
-        <label class="field-label">關係</label>
-        <input type="text" name="emergRel" required>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label class="field-label">聯絡人電話</label>
-      <input type="text" name="emergPhone" required>
     </div>
 
     <div class="section-title">04 / 匯款資訊</div>
