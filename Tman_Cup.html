@@ -1060,7 +1060,7 @@
     <button type="submit" id="submitBtn">確認送出報名</button>
 
     <div class="footer-copy">
-      Copyright &copy; 2026 第11屆 TMAN盃
+      Copyright © 2026 第11屆 TMAN盃
     </div>
     
   </form>
@@ -1075,7 +1075,7 @@
 </div>
 
 <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbw6Uq9e72w1Qd3Bw2B_n_kG5uF_uG_6a8m_F0zD5p2j9X6G_y7L3t_K9r2H_e1V_q8W/exec';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwAYsJSP4WTZ1seABuFSABcIPnWS-8QwQ8tX3Ow_wbyCOuLn09TShU4O4BJ7hy_aqbwaw/exec';
   
   const form = document.getElementById('registrationForm');
   const btn = document.getElementById('submitBtn');
@@ -1170,10 +1170,9 @@
     
     const formData = new FormData(form); 
     
-    /*
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        showAlert('報名成功！', true);
+        showAlert('報名成功！資料已送出。', true);
         form.reset(); 
         policyBoxes.forEach(box => {
           box.classList.remove('is-checked');
@@ -1190,13 +1189,6 @@
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
       });
-    */
-
-    setTimeout(() => {
-      showAlert('報名成功！資料已送出。', true);
-      btn.disabled = false; 
-      btn.innerText = '確認送出報名';
-    }, 1000);
   };
 </script>
 
