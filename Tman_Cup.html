@@ -132,6 +132,19 @@
       display: flex;
     }
 
+    /* 資訊區塊內的超連結樣式 */
+    .event-info-box .info-list a {
+      color: var(--tman-black);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .event-info-box .info-list a:hover {
+      color: var(--tman-yellow-hover);
+    }
+
     /* ==========================================
        共用 Section Header
        ========================================== */
@@ -723,6 +736,15 @@
     .modal-btn:hover {
       background: #333;
     }
+
+    /* ==========================================
+       強制表格最低寬度，觸發手機版左右滑動機制
+       ========================================== */
+    .schedule-table,
+    .distance-table {
+      min-width: 500px;
+    }
+
   </style>
 </head>
 <body>
@@ -734,7 +756,8 @@
     <div class="event-name">2026 第11屆 TMAN盃 鐵人三項聯誼賽</div>
     <ul class="info-list">
       <li><strong>賽事日期：</strong><span>2026年8月30日（日）AM 07:00</span></li>
-      <li><strong>賽事地點：</strong><span>金山磺港漁港<br>（會場：金山海灣餐廳前廣場，新北市金山區磺港路 326 號之一）</span></li>
+      <li><strong>賽事地點：</strong><span>金山磺港漁港</span></li>
+      <li><strong>集合會場：</strong><span><a href="https://maps.app.goo.gl/E87RuUfTNDdPYutEA" target="_blank" rel="noopener noreferrer">金山海灣餐廳前廣場</a>，新北市金山區磺港路 326 號之一</span></li>
       <li><strong>參賽名額：</strong><span>個人組 140 名，接力組 20 組 (額滿為止)</span></li>
       <li><strong>報到方式：</strong><span>早上 05:30~06:30 現場報到</span></li>
       <li><strong>獎勵辦法：</strong><span>本活動無分齡組別，敘獎為男子/女子個人組各取前三名，接力組取一名於餐廳表揚。</span></li>
@@ -1175,15 +1198,6 @@
       btn.innerText = '確認送出報名';
     }, 1000);
   };
-
-    /* ==========================================
-       強制表格最低寬度，觸發手機版左右滑動機制
-       ========================================== */
-    .schedule-table,
-    .distance-table {
-      min-width: 500px;
-    }
-  
 </script>
 
 </body>
