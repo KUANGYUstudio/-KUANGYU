@@ -68,7 +68,7 @@
     }
 
     /* ==========================================
-       新增：賽事資訊區塊
+       賽事資訊區塊
        ========================================== */
     .event-info-box {
       background-color: var(--blue-bg);
@@ -112,6 +112,51 @@
     }
 
     /* ==========================================
+       距離與限時表格
+       ========================================== */
+    .distance-section {
+      margin-bottom: 50px;
+    }
+
+    .distance-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--blue-border);
+      border-radius: 8px;
+      background-color: var(--blue-bg);
+    }
+
+    .distance-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 15px;
+    }
+
+    .distance-table th {
+      background-color: var(--blue-light);
+      color: var(--blue-dark);
+      font-weight: 600;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--blue-border);
+      white-space: nowrap;
+    }
+
+    .distance-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--blue-border);
+      color: #444;
+    }
+
+    .distance-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .distance-table td strong {
+      color: var(--blue-dark);
+      font-weight: 600;
+    }
+
+    /* ==========================================
        費用說明區塊
        ========================================== */
     .fee-section {
@@ -130,6 +175,7 @@
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
+      margin-bottom: 20px;
     }
 
     .fee-card {
@@ -181,6 +227,22 @@
 
     .fee-item-price.highlight { color: var(--error-color); }
     .fee-item-price.normal { color: #666; }
+
+    /* 費用附註說明 */
+    .fee-notes {
+      padding: 16px 20px;
+      background-color: #fff;
+      border: 1px solid #d1d9e0;
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .fee-notes p { margin: 0 0 8px 0; }
+    .fee-notes p:last-child { margin: 0; }
+    .fee-notes strong { color: var(--blue-dark); }
+    .fee-notes .warning { color: var(--error-color); font-weight: 600; }
 
     /* ==========================================
        表單區塊
@@ -553,10 +615,47 @@
     </ul>
   </div>
 
+  <div class="distance-section">
+    <div class="schedule-title" style="border-bottom: 2px solid var(--blue-light); padding-bottom: 12px; margin-bottom: 20px;">競賽距離與限時 (個人組 / 接力組)</div>
+    <div class="distance-table-wrapper">
+      <table class="distance-table">
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>距離</th>
+            <th>限時</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>游泳</strong></td>
+            <td>1500m</td>
+            <td>50 分鐘</td>
+          </tr>
+          <tr>
+            <td><strong>自由車</strong></td>
+            <td>40km</td>
+            <td>100 分鐘</td>
+          </tr>
+          <tr>
+            <td><strong>路跑</strong></td>
+            <td>10km</td>
+            <td>80 分鐘</td>
+          </tr>
+          <tr style="background-color: var(--blue-tint);">
+            <td><strong>總計</strong></td>
+            <td><strong>51.5km</strong></td>
+            <td><strong>3 小時 50 分鐘</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="fee-section">
     <div class="schedule-title" style="border-bottom: 2px solid var(--blue-light); padding-bottom: 12px; margin-bottom: 20px;">費用與組別說明 (費用不含餐費)</div>
+    
     <div class="fee-grid">
-      
       <div class="fee-card student-card">
         <div class="fee-card-title">
           <span style="display:inline-block; width:6px; height:16px; background:var(--blue-main); border-radius:3px;"></span>
@@ -587,8 +686,13 @@
         </div>
         <span class="note-text" style="margin-top: 8px;">※ 接力組須至少有一位女生</span>
       </div>
-
     </div>
+
+    <div class="fee-notes">
+      <p><strong>※ 費用包含：</strong>場地費、線上成績下載、號碼布、貼紙、保險、補給飲料、志工餐費、完賽衣等。</p>
+      <p class="warning">※ 晶片於終點處回收，遺失未繳回須負擔賠償之責任！</p>
+    </div>
+
   </div>
 
   <form id="registrationForm" novalidate>
