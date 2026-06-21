@@ -170,6 +170,84 @@
     }
 
     /* ==========================================
+       費用說明區塊
+       ========================================== */
+    .fee-section {
+      margin-bottom: 50px;
+    }
+
+    .fee-grid {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .fee-card {
+      flex: 1;
+      min-width: 250px;
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .fee-card.student-card {
+      background-color: var(--tman-bg);
+      border: 1px solid var(--tman-gray-border);
+    }
+
+    .fee-card.non-student-card {
+      background-color: #fff;
+      border: 2px solid var(--tman-yellow);
+    }
+
+    .fee-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--tman-black);
+    }
+
+    .fee-item { margin-bottom: 14px; }
+    .fee-item:last-child { margin-bottom: 0; }
+
+    .fee-item-title {
+      color: #444;
+      font-size: 15px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .fee-item-price {
+      font-size: 14.5px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .fee-item-price.highlight { color: var(--error-color); }
+    .fee-item-price.normal { color: #666; }
+
+    /* 費用附註說明 */
+    .fee-notes {
+      padding: 16px 20px;
+      background-color: var(--tman-gray-light);
+      border: 1px solid var(--tman-gray-border);
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .fee-notes p { margin: 0 0 8px 0; }
+    .fee-notes p:last-child { margin: 0; }
+    .fee-notes strong { color: var(--tman-black); }
+    .fee-notes .warning { color: var(--error-color); font-weight: 600; }
+
+    /* ==========================================
        日程表表格
        ========================================== */
     .schedule-section {
@@ -259,84 +337,6 @@
       color: var(--tman-black);
       font-weight: 700;
     }
-
-    /* ==========================================
-       費用說明區塊
-       ========================================== */
-    .fee-section {
-      margin-bottom: 50px;
-    }
-
-    .fee-grid {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .fee-card {
-      flex: 1;
-      min-width: 250px;
-      border-radius: 8px;
-      padding: 24px;
-    }
-
-    .fee-card.student-card {
-      background-color: var(--tman-bg);
-      border: 1px solid var(--tman-gray-border);
-    }
-
-    .fee-card.non-student-card {
-      background-color: #fff;
-      border: 2px solid var(--tman-yellow);
-    }
-
-    .fee-card-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin-top: 0;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--tman-black);
-    }
-
-    .fee-item { margin-bottom: 14px; }
-    .fee-item:last-child { margin-bottom: 0; }
-
-    .fee-item-title {
-      color: #444;
-      font-size: 15px;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .fee-item-price {
-      font-size: 14.5px;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-    }
-
-    .fee-item-price.highlight { color: var(--error-color); }
-    .fee-item-price.normal { color: #666; }
-
-    /* 費用附註說明 */
-    .fee-notes {
-      padding: 16px 20px;
-      background-color: var(--tman-gray-light);
-      border: 1px solid var(--tman-gray-border);
-      border-radius: 6px;
-      font-size: 14px;
-      line-height: 1.6;
-      color: #555;
-    }
-
-    .fee-notes p { margin: 0 0 8px 0; }
-    .fee-notes p:last-child { margin: 0; }
-    .fee-notes strong { color: var(--tman-black); }
-    .fee-notes .warning { color: var(--error-color); font-weight: 600; }
 
     /* ==========================================
        活動規則與注意事項
@@ -632,6 +632,48 @@
     </ul>
   </div>
 
+  <div class="fee-section">
+    <div class="section-header">費用與組別說明 (費用不含餐費)</div>
+    
+    <div class="fee-grid">
+      <div class="fee-card student-card">
+        <div class="fee-card-title">
+          <span style="display:inline-block; width:6px; height:16px; background:var(--tman-black); border-radius:3px;"></span>
+          個人組 (男子 / 女子)
+        </div>
+        <div class="fee-item">
+          <span class="fee-item-title">原價</span>
+          <span class="fee-item-price normal">$2,400</span>
+        </div>
+        <div class="fee-item">
+          <span class="fee-item-title">團報</span>
+          <span class="fee-item-price highlight">$2,160</span>
+        </div>
+      </div>
+
+      <div class="fee-card non-student-card">
+        <div class="fee-card-title">
+          <span style="display:inline-block; width:6px; height:16px; background:var(--tman-yellow); border-radius:3px;"></span>
+          接力組
+        </div>
+        <div class="fee-item">
+          <span class="fee-item-title">原價</span>
+          <span class="fee-item-price normal">$3,900</span>
+        </div>
+        <div class="fee-item">
+          <span class="fee-item-title">團報</span>
+          <span class="fee-item-price highlight">$3,600</span>
+        </div>
+        <span class="note-text" style="margin-top: 8px;">※ 接力組須至少有一位女生</span>
+      </div>
+    </div>
+
+    <div class="fee-notes">
+      <p><strong>※ 費用包含：</strong>場地費、線上成績下載、號碼布、貼紙、保險、補給飲料、志工餐費、完賽衣等。</p>
+      <p class="warning">※ 晶片於終點處回收，遺失未繳回須負擔賠償之責任！</p>
+    </div>
+  </div>
+
   <div class="schedule-section">
     <div class="section-header">比賽日程表 (8/30 星期日)</div>
     <div class="schedule-table-wrapper">
@@ -683,7 +725,6 @@
       </table>
     </div>
     
-    <!-- 這是新增的獎勵辦法備註 -->
     <div class="fee-notes" style="margin-top: 16px;">
       <p><strong>※ 獎勵辦法：</strong>本活動無分齡組別，敘獎為男子/女子個人組各取前三名，接力組取一名於餐廳表揚。</p>
     </div>
@@ -724,48 +765,6 @@
     </div>
   </div>
 
-  <div class="fee-section">
-    <div class="section-header">費用與組別說明 (費用不含餐費)</div>
-    
-    <div class="fee-grid">
-      <div class="fee-card student-card">
-        <div class="fee-card-title">
-          <span style="display:inline-block; width:6px; height:16px; background:var(--tman-black); border-radius:3px;"></span>
-          個人組 (男子 / 女子)
-        </div>
-        <div class="fee-item">
-          <span class="fee-item-title">原價</span>
-          <span class="fee-item-price normal">$2,400</span>
-        </div>
-        <div class="fee-item">
-          <span class="fee-item-title">團報</span>
-          <span class="fee-item-price highlight">$2,160</span>
-        </div>
-      </div>
-
-      <div class="fee-card non-student-card">
-        <div class="fee-card-title">
-          <span style="display:inline-block; width:6px; height:16px; background:var(--tman-yellow); border-radius:3px;"></span>
-          接力組
-        </div>
-        <div class="fee-item">
-          <span class="fee-item-title">原價</span>
-          <span class="fee-item-price normal">$3,900</span>
-        </div>
-        <div class="fee-item">
-          <span class="fee-item-title">團報</span>
-          <span class="fee-item-price highlight">$3,600</span>
-        </div>
-        <span class="note-text" style="margin-top: 8px;">※ 接力組須至少有一位女生</span>
-      </div>
-    </div>
-
-    <div class="fee-notes">
-      <p><strong>※ 費用包含：</strong>場地費、線上成績下載、號碼布、貼紙、保險、補給飲料、志工餐費、完賽衣等。</p>
-      <p class="warning">※ 晶片於終點處回收，遺失未繳回須負擔賠償之責任！</p>
-    </div>
-  </div>
-
   <div class="rules-section">
     <div class="section-header">賽事規則與注意事項</div>
     <div class="rules-content-box">
@@ -801,6 +800,11 @@
     </div>
 
     <div class="section-title">02 / 基本資料</div>
+
+    <div class="form-group">
+      <label class="field-label">團體名稱</label>
+      <input type="text" name="teamName" required>
+    </div>
 
     <div class="form-row">
       <div class="form-group">
