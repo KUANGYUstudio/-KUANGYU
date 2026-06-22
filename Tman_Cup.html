@@ -45,6 +45,11 @@
       box-shadow: 0 4px 24px rgba(0,0,0,0.06); 
     }
 
+    /* 預設隱藏手機版專用內容 */
+    .mobile-only {
+      display: none;
+    }
+
     @media (max-width: 600px) {
       .container { padding: 40px 24px; }
       body { padding: 30px 15px; }
@@ -64,6 +69,10 @@
       /* 手機版設定：強制換行與隱藏標點 */
       .m-block { display: block; }
       .m-hide { display: none; }
+
+      /* 切換顯示電腦版/手機版區塊 */
+      .desktop-only { display: none !important; }
+      .mobile-only { display: block; }
     }
     
     /* 主標題 */
@@ -100,7 +109,7 @@
     }
 
     .event-info-box .event-name {
-      font-size: 18px;
+      font-size: 18px; 
       font-weight: 700;
       color: var(--tman-black);
       margin-bottom: 20px;
@@ -152,10 +161,10 @@
        共用 Section Header
        ========================================== */
     .section-header {
-      font-size: 20px; /* 將標題字體進一步放大以增加層次感 */
+      font-size: 20px; 
       font-weight: 700;
       color: var(--tman-black);
-      margin-bottom: 20px; /* 稍微增加下方的留白讓排版更透氣 */
+      margin-bottom: 20px; 
       letter-spacing: 0.08em;
       border-bottom: 2px solid var(--tman-gray-border);
       padding-bottom: 12px;
@@ -249,7 +258,7 @@
     }
 
     .fee-card-title {
-      font-size: 17px;
+      font-size: 17px; 
       font-weight: 700;
       margin-top: 0;
       margin-bottom: 18px;
@@ -359,7 +368,7 @@
     }
 
     .rules-content-box h3 {
-      font-size: 17px;
+      font-size: 17px; 
       color: var(--tman-black);
       margin-top: 0;
       margin-bottom: 12px;
@@ -388,7 +397,7 @@
        ========================================== */
 
     .section-title { 
-      font-size: 18px;
+      font-size: 18px; 
       font-weight: 700; 
       color: var(--tman-black);
       margin: 50px 0 24px; 
@@ -610,8 +619,7 @@
     /* ==========================================
        強制表格最低寬度，觸發手機版左右滑動機制
        ========================================== */
-    .schedule-table,
-    .distance-table {
+    .schedule-table {
       min-width: 500px;
     }
 
@@ -671,19 +679,21 @@
   </div>
 
   <div class="distance-section">
-    <div class="section-header">競賽距離與限時</div>
+    <div class="section-header">競賽距離與限時 (個人組 / 接力組)</div>
     <div class="distance-table-wrapper">
       <table class="distance-table">
         <thead>
           <tr>
             <th>項目</th>
             <th>距離</th>
+            <th class="desktop-only">限時說明</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>游泳</strong></td>
             <td>1500m</td>
+            <td class="desktop-only" rowspan="4" style="vertical-align: middle; line-height: 1.8;">總限時：<strong>4 小時</strong><br>（各項距離以實際路線為主）</td>
           </tr>
           <tr>
             <td><strong>自由車</strong></td>
@@ -701,11 +711,11 @@
       </table>
     </div>
     
-    <div style="font-size: 15px; color: #444; margin-top: 16px; line-height: 1.6;">
+    <div class="mobile-only" style="font-size: 15px; color: #444; margin-top: 16px; line-height: 1.6;">
       <strong>※ 總限時：4 小時</strong>（各項距離以實際路線為主）
     </div>
-    <div style="color: var(--error-color); font-weight: 700; font-size: 15px; margin-top: 8px;">
-      ※ 游泳須攜帶魚雷浮標或跟屁蟲浮球
+    <div style="color: var(--error-color); font-weight: 700; font-size: 15px; margin-top: 12px;">
+      ※ 游泳 1500 公尺(下水須攜帶魚雷浮標或跟屁蟲浮球)
     </div>
   </div>
 
