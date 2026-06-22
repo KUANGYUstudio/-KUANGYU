@@ -100,7 +100,7 @@
     }
 
     .event-info-box .event-name {
-      font-size: 18px; /* 微調放大 */
+      font-size: 18px;
       font-weight: 700;
       color: var(--tman-black);
       margin-bottom: 20px;
@@ -152,10 +152,10 @@
        共用 Section Header
        ========================================== */
     .section-header {
-      font-size: 18px; /* 微調放大以增加層次感 */
+      font-size: 20px; /* 將標題字體進一步放大以增加層次感 */
       font-weight: 700;
       color: var(--tman-black);
-      margin-bottom: 16px;
+      margin-bottom: 20px; /* 稍微增加下方的留白讓排版更透氣 */
       letter-spacing: 0.08em;
       border-bottom: 2px solid var(--tman-gray-border);
       padding-bottom: 12px;
@@ -249,7 +249,7 @@
     }
 
     .fee-card-title {
-      font-size: 17px; /* 微調放大 */
+      font-size: 17px;
       font-weight: 700;
       margin-top: 0;
       margin-bottom: 18px;
@@ -359,7 +359,7 @@
     }
 
     .rules-content-box h3 {
-      font-size: 17px; /* 微調放大 */
+      font-size: 17px;
       color: var(--tman-black);
       margin-top: 0;
       margin-bottom: 12px;
@@ -388,7 +388,7 @@
        ========================================== */
 
     .section-title { 
-      font-size: 18px; /* 微調放大以增加層次感 */
+      font-size: 18px;
       font-weight: 700; 
       color: var(--tman-black);
       margin: 50px 0 24px; 
@@ -615,6 +615,13 @@
       min-width: 500px;
     }
 
+    /* 電腦版設定：維持原本的一行顯示 */
+    @media (min-width: 601px) {
+      .m-block { display: inline; }
+      .m-hide { display: inline; }
+      br.m-block { display: none; }
+    }
+
   </style>
 </head>
 <body>
@@ -696,7 +703,7 @@
       </table>
     </div>
     <div style="color: var(--error-color); font-weight: 700; font-size: 15px; margin-top: 12px;">
-      ※ 游泳須攜帶魚雷浮標或跟屁蟲浮球
+      ※ 游泳 1500 公尺(下水須攜帶魚雷浮標或跟屁蟲浮球)
     </div>
   </div>
 
