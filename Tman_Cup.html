@@ -60,6 +60,10 @@
       .schedule-table td:first-child {
         width: 65px !important; 
       }
+
+      /* 手機版設定：強制換行與隱藏標點 */
+      .m-block { display: block; }
+      .m-hide { display: none; }
     }
     
     /* 主標題 */
@@ -84,7 +88,7 @@
       border-radius: 8px;
       padding: 24px;
       margin-bottom: 40px;
-      text-align: center;
+      text-align: left;
     }
 
     .event-info-box .intro-text {
@@ -92,14 +96,16 @@
       color: #666;
       margin-bottom: 6px;
       letter-spacing: 0.05em;
+      text-align: center;
     }
 
     .event-info-box .event-name {
-      font-size: 17px;
+      font-size: 18px; /* 微調放大 */
       font-weight: 700;
       color: var(--tman-black);
       margin-bottom: 20px;
       letter-spacing: 0.08em;
+      text-align: center;
     }
 
     .event-info-box .info-list {
@@ -109,25 +115,24 @@
       font-size: 15px;
       color: #444;
       line-height: 1.8;
-      display: inline-block;
-      text-align: left;
+      display: block;
     }
 
     .event-info-box .info-list strong {
       color: var(--tman-black);
       font-weight: 700;
       margin-right: 4px;
-      flex: 0 0 90px; /* 將標題寬度加大至 90px，且鎖定不允許被擠壓 */
+      flex: 0 0 90px; 
     }
     
     .event-info-box .info-list span {
-      flex: 1; /* 讓右側的說明文字自動填滿所有剩下的空間 */
+      flex: 1; 
     }
 
     .event-info-box .info-list li {
       margin-bottom: 8px;
       display: flex;
-      align-items: flex-start; /* 確保左右兩邊的文字都對齊最上方 */
+      align-items: flex-start; 
     }
 
     /* 資訊區塊內的超連結樣式 */
@@ -147,7 +152,7 @@
        共用 Section Header
        ========================================== */
     .section-header {
-      font-size: 16px;
+      font-size: 18px; /* 微調放大以增加層次感 */
       font-weight: 700;
       color: var(--tman-black);
       margin-bottom: 16px;
@@ -165,6 +170,51 @@
       width: 60px;
       height: 2px;
       background-color: var(--tman-yellow);
+    }
+
+    /* ==========================================
+       距離與限時表格
+       ========================================== */
+    .distance-section {
+      margin-bottom: 50px;
+    }
+
+    .distance-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--tman-gray-border);
+      border-radius: 8px;
+      background-color: var(--tman-bg);
+    }
+
+    .distance-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 15px;
+    }
+
+    .distance-table th {
+      background-color: var(--tman-gray-light);
+      color: var(--tman-black);
+      font-weight: 700;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--tman-gray-border);
+      white-space: nowrap;
+    }
+
+    .distance-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--tman-gray-border);
+      color: #333;
+    }
+
+    .distance-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .distance-table td strong {
+      color: var(--tman-black);
+      font-weight: 700;
     }
 
     /* ==========================================
@@ -199,7 +249,7 @@
     }
 
     .fee-card-title {
-      font-size: 16px;
+      font-size: 17px; /* 微調放大 */
       font-weight: 700;
       margin-top: 0;
       margin-bottom: 18px;
@@ -292,51 +342,6 @@
     }
 
     /* ==========================================
-       距離與限時表格
-       ========================================== */
-    .distance-section {
-      margin-bottom: 50px;
-    }
-
-    .distance-table-wrapper {
-      overflow-x: auto;
-      border: 1px solid var(--tman-gray-border);
-      border-radius: 8px;
-      background-color: var(--tman-bg);
-    }
-
-    .distance-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 15px;
-    }
-
-    .distance-table th {
-      background-color: var(--tman-gray-light);
-      color: var(--tman-black);
-      font-weight: 700;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--tman-gray-border);
-      white-space: nowrap;
-    }
-
-    .distance-table td {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--tman-gray-border);
-      color: #333;
-    }
-
-    .distance-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .distance-table td strong {
-      color: var(--tman-black);
-      font-weight: 700;
-    }
-
-    /* ==========================================
        活動規則與注意事項
        ========================================== */
     .rules-section {
@@ -354,7 +359,7 @@
     }
 
     .rules-content-box h3 {
-      font-size: 16px;
+      font-size: 17px; /* 微調放大 */
       color: var(--tman-black);
       margin-top: 0;
       margin-bottom: 12px;
@@ -383,7 +388,7 @@
        ========================================== */
 
     .section-title { 
-      font-size: 16px; 
+      font-size: 18px; /* 微調放大以增加層次感 */
       font-weight: 700; 
       color: var(--tman-black);
       margin: 50px 0 24px; 
@@ -618,14 +623,44 @@
   <h1>2026 第11屆 TMAN盃</h1>
 
   <div class="event-info-box">
+    <div class="event-name">2026 第11屆 TMAN盃 鐵人三項聯誼賽</div>
     <ul class="info-list">
-      <li><strong>賽事日期：</strong><span>2026年8月30日（日）AM 07:00</span></li>
-      <li><strong>活動項目：</strong><span>鐵人三項個人賽、團體接力賽</span></li>
-      <li><strong>活動地點：</strong><span>金山磺港漁港</span></li>
-      <li><strong>集合會場：</strong><span><a href="https://maps.app.goo.gl/E87RuUfTNDdPYutEA" target="_blank" rel="noopener noreferrer">金山海灣餐廳前廣場</a><br>（新北市金山區磺港路326號之一）</span></li>
-      <li><strong>參賽名額：</strong><span>個人組 140 名，接力組 20 組 (額滿為止)</span></li>
-      <li><strong>報到方式：</strong><span>現場報到</span></li>
-      <li><strong>報名時間：</strong><span>2026年7月15日止（或額滿為止）</span></li>
+      <li>
+        <strong>賽事日期：</strong>
+        <span>2026年8月30日（日）AM 07:00</span>
+      </li>
+      <li>
+        <strong>活動項目：</strong>
+        <span>
+          <span class="m-block">鐵人三項個人賽</span><span class="m-hide">、</span><span class="m-block">團體接力賽</span>
+        </span>
+      </li>
+      <li>
+        <strong>活動地點：</strong>
+        <span>金山磺港漁港</span>
+      </li>
+      <li>
+        <strong>集合會場：</strong>
+        <span>
+          <span class="m-block"><a href="https://maps.app.goo.gl/E87RuUfTNDdPYutEA" target="_blank" rel="noopener noreferrer">金山海灣餐廳前廣場</a></span><span class="m-block">（新北市金山區磺港路326號之一）</span>
+        </span>
+      </li>
+      <li>
+        <strong>參賽名額：</strong>
+        <span>
+          <span class="m-block">個人組 140 名</span><span class="m-hide">，</span><span class="m-block">接力組 20 組 (額滿為止)</span>
+        </span>
+      </li>
+      <li>
+        <strong>報到方式：</strong>
+        <span>現場報到</span>
+      </li>
+      <li>
+        <strong>報名時間：</strong>
+        <span>
+          <span class="m-block">2026年7月15日止</span><span class="m-block">（或額滿為止）</span>
+        </span>
+      </li>
     </ul>
   </div>
 
@@ -662,7 +697,7 @@
       </table>
     </div>
     <div style="color: var(--error-color); font-weight: 700; font-size: 15px; margin-top: 12px;">
-     ※ 游泳須攜帶魚雷浮標或跟屁蟲浮球
+      ※ 游泳 1500 公尺(下水須攜帶魚雷浮標或跟屁蟲浮球)
     </div>
   </div>
 
@@ -759,7 +794,6 @@
       </table>
     </div>
     
-    <!-- 這是新增的獎勵辦法備註 -->
     <div class="fee-notes" style="margin-top: 16px;">
       <p><strong>※ 獎勵辦法：</strong>本活動無分齡組別，敘獎為男子/女子個人組各取前三名，接力組取一名於餐廳表揚。</p>
     </div>
