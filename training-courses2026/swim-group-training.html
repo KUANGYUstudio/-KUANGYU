@@ -73,7 +73,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 18px;
-      margin-bottom: 50px;
+      margin-bottom: 30px; /* 縮減間距以容納適合對象區塊 */
     }
 
     .info-pill-clean {
@@ -153,6 +153,31 @@
         grid-template-columns: 1fr;
         gap: 14px;
       }
+    }
+
+    /* ==========================================
+       適合對象特別區塊
+       ========================================== */
+    .target-audience-box {
+      background-color: var(--blue-light);
+      border-left: 4px solid var(--blue-main);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 50px;
+      color: #444;
+      font-size: 14.5px;
+      line-height: 1.7;
+    }
+
+    .target-audience-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      font-size: 16px;
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
     }
 
     /* ==========================================
@@ -574,6 +599,16 @@
 
   </div>
 
+  <!-- 適合對象特別區塊 -->
+  <div class="target-audience-box">
+    <div class="target-audience-title">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      適合對象
+    </div>
+    本團練專注於「水感建立」與「捷式（自由式）動作優化」。<br>
+    參加者須具備<strong style="color: var(--blue-dark);">以捷式連續游完 100 公尺不休息（不限速度）</strong>之最低門檻能力，適合想突破速度瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者。
+  </div>
+
   <div class="schedule-section">
     
     <div class="schedule-title">團練排程</div>
@@ -588,25 +623,25 @@
         </thead>
         <tbody>
           <tr>
-            <td>06:30 - 06:45</td>
+            <td>06:30 - 06:50</td>
             <td>
               <strong>陸上熱身 ＋ 核心啟動</strong>
             </td>
-            <td>肌肉開機、打開關節活動度，做好準備再下水。</td>
+            <td>喚醒特定肌群，建立良好的水準線體態準備。</td>
           </tr>
           <tr>
-            <td>06:45 - 07:45</td>
+            <td>06:50 - 07:50</td>
             <td>
               <strong>水感技術訓練</strong>
             </td>
-            <td>水感與技術優化，提升捷式效率，與課表執行。</td>
+            <td>主攻捷式效率優化、課表執行與雙水道分組專項特訓。</td>
           </tr>
           <tr>
-            <td>07:45 - 08:00</td>
+            <td>07:50 - 08:00</td>
             <td>
               <strong>速度訓練 ＋ 緩和</strong>
             </td>
-            <td>高強度速度突破、爆發力訓練，以及最後的收操緩和。</td>
+            <td>高強度速度突破、爆發力維持，以及最後的收操放鬆。</td>
           </tr>
         </tbody>
       </table>
@@ -647,7 +682,7 @@
     </div>
     
     <div class="note">
-      ※ 如需請假請務必於前一天告知，教練將提供自主練習的課表建議，恕不另行安排補課。<br>
+      ※ 如需請假請務必於前一天告知，教練將提供自主練習的課表建議，恕不另行安排補課（天候因素除外）。<br>
       ※ 詳細課程退費機制與天候規範，請見報名表單下方同意聲明。
     </div>
   </div>
@@ -706,7 +741,7 @@
       <div class="option-group">
         <label class="option-label">
           <input type="checkbox" name="prerequisite" value="確認符合門檻" required>
-          <span style="font-size: 14.5px; color: #444;">我已確認具備【連續游完 200 公尺不休息】或【熟練捷式換氣】之能力，並理解第一堂課將進行現場泳力測驗。</span>
+          <span style="font-size: 14.5px; color: #444;">我已確認具備<strong style="color: var(--blue-dark); font-weight: 600;">【以捷式（自由式）連續游完 100 公尺不休息】</strong>之能力（不限速度），並理解第一堂課將進行現場泳力測驗。</span>
         </label>
       </div>
     </div>
@@ -746,12 +781,19 @@
     <div class="section-title">05 / 其他</div>
     
     <div class="form-group">
+      <label class="field-label">近期游泳成績參考（選填）</label>
+      <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請提供過往鐵人賽游泳成績（務必註明 51.5 / 113 / 226）以及游泳池 100m 平均配速。</div>
+      <input type="text" name="swimPace" placeholder="例如：113 賽事 45 分 / 100m 配速 2分10秒">
+    </div>
+
+    <div class="form-group">
       <label class="field-label">對本次游泳團練的期望或過去游泳經歷？（選填）</label>
       <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
     </div>
 
     <div class="section-title">06 / 同意聲明與規範</div>
 
+    <!-- 1. 課前聲明與退費機制 -->
     <div class="policy-box">
       <div class="policy-header">
         <label class="custom-checkbox-container">
@@ -777,6 +819,7 @@
       </div>
     </div>
 
+    <!-- 2. 天候提醒聲明 -->
     <div class="policy-box">
       <div class="policy-header">
         <label class="custom-checkbox-container">
@@ -797,6 +840,7 @@
       </div>
     </div>
 
+    <!-- 3. 影像肖像權聲明 -->
     <div class="policy-box" style="margin-bottom: 24px;">
       <div class="policy-header">
         <label class="custom-checkbox-container">
