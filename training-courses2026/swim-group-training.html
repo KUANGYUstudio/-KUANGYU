@@ -261,12 +261,12 @@
       border-radius: 6px;
       padding: 10px 40px; 
       margin: 0 auto 20px auto;
-      width: fit-content; /* 寬度自動適應內容 */
+      width: fit-content; 
     }
 
     .date-row {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       border-bottom: 1px solid var(--pink-border);
       padding: 20px 0;
     }
@@ -281,6 +281,10 @@
       color: #555;
       width: 60px; 
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-top: 4px;
     }
 
     .days-wrapper {
@@ -306,8 +310,8 @@
       font-size: 13.5px;
       color: #888;
       font-weight: 500;
-      margin-left: 6px; 
-      white-space: nowrap;
+      margin-top: 0; 
+      margin-left: 4px; 
     }
     
     .note { 
@@ -343,10 +347,13 @@
       
       .date-row {
         flex-direction: row; 
+        align-items: flex-start;
         padding: 16px 0;
       }
       .month-label {
         width: 50px;
+        margin-bottom: 0;
+        padding-top: 2px;
       }
       .date-list-container {
         width: fit-content; 
@@ -359,7 +366,10 @@
         width: auto;
       }
       .day-number { font-size: 19px; }
-      .holiday-note { font-size: 12.5px; }
+      .holiday-note { 
+        font-size: 12.5px; 
+        margin-top: 0; 
+      }
     }
     
     label.field-label { 
@@ -410,7 +420,7 @@
     }
 
     /* ==========================================
-       條款條約設定區
+       銀行級自訂條款卡片 (Checkbox + Accordion)
        ========================================== */
     .policy-box {
       border: 1px solid #d1d9e0;
@@ -541,7 +551,7 @@
     button[type="submit"]:disabled { background: #c5d0d6; cursor: not-allowed; }
 
     /* ==========================================
-       彈出視窗樣式
+       自訂彈出視窗樣式
        ========================================== */
     .modal-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -624,7 +634,7 @@
       適合對象
     </div>
     本團練專注於「水感建立」與「捷式（自由式）動作優化」。<br>
-    參加者須具備<strong style="color: var(--blue-dark);">以捷式連續游完 100 公尺不休息（不限速度）</strong>之最低門檻能力，適合想突破速度瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者.
+    參加者須具備<strong style="color: var(--blue-dark);">以捷式連續游完 100 公尺不休息（不限速度）</strong>之最低門檻能力，適合想突破速度瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者。
   </div>
 
   <div class="schedule-section">
@@ -706,7 +716,7 @@
     </div>
     
     <div class="note">
-      ※ 如需請假請務必於前一天告知，教練將提供自主練習的課表建議，恕不另行安排補課（天候因素除外）。<br>
+      ※ 如需請假請務必於前一天告知，教練將提供自主練習的課表建議，恕不另行安排補課。<br>
       ※ 詳細課程退費機制與天候規範，請見報名表單下方同意聲明。
     </div>
   </div>
@@ -758,7 +768,27 @@
       <input type="text" name="emergPhone" required>
     </div>
 
-    <div class="section-title">03 / 門檻確認與方案</div>
+    <div class="section-title">03 / 其他</div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label class="field-label">鐵人賽游泳成績（選填）</label>
+        <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請註明 51.5 / 113 / 226 賽事成績</div>
+        <input type="text" name="triathlonSwimTime" placeholder="例如：113 賽事 45 分">
+      </div>
+      <div class="form-group">
+        <label class="field-label">游泳池 100m 配速（選填）</label>
+        <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請提供您在泳池的平均配速</div>
+        <input type="text" name="pool100mPace" placeholder="例如：2分10秒">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="field-label">對本次游泳團練的期望或過去游泳經歷？（選填）</label>
+      <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
+    </div>
+
+    <div class="section-title">04 / 門檻確認與方案</div>
     
     <div class="form-group">
       <label class="field-label">方案選擇</label>
@@ -775,12 +805,12 @@
       <div class="option-group">
         <label class="option-label">
           <input type="checkbox" name="prerequisite" value="確認符合門檻" required>
-          <span style="font-size: 14.5px; color: #444;">我已確認具備【以捷式（自由式）連續游完 100 公尺不休息】之能力（不限速度），並理解第一堂課將進行現場泳力測驗。</span>
+          <span style="font-size: 14.5px; color: #444;">我已確認具備<strong style="color: var(--blue-dark); font-weight: 600;">【以捷式（自由式）連續游完 100 公尺不休息】</strong>之能力（不限速度），並理解第一堂課將進行現場泳力測驗。</span>
         </label>
       </div>
     </div>
 
-    <div class="section-title">04 / 付款方式</div>
+    <div class="section-title">05 / 付款方式</div>
     
     <div class="payment-grid">
       <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" required><span>匯款</span></label>
@@ -800,26 +830,6 @@
         <label class="field-label">轉帳帳號後五碼</label>
         <input type="text" name="bankLastFive" placeholder="請輸入匯款帳號後五碼">
       </div>
-    </div>
-
-    <div class="section-title">05 / 其他</div>
-    
-    <div class="form-row">
-      <div class="form-group">
-        <label class="field-label">鐵人賽游泳成績（選填）</label>
-        <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請註明 51.5 / 113 / 226 賽事成績</div>
-        <input type="text" name="triathlonSwimTime" placeholder="例如：113 賽事 45 分">
-      </div>
-      <div class="form-group">
-        <label class="field-label">游泳池 100m 配速（選填）</label>
-        <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請提供您在泳池的平均配速</div>
-        <input type="text" name="pool100mPace" placeholder="例如：2分10秒">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="field-label">對本次游泳團練的期望或過去游泳經歷？（選填）</label>
-      <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
     </div>
 
     <div class="section-title">06 / 同意聲明與規範</div>
