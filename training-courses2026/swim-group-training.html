@@ -125,6 +125,27 @@
       letter-spacing: 0.02em;
     }
 
+    /* 針對可點擊地點連結的樣式優化：底線與懸停變色 */
+    a.info-pill-clean .info-value-clean {
+      border-bottom: 1.5px solid var(--blue-main);
+      padding-bottom: 1px;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    
+    a.info-pill-clean:hover .info-value-clean {
+      border-bottom-color: var(--blue-dark);
+    }
+
+    /* 地標圖示的無限上下浮動動畫 */
+    @keyframes float-up-down {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    
+    .floating-icon {
+      animation: float-up-down 2s ease-in-out infinite;
+    }
+
     @media (max-width: 600px) {
       .info-grid {
         grid-template-columns: 1fr;
@@ -218,7 +239,7 @@
       font-size: 16px;
       font-weight: 600;
       color: #555;
-      width: 175px; /* 加寬以容納九月停課說明，確保電腦版對齊 */
+      width: 175px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -275,7 +296,6 @@
     @media (max-width: 600px) {
       .form-row { flex-direction: column; gap: 20px; margin-bottom: 20px; }
       
-      /* 手機版：優化日期列表改為上下排列，防止壓縮 */
       .date-row {
         flex-direction: column;
         align-items: flex-start;
@@ -399,7 +419,8 @@
 
     <a href="https://maps.app.goo.gl/w8Cet4BW3KBswusL9" target="_blank" class="info-pill-clean">
       <div class="info-icon-clean">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <!-- 在此處套用 floating-icon 動畫類別 -->
+        <svg class="floating-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
       </div>
       <div class="info-text-clean">
         <span class="info-label-clean">訓練地點</span>
