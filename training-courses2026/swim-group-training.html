@@ -1093,6 +1093,10 @@
           form.reset(); 
           bankDetailsGroup.style.display = 'none';
           bankLastFiveInput.required = false;
+
+          // 加這兩行，讓表單送出後成績面板會乖乖收合
+          triathlonPanel.style.display = 'none';
+          poolPanel.style.display = 'none';
           
           policyBoxes.forEach(box => {
             box.classList.remove('is-checked');
