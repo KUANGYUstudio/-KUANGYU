@@ -770,14 +770,28 @@
 
     <div class="section-title">03 / 其他</div>
     
-    <div class="form-row">
-      <div class="form-group">
-        <label class="field-label">鐵人賽游泳成績 </label>
+    <div class="form-group">
+      <label class="field-label">參考成績（選填）</label>
+      <div style="font-size: 13.5px; color: #777; margin-bottom: 12px; line-height: 1.5;">請選擇一項提供，幫助教練了解您的目前程度</div>
+      <div class="option-group row-layout" style="margin-bottom: 10px;">
+        <label class="option-label">
+          <input type="radio" name="perfType" value="triathlon">
+          <span>鐵人賽游泳成績</span>
+        </label>
+        <label class="option-label">
+          <input type="radio" name="perfType" value="pool">
+          <span>游泳池 100m 配速</span>
+        </label>
+      </div>
+
+      <div id="triathlonPanel" class="dynamic-panel">
+        <label class="field-label">鐵人賽游泳成績</label>
         <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請註明 51.5 / 113 / 226 賽事成績</div>
         <input type="text" name="triathlonSwimTime" placeholder="例如：113 賽事 45 分">
       </div>
-      <div class="form-group">
-        <label class="field-label">游泳池 100m 配速 </label>
+
+      <div id="poolPanel" class="dynamic-panel">
+        <label class="field-label">游泳池 100m 配速</label>
         <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請提供您在泳池的平均配速</div>
         <input type="text" name="pool100mPace" placeholder="例如：2分10秒">
       </div>
@@ -787,8 +801,6 @@
       <label class="field-label">對本次游泳團練的期望或過去游泳經歷？（選填）</label>
       <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
     </div>
-
-    <div class="section-title">04 / 門檻確認與方案</div>
     
     <div class="form-group">
       <label class="field-label">方案選擇</label>
