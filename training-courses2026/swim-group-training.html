@@ -678,27 +678,39 @@
     
     const formData = new FormData(form); 
     
+    // 更新為可接收 JSON 回傳值的處理邏輯，以應對額滿狀況
     fetch(scriptURL, { method: 'POST', body: formData })
-      .then(() => {
-        // 觸發自訂美化視窗
-        const modal = document.getElementById('customAlert');
-        modal.style.display = 'flex';
-        setTimeout(() => modal.classList.add('show'), 10);
-        
-        // 保留原本的文字提示與表單重置功能
-        msg.innerText = '報名成功，請至信箱查看報名確認信。'; 
-        msg.style.display = 'block'; 
-        msg.className = 'success';
-        
-        form.reset(); 
-        bankDetailsGroup.style.display = 'none';
-        bankLastFiveInput.required = false;
-        btn.disabled = false; 
-        btn.innerText = '確認送出報名';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      .then(response => response.json())
+      .then(data => {
+        if (data.result === 'full') {
+          alert('非常抱歉，本次課程報名已額滿！');
+          btn.disabled = false; 
+          btn.innerText = '確認送出報名';
+        } else if (data.result === 'success') {
+          // 觸發自訂美化視窗
+          const modal = document.getElementById('customAlert');
+          modal.style.display = 'flex';
+          setTimeout(() => modal.classList.add('show'), 10);
+          
+          // 保留原本的文字提示與表單重置功能
+          msg.innerText = '報名成功，請至信箱查看報名確認信。'; 
+          msg.style.display = 'block'; 
+          msg.className = 'success';
+          
+          form.reset(); 
+          bankDetailsGroup.style.display = 'none';
+          bankLastFiveInput.required = false;
+          btn.disabled = false; 
+          btn.innerText = '確認送出報名';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          alert('系統發生錯誤，請聯絡工作室協助處理。'); 
+          btn.disabled = false; 
+          btn.innerText = '確認送出報名';
+        }
       })
       .catch(() => {
-        alert('傳送失敗，請連繫工作室。'); 
+        alert('網路傳送失敗，請連繫工作室。'); 
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
       });
