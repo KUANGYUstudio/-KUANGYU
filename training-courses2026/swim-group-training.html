@@ -87,7 +87,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 18px;
-      margin-bottom: 30px; /* 縮減間距以容納適合對象區塊 */
+      margin-bottom: 30px; 
     }
 
     .info-pill-clean {
@@ -217,7 +217,7 @@
       border: 1px solid var(--pink-border);
       border-radius: 6px;
       background-color: var(--pink-bg);
-      margin-bottom: 12px; /* 縮小與下方備註的間距 */
+      margin-bottom: 12px; 
     }
 
     .schedule-table {
@@ -266,7 +266,7 @@
 
     .date-row {
       display: flex;
-      align-items: center;
+      align-items: flex-start; /* 改為對齊頂部，避免備註換行時月份置中飄移 */
       border-bottom: 1px solid var(--pink-border);
       padding: 20px 0;
     }
@@ -279,11 +279,12 @@
       font-size: 16px;
       font-weight: 600;
       color: #555;
-      width: 70px; 
+      width: 60px; 
       flex-shrink: 0;
       display: flex;
       align-items: center;
       gap: 4px;
+      padding-top: 4px; /* 微調讓文字與右邊的大數字視覺對齊 */
     }
 
     .days-wrapper {
@@ -305,11 +306,14 @@
       letter-spacing: 0.05em;
     }
 
+    /* 停課備註換行樣式 */
     .holiday-note {
-      font-size: 14px;
+      font-size: 13.5px;
       color: #888;
       font-weight: 500;
-      margin-left: 4px;
+      flex-basis: 100%; /* 強制換行 */
+      margin-top: 4px;
+      margin-left: 0;
     }
     
     .note { 
@@ -343,19 +347,24 @@
     @media (max-width: 600px) {
       .form-row { flex-direction: column; gap: 20px; margin-bottom: 20px; }
       
+      /* 手機版日期區塊排版修正 */
       .date-row {
-        flex-direction: column;
+        flex-direction: row; /* 保持同行，不分兩行 */
         align-items: flex-start;
         padding: 16px 0;
       }
       .month-label {
-        width: auto;
-        margin-bottom: 8px;
+        width: 50px; /* 手機版固定寬度，讓出空間給日期 */
+        margin-bottom: 0;
+        padding-top: 2px;
       }
       .date-list-container { padding: 10px 20px; width: auto; }
-      .days-wrapper { gap: 14px; }
+      .days-wrapper { 
+        gap: 14px; 
+        flex: 1; /* 讓日期區塊自動填滿剩餘空間 */
+      }
       .day-number { font-size: 19px; }
-      .holiday-note { font-size: 13px; margin-left: 0; }
+      .holiday-note { font-size: 12.5px; margin-top: 4px; }
     }
     
     label.field-label { 
@@ -655,7 +664,7 @@
             <td>
               <strong>速度訓練 ＋ 緩和</strong>
             </td>
-            <td>速度突破、爆發力訓練，以及最後的收操緩和。</td>
+            <td>提升神經肌肉的徵招效率，以及最後的收操緩和。</td>
           </tr>
         </tbody>
       </table>
