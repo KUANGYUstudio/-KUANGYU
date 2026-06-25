@@ -203,7 +203,7 @@
       border: 1px solid var(--pink-border);
       border-radius: 6px;
       background-color: var(--pink-bg);
-      margin-bottom: 50px;
+      margin-bottom: 12px; /* 縮小與下方備註的間距 */
     }
 
     .schedule-table {
@@ -599,7 +599,6 @@
 
   </div>
 
-  <!-- 適合對象特別區塊 -->
   <div class="target-audience-box">
     <div class="target-audience-title">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -618,33 +617,37 @@
           <tr>
             <th>團練時間</th>
             <th>核心訓練項目</th>
-            <th>預期訓練內容</th>
+            <th>訓練內容</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>06:30 - 06:50</td>
+            <td>06:30 - 06:45</td>
             <td>
               <strong>陸上熱身 ＋ 核心啟動</strong>
             </td>
-            <td>喚醒特定肌群，建立良好的水準線體態準備。</td>
+            <td>肌肉開機、打開關節活動度，做好準備再下水。</td>
           </tr>
           <tr>
-            <td>06:50 - 07:50</td>
+            <td>06:45 - 07:45</td>
             <td>
               <strong>水感技術訓練</strong>
             </td>
-            <td>主攻捷式效率優化、課表執行與雙水道分組專項特訓。</td>
+            <td>水感與技術優化，提升捷式效率，與課表執行。</td>
           </tr>
           <tr>
-            <td>07:50 - 08:00</td>
+            <td>07:45 - 08:00</td>
             <td>
               <strong>速度訓練 ＋ 緩和</strong>
             </td>
-            <td>高強度速度突破、爆發力維持，以及最後的收操放鬆。</td>
+            <td>速度突破、爆發力訓練，以及最後的收操緩和。</td>
           </tr>
         </tbody>
       </table>
+    </div>
+    
+    <div style="font-size: 13.5px; color: #777; margin-bottom: 50px; padding-left: 5px;">
+      ※ 教練會依狀況調整訓練內容
     </div>
 
     <div class="schedule-title">團練日期</div>
@@ -737,21 +740,21 @@
     <div class="section-title">03 / 門檻確認與方案</div>
     
     <div class="form-group">
-      <label class="field-label">報名門檻自我確認</label>
-      <div class="option-group">
-        <label class="option-label">
-          <input type="checkbox" name="prerequisite" value="確認符合門檻" required>
-          <span style="font-size: 14.5px; color: #444;">我已確認具備<strong style="color: var(--blue-dark); font-weight: 600;">【以捷式（自由式）連續游完 100 公尺不休息】</strong>之能力（不限速度），並理解第一堂課將進行現場泳力測驗。</span>
-        </label>
-      </div>
-    </div>
-
-    <div class="form-group" style="margin-top: 24px;">
       <label class="field-label">方案選擇</label>
       <div class="option-group">
         <label class="option-label">
           <input type="radio" name="plan" value="完整一期 10 堂課程（費用 $7,000）" checked required>
           <span>完整一期 10 堂課程（費用 $7,000）</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-top: 24px;">
+      <label class="field-label">報名門檻自我確認</label>
+      <div class="option-group">
+        <label class="option-label">
+          <input type="checkbox" name="prerequisite" value="確認符合門檻" required>
+          <span style="font-size: 14.5px; color: #444;">我已確認具備<strong style="color: var(--blue-dark); font-weight: 600;">【以捷式（自由式）連續游完 100 公尺不休息】</strong>之能力（不限速度），並理解第一堂課將進行現場泳力測驗。</span>
         </label>
       </div>
     </div>
@@ -780,10 +783,17 @@
 
     <div class="section-title">05 / 其他</div>
     
-    <div class="form-group">
-      <label class="field-label">近期游泳成績參考（選填）</label>
-      <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請提供過往鐵人賽游泳成績（務必註明 51.5 / 113 / 226）以及游泳池 100m 平均配速。</div>
-      <input type="text" name="swimPace" placeholder="例如：113 賽事 45 分 / 100m 配速 2分10秒">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="field-label">鐵人賽游泳成績（選填）</label>
+        <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請註明 51.5 / 113 / 226 賽事成績</div>
+        <input type="text" name="triathlonSwimTime" placeholder="例如：113 賽事 45 分">
+      </div>
+      <div class="form-group">
+        <label class="field-label">游泳池 100m 配速（選填）</label>
+        <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請提供您在泳池的平均配速</div>
+        <input type="text" name="pool100mPace" placeholder="例如：2分10秒">
+      </div>
     </div>
 
     <div class="form-group">
@@ -793,7 +803,6 @@
 
     <div class="section-title">06 / 同意聲明與規範</div>
 
-    <!-- 1. 課前聲明與退費機制 -->
     <div class="policy-box">
       <div class="policy-header">
         <label class="custom-checkbox-container">
@@ -819,7 +828,6 @@
       </div>
     </div>
 
-    <!-- 2. 天候提醒聲明 -->
     <div class="policy-box">
       <div class="policy-header">
         <label class="custom-checkbox-container">
@@ -840,7 +848,6 @@
       </div>
     </div>
 
-    <!-- 3. 影像肖像權聲明 -->
     <div class="policy-box" style="margin-bottom: 24px;">
       <div class="policy-header">
         <label class="custom-checkbox-container">
