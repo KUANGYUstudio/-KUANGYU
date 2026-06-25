@@ -1111,7 +1111,7 @@
           btn.innerText = '確認送出報名';
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
-          showAlert('系統發生錯誤，請聯絡工作室協助處理。', false); 
+          showAlert('錯誤原因：' + data.error, false);
           btn.disabled = false; 
           btn.innerText = '確認送出報名';
         }
