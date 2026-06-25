@@ -964,6 +964,23 @@
     }, 300);
   }
 
+  // --- 參考成績動態展開邏輯 ---
+  const perfRadios = document.querySelectorAll('input[name="perfType"]');
+  const triathlonPanel = document.getElementById('triathlonPanel');
+  const poolPanel = document.getElementById('poolPanel');
+
+  perfRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      if (e.target.value === 'triathlon') {
+        triathlonPanel.style.display = 'block';
+        poolPanel.style.display = 'none';
+      } else if (e.target.value === 'pool') {
+        poolPanel.style.display = 'block';
+        triathlonPanel.style.display = 'none';
+      }
+    });
+  });
+
   const policyBoxes = document.querySelectorAll('.policy-box');
   
   policyBoxes.forEach(box => {
@@ -1039,6 +1056,25 @@
       }
     }
 
+    // --- 參考成績前端驗證 ---
+    const selectedPerf = document.querySelector('input[name="perfType"]:checked');
+    if (selectedPerf) {
+      if (selectedPerf.value === 'triathlon') {
+        const distChecked = document.querySelector('input[name="triathlonDistance"]:checked');
+        const timeVal = document.querySelector('input[name="triathlonSwimTime"]').value.trim();
+        if (!distChecked || !timeVal) {
+          showAlert('請完整選擇鐵人賽事距離並填寫成績', false);
+          return;
+        }
+      } else if (selectedPerf.value === 'pool') {
+        const poolVal = document.querySelector('input[name="pool100mPace"]').value.trim();
+        if (!poolVal) {
+          showAlert('請填寫游泳池 100m 配速', false);
+          return;
+        }
+      }
+    }
+    
     btn.disabled = true; 
     btn.innerText = '處理中...';
     
