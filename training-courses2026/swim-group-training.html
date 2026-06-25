@@ -17,7 +17,7 @@
       --blue-light: #eaf6f7;
       --blue-border: #c0e6e8;
       --blue-bg: #f4fbfb;
-      --blue-tint: #f0f4f7; /* 勾選後的微藍底色 */
+      --blue-tint: #f0f4f7;
 
       /* 沈穩粉桃紅 (課表區) */
       --pink-main: #c47c88;
@@ -271,6 +271,14 @@
       color: #888;
       font-weight: 500;
       margin-left: 4px;
+    }
+    
+    .note { 
+      font-size: 13.5px; 
+      color: #555; 
+      margin-top: 20px;
+      line-height: 1.7; 
+      padding: 0 10px;
     }
 
     /* ==========================================
@@ -637,6 +645,11 @@
       </div>
 
     </div>
+    
+    <div class="note">
+      ※ 如需請假請務必於前一天告知，教練將提供自主練習的課表建議，恕不另行安排補課（天候因素除外）。<br>
+      ※ 詳細課程退費機制與天候規範，請見報名表單下方同意聲明。
+    </div>
   </div>
   
   <form id="trainingForm" novalidate>
@@ -739,7 +752,7 @@
 
     <div class="section-title">06 / 同意聲明與規範</div>
 
-    <!-- 課前聲明與退費機制 -->
+    <!-- 1. 課前聲明與退費機制 -->
     <div class="policy-box">
       <div class="policy-header">
         <label class="custom-checkbox-container">
@@ -754,19 +767,19 @@
       <div class="policy-content">
         <div class="policy-inner">
           <div style="margin-bottom: 14px;">
-            <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ 請假與補課機制</strong>
-            本課程具備連貫性進度，為維持訓練品質，請盡量避免缺席。如需請假請務必於前一天告知，教練將提供課表供自主練習，恕不另行安排補課或退費。
+            <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ 課程退費機制</strong>
+            以該次課程日期為基準。於課程 7 天前取消者，退還該次費用之 90%；於課程 3 天前取消者，退還 50%；於課程 3 天內取消者，恕不予退費。
           </div>
           <div style="margin-bottom: 0;">
-            <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ 費用與轉讓規定</strong>
-            本課程為一期預付季度制，開班後恕不接受單堂退費、請假扣款或轉讓他人。
+            <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ 請假與補課機制</strong>
+            本課程具備連貫性進度，為維持訓練品質，請盡量避免缺席。如需請假請務必於前一天告知，教練將提供課表供自主練習，恕不另行安排補課（天候因素除外）。
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 天候提醒聲明 -->
-    <div class="policy-box" style="margin-bottom: 24px;">
+    <!-- 2. 天候提醒聲明 -->
+    <div class="policy-box">
       <div class="policy-header">
         <label class="custom-checkbox-container">
           <input type="checkbox" name="agreeWeather" class="policy-checkbox" required>
@@ -782,6 +795,25 @@
           本團練於戶外游泳池進行，小雨原則上照常上課；如雨勢影響池底辨識、現場安全或場館公告暫停使用，教練將視情況調整或停止課程。<br><br>
           如現場聽見雷聲或看見閃電，為維護安全，將立即停止下水並全員離開池畔至安全處避難。自最後一次雷聲／閃電起滿 30 分鐘後，視現場天候及場館規定評估是否恢復課程。<br><br>
           若恢復後仍可完成至少 45 分鐘有效水中訓練，課程將調整內容後繼續進行；若因雷雨中斷過久、無法恢復有效訓練，該堂將列為天候取消，並提供 1 次指定游泳團練補課額度。補課額度限本人使用，60 日內有效，不折現、不轉讓；實際執行將以現場安全判斷及泳池場館規定為準。
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 影像肖像權聲明 -->
+    <div class="policy-box" style="margin-bottom: 24px;">
+      <div class="policy-header">
+        <label class="custom-checkbox-container">
+          <input type="checkbox" name="agreeImage" class="policy-checkbox" required>
+          <span class="custom-checkmark"></span>
+          <span class="checkbox-text">我已詳閱並同意影像與肖像權授權</span>
+        </label>
+        <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
+          <span>＋</span>
+        </div>
+      </div>
+      <div class="policy-content">
+        <div class="policy-inner">
+          完成報名即代表同意相關照片與影片授權光聿工作室用於社群分享、活動紀錄或宣傳使用。若有特殊考量不便入鏡，請務必於課前主動告知教練。
         </div>
       </div>
     </div>
@@ -895,7 +927,8 @@
     const requiredInputs = Array.from(form.querySelectorAll('[required]'));
     const policyMapping = {
       'agreeRefund': '課前聲明與退費機制',
-      'agreeWeather': '戶外游泳天候聲明'
+      'agreeWeather': '戶外游泳天候聲明',
+      'agreeImage': '影像與肖像權授權'
     };
 
     for (let input of requiredInputs) {
