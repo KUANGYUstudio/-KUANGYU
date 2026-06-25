@@ -8,7 +8,7 @@
   <meta property="og:title" content="光聿單堂功率體驗預約">
   <meta property="og:description" content="歡迎預約光聿單堂功率課程，請填寫資料並選擇預約日期。">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://kuangyustudio.github.io/-KUANGYU/logo_icon.png">
+  <meta property="og:image" content="https://kuangyustudio.github.io/-KUANGYU/KUANGYU_logo_icon.png">
 
   <style>
     /* =========================================
@@ -175,7 +175,7 @@
         opacity: 0.6;
     }
 
-    /* --- 費用版配色 (綠色) --- */
+    /* --- 費用版配色 (慢色) --- */
     .accordion-box.price-theme {
         background-color: var(--price-bg);
         border-color: #c8e6c9;
@@ -393,7 +393,7 @@
 
   <div class="container">
     
-    <img src="logo_icon.png" alt="光聿 Logo" class="main-logo">
+    <img src="../KUANGYU_logo_icon.png" alt="光聿 Logo" class="main-logo">
 
     <h1>光聿單堂功率體驗</h1>
     
@@ -418,7 +418,7 @@
                 <strong>購課折抵優惠：</strong><br><br>
                 若後續購買正式課卡（10堂/20堂），本堂體驗費 <span class="price-highlight">可全額折抵</span>。<br><br>
                 <div class="price-example">
-                    例如：購買 10 堂課方案 ($5500)<br>
+                    Example: 購買 10 堂課方案 ($5500)<br>
                     扣除已付 $660，<strong>僅需補差額 $4840</strong><br>
                     即享完整 10 堂優惠 <span style="color:#2e7d32">（含本次體驗，剩餘 9 堂）</span>
                 </div>
@@ -520,7 +520,7 @@
     let myTrialSignups = JSON.parse(localStorage.getItem('myTrialSignups')) || [];
     
     // ============================================
-    // 🔥 新增：自動清除超過 24 小時的本機報名記憶
+    // 🔥 自動清除超過 24 小時的本機報名記憶
     // ============================================
     const currentTs = new Date().getTime();
     myTrialSignups = myTrialSignups.filter(record => {
