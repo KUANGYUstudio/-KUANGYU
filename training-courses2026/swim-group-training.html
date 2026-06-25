@@ -772,7 +772,7 @@
     
     <div class="form-group">
       <label class="field-label">參考成績</label>
-      <div style="font-size: 13.5px; color: #777; margin-bottom: 12px; line-height: 1.5;">請選擇一項提供，幫助教練了解您的目前程度</div>
+      <div style="font-size: 13.5px; color: #777; margin-bottom: 12px; line-height: 1.5;">請擇一填寫，幫助教練了解您的目前程度</div>
       <div class="option-group row-layout" style="margin-bottom: 10px;">
         <label class="option-label">
           <input type="radio" name="perfType" value="triathlon" required>
@@ -785,9 +785,14 @@
       </div>
 
       <div id="triathlonPanel" class="dynamic-panel">
-        <label class="field-label">鐵人賽游泳成績</label>
-        <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請註明 51.5 / 113 / 226 賽事成績</div>
-        <input type="text" name="triathlonSwimTime" placeholder="例如：113 賽事 45 分">
+        <label class="field-label">鐵人賽事距離（必選）</label>
+        <div class="option-group row-layout" style="margin-bottom: 15px;">
+          <label class="option-label"><input type="radio" name="triathlonDistance" value="51.5"><span>51.5</span></label>
+          <label class="option-label"><input type="radio" name="triathlonDistance" value="113"><span>113</span></label>
+          <label class="option-label"><input type="radio" name="triathlonDistance" value="226"><span>226</span></label>
+        </div>
+        <label class="field-label">該賽事游泳成績</label>
+        <input type="text" name="triathlonSwimTime" placeholder="例如：45 分鐘">
       </div>
 
       <div id="poolPanel" class="dynamic-panel">
