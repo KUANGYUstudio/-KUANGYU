@@ -157,7 +157,7 @@
     }
 
     /* ==========================================
-       新增：費用說明區塊
+       費用說明區塊
        ========================================== */
     .fee-section {
       margin-bottom: 50px;
@@ -217,8 +217,8 @@
 
     .fee-item-price {
       font-size: 15px;
-      font-weight: 400; /* 移除原本的 600，改為 400 (一般字體) 或是 300 (更細的字體) */
-      letter-spacing: 0.05em; /* 稍微增加字距，讓細體更有質感 */
+      font-weight: 400;
+      letter-spacing: 0.05em;
     }
 
     .fee-item-price.highlight {
@@ -282,6 +282,7 @@
       display: block;
       width: 100%;
       max-width: 100%;
+      min-height: 48px;
       -webkit-appearance: none;
       appearance: none;
       padding: 12px 14px; 
@@ -614,7 +615,7 @@
 
 <div class="container">
   
-  <img src="../power-training/logo_icon.png" alt="KUANGYU Logo" class="main-logo">
+  <img src="../KUANGYU_logo_icon.png" alt="KUANGYU Logo" class="main-logo">
   <h1>2026崇越武嶺<br>爬坡特訓</h1>
 
   <div class="schedule-section">
@@ -888,7 +889,7 @@
 
           <div style="margin-bottom: 14px;">
             <strong style="color: var(--blue-dark); display: block; margin-bottom: 4px;">※ 爬坡特訓班（全報方案）</strong>
-            因享有專屬優惠，自 6/20 首次課程開始後，恕不接受中途退費或退還堂數。
+            因享有專屬優惠，自 6/20 首次課程開始後，恕不接受中途退費或退還堂數.
           </div>
 
           <div style="margin-bottom: 14px;">
@@ -991,7 +992,6 @@
     `;
   }
 
-  // 共用彈窗函式：可切換成功(綠色打勾)或錯誤(紅色驚嘆號)
   function showAlert(message, isSuccess = false) {
     const modal = document.getElementById('customAlert');
     const icon = document.getElementById('alertIcon');
@@ -1012,7 +1012,6 @@
     setTimeout(() => modal.classList.add('show'), 10);
   }
 
-  // 關閉自訂彈出視窗
   function closeAlert() {
     const modal = document.getElementById('customAlert');
     modal.classList.remove('show');
@@ -1021,7 +1020,6 @@
     }, 300);
   }
 
-  // 多組銀行級動態條款卡片邏輯 (使用迴圈處理)
   const policyBoxes = document.querySelectorAll('.policy-box');
   
   policyBoxes.forEach(box => {
@@ -1030,7 +1028,6 @@
     const content = box.querySelector('.policy-content');
     const icon = expandBtn.querySelector('span');
 
-    // 處理勾選變色
     checkbox.addEventListener('change', (e) => {
       if (e.target.checked) {
         box.classList.add('is-checked');
@@ -1039,7 +1036,6 @@
       }
     });
 
-    // 處理點擊「＋」號展開收合
     expandBtn.addEventListener('click', () => {
       box.classList.toggle('is-expanded');
       if (content.style.maxHeight) {
@@ -1093,7 +1089,6 @@
     });
   });
 
-  // 付款方式切換邏輯
   document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
     r.addEventListener('change', (e) => {
       if (e.target.value === '匯款') {
@@ -1107,15 +1102,12 @@
     });
   });
 
-  // 表單自訂驗證與送出處理
   form.onsubmit = e => {
     e.preventDefault();
 
-    // 1. 清除畫面上所有的錯誤紅框
     document.querySelectorAll('.error-border').forEach(el => el.classList.remove('error-border'));
     document.querySelectorAll('.group-error-border').forEach(el => el.classList.remove('group-error-border'));
 
-    // 2. 攔截原生的 required 檢查，加上自訂錯誤呈現
     const requiredInputs = Array.from(form.querySelectorAll('[required]'));
     const policyMapping = {
       'agreeRefund': '課前聲明與退費機制',
@@ -1125,13 +1117,11 @@
 
     for (let input of requiredInputs) {
       if (!input.checkValidity()) {
-        // 如果是條款未勾選，顯示自訂彈窗
         if (policyMapping[input.name]) {
           showAlert(`請詳閱「${policyMapping[input.name]}」並勾選`, false);
           return;
         }
 
-        // 如果是選擇題 (radio/checkbox)，將外圍群組加上紅框虛線，並平滑捲動
         if (input.type === 'radio' || input.type === 'checkbox') {
           const group = input.closest('.option-group') || input.closest('.payment-grid') || input.parentElement;
           if (group) group.classList.add('group-error-border');
@@ -1139,7 +1129,6 @@
           return;
         }
 
-        // 一般輸入框，加上實體紅框並直接 focus 游標
         input.classList.add('error-border');
         input.scrollIntoView({ behavior: 'smooth', block: 'center' });
         input.focus({ preventScroll: true });
@@ -1147,7 +1136,6 @@
       }
     }
 
-    // 3. 檢查進階動態邏輯 (未選方案等)
     const planRawEl = document.querySelector('input[name="planRaw"]:checked');
     if (!planRawEl) { 
       document.getElementById('planOptions').classList.add('group-error-border');
@@ -1179,7 +1167,6 @@
       finalTaiping = `參加（${taipingDateEl.value}）`;
     }
 
-    // 4. 通過所有驗證，準備送出
     btn.disabled = true; 
     btn.innerText = '處理中...';
     
@@ -1191,7 +1178,6 @@
     
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(() => {
-        // 呼叫成功的綠色彈窗
         showAlert('報名成功！請至信箱查看報名確認信。', true);
         
         form.reset(); 
@@ -1201,7 +1187,6 @@
         bankDetailsGroup.style.display = 'none';
         bankLastFiveInput.required = false;
         
-        // 將所有同意卡片恢復為初始未勾選、未展開狀態
         policyBoxes.forEach(box => {
           box.classList.remove('is-checked');
           box.classList.remove('is-expanded');
