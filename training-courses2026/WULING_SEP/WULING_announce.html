@@ -171,11 +171,10 @@
             color: #1a202c;
             margin-bottom: 4px;
             display: flex;
-            align-items: center; /* 讓文字和地圖圖示對齊 */
-            gap: 6px; /* 文字和圖示的間距 */
+            align-items: center; 
+            gap: 6px; 
         }
 
-        /* 地標圖示樣式 */
         .map-icon {
             color: var(--primary-color);
             display: inline-flex;
@@ -185,7 +184,7 @@
 
         .map-icon:hover {
             color: var(--strava-color);
-            transform: scale(1.15); /* 滑鼠懸停時微放大 */
+            transform: scale(1.15);
         }
 
         .map-icon svg {
@@ -292,7 +291,22 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="location-meta">途中停靠：7-11 泰勝門市</div>
+                    <div class="location-meta">集合與單車上車</div>
+                </div>
+
+                <!-- 新增：獨立出來的 7-11 行程節點 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="time-tag">途中停靠</span>
+                    <div class="location-title">
+                        7-11 泰勝門市
+                        <a href="https://maps.app.goo.gl/DAy1v4tHDHDkSWja7?g_st=ic" target="_blank" class="map-icon" title="查看 Google 地圖">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="location-meta">短暫休息與最後補給</div>
                 </div>
 
                 <div class="timeline-item">
