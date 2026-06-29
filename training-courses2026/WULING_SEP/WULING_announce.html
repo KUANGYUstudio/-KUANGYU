@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太平山單車行程通知</title>
+    <style>
+        :root {
+            --primary-color: #2b6cb0;
+            --strava-color: #e65c00;
+            --text-color: #2d3748;
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --alert-bg: #fffaf0;
+            --alert-border: #dd6b20;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 30px 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #1a365d;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 8px;
+        }
+
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .route-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            padding: 14px 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .route-card:hover {
+            border-color: var(--strava-color);
+            background: #fff5f0;
+            transform: translateY(-2px);
+        }
+
+        .route-name {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 6px;
+        }
+
+        .route-card:hover .route-name {
+            color: var(--strava-color);
+        }
+
+        .route-btn {
+            display: inline-block;
+            font-size: 11px;
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .route-card:hover .route-btn {
+            background: var(--strava-color);
+            color: white;
+        }
+
+        .timeline {
+            position: relative;
+            margin-bottom: 32px;
+            padding-left: 8px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 32px;
+            padding-bottom: 24px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 6px;
+            width: 2px;
+            height: 100%;
+            background: var(--border-color);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--primary-color);
+            z-index: 1;
+        }
+
+        .time-tag {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary-color);
+            background: #ebf8ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .location-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 4px;
+        }
+
+        .location-meta {
+            font-size: 13px;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+
+        .map-link {
+            display: inline-flex;
+            align-items: center;
+            font-size: 13px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .map-link:hover {
+            text-decoration: underline;
+        }
+
+        .control-box {
+            background: var(--alert-bg);
+            border-left: 4px solid var(--alert-border);
+            border-radius: 0 12px 12px 0;
+            padding: 16px;
+        }
+
+        .control-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #c05621;
+            margin-bottom: 10px;
+        }
+
+        .control-list {
+            list-style: none;
+        }
+
+        .control-list li {
+            font-size: 14px;
+            position: relative;
+            padding-left: 14px;
+            margin-bottom: 8px;
+            color: #4a5568;
+        }
+
+        .control-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 5px;
+            height: 5px;
+            background: var(--alert-border);
+            border-radius: 50%;
+        }
+
+        .control-list strong {
+            color: #2d3748;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 12px; }
+            .container { padding: 20px 16px; }
+            .routes-grid { gap: 8px; }
+            .route-name { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>太平山單車行程通知</h1>
+        </header>
+
+        <section>
+            <div class="section-title">路線規劃</div>
+            <div class="routes-grid">
+                <a href="https://www.strava.com/routes/3505873379023531170" target="_blank" class="route-card">
+                    <span class="route-name">A 組路線</span>
+                    <span class="route-btn">開啟 Strava</span>
+                </a>
+                <a href="https://www.strava.com/routes/3505876456656327576" target="_blank" class="route-card">
+                    <span class="route-name">B 組路線</span>
+                    <span class="route-btn">開啟 Strava</span>
+                </a>
+                <a href="https://www.strava.com/routes/3505873379022809250" target="_blank" class="route-card">
+                    <span class="route-name">C 組路線</span>
+                    <span class="route-btn">開啟 Strava</span>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-title">行程時間軸</div>
+            <div class="timeline">
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="time-tag">05:30</span>
+                    <div class="location-title">民權國小 出發</div>
+                    <div class="location-meta">途中停靠：7-11 泰勝門市</div>
+                    <a href="https://maps.app.goo.gl/DAy1v4tHDHDkSWja7?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="time-tag">08:00</span>
+                    <div class="location-title">土場車站 開騎</div>
+                    <div class="location-meta">預計出發時間</div>
+                    <a href="https://maps.app.goo.gl/GG2Z9q7yGLmX9MCw8?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="time-tag">補給點一</span>
+                    <div class="location-title">中間服務站</div>
+                    <div class="location-meta">第一階段補給與調度</div>
+                    <a href="https://maps.app.goo.gl/Jh3FrBaBdpYU7VRs5?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="time-tag">補給點二</span>
+                    <div class="location-title">白嶺巨木</div>
+                    <div class="location-meta">第二階段補給點</div>
+                    <a href="https://maps.app.goo.gl/7tg3HhVNwukMuMPh9?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="time-tag">C組終點</span>
+                    <div class="location-title">太平山停車場</div>
+                    <div class="location-meta">C組挑戰終點</div>
+                    <a href="https://maps.app.goo.gl/ch2vY1dqVkRTm6H3A?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="time-tag">A/B組終點</span>
+                    <div class="location-title">翠峰湖</div>
+                    <div class="location-meta">A組與B組最終目的地</div>
+                    <a href="https://maps.app.goo.gl/4QLvDcwFszpLQJ4t6?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="control-box">
+                <div class="control-title">時間管制規定（太平山停車場）</div>
+                <ul class="control-list">
+                    <li><strong>10:30 前抵達：</strong> 可繼續騎往翠峰湖。</li>
+                    <li><strong>10:30 未抵達：</strong> 將由現場車輛協助載送入內。</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
