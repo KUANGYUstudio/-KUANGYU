@@ -12,12 +12,14 @@
             --bg-color: #f7fafc;
             --card-bg: #ffffff;
             --border-color: #e2e8f0;
-            --alert-bg: #fffaf0;
-            --alert-border: #dd6b20;
             
-            /* 分支專用的綠色系 */
-            --branch-color: #38a169;
-            --branch-bg: #f0fff4;
+            /* 分支專用的黃色系 */
+            --branch-color: #d69e2e;
+            --branch-bg: #fffff0;
+            
+            /* 注意事項專用的桃紅色系 */
+            --alert-bg: #fff5f7;
+            --alert-border: #d6556d;
         }
         
         * {
@@ -39,7 +41,7 @@
             margin: 0 auto;
             background: var(--card-bg);
             border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
             padding: 30px 24px;
         }
 
@@ -132,7 +134,6 @@
             padding-bottom: 0;
         }
 
-        /* 垂直主幹道藍線 */
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -159,14 +160,11 @@
             z-index: 1;
         }
 
-        /* ==========================================
-           分支節點專用樣式 (7-11 與補給點)
-           ========================================== */
+        /* 分支節點 (黃色系) */
         .timeline-item.branch {
             padding-left: 56px; 
         }
 
-        /* 繪製連接主幹道與分支的橫線 */
         .timeline-item.branch::after {
             content: '';
             position: absolute;
@@ -177,25 +175,22 @@
             background: var(--border-color);
         }
 
-        /* 分支的圓點設定 */
         .timeline-item.branch .timeline-dot {
             left: 24px; 
             border-color: var(--branch-color); 
         }
 
-        /* 分支的時間與名稱標籤設定 */
         .timeline-item.branch .time-tag {
             color: var(--branch-color);
             background: var(--branch-bg);
         }
 
-        /* 分支的地圖圖示設定 */
         .timeline-item.branch .map-icon {
             color: var(--branch-color);
         }
 
         .timeline-item.branch .map-icon:hover {
-            color: #2f855a; 
+            color: #b7791f; 
         }
 
         .time-tag {
@@ -242,6 +237,7 @@
             margin-bottom: 8px;
         }
 
+        /* 桃紅色注意事項 */
         .control-box {
             background: var(--alert-bg);
             border-left: 4px solid var(--alert-border);
@@ -252,7 +248,7 @@
         .control-title {
             font-size: 15px;
             font-weight: 700;
-            color: #c05621;
+            color: var(--alert-border);
             margin-bottom: 10px;
         }
 
@@ -268,10 +264,6 @@
             color: #4a5568;
         }
 
-        .control-list li:last-child {
-            margin-bottom: 0;
-        }
-
         .control-list li::before {
             content: '';
             position: absolute;
@@ -284,14 +276,7 @@
         }
 
         .control-list strong {
-            color: #2d3748;
-        }
-
-        @media (max-width: 480px) {
-            body { padding: 12px; }
-            .container { padding: 20px 16px; }
-            .routes-grid { gap: 8px; }
-            .route-name { font-size: 14px; }
+            color: #1a202c;
         }
     </style>
 </head>
