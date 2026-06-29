@@ -141,10 +141,12 @@
             color: white;
         }
 
+        /* 修改：讓整個時間軸置中對齊 */
         .timeline {
             position: relative;
-            margin-bottom: 32px;
+            margin: 0 auto 32px auto;
             padding-left: 8px;
+            width: fit-content; 
         }
 
         .timeline-item {
@@ -178,7 +180,7 @@
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            background: white;
+            background: var(--primary-color); /* 修改為實心填滿藍色 */
             border: 3px solid var(--primary-color);
             z-index: 1;
         }
@@ -200,6 +202,7 @@
         .timeline-item.branch .timeline-dot {
             left: 24px; 
             border-color: var(--branch-color); 
+            background: white; /* 確保黃色分支為空心 */
         }
 
         .timeline-item.branch .time-tag {
@@ -226,7 +229,6 @@
             margin-bottom: 6px;
         }
 
-        /* 修改：移除底色，只留桃紅文字 */
         .group-badge {
             font-size: 13px;
             color: var(--alert-border);
@@ -386,6 +388,7 @@
             .container { padding: 20px 16px; }
             .routes-grid { gap: 8px; }
             .route-name { font-size: 14px; }
+            .timeline { width: 100%; margin-left: 0; }
         }
     </style>
 </head>
