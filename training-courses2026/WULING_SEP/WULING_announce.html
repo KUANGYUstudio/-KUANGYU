@@ -14,6 +14,10 @@
             --border-color: #e2e8f0;
             --alert-bg: #fffaf0;
             --alert-border: #dd6b20;
+            
+            /* 新增分支專用的綠色系 */
+            --branch-color: #38a169;
+            --branch-bg: #f0fff4;
         }
         
         * {
@@ -128,6 +132,7 @@
             padding-bottom: 0;
         }
 
+        /* 垂直主幹道 */
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -152,6 +157,45 @@
             background: white;
             border: 3px solid var(--primary-color);
             z-index: 1;
+        }
+
+        /* ==========================================
+           分支節點專用樣式 (如 7-11 休息站)
+           ========================================== */
+        .timeline-item.branch {
+            padding-left: 56px; /* 將內文進一步往右推 */
+        }
+
+        /* 繪製連接主幹道與分支的橫線 */
+        .timeline-item.branch::after {
+            content: '';
+            position: absolute;
+            left: 7px; /* 從主幹道中心點開始 */
+            top: 11px; /* 對齊圓點的垂直置中位置 */
+            width: 18px; /* 橫線長度 */
+            height: 2px;
+            background: var(--border-color);
+        }
+
+        /* 分支的圓點設定 */
+        .timeline-item.branch .timeline-dot {
+            left: 24px; /* 將圓點往右推至橫線末端 */
+            border-color: var(--branch-color); /* 替換為綠色 */
+        }
+
+        /* 分支的時間標籤設定 */
+        .timeline-item.branch .time-tag {
+            color: var(--branch-color);
+            background: var(--branch-bg);
+        }
+
+        /* 分支的地圖圖示設定 */
+        .timeline-item.branch .map-icon {
+            color: var(--branch-color);
+        }
+
+        .timeline-item.branch .map-icon:hover {
+            color: #2f855a; /* 懸停時呈現較深的綠色 */
         }
 
         .time-tag {
@@ -294,8 +338,8 @@
                     <div class="location-meta">集合與單車上車</div>
                 </div>
 
-                <!-- 新增：獨立出來的 7-11 行程節點 -->
-                <div class="timeline-item">
+                <!-- 加上 class="timeline-item branch" 即可套用分支樣式 -->
+                <div class="timeline-item branch">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">途中停靠</span>
                     <div class="location-title">
