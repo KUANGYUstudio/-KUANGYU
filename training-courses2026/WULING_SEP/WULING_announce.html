@@ -170,25 +170,33 @@
             font-weight: 700;
             color: #1a202c;
             margin-bottom: 4px;
+            display: flex;
+            align-items: center; /* 讓文字和地圖圖示對齊 */
+            gap: 6px; /* 文字和圖示的間距 */
+        }
+
+        /* 地標圖示樣式 */
+        .map-icon {
+            color: var(--primary-color);
+            display: inline-flex;
+            align-items: center;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .map-icon:hover {
+            color: var(--strava-color);
+            transform: scale(1.15); /* 滑鼠懸停時微放大 */
+        }
+
+        .map-icon svg {
+            width: 18px;
+            height: 18px;
         }
 
         .location-meta {
             font-size: 13px;
             color: #718096;
             margin-bottom: 8px;
-        }
-
-        .map-link {
-            display: inline-flex;
-            align-items: center;
-            font-size: 13px;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .map-link:hover {
-            text-decoration: underline;
         }
 
         .control-box {
@@ -276,49 +284,85 @@
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">05:30</span>
-                    <div class="location-title">民權國小 出發</div>
+                    <div class="location-title">
+                        民權國小 出發
+                        <a href="https://maps.app.goo.gl/6G7DRqyhV4xFctrx8" target="_blank" class="map-icon" title="查看 Google 地圖">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </a>
+                    </div>
                     <div class="location-meta">途中停靠：7-11 泰勝門市</div>
-                    <a href="https://maps.app.goo.gl/DAy1v4tHDHDkSWja7?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">08:00</span>
-                    <div class="location-title">土場車站 開騎</div>
+                    <div class="location-title">
+                        土場車站 開騎
+                        <a href="https://maps.app.goo.gl/GG2Z9q7yGLmX9MCw8?g_st=ic" target="_blank" class="map-icon" title="查看 Google 地圖">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </a>
+                    </div>
                     <div class="location-meta">預計出發時間</div>
-                    <a href="https://maps.app.goo.gl/GG2Z9q7yGLmX9MCw8?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">補給點一</span>
-                    <div class="location-title">中間服務站</div>
+                    <div class="location-title">
+                        中間服務站
+                        <a href="https://maps.app.goo.gl/Jh3FrBaBdpYU7VRs5?g_st=ic" target="_blank" class="map-icon" title="查看 Google 地圖">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </a>
+                    </div>
                     <div class="location-meta">第一階段補給與調度</div>
-                    <a href="https://maps.app.goo.gl/Jh3FrBaBdpYU7VRs5?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">補給點二</span>
-                    <div class="location-title">白嶺巨木</div>
+                    <div class="location-title">
+                        白嶺巨木
+                        <a href="https://maps.app.goo.gl/7tg3HhVNwukMuMPh9?g_st=ic" target="_blank" class="map-icon" title="查看 Google 地圖">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </a>
+                    </div>
                     <div class="location-meta">第二階段補給點</div>
-                    <a href="https://maps.app.goo.gl/7tg3HhVNwukMuMPh9?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">C組終點</span>
-                    <div class="location-title">太平山停車場</div>
+                    <div class="location-title">
+                        太平山停車場
+                        <a href="https://maps.app.goo.gl/ch2vY1dqVkRTm6H3A?g_st=ic" target="_blank" class="map-icon" title="查看 Google 地圖">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </a>
+                    </div>
                     <div class="location-meta">C組挑戰終點</div>
-                    <a href="https://maps.app.goo.gl/ch2vY1dqVkRTm6H3A?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">A/B組終點</span>
-                    <div class="location-title">翠峰湖</div>
+                    <div class="location-title">
+                        翠峰湖
+                        <a href="https://maps.app.goo.gl/4QLvDcwFszpLQJ4t6?g_st=ic" target="_blank" class="map-icon" title="查看 Google 地圖">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </a>
+                    </div>
                     <div class="location-meta">A組與B組最終目的地</div>
-                    <a href="https://maps.app.goo.gl/4QLvDcwFszpLQJ4t6?g_st=ic" target="_blank" class="map-link">查看 Google 地圖</a>
                 </div>
 
             </div>
