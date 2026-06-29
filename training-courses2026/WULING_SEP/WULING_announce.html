@@ -15,7 +15,7 @@
             --alert-bg: #fffaf0;
             --alert-border: #dd6b20;
             
-            /* 新增分支專用的綠色系 */
+            /* 分支專用的綠色系 */
             --branch-color: #38a169;
             --branch-bg: #f0fff4;
         }
@@ -39,7 +39,7 @@
             margin: 0 auto;
             background: var(--card-bg);
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
             padding: 30px 24px;
         }
 
@@ -132,7 +132,7 @@
             padding-bottom: 0;
         }
 
-        /* 垂直主幹道 */
+        /* 垂直主幹道藍線 */
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -160,30 +160,30 @@
         }
 
         /* ==========================================
-           分支節點專用樣式 (如 7-11 休息站)
+           分支節點專用樣式 (7-11 與補給點)
            ========================================== */
         .timeline-item.branch {
-            padding-left: 56px; /* 將內文進一步往右推 */
+            padding-left: 56px; 
         }
 
         /* 繪製連接主幹道與分支的橫線 */
         .timeline-item.branch::after {
             content: '';
             position: absolute;
-            left: 7px; /* 從主幹道中心點開始 */
-            top: 11px; /* 對齊圓點的垂直置中位置 */
-            width: 18px; /* 橫線長度 */
+            left: 7px; 
+            top: 11px; 
+            width: 18px; 
             height: 2px;
             background: var(--border-color);
         }
 
         /* 分支的圓點設定 */
         .timeline-item.branch .timeline-dot {
-            left: 24px; /* 將圓點往右推至橫線末端 */
-            border-color: var(--branch-color); /* 替換為綠色 */
+            left: 24px; 
+            border-color: var(--branch-color); 
         }
 
-        /* 分支的時間標籤設定 */
+        /* 分支的時間與名稱標籤設定 */
         .timeline-item.branch .time-tag {
             color: var(--branch-color);
             background: var(--branch-bg);
@@ -195,7 +195,7 @@
         }
 
         .timeline-item.branch .map-icon:hover {
-            color: #2f855a; /* 懸停時呈現較深的綠色 */
+            color: #2f855a; 
         }
 
         .time-tag {
@@ -338,7 +338,6 @@
                     <div class="location-meta">集合與單車上車</div>
                 </div>
 
-                <!-- 加上 class="timeline-item branch" 即可套用分支樣式 -->
                 <div class="timeline-item branch">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">途中停靠</span>
@@ -367,7 +366,7 @@
                     <div class="location-meta">預計出發時間</div>
                 </div>
 
-                <div class="timeline-item">
+                <div class="timeline-item branch">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">補給點一</span>
                     <div class="location-title">
@@ -381,7 +380,7 @@
                     <div class="location-meta">第一階段補給與調度</div>
                 </div>
 
-                <div class="timeline-item">
+                <div class="timeline-item branch">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">補給點二</span>
                     <div class="location-title">
