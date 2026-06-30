@@ -83,7 +83,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin-bottom: 32px;
+            margin-bottom: 16px; /* 縮小與下方建議區塊的距離 */
         }
 
         .route-card {
@@ -141,18 +141,43 @@
             color: white;
         }
 
-        /* 讓整個時間軸置中對齊 */
+        /* 新增：建議分組區塊 */
+        .group-suggestion {
+            background-color: #ebf8ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 14px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 32px;
+        }
+        .suggestion-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        .suggestion-content {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        .suggestion-item strong {
+            color: #2d3748;
+        }
+
+        /* 讓整個時間軸置中對齊，並把時間標籤移到左側 */
         .timeline {
             position: relative;
             margin: 0 auto 32px auto;
-            padding-left: 8px;
+            padding-left: 86px; /* 為左側的時間標籤留出空間 */
             width: fit-content; 
         }
 
         .timeline-item {
             position: relative;
-            padding-left: 32px;
-            padding-bottom: 24px;
+            padding-left: 24px;
+            padding-bottom: 28px;
+            min-height: 50px;
         }
 
         .timeline-item:last-child {
@@ -186,7 +211,7 @@
         }
 
         .timeline-item.branch {
-            padding-left: 56px; 
+            padding-left: 48px; 
         }
 
         .timeline-item.branch::after {
@@ -205,9 +230,26 @@
             background: white; 
         }
 
+        .time-tag {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--primary-color);
+            background: #ebf8ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            
+            /* 絕對定位移到左邊 */
+            position: absolute;
+            left: -86px;
+            top: 0;
+            width: 76px;
+            text-align: center;
+        }
+
         .timeline-item.branch .time-tag {
             color: var(--branch-color);
             background: var(--branch-bg);
+            left: -62px; /* 補償 branch 節點本身的偏移 */
         }
 
         .timeline-item.branch .map-icon {
@@ -216,17 +258,6 @@
 
         .timeline-item.branch .map-icon:hover {
             color: #b7791f; 
-        }
-
-        .time-tag {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary-color);
-            background: #ebf8ff;
-            padding: 2px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 6px;
         }
 
         .group-badge {
@@ -241,6 +272,13 @@
             margin-bottom: 6px;
         }
 
+        /* 讓開騎標籤在桌面版不往下掉 */
+        .timeline-item .location-title-wrap {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
         .location-title {
             font-size: 17px;
             font-weight: 700;
@@ -251,11 +289,10 @@
             gap: 6px; 
         }
 
-        /* 新增：里程提示專用樣式 */
+        /* 里程提示專用樣式 */
         .mileage-hint {
             font-size: 13px;
             font-weight: 400;
-            /* 原本為灰色 #718096，已修改為純黑色 */
             color: #000000;
             margin-left: 2px;
         }
@@ -393,11 +430,40 @@
             border-radius: 8px;
         }
         
+        /* 手機版排版調整 */
         @media (max-width: 480px) {
             body { padding: 12px; }
             .container { padding: 20px 16px; }
             .routes-grid { gap: 8px; }
             .route-name { font-size: 15px; }
+            
+            .suggestion-content {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            /* 手機版時，把時間標籤推回上方，避免超出螢幕 */
+            .timeline {
+                padding-left: 12px;
+                width: 100%;
+            }
+            .timeline-item {
+                 padding-left: 32px;
+            }
+            .timeline-item.branch {
+                 padding-left: 56px;
+            }
+            .time-tag {
+                position: relative;
+                left: auto;
+                top: auto;
+                width: auto;
+                display: inline-block;
+                margin-bottom: 6px;
+            }
+            .timeline-item.branch .time-tag {
+                 left: auto;
+            }
         }
     </style>
 </head>
@@ -437,6 +503,15 @@
                     <span class="route-btn">開啟 Strava</span>
                 </a>
             </div>
+
+            <div class="group-suggestion">
+                <div class="suggestion-title">建議分組（以中社測驗成績為參考）：</div>
+                <div class="suggestion-content">
+                    <span class="suggestion-item"><strong>A組：</strong>&lt; 16分鐘</span>
+                    <span class="suggestion-item"><strong>B組：</strong>18 - 20分鐘</span>
+                    <span class="suggestion-item"><strong>C組：</strong>20 - 25分鐘</span>
+                </div>
+            </div>
         </section>
 
         <section>
@@ -460,14 +535,16 @@
                 <div class="timeline-item branch">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">途中停靠</span>
-                    <span class="group-badge">A組開騎！</span>
-                    <div class="location-title">
-                        7-11 泰勝門市
-                        <a href="https://maps.app.goo.gl/DAy1v4tHDHDkSWja7?g_st=ic" target="_blank" class="map-icon" title="查看 Google 地圖">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                            </svg>
-                        </a>
+                    <div class="location-title-wrap">
+                        <div class="location-title">
+                            7-11 泰勝門市
+                            <a href="https://maps.app.goo.gl/DAy1v4tHDHDkSWja7?g_st=ic" target="_blank" class="map-icon" title="查看 Google 地圖">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <span class="group-badge">A組開騎！</span>
                     </div>
                     <div class="location-meta">短暫休息與最後補給</div>
                 </div>
@@ -475,15 +552,18 @@
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <span class="time-tag">08:00</span>
-                    <span class="group-badge">B、C組開騎！</span>
-                    <div class="location-title">
-                        太平山售票口 開騎
-                        <a href="https://maps.app.goo.gl/yXdznqmTuZjFTDVa6" target="_blank" class="map-icon" title="查看 Google 地圖">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                            </svg>
-                        </a>
+                    <div class="location-title-wrap">
+                        <div class="location-title">
+                            太平山售票口 開騎
+                            <a href="https://maps.app.goo.gl/yXdznqmTuZjFTDVa6" target="_blank" class="map-icon" title="查看 Google 地圖">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <span class="group-badge">B、C組開騎！</span>
                     </div>
+                    <div class="location-meta">預計出發時間</div>
                 </div>
 
                 <div class="timeline-item branch">
@@ -497,6 +577,7 @@
                             </svg>
                         </a>
                     </div>
+                    <div class="location-meta">第一階段補給與調度</div>
                 </div>
 
                 <div class="timeline-item branch">
@@ -524,6 +605,7 @@
                             </svg>
                         </a>
                     </div>
+                    <div class="location-meta">C組挑戰終點</div>
                 </div>
 
                 <div class="timeline-item">
@@ -537,20 +619,7 @@
                             </svg>
                         </a>
                     </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <span class="time-tag">吃午餐！</span>
-                    <div class="location-title">
-                        享森活創意料理
-                        <!-- 已修正：拿掉 inline style，改為 class="map-icon" -->
-                        <a href="https://maps.app.goo.gl/SYZm2JpYoiK83cdm7?g_st=il" target="_blank" class="map-icon" title="查看 Google 地圖">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                            </svg>
-                        </a>
-                    </div>
+                    <div class="location-meta">A組與B組最終目的地</div>
                 </div>
 
             </div>
@@ -565,6 +634,7 @@
                     <li>補給車： 2000元／人（$13000／車）</li>
                     <li>午餐：約$400-$500／人 </li>
                     <li>太平山入園費：<strong>現金 200 元</strong>。</li>
+                    <li style="color: var(--alert-border); font-weight: bold; margin-top: 8px;">※ 提醒：請先給教練「保母車費用」即可，餐費等吃飯時再收，入園費請自己帶現金入園時給售票口。</li>
                 </ul>
             </div>
 
@@ -574,12 +644,14 @@
                     <li><strong>裝備：</strong>
                         <ul class="notice-sub-list">
                             <li>自行車騎乘裝備</li>
-                            <li>換洗衣物</li>
                             <li>水壺</li>
                             <li>電解質／鹽錠</li>
                             <li>能量果膠</li>
                             <li>前後燈（建議攜帶）</li>
-                            <li>符合個人輪組規格的全新內胎 1 條、以及換胎工具，可隨身攜帶或放在補給車上。</li>
+                            <li>換洗衣物</li>
+                        </ul>
+                    </li>
+                    <li>請準備 符合個人輪組規格的全新內胎 1 條與換胎工具、可自行攜帶或是放在補給車上。</li>
                 </ul>
                 <div style="margin-top: 16px; font-size: 15px; font-weight: 700; color: var(--alert-border);">請務必於行前再三檢查自行車的車況！</div>
             </div>
