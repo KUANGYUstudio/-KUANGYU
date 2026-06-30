@@ -83,7 +83,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin-bottom: 16px; /* 縮小與下方建議區塊的距離 */
+            margin-bottom: 16px; 
         }
 
         .route-card {
@@ -141,7 +141,7 @@
             color: white;
         }
 
-        /* 建議分組區塊 (已移除深藍直槓) */
+        /* 建議分組區塊 */
         .group-suggestion {
             background-color: #ebf8ff;
             padding: 14px 16px;
@@ -168,7 +168,7 @@
         .timeline {
             position: relative;
             margin: 0 auto 32px auto;
-            padding-left: 116px; /* 為左側的時間標籤留出空間 */
+            padding-left: 116px; 
             width: fit-content; 
         }
 
@@ -249,7 +249,6 @@
         .timeline-item.branch .time-tag {
             color: var(--branch-color);
             background: var(--branch-bg);
-            /* 移除原本向右推的 left 偏移，讓分支標籤與主幹道標籤完美對齊左側 */
         }
 
         .timeline-item.branch .map-icon {
@@ -262,7 +261,7 @@
 
         .group-badge {
             font-size: 12px;
-            color: #de7388; /* 調柔和的粉桃色 */
+            color: #de7388; 
             background: transparent;
             margin-left: 8px;
             font-weight: 700;
@@ -272,7 +271,6 @@
             margin-bottom: 6px;
         }
 
-        /* 讓開騎標籤在桌面版不往下掉 */
         .timeline-item .location-title-wrap {
             display: flex;
             align-items: center;
@@ -442,27 +440,35 @@
                 gap: 4px;
             }
 
-            /* 手機版時，把時間標籤推回上方，避免超出螢幕 */
+            /* 手機版保留左側時間軸排版，但進行等比例縮放以適應螢幕 */
             .timeline {
-                padding-left: 12px;
+                padding-left: 90px; 
                 width: 100%;
             }
+            .time-tag {
+                left: -90px;
+                width: 82px;
+                font-size: 12px;
+                padding: 2px 4px;
+            }
             .timeline-item {
-                 padding-left: 32px;
+                 padding-left: 20px;
             }
             .timeline-item.branch {
-                 padding-left: 56px;
+                 padding-left: 42px;
             }
-            .time-tag {
-                position: relative;
-                left: auto;
-                top: auto;
-                width: auto;
-                display: inline-block;
-                margin-bottom: 6px;
+            .timeline-item.branch .timeline-dot {
+                 left: 20px;
             }
-            .timeline-item.branch .time-tag {
-                 left: auto;
+            .timeline-item.branch::after {
+                 width: 14px;
+            }
+            
+            .location-title {
+                font-size: 16px;
+            }
+            .group-badge {
+                margin-left: 4px;
             }
         }
     </style>
@@ -504,10 +510,11 @@
                 </a>
             </div>
 
+            <!-- 建議分組區塊 -->
             <div class="group-suggestion">
                 <div class="suggestion-title">建議分組（以中社測驗成績為參考）：</div>
                 <div class="suggestion-content">
-                    <span class="suggestion-item"><strong>A組：</strong>< 16分鐘</span>
+                    <span class="suggestion-item"><strong>A組：</strong>&lt; 16分鐘</span>
                     <span class="suggestion-item"><strong>B組：</strong>18 - 20分鐘</span>
                     <span class="suggestion-item"><strong>C組：</strong>20 - 25分鐘</span>
                 </div>
