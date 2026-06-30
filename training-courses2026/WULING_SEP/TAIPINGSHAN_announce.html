@@ -141,12 +141,11 @@
             color: white;
         }
 
-        /* 新增：建議分組區塊 */
+        /* 建議分組區塊 (已移除深藍直槓) */
         .group-suggestion {
             background-color: #ebf8ff;
-            border-left: 4px solid var(--primary-color);
             padding: 14px 16px;
-            border-radius: 0 8px 8px 0;
+            border-radius: 8px;
             margin-bottom: 32px;
         }
         .suggestion-title {
@@ -169,7 +168,7 @@
         .timeline {
             position: relative;
             margin: 0 auto 32px auto;
-            padding-left: 86px; /* 為左側的時間標籤留出空間 */
+            padding-left: 116px; /* 為左側的時間標籤留出空間 */
             width: fit-content; 
         }
 
@@ -238,18 +237,19 @@
             padding: 2px 8px;
             border-radius: 4px;
             
-            /* 絕對定位移到左邊 */
+            /* 絕對定位移到左邊，確保不折行 */
             position: absolute;
-            left: -86px;
+            left: -116px;
             top: 0;
-            width: 76px;
+            width: 104px;
+            white-space: nowrap;
             text-align: center;
         }
 
         .timeline-item.branch .time-tag {
             color: var(--branch-color);
             background: var(--branch-bg);
-            left: -62px; /* 補償 branch 節點本身的偏移 */
+            /* 移除原本向右推的 left 偏移，讓分支標籤與主幹道標籤完美對齊左側 */
         }
 
         .timeline-item.branch .map-icon {
@@ -262,7 +262,7 @@
 
         .group-badge {
             font-size: 12px;
-            color: #de7388;
+            color: #de7388; /* 調柔和的粉桃色 */
             background: transparent;
             margin-left: 8px;
             font-weight: 700;
@@ -507,7 +507,7 @@
             <div class="group-suggestion">
                 <div class="suggestion-title">建議分組（以中社測驗成績為參考）：</div>
                 <div class="suggestion-content">
-                    <span class="suggestion-item"><strong>A組：</strong>&lt; 16分鐘</span>
+                    <span class="suggestion-item"><strong>A組：</strong>< 16分鐘</span>
                     <span class="suggestion-item"><strong>B組：</strong>18 - 20分鐘</span>
                     <span class="suggestion-item"><strong>C組：</strong>20 - 25分鐘</span>
                 </div>
@@ -620,6 +620,19 @@
                         </a>
                     </div>
                     <div class="location-meta">A組與B組最終目的地</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="time-tag">吃午餐！</span>
+                    <div class="location-title">
+                        享森活創意料理
+                        <a href="https://maps.app.goo.gl/SYZm2JpYoiK83cdm7?g_st=il" target="_blank" class="map-icon" title="查看 Google 地圖">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
             </div>
