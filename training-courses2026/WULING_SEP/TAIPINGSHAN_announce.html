@@ -255,7 +255,8 @@
         .mileage-hint {
             font-size: 13px;
             font-weight: 400;
-            color: #718096;
+            /* 原本為灰色 #718096，已修改為純黑色 */
+            color: #000000;
             margin-left: 2px;
         }
 
@@ -543,8 +544,9 @@
                     <span class="time-tag">吃午餐！</span>
                     <div class="location-title">
                         享森活創意料理
-                        <a href="https://maps.app.goo.gl/SYZm2JpYoiK83cdm7?g_st=il" target="_blank" style="color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 14px; height: 14px;">
+                        <!-- 已修正：拿掉 inline style，改為 class="map-icon" -->
+                        <a href="https://maps.app.goo.gl/SYZm2JpYoiK83cdm7?g_st=il" target="_blank" class="map-icon" title="查看 Google 地圖">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                             </svg>
                         </a>
@@ -558,9 +560,11 @@
             <div class="section-title">行前安全與注意事項</div>
 
             <div class="notice-block">
-                <div class="notice-block-title">一、 費用準備</div>
+                <div class="notice-block-title">一、 費用</div>
                 <ul class="notice-list">
-                    <li>請隨身攜帶<strong>現金 200 元</strong>，以便支付太平山國家森林遊樂區之入園費用。</li>
+                    <li>補給車： 2000元／人（$13000／車）</li>
+                    <li>午餐：約$400-$500／人 </li>
+                    <li>另請隨身攜帶現金 200 元，以便支付太平山國家森林遊樂區之入園費用。</li>
                 </ul>
             </div>
 
@@ -587,6 +591,7 @@
                 <ul class="notice-list">
                     <li>盡量維持每小時補充 60 克<strong>碳水化合物</strong>，不要感覺餓才吃東西。</li>
                     <li>每 45-60 分鐘要記得補充<strong>電解質</strong>，避免肌肉訊號中斷或是中暑！</li>
+                    <li>記得多<strong>補充水分</strong>！可以每 15 分鐘一口。</li>
                 </ul>
             </div>
 
