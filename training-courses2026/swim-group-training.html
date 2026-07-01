@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026 光聿游泳團練｜技術優化班</title>
+  <title>2026 光聿游泳團練｜季度技術優化班</title>
  
   <meta property="og:image" content="https://kuangyustudio.github.io/-KUANGYU/KUANGYU_logo_icon.png">
   
@@ -170,28 +170,95 @@
     }
 
     /* ==========================================
-       適合對象特別區塊
+       適合對象 (參加資格風格)
        ========================================== */
-    .target-audience-box {
-      background-color: var(--blue-light);
-      border-left: 4px solid var(--blue-main);
-      border-radius: 6px;
-      padding: 20px;
-      margin-bottom: 50px;
-      color: #444;
-      font-size: 14.5px;
-      line-height: 1.7;
+    .qual-section { 
+      margin-bottom: 50px; 
+      color: #333; 
     }
-
-    .target-audience-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      color: var(--blue-dark);
-      font-size: 16px;
-      margin-bottom: 10px;
-      letter-spacing: 0.05em;
+    .qual-title-wrapper { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      margin-bottom: 20px; 
+    }
+    .qual-icon-box {
+      width: 38px; 
+      height: 38px; 
+      background-color: #ffedd5; 
+      border-radius: 8px;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: #ea580c;
+    }
+    .qual-title-text { 
+      font-size: 20px; 
+      font-weight: 800; 
+      color: #111827; 
+      margin: 0; 
+      letter-spacing: 0.05em; 
+    }
+    
+    .qual-list { 
+      list-style: none; 
+      padding: 0; 
+      margin: 0 0 20px 0; 
+    }
+    .qual-list-item { 
+      display: flex; 
+      align-items: flex-start; 
+      gap: 12px; 
+      margin-bottom: 16px; 
+      font-size: 15.5px; 
+      line-height: 1.6; 
+      font-weight: 500; 
+      color: #111827;
+    }
+    
+    .qual-check-icon {
+      flex-shrink: 0; 
+      width: 22px; 
+      height: 22px; 
+      background-color: #ea580c; 
+      border-radius: 50%;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: white; 
+      margin-top: 2px;
+    }
+    
+    .qual-nested-box {
+      background-color: #f9fafb; 
+      border-radius: 12px; 
+      padding: 22px 24px; 
+      margin-top: 10px; 
+      border: 1px solid #f3f4f6;
+    }
+    .qual-nested-title { 
+      display: flex; 
+      align-items: flex-start; 
+      gap: 12px; 
+      font-size: 15.5px; 
+      font-weight: 700; 
+      margin-bottom: 16px; 
+      color: #111827;
+    }
+    
+    .qual-sub-list { 
+      margin: 0; 
+      padding-left: 34px; 
+      list-style-type: disc; 
+      color: #4b5563; 
+    }
+    .qual-sub-list li { 
+      margin-bottom: 12px; 
+      font-size: 14.5px; 
+      line-height: 1.6; 
+    }
+    .qual-sub-list li:last-child { 
+      margin-bottom: 0; 
     }
 
     /* ==========================================
@@ -630,13 +697,41 @@
 
   </div>
 
-  <div class="target-audience-box">
-    <div class="target-audience-title">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-      適合對象
+  <div class="qual-section">
+    <div class="qual-title-wrapper">
+      <div class="qual-icon-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+      </div>
+      <h2 class="qual-title-text">適合對象</h2>
     </div>
-    本團練專注於「水感與技術提升」、「捷式（自由式）動作優化」。<br>
-    參加者須具備<strong style="color: var(--blue-dark);">以捷式連續游完 200 公尺不休息</strong>之最低門檻能力，適合想突破速度瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者。
+
+    <ul class="qual-list">
+      <li class="qual-list-item">
+        <div class="qual-check-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <span>本團練專注於「水感與技術提升」、「捷式（自由式）動作優化」。</span>
+      </li>
+      <li class="qual-list-item">
+        <div class="qual-check-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <span>名額限制：<strong>5 人開班，15 人滿班</strong>。</span>
+      </li>
+    </ul>
+
+    <div class="qual-nested-box">
+      <div class="qual-nested-title">
+        <div class="qual-check-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <span>參加者須具備最低門檻能力：</span>
+      </div>
+      <ul class="qual-sub-list">
+        <li>可<strong style="color: var(--blue-dark);">以捷式連續游完 100 公尺不休息</strong>（不限速度）。</li>
+        <li>適合想突破速度瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者。</li>
+      </ul>
+    </div>
   </div>
 
   <div class="schedule-section">
@@ -825,7 +920,7 @@
       <div class="option-group">
         <label class="option-label">
           <input type="checkbox" name="prerequisite" value="確認符合門檻" required>
-          <span style="font-size: 14.5px; color: #444;">我已確認具備<strong style="color: var(--blue-dark); font-weight: 600;">【以捷式（自由式）連續游完 200 公尺不休息】</strong>之能力（不限速度），並理解第一堂課將進行現場泳力測驗。</span>
+          <span style="font-size: 14.5px; color: #444;">我已確認具備<strong style="color: var(--blue-dark); font-weight: 600;">【以捷式（自由式）連續游完 100 公尺不休息】</strong>之能力（不限速度），並理解第一堂課將進行現場泳力測驗。</span>
         </label>
       </div>
     </div>
