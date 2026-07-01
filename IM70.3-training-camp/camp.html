@@ -528,8 +528,8 @@
                             <i class="fas fa-clock text-white text-sm sm:text-base"></i>
                         </div>
                         <div class="bg-white py-4 px-6 sm:px-7 rounded-2xl border border-slate-100 shadow-lg transition hover:border-orange-100 hover:shadow-xl w-full">
-                            <span class="text-sm font-bold text-iron-orange-600 tracking-wider">6/30 (二) 24:00</span>
-                            <h4 class="text-xl font-bold text-slate-950 mt-1 mb-2">早鳥優惠截止</h4>
+                            <span class="text-sm font-bold text-iron-orange-600 tracking-wider">7/7 (二) 24:00止</span>
+                            <h4 class="text-xl font-bold text-slate-950 mt-1 mb-2">早鳥優惠延長</h4>
                             <p class="text-slate-700 text-sm md:text-base leading-relaxed">請把握時間完成報名手續，享有最優價格。</p>
                         </div>
                     </div>
@@ -606,8 +606,8 @@
             const now = new Date();
 
             // --- 功能一：早鳥價格自動切換指令 ---
-            // 設定早鳥結束時間：2026年6月30日 24:00 (即 7月1日 00:00:00)
-            const earlyBirdDeadline = new Date(2026, 6, 1); // 6 代表 7 月
+            // 設定早鳥結束時間：2026年7月7日 24:00 (即 7月8日 00:00:00)
+            const earlyBirdDeadline = new Date(2026, 6, 8); // 6 代表 7 月
 
             if (now >= earlyBirdDeadline) {
                 // 1. 更新基本方案
