@@ -6,7 +6,7 @@
   <title>光聿功率課</title>
   <style>
     /* =========================================
-       🎨 全局設定 (極簡質感版)
+       全局設定 (極簡質感版)
        ========================================= */
     :root {
       --bg-color: #f8f9fa;
@@ -50,19 +50,19 @@
     }
 
     /* =========================================
-       🔥 Logo 設定 (新增此段 CSS)
+       Logo 設定 (新增此段 CSS)
        ========================================= */
     .main-logo {
         display: block;
         margin: 0 auto 5px; /* 置中，下方留一點白 */
-        width: 40px;        /* 🎯 手機版預設大小：40px */
+        width: 40px;        /* 手機版預設大小：40px */
         height: auto;
     }
 
-    /* 💻 電腦版變大 */
+    /* 電腦版變大 */
     @media (min-width: 751px) {
         .main-logo {
-            width: 60px;     /* 🎯 電腦版大小：60px */
+            width: 60px;     /* 電腦版大小：60px */
             margin-bottom: 10px;
         }
     }
@@ -205,14 +205,6 @@
         <div class="arrow-container"><div class="arrow"></div></div>
       </a>
 
-      <a href="#" id="online-link" class="card-btn online">
-        <div class="btn-content">
-          <span class="btn-title">線上功率課</span>
-          <span class="btn-desc">Rouvy 線上同步訓練</span>
-        </div>
-        <div class="arrow-container"><div class="arrow"></div></div>
-      </a>
-
       <a href="#" id="weekend-link" class="card-btn weekend">
         <div class="btn-content">
           <span class="btn-title">週末長距離</span>
@@ -239,9 +231,8 @@
     // 組合參數字串
     const params = `?name=${encodeURIComponent(name)}&lineId=${encodeURIComponent(lineId)}`;
     
-    // 設定連結 (⚠️ 完全保留您原本的寫法，包含短橫線)
+    // 設定連結 (完全保留您原本的寫法，包含短橫線)
     document.getElementById('weekday-link').href = `signup_weekday.html${params}`;
-    document.getElementById('online-link').href = `signup-online.html${params}`;
     document.getElementById('weekend-link').href = `signup-weekend.html${params}`;
   </script>
 
