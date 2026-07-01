@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026 光聿游泳團練｜技術優化班</title>
+  <title>2026 光聿游泳團練｜季度技術優化班</title>
  
   <meta property="og:image" content="https://kuangyustudio.github.io/-KUANGYU/KUANGYU_logo_icon.png">
   
@@ -81,7 +81,7 @@
     }
 
     /* ==========================================
-       課程資訊摘要 (2x2 清透膠囊雙欄網格)
+       課程資訊摘要 (清透膠囊網格)
        ========================================== */
     .info-grid {
       display: grid;
@@ -101,6 +101,12 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       text-decoration: none;
       color: var(--blue-dark);
+    }
+
+    .info-pill-clean.span-full {
+      grid-column: 1 / -1;
+      justify-content: center;
+      padding-right: 32px;
     }
 
     .info-pill-clean:hover {
@@ -167,99 +173,59 @@
         grid-template-columns: 1fr;
         gap: 14px;
       }
+      .info-pill-clean.span-full {
+        grid-column: auto;
+        justify-content: flex-start;
+      }
     }
 
     /* ==========================================
-       適合對象 (風格優化版)
+       招募引言
+       ========================================== */
+    .intro-text {
+      text-align: center;
+      font-size: 16.5px;
+      font-weight: 500;
+      color: #444;
+      margin-bottom: 40px;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+    }
+
+    /* ==========================================
+       適合對象 (粉桃紅色系版)
        ========================================== */
     .qual-section { 
       margin-bottom: 50px; 
-      color: #333; 
     }
-    .qual-title-wrapper { 
-      display: flex; 
-      align-items: center; 
-      gap: 12px; 
-      margin-bottom: 20px; 
+
+    .qual-pink-box {
+      background-color: var(--pink-bg); 
+      border-radius: 8px; 
+      padding: 24px 30px; 
+      border: 1px solid var(--pink-border);
     }
-    .qual-icon-box {
-      width: 38px; 
-      height: 38px; 
-      background-color: var(--blue-light); 
-      border: 1px solid var(--blue-border);
-      border-radius: 8px;
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      color: var(--blue-main);
-    }
-    .qual-title-text { 
-      font-size: 20px; 
-      font-weight: 700; 
-      color: var(--blue-dark); 
+    
+    .qual-sub-list-pink { 
       margin: 0; 
-      letter-spacing: 0.05em; 
-    }
-    
-    .qual-list { 
-      list-style: none; 
-      padding: 0; 
-      margin: 0 0 20px 0; 
-    }
-    .qual-list-item { 
-      display: flex; 
-      align-items: flex-start; 
-      gap: 12px; 
-      margin-bottom: 16px; 
-      font-size: 15.5px; 
-      line-height: 1.6; 
-      font-weight: 500; 
-      color: #333;
-    }
-    
-    .qual-check-icon {
-      flex-shrink: 0; 
-      width: 22px; 
-      height: 22px; 
-      background-color: var(--blue-main); 
-      border-radius: 50%;
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      color: white; 
-      margin-top: 2px;
-    }
-    
-    .qual-nested-box {
-      background-color: var(--blue-bg); 
-      border-radius: 12px; 
-      padding: 22px 24px; 
-      margin-top: 10px; 
-      border: 1px solid var(--blue-border);
-    }
-    .qual-nested-title { 
-      display: flex; 
-      align-items: flex-start; 
-      gap: 12px; 
-      font-size: 15.5px; 
-      font-weight: 700; 
-      margin-bottom: 16px; 
-      color: var(--blue-dark);
-    }
-    
-    .qual-sub-list { 
-      margin: 0; 
-      padding-left: 34px; 
+      padding-left: 20px; 
       list-style-type: disc; 
-      color: #555; 
+      color: #444; 
     }
-    .qual-sub-list li { 
+    
+    .qual-sub-list-pink li { 
       margin-bottom: 12px; 
-      font-size: 14.5px; 
+      font-size: 15px; 
       line-height: 1.6; 
     }
-    .qual-sub-list li:last-child { 
+    
+    .qual-sub-list-pink li:last-child { 
       margin-bottom: 0; 
+    }
+
+    .qual-sub-list-pink strong {
+      color: var(--pink-dark);
+      font-weight: 600;
     }
 
     /* ==========================================
@@ -582,7 +548,7 @@
       justify-content: center;
       border-radius: 50%;
       margin-left: 10px;
-      transition: background-color: 0.2s;
+      transition: background-color 0.2s;
     }
 
     .expand-toggle:hover {
@@ -696,40 +662,28 @@
       </div>
     </div>
 
+    <div class="info-pill-clean span-full">
+      <div class="info-icon-clean">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      </div>
+      <div class="info-text-clean">
+        <span class="info-label-clean">名額限制</span>
+        <span class="info-value-clean">5 人開班，15 人滿班</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="intro-text">
+    本團練專注於「水感與技術提升」、「捷式（自由式）動作優化」。
   </div>
 
   <div class="qual-section">
-    <div class="qual-title-wrapper">
-      <div class="qual-icon-box">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
-      </div>
-      <h2 class="qual-title-text">適合對象</h2>
-    </div>
-
-    <ul class="qual-list">
-      <li class="qual-list-item">
-        <div class="qual-check-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        </div>
-        <span>本團練專注於「水感與技術提升」、「捷式（自由式）動作優化」。</span>
-      </li>
-      <li class="qual-list-item">
-        <div class="qual-check-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        </div>
-        <span>名額限制：<strong>5 人開班，15 人滿班</strong>。</span>
-      </li>
-    </ul>
-
-    <div class="qual-nested-box">
-      <div class="qual-nested-title">
-        <div class="qual-check-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        </div>
-        <span>參加者須具備最低門檻能力：</span>
-      </div>
-      <ul class="qual-sub-list">
-        <li>可<strong style="color: var(--blue-dark);">以捷式連續游完 100 公尺不休息</strong>（不限速度）。</li>
+    <div class="schedule-title">適合對象</div>
+    
+    <div class="qual-pink-box">
+      <ul class="qual-sub-list-pink">
+        <li>可<strong>以捷式連續游完 100 公尺不休息</strong>（不限速度）。</li>
         <li>適合想突破速度瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者。</li>
       </ul>
     </div>
