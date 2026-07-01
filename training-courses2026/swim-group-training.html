@@ -636,7 +636,7 @@
       適合對象
     </div>
     本團練專注於「水感與技術提升」、「捷式（自由式）動作優化」。<br>
-    參加者須具備<strong style="color: var(--blue-dark);">以捷式連續游完 200 公尺不休息</strong>之最低門檻能力，適合想突破速度瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者。
+    參加者須具備<strong style="color: var(--blue-dark);">以捷式連續游完 100 公尺不休息（不限速度）</strong>之最低門檻能力，適合想突破速度瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者。
   </div>
 
   <div class="schedule-section">
@@ -856,6 +856,24 @@
     <div class="policy-box">
       <div class="policy-header">
         <label class="custom-checkbox-container">
+          <input type="checkbox" name="agreeHealth" class="policy-checkbox" required>
+          <span class="custom-checkmark"></span>
+          <span class="checkbox-text">我已詳閱並確認身體狀況良好</span>
+        </label>
+        <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
+          <span>＋</span>
+        </div>
+      </div>
+      <div class="policy-content">
+        <div class="policy-inner">
+          本人確認目前身體狀況良好，且無任何隱瞞不適合從事高強度耐力運動之心血管病史、胸悶、心悸、頭暈或其他可能引發危險之病症。本人明瞭游泳運動具備一定強度，若在訓練過程中感到任何不適，將立即告知教練並停止訓練。本人對自身參與團練之行為負起最終安全責任。
+        </div>
+      </div>
+    </div>
+
+    <div class="policy-box">
+      <div class="policy-header">
+        <label class="custom-checkbox-container">
           <input type="checkbox" name="agreeRefund" class="policy-checkbox" required>
           <span class="custom-checkmark"></span>
           <span class="checkbox-text">我已詳閱並同意課前聲明與退費機制</span>
@@ -1032,6 +1050,7 @@
 
     const requiredInputs = Array.from(form.querySelectorAll('[required]'));
     const policyMapping = {
+      'agreeHealth': '健康狀況聲明',
       'agreeRefund': '課前聲明與退費機制',
       'agreeWeather': '戶外游泳天候聲明',
       'agreeImage': '影像與肖像權授權'
