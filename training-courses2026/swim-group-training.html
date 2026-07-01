@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026 光聿游泳團練｜季度技術優化班</title>
+  <title>2026 光聿游泳團練｜技術優化班</title>
  
   <meta property="og:image" content="https://kuangyustudio.github.io/-KUANGYU/KUANGYU_logo_icon.png">
   
@@ -81,7 +81,7 @@
     }
 
     /* ==========================================
-       課程資訊摘要 (清透膠囊網格)
+       課程資訊摘要 (2x2 清透膠囊雙欄網格)
        ========================================== */
     .info-grid {
       display: grid;
@@ -143,14 +143,6 @@
       letter-spacing: 0.02em;
     }
 
-    /* 將內聯樣式整理成 class，方便電腦版放大 */
-    .info-note-clean {
-      font-size: 12.5px; 
-      color: #777; 
-      font-weight: 500; 
-      letter-spacing: 0.03em;
-    }
-
     a.info-pill-clean .info-value-clean {
       border-bottom: 1.5px solid var(--blue-main);
       padding-bottom: 1px;
@@ -178,39 +170,95 @@
     }
 
     /* ==========================================
-       適合對象 (粉桃紅色系版)
+       適合對象 (參加資格風格)
        ========================================== */
     .qual-section { 
       margin-bottom: 50px; 
+      color: #333; 
     }
-
-    .qual-pink-box {
-      background-color: var(--pink-bg); 
-      border-radius: 8px; 
-      padding: 24px 30px; 
-      border: 1px solid var(--pink-border);
+    .qual-title-wrapper { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      margin-bottom: 20px; 
     }
-    
-    .qual-sub-list-pink { 
+    .qual-icon-box {
+      width: 38px; 
+      height: 38px; 
+      background-color: #ffedd5; 
+      border-radius: 8px;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: #ea580c;
+    }
+    .qual-title-text { 
+      font-size: 20px; 
+      font-weight: 800; 
+      color: #111827; 
       margin: 0; 
-      padding-left: 20px; 
-      list-style-type: disc; 
-      color: #444; 
+      letter-spacing: 0.05em; 
     }
     
-    .qual-sub-list-pink li { 
+    .qual-list { 
+      list-style: none; 
+      padding: 0; 
+      margin: 0 0 20px 0; 
+    }
+    .qual-list-item { 
+      display: flex; 
+      align-items: flex-start; 
+      gap: 12px; 
+      margin-bottom: 16px; 
+      font-size: 15.5px; 
+      line-height: 1.6; 
+      font-weight: 500; 
+      color: #111827;
+    }
+    
+    .qual-check-icon {
+      flex-shrink: 0; 
+      width: 22px; 
+      height: 22px; 
+      background-color: #ea580c; 
+      border-radius: 50%;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: white; 
+      margin-top: 2px;
+    }
+    
+    .qual-nested-box {
+      background-color: #f9fafb; 
+      border-radius: 12px; 
+      padding: 22px 24px; 
+      margin-top: 10px; 
+      border: 1px solid #f3f4f6;
+    }
+    .qual-nested-title { 
+      display: flex; 
+      align-items: flex-start; 
+      gap: 12px; 
+      font-size: 15.5px; 
+      font-weight: 700; 
+      margin-bottom: 16px; 
+      color: #111827;
+    }
+    
+    .qual-sub-list { 
+      margin: 0; 
+      padding-left: 34px; 
+      list-style-type: disc; 
+      color: #4b5563; 
+    }
+    .qual-sub-list li { 
       margin-bottom: 12px; 
-      font-size: 15px; 
+      font-size: 14.5px; 
       line-height: 1.6; 
     }
-    
-    .qual-sub-list-pink li:last-child { 
+    .qual-sub-list li:last-child { 
       margin-bottom: 0; 
-    }
-
-    .qual-sub-list-pink strong {
-      color: var(--pink-dark);
-      font-weight: 600;
     }
 
     /* ==========================================
@@ -340,13 +388,6 @@
       line-height: 1.7; 
       padding: 0 10px;
     }
-    
-    .schedule-hint {
-      font-size: 13.5px; 
-      color: #777; 
-      margin-bottom: 50px; 
-      padding-left: 5px;
-    }
 
     /* ==========================================
        下半部：表單區塊
@@ -401,17 +442,6 @@
     label.field-label { 
       display: block; font-weight: 600; font-size: 14px; color: #444; margin-bottom: 6px; 
     }
-
-    .field-hint {
-      font-size: 13.5px; 
-      color: #777; 
-      margin-bottom: 12px; 
-      line-height: 1.5;
-    }
-
-    .field-hint.tight {
-      margin-bottom: 8px;
-    }
     
     input[type="text"], input[type="email"] { 
       display: block; width: 100%; max-width: 100%; -webkit-appearance: none; appearance: none;
@@ -454,11 +484,6 @@
     .bank-info { 
       background: var(--blue-bg); border: 1px solid var(--blue-border); padding: 20px; 
       border-radius: 6px; font-size: 14.5px; margin-top: 0; margin-bottom: 16px; line-height: 1.8; color: #444;
-    }
-
-    .prerequisite-text {
-      font-size: 14.5px; 
-      color: #444;
     }
 
     /* ==========================================
@@ -624,22 +649,21 @@
       h1 { font-size: 30px; }
       .info-label-clean { font-size: 14px; }
       .info-value-clean { font-size: 17px; }
-      .info-note-clean { font-size: 14.5px; }
       .schedule-title { font-size: 24px; }
-      .qual-sub-list-pink li { font-size: 17px; }
+      .qual-title-text { font-size: 22px; }
+      .qual-list-item { font-size: 17px; }
+      .qual-nested-title { font-size: 17px; }
+      .qual-sub-list li { font-size: 16px; }
       .schedule-table { font-size: 16.5px; }
       .month-label { font-size: 18px; }
       .day-number { font-size: 26px; }
       .holiday-note { font-size: 15.5px; }
       .note { font-size: 15.5px; }
-      .schedule-hint { font-size: 15px; }
       .section-title { font-size: 18px; }
       label.field-label { font-size: 16px; }
-      .field-hint { font-size: 15px; }
       input[type="text"], input[type="email"], textarea { font-size: 16px; }
       .option-label { font-size: 17px; }
       .bank-info { font-size: 16px; }
-      .prerequisite-text { font-size: 16.5px; }
       .checkbox-text { font-size: 17px; }
       .policy-inner { font-size: 16px; }
       button[type="submit"] { font-size: 18px; }
@@ -675,7 +699,7 @@
         <span class="info-label-clean">課程期間</span>
         <div style="display: flex; align-items: baseline; gap: 4px;">
           <span class="info-value-clean">7/10 - 9/18</span>
-          <span class="info-note-clean">(共 10 週)</span>
+          <span style="font-size: 12.5px; color: #777; font-weight: 500; letter-spacing: 0.03em;">(共 10 週)</span>
         </div>
       </div>
     </div>
@@ -703,12 +727,32 @@
   </div>
 
   <div class="qual-section">
-    <div class="schedule-title">適合對象</div>
-    
-    <div class="qual-pink-box">
-      <ul class="qual-sub-list-pink">
-        <li>可以<strong>捷式連續游完 100 公尺不休息</strong>。</li>
-        <li>適合想突破自由式瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者。</li>
+    <div class="qual-title-wrapper">
+      <div class="qual-icon-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+      </div>
+      <h2 class="qual-title-text">參加資格</h2>
+    </div>
+
+    <ul class="qual-list">
+      <li class="qual-list-item">
+        <div class="qual-check-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <span>名額限制：<strong>5 人開班，15 人滿班。</strong></span>
+      </li>
+    </ul>
+
+    <div class="qual-nested-box">
+      <div class="qual-nested-title">
+        <div class="qual-check-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <span>參加者須具備最低門檻能力：</span>
+      </div>
+      <ul class="qual-sub-list">
+        <li>可連續捷泳（自由式）100 公尺不休息。</li>
+        <li>適合想突破速度瓶頸、提升游泳效率，或準備鐵人三項賽事的泳者。</li>
       </ul>
     </div>
   </div>
@@ -751,7 +795,7 @@
       </table>
     </div>
     
-    <div class="schedule-hint">
+    <div style="font-size: 13.5px; color: #777; margin-bottom: 50px; padding-left: 5px;">
       ※ 教練會依狀況調整訓練內容
     </div>
 
@@ -848,7 +892,7 @@
     
     <div class="form-group">
       <label class="field-label">參考成績</label>
-      <div class="field-hint">請擇一填寫，幫助教練了解您的目前程度</div>
+      <div style="font-size: 13.5px; color: #777; margin-bottom: 12px; line-height: 1.5;">請擇一填寫，幫助教練了解您的目前程度</div>
       <div class="option-group row-layout" style="margin-bottom: 10px;">
         <label class="option-label">
           <input type="radio" name="perfType" value="triathlon" required>
@@ -874,14 +918,14 @@
 
       <div id="poolPanel" class="dynamic-panel">
         <label class="field-label">游泳池 100m 配速</label>
-        <div class="field-hint tight">請提供您在泳池的平均配速</div>
+        <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請提供您在泳池的平均配速</div>
         <input type="text" name="pool100mPace" placeholder="例如：2分10秒">
       </div>
     </div>
 
     <div class="form-group">
       <label class="field-label">對本次游泳團練的期望、或想跟教練說的話？（選填）</label>
-      <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: inherit; color: #333; font-family: inherit; resize: vertical;"></textarea>
+      <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
     </div>
     
     <div class="form-group">
@@ -899,7 +943,7 @@
       <div class="option-group">
         <label class="option-label">
           <input type="checkbox" name="prerequisite" value="確認符合門檻" required>
-          <span class="prerequisite-text">我已確認具備<strong style="color: var(--blue-dark); font-weight: 600;">【以捷式（自由式）連續游完 100 公尺不休息】</strong>之能力（不限速度），並理解第一堂課將進行現場泳力測驗。</span>
+          <span style="font-size: 14.5px; color: #444;">我已確認具備<strong style="color: var(--blue-dark); font-weight: 600;">【以捷式（自由式）連續游完 100 公尺不休息】</strong>之能力（不限速度），並理解第一堂課將進行現場泳力測驗。</span>
         </label>
       </div>
     </div>
@@ -914,7 +958,7 @@
     
     <div id="bankDetailsGroup" class="dynamic-panel">
       <div class="bank-info">
-        <strong style="color: var(--blue-dark); font-size: inherit;">匯款帳戶資訊</strong><br>
+        <strong style="color: var(--blue-dark); font-size: 15px;">匯款帳戶資訊</strong><br>
         銀行：國泰世華 (013)<br>
         帳號：269506136805<br>
         戶名：費聿凡
@@ -983,9 +1027,9 @@
       </div>
       <div class="policy-content">
         <div class="policy-inner">
-          本團練於戶外游泳池進行，<strong style="color: var(--blue-dark);">小雨原則上照常上課</strong>；如雨勢影響池底辨識、現場安全或場館公告暫停使用，<strong style="color: var(--blue-dark);">教練將視情況調整或停止課程</strong>。<br><br>
-          如現場<strong style="color: var(--error-color);">聽見雷聲或看見閃電</strong>，為維護安全，將<strong style="color: var(--error-color);">立即停止下水</strong>並全員離開池畔至安全處避難。<strong style="color: var(--blue-dark);">自最後一次雷聲／閃電起滿 30 分鐘後</strong>，視現場天候及場館規定評估是否恢復課程。<br><br>
-          若恢復後仍可完成<strong style="color: var(--blue-dark);">至少 45 分鐘</strong>有效水中訓練，課程將調整內容後繼續進行；若因雷雨中斷過久、無法恢復有效訓練，該堂將列為<strong style="color: var(--blue-dark);">天候取消，並提供 1 次指定游泳團練補課額度</strong>。補課額度<strong style="color: var(--blue-dark);">限本人使用</strong>，如無法參加，該堂課可以退費；實際執行將以現場安全判斷及泳池場館規定為準。
+          本團練於戶外游泳池進行，<strong style="color: var(--blue-dark); font-size: 14.5px;">小雨原則上照常上課</strong>；如雨勢影響池底辨識、現場安全或場館公告暫停使用，<strong style="color: var(--blue-dark); font-size: 14.5px;">教練將視情況調整或停止課程</strong>。<br><br>
+          如現場<strong style="color: var(--error-color); font-size: 14.5px;">聽見雷聲或看見閃電</strong>，為維護安全，將<strong style="color: var(--error-color); font-size: 14.5px;">立即停止下水</strong>並全員離開池畔至安全處避難。<strong style="color: var(--blue-dark); font-size: 14.5px;">自最後一次雷聲／閃電起滿 30 分鐘後</strong>，視現場天候及場館規定評估是否恢復課程。<br><br>
+          若恢復後仍可完成<strong style="color: var(--blue-dark); font-size: 14.5px;">至少 45 分鐘</strong>有效水中訓練，課程將調整內容後繼續進行；若因雷雨中斷過久、無法恢復有效訓練，該堂將列為<strong style="color: var(--blue-dark); font-size: 14.5px;">天候取消，並提供 1 次指定游泳團練補課額度</strong>。補課額度<strong style="color: var(--blue-dark); font-size: 14.5px;">限本人使用</strong>，如無法參加，該堂課可以退費；實際執行將以現場安全判斷及泳池場館規定為準。
         </div>
       </div>
     </div>
