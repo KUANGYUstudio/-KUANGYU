@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026 光聿游泳團練｜季度技術優化班</title>
+  <title>2026 光聿游泳團練｜技術優化班</title>
  
   <meta property="og:image" content="https://kuangyustudio.github.io/-KUANGYU/KUANGYU_logo_icon.png">
   
@@ -170,7 +170,7 @@
     }
 
     /* ==========================================
-       適合對象 (參加資格風格)
+       適合對象 (風格優化版)
        ========================================== */
     .qual-section { 
       margin-bottom: 50px; 
@@ -185,17 +185,18 @@
     .qual-icon-box {
       width: 38px; 
       height: 38px; 
-      background-color: #ffedd5; 
+      background-color: var(--blue-light); 
+      border: 1px solid var(--blue-border);
       border-radius: 8px;
       display: flex; 
       align-items: center; 
       justify-content: center; 
-      color: #ea580c;
+      color: var(--blue-main);
     }
     .qual-title-text { 
       font-size: 20px; 
-      font-weight: 800; 
-      color: #111827; 
+      font-weight: 700; 
+      color: var(--blue-dark); 
       margin: 0; 
       letter-spacing: 0.05em; 
     }
@@ -213,14 +214,14 @@
       font-size: 15.5px; 
       line-height: 1.6; 
       font-weight: 500; 
-      color: #111827;
+      color: #333;
     }
     
     .qual-check-icon {
       flex-shrink: 0; 
       width: 22px; 
       height: 22px; 
-      background-color: #ea580c; 
+      background-color: var(--blue-main); 
       border-radius: 50%;
       display: flex; 
       align-items: center; 
@@ -230,11 +231,11 @@
     }
     
     .qual-nested-box {
-      background-color: #f9fafb; 
+      background-color: var(--blue-bg); 
       border-radius: 12px; 
       padding: 22px 24px; 
       margin-top: 10px; 
-      border: 1px solid #f3f4f6;
+      border: 1px solid var(--blue-border);
     }
     .qual-nested-title { 
       display: flex; 
@@ -243,14 +244,14 @@
       font-size: 15.5px; 
       font-weight: 700; 
       margin-bottom: 16px; 
-      color: #111827;
+      color: var(--blue-dark);
     }
     
     .qual-sub-list { 
       margin: 0; 
       padding-left: 34px; 
       list-style-type: disc; 
-      color: #4b5563; 
+      color: #555; 
     }
     .qual-sub-list li { 
       margin-bottom: 12px; 
@@ -581,7 +582,7 @@
       justify-content: center;
       border-radius: 50%;
       margin-left: 10px;
-      transition: background-color 0.2s;
+      transition: background-color: 0.2s;
     }
 
     .expand-toggle:hover {
@@ -1210,7 +1211,6 @@
           bankDetailsGroup.style.display = 'none';
           bankLastFiveInput.required = false;
 
-          // 加這兩行，讓表單送出後成績面板會乖乖收合
           triathlonPanel.style.display = 'none';
           poolPanel.style.display = 'none';
           
