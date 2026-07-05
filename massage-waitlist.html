@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按摩服務 候補登記系統</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 32px 24px;
+        }
+
+        .header {
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: #666666;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .form-label span {
+            color: #d9534f;
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #dcdfe6;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333333;
+            background-color: #fff;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4a6984;
+        }
+
+        /* Tag 樣式多選區 */
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-item {
+            position: relative;
+        }
+
+        .tag-item input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .tag-label {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #f4f6f8;
+            border: 1px solid #e4e7ed;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #5a5e66;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .tag-item input[type="checkbox"]:checked + .tag-label {
+            background-color: #4a6984;
+            border-color: #4a6984;
+            color: #ffffff;
+        }
+
+        .form-textarea {
+            width: 100%;
+            height: 100px;
+            padding: 12px 16px;
+            border: 1px solid #dcdfe6;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333333;
+            resize: none;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #4a6984;
+        }
+
+        .statement {
+            background-color: #fafafa;
+            border-left: 3px solid #909399;
+            padding: 12px 16px;
+            font-size: 12px;
+            color: #606266;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #333333;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #4a4a4a;
+        }
+
+        .submit-btn:disabled {
+            background-color: #c0c4cc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>預約候補登記</h1>
+        <p>請填寫您的候補需求，有空檔釋出時將依序通知</p>
+    </div>
+
+    <form id="waitlistForm">
+        <div class="form-group">
+            <label class="form-label">姓名<span>*</span></label>
+            <input type="text" id="name" class="form-input" required placeholder="請輸入姓名">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">聯絡電話<span>*</span></label>
+            <input type="tel" id="phone" class="form-input" required placeholder="請輸入手機號碼">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">可以的日期（可多選）<span>*</span></label>
+            <div class="tag-container">
+                <div class="tag-item">
+                    <input type="checkbox" id="day-all" value="皆可">
+                    <label for="day-all" class="tag-label">皆可</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-1" value="週一">
+                    <label for="day-1" class="tag-label">週一</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-2" value="週二">
+                    <label for="day-2" class="tag-label">週二</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-3" value="週三">
+                    <label for="day-3" class="tag-label">週三</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-4" value="週四">
+                    <label for="day-4" class="tag-label">週四</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-5" value="週五">
+                    <label for="day-5" class="tag-label">週五</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-6" value="週六">
+                    <label for="day-6" class="tag-label">週六</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-7" value="週日">
+                    <label for="day-7" class="tag-label">週日</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">可以的時段（可多選）<span>*</span></label>
+            <div class="tag-container">
+                <div class="tag-item">
+                    <input type="checkbox" name="times" id="time-1" value="14:30－16:30">
+                    <label for="time-1" class="tag-label">14:30－16:30</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="times" id="time-2" value="17:00－18:30">
+                    <label for="time-2" class="tag-label">17:00－18:30</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="times" id="time-3" value="19:30－21:00">
+                    <label for="time-3" class="tag-label">19:30－21:00</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">備註</label>
+            <textarea id="note" class="form-textarea" placeholder="如有特定身體狀況或特殊需求請在此說明"></textarea>
+        </div>
+
+        <div class="statement">
+            有人取消或是有空檔時，會依照候補登記順序安排，如果沒有安排到敬請見諒。
+        </div>
+
+        <button type="submit" id="submitBtn" class="submit-btn">送出候補登記</button>
+    </form>
+</div>
+
+<script>
+    // 日期「皆可」的自動全選邏輯
+    const dayAllCheckbox = document.getElementById('day-all');
+    const dayCheckboxes = document.querySelectorAll('input[name="days"]');
+
+    dayAllCheckbox.addEventListener('change', function() {
+        dayCheckboxes.forEach(cb => {
+            cb.checked = dayAllCheckbox.checked;
+        });
+    });
+
+    dayCheckboxes.forEach(cb => {
+        cb.addEventListener('change', function() {
+            if (!this.checked) {
+                dayAllCheckbox.checked = false;
+            } else {
+                const allChecked = Array.from(dayCheckboxes).every(item => item.checked);
+                if (allChecked) {
+                    dayAllCheckbox.checked = true;
+                }
+            }
+        });
+    });
+
+    // 表單送出事件處理
+    document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 驗證是否至少選擇了一個日期與時段
+        const selectedDays = Array.from(document.querySelectorAll('input[name="days"]:checked')).map(cb => cb.value);
+        const selectedTimes = Array.from(document.querySelectorAll('input[name="times"]:checked')).map(cb => cb.value);
+
+        if (selectedDays.length === 0) {
+            alert('請至少選擇一個可以的日期');
+            return;
+        }
+        if (selectedTimes.length === 0) {
+            alert('請至少選擇一個可以的時段');
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerText = '處理中...';
+
+        // 整理準備送出的資料
+        const formData = {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            days: selectedDays.join(', '),
+            times: selectedTimes.join(', '),
+            note: document.getElementById('note').value
+        };
+
+        // 這裡預留未來串接 LIFF / GAS 的發送邏輯
+        console.log('準備送出的資料：', formData);
+        
+        // 模擬送出成功
+        setTimeout(() => {
+            alert('候補登記成功！');
+            submitBtn.disabled = false;
+            submitBtn.innerText = '送出候補登記';
+            // 這裡未來可以加入關閉 LIFF 視窗的指令
+        }, 1000);
+    });
+</script>
+
+</body>
+</html>
