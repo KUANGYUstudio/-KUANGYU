@@ -194,45 +194,39 @@
 
         <div class="form-group">
             <label class="form-label">偏好的星期（可多選）<span>*</span></label>
-            <div class="tag-group">
-                <!-- 第一排：一到日 -->
-                <div class="tag-container">
-                    <div class="tag-item">
-                        <input type="checkbox" name="days" id="day-1" value="一">
-                        <label for="day-1" class="tag-label">一</label>
-                    </div>
-                    <div class="tag-item">
-                        <input type="checkbox" name="days" id="day-2" value="二">
-                        <label for="day-2" class="tag-label">二</label>
-                    </div>
-                    <div class="tag-item">
-                        <input type="checkbox" name="days" id="day-3" value="三">
-                        <label for="day-3" class="tag-label">三</label>
-                    </div>
-                    <div class="tag-item">
-                        <input type="checkbox" name="days" id="day-4" value="四">
-                        <label for="day-4" class="tag-label">四</label>
-                    </div>
-                    <div class="tag-item">
-                        <input type="checkbox" name="days" id="day-5" value="五">
-                        <label for="day-5" class="tag-label">五</label>
-                    </div>
-                    <div class="tag-item">
-                        <input type="checkbox" name="days" id="day-6" value="六">
-                        <label for="day-6" class="tag-label">六</label>
-                    </div>
-                    <div class="tag-item">
-                        <input type="checkbox" name="days" id="day-7" value="日">
-                        <label for="day-7" class="tag-label">日</label>
-                    </div>
+            <!-- 將所有選項放回同一個 tag-container 中 -->
+            <div class="tag-container">
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-1" value="一">
+                    <label for="day-1" class="tag-label">一</label>
                 </div>
-
-                <!-- 第二排：以上皆可 -->
-                <div class="tag-container">
-                    <div class="tag-item">
-                        <input type="checkbox" id="day-all" value="以上皆可">
-                        <label for="day-all" class="tag-label">以上皆可</label>
-                    </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-2" value="二">
+                    <label for="day-2" class="tag-label">二</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-3" value="三">
+                    <label for="day-3" class="tag-label">三</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-4" value="四">
+                    <label for="day-4" class="tag-label">四</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-5" value="五">
+                    <label for="day-5" class="tag-label">五</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-6" value="六">
+                    <label for="day-6" class="tag-label">六</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" name="days" id="day-7" value="日">
+                    <label for="day-7" class="tag-label">日</label>
+                </div>
+                <div class="tag-item">
+                    <input type="checkbox" id="day-all" value="以上皆可">
+                    <label for="day-all" class="tag-label">以上皆可</label>
                 </div>
             </div>
         </div>
