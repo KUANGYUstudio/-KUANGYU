@@ -82,6 +82,13 @@
             border-color: #4a6984;
         }
 
+        /* 針對分行排列新增的群組容器 */
+        .tag-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
         /* Tag 樣式多選區 */
         .tag-container {
             display: flex;
@@ -187,40 +194,52 @@
             <input type="tel" id="phone" class="form-input" required placeholder="請輸入手機號碼">
         </div>
 
+        <!-- 偏好的日期分行排列 -->
         <div class="form-group">
             <label class="form-label">偏好的日期（可多選）<span>*</span></label>
-            <div class="tag-container">
-                <div class="tag-item">
-                    <input type="checkbox" id="day-all" value="皆可">
-                    <label for="day-all" class="tag-label">皆可</label>
+            <div class="tag-group">
+                <!-- 第一排：週一到週四 -->
+                <div class="tag-container">
+                    <div class="tag-item">
+                        <input type="checkbox" name="days" id="day-1" value="週一">
+                        <label for="day-1" class="tag-label">週一</label>
+                    </div>
+                    <div class="tag-item">
+                        <input type="checkbox" name="days" id="day-2" value="週二">
+                        <label for="day-2" class="tag-label">週二</label>
+                    </div>
+                    <div class="tag-item">
+                        <input type="checkbox" name="days" id="day-3" value="週三">
+                        <label for="day-3" class="tag-label">週三</label>
+                    </div>
+                    <div class="tag-item">
+                        <input type="checkbox" name="days" id="day-4" value="週四">
+                        <label for="day-4" class="tag-label">週四</label>
+                    </div>
                 </div>
-                <div class="tag-item">
-                    <input type="checkbox" name="days" id="day-1" value="週一">
-                    <label for="day-1" class="tag-label">週一</label>
+                
+                <!-- 第二排：週五到週日 -->
+                <div class="tag-container">
+                    <div class="tag-item">
+                        <input type="checkbox" name="days" id="day-5" value="週五">
+                        <label for="day-5" class="tag-label">週五</label>
+                    </div>
+                    <div class="tag-item">
+                        <input type="checkbox" name="days" id="day-6" value="週六">
+                        <label for="day-6" class="tag-label">週六</label>
+                    </div>
+                    <div class="tag-item">
+                        <input type="checkbox" name="days" id="day-7" value="週日">
+                        <label for="day-7" class="tag-label">週日</label>
+                    </div>
                 </div>
-                <div class="tag-item">
-                    <input type="checkbox" name="days" id="day-2" value="週二">
-                    <label for="day-2" class="tag-label">週二</label>
-                </div>
-                <div class="tag-item">
-                    <input type="checkbox" name="days" id="day-3" value="週三">
-                    <label for="day-3" class="tag-label">週三</label>
-                </div>
-                <div class="tag-item">
-                    <input type="checkbox" name="days" id="day-4" value="週四">
-                    <label for="day-4" class="tag-label">週四</label>
-                </div>
-                <div class="tag-item">
-                    <input type="checkbox" name="days" id="day-5" value="週五">
-                    <label for="day-5" class="tag-label">週五</label>
-                </div>
-                <div class="tag-item">
-                    <input type="checkbox" name="days" id="day-6" value="週六">
-                    <label for="day-6" class="tag-label">週六</label>
-                </div>
-                <div class="tag-item">
-                    <input type="checkbox" name="days" id="day-7" value="週日">
-                    <label for="day-7" class="tag-label">週日</label>
+
+                <!-- 第三排：以上皆可 -->
+                <div class="tag-container">
+                    <div class="tag-item">
+                        <input type="checkbox" id="day-all" value="以上皆可">
+                        <label for="day-all" class="tag-label">以上皆可</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -259,7 +278,7 @@
 </div>
 
 <script>
-    // 日期「皆可」的自動全選邏輯
+    // 日期「以上皆可」的自動全選邏輯
     const dayAllCheckbox = document.getElementById('day-all');
     const dayCheckboxes = document.querySelectorAll('input[name="days"]');
 
