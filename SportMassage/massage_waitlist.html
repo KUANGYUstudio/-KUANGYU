@@ -194,7 +194,6 @@
 
         <div class="form-group">
             <label class="form-label">偏好的星期（可多選）<span>*</span></label>
-            <!-- 將所有選項放回同一個 tag-container 中 -->
             <div class="tag-container">
                 <div class="tag-item">
                     <input type="checkbox" name="days" id="day-1" value="一">
@@ -246,6 +245,10 @@
                     <input type="checkbox" name="times" id="time-3" value="19:30－21:00">
                     <label for="time-3" class="tag-label">19:30－21:00</label>
                 </div>
+                <div class="tag-item">
+                    <input type="checkbox" id="time-all" value="以上皆可">
+                    <label for="time-all" class="tag-label">以上皆可</label>
+                </div>
             </div>
         </div>
 
@@ -256,8 +259,8 @@
 
         <div class="statement">
             【候補與遞延規則說明】<br>
-            有人取消或是有空檔時，會依照候補登記順序安排。<br>
-            每月 20 日將常態開放次月預約。若未能為您安排到空檔，候補資格將不會自動遞延，敬請見諒。
+            有人取消或是有空檔時，會依照候補登記順序安排並用LINE通知。<br>
+            每月 20 日開放下個月預約。若未能為您安排到空檔，候補資格將不會自動遞延，敬請見諒。
         </div>
 
         <button type="submit" id="submitBtn" class="submit-btn">送出候補登記</button>
@@ -283,6 +286,29 @@
                 const allChecked = Array.from(dayCheckboxes).every(item => item.checked);
                 if (allChecked) {
                     dayAllCheckbox.checked = true;
+                }
+            }
+        });
+    });
+
+    // 新增：時段「以上皆可」的自動全選邏輯
+    const timeAllCheckbox = document.getElementById('time-all');
+    const timeCheckboxes = document.querySelectorAll('input[name="times"]');
+
+    timeAllCheckbox.addEventListener('change', function() {
+        timeCheckboxes.forEach(cb => {
+            cb.checked = timeAllCheckbox.checked;
+        });
+    });
+
+    timeCheckboxes.forEach(cb => {
+        cb.addEventListener('change', function() {
+            if (!this.checked) {
+                timeAllCheckbox.checked = false;
+            } else {
+                const allChecked = Array.from(timeCheckboxes).every(item => item.checked);
+                if (allChecked) {
+                    timeAllCheckbox.checked = true;
                 }
             }
         });
