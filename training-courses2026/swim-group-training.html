@@ -691,6 +691,25 @@
       font-size: 15px; letter-spacing: 0.1em; cursor: pointer; transition: background 0.2s;
     }
     .modal-btn:hover { background: #3b9397; }
+
+    /* === 增強表單小標題視覺層次 === */
+    .form-group { 
+      margin-bottom: 34px; 
+    }
+    label.field-label { 
+      font-weight: 700; 
+      font-size: 16px; 
+      color: var(--blue-dark); 
+      margin-bottom: 12px; 
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--blue-border);
+      letter-spacing: 0.05em;
+    }
+    @media (min-width: 601px) {
+      label.field-label { 
+        font-size: 18px; 
+      }
+    }
   </style>
 </head>
 <body>
