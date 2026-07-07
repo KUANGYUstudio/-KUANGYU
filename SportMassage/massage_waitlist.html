@@ -82,6 +82,13 @@
             border-color: #4a6984;
         }
 
+        .form-hint {
+            font-size: 12px;
+            color: #666666;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+
         .tag-group {
             display: flex;
             flex-direction: column;
@@ -192,6 +199,13 @@
             <input type="tel" id="phone" class="form-input" required placeholder="請輸入手機號碼">
         </div>
 
+        <!-- 新增：LINE ID 或名稱（選填） -->
+        <div class="form-group">
+            <label class="form-label">LINE ID 或 LINE 名稱（選填）</label>
+            <input type="text" id="lineInfo" class="form-input" placeholder="請輸入可聯繫到您的 LINE 資訊">
+            <div class="form-hint">請確認聿凡可以聯繫到你！</div>
+        </div>
+
         <div class="form-group">
             <label class="form-label">偏好的星期（可多選）<span>*</span></label>
             <div class="tag-container">
@@ -259,8 +273,8 @@
 
         <div class="statement">
             【候補與遞延規則說明】<br>
-            有人取消或是有空檔時，會依照候補登記順序安排並用LINE通知。<br>
-            每月 20 日開放下個月預約。若未能為您安排到空檔，候補資格將不會自動遞延，敬請見諒。
+            有人取消或是有空檔時，會依照候補登記順序安排。<br>
+            每月 20 日將常態開放次月預約。若未能為您安排到空檔，候補資格將不會自動遞延，敬請見諒。
         </div>
 
         <button type="submit" id="submitBtn" class="submit-btn">送出候補登記</button>
@@ -291,7 +305,7 @@
         });
     });
 
-    // 新增：時段「以上皆可」的自動全選邏輯
+    // 時段「以上皆可」的自動全選邏輯
     const timeAllCheckbox = document.getElementById('time-all');
     const timeCheckboxes = document.querySelectorAll('input[name="times"]');
 
@@ -339,6 +353,7 @@
         const formData = {
             name: document.getElementById('name').value,
             phone: document.getElementById('phone').value,
+            lineInfo: document.getElementById('lineInfo').value, // 取得新欄位資料
             days: selectedDays.join(', '),
             times: selectedTimes.join(', '),
             note: document.getElementById('note').value
