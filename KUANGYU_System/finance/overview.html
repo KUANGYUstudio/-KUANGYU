@@ -76,7 +76,6 @@
         }
         .btn-full:disabled { background-color: #adb5bd; }
 
-        /* 封存按鈕設計 */
         .btn-archive {
             width: 100%;
             padding: 10px;
@@ -109,11 +108,20 @@
         .project-header {
             background-color: #f1f3f5;
             padding: 12px 16px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #495057;
             border-bottom: 1px solid #dee2e6;
         }
+        .project-title-main {
+            font-size: 15px;
+            font-weight: 700;
+            color: #212529;
+        }
+        .project-title-sub {
+            font-size: 12px;
+            font-weight: 400;
+            color: #868e96;
+            margin-left: 8px;
+        }
+        
         .project-items {
             display: flex;
             flex-direction: column;
@@ -151,8 +159,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .summary-title {
-            font-size: 16px;
-            font-weight: 600;
             border-bottom: 1px solid #f1f3f5;
             padding-bottom: 8px;
         }
@@ -302,12 +308,14 @@
                     </div>`;
             });
 
-            const pName = projectNames[projectId];
-            const headerText = pName ? `${projectId} - ${pName}` : projectId;
+            const pName = projectNames[projectId] || "未命名專案";
 
             container.innerHTML += `
                 <div class="project-group">
-                    <div class="project-header">${headerText}</div>
+                    <div class="project-header">
+                        <span class="project-title-main">${pName}</span>
+                        <span class="project-title-sub">${projectId}</span>
+                    </div>
                     <div class="project-items">
                         ${itemsHtml}
                     </div>
@@ -318,29 +326,31 @@
     function toggleStatus(id, el) {
         const status = el.checked;
         
-        // 防呆機制：如果是從「已繳費(true)」變更為「未繳費(false)」
         if (status === false) {
             const confirmChange = confirm("注意：您正試圖將此筆款項變更為「未繳費」，確定要變更嗎？");
             if (!confirmChange) {
-                el.checked = true; // 使用者取消，將按鈕還原為開起狀態
+                el.checked = true; 
                 return;
             }
         }
 
-        el.disabled = true; 
-        setStatus(`更新付款狀態中...`);
-        
-        const timestamp = new Date().getTime();
-        const url = `${GAS_API_URL}?action=updateStatus&id=${id}&status=${status}&t=${timestamp}`;
+        // 優化手機觸控體驗：利用延遲確保開關滑動動畫完成後再進行網路鎖定
+        setTimeout(() => {
+            el.disabled = true;
+            setStatus(`更新付款狀態中...`);
+            
+            const timestamp = new Date().getTime();
+            const url = `${GAS_API_URL}?action=updateStatus&id=${id}&status=${status}&t=${timestamp}`;
 
-        fetch(url)
-            .then(r => r.json())
-            .then(res => {
-                if(res.status === "success") setStatus("狀態已儲存");
-                else { el.checked = !status; setStatus("更新失敗"); }
-            })
-            .catch(() => { el.checked = !status; setStatus("連線異常"); })
-            .finally(() => el.disabled = false);
+            fetch(url)
+                .then(r => r.json())
+                .then(res => {
+                    if(res.status === "success") setStatus("狀態已儲存");
+                    else { el.checked = !status; setStatus("更新失敗"); }
+                })
+                .catch(() => { el.checked = !status; setStatus("連線異常"); })
+                .finally(() => el.disabled = false);
+        }, 50);
     }
 
     function syncData() {
@@ -379,9 +389,14 @@
         data.forEach(item => {
             const isDone = item.remaining === 0;
             const remainingColor = isDone ? "#2b8a3e" : "#e03131";
+            const pName = item.name || "未命名專案";
+            
             container.innerHTML += `
                 <div class="card card-summary">
-                    <div class="summary-title">${item.id} - ${item.name}</div>
+                    <div class="summary-title">
+                        <span class="project-title-main">${pName}</span>
+                        <span class="project-title-sub">${item.id}</span>
+                    </div>
                     <div class="summary-row"><span>應收總計：</span><span>TWD ${item.expected}</span></div>
                     <div class="summary-row"><span>目前已收：</span><span>TWD ${item.received}</span></div>
                     <div class="summary-row" style="color: ${remainingColor}; font-weight: 600;">
@@ -392,7 +407,6 @@
         });
     }
 
-    // 點擊封存按鈕觸發的函式
     function archiveProjectClick(pId) {
         const confirmArchive = confirm(`確定要封存專案「${pId}」嗎？\n封存後該專案的所有明細將會移至歷史分頁。`);
         if (!confirmArchive) return;
@@ -405,7 +419,7 @@
             .then(res => {
                 if (res.status === "success") {
                     setStatus(res.data);
-                    fetchSummary(); // 重新整理總覽畫面
+                    fetchSummary(); 
                 } else {
                     setStatus("封存失敗：" + res.message);
                 }
