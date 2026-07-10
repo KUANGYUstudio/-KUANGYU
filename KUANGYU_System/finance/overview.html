@@ -27,7 +27,6 @@
             margin: 0 0 16px 0;
         }
         
-        /* 導覽列標籤設計 */
         .tab-bar {
             display: flex;
             border-bottom: 1px solid #dee2e6;
@@ -77,37 +76,64 @@
         }
         .btn-full:disabled { background-color: #adb5bd; }
 
-        /* 卡片共用設定 */
         .card-container {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-        .card {
+        
+        /* 專案分群外框設計 */
+        .project-group {
             background: #ffffff;
             border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 16px;
+            margin-bottom: 4px;
+            overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
+        .project-header {
+            background-color: #f1f3f5;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #495057;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .project-items {
+            display: flex;
+            flex-direction: column;
+        }
 
-        /* 明細卡片排版 */
+        /* 內部明細卡片排版 */
+        .card {
+            background: #ffffff;
+            padding: 16px;
+        }
+        .project-items .card {
+            border-bottom: 1px solid #f1f3f5;
+            padding: 14px 16px;
+        }
+        .project-items .card:last-child {
+            border-bottom: none;
+        }
+
         .card-ledger {
             display: grid;
-            grid-template-columns: 1.5fr 1fr auto;
+            grid-template-columns: 1fr 1fr auto;
             align-items: center;
             gap: 10px;
         }
         .card-left { display: flex; flex-direction: column; gap: 4px; }
-        .project-id { font-size: 12px; color: #868e96; }
         .name { font-size: 16px; font-weight: 600; }
         .amount { font-size: 15px; font-weight: 500; text-align: right; padding-right: 8px; }
 
-        /* 總覽卡片排版 */
         .card-summary {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .summary-title {
             font-size: 16px;
@@ -121,32 +147,11 @@
             font-size: 14px;
             color: #495057;
         }
-        .summary-highlight {
-            color: #e03131;
-            font-weight: 600;
-        }
 
-        /* 表單設計 */
-        .form-group {
-            margin-bottom: 16px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            color: #495057;
-            margin-bottom: 6px;
-            font-weight: 500;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            font-size: 15px;
-            box-sizing: border-box;
-        }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; color: #495057; margin-bottom: 6px; font-weight: 500; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
         
-        /* 切換開關 */
         .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e9ecef; transition: .3s; border-radius: 24px; }
@@ -180,7 +185,7 @@
 </div>
 
 <div id="tab-add" class="content-area">
-    <div class="card">
+    <div class="card" style="border: 1px solid #dee2e6; border-radius: 8px;">
         <div class="form-group">
             <label>專案 ID (例如：GB2607_UP)</label>
             <input type="text" id="pId" placeholder="輸入專案代號">
@@ -226,14 +231,13 @@
         statusDiv.innerText = msg;
     }
 
-    // --- 明細對帳功能 ---
     function fetchLedger() {
         setStatus("正在讀取最新明細...");
         fetch(`${GAS_API_URL}?action=getData`)
             .then(r => r.json())
             .then(res => {
                 if(res.status === "success") {
-                    renderLedger(res.data.reverse());
+                    renderGroupedLedger(res.data.reverse());
                     setStatus("明細載入完成");
                 } else {
                     setStatus("讀取失敗");
@@ -241,26 +245,48 @@
             }).catch(() => setStatus("連線異常"));
     }
 
-    function renderLedger(data) {
+    // 新增的分群渲染邏輯
+    function renderGroupedLedger(data) {
         const container = document.getElementById("ledgerContainer");
         container.innerHTML = "";
+        
+        // 將資料依照專案 ID 進行分群
+        const groupedData = {};
         data.forEach(item => {
-            const isChecked = item.isPaid ? "checked" : "";
+            if (!groupedData[item.projectId]) {
+                groupedData[item.projectId] = [];
+            }
+            groupedData[item.projectId].push(item);
+        });
+
+        // 產生分群的 HTML 結構
+        for (const projectId in groupedData) {
+            let itemsHtml = "";
+            groupedData[projectId].forEach(item => {
+                const isChecked = item.isPaid ? "checked" : "";
+                itemsHtml += `
+                    <div class="card card-ledger">
+                        <div class="card-left">
+                            <span class="name">${item.name}</span>
+                        </div>
+                        <div class="amount">TWD ${item.amount}</div>
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" ${isChecked} onchange="toggleStatus('${item.id}', this)">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>`;
+            });
+
             container.innerHTML += `
-                <div class="card card-ledger">
-                    <div class="card-left">
-                        <span class="project-id">${item.projectId}</span>
-                        <span class="name">${item.name}</span>
-                    </div>
-                    <div class="amount">TWD ${item.amount}</div>
-                    <div>
-                        <label class="switch">
-                            <input type="checkbox" ${isChecked} onchange="toggleStatus('${item.id}', this)">
-                            <span class="slider"></span>
-                        </label>
+                <div class="project-group">
+                    <div class="project-header">${projectId}</div>
+                    <div class="project-items">
+                        ${itemsHtml}
                     </div>
                 </div>`;
-        });
+        }
     }
 
     function toggleStatus(id, el) {
@@ -291,7 +317,6 @@
             .finally(() => btn.disabled = false);
     }
 
-    // --- 結算總覽功能 ---
     function fetchSummary() {
         const btn = document.getElementById("summaryBtn");
         btn.disabled = true;
@@ -326,7 +351,6 @@
         });
     }
 
-    // --- 新增專案功能 ---
     function submitProject() {
         const pId = document.getElementById("pId").value.trim();
         const pName = document.getElementById("pName").value.trim();
