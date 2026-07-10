@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工作室帳務管理系統</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            margin-top: 40px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-size: 22px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-sizing: border-box;
+        }
+        .btn-sync {
+            background-color: #2ecc71;
+        }
+        .btn-sync:hover {
+            background-color: #27ae60;
+        }
+        .btn-master {
+            background-color: #3498db;
+        }
+        .btn-master:hover {
+            background-color: #2980b9;
+        }
+        .btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        #status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 15px;
+            color: #7f8c8d;
+            min-height: 24px;
+            line-height: 24px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>工作室帳務管理</h2>
+    
+    <button class="btn btn-sync" id="syncBtn" onclick="callApi('sync')">同步表單資料</button>
+    <button class="btn btn-master" id="masterBtn" onclick="callApi('master')">更新專案總控</button>
+    
+    <div id="status">系統準備就緒</div>
+</div>
+
+<script>
+    // 請將下方的引號內的文字，替換為您在 Google Apps Script 部署後複製的「網頁應用程式網址」
+    const GAS_API_URL = "請在此處貼上您的GAS網頁應用程式網址";
+
+    function callApi(action) {
+        const syncBtn = document.getElementById("syncBtn");
+        const masterBtn = document.getElementById("masterBtn");
+        const statusDiv = document.getElementById("status");
+
+        // 暫時將按鈕關閉，避免連續點擊造成重覆執行
+        syncBtn.disabled = true;
+        masterBtn.disabled = true;
+        statusDiv.style.color = "#7f8c8d";
+        statusDiv.innerText = action === "sync" ? "正在同步外部表單資料，請稍候..." : "正在計算並更新專案總控，請稍候...";
+
+        // 向後端 GAS 發送遠端指令
+        fetch(`${GAS_API_URL}?action=${action}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    statusDiv.style.color = "#2ecc71";
+                    statusDiv.innerText = data.message;
+                } else {
+                    statusDiv.style.color = "#e74c3c";
+                    statusDiv.innerText = "執行失敗: " + data.message;
+                }
+            })
+            .catch(error => {
+                statusDiv.style.color = "#e74c3c";
+                statusDiv.innerText = "連線失敗，請檢查網路或 API 網址";
+                console.error("Error:", error);
+            })
+            .finally(() => {
+                // 執行完畢，恢復按鈕功能
+                syncBtn.disabled = false;
+                masterBtn.disabled = false;
+            });
+    }
+</script>
+
+</body>
+</html>
