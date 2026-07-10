@@ -3,122 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>工作室帳務管理系統</title>
+    <title>財務總覽系統</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            background-color: #f4f6f9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #333;
+            padding: 20px 15px;
+            color: #212529;
         }
-        .container {
-            width: 100%;
-            max-width: 400px;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            box-sizing: border-box;
-            margin-top: 40px;
-        }
-        h2 {
+        .header {
             text-align: center;
-            margin-bottom: 30px;
-            color: #2c3e50;
-            font-size: 22px;
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin: 0 0 16px 0;
+            color: #343a40;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
         }
         .btn {
-            display: block;
-            width: 100%;
-            padding: 18px;
-            margin-bottom: 20px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffffff;
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            background-color: #495057;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.2s;
-            box-sizing: border-box;
         }
-        .btn-sync {
-            background-color: #2ecc71;
-        }
-        .btn-sync:hover {
-            background-color: #27ae60;
-        }
-        .btn-master {
-            background-color: #3498db;
-        }
-        .btn-master:hover {
-            background-color: #2980b9;
-        }
-        .btn:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
+        .btn:hover { background-color: #343a40; }
+        .btn:disabled { background-color: #adb5bd; cursor: not-allowed; }
+        
         #status {
             text-align: center;
-            margin-top: 20px;
-            font-size: 15px;
-            color: #7f8c8d;
-            min-height: 24px;
-            line-height: 24px;
+            font-size: 13px;
+            color: #6c757d;
+            height: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* 卡片列表設計 */
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 40px;
+        }
+        .card {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .project-id {
+            font-size: 12px;
+            color: #868e96;
+            letter-spacing: 0.5px;
+        }
+        .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #212529;
+        }
+        .amount {
+            font-size: 14px;
+            color: #495057;
+            margin-top: 4px;
+        }
+        
+        /* 切換開關設計 (Toggle Switch) */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #e9ecef;
+            transition: .3s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        input:checked + .slider {
+            background-color: #2b8a3e;
+        }
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+        input:disabled + .slider {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>工作室帳務管理</h2>
-    
-    <button class="btn btn-sync" id="syncBtn" onclick="callApi('sync')">同步表單資料</button>
-    <button class="btn btn-master" id="masterBtn" onclick="callApi('master')">更新專案總控</button>
-    
-    <div id="status">系統準備就緒</div>
+<div class="header">
+    <h1>財務總覽系統</h1>
+    <div class="btn-group">
+        <button class="btn" id="syncBtn" onclick="executeAction('sync')">同步外部資料</button>
+        <button class="btn" id="masterBtn" onclick="executeAction('master')">更新專案總控</button>
+    </div>
+    <div id="status">載入中...</div>
 </div>
 
+<div class="card-container" id="listContainer">
+    </div>
+
 <script>
-    // 請將下方的引號內的文字，替換為您在 Google Apps Script 部署後複製的「網頁應用程式網址」
-    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxajCNqeJ_3OehM7uJtjlafBsYpp6se-M7ZvcnxZlS2HazZ85vqWYzw94g0_UV7BGIR4Q/exec";
+    // 請替換為您的 GAS 網頁應用程式網址
+    const GAS_API_URL = "在此輸入您的API網址";
 
-    function callApi(action) {
-        const syncBtn = document.getElementById("syncBtn");
-        const masterBtn = document.getElementById("masterBtn");
-        const statusDiv = document.getElementById("status");
+    const statusDiv = document.getElementById("status");
+    const listContainer = document.getElementById("listContainer");
 
-        // 暫時將按鈕關閉，避免連續點擊造成重覆執行
-        syncBtn.disabled = true;
-        masterBtn.disabled = true;
-        statusDiv.style.color = "#7f8c8d";
-        statusDiv.innerText = action === "sync" ? "正在同步外部表單資料，請稍候..." : "正在計算並更新專案總控，請稍候...";
+    // 網頁載入時自動取得資料
+    window.onload = function() {
+        fetchData();
+    };
 
-        // 向後端 GAS 發送遠端指令
-        fetch(`${GAS_API_URL}?action=${action}`)
+    // 取得並渲染帳目清單
+    function fetchData() {
+        setStatus("正在讀取最新帳目明細...");
+        fetch(`${GAS_API_URL}?action=getData`)
             .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    statusDiv.style.color = "#2ecc71";
-                    statusDiv.innerText = data.message;
+            .then(res => {
+                if(res.status === "success") {
+                    renderList(res.data.reverse()); // 反轉陣列，讓最新資料在最上方
+                    setStatus("資料載入完成");
                 } else {
-                    statusDiv.style.color = "#e74c3c";
-                    statusDiv.innerText = "執行失敗: " + data.message;
+                    setStatus("讀取失敗：" + res.message);
+                }
+            })
+            .catch(error => setStatus("連線異常，請重新整理網頁"));
+    }
+
+    // 渲染卡片列表
+    function renderList(data) {
+        listContainer.innerHTML = "";
+        data.forEach(item => {
+            const isChecked = item.isPaid ? "checked" : "";
+            const cardHtml = `
+                <div class="card">
+                    <div class="card-info">
+                        <span class="project-id">${item.projectId}</span>
+                        <span class="name">${item.name}</span>
+                        <span class="amount">TWD ${item.amount}</span>
+                    </div>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" id="check_${item.id}" ${isChecked} onchange="toggleStatus('${item.id}', this)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            `;
+            listContainer.innerHTML += cardHtml;
+        });
+    }
+
+    // 切換付款狀態
+    function toggleStatus(id, checkboxElement) {
+        checkboxElement.disabled = true; // 鎖定開關避免重複點擊
+        const newStatus = checkboxElement.checked;
+        setStatus(`正在更新 ${id} 的付款狀態...`);
+
+        fetch(`${GAS_API_URL}?action=updateStatus&id=${id}&status=${newStatus}`)
+            .then(response => response.json())
+            .then(res => {
+                if(res.status === "success") {
+                    setStatus("狀態已儲存");
+                } else {
+                    checkboxElement.checked = !newStatus; // 失敗則還原開關狀態
+                    setStatus("更新失敗");
                 }
             })
             .catch(error => {
-                statusDiv.style.color = "#e74c3c";
-                statusDiv.innerText = "連線失敗，請檢查網路或 API 網址";
-                console.error("Error:", error);
+                checkboxElement.checked = !newStatus;
+                setStatus("連線異常，更新失敗");
             })
             .finally(() => {
-                // 執行完畢，恢復按鈕功能
-                syncBtn.disabled = false;
-                masterBtn.disabled = false;
+                checkboxElement.disabled = false; // 解除鎖定
             });
+    }
+
+    // 執行上方管理按鈕的動作
+    function executeAction(action) {
+        document.getElementById("syncBtn").disabled = true;
+        document.getElementById("masterBtn").disabled = true;
+        
+        setStatus(action === "sync" ? "正在同步外部表單..." : "正在計算專案總控...");
+
+        fetch(`${GAS_API_URL}?action=${action}`)
+            .then(response => response.json())
+            .then(res => {
+                if(res.status === "success") {
+                    setStatus(res.data);
+                    if(action === "sync") fetchData(); // 若同步了新資料，自動重新讀取列表
+                } else {
+                    setStatus("執行失敗");
+                }
+            })
+            .catch(error => setStatus("連線異常"))
+            .finally(() => {
+                document.getElementById("syncBtn").disabled = false;
+                document.getElementById("masterBtn").disabled = false;
+            });
+    }
+
+    function setStatus(msg) {
+        statusDiv.innerText = msg;
     }
 </script>
 
