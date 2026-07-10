@@ -82,7 +82,6 @@
             gap: 12px;
         }
         
-        /* 專案分群外框設計 */
         .project-group {
             background: #ffffff;
             border: 1px solid #dee2e6;
@@ -104,7 +103,6 @@
             flex-direction: column;
         }
 
-        /* 內部明細卡片排版 */
         .card {
             background: #ffffff;
             padding: 16px;
@@ -123,8 +121,9 @@
             align-items: center;
             gap: 10px;
         }
-        .card-left { display: flex; flex-direction: column; gap: 4px; }
+        .card-left { display: flex; flex-direction: column; gap: 2px; }
         .name { font-size: 16px; font-weight: 600; }
+        .method { font-size: 13px; color: #868e96; } 
         .amount { font-size: 15px; font-weight: 500; text-align: right; padding-right: 8px; }
 
         .card-summary {
@@ -210,6 +209,11 @@
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxajCNqeJ_3OehM7uJtjlafBsYpp6se-M7ZvcnxZlS2HazZ85vqWYzw94g0_UV7BGIR4Q/exec";
     const statusDiv = document.getElementById("status");
 
+    function getNoCacheUrl(actionParam) {
+        const timestamp = new Date().getTime();
+        return `${GAS_API_URL}?action=${actionParam}&t=${timestamp}`;
+    }
+
     window.onload = function() {
         fetchLedger();
     };
@@ -233,7 +237,7 @@
 
     function fetchLedger() {
         setStatus("正在讀取最新明細...");
-        fetch(`${GAS_API_URL}?action=getData`)
+        fetch(getNoCacheUrl('getData'))
             .then(r => r.json())
             .then(res => {
                 if(res.status === "success") {
@@ -245,29 +249,32 @@
             }).catch(() => setStatus("連線異常"));
     }
 
-    // 新增的分群渲染邏輯
     function renderGroupedLedger(data) {
         const container = document.getElementById("ledgerContainer");
         container.innerHTML = "";
         
-        // 將資料依照專案 ID 進行分群
         const groupedData = {};
+        const projectNames = {};
+        
         data.forEach(item => {
             if (!groupedData[item.projectId]) {
                 groupedData[item.projectId] = [];
+                projectNames[item.projectId] = item.projectName;
             }
             groupedData[item.projectId].push(item);
         });
 
-        // 產生分群的 HTML 結構
         for (const projectId in groupedData) {
             let itemsHtml = "";
             groupedData[projectId].forEach(item => {
                 const isChecked = item.isPaid ? "checked" : "";
+                const methodHtml = item.method && item.method.trim() !== "" && item.method !== "未填寫" ? `<span class="method">(${item.method})</span>` : "";
+                
                 itemsHtml += `
                     <div class="card card-ledger">
                         <div class="card-left">
                             <span class="name">${item.name}</span>
+                            ${methodHtml}
                         </div>
                         <div class="amount">TWD ${item.amount}</div>
                         <div>
@@ -279,9 +286,12 @@
                     </div>`;
             });
 
+            const pName = projectNames[projectId];
+            const headerText = pName ? `${projectId} - ${pName}` : projectId;
+
             container.innerHTML += `
                 <div class="project-group">
-                    <div class="project-header">${projectId}</div>
+                    <div class="project-header">${headerText}</div>
                     <div class="project-items">
                         ${itemsHtml}
                     </div>
@@ -293,7 +303,11 @@
         el.disabled = true; 
         const status = el.checked;
         setStatus(`更新付款狀態中...`);
-        fetch(`${GAS_API_URL}?action=updateStatus&id=${id}&status=${status}`)
+        
+        const timestamp = new Date().getTime();
+        const url = `${GAS_API_URL}?action=updateStatus&id=${id}&status=${status}&t=${timestamp}`;
+
+        fetch(url)
             .then(r => r.json())
             .then(res => {
                 if(res.status === "success") setStatus("狀態已儲存");
@@ -307,7 +321,7 @@
         const btn = document.getElementById("syncBtn");
         btn.disabled = true;
         setStatus("正在抓取外部資料...");
-        fetch(`${GAS_API_URL}?action=sync`)
+        fetch(getNoCacheUrl('sync'))
             .then(r => r.json())
             .then(res => {
                 setStatus(res.data);
@@ -321,7 +335,7 @@
         const btn = document.getElementById("summaryBtn");
         btn.disabled = true;
         setStatus("正在結算各專案總額...");
-        fetch(`${GAS_API_URL}?action=getSummary`)
+        fetch(getNoCacheUrl('getSummary'))
             .then(r => r.json())
             .then(res => {
                 if(res.status === "success") {
@@ -366,7 +380,8 @@
         btn.disabled = true;
         setStatus("建立專案中...");
 
-        const url = `${GAS_API_URL}?action=addProject&pId=${encodeURIComponent(pId)}&pName=${encodeURIComponent(pName)}&url=${encodeURIComponent(pUrl)}&tab=${encodeURIComponent(pTab)}`;
+        const timestamp = new Date().getTime();
+        const url = `${GAS_API_URL}?action=addProject&pId=${encodeURIComponent(pId)}&pName=${encodeURIComponent(pName)}&url=${encodeURIComponent(pUrl)}&tab=${encodeURIComponent(pTab)}&t=${timestamp}`;
         
         fetch(url)
             .then(r => r.json())
