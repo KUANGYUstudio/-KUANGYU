@@ -76,6 +76,22 @@
         }
         .btn-full:disabled { background-color: #adb5bd; }
 
+        /* 封存按鈕設計 */
+        .btn-archive {
+            width: 100%;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background-color 0.2s;
+        }
+        .btn-archive:hover { background-color: #dee2e6; }
+
         .card-container {
             display: flex;
             flex-direction: column;
@@ -300,8 +316,18 @@
     }
 
     function toggleStatus(id, el) {
-        el.disabled = true; 
         const status = el.checked;
+        
+        // 防呆機制：如果是從「已繳費(true)」變更為「未繳費(false)」
+        if (status === false) {
+            const confirmChange = confirm("注意：您正試圖將此筆款項變更為「未繳費」，確定要變更嗎？");
+            if (!confirmChange) {
+                el.checked = true; // 使用者取消，將按鈕還原為開起狀態
+                return;
+            }
+        }
+
+        el.disabled = true; 
         setStatus(`更新付款狀態中...`);
         
         const timestamp = new Date().getTime();
@@ -361,8 +387,30 @@
                     <div class="summary-row" style="color: ${remainingColor}; font-weight: 600;">
                         <span>未收餘額：</span><span>TWD ${item.remaining}</span>
                     </div>
+                    <button class="btn-archive" onclick="archiveProjectClick('${item.id}')">封存此專案</button>
                 </div>`;
         });
+    }
+
+    // 點擊封存按鈕觸發的函式
+    function archiveProjectClick(pId) {
+        const confirmArchive = confirm(`確定要封存專案「${pId}」嗎？\n封存後該專案的所有明細將會移至歷史分頁。`);
+        if (!confirmArchive) return;
+
+        setStatus("正在執行專案封存...");
+        const url = `${getNoCacheUrl('archive')}&pId=${encodeURIComponent(pId)}`;
+
+        fetch(url)
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === "success") {
+                    setStatus(res.data);
+                    fetchSummary(); // 重新整理總覽畫面
+                } else {
+                    setStatus("封存失敗：" + res.message);
+                }
+            })
+            .catch(() => setStatus("連線異常，封存失敗"));
     }
 
     function submitProject() {
