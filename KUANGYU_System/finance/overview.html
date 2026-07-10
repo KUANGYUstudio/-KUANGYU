@@ -334,7 +334,6 @@
             }
         }
 
-        // 優化手機觸控體驗：利用延遲確保開關滑動動畫完成後再進行網路鎖定
         setTimeout(() => {
             el.disabled = true;
             setStatus(`更新付款狀態中...`);
@@ -355,8 +354,8 @@
 
     function syncData() {
         const btn = document.getElementById("syncBtn");
-        btn.disabled = true;
-        setStatus("正在抓取外部資料...");
+        if (btn) btn.disabled = true;
+        setStatus("正在為您抓取最新名單...");
         fetch(getNoCacheUrl('sync'))
             .then(r => r.json())
             .then(res => {
@@ -364,7 +363,9 @@
                 fetchLedger();
             })
             .catch(() => setStatus("連線異常"))
-            .finally(() => btn.disabled = false);
+            .finally(() => {
+                if (btn) btn.disabled = false;
+            });
     }
 
     function fetchSummary() {
@@ -427,6 +428,7 @@
             .catch(() => setStatus("連線異常，封存失敗"));
     }
 
+    // 升級：建立專案後，自動排程執行後續動作
     function submitProject() {
         const pId = document.getElementById("pId").value.trim();
         const pName = document.getElementById("pName").value.trim();
@@ -440,7 +442,7 @@
 
         const btn = document.getElementById("addBtn");
         btn.disabled = true;
-        setStatus("建立專案中...");
+        setStatus("步驟 1/2：正在建立專案，請稍候...");
 
         const timestamp = new Date().getTime();
         const url = `${GAS_API_URL}?action=addProject&pId=${encodeURIComponent(pId)}&pName=${encodeURIComponent(pName)}&url=${encodeURIComponent(pUrl)}&tab=${encodeURIComponent(pTab)}&t=${timestamp}`;
@@ -449,11 +451,21 @@
             .then(r => r.json())
             .then(res => {
                 if(res.status === "success") {
-                    setStatus("建立成功，您可以切換到明細對帳進行同步");
+                    // 1. 清空表單
                     document.getElementById("pId").value = "";
                     document.getElementById("pName").value = "";
                     document.getElementById("pUrl").value = "";
-                } else setStatus("建立失敗");
+                    
+                    // 2. 切換到明細對帳的畫面
+                    switchTab('ledger');
+                    
+                    // 3. 直接自動觸發同步抓取指令 (步驟2)
+                    setStatus("步驟 2/2：專案建立完成，自動啟動抓取名單...");
+                    syncData();
+                    
+                } else {
+                    setStatus("建立失敗");
+                }
             })
             .catch(() => setStatus("連線異常"))
             .finally(() => btn.disabled = false);
