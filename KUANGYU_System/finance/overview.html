@@ -51,7 +51,7 @@
             margin-bottom: 20px;
         }
 
-        /* 卡片列表設計 */
+        /* 更新卡片排版：採用三欄式 Grid 設計 */
         .card-container {
             display: flex;
             flex-direction: column;
@@ -63,12 +63,15 @@
             border: 1px solid #dee2e6;
             border-radius: 8px;
             padding: 16px;
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr auto; /* 設定三欄的寬度比例 */
             align-items: center;
+            gap: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        .card-info {
+        
+        /* 左側區塊：上下排列 ID 與姓名 */
+        .card-left {
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -83,13 +86,19 @@
             font-weight: 600;
             color: #212529;
         }
+
+        /* 中間區塊：金額靠右對齊 */
+        .card-middle {
+            text-align: right;
+            padding-right: 8px;
+        }
         .amount {
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 500;
             color: #495057;
-            margin-top: 4px;
         }
         
-        /* 切換開關設計 (Toggle Switch) */
+        /* 切換開關設計維持不變 */
         .switch {
             position: relative;
             display: inline-block;
@@ -145,28 +154,25 @@
 </div>
 
 <div class="card-container" id="listContainer">
-    </div>
+</div>
 
 <script>
-    // 請替換為您的 GAS 網頁應用程式網址
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxajCNqeJ_3OehM7uJtjlafBsYpp6se-M7ZvcnxZlS2HazZ85vqWYzw94g0_UV7BGIR4Q/exec";
 
     const statusDiv = document.getElementById("status");
     const listContainer = document.getElementById("listContainer");
 
-    // 網頁載入時自動取得資料
     window.onload = function() {
         fetchData();
     };
 
-    // 取得並渲染帳目清單
     function fetchData() {
         setStatus("正在讀取最新帳目明細...");
         fetch(`${GAS_API_URL}?action=getData`)
             .then(response => response.json())
             .then(res => {
                 if(res.status === "success") {
-                    renderList(res.data.reverse()); // 反轉陣列，讓最新資料在最上方
+                    renderList(res.data.reverse()); 
                     setStatus("資料載入完成");
                 } else {
                     setStatus("讀取失敗：" + res.message);
@@ -175,16 +181,17 @@
             .catch(error => setStatus("連線異常，請重新整理網頁"));
     }
 
-    // 渲染卡片列表
     function renderList(data) {
         listContainer.innerHTML = "";
         data.forEach(item => {
             const isChecked = item.isPaid ? "checked" : "";
             const cardHtml = `
                 <div class="card">
-                    <div class="card-info">
+                    <div class="card-left">
                         <span class="project-id">${item.projectId}</span>
                         <span class="name">${item.name}</span>
+                    </div>
+                    <div class="card-middle">
                         <span class="amount">TWD ${item.amount}</span>
                     </div>
                     <div>
@@ -199,11 +206,10 @@
         });
     }
 
-    // 切換付款狀態
     function toggleStatus(id, checkboxElement) {
-        checkboxElement.disabled = true; // 鎖定開關避免重複點擊
+        checkboxElement.disabled = true; 
         const newStatus = checkboxElement.checked;
-        setStatus(`正在更新 ${id} 的付款狀態...`);
+        setStatus(`正在更新付款狀態...`);
 
         fetch(`${GAS_API_URL}?action=updateStatus&id=${id}&status=${newStatus}`)
             .then(response => response.json())
@@ -211,7 +217,7 @@
                 if(res.status === "success") {
                     setStatus("狀態已儲存");
                 } else {
-                    checkboxElement.checked = !newStatus; // 失敗則還原開關狀態
+                    checkboxElement.checked = !newStatus; 
                     setStatus("更新失敗");
                 }
             })
@@ -220,11 +226,10 @@
                 setStatus("連線異常，更新失敗");
             })
             .finally(() => {
-                checkboxElement.disabled = false; // 解除鎖定
+                checkboxElement.disabled = false; 
             });
     }
 
-    // 執行上方管理按鈕的動作
     function executeAction(action) {
         document.getElementById("syncBtn").disabled = true;
         document.getElementById("masterBtn").disabled = true;
@@ -236,7 +241,7 @@
             .then(res => {
                 if(res.status === "success") {
                     setStatus(res.data);
-                    if(action === "sync") fetchData(); // 若同步了新資料，自動重新讀取列表
+                    if(action === "sync") fetchData(); 
                 } else {
                     setStatus("執行失敗");
                 }
