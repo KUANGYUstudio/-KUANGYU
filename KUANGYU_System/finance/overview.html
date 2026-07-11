@@ -5,69 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>財務總覽系統</title>
     
-    <!-- 加上這兩行來設定網頁標籤與手機 APP 圖示 -->
+    <!-- 網頁標籤與手機 APP 圖示 -->
     <link rel="apple-touch-icon" href="./icon_flower.png">
     <link rel="icon" href="./icon_flower.png">
 
     <style>
-        /* 升級：加上外層底色，區分電腦版的邊界 */
-        html {
-            background-color: #e9ecef;
-        }
+        html { background-color: #e9ecef; }
         
-        /* 升級：限制最大寬度並置中，呈現窄版閱讀體驗 */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f8f9fa;
-            margin: 0 auto;
-            padding: 0;
-            color: #212529;
-            max-width: 500px; 
-            min-height: 100vh;
+            margin: 0 auto; padding: 0; color: #212529;
+            max-width: 500px; min-height: 100vh;
             box-shadow: 0 0 20px rgba(0,0,0,0.08); 
             position: relative;
         }
         
         .header {
-            background-color: #ffffff;
-            padding: 16px 15px 0;
+            background-color: #ffffff; padding: 16px 15px 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: sticky; top: 0; z-index: 100;
         }
-        h1 {
-            font-size: 20px;
-            font-weight: 600;
-            text-align: center;
-            margin: 0 0 16px 0;
-        }
-        .tab-bar {
-            display: flex;
-            border-bottom: 1px solid #dee2e6;
-        }
+        h1 { font-size: 20px; font-weight: 600; text-align: center; margin: 0 0 16px 0; }
+        
+        .tab-bar { display: flex; border-bottom: 1px solid #dee2e6; }
         .tab {
-            flex: 1;
-            text-align: center;
-            padding: 12px 0;
-            font-size: 14px;
-            font-weight: 600;
-            color: #6c757d;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
+            flex: 1; text-align: center; padding: 12px 0; font-size: 14px; font-weight: 600;
+            color: #6c757d; cursor: pointer; border-bottom: 2px solid transparent;
         }
-        .tab.active {
-            color: #212529;
-            border-bottom: 2px solid #212529;
-        }
+        .tab.active { color: #212529; border-bottom: 2px solid #212529; }
 
         .content-area { padding: 20px 15px 40px; display: none; }
         .content-area.active { display: block; }
 
-        #status {
-            text-align: center; font-size: 13px; color: #6c757d;
-            height: 20px; margin: 10px 0;
-        }
+        #status { text-align: center; font-size: 13px; color: #6c757d; height: 20px; margin: 10px 0; }
 
         .btn-full {
             width: 100%; padding: 14px; font-size: 15px; font-weight: 600;
@@ -79,8 +50,7 @@
         .btn-archive {
             width: 100%; padding: 10px; font-size: 13px; font-weight: 600;
             color: #495057; background-color: #e9ecef; border: 1px solid #ced4da;
-            border-radius: 6px; cursor: pointer; margin-top: 12px;
-            transition: background-color 0.2s;
+            border-radius: 6px; cursor: pointer; margin-top: 12px; transition: background-color 0.2s;
         }
         .btn-archive:hover { background-color: #dee2e6; }
 
@@ -88,61 +58,50 @@
         
         .project-group {
             background: #ffffff; border: 1px solid #dee2e6;
-            border-radius: 8px; overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .project-header {
-            background-color: #f1f3f5;
-            padding: 16px;
-            border-bottom: 1px solid #dee2e6;
+            background-color: #f1f3f5; padding: 16px; border-bottom: 1px solid #dee2e6;
             border-left: 4px solid #495057;
         }
-        .project-title-main {
-            font-size: 18px;
-            font-weight: 800;
-            color: #212529;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .project-title-sub {
-            font-size: 13px;
-            font-weight: 400;
-            color: #868e96;
-        }
+        .project-title-main { font-size: 18px; font-weight: 800; color: #212529; display: block; margin-bottom: 4px; }
+        .project-title-sub { font-size: 13px; font-weight: 400; color: #868e96; }
         
         .project-items { display: flex; flex-direction: column; }
-
         .card { background: #ffffff; padding: 16px; }
         .project-items .card { border-bottom: 1px solid #f1f3f5; padding: 14px 16px; }
         .project-items .card:last-child { border-bottom: none; }
 
+        /* --- 明細排版與視覺狀態 --- */
         .card-ledger {
-            display: grid; grid-template-columns: 1fr 1fr auto;
-            align-items: center; gap: 10px;
+            display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 10px;
+            transition: all 0.3s ease; /* 切換時的流暢漸變效果 */
         }
         .card-left { display: flex; flex-direction: column; gap: 4px; }
-        .name { font-size: 16px; font-weight: 600; transition: all 0.3s ease; }
         
-        .name.paid { color: #2b8a3e; opacity: 0.6; }
-        
+        /* 預設（未付款）狀態：高對比、粗體吸引注意 */
+        .name { font-size: 16px; font-weight: 700; color: #212529; }
+        .amount { font-size: 15px; font-weight: 600; text-align: right; padding-right: 8px; color: #212529; }
         .method { font-size: 13px; color: #868e96; } 
-        .amount { font-size: 15px; font-weight: 500; text-align: right; padding-right: 8px; }
+
+        /* 已付款狀態（整行套用）：大幅降低存在感，融入背景 */
+        .card-ledger.is-paid {
+            opacity: 0.45; /* 降低整行透明度，開關也會跟著變低調 */
+        }
+        .card-ledger.is-paid .name {
+            color: #868e96; /* 名字變回低調灰色，拿掉綠色 */
+            font-weight: 500;
+        }
+        .card-ledger.is-paid .amount {
+            font-weight: 400;
+        }
 
         .card-summary {
-            display: flex; flex-direction: column; gap: 12px;
-            border: 1px solid #dee2e6; border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex; flex-direction: column; gap: 12px; border: 1px solid #dee2e6;
+            border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .summary-title { border-bottom: 1px solid #f1f3f5; padding-bottom: 12px; border-left: 4px solid #495057; padding-left: 12px;}
-        
-        .summary-row {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            font-size: 15px;
-            color: #495057;
-            padding: 4px 0;
-        }
+        .summary-row { display: flex; justify-content: center; gap: 24px; font-size: 15px; color: #495057; padding: 4px 0; }
         .summary-row span:first-child { width: 90px; text-align: right; color: #868e96; }
         .summary-row span:last-child { width: 90px; text-align: left; font-weight: 600; }
 
@@ -158,16 +117,8 @@
         input:checked + .slider:before { transform: translateX(22px); }
         input:disabled + .slider { opacity: 0.5; }
 
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5); display: flex;
-            justify-content: center; align-items: center; z-index: 1000;
-        }
-        .modal-box {
-            background: #fff; border-radius: 12px; padding: 24px;
-            width: 80%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-box { background: #fff; border-radius: 12px; padding: 24px; width: 80%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
         .modal-title { font-size: 18px; font-weight: 700; color: #212529; margin-bottom: 12px; }
         .modal-text { font-size: 15px; color: #495057; margin-bottom: 24px; line-height: 1.5; }
         .modal-actions { display: flex; gap: 12px; justify-content: center; }
@@ -221,7 +172,6 @@
     </div>
 </div>
 
-<!-- 客製化防呆確認彈窗 -->
 <div id="confirmModal" class="modal-overlay" style="display:none;">
     <div class="modal-box">
         <div class="modal-title">確認取消付款？</div>
@@ -290,13 +240,14 @@
             let itemsHtml = "";
             groupedData[projectId].forEach(item => {
                 const isChecked = item.isPaid ? "checked" : "";
-                const paidClass = item.isPaid ? "paid" : "";
+                // 視覺邏輯：已付款的加上 is-paid 類別套用在整行外框
+                const rowPaidClass = item.isPaid ? "is-paid" : "";
                 const methodHtml = item.method && item.method.trim() !== "" && item.method !== "未填寫" ? `<span class="method">(${item.method})</span>` : "";
                 
                 itemsHtml += `
-                    <div class="card card-ledger">
+                    <div class="card card-ledger ${rowPaidClass}">
                         <div class="card-left">
-                            <span class="name ${paidClass}">${item.name}</span>
+                            <span class="name">${item.name}</span>
                             ${methodHtml}
                         </div>
                         <div class="amount">TWD ${item.amount}</div>
@@ -326,16 +277,16 @@
 
     function handleToggleClick(id, el) {
         const status = el.checked;
-        const nameEl = el.closest('.card-ledger').querySelector('.name');
+        const rowEl = el.closest('.card-ledger');
         
         if (status === false) {
             el.checked = true; 
-            currentToggleData = { id: id, el: el, targetStatus: false, nameEl: nameEl };
+            currentToggleData = { id: id, el: el, targetStatus: false, rowEl: rowEl };
             document.getElementById('confirmModal').style.display = 'flex';
             return;
         }
 
-        executeToggle(id, el, true, nameEl);
+        executeToggle(id, el, true, rowEl);
     }
 
     function closeModal() {
@@ -346,12 +297,12 @@
     function confirmToggle() {
         if (currentToggleData) {
             document.getElementById('confirmModal').style.display = 'none';
-            executeToggle(currentToggleData.id, currentToggleData.el, currentToggleData.targetStatus, currentToggleData.nameEl);
+            executeToggle(currentToggleData.id, currentToggleData.el, currentToggleData.targetStatus, currentToggleData.rowEl);
             currentToggleData = null;
         }
     }
 
-    function executeToggle(id, el, targetStatus, nameEl) {
+    function executeToggle(id, el, targetStatus, rowEl) {
         el.checked = targetStatus; 
         el.disabled = true;
         setStatus(`更新付款狀態中...`);
@@ -364,8 +315,9 @@
             .then(res => {
                 if(res.status === "success") {
                     setStatus("狀態已儲存");
-                    if (targetStatus) nameEl.classList.add('paid');
-                    else nameEl.classList.remove('paid');
+                    // 根據狀態即時為整行加入或移除半透明淡化效果
+                    if (targetStatus) rowEl.classList.add('is-paid');
+                    else rowEl.classList.remove('is-paid');
                 } else { 
                     el.checked = !targetStatus; 
                     setStatus("更新失敗"); 
