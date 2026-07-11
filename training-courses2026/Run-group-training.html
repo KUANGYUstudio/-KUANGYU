@@ -388,10 +388,19 @@
     .schedule-card {
       display: flex;
       align-items: center;
-      background-color: #f9f9f9;
-      padding: 16px 24px;
-      margin-bottom: 8px;
-      border-radius: 4px;
+      background-color: #ffffff; /* 改為純白底 */
+      padding: 18px 24px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 1px solid #eaedf0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02); /* 增加極淡陰影 */
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .schedule-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(230, 92, 0, 0.06);
+      border-color: var(--orange-border);
     }
     
     /* 左側日期區塊 (帶有右側垂直分隔線) */
@@ -407,16 +416,16 @@
     
     .card-num {
       font-size: 13px;
-      color: #999;
-      font-weight: 500;
-      margin-bottom: 6px;
+      color: #888;
+      font-weight: 600;
+      margin-bottom: 4px;
       letter-spacing: 0.05em;
     }
     
     .card-date {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
-      color: #333;
+      color: var(--slate-dark);
       line-height: 1;
     }
     
@@ -428,7 +437,7 @@
     }
     
     .card-content {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       color: #333;
       margin-bottom: 6px;
@@ -442,25 +451,33 @@
       align-items: center;
     }
     
-    /* 自動在地點前方加上小灰點 */
     .card-location::before {
       content: "•";
       margin-right: 6px;
-      color: #bbb;
+      color: var(--orange-main); /* 點綴一點橘色 */
     }
     
-    /* 右側訓練目標標籤 (白底灰框矩形) */
+    /* 右側訓練目標標籤 (圓角膠囊狀) */
     .goal-tag-muji {
-      font-size: 14px;
-      color: #555;
-      background-color: #ffffff;
-      border: 1px solid #d3d9dc;
-      padding: 6px 18px;
-      border-radius: 2px;
-      font-weight: 400;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
       letter-spacing: 0.05em;
       flex-shrink: 0;
+      text-align: center;
+      min-width: 60px;
     }
+
+    /* --- 依據科學化訓練目標的分色標籤 --- */
+    /* 肌力/肌耐力 (沈穩藍灰) */
+    .tag-strength { background-color: #f0f4f8; color: #4a6572; border: 1px solid #d9e2ec; }
+    /* 速度/速耐力 (活力曜橘) */
+    .tag-speed { background-color: var(--orange-tint); color: var(--orange-dark); border: 1px solid var(--orange-border); }
+    /* 乳酸耐受 (高強度深灰) */
+    .tag-lactic { background-color: #f2f2f2; color: #444; border: 1px solid #d1d1d1; }
+    /* 測驗 (專屬強調色) */
+    .tag-test { background-color: var(--slate-dark); color: #fff; border: 1px solid var(--slate-dark); }
 
     /* 手機版適應排版 */
     @media (max-width: 600px) {
@@ -477,11 +494,12 @@
         padding-left: 0;
       }
       .card-content {
-        font-size: 16px;
+        font-size: 15.5px;
       }
       .goal-tag-muji {
-        padding: 4px 12px;
-        font-size: 13px;
+        padding: 4px 10px;
+        font-size: 12.5px;
+        min-width: auto;
       }
     }
     
@@ -896,7 +914,7 @@
           <span class="card-content">上坡跑 200m</span>
           <span class="card-location">劍南路</span>
         </div>
-        <div class="goal-tag-muji">肌力</div>
+        <div class="goal-tag-muji tag-strength">肌力</div>
       </li>
       
       <li class="schedule-card">
@@ -908,7 +926,7 @@
           <span class="card-content">上坡跑 5/4/3min</span>
           <span class="card-location">中社路</span>
         </div>
-        <div class="goal-tag-muji">肌耐力</div>
+        <div class="goal-tag-muji tag-strength">肌耐力</div>
       </li>
       
       <li class="schedule-card">
@@ -920,7 +938,7 @@
           <span class="card-content">400m + 800m</span>
           <span class="card-location">大同高中</span>
         </div>
-        <div class="goal-tag-muji">速度 / 速耐力</div>
+        <div class="goal-tag-muji tag-speed">速度 / 速耐力</div>
       </li>
       
       <li class="schedule-card">
@@ -932,7 +950,7 @@
           <span class="card-content">上坡跑 500m</span>
           <span class="card-location">至善路</span>
         </div>
-        <div class="goal-tag-muji">速耐力</div>
+        <div class="goal-tag-muji tag-speed">速耐力</div>
       </li>
       
       <li class="schedule-card">
@@ -944,7 +962,7 @@
           <span class="card-content">上坡跑 5/4/3min</span>
           <span class="card-location">中社路</span>
         </div>
-        <div class="goal-tag-muji">肌耐力</div>
+        <div class="goal-tag-muji tag-strength">肌耐力</div>
       </li>
       
       <li class="schedule-card">
@@ -953,10 +971,10 @@
           <span class="card-date">8/19</span>
         </div>
         <div class="card-main">
-          <span class="card-content">200m + 300m + 400m + 500m</span>
+          <span class="card-content">200m+300m+400m+500m</span>
           <span class="card-location">基五號水門</span>
         </div>
-        <div class="goal-tag-muji">乳酸耐受</div>
+        <div class="goal-tag-muji tag-lactic">乳酸耐受</div>
       </li>
       
       <li class="schedule-card">
@@ -968,7 +986,7 @@
           <span class="card-content">上坡跑 200m</span>
           <span class="card-location">劍南路</span>
         </div>
-        <div class="goal-tag-muji">肌力</div>
+        <div class="goal-tag-muji tag-strength">肌力</div>
       </li>
       
       <li class="schedule-card">
@@ -980,7 +998,7 @@
           <span class="card-content">上坡跑 5/4/3min</span>
           <span class="card-location">中社路</span>
         </div>
-        <div class="goal-tag-muji">肌耐力</div>
+        <div class="goal-tag-muji tag-strength">肌耐力</div>
       </li>
       
       <li class="schedule-card">
@@ -989,10 +1007,10 @@
           <span class="card-date">9/9</span>
         </div>
         <div class="card-main">
-          <span class="card-content">200m + 300m + 400m + 500m</span>
+          <span class="card-content">200m+300m+400m+500m</span>
           <span class="card-location">基五號水門</span>
         </div>
-        <div class="goal-tag-muji">乳酸耐受</div>
+        <div class="goal-tag-muji tag-lactic">乳酸耐受</div>
       </li>
       
       <li class="schedule-card">
@@ -1004,7 +1022,7 @@
           <span class="card-content">三千公尺測驗</span>
           <span class="card-location">大同高中</span>
         </div>
-        <div class="goal-tag-muji">vo2max</div>
+        <div class="goal-tag-muji tag-test">VO2 Max</div>
       </li>
       
     </ul>
