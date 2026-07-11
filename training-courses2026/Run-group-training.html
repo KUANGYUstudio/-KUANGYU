@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>光聿第 26 期跑班報名表</title>
-  
+ 
   <meta property="og:image" content="https://kuangyustudio.github.io/-KUANGYU/KUANGYU_logo_icon.png">
   
   <style>
     /* ==========================================
-        CSS 樣式：極簡灰黑經典 (課表) x 田徑曜石橘 (表單)
-        ========================================== */
+       CSS 樣式：極簡灰黑經典 (課表) x 田徑曜石橘 (表單)
+       ========================================== */
     
     :root {
       /* 田徑曜石橘 (表單區與按鈕) */
@@ -27,17 +27,6 @@
       --slate-light: #f4f6f7;
       --slate-border: #d3d9dc;
       --slate-bg: #f8f9fa;
-
-      /* 彩色參考標籤顏色 */
-      --reference-orange: #ffe8d1;
-      --reference-blue: #d1e8ff;
-      --reference-pink: #ffd1e8;
-      --reference-grey: #e0e0e0;
-      
-      --reference-orange-dark: #ff8800;
-      --reference-blue-dark: #0077ff;
-      --reference-pink-dark: #ff0077;
-      --reference-grey-dark: #555;
 
       /* 錯誤提示紅 */
       --error-color: #d6556d;
@@ -92,8 +81,8 @@
     }
 
     /* ==========================================
-        課程資訊摘要 (清透膠囊網格)
-        ========================================== */
+       課程資訊摘要 (清透膠囊網格)
+       ========================================== */
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -191,8 +180,8 @@
     }
 
     /* ==========================================
-        招募引言
-        ========================================== */
+       招募引言
+       ========================================== */
     .intro-text {
       text-align: center;
       font-size: 16.5px;
@@ -204,8 +193,8 @@
     }
 
     /* ==========================================
-        適合對象 (灰黑版)
-        ========================================== */
+       適合對象 (灰黑版)
+       ========================================== */
     .qual-section { 
       margin-bottom: 50px; 
     }
@@ -240,8 +229,8 @@
     }
 
     /* ==========================================
-        關於教練區塊
-        ========================================== */
+       關於教練區塊
+       ========================================== */
     .coach-section {
       margin-bottom: 50px;
     }
@@ -323,8 +312,8 @@
     }
 
     /* ==========================================
-        上半部：課表與日程區塊 (去表格化設計)
-        ========================================== */
+       上半部：課表與日程區塊 (去表格化設計)
+       ========================================== */
     .schedule-section {
       margin-bottom: 50px;
     }
@@ -338,200 +327,81 @@
       text-align: center;
     }
 
-    /* === 去表格化設計：上課流程 (卡片清單) === */
-    .flow-list {
-      margin-bottom: 40px;
-      padding: 0;
-      list-style: none;
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      /* 移除粗硬外框，改為純淨留白 */
+      margin-bottom: 24px; 
     }
-    .flow-item {
-      display: flex;
-      align-items: flex-start;
-      background-color: #f8f9fa; /* 清透淺灰底 */
-      border-radius: 8px;
-      padding: 18px 20px;
-      margin-bottom: 15px;
-      border: 1px solid transparent;
-      transition: background-color 0.2s ease, border-color 0.2s ease;
+
+    .schedule-table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+      font-size: 15px;
     }
-    .flow-item:last-child {
-      margin-bottom: 0;
-    }
-    .flow-item:hover {
-      background-color: #ffffff;
-      border-color: #eaedf0;
-    }
-    .flow-time {
-      font-size: 14px;
+
+    .schedule-table th {
+      text-align: left;
+      /* 依據您的設計圖設定清透淺灰底色 */
+      background-color: #eef1f4; 
       color: #555;
       font-weight: 600;
-      width: 100px;
-      flex-shrink: 0;
-      margin-right: 20px;
-      padding-top: 2px;
-    }
-    .flow-content {
-      flex: 1;
-    }
-    .flow-title {
-      font-size: 16px;
-      color: var(--slate-dark);
-      font-weight: 700;
-      margin-bottom: 6px;
-      display: block;
-    }
-    .flow-desc {
-      font-size: 14.5px;
-      color: #444;
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    /* === 去表格化設計：課程安排 (參考圖片現代清單) === */
-    .schedule-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    
-    .schedule-card {
-      display: flex;
-      align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px dashed #eaedf0; /* 圖片的虛線分隔 */
-      position: relative;
-    }
-    
-    .schedule-card:last-child {
+      padding: 16px 20px;
+      white-space: nowrap; 
       border-bottom: none;
     }
-    
-    .card-num-date {
-      display: flex;
-      align-items: center;
-      width: 100px;
-      flex-shrink: 0;
-      margin-right: 20px;
-    }
-    
-    .card-num {
-      font-size: 13px;
-      color: #777;
-      font-weight: 500;
-      margin-right: 12px;
-      width: 1.2em;
-      text-align: right;
-    }
-    
-    /* 參考圖片的圓角日期 */
-    .date-pilled {
-      background-color: #d1e8ff; /* 參考圖片藍色 */
-      color: #0077ff; /* 參考圖片藍色 */
-      border: 1px solid #99ccff; /* 參考圖片藍色 */
-      border-radius: 50px;
-      padding: 6px 12px;
-      font-size: 14px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-    }
-    
-    .date-loc-separator {
-      margin: 0 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    /* 地點垂直文字 */
-    .vertical-location {
-      writing-mode: vertical-rl; /* 垂直排版 */
-      text-orientation: upright; /* 文字正向 */
-      font-size: 13px;
-      color: #777;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 1.5em; /* 限制寬度 */
-      white-space: nowrap;
-      margin-right: 15px;
-    }
-    
-    .card-main {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    
-    .card-content {
-      font-size: 16px;
-      color: var(--slate-dark);
-      font-weight: 700; /* 加粗 */
-    }
-    
-    /* 彩色標籤 */
-    .goal-tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 12px;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1;
-      border: 1px solid transparent;
-    }
-    
-    /* 標籤顏色：對應原本內容 */
-    .goal-orange { background-color: var(--reference-orange); color: var(--reference-orange-dark); border-color: #ffcc99; }
-    .goal-blue { background-color: var(--reference-blue); color: var(--reference-blue-dark); border-color: #99ccff; }
-    .goal-pink { background-color: var(--reference-pink); color: var(--reference-pink-dark); border-color: #ff99cc; }
-    .goal-grey { background-color: var(--reference-grey); color: var(--reference-grey-dark); border-color: #c0c0c0; }
 
-    @media (max-width: 600px) {
-      .schedule-card {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 20px 0;
-      }
-      .card-num-date {
-        margin-bottom: 12px;
-        width: 100%;
-        margin-right: 0;
-      }
-      .vertical-location {
-        writing-mode: horizontal-tb; /* 手機端改為水平 */
-        width: auto;
-        margin-right: 0;
-        margin-top: 6px;
-        margin-left: 36px;
-      }
-      .card-main {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        gap: 8px;
-        margin-left: 36px;
-      }
+    /* 讓標題列擁有微圓角，減輕傳統表格感 */
+    .schedule-table th:first-child {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
+    .schedule-table th:last-child {
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+
+    .schedule-table td {
+      /* 增加留白，讓視覺不擁擠 */
+      padding: 18px 20px; 
+      /* 極淡的橫向分隔線 */
+      border-bottom: 1px solid #eaedf0; 
+      color: #444;
+      vertical-align: middle;
+      line-height: 1.6;
     }
     
-    /* === 優化備註區塊 === */
+    .schedule-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .schedule-table td strong {
+      color: var(--slate-dark);
+      font-weight: 600;
+      display: block;
+    }
+
+    /* 增加滑鼠懸停時的細微互動感 */
+    .schedule-table tbody tr {
+      transition: background-color 0.2s ease;
+    }
+    .schedule-table tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+
     .note { 
       font-size: 13.5px; 
       color: #555; 
       margin-top: 20px;
       line-height: 1.7; 
-      padding: 10px 15px;
-      background-color: #f8f9fa; /* 清透淺灰底 */
-      border-radius: 6px;
-      border: 1px solid #eaedf0;
+      padding: 0 10px;
     }
 
     /* ==========================================
-        下半部：表單區塊
-        ========================================== */
+       下半部：表單區塊
+       ========================================== */
 
     .section-title { 
       font-size: 15px; 
@@ -601,8 +471,8 @@
     }
 
     /* ==========================================
-        自訂條款卡片 (Checkbox + Accordion)
-        ========================================== */
+       自訂條款卡片 (Checkbox + Accordion)
+       ========================================== */
     .policy-box {
       border: 1px solid #d1d9e0;
       border-radius: 8px;
@@ -732,8 +602,8 @@
     button[type="submit"]:disabled { background: #c5d0d6; cursor: not-allowed; }
 
     /* ==========================================
-        自訂彈出視窗樣式
-        ========================================== */
+       自訂彈出視窗樣式
+       ========================================== */
     .modal-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.4); z-index: 1000; align-items: center; justify-content: center;
@@ -898,173 +768,141 @@
   <div class="schedule-section">
     
     <div class="schedule-title">上課流程</div>
-    
-    <!-- === 修改：去表格化流程 (卡片清單) === -->
-    <ul class="flow-list">
-      <li class="flow-item">
-        <div class="flow-time">19:30 - 19:50</div>
-        <div class="flow-content">
-          <strong class="flow-title">動態熱身 ＋ 關節活動度</strong>
-          <p class="flow-desc">神經與肌肉開機，跑感建立與動作優化，做好準備，減少運動傷害。</p>
-        </div>
-      </li>
-      <li class="flow-item">
-        <div class="flow-time">19:50 - 20:50</div>
-        <div class="flow-content">
-          <strong class="flow-title">主課表訓練</strong>
-          <p class="flow-desc">執行主課表。</p>
-        </div>
-      </li>
-      <li class="flow-item">
-        <div class="flow-time">20:50 - 21:00</div>
-        <div class="flow-content">
-          <strong class="flow-title">緩和收操</strong>
-          <p class="flow-desc">進行伸展與肌肉緩和。</p>
-        </div>
-      </li>
-    </ul>
+    <div class="table-responsive" style="margin-bottom: 40px;">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th style="width: 22%;">團練時間</th>
+            <th style="width: 33%;">核心訓練項目</th>
+            <th>訓練內容</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>19:30 - 19:50</td>
+            <td>
+              <strong>動態熱身 ＋ 關節活動度</strong>
+            </td>
+            <td>神經與肌肉開機，跑感建立與動作優化，做好準備，減少運動傷害。</td>
+          </tr>
+          <tr>
+            <td>19:50 - 20:50</td>
+            <td>
+              <strong>主課表訓練</strong>
+            </td>
+            <td>執行主課表。</td>
+          </tr>
+          <tr>
+            <td>20:50 - 21:00</td>
+            <td>
+              <strong>緩和收操</strong>
+            </td>
+            <td>進行伸展與肌肉緩和。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="schedule-title">課程安排</div>
+    <div class="table-responsive">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th style="width: 8%;">堂數</th>
+            <th style="width: 12%;">日期</th>
+            <th style="width: 35%;">課程內容</th>
+            <th style="width: 15%;">地點</th>
+            <th>訓練目標</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>7/15</td>
+            <td><strong>上坡跑 200m</strong></td>
+            <td>劍南路</td>
+            <td>肌力</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>7/22</td>
+            <td><strong>上坡跑 5/4/3min</strong></td>
+            <td>中社路</td>
+            <td>肌耐力</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>7/29</td>
+            <td><strong>400m + 800m</strong></td>
+            <td>大同高中</td>
+            <td>速度 / 速耐力</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>8/5</td>
+            <td><strong>上坡跑 500m</strong></td>
+            <td>至善路</td>
+            <td>速耐力</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>8/12</td>
+            <td><strong>上坡跑 5/4/3min</strong></td>
+            <td>中社路</td>
+            <td>肌耐力</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>8/19</td>
+            <td><strong>200m + 300m + 400m + 500m</strong></td>
+            <td>河濱</td>
+            <td>乳酸耐受</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>8/26</td>
+            <td><strong>上坡跑 200m</strong></td>
+            <td>劍南路</td>
+            <td>肌力</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>9/2</td>
+            <td><strong>上坡跑 5/4/3min</strong></td>
+            <td>中社路</td>
+            <td>肌耐力</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>9/9</td>
+            <td><strong>200m + 300m + 400m + 500m</strong></td>
+            <td>河濱</td>
+            <td>乳酸耐受</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>9/16</td>
+            <td><strong>三千公尺測驗</strong></td>
+            <td>大同高中</td>
+            <td>vo2max</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     
-    <!-- === 修改：去表格化課程安排 (參考圖片現代清單) === -->
-    <ul class="schedule-list">
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">1</span>
-          <div class="date-pilled">7/15</div>
-        </div>
-        <div class="vertical-location">劍南路</div>
-        <div class="card-main">
-          <strong class="card-content">上坡跑 200m</strong>
-          <span class="goal-tag goal-pink">肌力</span>
-        </div>
-      </li>
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">2</span>
-          <div class="date-pilled">7/22</div>
-        </div>
-        <div class="vertical-location">中社路</div>
-        <div class="card-main">
-          <strong class="card-content">上坡跑 5/4/3min</strong>
-          <span class="goal-tag goal-pink">肌耐力</span>
-        </div>
-      </li>
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">3</span>
-          <div class="date-pilled">7/29</div>
-        </div>
-        <div class="vertical-location">大同高中</div>
-        <div class="card-main">
-          <strong class="card-content">400m + 800m</strong>
-          <span class="goal-tag goal-blue">速度 / 速耐力</span>
-        </div>
-      </li>
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">4</span>
-          <div class="date-pilled">8/5</div>
-        </div>
-        <div class="vertical-location">至善路</div>
-        <div class="card-main">
-          <strong class="card-content">上坡跑 500m</strong>
-          <span class="goal-tag goal-blue">速耐力</span>
-        </div>
-      </li>
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">5</span>
-          <div class="date-pilled">8/12</div>
-        </div>
-        <div class="vertical-location">中社路</div>
-        <div class="card-main">
-          <strong class="card-content">上坡跑 5/4/3min</strong>
-          <span class="goal-tag goal-pink">肌耐力</span>
-        </div>
-      </li>
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">6</span>
-          <div class="date-pilled">8/19</div>
-        </div>
-        <div class="vertical-location">河濱</div>
-        <div class="card-main">
-          <strong class="card-content">200m + 300m + 400m + 500m</strong>
-          <span class="goal-tag goal-blue">乳酸耐受</span>
-        </div>
-      </li>
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">7</span>
-          <div class="date-pilled">8/26</div>
-        </div>
-        <div class="vertical-location">劍南路</div>
-        <div class="card-main">
-          <strong class="card-content">上坡跑 200m</strong>
-          <span class="goal-tag goal-pink">肌力</span>
-        </div>
-      </li>
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">8</span>
-          <div class="date-pilled">9/2</div>
-        </div>
-        <div class="vertical-location">中社路</div>
-        <div class="card-main">
-          <strong class="card-content">上坡跑 5/4/3min</strong>
-          <span class="goal-tag goal-pink">肌耐力</span>
-        </div>
-      </li>
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">9</span>
-          <div class="date-pilled">9/9</div>
-        </div>
-        <div class="vertical-location">河濱</div>
-        <div class="card-main">
-          <strong class="card-content">200m + 300m + 400m + 500m</strong>
-          <span class="goal-tag goal-blue">乳酸耐受</span>
-        </div>
-      </li>
-      
-      <li class="schedule-card">
-        <div class="card-num-date">
-          <span class="card-num">10</span>
-          <div class="date-pilled">9/16</div>
-        </div>
-        <div class="vertical-location">大同高中</div>
-        <div class="card-main">
-          <strong class="card-content">三千公尺測驗</strong>
-          <span class="goal-tag goal-orange">vo2max</span>
-        </div>
-      </li>
-      
-    </ul>
-    
-    <div style="font-size: 13.5px; color: #777; margin-top: 20px; margin-bottom: 24px; text-align: center;">
+    <div style="font-size: 13.5px; color: #777; margin-top: 12px; margin-bottom: 24px; text-align: center;">
       ※ 依照學員狀況與天氣因素，教練保有課程變更之權利
     </div>
 
-    <!-- === 修改補充說明區塊 === -->
-    <div class="qual-slate-box" style="margin-bottom: 30px; padding: 24px; border: 1px solid #eaedf0; background-color: #fcfdfe;">
-      <strong style="color: var(--slate-dark); font-size: 16px; display: block; margin-bottom: 12px; font-weight: 700; letter-spacing: 0.05em;">補充說明</strong>
-      <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14.5px; line-height: 1.6;">
+    <div class="qual-slate-box" style="margin-bottom: 30px; padding: 20px;">
+      <strong style="color: var(--slate-dark); font-size: 15px; display: block; margin-bottom: 8px;">補充說明</strong>
+      <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.6;">
         <li>以三千公尺測驗成績為基礎，尋求突破以達成比賽預設目標。</li>
         <li>課表為參考，教練有權利依情況調整課表內容。</li>
       </ul>
     </div>
     
-    <div class="note">
+    <div class="note" style="margin-top: 0;">
       ※ 如需請假請於前一天 22:00 前告知，教練將提供自主練習課表建議，恕不另行安排補課。<br>
       ※ 詳細課程退費機制與天候規範，請見報名表單下方同意聲明。
     </div>
