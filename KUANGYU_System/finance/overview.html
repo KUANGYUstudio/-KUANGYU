@@ -35,10 +35,22 @@
         }
         .tab.active { color: #212529; border-bottom: 2px solid #212529; }
 
-        .content-area { padding: 20px 15px 40px; display: none; }
+       /* 優化：縮減內容區塊頂部的留白（將 padding-top 從 20px 縮小為 8px） */
+        .content-area { 
+            padding: 8px 15px 40px; 
+            display: none; 
+        }
         .content-area.active { display: block; }
 
-        #status { text-align: center; font-size: 13px; color: #6c757d; height: 20px; margin: 10px 0; }
+        /* 優化：弱化狀態提示的視覺比重，收緊間距 */
+        #status {
+            text-align: center; 
+            font-size: 12px;           /* 字體稍微縮小 */
+            color: #adb5bd;            /* 顏色調淡，降低視覺干擾 */
+            height: 16px; 
+            margin: 12px 0 4px 0;      /* 調整上下間距，讓它自然過渡到按鈕 */
+            letter-spacing: 0.5px;     /* 增加字距提升質感 */
+        }
 
         .btn-full {
             width: 100%; padding: 14px; font-size: 15px; font-weight: 600;
