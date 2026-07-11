@@ -26,7 +26,6 @@
             text-align: center;
             margin: 0 0 16px 0;
         }
-        
         .tab-bar {
             display: flex;
             border-bottom: 1px solid #dee2e6;
@@ -46,133 +45,99 @@
             border-bottom: 2px solid #212529;
         }
 
-        .content-area {
-            padding: 20px 15px 40px;
-            display: none;
-        }
-        .content-area.active {
-            display: block;
-        }
+        .content-area { padding: 20px 15px 40px; display: none; }
+        .content-area.active { display: block; }
 
         #status {
-            text-align: center;
-            font-size: 13px;
-            color: #6c757d;
-            height: 20px;
-            margin: 10px 0;
+            text-align: center; font-size: 13px; color: #6c757d;
+            height: 20px; margin: 10px 0;
         }
 
         .btn-full {
-            width: 100%;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #fff;
-            background-color: #343a40;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-bottom: 16px;
+            width: 100%; padding: 14px; font-size: 15px; font-weight: 600;
+            color: #fff; background-color: #343a40; border: none;
+            border-radius: 6px; cursor: pointer; margin-bottom: 16px;
         }
         .btn-full:disabled { background-color: #adb5bd; }
 
         .btn-archive {
-            width: 100%;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #495057;
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 12px;
+            width: 100%; padding: 10px; font-size: 13px; font-weight: 600;
+            color: #495057; background-color: #e9ecef; border: 1px solid #ced4da;
+            border-radius: 6px; cursor: pointer; margin-top: 12px;
             transition: background-color 0.2s;
         }
         .btn-archive:hover { background-color: #dee2e6; }
 
-        .card-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .card-container { display: flex; flex-direction: column; gap: 16px; }
         
         .project-group {
-            background: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            margin-bottom: 4px;
-            overflow: hidden;
+            background: #ffffff; border: 1px solid #dee2e6;
+            border-radius: 8px; overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
+        /* 優化：主標題加大、增加底色與點綴線 */
         .project-header {
             background-color: #f1f3f5;
-            padding: 12px 16px;
+            padding: 16px;
             border-bottom: 1px solid #dee2e6;
+            border-left: 4px solid #495057;
         }
         .project-title-main {
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 800;
             color: #212529;
+            display: block;
+            margin-bottom: 4px;
         }
         .project-title-sub {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 400;
             color: #868e96;
-            margin-left: 8px;
         }
         
-        .project-items {
-            display: flex;
-            flex-direction: column;
-        }
+        .project-items { display: flex; flex-direction: column; }
 
-        .card {
-            background: #ffffff;
-            padding: 16px;
-        }
-        .project-items .card {
-            border-bottom: 1px solid #f1f3f5;
-            padding: 14px 16px;
-        }
-        .project-items .card:last-child {
-            border-bottom: none;
-        }
+        .card { background: #ffffff; padding: 16px; }
+        .project-items .card { border-bottom: 1px solid #f1f3f5; padding: 14px 16px; }
+        .project-items .card:last-child { border-bottom: none; }
 
         .card-ledger {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
-            align-items: center;
-            gap: 10px;
+            display: grid; grid-template-columns: 1fr 1fr auto;
+            align-items: center; gap: 10px;
         }
-        .card-left { display: flex; flex-direction: column; gap: 2px; }
-        .name { font-size: 16px; font-weight: 600; }
+        .card-left { display: flex; flex-direction: column; gap: 4px; }
+        .name { font-size: 16px; font-weight: 600; transition: all 0.3s ease; }
+        
+        /* 優化：完成付款的視覺標示 */
+        .name.paid { color: #2b8a3e; opacity: 0.6; }
+        
         .method { font-size: 13px; color: #868e96; } 
         .amount { font-size: 15px; font-weight: 500; text-align: right; padding-right: 8px; }
 
         .card-summary {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
+            display: flex; flex-direction: column; gap: 12px;
+            border: 1px solid #dee2e6; border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        .summary-title {
-            border-bottom: 1px solid #f1f3f5;
-            padding-bottom: 8px;
-        }
+        .summary-title { border-bottom: 1px solid #f1f3f5; padding-bottom: 12px; border-left: 4px solid #495057; padding-left: 12px;}
+        
+        /* 優化：結算總覽置中集中對齊 */
         .summary-row {
             display: flex;
-            justify-content: space-between;
-            font-size: 14px;
+            justify-content: center;
+            gap: 24px;
+            font-size: 15px;
             color: #495057;
+            padding: 4px 0;
         }
+        .summary-row span:first-child { width: 90px; text-align: right; color: #868e96; }
+        .summary-row span:last-child { width: 90px; text-align: left; font-weight: 600; }
 
         .form-group { margin-bottom: 16px; }
         .form-group label { display: block; font-size: 13px; color: #495057; margin-bottom: 6px; font-weight: 500; }
         .form-group input { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
         
+        /* Switch 開關樣式 */
         .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e9ecef; transition: .3s; border-radius: 24px; }
@@ -180,6 +145,24 @@
         input:checked + .slider { background-color: #2b8a3e; }
         input:checked + .slider:before { transform: translateX(22px); }
         input:disabled + .slider { opacity: 0.5; }
+
+        /* 優化：漂亮客製化彈窗樣式 */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); display: flex;
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-box {
+            background: #fff; border-radius: 12px; padding: 24px;
+            width: 80%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .modal-title { font-size: 18px; font-weight: 700; color: #212529; margin-bottom: 12px; }
+        .modal-text { font-size: 15px; color: #495057; margin-bottom: 24px; line-height: 1.5; }
+        .modal-actions { display: flex; gap: 12px; justify-content: center; }
+        .modal-btn { flex: 1; padding: 12px; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; }
+        .modal-btn.cancel { background: #e9ecef; color: #495057; }
+        .modal-btn.confirm { background: #e03131; color: #fff; }
     </style>
 </head>
 <body>
@@ -196,7 +179,7 @@
 <div id="status">系統準備就緒</div>
 
 <div id="tab-ledger" class="content-area active">
-    <button class="btn-full" id="syncBtn" onclick="syncData()">同步外部表單資料</button>
+    <button class="btn-full" id="syncBtn" onclick="syncData()">同步最新名單</button>
     <div class="card-container" id="ledgerContainer"></div>
 </div>
 
@@ -227,18 +210,29 @@
     </div>
 </div>
 
+<!-- 客製化防呆確認彈窗 -->
+<div id="confirmModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <div class="modal-title">確認取消付款？</div>
+        <div class="modal-text">您正試圖將此筆款項退回為「未繳費」狀態，請確認是否執行變更。</div>
+        <div class="modal-actions">
+            <button class="modal-btn cancel" onclick="closeModal()">取消</button>
+            <button class="modal-btn confirm" onclick="confirmToggle()">確定變更</button>
+        </div>
+    </div>
+</div>
+
 <script>
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxajCNqeJ_3OehM7uJtjlafBsYpp6se-M7ZvcnxZlS2HazZ85vqWYzw94g0_UV7BGIR4Q/exec";
     const statusDiv = document.getElementById("status");
+    let currentToggleData = null; // 用來暫存彈窗的資料
 
     function getNoCacheUrl(actionParam) {
         const timestamp = new Date().getTime();
         return `${GAS_API_URL}?action=${actionParam}&t=${timestamp}`;
     }
 
-    window.onload = function() {
-        fetchLedger();
-    };
+    window.onload = function() { fetchLedger(); };
 
     function switchTab(tabId) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -246,16 +240,13 @@
         
         event.target.classList.add('active');
         document.getElementById('tab-' + tabId).classList.add('active');
-        
         setStatus("切換至 " + event.target.innerText);
         
         if (tabId === 'ledger') fetchLedger();
         if (tabId === 'summary') fetchSummary();
     }
 
-    function setStatus(msg) {
-        statusDiv.innerText = msg;
-    }
+    function setStatus(msg) { statusDiv.innerText = msg; }
 
     function fetchLedger() {
         setStatus("正在讀取最新明細...");
@@ -265,9 +256,7 @@
                 if(res.status === "success") {
                     renderGroupedLedger(res.data.reverse());
                     setStatus("明細載入完成");
-                } else {
-                    setStatus("讀取失敗");
-                }
+                } else setStatus("讀取失敗");
             }).catch(() => setStatus("連線異常"));
     }
 
@@ -290,18 +279,19 @@
             let itemsHtml = "";
             groupedData[projectId].forEach(item => {
                 const isChecked = item.isPaid ? "checked" : "";
+                const paidClass = item.isPaid ? "paid" : "";
                 const methodHtml = item.method && item.method.trim() !== "" && item.method !== "未填寫" ? `<span class="method">(${item.method})</span>` : "";
                 
                 itemsHtml += `
                     <div class="card card-ledger">
                         <div class="card-left">
-                            <span class="name">${item.name}</span>
+                            <span class="name ${paidClass}">${item.name}</span>
                             ${methodHtml}
                         </div>
                         <div class="amount">TWD ${item.amount}</div>
                         <div>
                             <label class="switch">
-                                <input type="checkbox" ${isChecked} onchange="toggleStatus('${item.id}', this)">
+                                <input type="checkbox" ${isChecked} onchange="handleToggleClick('${item.id}', this)">
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -323,33 +313,61 @@
         }
     }
 
-    function toggleStatus(id, el) {
+    // 處理開關點擊與彈窗邏輯
+    function handleToggleClick(id, el) {
         const status = el.checked;
+        const nameEl = el.closest('.card-ledger').querySelector('.name');
         
         if (status === false) {
-            const confirmChange = confirm("注意：您正試圖將此筆款項變更為「未繳費」，確定要變更嗎？");
-            if (!confirmChange) {
-                el.checked = true; 
-                return;
-            }
+            el.checked = true; // 畫面先強制切回綠色，等待彈窗確認
+            currentToggleData = { id: id, el: el, targetStatus: false, nameEl: nameEl };
+            document.getElementById('confirmModal').style.display = 'flex';
+            return;
         }
 
-        setTimeout(() => {
-            el.disabled = true;
-            setStatus(`更新付款狀態中...`);
-            
-            const timestamp = new Date().getTime();
-            const url = `${GAS_API_URL}?action=updateStatus&id=${id}&status=${status}&t=${timestamp}`;
+        // 如果是變成「已付款」，不需確認，直接執行
+        executeToggle(id, el, true, nameEl);
+    }
 
-            fetch(url)
-                .then(r => r.json())
-                .then(res => {
-                    if(res.status === "success") setStatus("狀態已儲存");
-                    else { el.checked = !status; setStatus("更新失敗"); }
-                })
-                .catch(() => { el.checked = !status; setStatus("連線異常"); })
-                .finally(() => el.disabled = false);
-        }, 50);
+    function closeModal() {
+        document.getElementById('confirmModal').style.display = 'none';
+        currentToggleData = null;
+    }
+
+    function confirmToggle() {
+        if (currentToggleData) {
+            document.getElementById('confirmModal').style.display = 'none';
+            executeToggle(currentToggleData.id, currentToggleData.el, currentToggleData.targetStatus, currentToggleData.nameEl);
+            currentToggleData = null;
+        }
+    }
+
+    function executeToggle(id, el, targetStatus, nameEl) {
+        el.checked = targetStatus; 
+        el.disabled = true;
+        setStatus(`更新付款狀態中...`);
+        
+        const timestamp = new Date().getTime();
+        const url = `${GAS_API_URL}?action=updateStatus&id=${id}&status=${targetStatus}&t=${timestamp}`;
+
+        fetch(url)
+            .then(r => r.json())
+            .then(res => {
+                if(res.status === "success") {
+                    setStatus("狀態已儲存");
+                    // 根據狀態即時切換文字顏色特效
+                    if (targetStatus) nameEl.classList.add('paid');
+                    else nameEl.classList.remove('paid');
+                } else { 
+                    el.checked = !targetStatus; 
+                    setStatus("更新失敗"); 
+                }
+            })
+            .catch(() => { 
+                el.checked = !targetStatus; 
+                setStatus("連線異常"); 
+            })
+            .finally(() => el.disabled = false);
     }
 
     function syncData() {
@@ -358,14 +376,9 @@
         setStatus("正在為您抓取最新名單...");
         fetch(getNoCacheUrl('sync'))
             .then(r => r.json())
-            .then(res => {
-                setStatus(res.data);
-                fetchLedger();
-            })
+            .then(res => { setStatus(res.data); fetchLedger(); })
             .catch(() => setStatus("連線異常"))
-            .finally(() => {
-                if (btn) btn.disabled = false;
-            });
+            .finally(() => { if (btn) btn.disabled = false; });
     }
 
     function fetchSummary() {
@@ -375,10 +388,8 @@
         fetch(getNoCacheUrl('getSummary'))
             .then(r => r.json())
             .then(res => {
-                if(res.status === "success") {
-                    renderSummary(res.data);
-                    setStatus("結算完成");
-                } else setStatus("結算失敗");
+                if(res.status === "success") { renderSummary(res.data); setStatus("結算完成"); } 
+                else setStatus("結算失敗");
             })
             .catch(() => setStatus("連線異常"))
             .finally(() => btn.disabled = false);
@@ -395,13 +406,12 @@
             container.innerHTML += `
                 <div class="card card-summary">
                     <div class="summary-title">
-                        <span class="project-title-main">${pName}</span>
-                        <span class="project-title-sub">${item.id}</span>
+                        <span class="project-title-main" style="margin:0">${pName}</span>
                     </div>
                     <div class="summary-row"><span>應收總計：</span><span>TWD ${item.expected}</span></div>
                     <div class="summary-row"><span>目前已收：</span><span>TWD ${item.received}</span></div>
-                    <div class="summary-row" style="color: ${remainingColor}; font-weight: 600;">
-                        <span>未收餘額：</span><span>TWD ${item.remaining}</span>
+                    <div class="summary-row" style="color: ${remainingColor};">
+                        <span>未收餘額：</span><span style="font-weight:700">TWD ${item.remaining}</span>
                     </div>
                     <button class="btn-archive" onclick="archiveProjectClick('${item.id}')">封存此專案</button>
                 </div>`;
@@ -418,27 +428,19 @@
         fetch(url)
             .then(r => r.json())
             .then(res => {
-                if (res.status === "success") {
-                    setStatus(res.data);
-                    fetchSummary(); 
-                } else {
-                    setStatus("封存失敗：" + res.message);
-                }
+                if (res.status === "success") { setStatus(res.data); fetchSummary(); } 
+                else setStatus("封存失敗：" + res.message);
             })
             .catch(() => setStatus("連線異常，封存失敗"));
     }
 
-    // 升級：建立專案後，自動排程執行後續動作
     function submitProject() {
         const pId = document.getElementById("pId").value.trim();
         const pName = document.getElementById("pName").value.trim();
         const pUrl = document.getElementById("pUrl").value.trim();
         const pTab = document.getElementById("pTab").value.trim();
 
-        if(!pId || !pUrl) {
-            setStatus("請輸入專案 ID 與網址");
-            return;
-        }
+        if(!pId || !pUrl) { setStatus("請輸入專案 ID 與網址"); return; }
 
         const btn = document.getElementById("addBtn");
         btn.disabled = true;
@@ -451,26 +453,17 @@
             .then(r => r.json())
             .then(res => {
                 if(res.status === "success") {
-                    // 1. 清空表單
                     document.getElementById("pId").value = "";
                     document.getElementById("pName").value = "";
                     document.getElementById("pUrl").value = "";
-                    
-                    // 2. 切換到明細對帳的畫面
                     switchTab('ledger');
-                    
-                    // 3. 直接自動觸發同步抓取指令 (步驟2)
                     setStatus("步驟 2/2：專案建立完成，自動啟動抓取名單...");
                     syncData();
-                    
-                } else {
-                    setStatus("建立失敗");
-                }
+                } else setStatus("建立失敗");
             })
             .catch(() => setStatus("連線異常"))
             .finally(() => btn.disabled = false);
     }
 </script>
-
 </body>
 </html>
