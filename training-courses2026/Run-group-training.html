@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>光聿第 26 期跑班報名表</title>
- 
+  
   <meta property="og:image" content="https://kuangyustudio.github.io/-KUANGYU/KUANGYU_logo_icon.png">
   
   <style>
@@ -312,91 +312,211 @@
     }
 
     /* ==========================================
-       上半部：課表與日程區塊 (去表格化設計)
+       MUJI 風格課程安排 (極簡文字層次設計)
        ========================================== */
     .schedule-section {
       margin-bottom: 50px;
     }
 
     .schedule-title {
-      font-size: 20px; 
-      font-weight: 700;
-      color: var(--slate-dark);
-      margin-bottom: 20px;
-      letter-spacing: 0.1em;
-      text-align: center;
-    }
-
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      /* 移除粗硬外框，改為純淨留白 */
-      margin-bottom: 24px; 
-    }
-
-    .schedule-table {
-      width: 100%;
-      min-width: 600px;
-      border-collapse: collapse;
-      font-size: 15px;
-    }
-
-    .schedule-table th {
-      text-align: left;
-      /* 依據您的設計圖設定清透淺灰底色 */
-      background-color: #eef1f4; 
-      color: #555;
+      font-size: 18px; 
       font-weight: 600;
-      padding: 16px 20px;
-      white-space: nowrap; 
-      border-bottom: none;
-    }
-
-    /* 讓標題列擁有微圓角，減輕傳統表格感 */
-    .schedule-table th:first-child {
-      border-top-left-radius: 6px;
-      border-bottom-left-radius: 6px;
-    }
-    .schedule-table th:last-child {
-      border-top-right-radius: 6px;
-      border-bottom-right-radius: 6px;
-    }
-
-    .schedule-table td {
-      /* 增加留白，讓視覺不擁擠 */
-      padding: 18px 20px; 
-      /* 極淡的橫向分隔線 */
-      border-bottom: 1px solid #eaedf0; 
-      color: #444;
-      vertical-align: middle;
-      line-height: 1.6;
+      color: #333;
+      margin-bottom: 24px;
+      letter-spacing: 0.15em;
+      text-align: center;
+      position: relative;
     }
     
-    .schedule-table tbody tr:last-child td {
+    .schedule-title::after {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 2px;
+      background-color: #333;
+      margin: 12px auto 0;
+    }
+
+    /* === 上課流程 (極簡清單) === */
+    .flow-list {
+      margin: 0 0 40px 0;
+      padding: 0;
+      list-style: none;
+    }
+    .flow-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 16px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .flow-item:last-child {
       border-bottom: none;
     }
-
-    .schedule-table td strong {
-      color: var(--slate-dark);
-      font-weight: 600;
+    .flow-time {
+      font-size: 14px;
+      color: #777;
+      font-weight: 400;
+      width: 110px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+    .flow-content {
+      flex: 1;
+    }
+    .flow-title {
+      font-size: 16px;
+      color: #333;
+      font-weight: 500;
+      margin-bottom: 4px;
       display: block;
+      letter-spacing: 0.05em;
+    }
+    .flow-desc {
+      font-size: 14px;
+      color: #777;
+      line-height: 1.6;
+      margin: 0;
     }
 
-    /* 增加滑鼠懸停時的細微互動感 */
-    .schedule-table tbody tr {
+    /* === 課程安排 (MUJI 極簡卡片) === */
+    .schedule-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    
+    .schedule-card {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      margin-bottom: 8px;
+      background-color: #fafafa; /* 極淺灰底 */
+      border-radius: 4px;
       transition: background-color 0.2s ease;
     }
-    .schedule-table tbody tr:hover {
-      background-color: #f8f9fa;
+    
+    .schedule-card:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      width: 80px;
+      flex-shrink: 0;
+    }
+    
+    .card-num {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 2px;
+      letter-spacing: 0.05em;
+    }
+    
+    .card-date {
+      font-size: 15px;
+      font-weight: 500;
+      color: #333;
+      letter-spacing: 0.05em;
+    }
+    
+    .card-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 0 20px;
+      border-left: 1px solid #ddd;
+    }
+    
+    .card-content {
+      font-size: 16px;
+      color: #333;
+      font-weight: 500;
+      margin-bottom: 4px;
+      letter-spacing: 0.05em;
+    }
+    
+    .card-location {
+      font-size: 13px;
+      color: #777;
+      display: flex;
+      align-items: center;
+    }
+    
+    /* 運用極簡圓點取代圖示 */
+    .card-location::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background-color: #ccc;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    
+    /* 極簡無色彩目標標籤 */
+    .goal-tag-muji {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #555;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+      min-width: 60px;
+      text-align: center;
+      letter-spacing: 0.05em;
     }
 
+    @media (max-width: 600px) {
+      .schedule-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+        position: relative;
+      }
+      
+      .card-meta {
+        flex-direction: row;
+        width: 100%;
+        align-items: baseline;
+        margin-bottom: 12px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 8px;
+      }
+      
+      .card-num {
+        margin-right: 8px;
+        margin-bottom: 0;
+      }
+      
+      .card-main {
+        padding: 0;
+        border-left: none;
+        width: 100%;
+        margin-bottom: 12px;
+      }
+      
+      .goal-tag-muji {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+      }
+    }
+    
+    /* === 優化備註區塊 === */
     .note { 
       font-size: 13.5px; 
       color: #555; 
       margin-top: 20px;
       line-height: 1.7; 
-      padding: 0 10px;
+      padding: 10px 15px;
+      background-color: #f8f9fa; 
+      border-radius: 6px;
+      border: 1px solid #eaedf0;
     }
 
     /* ==========================================
@@ -627,22 +747,16 @@
     .modal-btn:hover { background: #cc5200; }
 
     /* === 增強表單小標題視覺層次 === */
-    .form-group { 
-      margin-bottom: 34px; 
-    }
+    .form-group { margin-bottom: 34px; }
     label.field-label { 
       font-weight: 700; 
       font-size: 16px; 
       color: var(--orange-dark); 
       margin-bottom: 12px; 
-      
-      
       letter-spacing: 0.05em;
     }
     @media (min-width: 601px) {
-      label.field-label { 
-        font-size: 18px; 
-      }
+      label.field-label { font-size: 18px; }
     }
   </style>
 </head>
@@ -658,7 +772,6 @@
   </div>
   
   <div class="info-grid">
-    
     <div class="info-pill-clean">
       <div class="info-icon-clean">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
@@ -724,7 +837,6 @@
 
   </div>
 
-
   <div class="qual-section">
     <div class="schedule-title">適合對象</div>
     
@@ -768,129 +880,158 @@
   <div class="schedule-section">
     
     <div class="schedule-title">上課流程</div>
-    <div class="table-responsive" style="margin-bottom: 40px;">
-      <table class="schedule-table">
-        <thead>
-          <tr>
-            <th style="width: 22%;">團練時間</th>
-            <th style="width: 33%;">核心訓練項目</th>
-            <th>訓練內容</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>19:30 - 19:50</td>
-            <td>
-              <strong>動態熱身 ＋ 關節活動度</strong>
-            </td>
-            <td>神經與肌肉開機，跑感建立與動作優化，做好準備，減少運動傷害。</td>
-          </tr>
-          <tr>
-            <td>19:50 - 20:50</td>
-            <td>
-              <strong>主課表訓練</strong>
-            </td>
-            <td>執行主課表。</td>
-          </tr>
-          <tr>
-            <td>20:50 - 21:00</td>
-            <td>
-              <strong>緩和收操</strong>
-            </td>
-            <td>進行伸展與肌肉緩和。</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    
+    <ul class="flow-list">
+      <li class="flow-item">
+        <div class="flow-time">19:30 - 19:50</div>
+        <div class="flow-content">
+          <span class="flow-title">動態熱身 ＋ 關節活動度</span>
+          <p class="flow-desc">神經與肌肉開機，跑感建立與動作優化，做好準備，減少運動傷害。</p>
+        </div>
+      </li>
+      <li class="flow-item">
+        <div class="flow-time">19:50 - 20:50</div>
+        <div class="flow-content">
+          <span class="flow-title">主課表訓練</span>
+          <p class="flow-desc">執行主課表。</p>
+        </div>
+      </li>
+      <li class="flow-item">
+        <div class="flow-time">20:50 - 21:00</div>
+        <div class="flow-content">
+          <span class="flow-title">緩和收操</span>
+          <p class="flow-desc">進行伸展與肌肉緩和。</p>
+        </div>
+      </li>
+    </ul>
 
     <div class="schedule-title">課程安排</div>
-    <div class="table-responsive">
-      <table class="schedule-table">
-        <thead>
-          <tr>
-            <th style="width: 8%;">堂數</th>
-            <th style="width: 12%;">日期</th>
-            <th style="width: 35%;">課程內容</th>
-            <th style="width: 15%;">地點</th>
-            <th>訓練目標</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>7/15</td>
-            <td><strong>上坡跑 200m</strong></td>
-            <td>劍南路</td>
-            <td>肌力</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>7/22</td>
-            <td><strong>上坡跑 5/4/3min</strong></td>
-            <td>中社路</td>
-            <td>肌耐力</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>7/29</td>
-            <td><strong>400m + 800m</strong></td>
-            <td>大同高中</td>
-            <td>速度 / 速耐力</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>8/5</td>
-            <td><strong>上坡跑 500m</strong></td>
-            <td>至善路</td>
-            <td>速耐力</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>8/12</td>
-            <td><strong>上坡跑 5/4/3min</strong></td>
-            <td>中社路</td>
-            <td>肌耐力</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>8/19</td>
-            <td><strong>200m + 300m + 400m + 500m</strong></td>
-            <td>河濱</td>
-            <td>乳酸耐受</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>8/26</td>
-            <td><strong>上坡跑 200m</strong></td>
-            <td>劍南路</td>
-            <td>肌力</td>
-          </tr>
-          <tr>
-            <td>8</td>
-            <td>9/2</td>
-            <td><strong>上坡跑 5/4/3min</strong></td>
-            <td>中社路</td>
-            <td>肌耐力</td>
-          </tr>
-          <tr>
-            <td>9</td>
-            <td>9/9</td>
-            <td><strong>200m + 300m + 400m + 500m</strong></td>
-            <td>河濱</td>
-            <td>乳酸耐受</td>
-          </tr>
-          <tr>
-            <td>10</td>
-            <td>9/16</td>
-            <td><strong>三千公尺測驗</strong></td>
-            <td>大同高中</td>
-            <td>vo2max</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
     
-    <div style="font-size: 13.5px; color: #777; margin-top: 12px; margin-bottom: 24px; text-align: center;">
+    <ul class="schedule-list">
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 01</span>
+          <span class="card-date">7/15</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">上坡跑 200m</span>
+          <span class="card-location">劍南路</span>
+        </div>
+        <div class="goal-tag-muji">肌力</div>
+      </li>
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 02</span>
+          <span class="card-date">7/22</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">上坡跑 5/4/3min</span>
+          <span class="card-location">中社路</span>
+        </div>
+        <div class="goal-tag-muji">肌耐力</div>
+      </li>
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 03</span>
+          <span class="card-date">7/29</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">400m + 800m</span>
+          <span class="card-location">大同高中</span>
+        </div>
+        <div class="goal-tag-muji">速度 / 速耐力</div>
+      </li>
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 04</span>
+          <span class="card-date">8/5</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">上坡跑 500m</span>
+          <span class="card-location">至善路</span>
+        </div>
+        <div class="goal-tag-muji">速耐力</div>
+      </li>
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 05</span>
+          <span class="card-date">8/12</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">上坡跑 5/4/3min</span>
+          <span class="card-location">中社路</span>
+        </div>
+        <div class="goal-tag-muji">肌耐力</div>
+      </li>
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 06</span>
+          <span class="card-date">8/19</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">200m + 300m + 400m + 500m</span>
+          <span class="card-location">基五號水門</span>
+        </div>
+        <div class="goal-tag-muji">乳酸耐受</div>
+      </li>
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 07</span>
+          <span class="card-date">8/26</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">上坡跑 200m</span>
+          <span class="card-location">劍南路</span>
+        </div>
+        <div class="goal-tag-muji">肌力</div>
+      </li>
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 08</span>
+          <span class="card-date">9/2</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">上坡跑 5/4/3min</span>
+          <span class="card-location">中社路</span>
+        </div>
+        <div class="goal-tag-muji">肌耐力</div>
+      </li>
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 09</span>
+          <span class="card-date">9/9</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">200m + 300m + 400m + 500m</span>
+          <span class="card-location">基五號水門</span>
+        </div>
+        <div class="goal-tag-muji">乳酸耐受</div>
+      </li>
+      
+      <li class="schedule-card">
+        <div class="card-meta">
+          <span class="card-num">Week 10</span>
+          <span class="card-date">9/16</span>
+        </div>
+        <div class="card-main">
+          <span class="card-content">三千公尺測驗</span>
+          <span class="card-location">大同高中</span>
+        </div>
+        <div class="goal-tag-muji">vo2max</div>
+      </li>
+      
+    </ul>
+    
+    <div style="font-size: 13.5px; color: #777; margin-top: 20px; margin-bottom: 24px; text-align: center;">
       ※ 依照學員狀況與天氣因素，教練保有課程變更之權利
     </div>
 
