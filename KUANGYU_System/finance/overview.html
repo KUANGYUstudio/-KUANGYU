@@ -5,13 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>財務總覽系統</title>
     <style>
+        /* 升級：加上外層底色，區分電腦版的邊界 */
+        html {
+            background-color: #e9ecef;
+        }
+        
+        /* 升級：限制最大寬度並置中，呈現窄版閱讀體驗 */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f8f9fa;
-            margin: 0;
+            margin: 0 auto;
             padding: 0;
             color: #212529;
+            max-width: 500px; 
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.08); 
+            position: relative;
         }
+        
         .header {
             background-color: #ffffff;
             padding: 16px 15px 0;
@@ -75,7 +86,6 @@
             border-radius: 8px; overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        /* 優化：主標題加大、增加底色與點綴線 */
         .project-header {
             background-color: #f1f3f5;
             padding: 16px;
@@ -108,7 +118,6 @@
         .card-left { display: flex; flex-direction: column; gap: 4px; }
         .name { font-size: 16px; font-weight: 600; transition: all 0.3s ease; }
         
-        /* 優化：完成付款的視覺標示 */
         .name.paid { color: #2b8a3e; opacity: 0.6; }
         
         .method { font-size: 13px; color: #868e96; } 
@@ -121,7 +130,6 @@
         }
         .summary-title { border-bottom: 1px solid #f1f3f5; padding-bottom: 12px; border-left: 4px solid #495057; padding-left: 12px;}
         
-        /* 優化：結算總覽置中集中對齊 */
         .summary-row {
             display: flex;
             justify-content: center;
@@ -137,7 +145,6 @@
         .form-group label { display: block; font-size: 13px; color: #495057; margin-bottom: 6px; font-weight: 500; }
         .form-group input { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
         
-        /* Switch 開關樣式 */
         .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e9ecef; transition: .3s; border-radius: 24px; }
@@ -146,7 +153,6 @@
         input:checked + .slider:before { transform: translateX(22px); }
         input:disabled + .slider { opacity: 0.5; }
 
-        /* 優化：漂亮客製化彈窗樣式 */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.5); display: flex;
@@ -225,7 +231,7 @@
 <script>
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxajCNqeJ_3OehM7uJtjlafBsYpp6se-M7ZvcnxZlS2HazZ85vqWYzw94g0_UV7BGIR4Q/exec";
     const statusDiv = document.getElementById("status");
-    let currentToggleData = null; // 用來暫存彈窗的資料
+    let currentToggleData = null;
 
     function getNoCacheUrl(actionParam) {
         const timestamp = new Date().getTime();
@@ -313,19 +319,17 @@
         }
     }
 
-    // 處理開關點擊與彈窗邏輯
     function handleToggleClick(id, el) {
         const status = el.checked;
         const nameEl = el.closest('.card-ledger').querySelector('.name');
         
         if (status === false) {
-            el.checked = true; // 畫面先強制切回綠色，等待彈窗確認
+            el.checked = true; 
             currentToggleData = { id: id, el: el, targetStatus: false, nameEl: nameEl };
             document.getElementById('confirmModal').style.display = 'flex';
             return;
         }
 
-        // 如果是變成「已付款」，不需確認，直接執行
         executeToggle(id, el, true, nameEl);
     }
 
@@ -355,7 +359,6 @@
             .then(res => {
                 if(res.status === "success") {
                     setStatus("狀態已儲存");
-                    // 根據狀態即時切換文字顏色特效
                     if (targetStatus) nameEl.classList.add('paid');
                     else nameEl.classList.remove('paid');
                 } else { 
