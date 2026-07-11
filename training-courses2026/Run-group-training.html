@@ -339,7 +339,7 @@
 
     .schedule-table {
       width: 100%;
-      min-width: 500px;
+      min-width: 600px;
       border-collapse: collapse;
       font-size: 15px;
     }
@@ -372,65 +372,6 @@
       display: block;
     }
 
-    .date-list-container {
-      background-color: var(--slate-bg);
-      border: 1px solid var(--slate-border);
-      border-radius: 6px;
-      padding: 10px 40px; 
-      margin: 0 auto 20px auto;
-      width: fit-content; 
-    }
-
-    .date-row {
-      display: flex;
-      align-items: flex-start;
-      border-bottom: 1px solid var(--slate-border);
-      padding: 20px 0;
-    }
-
-    .date-row:last-child {
-      border-bottom: none;
-    }
-
-    .month-label {
-      font-size: 16px;
-      font-weight: 600;
-      color: #555;
-      width: 60px; 
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding-top: 4px;
-    }
-
-    .days-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .day-badge {
-      display: flex;
-      align-items: baseline;
-    }
-
-    .day-number {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--slate-dark);
-      letter-spacing: 0.05em;
-    }
-
-    .holiday-note {
-      font-size: 13.5px;
-      color: #888;
-      font-weight: 500;
-      margin-top: 0; 
-      margin-left: 4px; 
-    }
-    
     .note { 
       font-size: 13.5px; 
       color: #555; 
@@ -461,32 +402,6 @@
 
     @media (max-width: 600px) {
       .form-row { flex-direction: column; gap: 20px; margin-bottom: 20px; }
-      
-      .date-row {
-        flex-direction: row; 
-        align-items: flex-start;
-        padding: 16px 0;
-      }
-      .month-label {
-        width: 50px;
-        margin-bottom: 0;
-        padding-top: 2px;
-      }
-      .date-list-container {
-        width: fit-content; 
-        margin: 0 auto 20px auto; 
-        padding: 10px 20px; 
-      }
-      .days-wrapper { 
-        gap: 14px; 
-        flex: none; 
-        width: auto;
-      }
-      .day-number { font-size: 19px; }
-      .holiday-note { 
-        font-size: 12.5px; 
-        margin-top: 0; 
-      }
     }
     
     label.field-label { 
@@ -838,75 +753,101 @@
       <table class="schedule-table">
         <thead>
           <tr>
-            <th>團練時間</th>
-            <th>核心訓練項目</th>
-            <th>訓練內容</th>
+            <th style="width: 60px;">堂數</th>
+            <th style="width: 80px;">日期</th>
+            <th>課程內容</th>
+            <th>地點</th>
+            <th>訓練目標</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>19:30 - 19:45</td>
-            <td>
-              <strong>動態熱身 ＋ 關節活動度</strong>
-            </td>
-            <td>神經與肌肉開機，激活核心與臀大肌，做好跑步準備。</td>
+            <td>1</td>
+            <td>7/15</td>
+            <td><strong>上坡跑 200m</strong></td>
+            <td>劍南路</td>
+            <td>肌力</td>
           </tr>
           <tr>
-            <td>19:45 - 20:45</td>
-            <td>
-              <strong>跑步技術與步態訓練</strong>
-            </td>
-            <td>姿勢跑法體感建立、落腳點修正與步頻優化，執行主課表。</td>
+            <td>2</td>
+            <td>7/22</td>
+            <td><strong>上坡跑 5/4/3min</strong></td>
+            <td>中社路</td>
+            <td>肌耐力</td>
           </tr>
           <tr>
-            <td>20:45 - 21:00</td>
-            <td>
-              <strong>專項肌力 ＋ 緩和收操</strong>
-            </td>
-            <td>加強下肢剛性與彈性跳躍訓練，最後進行伸展與肌肉緩和。</td>
+            <td>3</td>
+            <td>7/29</td>
+            <td><strong>400m + 800m</strong></td>
+            <td>大同高中</td>
+            <td>速度 / 速耐力</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>8/5</td>
+            <td><strong>上坡跑 500m</strong></td>
+            <td>至善路</td>
+            <td>速耐力</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>8/12</td>
+            <td><strong>上坡跑 5/4/3min</strong></td>
+            <td>中社路</td>
+            <td>肌耐力</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>8/19</td>
+            <td><strong>200m + 300m + 400m + 500m</strong></td>
+            <td>河濱</td>
+            <td>乳酸耐受</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>8/26</td>
+            <td><strong>上坡跑 200m</strong></td>
+            <td>劍南路</td>
+            <td>肌力</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>9/2</td>
+            <td><strong>上坡跑 5/4/3min</strong></td>
+            <td>中社路</td>
+            <td>肌耐力</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>9/9</td>
+            <td><strong>200m + 300m + 400m + 500m</strong></td>
+            <td>河濱</td>
+            <td>乳酸耐受</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>9/16</td>
+            <td><strong>三千公尺測驗</strong></td>
+            <td>大同高中</td>
+            <td>vo2max</td>
           </tr>
         </tbody>
       </table>
     </div>
     
-    <div style="font-size: 13.5px; color: #777; margin-bottom: 50px; padding-left: 5px;">
-      ※ 每次團練教練會依現場學員狀況與天氣動態調整訓練內容
+    <div style="font-size: 13.5px; color: #777; margin-top: 12px; margin-bottom: 24px; text-align: center;">
+      ※ 依照學員狀況與天氣因素，教練保有課程變更之權利
     </div>
 
-    <div class="schedule-title">團練日期</div>
-    <div class="date-list-container">
-      
-      <div class="date-row">
-        <div class="month-label">7月</div>
-        <div class="days-wrapper">
-          <div class="day-badge"><span class="day-number">15</span></div>
-          <div class="day-badge"><span class="day-number">22</span></div>
-          <div class="day-badge"><span class="day-number">29</span></div>
-        </div>
-      </div>
-      
-      <div class="date-row">
-        <div class="month-label">8月</div>
-        <div class="days-wrapper">
-          <div class="day-badge"><span class="day-number">05</span></div>
-          <div class="day-badge"><span class="day-number">12</span></div>
-          <div class="day-badge"><span class="day-number">19</span></div>
-          <div class="day-badge"><span class="day-number">26</span></div>
-        </div>
-      </div>
-
-      <div class="date-row">
-        <div class="month-label">9月</div>
-        <div class="days-wrapper">
-          <div class="day-badge"><span class="day-number">02</span></div>
-          <div class="day-badge"><span class="day-number">09</span></div>
-          <div class="day-badge"><span class="day-number">16</span></div>
-        </div>
-      </div>
-
+    <div class="qual-slate-box" style="margin-bottom: 30px; padding: 20px;">
+      <strong style="color: var(--slate-dark); font-size: 15px; display: block; margin-bottom: 8px;">補充說明</strong>
+      <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.6;">
+        <li>以三千公尺測驗成績為基礎，尋求突破以達成比賽預設目標。</li>
+        <li>課表為參考，教練有權利依情況調整課表內容。</li>
+      </ul>
     </div>
     
-    <div class="note">
+    <div class="note" style="margin-top: 0;">
       ※ 如需請假請於前一天 22:00 前告知，教練將提供自主練習課表建議，恕不另行安排補課。<br>
       ※ 詳細課程退費機制與天候規範，請見報名表單下方同意聲明。
     </div>
@@ -1126,7 +1067,7 @@
 </div>
 
 <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbxhpXkLELk4lCwoaz6Soa9NcB-W7Wxo2IiJ1JvTqosbSoRZ0ju3B2Qz1j92noNq-jpx/exec';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbytDGwDw9-P_3JaW575Ph8meYn-EXXNUMR7knpdV-4KdI4py_hS3i3PUV1UfngWelmsTQ/exec';
   
   const form = document.getElementById('trainingForm');
   const btn = document.getElementById('submitBtn');
