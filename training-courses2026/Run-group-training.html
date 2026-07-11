@@ -434,6 +434,8 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      min-width: 0; /* 關鍵防護：防止內容過長擠破 Flex 容器 */
+      padding-right: 12px;
     }
     
     .card-content {
@@ -442,6 +444,8 @@
       color: #333;
       margin-bottom: 6px;
       letter-spacing: 0.05em;
+      word-wrap: break-word; /* 確保長英文字或數字能正常換行 */
+      line-height: 1.3;
     }
     
     .card-location {
@@ -938,7 +942,7 @@
           <span class="card-content">400m + 800m</span>
           <span class="card-location">大同高中</span>
         </div>
-        <div class="goal-tag-muji tag-speed">速度 / 速耐力</div>
+        <div class="goal-tag-muji tag-speed">速耐力</div>
       </li>
       
       <li class="schedule-card">
@@ -971,7 +975,7 @@
           <span class="card-date">8/19</span>
         </div>
         <div class="card-main">
-          <span class="card-content">200m+300m+400m+500m</span>
+          <span class="card-content">金字塔間歇</span>
           <span class="card-location">基五號水門</span>
         </div>
         <div class="goal-tag-muji tag-lactic">乳酸耐受</div>
@@ -1007,7 +1011,7 @@
           <span class="card-date">9/9</span>
         </div>
         <div class="card-main">
-          <span class="card-content">200m+300m+400m+500m</span>
+          <span class="card-content">金字塔間歇</span>
           <span class="card-location">基五號水門</span>
         </div>
         <div class="goal-tag-muji tag-lactic">乳酸耐受</div>
