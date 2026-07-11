@@ -312,7 +312,7 @@
     }
 
     /* ==========================================
-       上半部：課表與日程區塊
+       上半部：課表與日程區塊 (去表格化設計)
        ========================================== */
     .schedule-section {
       margin-bottom: 50px;
@@ -331,45 +331,64 @@
       width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--slate-border);
-      border-radius: 6px;
-      background-color: var(--slate-bg);
-      margin-bottom: 12px; 
+      /* 移除粗硬外框，改為純淨留白 */
+      margin-bottom: 24px; 
     }
 
     .schedule-table {
       width: 100%;
-      min-width: 500px;
+      min-width: 600px;
       border-collapse: collapse;
       font-size: 15px;
     }
 
     .schedule-table th {
       text-align: left;
-      background-color: var(--slate-border);
-      color: var(--slate-dark);
+      /* 依據您的設計圖設定清透淺灰底色 */
+      background-color: #eef1f4; 
+      color: #555;
       font-weight: 600;
-      padding: 14px 16px;
+      padding: 16px 20px;
       white-space: nowrap; 
+      border-bottom: none;
+    }
+
+    /* 讓標題列擁有微圓角，減輕傳統表格感 */
+    .schedule-table th:first-child {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
+    .schedule-table th:last-child {
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
     }
 
     .schedule-table td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--slate-border);
+      /* 增加留白，讓視覺不擁擠 */
+      padding: 18px 20px; 
+      /* 極淡的橫向分隔線 */
+      border-bottom: 1px solid #eaedf0; 
       color: #444;
       vertical-align: middle;
       line-height: 1.6;
     }
     
-    .schedule-table td:nth-child(1),
-    .schedule-table td:nth-child(2) {
-      white-space: nowrap;
+    .schedule-table tbody tr:last-child td {
+      border-bottom: none;
     }
 
     .schedule-table td strong {
       color: var(--slate-dark);
       font-weight: 600;
       display: block;
+    }
+
+    /* 增加滑鼠懸停時的細微互動感 */
+    .schedule-table tbody tr {
+      transition: background-color 0.2s ease;
+    }
+    .schedule-table tbody tr:hover {
+      background-color: #f8f9fa;
     }
 
     .note { 
@@ -753,8 +772,8 @@
       <table class="schedule-table">
         <thead>
           <tr>
-            <th>團練時間</th>
-            <th>核心訓練項目</th>
+            <th style="width: 22%;">團練時間</th>
+            <th style="width: 33%;">核心訓練項目</th>
             <th>訓練內容</th>
           </tr>
         </thead>
@@ -789,10 +808,10 @@
       <table class="schedule-table">
         <thead>
           <tr>
-            <th style="width: 60px;">堂數</th>
-            <th style="width: 80px;">日期</th>
-            <th>課程內容</th>
-            <th>地點</th>
+            <th style="width: 8%;">堂數</th>
+            <th style="width: 12%;">日期</th>
+            <th style="width: 35%;">課程內容</th>
+            <th style="width: 15%;">地點</th>
             <th>訓練目標</th>
           </tr>
         </thead>
