@@ -378,7 +378,7 @@
       margin: 0;
     }
 
-    /* === 課程安排 (極簡垂直線卡片) === */
+    /* === 課程安排 (全新聚焦排版) === */
     .schedule-list {
       margin: 0 0 40px 0;
       padding: 0;
@@ -387,13 +387,13 @@
     
     .schedule-card {
       display: flex;
-      align-items: center;
-      background-color: #ffffff; /* 改為純白底 */
-      padding: 18px 24px;
+      flex-direction: column;
+      background-color: #ffffff;
+      padding: 20px 24px;
       margin-bottom: 12px;
       border-radius: 8px;
       border: 1px solid #eaedf0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02); /* 增加極淡陰影 */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
 
@@ -403,107 +403,85 @@
       border-color: var(--orange-border);
     }
     
-    /* 左側日期區塊 (帶有右側垂直分隔線) */
-    .card-meta {
+    /* 頂部次要資訊 (Week & 標籤) */
+    .card-top {
       display: flex;
-      flex-direction: column;
-      min-width: 70px;
-      border-right: 1px solid #d3d9dc;
-      padding-right: 20px;
-      margin-right: 20px;
-      flex-shrink: 0;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
     
-    .card-num {
+    .card-week {
       font-size: 13px;
-      color: #888;
+      color: #999;
       font-weight: 600;
-      margin-bottom: 4px;
       letter-spacing: 0.05em;
     }
     
-    .card-date {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--slate-dark);
-      line-height: 1;
+    /* 訓練目標標籤 (小型化，降低視覺干擾) */
+    .goal-tag-muji {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
     }
-    
-    /* 中間課程內容與地點 */
-    .card-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0; /* 關鍵防護：防止內容過長擠破 Flex 容器 */
-      padding-right: 12px;
-    }
-    
+
+    /* --- 依據科學化訓練目標的分色標籤 --- */
+    .tag-strength { background-color: #f0f4f8; color: #4a6572; border: 1px solid #d9e2ec; }
+    .tag-speed { background-color: var(--orange-tint); color: var(--orange-dark); border: 1px solid var(--orange-border); }
+    .tag-lactic { background-color: #f2f2f2; color: #444; border: 1px solid #d1d1d1; }
+    .tag-test { background-color: var(--slate-dark); color: #fff; border: 1px solid var(--slate-dark); }
+
+    /* 最重要的課表內容 (放大、加粗) */
     .card-content {
-      font-size: 17px;
-      font-weight: 700;
-      color: #333;
-      margin-bottom: 6px;
-      letter-spacing: 0.05em;
-      word-wrap: break-word; /* 確保長英文字或數字能正常換行 */
-      line-height: 1.3;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--slate-dark);
+      margin-bottom: 12px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      letter-spacing: 0.03em;
     }
     
-    .card-location {
-      font-size: 14px;
-      color: #777;
+    /* 次重要的日期與地點 */
+    .card-bottom {
       display: flex;
       align-items: center;
     }
     
-    .card-location::before {
-      content: "•";
-      margin-right: 6px;
-      color: var(--orange-main); /* 點綴一點橘色 */
+    .card-date {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--orange-main);
+      border-right: 2px solid var(--orange-border);
+      padding-right: 12px;
+      margin-right: 12px;
+      line-height: 1;
     }
     
-    /* 右側訓練目標標籤 (圓角膠囊狀) */
-    .goal-tag-muji {
-      font-size: 13.5px;
-      font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 20px;
-      letter-spacing: 0.05em;
-      flex-shrink: 0;
-      text-align: center;
-      min-width: 60px;
+    .card-location {
+      font-size: 15.5px;
+      color: #555;
+      font-weight: 500;
     }
-
-    /* --- 依據科學化訓練目標的分色標籤 --- */
-    /* 肌力/肌耐力 (沈穩藍灰) */
-    .tag-strength { background-color: #f0f4f8; color: #4a6572; border: 1px solid #d9e2ec; }
-    /* 速度/速耐力 (活力曜橘) */
-    .tag-speed { background-color: var(--orange-tint); color: var(--orange-dark); border: 1px solid var(--orange-border); }
-    /* 乳酸耐受 (高強度深灰) */
-    .tag-lactic { background-color: #f2f2f2; color: #444; border: 1px solid #d1d1d1; }
-    /* 測驗 (專屬強調色) */
-    .tag-test { background-color: var(--slate-dark); color: #fff; border: 1px solid var(--slate-dark); }
-
+    
     /* 手機版適應排版 */
     @media (max-width: 600px) {
       .schedule-card {
-        padding: 16px;
-        gap: 12px;
-      }
-      .card-meta {
-        min-width: 60px;
-        padding-right: 12px;
-        margin-right: 0;
-      }
-      .card-main {
-        padding-left: 0;
+        padding: 18px 20px;
       }
       .card-content {
-        font-size: 15.5px;
+        font-size: 20px;
+        margin-bottom: 10px;
       }
-      .goal-tag-muji {
-        padding: 4px 10px;
-        font-size: 12.5px;
-        min-width: auto;
+      .card-date {
+        font-size: 15px;
+        padding-right: 10px;
+        margin-right: 10px;
+      }
+      .card-location {
+        font-size: 14.5px;
       }
     }
     
@@ -910,123 +888,123 @@
     <ul class="schedule-list">
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 01</span>
-          <span class="card-date">7/15</span>
+        <div class="card-top">
+          <span class="card-week">Week 01</span>
+          <span class="goal-tag-muji tag-strength">肌力</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">上坡跑 200m</span>
+        <div class="card-content">上坡跑 200m</div>
+        <div class="card-bottom">
+          <span class="card-date">7/15</span>
           <span class="card-location">劍南路</span>
         </div>
-        <div class="goal-tag-muji tag-strength">肌力</div>
       </li>
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 02</span>
-          <span class="card-date">7/22</span>
+        <div class="card-top">
+          <span class="card-week">Week 02</span>
+          <span class="goal-tag-muji tag-strength">肌耐力</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">上坡跑 5/4/3min</span>
+        <div class="card-content">上坡跑 5/4/3min</div>
+        <div class="card-bottom">
+          <span class="card-date">7/22</span>
           <span class="card-location">中社路</span>
         </div>
-        <div class="goal-tag-muji tag-strength">肌耐力</div>
       </li>
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 03</span>
-          <span class="card-date">7/29</span>
+        <div class="card-top">
+          <span class="card-week">Week 03</span>
+          <span class="goal-tag-muji tag-speed">速耐力</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">400m + 800m</span>
+        <div class="card-content">400m + 800m</div>
+        <div class="card-bottom">
+          <span class="card-date">7/29</span>
           <span class="card-location">大同高中</span>
         </div>
-        <div class="goal-tag-muji tag-speed">速耐力</div>
       </li>
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 04</span>
-          <span class="card-date">8/5</span>
+        <div class="card-top">
+          <span class="card-week">Week 04</span>
+          <span class="goal-tag-muji tag-speed">速耐力</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">上坡跑 500m</span>
+        <div class="card-content">上坡跑 500m</div>
+        <div class="card-bottom">
+          <span class="card-date">8/5</span>
           <span class="card-location">至善路</span>
         </div>
-        <div class="goal-tag-muji tag-speed">速耐力</div>
       </li>
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 05</span>
-          <span class="card-date">8/12</span>
+        <div class="card-top">
+          <span class="card-week">Week 05</span>
+          <span class="goal-tag-muji tag-strength">肌耐力</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">上坡跑 5/4/3min</span>
+        <div class="card-content">上坡跑 5/4/3min</div>
+        <div class="card-bottom">
+          <span class="card-date">8/12</span>
           <span class="card-location">中社路</span>
         </div>
-        <div class="goal-tag-muji tag-strength">肌耐力</div>
       </li>
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 06</span>
-          <span class="card-date">8/19</span>
+        <div class="card-top">
+          <span class="card-week">Week 06</span>
+          <span class="goal-tag-muji tag-lactic">乳酸耐受</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">金字塔間歇</span>
+        <div class="card-content">金字塔間歇</div>
+        <div class="card-bottom">
+          <span class="card-date">8/19</span>
           <span class="card-location">基五號水門</span>
         </div>
-        <div class="goal-tag-muji tag-lactic">乳酸耐受</div>
       </li>
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 07</span>
-          <span class="card-date">8/26</span>
+        <div class="card-top">
+          <span class="card-week">Week 07</span>
+          <span class="goal-tag-muji tag-strength">肌力</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">上坡跑 200m</span>
+        <div class="card-content">上坡跑 200m</div>
+        <div class="card-bottom">
+          <span class="card-date">8/26</span>
           <span class="card-location">劍南路</span>
         </div>
-        <div class="goal-tag-muji tag-strength">肌力</div>
       </li>
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 08</span>
-          <span class="card-date">9/2</span>
+        <div class="card-top">
+          <span class="card-week">Week 08</span>
+          <span class="goal-tag-muji tag-strength">肌耐力</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">上坡跑 5/4/3min</span>
+        <div class="card-content">上坡跑 5/4/3min</div>
+        <div class="card-bottom">
+          <span class="card-date">9/2</span>
           <span class="card-location">中社路</span>
         </div>
-        <div class="goal-tag-muji tag-strength">肌耐力</div>
       </li>
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 09</span>
-          <span class="card-date">9/9</span>
+        <div class="card-top">
+          <span class="card-week">Week 09</span>
+          <span class="goal-tag-muji tag-lactic">乳酸耐受</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">金字塔間歇</span>
+        <div class="card-content">金字塔間歇</div>
+        <div class="card-bottom">
+          <span class="card-date">9/9</span>
           <span class="card-location">基五號水門</span>
         </div>
-        <div class="goal-tag-muji tag-lactic">乳酸耐受</div>
       </li>
       
       <li class="schedule-card">
-        <div class="card-meta">
-          <span class="card-num">Week 10</span>
-          <span class="card-date">9/16</span>
+        <div class="card-top">
+          <span class="card-week">Week 10</span>
+          <span class="goal-tag-muji tag-test">VO2 Max</span>
         </div>
-        <div class="card-main">
-          <span class="card-content">三千公尺測驗</span>
+        <div class="card-content">三千公尺測驗</div>
+        <div class="card-bottom">
+          <span class="card-date">9/16</span>
           <span class="card-location">大同高中</span>
         </div>
-        <div class="goal-tag-muji tag-test">VO2 Max</div>
       </li>
       
     </ul>
@@ -1244,7 +1222,7 @@
       </div>
       <div class="policy-content">
         <div class="policy-inner">
-          完成報名即代表同意相關照片與影片授權光聿工作室用於社群分享、活動紀錄或宣傳使用。若有特殊考量不便入鏡，請務必於課前主動告知教練。
+          完成報名即代表同意相關照片與影片授權光聿工作室用於社群分享、活動紀錄或宣傳使用。若有特殊考量不便入鏡，請務必於課前主持告知教練。
         </div>
       </div>
     </div>
