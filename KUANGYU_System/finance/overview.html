@@ -292,7 +292,14 @@
             groupedData[item.projectId].push(item);
         });
 
-        for (const projectId in groupedData) {
+        // 升級：鎖定專案的絕對排序順序
+        // 從最原始的 globalLedgerData 中萃取出不重複的專案 ID，當作永遠的排序標準
+        const orderedProjectIds = [...new Set(globalLedgerData.map(item => item.projectId))];
+
+        orderedProjectIds.forEach(projectId => {
+            // 如果這個專案在目前的篩選條件下沒有任何名單，就跳過不顯示
+            if (!groupedData[projectId]) return;
+
             let itemsHtml = "";
             groupedData[projectId].forEach(item => {
                 const isChecked = item.isPaid ? "checked" : "";
@@ -327,7 +334,7 @@
                         ${itemsHtml}
                     </div>
                 </div>`;
-        }
+        });
     }
 
     function handleToggleClick(id, el) {
