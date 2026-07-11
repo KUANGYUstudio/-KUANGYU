@@ -49,16 +49,22 @@
         }
         .btn-full:disabled { background-color: #adb5bd; }
 
-        /* 新增：質感下拉選單樣式 */
-        .filter-select {
-            width: 100%; padding: 12px 14px; font-size: 15px; font-weight: 600;
-            color: #495057; background-color: #ffffff; border: 1px solid #ced4da;
-            border-radius: 6px; margin-bottom: 16px; appearance: none; 
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat; background-position: right 12px center;
-            background-size: 16px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        /* 新增：一字排開的按鈕過濾器樣式 */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
         }
-        .filter-select:focus { outline: none; border-color: #adb5bd; }
+        .filter-btn {
+            flex: 1; padding: 8px 0; font-size: 13px; font-weight: 600;
+            color: #868e96; background-color: #ffffff; border: 1px solid #dee2e6;
+            border-radius: 6px; cursor: pointer; transition: all 0.2s;
+            text-align: center; white-space: nowrap;
+        }
+        /* 按鈕被選中時的深色質感狀態 */
+        .filter-btn.active {
+            background-color: #495057; color: #ffffff; border-color: #495057;
+        }
 
         .btn-archive {
             width: 100%; padding: 10px; font-size: 13px; font-weight: 600;
@@ -146,13 +152,13 @@
 <div id="tab-ledger" class="content-area active">
     <button class="btn-full" id="syncBtn" onclick="syncData()">同步最新名單</button>
     
-    <!-- 新增：金流分類篩選器 -->
-    <select id="methodFilter" class="filter-select" onchange="applyFilter()">
-        <option value="all">顯示全部金流 (依專案排序)</option>
-        <option value="LINE">過濾：僅顯示 LINE PAY / iPass</option>
-        <option value="現金">過濾：僅顯示 現金</option>
-        <option value="匯款">過濾：僅顯示 銀行匯款</option>
-    </select>
+    <!-- 替換為按鈕式的分類切換器 -->
+    <div class="filter-bar">
+        <button class="filter-btn active" onclick="setFilter('all', this)">全部</button>
+        <button class="filter-btn" onclick="setFilter('現金', this)">現金</button>
+        <button class="filter-btn" onclick="setFilter('匯款', this)">銀行匯款</button>
+        <button class="filter-btn" onclick="setFilter('LINE', this)">LINE PAY</button>
+    </div>
 
     <div class="card-container" id="ledgerContainer"></div>
 </div>
@@ -199,7 +205,8 @@
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxajCNqeJ_3OehM7uJtjlafBsYpp6se-M7ZvcnxZlS2HazZ85vqWYzw94g0_UV7BGIR4Q/exec";
     const statusDiv = document.getElementById("status");
     let currentToggleData = null;
-    let globalLedgerData = []; // 新增：把資料存起來供篩選器使用
+    let globalLedgerData = []; 
+    let currentFilter = 'all'; // 記錄當前的分類狀態
 
     function getNoCacheUrl(actionParam) {
         const timestamp = new Date().getTime();
@@ -229,25 +236,34 @@
             .then(res => {
                 if(res.status === "success") {
                     globalLedgerData = res.data.reverse();
-                    applyFilter(); // 載入後套用目前的篩選狀態
+                    applyFilter(); 
                     setStatus("明細載入完成");
                 } else setStatus("讀取失敗");
             }).catch(() => setStatus("連線異常"));
     }
 
-    // 新增：處理下拉選單的過濾邏輯
+    // 處理按鈕點擊：切換外觀並觸發過濾
+    function setFilter(filterType, btnEl) {
+        currentFilter = filterType;
+        
+        // 移除所有按鈕的 active 狀態，並為點擊的按鈕加上
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        btnEl.classList.add('active');
+        
+        applyFilter();
+    }
+
     function applyFilter() {
-        const filterValue = document.getElementById('methodFilter').value;
         let filteredData = globalLedgerData;
 
-        if (filterValue !== 'all') {
+        if (currentFilter !== 'all') {
             filteredData = globalLedgerData.filter(item => {
                 const methodStr = item.method ? item.method.toUpperCase() : "";
-                if (filterValue === 'LINE') {
+                if (currentFilter === 'LINE') {
                     return methodStr.includes('LINE') || methodStr.includes('IPASS');
-                } else if (filterValue === '現金') {
+                } else if (currentFilter === '現金') {
                     return methodStr.includes('現金') || methodStr.includes('面交');
-                } else if (filterValue === '匯款') {
+                } else if (currentFilter === '匯款') {
                     return methodStr.includes('匯款') || methodStr.includes('轉帳') || methodStr.includes('銀行') || methodStr.includes('五碼');
                 }
                 return false;
@@ -261,7 +277,7 @@
         container.innerHTML = "";
         
         if (data.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding: 30px; color: #868e96; font-size: 14px;">此分類目前沒有資料</div>`;
+            container.innerHTML = `<div style="text-align:center; padding: 40px 20px; color: #adb5bd; font-size: 14px;">此分類目前沒有資料</div>`;
             return;
         }
 
@@ -357,7 +373,6 @@
                     if (targetStatus) rowEl.classList.add('is-paid');
                     else rowEl.classList.remove('is-paid');
 
-                    // 新增：同步更新本地端資料庫，這樣切換分類時狀態才不會跑掉
                     const itemIndex = globalLedgerData.findIndex(i => i.id === id);
                     if (itemIndex > -1) {
                         globalLedgerData[itemIndex].isPaid = targetStatus;
