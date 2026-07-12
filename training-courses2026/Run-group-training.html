@@ -362,12 +362,15 @@
     }
     .flow-content {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .flow-title {
       font-size: 16px;
       color: #333;
       font-weight: 500;
-      margin-bottom: 4px;
+      margin-bottom: 0;
       display: block;
       letter-spacing: 0.05em;
     }
@@ -375,14 +378,15 @@
       font-size: 14px;
       color: #777;
       line-height: 1.6;
-      margin: 0;
+      margin: 4px 0 0 0;
     }
 
     /* === 課程安排 (全新橫向聚焦排版) === */
     .schedule-list {
-      margin: 0 0 40px 0;
+      margin: 0 auto 40px auto; /* 置中並保留下方間距 */
       padding: 0;
       list-style: none;
+      max-width: 520px; /* 限制電腦版最大寬度，提升資訊密度 */
     }
     
     .schedule-card {
@@ -483,6 +487,9 @@
     
     /* 手機版適應排版 */
     @media (max-width: 600px) {
+      .schedule-list {
+        max-width: 100%; /* 手機版維持滿版 */
+      }
       .schedule-card {
         padding: 14px 15px;
       }
@@ -900,14 +907,12 @@
         <div class="flow-time">19:50 - 20:50</div>
         <div class="flow-content">
           <span class="flow-title">主課表訓練</span>
-          <p class="flow-desc">執行主課表。</p>
         </div>
       </li>
       <li class="flow-item">
         <div class="flow-time">20:50 - 21:00</div>
         <div class="flow-content">
           <span class="flow-title">緩和收操</span>
-          <p class="flow-desc">進行伸展與肌肉緩和。</p>
         </div>
       </li>
     </ul>
@@ -990,7 +995,7 @@
         <div class="card-left">
           <span class="card-week">Week 06</span>
           <span class="card-date">8/19</span>
-          <span class="card-location">基五號</span>
+          <span class="card-location">基五號水門</span>
         </div>
         <div class="card-center">
           <div class="card-content">金字塔間歇</div>
@@ -1032,7 +1037,7 @@
         <div class="card-left">
           <span class="card-week">Week 09</span>
           <span class="card-date">9/9</span>
-          <span class="card-location">基五號</span>
+          <span class="card-location">基五號水門</span>
         </div>
         <div class="card-center">
           <div class="card-content">金字塔間歇</div>
