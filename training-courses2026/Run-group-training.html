@@ -159,15 +159,6 @@
       border-bottom-color: var(--orange-dark);
     }
 
-    @keyframes float-up-down {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
-    }
-    
-    .floating-icon {
-      animation: float-up-down 2s ease-in-out infinite;
-    }
-
     @media (max-width: 600px) {
       .info-grid {
         grid-template-columns: 1fr;
@@ -184,12 +175,21 @@
        ========================================== */
     .intro-text {
       text-align: center;
-      font-size: 16.5px;
-      font-weight: 500;
+      font-size: 16px;
       color: #444;
       margin-bottom: 40px;
       line-height: 1.8;
       letter-spacing: 0.05em;
+    }
+    .intro-text a {
+      color: var(--orange-dark);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s ease;
+      font-weight: 500;
+    }
+    .intro-text a:hover {
+      border-bottom-color: var(--orange-dark);
     }
 
     /* ==========================================
@@ -223,11 +223,6 @@
       margin-bottom: 0; 
     }
 
-    .qual-sub-list-slate strong {
-      color: var(--slate-dark);
-      font-weight: 600;
-    }
-
     /* ==========================================
        關於教練區塊 (全新網格設計)
        ========================================== */
@@ -250,7 +245,7 @@
     .coach-box {
       background-color: #ffffff;
       border-radius: 8px;
-      padding: 24px;
+      padding: 28px 24px;
       border: 1px solid var(--orange-border);
       box-shadow: 0 4px 16px rgba(230, 92, 0, 0.05);
       height: 100%;
@@ -261,40 +256,29 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 12px;
-    }
-    .coach-icon {
-      width: 44px;
-      height: 44px;
-      background-color: var(--orange-light);
-      color: var(--orange-dark);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      margin-bottom: 16px;
     }
     .coach-name {
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 22px; /* 放大教練名字 */
+      font-weight: 800;
       color: var(--orange-dark);
       letter-spacing: 0.05em;
       margin: 0;
     }
     .coach-role-tag {
-      font-size: 13px;
-      background-color: var(--slate-dark);
-      color: #fff;
-      padding: 3px 10px;
+      font-size: 15px; /* 放大職稱標籤 */
+      background-color: var(--orange-tint); /* 淺色背景點綴 */
+      color: var(--orange-dark);
+      padding: 4px 12px;
       border-radius: 4px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.05em;
     }
     .coach-desc {
       font-size: 14.5px;
       color: #444;
       line-height: 1.8;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
     .coach-exp-title {
       font-size: 14.5px;
@@ -441,7 +425,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 70px; 
+      width: 85px; /* 加寬確保電腦版「基五號水門」不換行 */
       flex-shrink: 0;
     }
     
@@ -469,6 +453,7 @@
       font-size: 13.5px;
       color: #3182ce; 
       font-weight: 500;
+      white-space: nowrap; /* 確保地點不換行 */
     }
 
     /* 中間：主課表區塊 */
@@ -518,30 +503,30 @@
         column-count: 1; 
       }
       .schedule-card {
-        padding: 8px 12px; /* 極大化壓縮內距 */
-        margin-bottom: 8px; /* 縮減卡片距離 */
+        padding: 8px 12px; 
+        margin-bottom: 8px; 
       }
       .card-left {
-        width: 50px; /* 縮小左側區塊寬度 */
+        width: 65px; /* 稍微留寬給手機版地點 */
       }
       .card-week {
-        font-size: 10px; /* 縮小 Week 字體 */
-        margin-bottom: 2px; /* 收緊上下距離 */
+        font-size: 10px; 
+        margin-bottom: 2px; 
         padding-bottom: 0;
-        border-bottom: none; /* 手機版移除底線以節省空間 */
+        border-bottom: none; 
       }
       .card-date {
-        font-size: 18px; /* 縮小日期 */
+        font-size: 18px; 
         margin-bottom: 2px;
       }
       .card-location {
-        font-size: 11.5px; /* 縮小地點字體 */
+        font-size: 11px; /* 縮小地點字體 */
       }
       .card-center {
         padding: 0 8px;
       }
       .card-content {
-        font-size: 16px; /* 縮小主課表字體 */
+        font-size: 16px; 
       }
       .card-right {
         min-width: 45px;
@@ -550,18 +535,6 @@
         font-size: 10px;
         padding: 3px 6px;
       }
-    }
-    
-    /* === 優化備註區塊 === */
-    .note { 
-      font-size: 13.5px; 
-      color: #555; 
-      margin-top: 20px;
-      line-height: 1.7; 
-      padding: 10px 15px;
-      background-color: #f8f9fa; 
-      border-radius: 6px;
-      border: 1px solid #eaedf0;
     }
 
     /* ==========================================
@@ -813,7 +786,12 @@
   <h1>光聿第 26 期跑班<br>跑步技術與肌力優化班</h1>
 
   <div class="intro-text">
-    本跑班專注於「跑步技術優化」與「專項肌力建立」為主，透過科學化的動作拆解、步態調整與體感建立，協助學員提升跑步效率，遠離運動傷害，培養更穩定流暢的奔跑能力。
+    想突破瓶頸、跑得更有效率；<br>
+    想改善跑姿、遠離疼痛！<br>
+    歡迎和我們一起練習！<br>
+    提升自我、打造更好的生活品質！<br><br>
+    <a href="https://www.facebook.com/KUANGYU.studio" target="_blank">FB：光聿工作室</a><br>
+    <a href="https://www.instagram.com/kuangyu.studio/" target="_blank">IG：@kuangyu.studio</a>
   </div>
   
   <div class="info-grid">
@@ -840,17 +818,17 @@
       </div>
     </div>
 
-    <a href="https://maps.app.goo.gl/w8Cet4BW3KBswusL9" target="_blank" class="info-pill-clean">
+    <div class="info-pill-clean span-full">
       <div class="info-icon-clean">
-        <svg class="floating-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
       </div>
       <div class="info-text-clean">
         <span class="info-label-clean">訓練地點</span>
-        <span class="info-value-clean">川岳中醫醫療運動中心</span>
+        <span class="info-value-clean">依課程安排，如有變動會於課程群組公告。</span>
       </div>
-    </a>
+    </div>
 
-    <div class="info-pill-clean">
+    <div class="info-pill-clean span-full">
       <div class="info-icon-clean">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
       </div>
@@ -859,27 +837,6 @@
         <span class="info-value-clean">$7,000 / 人</span>
       </div>
     </div>
-
-    <div class="info-pill-clean">
-      <div class="info-icon-clean">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-      </div>
-      <div class="info-text-clean">
-        <span class="info-label-clean">名額限制</span>
-        <span class="info-value-clean">5 人開班，15 人滿班</span>
-      </div>
-    </div>
-
-    <div class="info-pill-clean">
-      <div class="info-icon-clean">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-      </div>
-      <div class="info-text-clean">
-        <span class="info-label-clean">報名截止</span>
-        <span class="info-value-clean">7/13 (一) 23:59（或額滿為止）</span>
-      </div>
-    </div>
-
   </div>
 
   <div class="qual-section">
@@ -887,8 +844,8 @@
     
     <div class="qual-slate-box">
       <ul class="qual-sub-list-slate">
-        <li>想建立良好跑步姿勢、預防運動傷害的初跑者。</li>
-        <li>期望優化跑步經濟性、突破個人PB，或準備路跑與鐵人賽事的跑者。</li>
+        <li>想要突破跑步瓶頸、跑得更有效率的跑者。</li>
+        <li>針對下半年鐵人三項賽事或路跑賽事準備，期望提升成績的跑者。</li>
       </ul>
     </div>
   </div>
@@ -898,17 +855,13 @@
     
     <div class="coach-grid">
       
-      <!-- 總教練：劉光武 -->
       <div class="coach-box">
         <div class="coach-header">
-          <div class="coach-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          </div>
           <h3 class="coach-name">劉光武 教練</h3>
           <span class="coach-role-tag">總教練</span>
         </div>
         
-        <div style="font-weight: 600; color: var(--orange-dark); margin-bottom: 8px; font-size: 14.5px;">素人選手出生 / 8 年教學經歷</div>
+        <div style="font-weight: 600; color: var(--orange-dark); margin-bottom: 12px; font-size: 14.5px;">素人選手出生 / 8 年教學經歷</div>
         
         <div class="coach-desc">
           致力於健康無痛的運動生活。熱衷於鐵人三項訓練，也喜歡鑽研背後的科學邏輯，藉由自身經驗發展的訓練系統，讓忙碌的人也能勇於追求進步、達成自我實現！
@@ -938,19 +891,25 @@
         </ul>
       </div>
 
-      <!-- 助理教練：費聿凡 -->
       <div class="coach-box">
         <div class="coach-header">
-          <div class="coach-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          </div>
           <h3 class="coach-name">費聿凡 教練</h3>
           <span class="coach-role-tag">助理教練</span>
         </div>
         
-        <div class="coach-desc" style="margin-top: 32px;">
+        <div class="coach-desc" style="margin-top: 12px;">
           身為專業體能教練與動作控制專家，同時具備豐富的鐵人三項與耐力運動實戰經驗。對人體結構、核心啟動與下肢力學具備極高敏銳度，深知跑者面對「推蹬沒力、重心落後、越跑越痛」的技術痛點，擅長以科學化的動作指令與動作誘發，協助學員破除身體限制，建立高效輕盈的跑步機制。
         </div>
+
+        <div class="coach-exp-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          專長
+        </div>
+        <ul class="coach-exp-list" style="margin-bottom: 20px;">
+          <li class="coach-exp-item">運動按摩</li>
+          <li class="coach-exp-item">跑步、游泳姿勢調整</li>
+          <li class="coach-exp-item">鐵人三項訓練</li>
+        </ul>
         
         <div class="coach-exp-title">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
@@ -1145,16 +1104,11 @@
     </div>
 
     <div class="qual-slate-box" style="margin-bottom: 30px; padding: 20px;">
-      <strong style="color: var(--slate-dark); font-size: 15px; display: block; margin-bottom: 8px;">補充說明</strong>
+      <div style="color: var(--slate-dark); font-size: 16px; font-weight: 600; display: block; margin-bottom: 12px;">重要提醒</div>
       <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.6;">
-        <li>以三千公尺測驗成績為基礎，尋求突破以達成比賽預設目標。</li>
-        <li>課表為參考，教練有權利依情況調整課表內容。</li>
+        <li>可以插班，需由教練評估是否合適。</li>
+        <li>如需請假，無法提供補課，敬請見諒。</li>
       </ul>
-    </div>
-    
-    <div class="note" style="margin-top: 0;">
-      ※ 如需請假請於前一天 22:00 前告知，教練將提供自主練習課表建議，恕不另行安排補課。<br>
-      ※ 詳細課程退費機制與天候規範，請見報名表單下方同意聲明。
     </div>
   </div>
   
@@ -1265,7 +1219,7 @@
     
     <div id="bankDetailsGroup" class="dynamic-panel">
       <div class="bank-info">
-        <strong style="color: var(--orange-dark); font-size: 15px;">匯款帳戶資訊</strong><br>
+        <div style="color: var(--orange-dark); font-size: 15px; margin-bottom: 8px;">匯款帳戶資訊</div>
         銀行：國泰世華 (013)<br>
         帳號：269506136805<br>
         戶名：費聿凡
@@ -1281,9 +1235,9 @@
     <div class="policy-box">
       <div class="policy-header">
         <label class="custom-checkbox-container">
-          <input type="checkbox" name="agreeHealth" class="policy-checkbox" required>
+          <input type="checkbox" name="agreeMatters" class="policy-checkbox" required>
           <span class="custom-checkmark"></span>
-          <span class="checkbox-text">我已詳閱並確認身體狀況良好</span>
+          <span class="checkbox-text">我已詳閱並同意課程注意事項</span>
         </label>
         <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
           <span>＋</span>
@@ -1291,7 +1245,12 @@
       </div>
       <div class="policy-content">
         <div class="policy-inner">
-          本人確認目前身體狀況良好，且無任何隱瞞不適合從事高強度耐力運動之心血管病史、胸悶、心悸、頭暈或其他可能引發危險之病症。本人明瞭跑步訓練具備一定強度，若在訓練過程中感到任何不適，將立即告知教練並停止訓練。本人對自身參與團練之行為負起最終安全責任。
+          <div style="margin-bottom: 12px;">1. 為將課程風險降至最低，請同學遵守課程相關規定，並做好自我管理，避免造成自己或其他人不論是生理、心理或是財產的損失，並且不以光聿工作室名義從事不當行為。如有違反，光聿工作室有權禁止參與課程並辦理退費。</div>
+          <div style="margin-bottom: 12px;">2. 本課程不包含保險，如須個人保險，請自行加保。</div>
+          <div style="margin-bottom: 12px;">3. 參與課程的同時，即視為同意並授權光聿工作室拍攝並公開使用「課程中所拍攝之照片與影片」。若有其他用途，光聿工作室會徵求同學的同意才行使用。</div>
+          <div style="margin-bottom: 12px;">4. 請同學確保自身的健康狀況，如有心血管疾病或其它重大疾病，請審慎評估自身狀況，切勿勉強參與課程。</div>
+          <div style="margin-bottom: 12px;">5. 課程中若有不適，請立即向教練反應！切勿硬撐！</div>
+          <div>6. 光聿工作室保有修改、變更或暫停本課程之權利，但會以學員權益為第一考量，如有未盡事宜，將隨時調整修訂與補充公告。一旦參加本課程，則表示同意接受本辦法之規範。</div>
         </div>
       </div>
     </div>
@@ -1299,9 +1258,9 @@
     <div class="policy-box">
       <div class="policy-header">
         <label class="custom-checkbox-container">
-          <input type="checkbox" name="agreeRefund" class="policy-checkbox" required>
+          <input type="checkbox" name="agreeSuspension" class="policy-checkbox" required>
           <span class="custom-checkmark"></span>
-          <span class="checkbox-text">我已詳閱並同意課前聲明與退費機制</span>
+          <span class="checkbox-text">我已詳閱並同意停課相關事宜</span>
         </label>
         <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
           <span>＋</span>
@@ -1309,33 +1268,7 @@
       </div>
       <div class="policy-content">
         <div class="policy-inner">
-          <div style="margin-bottom: 14px;">
-            <strong style="color: var(--orange-dark); display: block; margin-bottom: 4px;">※ 課程退費機制</strong>
-            於 7/15 課程開始 7 天前取消者，退還該次費用之 90%；於課程開始 3 天前取消者，退還 50%；於課程開始 3 天內取消者，恕不予退費。
-          </div>
-          <div style="margin-bottom: 0;">
-            <strong style="color: var(--orange-dark); display: block; margin-bottom: 4px;">※ 請假與補課機制</strong>
-            如需請假請於前一天 22:00 前告知，教練將提供自主練習的課表建議，恕不另行安排補課。
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="policy-box">
-      <div class="policy-header">
-        <label class="custom-checkbox-container">
-          <input type="checkbox" name="agreeWeather" class="policy-checkbox" required>
-          <span class="custom-checkmark"></span>
-          <span class="checkbox-text">我已詳閱並同意天候變更與退費聲明</span>
-        </label>
-        <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
-          <span>＋</span>
-        </div>
-      </div>
-      <div class="policy-content">
-        <div class="policy-inner">
-          本團練於戶外場地進行，<strong style="color: var(--orange-dark); font-size: 14.5px;">小雨原則上照常上課</strong>；如遇豪大雨、颱風等惡劣天氣，或政府公告停班停課，<strong style="color: var(--orange-dark); font-size: 14.5px;">教練將視情況調整、延期或停止課程</strong>。<br><br>
-          如因不可抗力之天候因素導致課程中斷或無法恢復訓練，該堂課將列為<strong style="color: var(--orange-dark); font-size: 14.5px;">天候取消，並優先安排指定時間補課</strong>。如學員因時間衝突無法配合補課，該堂課可申請依比例退費。實際執行將以現場安全判斷為最終依歸。
+          如遇不可抗力之天災，將依台北市政府發布消息為基準，若發佈「停止上班上課」，當天課程即暫停一次，並於 LINE 群組隨時更新與通知。
         </div>
       </div>
     </div>
@@ -1343,9 +1276,9 @@
     <div class="policy-box" style="margin-bottom: 24px;">
       <div class="policy-header">
         <label class="custom-checkbox-container">
-          <input type="checkbox" name="agreeImage" class="policy-checkbox" required>
+          <input type="checkbox" name="agreeRefund" class="policy-checkbox" required>
           <span class="custom-checkmark"></span>
-          <span class="checkbox-text">我已詳閱並同意影像與肖像權授權</span>
+          <span class="checkbox-text">我已詳閱並同意課程退費機制</span>
         </label>
         <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
           <span>＋</span>
@@ -1353,7 +1286,7 @@
       </div>
       <div class="policy-content">
         <div class="policy-inner">
-          完成報名即代表同意相關照片與影片授權光聿工作室用於社群分享、活動紀錄或宣傳使用。若有特殊考量不便入鏡，請務必於課前主持告知教練。
+          於 7/15 課程開始 7 天前取消者，退還該次費用之 90%；於課程開始 3 天前取消者，退還 50%；於課程開始 3 天內取消者，恕不予退費。
         </div>
       </div>
     </div>
@@ -1475,10 +1408,9 @@
 
     const requiredInputs = Array.from(form.querySelectorAll('[required]'));
     const policyMapping = {
-      'agreeHealth': '健康狀況聲明',
-      'agreeRefund': '課前聲明與退費機制',
-      'agreeWeather': '天候變更與退費聲明',
-      'agreeImage': '影像與肖像權授權'
+      'agreeMatters': '課程注意事項',
+      'agreeSuspension': '停課相關事宜',
+      'agreeRefund': '課程退費機制'
     };
 
     for (let input of requiredInputs) {
