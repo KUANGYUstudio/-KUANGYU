@@ -229,23 +229,39 @@
     }
 
     /* ==========================================
-       關於教練區塊
+       關於教練區塊 (全新網格設計)
        ========================================== */
     .coach-section {
       margin-bottom: 50px;
     }
+    
+    .coach-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 電腦版左右並排 */
+      gap: 20px;
+    }
+    
+    @media (max-width: 650px) {
+      .coach-grid {
+        grid-template-columns: 1fr; /* 手機版上下堆疊 */
+      }
+    }
+    
     .coach-box {
       background-color: #ffffff;
       border-radius: 8px;
-      padding: 30px;
+      padding: 24px;
       border: 1px solid var(--orange-border);
       box-shadow: 0 4px 16px rgba(230, 92, 0, 0.05);
+      height: 100%;
+      box-sizing: border-box;
     }
     .coach-header {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .coach-icon {
       width: 44px;
@@ -265,14 +281,23 @@
       letter-spacing: 0.05em;
       margin: 0;
     }
+    .coach-role-tag {
+      font-size: 13px;
+      background-color: var(--slate-dark);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
     .coach-desc {
-      font-size: 15px;
+      font-size: 14.5px;
       color: #444;
       line-height: 1.8;
       margin-bottom: 20px;
     }
     .coach-exp-title {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 700;
       color: var(--orange-dark);
       margin-bottom: 12px;
@@ -286,7 +311,7 @@
       list-style: none;
     }
     .coach-exp-item {
-      font-size: 14.5px;
+      font-size: 13.5px;
       color: #555;
       margin-bottom: 8px;
       padding-left: 16px;
@@ -302,13 +327,6 @@
       height: 5px;
       background-color: var(--orange-main);
       border-radius: 50%;
-    }
-
-    @media (min-width: 601px) {
-      .coach-name { font-size: 20px; }
-      .coach-desc { font-size: 16px; }
-      .coach-exp-title { font-size: 16px; }
-      .coach-exp-item { font-size: 15.5px; }
     }
 
     /* ==========================================
@@ -381,12 +399,20 @@
       margin: 4px 0 0 0;
     }
 
-    /* === 課程安排 (全新橫向聚焦排版) === */
+    /* === 課程安排 (全新雙欄排版) === */
     .schedule-list {
-      margin: 0 auto 40px auto; /* 置中並保留下方間距 */
+      margin: 0 auto 40px auto; 
       padding: 0;
       list-style: none;
-      max-width: 520px; /* 限制電腦版最大寬度，提升資訊密度 */
+      max-width: 100%; 
+    }
+    
+    /* 雙欄設定：大螢幕時自動分成左右兩排 */
+    @media (min-width: 601px) {
+      .schedule-list {
+        column-count: 2; 
+        column-gap: 20px; 
+      }
     }
     
     .schedule-card {
@@ -395,12 +421,13 @@
       align-items: center; 
       justify-content: space-between;
       background-color: #ffffff;
-      padding: 16px 20px;
+      padding: 16px 16px;
       margin-bottom: 12px;
       border-radius: 8px;
       border: 1px solid #eaedf0;
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      break-inside: avoid;
     }
 
     .schedule-card:hover {
@@ -414,16 +441,16 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 75px; 
+      width: 70px; 
       flex-shrink: 0;
     }
     
     .card-week {
-      font-size: 13px;
-      color: #999;
+      font-size: 12px;
+      color: #b0b8c1; 
       font-weight: 600;
       letter-spacing: 0.05em;
-      border-bottom: 1px solid #ccc; 
+      border-bottom: 1px solid #eaedf0; 
       padding-bottom: 4px;
       margin-bottom: 8px;
       width: 100%;
@@ -431,7 +458,7 @@
     }
     
     .card-date {
-      font-size: 28px; 
+      font-size: 26px; 
       font-weight: 800;
       color: #999; 
       line-height: 1;
@@ -439,7 +466,7 @@
     }
     
     .card-location {
-      font-size: 14px;
+      font-size: 13.5px;
       color: #3182ce; 
       font-weight: 500;
     }
@@ -448,11 +475,11 @@
     .card-center {
       flex: 1; 
       text-align: center;
-      padding: 0 15px;
+      padding: 0 10px;
     }
 
     .card-content {
-      font-size: 22px;
+      font-size: 20px; 
       font-weight: 800;
       color: var(--slate-dark);
       margin: 0;
@@ -466,14 +493,14 @@
       flex-shrink: 0;
       display: flex;
       justify-content: flex-end;
-      min-width: 65px; 
+      min-width: 55px; 
     }
 
     /* 訓練目標標籤 */
     .goal-tag-muji {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 4px;
       letter-spacing: 0.05em;
       white-space: nowrap;
@@ -485,39 +512,43 @@
     .tag-lactic { background-color: #f2f2f2; color: #444; border: 1px solid #d1d1d1; }
     .tag-test { background-color: var(--slate-dark); color: #fff; border: 1px solid var(--slate-dark); }
     
-    /* 手機版適應排版 */
+    /* 手機版適應排版 (極致壓縮版面) */
     @media (max-width: 600px) {
       .schedule-list {
-        max-width: 100%; /* 手機版維持滿版 */
+        column-count: 1; 
       }
       .schedule-card {
-        padding: 14px 15px;
+        padding: 8px 12px; /* 極大化壓縮內距 */
+        margin-bottom: 8px; /* 縮減卡片距離 */
       }
       .card-left {
-        width: 60px;
+        width: 50px; /* 縮小左側區塊寬度 */
       }
       .card-week {
-        font-size: 12px;
-        margin-bottom: 6px;
+        font-size: 10px; /* 縮小 Week 字體 */
+        margin-bottom: 2px; /* 收緊上下距離 */
+        padding-bottom: 0;
+        border-bottom: none; /* 手機版移除底線以節省空間 */
       }
       .card-date {
-        font-size: 24px;
+        font-size: 18px; /* 縮小日期 */
+        margin-bottom: 2px;
       }
       .card-location {
-        font-size: 13px;
+        font-size: 11.5px; /* 縮小地點字體 */
       }
       .card-center {
-        padding: 0 10px;
+        padding: 0 8px;
       }
       .card-content {
-        font-size: 18px;
+        font-size: 16px; /* 縮小主課表字體 */
       }
       .card-right {
-        min-width: 55px;
+        min-width: 45px;
       }
       .goal-tag-muji {
-        font-size: 11px;
-        padding: 3px 8px;
+        font-size: 10px;
+        padding: 3px 6px;
       }
     }
     
@@ -865,29 +896,75 @@
   <div class="coach-section">
     <div class="schedule-title">關於教練</div>
     
-    <div class="coach-box">
-      <div class="coach-header">
-        <div class="coach-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+    <div class="coach-grid">
+      
+      <!-- 總教練：劉光武 -->
+      <div class="coach-box">
+        <div class="coach-header">
+          <div class="coach-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <h3 class="coach-name">劉光武 教練</h3>
+          <span class="coach-role-tag">總教練</span>
         </div>
-        <h3 class="coach-name">費聿凡 教練</h3>
+        
+        <div style="font-weight: 600; color: var(--orange-dark); margin-bottom: 8px; font-size: 14.5px;">素人選手出生 / 8 年教學經歷</div>
+        
+        <div class="coach-desc">
+          致力於健康無痛的運動生活。熱衷於鐵人三項訓練，也喜歡鑽研背後的科學邏輯，藉由自身經驗發展的訓練系統，讓忙碌的人也能勇於追求進步、達成自我實現！
+        </div>
+        
+        <div class="coach-exp-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          證照與專長
+        </div>
+        <ul class="coach-exp-list" style="margin-bottom: 20px;">
+          <li class="coach-exp-item">中華民國鐵人三項 A 級教練</li>
+          <li class="coach-exp-item">鐵人三項訓練｜自行車訓練｜跑步訓練</li>
+        </ul>
+
+        <div class="coach-exp-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          比賽經歷
+        </div>
+        <ul class="coach-exp-list">
+          <li class="coach-exp-item">2025 西班牙 IRONMAN 70.3 世錦賽</li>
+          <li class="coach-exp-item">2024 紐西蘭 IRONMAN 70.3 世錦賽</li>
+          <li class="coach-exp-item">2022 夏威夷 KONA IRONMAN 世錦賽</li>
+          <li class="coach-exp-item">2022 墾丁 IRONMAN 70.3 總排第 2 名</li>
+          <li class="coach-exp-item">2022 台東普悠瑪鐵人賽 226 km 總排第 2 名</li>
+          <li class="coach-exp-item">2021 台東超鐵 226 km 總排第 4 名</li>
+          <li class="coach-exp-item">2019 法國尼斯 IRONMAN 70.3 世錦賽</li>
+        </ul>
       </div>
-      
-      <div class="coach-desc">
-        身為專業體能教練與動作控制專家，同時具備豐富的鐵人三項與耐力運動實戰經驗。對人體結構、核心啟動與下肢力學具備極高敏銳度，深知跑者面對「推蹬沒力、重心落後、越跑越痛」的技術痛點，擅長以科學化的動作指令與動作誘發，協助學員破除身體限制，建立高效輕盈的跑步機制。
+
+      <!-- 助理教練：費聿凡 -->
+      <div class="coach-box">
+        <div class="coach-header">
+          <div class="coach-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <h3 class="coach-name">費聿凡 教練</h3>
+          <span class="coach-role-tag">助理教練</span>
+        </div>
+        
+        <div class="coach-desc" style="margin-top: 32px;">
+          身為專業體能教練與動作控制專家，同時具備豐富的鐵人三項與耐力運動實戰經驗。對人體結構、核心啟動與下肢力學具備極高敏銳度，深知跑者面對「推蹬沒力、重心落後、越跑越痛」的技術痛點，擅長以科學化的動作指令與動作誘發，協助學員破除身體限制，建立高效輕盈的跑步機制。
+        </div>
+        
+        <div class="coach-exp-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          實戰經歷
+        </div>
+        <ul class="coach-exp-list">
+          <li class="coach-exp-item">2026 普悠瑪 51.5km 三鐵賽 F30 第二名</li>
+          <li class="coach-exp-item">2026 澎湖 IRONMAN 鐵人三項完賽</li>
+          <li class="coach-exp-item">2022 台東 IRONMAN 70.3 分組第一</li>
+          <li class="coach-exp-item">2017 日本村上亞洲盃鐵人三項 — 中華台北代表隊</li>
+          <li class="coach-exp-item">2012 世界大學鐵人三項錦標賽 — 中華台北代表隊</li>
+        </ul>
       </div>
-      
-      <div class="coach-exp-title">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-        實戰經歷
-      </div>
-      <ul class="coach-exp-list">
-        <li class="coach-exp-item">2026 普悠瑪 51.5km 三鐵賽 F30 第二名</li>
-        <li class="coach-exp-item">2026 澎湖 IRONMAN 鐵人三項完賽</li>
-        <li class="coach-exp-item">2022 台東 IRONMAN 70.3 分組第一</li>
-        <li class="coach-exp-item">2017 日本村上亞洲盃鐵人三項 — 中華台北代表隊</li>
-        <li class="coach-exp-item">2012 世界大學鐵人三項錦標賽 — 中華台北代表隊</li>
-      </ul>
+
     </div>
   </div>
 
@@ -900,7 +977,7 @@
         <div class="flow-time">19:30 - 19:50</div>
         <div class="flow-content">
           <span class="flow-title">動態熱身 ＋ 關節活動度</span>
-          <p class="flow-desc">神經與肌肉開機，跑感建立與動作優化。</p>
+          <p class="flow-desc">神經與肌肉開機，跑感建立與動作優化，做好準備，減少運動傷害。</p>
         </div>
       </li>
       <li class="flow-item">
