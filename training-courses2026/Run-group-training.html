@@ -343,8 +343,12 @@
         display: none;
       }
       .coach-box {
-        min-width: 93%; /* 調整這裡讓卡片更寬 */
+        min-width: 360px; /* 卡片加寬以防換行 */
+        padding: 24px 20px; /* 稍微縮減手機版左右留白 */
         scroll-snap-align: center;
+      }
+      .coach-exp-item {
+        white-space: nowrap; /* 確保手機版經歷不換行 */
       }
     }
 
@@ -1019,6 +1023,8 @@
             <span class="coach-role-tag">總教練</span>
           </div>
           
+          <div style="font-weight: 600; color: var(--orange-dark); margin-bottom: 12px; font-size: 14.5px;">素人選手出生 / 8 年教學經歷</div>
+          
           <div class="coach-desc">
             熱衷於鐵人三項的訓練研究，也喜歡鑽研背後的科學邏輯，對於科學化訓練有深入的了解，藉由自身經驗發展的訓練系統，讓忙碌的人也能勇於追求進步、達成自我實現！
           </div>
@@ -1374,7 +1380,7 @@
       </div>
 
       <div class="form-group new-student-only">
-        <label class="field-label">對本期跑步團練的期望、或想跟教練說的話？（選填）</label>
+        <label class="field-label">對本次跑步團練的期望、或想跟教練說的話？（選填）</label>
         <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
       </div>
       
@@ -1383,11 +1389,11 @@
         <div class="option-group">
           <label class="option-label">
             <input type="radio" name="plan" value="完整一期 10 堂課程（費用 $4,500）" checked required>
-            <span>一期 10 堂（$4,500）</span>
+            <span>完整一期 10 堂課程（費用 $4,500）</span>
           </label>
           <label class="option-label">
             <input type="radio" name="plan" value="單堂報名（費用 $550 / 堂）" required>
-            <span>單堂報名（$550／堂）</span>
+            <span>單堂報名（費用 $550 / 堂）</span>
           </label>
         </div>
 
