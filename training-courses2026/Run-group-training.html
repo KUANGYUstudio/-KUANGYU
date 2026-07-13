@@ -200,7 +200,7 @@
     }
 
     /* ==========================================
-       展開/收合 按鈕與動畫
+       展開/收合 漸層動畫
        ========================================== */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
@@ -221,11 +221,55 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-bottom: 30px;
       letter-spacing: 0.05em;
+      position: relative;
+      z-index: 2;
     }
     .expand-btn:hover {
       background-color: var(--orange-tint);
+    }
+
+    .course-details-wrapper {
+      position: relative;
+      overflow: hidden;
+      max-height: 220px; /* 露出部分內容 */
+      transition: max-height 0.6s ease-in-out;
+      margin-bottom: 30px;
+    }
+
+    .course-details-wrapper.expanded {
+      max-height: 6000px; /* 足夠大的數值以容納內容 */
+    }
+
+    .gradient-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 140px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 75%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 5px;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+    }
+
+    .course-details-wrapper.expanded .gradient-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .collapse-btn-wrapper {
+      text-align: center;
+      margin-top: 30px;
+      display: none; /* 預設隱藏，展開後顯示 */
+    }
+
+    .course-details-wrapper.expanded .collapse-btn-wrapper {
+      display: block;
+      animation: fadeIn 0.6s ease;
     }
 
     /* ==========================================
@@ -936,7 +980,7 @@
         <span class="info-label-clean">訓練地點</span>
         <div style="display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap;">
           <span class="info-value-clean">依課程安排</span>
-          <span style="font-size: 12.5px; color: #777; font-weight: 500; letter-spacing: 0.02em;">如有變動會於課程群組公告</span>
+          <span style="font-size: 12.5px; color: #777; font-weight: 500; letter-spacing: 0.02em;">如有變動會於群組公告</span>
         </div>
       </div>
     </div>
@@ -952,11 +996,7 @@
     </div>
   </div>
 
-  <div style="text-align: center;">
-    <button type="button" id="toggleInfoBtn" class="expand-btn">展開完整課程資訊 ▼</button>
-  </div>
-
-  <div id="moreInfoWrapper" style="display: none; animation: fadeIn 0.4s ease;">
+  <div id="moreInfoWrapper" class="course-details-wrapper">
     <div class="qual-section">
       <div class="schedule-title">適合對象</div>
       
@@ -978,6 +1018,8 @@
             <h3 class="coach-name">劉光武 教練</h3>
             <span class="coach-role-tag">總教練</span>
           </div>
+          
+          <div style="font-weight: 600; color: var(--orange-dark); margin-bottom: 12px; font-size: 14.5px;">素人選手出生 / 8 年教學經歷</div>
           
           <div class="coach-desc">
             熱衷於鐵人三項的訓練研究，也喜歡鑽研背後的科學邏輯，對於科學化訓練有深入的了解，藉由自身經驗發展的訓練系統，讓忙碌的人也能勇於追求進步、達成自我實現！
@@ -1005,7 +1047,7 @@
             <li class="coach-exp-item">2022墾丁IRONMAN70.3 總排第2名</li>
             <li class="coach-exp-item">2022台東普悠 226 km 總排第2名</li>
             <li class="coach-exp-item">2021台東超鐵 226 km 總排第4名</li>
-            <li class="coach-exp-item">2019法國IRONMAN70.3 世錦賽</li>
+            <li class="coach-exp-item">2019法國尼斯IRONMAN70.3 世錦賽</li>
           </ul>
         </div>
 
@@ -1036,10 +1078,10 @@
           <ul class="coach-exp-list">
             <li class="coach-exp-item">2026 普悠瑪 51.5km F30 第二名</li>
             <li class="coach-exp-item">2026 澎湖IRONMAN 鐵人三項完賽</li>
-            <li class="coach-exp-item">2022 台東IRONMAN70.3 F30第1名</li>
+            <li class="coach-exp-item">2022 台東IRONMAN70.3 分組第1名</li>
             <li class="coach-exp-item">2022 澎湖IRONMAN 總排第7名</li>
-            <li class="coach-exp-item">2017 日本村上亞洲盃鐵人三項<br>－中華台北代表隊</li>
-            <li class="coach-exp-item">2012 世界大學鐵人三項錦標賽<br>－中華台北代表隊</li>
+            <li class="coach-exp-item">2017 日本村上亞洲盃鐵人三項－中華台北代表隊</li>
+            <li class="coach-exp-item">2012 世界大學鐵人三項錦標賽－中華台北代表隊</li>
           </ul>
         </div>
 
@@ -1233,8 +1275,12 @@
       </div>
     </div>
     
-    <div style="text-align: center;">
-      <button type="button" id="collapseInfoBtn" class="expand-btn" style="margin-bottom: 10px;">收合 ▲</button>
+    <div class="collapse-btn-wrapper">
+      <button type="button" id="collapseInfoBtn" class="expand-btn">收合 ▲</button>
+    </div>
+
+    <div class="gradient-overlay" id="gradientOverlay">
+      <button type="button" id="toggleInfoBtn" class="expand-btn">展開完整課程資訊 ▼</button>
     </div>
   </div>
   
@@ -1517,20 +1563,21 @@
   const form = document.getElementById('trainingForm');
   const btn = document.getElementById('submitBtn');
 
-  // --- 資訊區塊展開與收合邏輯 ---
+  // --- 資訊區塊展開與收合邏輯 (含漸層) ---
   const toggleInfoBtn = document.getElementById('toggleInfoBtn');
   const collapseInfoBtn = document.getElementById('collapseInfoBtn');
   const moreInfoWrapper = document.getElementById('moreInfoWrapper');
 
   toggleInfoBtn.addEventListener('click', () => {
-    moreInfoWrapper.style.display = 'block';
-    toggleInfoBtn.style.display = 'none';
+    moreInfoWrapper.classList.add('expanded');
   });
 
   collapseInfoBtn.addEventListener('click', () => {
-    moreInfoWrapper.style.display = 'none';
-    toggleInfoBtn.style.display = 'inline-flex';
-    toggleInfoBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    moreInfoWrapper.classList.remove('expanded');
+    // 平滑滾動回到區塊頂部附近，避免畫面跳動
+    setTimeout(() => {
+      moreInfoWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
   });
 
   // --- 新舊生切換與表單展開邏輯 ---
