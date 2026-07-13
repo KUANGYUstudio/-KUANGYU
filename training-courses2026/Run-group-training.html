@@ -149,16 +149,6 @@
       letter-spacing: 0.02em;
     }
 
-    a.info-pill-clean .info-value-clean {
-      border-bottom: 1.5px solid var(--orange-main);
-      padding-bottom: 1px;
-      transition: border-color 0.2s ease, color 0.2s ease;
-    }
-    
-    a.info-pill-clean:hover .info-value-clean {
-      border-bottom-color: var(--orange-dark);
-    }
-
     @media (max-width: 600px) {
       .info-grid {
         grid-template-columns: 1fr;
@@ -171,25 +161,42 @@
     }
 
     /* ==========================================
-       招募引言
+       招募引言與社群連結
        ========================================== */
     .intro-text {
       text-align: center;
       font-size: 16px;
       color: #444;
-      margin-bottom: 40px;
+      margin-bottom: 24px;
       line-height: 1.8;
       letter-spacing: 0.05em;
     }
-    .intro-text a {
-      color: var(--orange-dark);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s ease;
-      font-weight: 500;
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 40px;
     }
-    .intro-text a:hover {
-      border-bottom-color: var(--orange-dark);
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: #f8f9fa;
+      border: 1px solid #eaedf0;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .social-links a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .social-links img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
     }
 
     /* ==========================================
@@ -232,13 +239,13 @@
     
     .coach-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr; 
       gap: 20px;
     }
     
     @media (max-width: 650px) {
       .coach-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; 
       }
     }
     
@@ -314,7 +321,7 @@
     }
 
     /* ==========================================
-       MUJI 風格課程安排 (極簡文字層次設計)
+       MUJI 風格課程安排
        ========================================== */
     .schedule-section {
       margin-bottom: 50px;
@@ -339,20 +346,24 @@
       margin: 12px auto 0;
     }
 
-    /* === 上課流程 (含外框與內距) === */
-    .flow-list {
-      margin: 0 0 40px 0;
-      padding: 0 24px;
-      list-style: none;
+    .flow-box {
       background-color: #ffffff;
-      border: 1px solid var(--slate-border);
       border-radius: 8px;
+      padding: 10px 24px;
+      border: 1px solid #eaedf0;
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      margin-bottom: 40px;
+    }
+
+    .flow-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
     .flow-item {
       display: flex;
       align-items: flex-start;
-      padding: 20px 0;
+      padding: 16px 0;
       border-bottom: 1px solid #eee;
     }
     .flow-item:last-child {
@@ -387,9 +398,8 @@
       margin: 4px 0 0 0;
     }
 
-    /* === 課程安排 (全新雙欄排版) === */
     .schedule-list {
-      margin: 0 auto 12px auto; 
+      margin: 0 auto 40px auto; 
       padding: 0;
       list-style: none;
       max-width: 100%; 
@@ -537,7 +547,6 @@
     /* ==========================================
        下半部：表單區塊
        ========================================== */
-
     .section-title { 
       font-size: 15px; 
       font-weight: 600; 
@@ -606,7 +615,7 @@
     }
 
     /* ==========================================
-       自訂條款卡片 (Checkbox + Accordion)
+       自訂條款卡片 (彈出視窗機制)
        ========================================== */
     .policy-box {
       border: 1px solid #d1d9e0;
@@ -614,7 +623,12 @@
       background-color: #fff;
       transition: all 0.3s ease;
       margin-bottom: 12px;
-      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .policy-box:hover {
+      border-color: #b0b8c1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
     .policy-box.is-checked {
@@ -627,16 +641,16 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 20px;
+      padding: 16px 20px;
     }
 
     .custom-checkbox-container {
       display: flex;
       align-items: center;
-      cursor: pointer;
       position: relative;
       user-select: none;
       flex: 1;
+      pointer-events: none; /* 鎖定點擊，強制使用外層盒子呼叫視窗 */
     }
 
     .custom-checkbox-container input[type="checkbox"] {
@@ -650,8 +664,8 @@
     .custom-checkmark {
       height: 22px;
       width: 22px;
-      background-color: #fff;
-      border: 2px solid #c5d0d6;
+      background-color: #f4f6f8;
+      border: 2px solid #d1d9e0;
       border-radius: 5px;
       margin-right: 14px;
       display: flex;
@@ -683,48 +697,90 @@
 
     .checkbox-text {
       font-weight: 600;
-      color: var(--orange-dark);
+      color: var(--slate-dark);
       font-size: 15px;
       line-height: 1.4;
     }
 
-    .expand-toggle {
-      cursor: pointer;
-      color: var(--orange-main);
+    .policy-box.is-checked .checkbox-text {
+      color: var(--orange-dark);
+    }
+
+    .arrow-icon {
+      color: #b0b8c1;
       font-weight: bold;
-      font-size: 20px;
-      width: 40px;
-      height: 40px;
+      font-size: 16px;
+      transition: color 0.2s ease;
+    }
+
+    .policy-box:hover .arrow-icon {
+      color: var(--orange-main);
+    }
+
+    /* 條款彈出視窗 */
+    .policy-modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5); z-index: 2000; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s ease;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .policy-modal-overlay.show { display: flex; opacity: 1; }
+    
+    .policy-modal-card {
+      background: #fff; 
+      border-radius: 12px; 
+      width: 100%; 
+      max-width: 500px;
+      max-height: 85vh; 
+      display: flex; 
+      flex-direction: column;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      transform: translateY(20px); 
+      transition: transform 0.3s ease;
+    }
+    .policy-modal-overlay.show .policy-modal-card { transform: translateY(0); }
+
+    .policy-modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid #eaedf0;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      margin-left: 10px;
-      transition: background-color 0.2s;
+    }
+    .policy-modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--slate-dark);
+      margin: 0;
+      letter-spacing: 0.05em;
+    }
+    .policy-modal-close {
+      background: none; border: none; font-size: 24px; color: #999; cursor: pointer; padding: 0;
     }
 
-    .expand-toggle:hover {
-      background-color: rgba(230, 92, 0, 0.15);
-    }
-
-    .policy-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
-      border-top: 1px solid transparent;
-    }
-
-    .policy-box.is-expanded .policy-content {
-      border-top-color: var(--orange-border);
-      transition: max-height 0.4s ease-in-out;
-    }
-
-    .policy-inner {
-      padding: 24px 20px;
-      font-size: 14px;
+    .policy-modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      font-size: 14.5px;
       color: #444;
       line-height: 1.8;
-      background-color: var(--orange-bg);
+    }
+
+    .policy-modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid #eaedf0;
+      background-color: #f8f9fa;
+      border-radius: 0 0 12px 12px;
+    }
+
+    .policy-accept-btn {
+      width: 100%; padding: 14px; background: var(--orange-main); color: #fff; border: none; 
+      border-radius: 6px; font-size: 15px; font-weight: 600; letter-spacing: 0.1em; cursor: pointer; 
+      transition: all 0.2s ease;
+    }
+    .policy-accept-btn:disabled {
+      background: #c5d0d6; cursor: not-allowed;
     }
     
     button[type="submit"] { 
@@ -737,7 +793,7 @@
     button[type="submit"]:disabled { background: #c5d0d6; cursor: not-allowed; }
 
     /* ==========================================
-       自訂彈出視窗樣式
+       一般彈出視窗樣式
        ========================================== */
     .modal-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -786,9 +842,16 @@
     想突破瓶頸、跑得更有效率；<br>
     想改善跑姿、遠離疼痛！<br>
     歡迎和我們一起練習！<br>
-    提升自我、打造更好的生活品質！<br><br>
-    <a href="https://www.facebook.com/KUANGYU.studio" target="_blank">FB：光聿工作室</a><br>
-    <a href="https://www.instagram.com/kuangyu.studio/" target="_blank">IG：@kuangyu.studio</a>
+    提升自我、打造更好的生活品質！
+  </div>
+
+  <div class="social-links">
+    <a href="https://www.facebook.com/KUANGYU.studio" target="_blank" title="Facebook">
+      <img src="../icon/Facebook_icon.png" alt="FB">
+    </a>
+    <a href="https://www.instagram.com/kuangyu.studio/" target="_blank" title="Instagram">
+      <img src="../icon/instagram_icon.png" alt="IG">
+    </a>
   </div>
   
   <div class="info-grid">
@@ -815,20 +878,20 @@
       </div>
     </div>
 
-    <div class="info-pill-clean">
+    <div class="info-pill-clean span-full">
       <div class="info-icon-clean">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
       </div>
       <div class="info-text-clean">
         <span class="info-label-clean">訓練地點</span>
-        <div style="display: flex; flex-direction: column; gap: 1px;">
+        <div style="display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap;">
           <span class="info-value-clean">依課程安排</span>
-          <span style="font-size: 11px; color: #888; font-weight: 500; letter-spacing: 0.02em;">(如有變動會於課程群組公告)</span>
+          <span style="font-size: 12.5px; color: #777; font-weight: 500; letter-spacing: 0.02em;">如有變動會於課程群組公告</span>
         </div>
       </div>
     </div>
 
-    <div class="info-pill-clean">
+    <div class="info-pill-clean span-full">
       <div class="info-icon-clean">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
       </div>
@@ -931,27 +994,29 @@
     
     <div class="schedule-title">上課流程</div>
     
-    <ul class="flow-list">
-      <li class="flow-item">
-        <div class="flow-time">19:30 - 19:50</div>
-        <div class="flow-content">
-          <span class="flow-title">動態熱身 ＋ 關節活動度</span>
-          <p class="flow-desc">神經與肌肉開機，跑感建立與動作優化，做好準備，減少運動傷害。</p>
-        </div>
-      </li>
-      <li class="flow-item">
-        <div class="flow-time">19:50 - 20:50</div>
-        <div class="flow-content">
-          <span class="flow-title">主課表訓練</span>
-        </div>
-      </li>
-      <li class="flow-item">
-        <div class="flow-time">20:50 - 21:00</div>
-        <div class="flow-content">
-          <span class="flow-title">緩和收操</span>
-        </div>
-      </li>
-    </ul>
+    <div class="flow-box">
+      <ul class="flow-list">
+        <li class="flow-item">
+          <div class="flow-time">19:30 - 19:50</div>
+          <div class="flow-content">
+            <span class="flow-title">動態熱身 ＋ 關節活動度</span>
+            <p class="flow-desc">神經與肌肉開機，跑感建立與動作優化，做好準備，減少運動傷害。</p>
+          </div>
+        </li>
+        <li class="flow-item">
+          <div class="flow-time">19:50 - 20:50</div>
+          <div class="flow-content">
+            <span class="flow-title">主課表訓練</span>
+          </div>
+        </li>
+        <li class="flow-item">
+          <div class="flow-time">20:50 - 21:00</div>
+          <div class="flow-content">
+            <span class="flow-title">緩和收操</span>
+          </div>
+        </li>
+      </ul>
+    </div>
 
     <div class="schedule-title">課程安排</div>
     
@@ -1099,8 +1164,8 @@
       
     </ul>
     
-    <div style="font-size: 13.5px; color: #777; margin-top: 0; margin-bottom: 24px; text-align: center;">
-      ※ 教練保有課程變更之權利
+    <div style="font-size: 13.5px; color: #777; margin-top: 20px; margin-bottom: 24px; text-align: center;">
+      ※ 依照學員狀況與天氣因素，教練保有課程變更之權利
     </div>
 
     <div class="qual-slate-box" style="margin-bottom: 30px; padding: 20px;">
@@ -1171,7 +1236,7 @@
         </label>
         <label class="option-label">
           <input type="radio" name="perfType" value="pace">
-          <span>平常慢跑平均配速</span>
+          <span>日常的跑步配速</span>
         </label>
       </div>
 
@@ -1188,7 +1253,7 @@
       </div>
 
       <div id="pacePanel" class="dynamic-panel">
-        <label class="field-label">平常慢跑平均配速</label>
+        <label class="field-label">日常的跑步配速</label>
         <div style="font-size: 13.5px; color: #777; margin-bottom: 8px; line-height: 1.5;">請提供您平常練習時的平均每公里配速</div>
         <input type="text" name="runPace" placeholder="例如：6分30秒 / 每公里">
       </div>
@@ -1232,68 +1297,120 @@
 
     <div class="section-title">05 / 同意聲明與規範</div>
 
-    <div class="policy-box">
+    <div class="policy-box" onclick="openPolicyModal('healthModal')">
       <div class="policy-header">
         <label class="custom-checkbox-container">
-          <input type="checkbox" name="agreeMatters" class="policy-checkbox" required>
+          <input type="checkbox" name="agreeHealth" required>
+          <span class="custom-checkmark"></span>
+          <span class="checkbox-text">我已詳閱並同意健康聲明</span>
+        </label>
+        <div class="arrow-icon">〉</div>
+      </div>
+    </div>
+
+    <div class="policy-box" onclick="openPolicyModal('mattersModal')">
+      <div class="policy-header">
+        <label class="custom-checkbox-container">
+          <input type="checkbox" name="agreeMatters" required>
           <span class="custom-checkmark"></span>
           <span class="checkbox-text">我已詳閱並同意課程注意事項</span>
         </label>
-        <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
-          <span>＋</span>
-        </div>
-      </div>
-      <div class="policy-content">
-        <div class="policy-inner">
-          <div style="margin-bottom: 12px;">1. 為將課程風險降至最低，請同學遵守課程相關規定，並做好自我管理，避免造成自己或其他人不論是生理、心理或是財產的損失，並且不以光聿工作室名義從事不當行為。如有違反，光聿工作室有權禁止參與課程並辦理退費。</div>
-          <div style="margin-bottom: 12px;">2. 本課程不包含保險，如須個人保險，請自行加保。</div>
-          <div style="margin-bottom: 12px;">3. 參與課程的同時，即視為同意並授權光聿工作室拍攝並公開使用「課程中所拍攝之照片與影片」。若有其他用途，光聿工作室會徵求同學的同意才行使用。</div>
-          <div style="margin-bottom: 12px;">4. 請同學確保自身的健康狀況，如有心血管疾病或其它重大疾病，請審慎評估自身狀況，切勿勉強參與課程。</div>
-          <div style="margin-bottom: 12px;">5. 課程中若有不適，請立即向教練反應！切勿硬撐！</div>
-          <div>6. 光聿工作室保有修改、變更或暫停本課程之權利，但會以學員權益為第一考量，如有未盡事宜，將隨時調整修訂與補充公告。一旦參加本課程，則表示同意接受本辦法之規範。</div>
-        </div>
+        <div class="arrow-icon">〉</div>
       </div>
     </div>
 
-    <div class="policy-box">
+    <div class="policy-box" onclick="openPolicyModal('suspensionModal')">
       <div class="policy-header">
         <label class="custom-checkbox-container">
-          <input type="checkbox" name="agreeSuspension" class="policy-checkbox" required>
+          <input type="checkbox" name="agreeSuspension" required>
           <span class="custom-checkmark"></span>
           <span class="checkbox-text">我已詳閱並同意停課相關事宜</span>
         </label>
-        <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
-          <span>＋</span>
-        </div>
-      </div>
-      <div class="policy-content">
-        <div class="policy-inner">
-          如遇不可抗力之天災，將依台北市政府發布消息為基準，若發佈「停止上班上課」，當天課程即暫停一次，並於 LINE 群組隨時更新與通知。
-        </div>
+        <div class="arrow-icon">〉</div>
       </div>
     </div>
 
-    <div class="policy-box" style="margin-bottom: 24px;">
+    <div class="policy-box" style="margin-bottom: 24px;" onclick="openPolicyModal('refundModal')">
       <div class="policy-header">
         <label class="custom-checkbox-container">
-          <input type="checkbox" name="agreeRefund" class="policy-checkbox" required>
+          <input type="checkbox" name="agreeRefund" required>
           <span class="custom-checkmark"></span>
           <span class="checkbox-text">我已詳閱並同意課程退費機制</span>
         </label>
-        <div class="expand-toggle policy-expand-btn" title="點擊展開/收合細則">
-          <span>＋</span>
-        </div>
-      </div>
-      <div class="policy-content">
-        <div class="policy-inner">
-          於 7/15 課程開始 7 天前取消者，退還該次費用之 90%；於課程開始 3 天前取消者，退還 50%；於課程開始 3 天內取消者，恕不予退費。
-        </div>
+        <div class="arrow-icon">〉</div>
       </div>
     </div>
     
     <button type="submit" id="submitBtn">確認送出報名</button>
     
   </form>
+</div>
+
+<div class="policy-modal-overlay" id="healthModal">
+  <div class="policy-modal-card">
+    <div class="policy-modal-header">
+      <h4 class="policy-modal-title">健康聲明</h4>
+      <button class="policy-modal-close" onclick="closePolicyModal('healthModal')">×</button>
+    </div>
+    <div class="policy-modal-body" onscroll="checkScroll(this)">
+      一、本人確認目前身體狀況良好，且無任何隱瞞不適合從事高強度耐力運動之心血管病史、胸悶、心悸、頭暈、呼吸系統疾病或其他可能引發危險之病症。<br><br>
+      二、本人充分明瞭跑步與肌力訓練具備一定強度與風險，若在訓練過程中感到任何不適，將立即主動告知教練並停止訓練。<br><br>
+      三、本人同意對於自身參與本次課程之安全負起最終責任，並充分配合教練之安全指導與風險管控。
+    </div>
+    <div class="policy-modal-footer">
+      <button class="policy-accept-btn" disabled onclick="acceptPolicy('healthModal', 'agreeHealth')">我同意</button>
+    </div>
+  </div>
+</div>
+
+<div class="policy-modal-overlay" id="mattersModal">
+  <div class="policy-modal-card">
+    <div class="policy-modal-header">
+      <h4 class="policy-modal-title">課程注意事項</h4>
+      <button class="policy-modal-close" onclick="closePolicyModal('mattersModal')">×</button>
+    </div>
+    <div class="policy-modal-body" onscroll="checkScroll(this)">
+      1. 為將課程風險降至最低，請同學遵守課程相關規定，並做好自我管理，避免造成自己或其他人不論是生理、心理或是財產的損失，並且不以光聿工作室名義從事不當行為。如有違反，光聿工作室有權禁止參與課程並辦理退費。<br><br>
+      2. 本課程不包含保險，如須個人保險，請自行加保。<br><br>
+      3. 參與課程的同時，即視為同意並授權光聿工作室拍攝並公開使用「課程中所拍攝之照片與影片」。若有其他用途，光聿工作室會徵求同學的同意才行使用。<br><br>
+      4. 請同學確保自身的健康狀況，如有心血管疾病或其它重大疾病，請審慎評估自身狀況，切勿勉強參與課程。<br><br>
+      5. 課程中若有不適，請立即向教練反應！切勿硬撐！<br><br>
+      6. 光聿工作室保有修改、變更或暫停本課程之權利，但會以學員權益為第一考量，如有未盡事宜，將隨時調整修訂與補充公告。一旦參加本課程，則表示同意接受本辦法之規範。
+    </div>
+    <div class="policy-modal-footer">
+      <button class="policy-accept-btn" disabled onclick="acceptPolicy('mattersModal', 'agreeMatters')">我同意</button>
+    </div>
+  </div>
+</div>
+
+<div class="policy-modal-overlay" id="suspensionModal">
+  <div class="policy-modal-card">
+    <div class="policy-modal-header">
+      <h4 class="policy-modal-title">停課相關事宜</h4>
+      <button class="policy-modal-close" onclick="closePolicyModal('suspensionModal')">×</button>
+    </div>
+    <div class="policy-modal-body" onscroll="checkScroll(this)">
+      如遇不可抗力之天災，將依台北市政府發布消息為基準，若發佈「停止上班上課」，當天課程即暫停一次，並於 LINE 群組隨時更新與通知。
+    </div>
+    <div class="policy-modal-footer">
+      <button class="policy-accept-btn" disabled onclick="acceptPolicy('suspensionModal', 'agreeSuspension')">我同意</button>
+    </div>
+  </div>
+</div>
+
+<div class="policy-modal-overlay" id="refundModal">
+  <div class="policy-modal-card">
+    <div class="policy-modal-header">
+      <h4 class="policy-modal-title">課程退費機制</h4>
+      <button class="policy-modal-close" onclick="closePolicyModal('refundModal')">×</button>
+    </div>
+    <div class="policy-modal-body" onscroll="checkScroll(this)">
+      於 7/15 課程開始 7 天前取消者，退還該次費用之 90%；於課程開始 3 天前取消者，退還 50%；於課程開始 3 天內取消者，恕不予退費。
+    </div>
+    <div class="policy-modal-footer">
+      <button class="policy-accept-btn" disabled onclick="acceptPolicy('refundModal', 'agreeRefund')">我同意</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-overlay" id="customAlert">
@@ -1313,6 +1430,7 @@
   const bankDetailsGroup = document.getElementById('bankDetailsGroup');
   const bankLastFiveInput = document.querySelector('input[name="bankLastFive"]');
 
+  // --- Alert 邏輯 ---
   function showAlert(message, isSuccess = false) {
     const modal = document.getElementById('customAlert');
     const icon = document.getElementById('alertIcon');
@@ -1342,6 +1460,42 @@
     }, 300);
   }
 
+  // --- 條款彈出視窗與同意邏輯 ---
+  function openPolicyModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+    
+    // 如果內容很短不需滾動，直接啟用同意按鈕
+    const body = modal.querySelector('.policy-modal-body');
+    const acceptBtn = modal.querySelector('.policy-accept-btn');
+    if (body.scrollHeight <= body.clientHeight + 10) {
+      acceptBtn.disabled = false;
+    }
+  }
+
+  function closePolicyModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('show');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
+  }
+
+  function checkScroll(element) {
+    if (element.scrollHeight - element.scrollTop <= element.clientHeight + 10) {
+      const btn = element.nextElementSibling.querySelector('.policy-accept-btn');
+      btn.disabled = false;
+    }
+  }
+
+  function acceptPolicy(modalId, checkboxName) {
+    const checkbox = document.querySelector(`input[name="${checkboxName}"]`);
+    checkbox.checked = true;
+    checkbox.closest('.policy-box').classList.add('is-checked');
+    closePolicyModal(modalId);
+  }
+
   // --- 參考成績動態展開邏輯 ---
   const perfRadios = document.querySelectorAll('input[name="perfType"]');
   const roadracePanel = document.getElementById('roadracePanel');
@@ -1359,34 +1513,7 @@
     });
   });
 
-  const policyBoxes = document.querySelectorAll('.policy-box');
-  
-  policyBoxes.forEach(box => {
-    const checkbox = box.querySelector('.policy-checkbox');
-    const expandBtn = box.querySelector('.policy-expand-btn');
-    const content = box.querySelector('.policy-content');
-    const icon = expandBtn.querySelector('span');
-
-    checkbox.addEventListener('change', (e) => {
-      if (e.target.checked) {
-        box.classList.add('is-checked');
-      } else {
-        box.classList.remove('is-checked');
-      }
-    });
-
-    expandBtn.addEventListener('click', () => {
-      box.classList.toggle('is-expanded');
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-        icon.innerText = '＋';
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-        icon.innerText = '－';
-      }
-    });
-  });
-
+  // --- 匯款選項動態展開邏輯 ---
   document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
     r.addEventListener('change', (e) => {
       if (e.target.value === '匯款') {
@@ -1400,6 +1527,7 @@
     });
   });
 
+  // --- 表單送出邏輯 ---
   form.onsubmit = e => {
     e.preventDefault();
 
@@ -1408,6 +1536,7 @@
 
     const requiredInputs = Array.from(form.querySelectorAll('[required]'));
     const policyMapping = {
+      'agreeHealth': '健康聲明',
       'agreeMatters': '課程注意事項',
       'agreeSuspension': '停課相關事宜',
       'agreeRefund': '課程退費機制'
@@ -1416,7 +1545,7 @@
     for (let input of requiredInputs) {
       if (!input.checkValidity()) {
         if (policyMapping[input.name]) {
-          showAlert(`請詳閱「${policyMapping[input.name]}」並勾選`, false);
+          showAlert(`請點擊閱讀並同意「${policyMapping[input.name]}」`, false);
           return;
         }
 
@@ -1447,7 +1576,7 @@
       } else if (selectedPerf.value === 'pace') {
         const paceVal = document.querySelector('input[name="runPace"]').value.trim();
         if (!paceVal) {
-          showAlert('請填寫平常慢跑平均配速', false);
+          showAlert('請填寫日常的跑步配速', false);
           return;
         }
       }
@@ -1475,13 +1604,12 @@
           roadracePanel.style.display = 'none';
           pacePanel.style.display = 'none';
           
+          // 重置條款勾選狀態
+          const policyBoxes = document.querySelectorAll('.policy-box');
           policyBoxes.forEach(box => {
             box.classList.remove('is-checked');
-            box.classList.remove('is-expanded');
-            const content = box.querySelector('.policy-content');
-            const icon = box.querySelector('.policy-expand-btn span');
-            content.style.maxHeight = null;
-            icon.innerText = '＋';
+            const acceptBtn = document.getElementById(box.getAttribute('onclick').match(/'([^']+)'/)[1]).querySelector('.policy-accept-btn');
+            acceptBtn.disabled = true;
           });
 
           btn.disabled = false; 
