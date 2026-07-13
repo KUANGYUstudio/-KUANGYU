@@ -231,7 +231,7 @@
     }
 
     /* ==========================================
-       關於教練區塊 (全新網格設計)
+       關於教練區塊 (手機左右滑動設計)
        ========================================== */
     .coach-section {
       margin-bottom: 50px;
@@ -243,12 +243,6 @@
       gap: 20px;
     }
     
-    @media (max-width: 650px) {
-      .coach-grid {
-        grid-template-columns: 1fr; 
-      }
-    }
-    
     .coach-box {
       background-color: #ffffff;
       border-radius: 8px;
@@ -258,6 +252,28 @@
       height: 100%;
       box-sizing: border-box;
     }
+
+    @media (max-width: 650px) {
+      .coach-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 16px;
+        padding-bottom: 12px;
+        /* 隱藏捲動條讓畫面更乾淨 */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .coach-grid::-webkit-scrollbar {
+        display: none;
+      }
+      .coach-box {
+        min-width: 85%; /* 讓下一張卡片露出一點點，提示可以滑動 */
+        scroll-snap-align: center;
+      }
+    }
+
     .coach-header {
       display: flex;
       align-items: center;
@@ -1269,8 +1285,28 @@
       <div class="option-group">
         <label class="option-label">
           <input type="radio" name="plan" value="完整一期 10 堂課程（費用 $4,500）" checked required>
-          <span>完整一期 10 堂課程（費用 $7,000）</span>
+          <span>完整一期 10 堂課程（費用 $4,500）</span>
         </label>
+        <label class="option-label">
+          <input type="radio" name="plan" value="單堂報名（費用 $550 / 堂）" required>
+          <span>單堂報名（費用 $550 / 堂）</span>
+        </label>
+      </div>
+
+      <div id="singleClassPanel" class="dynamic-panel">
+        <label class="field-label">請選擇報名日期（可複選）</label>
+        <div class="option-group row-layout" style="margin-bottom: 10px;">
+          <label class="option-label"><input type="checkbox" name="singleDates" value="7/15"><span>7/15</span></label>
+          <label class="option-label"><input type="checkbox" name="singleDates" value="7/22"><span>7/22</span></label>
+          <label class="option-label"><input type="checkbox" name="singleDates" value="7/29"><span>7/29</span></label>
+          <label class="option-label"><input type="checkbox" name="singleDates" value="8/5"><span>8/5</span></label>
+          <label class="option-label"><input type="checkbox" name="singleDates" value="8/12"><span>8/12</span></label>
+          <label class="option-label"><input type="checkbox" name="singleDates" value="8/19"><span>8/19</span></label>
+          <label class="option-label"><input type="checkbox" name="singleDates" value="8/26"><span>8/26</span></label>
+          <label class="option-label"><input type="checkbox" name="singleDates" value="9/2"><span>9/2</span></label>
+          <label class="option-label"><input type="checkbox" name="singleDates" value="9/9"><span>9/9</span></label>
+          <label class="option-label"><input type="checkbox" name="singleDates" value="9/16"><span>9/16</span></label>
+        </div>
       </div>
     </div>
 
@@ -1513,6 +1549,22 @@
     });
   });
 
+  // --- 方案選擇動態展開邏輯 ---
+  const planRadios = document.querySelectorAll('input[name="plan"]');
+  const singleClassPanel = document.getElementById('singleClassPanel');
+
+  planRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      if (e.target.value.includes('單堂報名')) {
+        singleClassPanel.style.display = 'block';
+      } else {
+        singleClassPanel.style.display = 'none';
+        // 切換回一期時，清空單堂勾選
+        document.querySelectorAll('input[name="singleDates"]').forEach(cb => cb.checked = false);
+      }
+    });
+  });
+
   // --- 匯款選項動態展開邏輯 ---
   document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
     r.addEventListener('change', (e) => {
@@ -1581,6 +1633,19 @@
         }
       }
     }
+
+    // --- 單堂報名前端驗證 ---
+    const selectedPlan = document.querySelector('input[name="plan"]:checked');
+    if (selectedPlan && selectedPlan.value.includes('單堂報名')) {
+      const checkedDates = document.querySelectorAll('input[name="singleDates"]:checked');
+      if (checkedDates.length === 0) {
+        showAlert('請至少選擇一天單堂報名的日期', false);
+        const group = document.getElementById('singleClassPanel');
+        group.classList.add('group-error-border');
+        group.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
     
     btn.disabled = true; 
     btn.innerText = '處理中...';
@@ -1603,6 +1668,7 @@
 
           roadracePanel.style.display = 'none';
           pacePanel.style.display = 'none';
+          singleClassPanel.style.display = 'none';
           
           // 重置條款勾選狀態
           const policyBoxes = document.querySelectorAll('.policy-box');
