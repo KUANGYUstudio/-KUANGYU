@@ -1203,26 +1203,35 @@
   
   <form id="trainingForm" novalidate>
     
-    <div class="section-title">01 / 基本與聯繫資料</div>
+    <!-- 新舊生切換區塊 -->
+    <div class="form-group" style="margin-top: 20px; margin-bottom: 40px; background-color: #fffaf5; padding: 24px; border-radius: 8px; border: 1px solid var(--orange-border);">
+      <label class="field-label" style="font-size: 16px; margin-bottom: 16px;">您是新生還是光聿舊生？</label>
+      <div class="option-group row-layout">
+        <label class="option-label"><input type="radio" name="studentStatus" value="新生" checked required><span>新生（首次報名）</span></label>
+        <label class="option-label"><input type="radio" name="studentStatus" value="舊生"><span>舊生（曾參加過光聿課程）</span></label>
+      </div>
+    </div>
+
+    <div class="section-title">▍ 基本與聯繫資料</div>
     
     <div class="form-row">
       <div class="form-group">
         <label class="field-label">姓名</label>
         <input type="text" name="name" required>
       </div>
-      <div class="form-group">
+      <div class="form-group new-student-only">
         <label class="field-label">性別</label>
         <div class="option-group row-layout">
-          <label class="option-label"><input type="radio" name="gender" value="男" required><span>男</span></label>
-          <label class="option-label"><input type="radio" name="gender" value="女"><span>女</span></label>
+          <label class="option-label"><input type="radio" name="gender" value="男" class="req-new" required><span>男</span></label>
+          <label class="option-label"><input type="radio" name="gender" value="女" class="req-new"><span>女</span></label>
         </div>
       </div>
     </div>
     
     <div class="form-row">
-      <div class="form-group">
+      <div class="form-group new-student-only">
         <label class="field-label">LINE ID</label>
-        <input type="text" name="lineId" required>
+        <input type="text" name="lineId" class="req-new" required>
       </div>
       <div class="form-group">
         <label class="field-label">Email 信箱</label>
@@ -1230,36 +1239,36 @@
       </div>
     </div>
 
-    <div class="section-title">02 / 緊急聯絡資訊</div>
+    <div class="section-title new-student-only">▍ 緊急聯絡資訊</div>
     
-    <div class="form-row">
+    <div class="form-row new-student-only">
       <div class="form-group">
         <label class="field-label">緊急聯絡人姓名</label>
-        <input type="text" name="emergName" required>
+        <input type="text" name="emergName" class="req-new" required>
       </div>
       <div class="form-group">
         <label class="field-label">緊急連絡人關係</label>
-        <input type="text" name="emergRel" required>
+        <input type="text" name="emergRel" class="req-new" required>
       </div>
     </div>
     
-    <div class="form-group">
+    <div class="form-group new-student-only">
       <label class="field-label">緊急聯絡人電話</label>
-      <input type="text" name="emergPhone" required>
+      <input type="text" name="emergPhone" class="req-new" required>
     </div>
 
-    <div class="section-title">03 / 其他資訊</div>
+    <div class="section-title">▍ 課程方案與其他資訊</div>
     
-    <div class="form-group">
+    <div class="form-group new-student-only">
       <label class="field-label">參考成績</label>
       <div style="font-size: 13.5px; color: #777; margin-bottom: 12px; line-height: 1.5;">請擇一填寫，幫助教練了解您的目前跑步程度</div>
       <div class="option-group row-layout" style="margin-bottom: 10px;">
         <label class="option-label">
-          <input type="radio" name="perfType" value="roadrace" required>
+          <input type="radio" name="perfType" value="roadrace" class="req-new" required>
           <span>路跑賽事成績 (5K/10K/半馬/全馬)</span>
         </label>
         <label class="option-label">
-          <input type="radio" name="perfType" value="pace">
+          <input type="radio" name="perfType" value="pace" class="req-new">
           <span>日常的跑步配速</span>
         </label>
       </div>
@@ -1283,7 +1292,7 @@
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group new-student-only">
       <label class="field-label">對本次跑步團練的期望、或想跟教練說的話？（選填）</label>
       <textarea name="remarks" rows="3" style="display: block; width: 100%; max-width: 100%; padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit; resize: vertical;"></textarea>
     </div>
@@ -1318,7 +1327,7 @@
       </div>
     </div>
 
-    <div class="section-title">04 / 付款方式</div>
+    <div class="section-title">▍ 付款方式</div>
     
     <div class="payment-grid">
       <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" required><span>匯款</span></label>
@@ -1339,7 +1348,7 @@
       </div>
     </div>
 
-    <div class="section-title">05 / 同意聲明與規範</div>
+    <div class="section-title">▍ 同意聲明與規範</div>
 
     <div class="policy-box" onclick="openPolicyModal('healthModal')">
       <div class="policy-header">
@@ -1470,6 +1479,34 @@
   
   const form = document.getElementById('trainingForm');
   const btn = document.getElementById('submitBtn');
+
+  // --- 新舊生切換邏輯 ---
+  const statusRadios = document.querySelectorAll('input[name="studentStatus"]');
+  const newStudentElements = document.querySelectorAll('.new-student-only');
+  const newStudentReqs = document.querySelectorAll('.req-new');
+
+  statusRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const isNew = e.target.value === '新生';
+      
+      // 顯示或隱藏新生專屬區塊
+      newStudentElements.forEach(el => {
+        el.style.display = isNew ? '' : 'none'; 
+      });
+
+      // 動態解除必填限制，讓舊生可以順利送出表單
+      newStudentReqs.forEach(el => {
+        el.required = isNew;
+      });
+
+      // 如果切換成舊生，把參考成績的面版清空隱藏
+      if (!isNew) {
+        document.getElementById('roadracePanel').style.display = 'none';
+        document.getElementById('pacePanel').style.display = 'none';
+        document.querySelectorAll('input[name="perfType"]').forEach(r => r.checked = false);
+      }
+    });
+  });
 
   const bankDetailsGroup = document.getElementById('bankDetailsGroup');
   const bankLastFiveInput = document.querySelector('input[name="bankLastFive"]');
@@ -1623,21 +1660,24 @@
       }
     }
 
-    // --- 參考成績前端驗證 ---
-    const selectedPerf = document.querySelector('input[name="perfType"]:checked');
-    if (selectedPerf) {
-      if (selectedPerf.value === 'roadrace') {
-        const distChecked = document.querySelector('input[name="raceDistance"]:checked');
-        const timeVal = document.querySelector('input[name="raceTime"]').value.trim();
-        if (!distChecked || !timeVal) {
-          showAlert('請完整選擇路跑賽事項目並填寫成績', false);
-          return;
-        }
-      } else if (selectedPerf.value === 'pace') {
-        const paceVal = document.querySelector('input[name="runPace"]').value.trim();
-        if (!paceVal) {
-          showAlert('請填寫日常的跑步配速', false);
-          return;
+    // --- 參考成績前端驗證 (僅限新生) ---
+    const studentStatus = document.querySelector('input[name="studentStatus"]:checked').value;
+    if (studentStatus === '新生') {
+      const selectedPerf = document.querySelector('input[name="perfType"]:checked');
+      if (selectedPerf) {
+        if (selectedPerf.value === 'roadrace') {
+          const distChecked = document.querySelector('input[name="raceDistance"]:checked');
+          const timeVal = document.querySelector('input[name="raceTime"]').value.trim();
+          if (!distChecked || !timeVal) {
+            showAlert('請完整選擇路跑賽事項目並填寫成績', false);
+            return;
+          }
+        } else if (selectedPerf.value === 'pace') {
+          const paceVal = document.querySelector('input[name="runPace"]').value.trim();
+          if (!paceVal) {
+            showAlert('請填寫日常的跑步配速', false);
+            return;
+          }
         }
       }
     }
@@ -1678,6 +1718,10 @@
           pacePanel.style.display = 'none';
           singleClassPanel.style.display = 'none';
           
+          // 復原新生狀態與畫面
+          document.querySelectorAll('.new-student-only').forEach(el => el.style.display = '');
+          document.querySelectorAll('.req-new').forEach(el => el.required = true);
+
           // 重置條款勾選狀態
           const policyBoxes = document.querySelectorAll('.policy-box');
           policyBoxes.forEach(box => {
