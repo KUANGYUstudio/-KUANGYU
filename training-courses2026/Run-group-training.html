@@ -335,6 +335,7 @@
         scroll-snap-type: x mandatory;
         gap: 16px;
         padding-bottom: 12px;
+        /* 隱藏捲動條讓畫面更乾淨 */
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
@@ -342,11 +343,10 @@
         display: none;
       }
       .coach-box {
-        min-width: 93%; 
-        padding: 24px 20px; 
+        min-width: 85%; 
         scroll-snap-align: center;
       }
-    } /* 補回遺漏的大括號 */
+    }
 
     .coach-header {
       display: flex;
@@ -363,7 +363,7 @@
       border-radius: 50%;
       background-color: var(--slate-light);
       border: 2px solid var(--orange-border);
-      margin: 0 auto 16px; /* 這裡改成 margin: 0 auto 16px; 即可水平置中 */
+      margin: 0 auto 16px;
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -760,7 +760,7 @@
       position: relative;
       user-select: none;
       flex: 1;
-      pointer-events: none;
+      pointer-events: none; /* 鎖定點擊，強制使用外層盒子呼叫視窗 */
     }
 
     .custom-checkbox-container input[type="checkbox"] {
@@ -1440,8 +1440,8 @@
       
       <div class="payment-grid">
         <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" required><span>匯款</span></label>
-        <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
-        <label class="option-label" style="grid-column: 1 / -1;"><input type="radio" name="paymentMethod" value="LINE PAY／iPass Money（限光聿學員）"><span>LINE PAY／iPass Money（限光聿學員）</span></label>
+        <label class="option-label old-student-payment"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
+        <label class="option-label old-student-payment" style="grid-column: 1 / -1;"><input type="radio" name="paymentMethod" value="LINE PAY／iPass Money（限光聿學員）"><span>LINE PAY／iPass Money（限光聿學員）</span></label>
       </div>
       
       <div id="bankDetailsGroup" class="dynamic-panel">
@@ -1611,6 +1611,7 @@
   const newStudentElements = document.querySelectorAll('.new-student-only');
   const newStudentReqs = document.querySelectorAll('.req-new');
   const mainFormContent = document.getElementById('mainFormContent');
+  const oldStudentPayments = document.querySelectorAll('.old-student-payment');
 
   statusRadios.forEach(radio => {
     radio.addEventListener('change', (e) => {
@@ -1633,6 +1634,20 @@
       newStudentReqs.forEach(el => {
         el.required = isNew;
       });
+
+      // 處理付款方式：新生隱藏現金與LINE PAY
+      if (isNew) {
+        oldStudentPayments.forEach(el => el.style.display = 'none');
+        // 若原本選了現金或LINE PAY，強制改為匯款並展開匯款資訊
+        const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+        if (selectedPayment && selectedPayment.value !== '匯款') {
+          document.querySelector('input[name="paymentMethod"][value="匯款"]').checked = true;
+          document.getElementById('bankDetailsGroup').style.display = 'block';
+          document.querySelector('input[name="bankLastFive"]').required = true;
+        }
+      } else {
+        oldStudentPayments.forEach(el => el.style.display = 'flex');
+      }
 
       // 如果切換成舊生，清空並隱藏參考成績面版
       if (!isNew) {
