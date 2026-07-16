@@ -1079,14 +1079,17 @@
         let actionButtonsHtml = '';
         
         if (item.hasSignedIn) {
-          actionButtonsHtml = `<button class="action-btn" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" disabled>已簽到</button>`;
+          const signedInText = (item.courseType === '跑班') ? '已點名' : '已簽到';
+          actionButtonsHtml = `<button class="action-btn" style="background:#f1f5f9; color:#94a3b8; border:1px solid #e2e8f0; cursor:not-allowed;" disabled>${signedInText}</button>`;
         } else if (item.isExcused) {
           const excusedText = (item.courseType === '跑班') ? '已請假' : '已取消';
           actionButtonsHtml = `<button class="action-btn" style="background:#fef2f2; color:#ef4444; border:1px solid #fecaca; cursor:not-allowed;" disabled>${excusedText}</button>`;
         } else {
           const cancelBtnText = (item.courseType === '跑班') ? '請假' : '取消';
+          const signInBtnText = (item.courseType === '跑班') ? '點名' : '代簽到';
+          
           actionButtonsHtml = `
-            <button class="action-btn bg-success" onclick="actionSignIn('${item.studentName}', '${item.courseType}', this)">代簽到</button>
+            <button class="action-btn bg-success" onclick="actionSignIn('${item.studentName}', '${item.courseType}', this)">${signInBtnText}</button>
             <button class="action-btn bg-outline" style="color:var(--danger); border-color:var(--danger);" onclick="actionCancel('${item.studentName}', '${item.sheetName}', ${item.rowIndex}, this)">${cancelBtnText}</button>
           `;
         }
@@ -1106,14 +1109,16 @@
 
     function actionSignIn(name, course, btnElement) {
       const dateStr = document.getElementById('searchDate').value;
-      if (!confirm(`確定幫 ${name} 簽到並扣堂？`)) return;
+      
+      const confirmMsg = (course === '跑班') ? `確定幫 ${name} 點名並扣堂？` : `確定幫 ${name} 簽到並扣堂？`;
+      if (!confirm(confirmMsg)) return;
       
       btnElement.textContent = "處理中...";
       
       callBackend("manualCoachSignIn", { studentName: name, courseType: course, dateStr: dateStr })
       .then(res => {
         alert(res); 
-        btnElement.textContent = "已簽到"; 
+        btnElement.textContent = (course === '跑班') ? "已點名" : "已簽到"; 
         btnElement.style.background = "#f1f5f9"; 
         btnElement.style.color = "#94a3b8"; 
         btnElement.style.border = "1px solid #e2e8f0"; 
@@ -1123,8 +1128,8 @@
         if (nextBtn) nextBtn.style.display = 'none';
       })
       .catch(err => {
-        alert("簽到失敗：" + err.message);
-        btnElement.textContent = "代簽到";
+        alert("操作失敗：" + err.message);
+        btnElement.textContent = (course === '跑班') ? "點名" : "代簽到";
       });
     }
 
