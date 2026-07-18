@@ -36,14 +36,14 @@
             background: white;
             padding: 30px 20px;
             text-align: center;
-            border-bottom: 3px solid #E8601C;
+            border-bottom: 3px solid #1A9CDB;
             margin-bottom: 30px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         h1 {
             font-size: 2.5em;
-            color: #E8601C;
+            color: #1A9CDB;
             margin-bottom: 10px;
             font-weight: 700;
         }
@@ -117,8 +117,8 @@
         input[type="number"]:focus,
         select:focus {
             outline: none;
-            border-color: #E8601C;
-            box-shadow: 0 0 0 3px rgba(232, 96, 28, 0.1);
+            border-color: #1A9CDB;
+            box-shadow: 0 0 0 3px rgba(26, 156, 219, 0.1);
         }
 
         /* Filter Section */
@@ -144,14 +144,14 @@
         }
 
         .filter-btn:hover {
-            border-color: #E8601C;
-            color: #E8601C;
+            border-color: #1A9CDB;
+            color: #1A9CDB;
         }
 
         .filter-btn.active {
-            background: #E8601C;
+            background: #1A9CDB;
             color: white;
-            border-color: #E8601C;
+            border-color: #1A9CDB;
         }
 
         .filter-break {
@@ -165,7 +165,7 @@
             padding: 20px;
             border-radius: 8px;
             border: 1px solid #eee;
-            overflow: visible; /* 修改為可見以容納箭頭 */
+            overflow: visible;
             width: 100%;
         }
 
@@ -190,7 +190,7 @@
 
         .product-type {
             font-size: 0.9em;
-            color: #E8601C;
+            color: #1A9CDB;
             font-weight: 600;
         }
 
@@ -209,11 +209,11 @@
             gap: 20px;
             width: 100%;
             padding-bottom: 15px;
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
         }
 
         .products-grid::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
+            display: none;
         }
 
         .scroll-arrow {
@@ -238,8 +238,8 @@
         }
 
         .scroll-arrow:hover {
-            color: #E8601C;
-            border-color: #E8601C;
+            color: #1A9CDB;
+            border-color: #1A9CDB;
             background: white;
         }
 
@@ -251,7 +251,6 @@
             .form-section { padding: 20px 15px; }
             .series-group { padding: 15px 10px; }
             
-            /* 手機版強制篩選器換行 */
             .filter-break {
                 display: block;
                 flex-basis: 100%;
@@ -264,7 +263,6 @@
                 font-size: 0.9em;
             }
 
-            /* 手機版隱藏箭頭，保持滑動吸附 */
             .scroll-arrow { display: none; }
             .products-grid {
                 scroll-snap-type: x mandatory;
@@ -286,7 +284,7 @@
             display: flex;
             flex-direction: column;
             transition: border-color 0.2s;
-            flex: 0 0 220px; /* 電腦版固定寬度 */
+            flex: 0 0 220px;
         }
 
         .product-card:hover {
@@ -320,7 +318,7 @@
         }
 
         .product-price {
-            color: #E8601C;
+            color: #1A9CDB;
             font-weight: 700;
             font-size: 1.1em;
         }
@@ -389,7 +387,7 @@
             color: #333;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #E8601C;
+            border-bottom: 2px solid #1A9CDB;
         }
 
         .cart-items {
@@ -415,21 +413,21 @@
         .cart-item-info { flex-grow: 1; }
         .cart-item-title { font-weight: 600; margin-bottom: 4px; }
         .cart-item-detail { color: #666; font-size: 0.9em; }
-        .cart-item-price { font-weight: 700; color: #E8601C; text-align: right; min-width: 60px; }
+        .cart-item-price { font-weight: 700; color: #1A9CDB; text-align: right; min-width: 60px; }
 
         .cart-total {
-            background: #fff3e0;
+            background: #E8F6FD;
             padding: 15px;
             border-radius: 6px;
             margin-bottom: 25px;
-            border-left: 4px solid #E8601C;
+            border-left: 4px solid #1A9CDB;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .total-label { font-size: 0.9em; font-weight: 600; color: #333; }
-        .total-amount { font-size: 1.5em; font-weight: 700; color: #E8601C; }
+        .total-amount { font-size: 1.5em; font-weight: 700; color: #1A9CDB; }
 
         /* Payment */
         .payment-section {
@@ -447,7 +445,7 @@
 
         .bank-info {
             background: #f9f9f9; padding: 15px; border-radius: 6px; margin-top: 10px;
-            border-left: 4px solid #E8601C; display: none; font-size: 0.9em;
+            border-left: 4px solid #1A9CDB; display: none; font-size: 0.9em;
         }
         .bank-info.show { display: block; }
         #accountLast5Group { display: none; margin-top: 15px; }
@@ -455,7 +453,7 @@
 
         .bank-info-item { margin-bottom: 8px; }
         .bank-info-label { font-weight: 600; color: #333; }
-        .bank-info-value { color: #E8601C; font-weight: 700; }
+        .bank-info-value { color: #1A9CDB; font-weight: 700; }
 
         /* Submit Button */
         button.submit-btn {
@@ -466,14 +464,14 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            background: #E8601C;
+            background: #1A9CDB;
             color: white;
             transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(232, 96, 28, 0.2);
+            box-shadow: 0 4px 12px rgba(26, 156, 219, 0.2);
         }
 
         button.submit-btn:hover {
-            background: #d14d0a;
+            background: #157FBA;
             transform: translateY(-2px);
         }
 
@@ -490,7 +488,7 @@
             z-index: 999;
             align-items: center;
             justify-content: space-between;
-            border-top: 2px solid #E8601C;
+            border-top: 2px solid #1A9CDB;
         }
 
         .floating-info {
@@ -507,11 +505,11 @@
         .floating-total {
             font-size: 1.3em;
             font-weight: 700;
-            color: #E8601C;
+            color: #1A9CDB;
         }
 
         .floating-btn {
-            background: #E8601C;
+            background: #1A9CDB;
             color: white;
             border: none;
             padding: 12px 25px;
@@ -553,10 +551,10 @@
         .loading.show { display: block; }
         
         .success-modal-body { text-align: center; padding: 20px 10px; }
-        .success-modal-title { color: #E8601C; font-size: 1.8em; margin-bottom: 15px; font-weight: 700; }
+        .success-modal-title { color: #1A9CDB; font-size: 1.8em; margin-bottom: 15px; font-weight: 700; }
         .success-modal-text { font-size: 1.1em; color: #333; margin-bottom: 25px; }
         .success-modal-btn {
-            background: #E8601C; color: white; border: none; padding: 10px 30px;
+            background: #1A9CDB; color: white; border: none; padding: 10px 30px;
             font-size: 1em; border-radius: 6px; cursor: pointer; font-weight: 600;
         }
     </style>
