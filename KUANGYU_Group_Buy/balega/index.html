@@ -11,12 +11,15 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth; /* 平滑捲動效果 */
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #f8f8f8;
             color: #333;
             line-height: 1.6;
-            /* 修正一：禁止整個網頁出現水平滑動 */
             overflow-x: hidden;
             width: 100%;
         }
@@ -51,8 +54,8 @@
             font-weight: 300;
         }
 
-        /* Main Layout */
-        .main-content {
+        /* Main Layout (把 Form 當作外層容器) */
+        form.main-content {
             display: grid;
             grid-template-columns: 1fr 350px;
             gap: 30px;
@@ -60,28 +63,32 @@
             align-items: start;
         }
 
-        /* 修正二：防止 Grid 內部元素撐破外層框架 */
-        .main-content > div {
+        form.main-content > div {
             min-width: 0;
         }
 
         @media (max-width: 900px) {
-            .main-content {
+            form.main-content {
                 grid-template-columns: 1fr;
             }
         }
 
-        /* Form Section */
+        /* Left Column Elements */
         .form-section {
             background: white;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             width: 100%;
+            margin-bottom: 30px;
         }
 
         .form-group {
             margin-bottom: 25px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
         }
 
         label {
@@ -133,6 +140,7 @@
             font-weight: 600;
             color: #666;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .filter-btn:hover {
@@ -147,17 +155,12 @@
         }
 
         /* Products Section */
-        .products-section {
-            margin-bottom: 30px;
-        }
-
         .series-group {
             margin-bottom: 40px;
             background: white;
             padding: 20px;
             border-radius: 8px;
             border: 1px solid #eee;
-            /* 修正三：確保群組框內不會有東西破版溢出 */
             overflow: hidden;
             width: 100%;
         }
@@ -187,7 +190,6 @@
             font-weight: 600;
         }
 
-        /* 電腦版：多排網格顯示 */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -195,17 +197,10 @@
             width: 100%;
         }
 
-        /* 手機版：左右滑動顯示 (Swipe) 且縮小卡片 */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
-            .form-section {
-                padding: 20px 15px;
-            }
-            .series-group {
-                padding: 15px 10px;
-            }
+            h1 { font-size: 2em; }
+            .form-section { padding: 20px 15px; }
+            .series-group { padding: 15px 10px; }
             .products-grid {
                 display: flex;
                 overflow-x: auto;
@@ -214,22 +209,14 @@
                 padding-bottom: 15px;
                 scrollbar-width: none; 
             }
-            .products-grid::-webkit-scrollbar {
-                display: none; 
-            }
+            .products-grid::-webkit-scrollbar { display: none; }
             .product-card {
                 flex: 0 0 45%; 
                 scroll-snap-align: start;
                 padding: 10px;
             }
-            .qty-btn {
-                width: 28px;
-                height: 28px;
-            }
-            select.size-select {
-                padding: 4px 8px;
-                font-size: 0.85em;
-            }
+            .qty-btn { width: 28px; height: 28px; }
+            select.size-select { padding: 4px 8px; font-size: 0.85em; }
         }
 
         .product-card {
@@ -312,7 +299,7 @@
         }
 
         .qty-btn:hover {
-            background: #e0e0e0;
+            background-color: #e0e0e0;
         }
 
         .qty-input {
@@ -325,10 +312,10 @@
             background: transparent;
         }
 
-        /* Cart Sidebar */
+        /* Cart Sidebar (Right Column) */
         .cart-sidebar {
             background: white;
-            padding: 20px;
+            padding: 25px 20px;
             border-radius: 8px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             position: sticky;
@@ -346,7 +333,7 @@
         }
 
         .cart-items {
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
             margin-bottom: 15px;
             padding-right: 5px;
@@ -365,126 +352,64 @@
             align-items: flex-start;
         }
 
-        .cart-item-info {
-            flex-grow: 1;
-        }
-
-        .cart-item-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .cart-item-detail {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .cart-item-price {
-            font-weight: 700;
-            color: #E8601C;
-            text-align: right;
-            min-width: 60px;
-        }
+        .cart-item-info { flex-grow: 1; }
+        .cart-item-title { font-weight: 600; margin-bottom: 4px; }
+        .cart-item-detail { color: #666; font-size: 0.9em; }
+        .cart-item-price { font-weight: 700; color: #E8601C; text-align: right; min-width: 60px; }
 
         .cart-total {
             background: #fff3e0;
             padding: 15px;
             border-radius: 6px;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             border-left: 4px solid #E8601C;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .total-label {
-            font-size: 0.9em;
-            font-weight: 600;
-            color: #333;
+        .total-label { font-size: 0.9em; font-weight: 600; color: #333; }
+        .total-amount { font-size: 1.5em; font-weight: 700; color: #E8601C; }
+
+        /* Payment inside Sidebar */
+        .payment-section {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            margin-bottom: 25px;
         }
 
-        .total-amount {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: #E8601C;
-        }
-
-        /* Payment Methods */
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
+        .radio-group { display: flex; flex-direction: column; gap: 10px; }
         .radio-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border: 1px solid #eee;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.2s;
+            display: flex; align-items: center; gap: 10px; padding: 10px;
+            border: 1px solid #eee; border-radius: 4px; cursor: pointer; transition: background-color 0.2s;
         }
-
-        .radio-item:hover {
-            background-color: #f9f9f9;
-        }
+        .radio-item:hover { background-color: #f9f9f9; }
 
         .bank-info {
-            background: #fff3e0;
-            padding: 15px;
-            border-radius: 6px;
-            margin-top: 10px;
-            border-left: 4px solid #E8601C;
-            display: none;
+            background: #f9f9f9; padding: 15px; border-radius: 6px; margin-top: 10px;
+            border-left: 4px solid #E8601C; display: none; font-size: 0.9em;
         }
+        .bank-info.show { display: block; }
+        #accountLast5Group { display: none; margin-top: 15px; }
+        #accountLast5Group.show { display: block; }
 
-        .bank-info.show {
-            display: block;
-        }
-        
-        #accountLast5Group {
-            display: none;
-        }
-        
-        #accountLast5Group.show {
-            display: block;
-        }
+        .bank-info-item { margin-bottom: 8px; }
+        .bank-info-label { font-weight: 600; color: #333; }
+        .bank-info-value { color: #E8601C; font-weight: 700; }
 
-        .bank-info-item {
-            margin-bottom: 8px;
-            font-size: 0.9em;
-        }
-
-        .bank-info-label {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .bank-info-value {
-            color: #E8601C;
-            font-weight: 700;
-        }
-
-        /* Buttons */
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 30px;
-        }
-
+        /* Submit Button */
         button.submit-btn {
-            flex: 1;
-            padding: 14px 20px;
-            font-size: 1em;
-            font-weight: 600;
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.05em;
+            font-weight: 700;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             background: #E8601C;
             color: white;
             transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(232, 96, 28, 0.2);
         }
 
         button.submit-btn:hover {
@@ -492,82 +417,87 @@
             transform: translateY(-2px);
         }
 
-        /* Modal & Status Messages */
-        .modal {
+        /* Mobile Floating Cart Bar */
+        .mobile-floating-bar {
             display: none;
             position: fixed;
-            z-index: 1000;
+            bottom: 0;
             left: 0;
-            top: 0;
             width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-        }
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
             background: white;
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 90%;
-            max-height: 90vh;
-            position: relative;
+            padding: 15px 20px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            z-index: 999;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 2px solid #E8601C;
         }
-        .modal-close {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            background: #333;
+
+        .floating-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .floating-count {
+            font-size: 0.85em;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .floating-total {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #E8601C;
+        }
+
+        .floating-btn {
+            background: #E8601C;
             color: white;
             border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1em;
             cursor: pointer;
-            font-size: 1.2em;
         }
-        .modal-image {
-            max-width: 100%;
-            max-height: 80vh;
-            display: block;
+
+        @media (max-width: 900px) {
+            .mobile-floating-bar.show {
+                display: flex;
+            }
+            body {
+                padding-bottom: 90px; /* 防止懸浮列遮擋底部內容 */
+            }
         }
-        .success-message, .error-message, .loading {
-            display: none;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            text-align: center;
+
+        /* Modal & Status Messages */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
+        }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .modal-content {
+            background: white; padding: 30px; border-radius: 8px;
+            max-width: 90%; max-height: 90vh; position: relative;
+        }
+        .modal-close {
+            position: absolute; top: -15px; right: -15px; background: #333; color: white;
+            border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1.2em;
+        }
+        .modal-image { max-width: 100%; max-height: 80vh; display: block; }
+        
+        .error-message, .loading {
+            display: none; padding: 15px; border-radius: 6px; margin-bottom: 20px; text-align: center;
         }
         .error-message.show { display: block; background: #ffebee; color: #c62828; border: 1px solid #f44336; }
         .loading.show { display: block; }
         
-        .success-modal-body {
-            text-align: center;
-            padding: 20px 10px;
-        }
-        .success-modal-title {
-            color: #E8601C;
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-        .success-modal-text {
-            font-size: 1.1em;
-            color: #333;
-            margin-bottom: 25px;
-        }
+        .success-modal-body { text-align: center; padding: 20px 10px; }
+        .success-modal-title { color: #E8601C; font-size: 1.8em; margin-bottom: 15px; font-weight: 700; }
+        .success-modal-text { font-size: 1.1em; color: #333; margin-bottom: 25px; }
         .success-modal-btn {
-            background: #E8601C;
-            color: white;
-            border: none;
-            padding: 10px 30px;
-            font-size: 1em;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
+            background: #E8601C; color: white; border: none; padding: 10px 30px;
+            font-size: 1em; border-radius: 6px; cursor: pointer; font-weight: 600;
         }
     </style>
 </head>
@@ -578,24 +508,39 @@
     </header>
 
     <div class="container">
-        <div class="main-content">
-            <div>
+        <!-- 將 form 標籤移至最外層，包覆左側商品與右側結帳區 -->
+        <form id="orderForm" class="main-content">
+            
+            <!-- 左側區塊：基本資料與商品 -->
+            <div class="left-column">
                 <div class="error-message" id="errorMessage"></div>
-
-                <form id="orderForm" class="form-section">
+                
+                <div class="form-section">
                     <div class="form-group">
                         <label for="name">姓名 *</label>
                         <input type="text" id="name" name="name" required>
                     </div>
-
                     <div class="form-group">
                         <label for="email">Email *</label>
                         <input type="email" id="email" name="email" required>
                     </div>
+                </div>
 
-                    <!-- 產品區塊 (含篩選器) -->
-                    <div class="products-section" id="productsContainer"></div>
+                <div class="products-section" id="productsContainer"></div>
+            </div>
 
+            <!-- 右側區塊：購物車、付款方式與送出按鈕 -->
+            <div class="cart-sidebar" id="checkoutSection">
+                <div class="cart-title">購物車清單</div>
+                <div class="cart-items" id="cartItems">
+                    <p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>
+                </div>
+                <div class="cart-total">
+                    <div class="total-label">總計金額</div>
+                    <div class="total-amount" id="cartTotal">$0</div>
+                </div>
+
+                <div class="payment-section">
                     <div class="form-group">
                         <label>付款方式 *</label>
                         <div class="radio-group">
@@ -612,6 +557,7 @@
                                 <span>LINE Pay</span>
                             </label>
                         </div>
+                        
                         <div class="bank-info" id="bankInfo">
                             <div class="bank-info-item">
                                 <span class="bank-info-label">銀行：</span>
@@ -626,34 +572,28 @@
                                 <span class="bank-info-value">269506136805</span>
                             </div>
                         </div>
+
+                        <div class="form-group" id="accountLast5Group">
+                            <label for="accountLast5">帳號後五碼 (選擇銀行轉帳時填寫)</label>
+                            <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
+                        </div>
                     </div>
-
-                    <div class="form-group" id="accountLast5Group">
-                        <label for="accountLast5">帳號後五碼 (選擇銀行轉帳時填寫)</label>
-                        <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
-                    </div>
-
-                    <input type="hidden" id="totalAmount" name="totalAmount" value="0">
-
-                    <div class="button-group">
-                        <button type="submit" class="submit-btn">提交訂單</button>
-                    </div>
-
-                    <div class="loading" id="loading">正在提交訂單...</div>
-                </form>
-            </div>
-
-            <div class="cart-sidebar">
-                <div class="cart-title">購物車清單</div>
-                <div class="cart-items" id="cartItems">
-                    <p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>
                 </div>
-                <div class="cart-total">
-                    <div class="total-label">總計金額</div>
-                    <div class="total-amount" id="cartTotal">$0</div>
-                </div>
+
+                <input type="hidden" id="totalAmount" name="totalAmount" value="0">
+                <button type="submit" class="submit-btn">送出訂單</button>
+                <div class="loading" id="loading" style="margin-top: 15px;">正在處理中...</div>
             </div>
+        </form>
+    </div>
+
+    <!-- 手機版專屬：底部懸浮購物車資訊列 -->
+    <div class="mobile-floating-bar" id="mobileFloatingBar">
+        <div class="floating-info">
+            <span class="floating-count" id="floatingItemCount">0 件商品</span>
+            <span class="floating-total" id="floatingTotal">$0</span>
         </div>
+        <button type="button" class="floating-btn" onclick="scrollToCheckout()">前往結帳</button>
     </div>
 
     <!-- 圖片放大視窗 -->
@@ -679,7 +619,7 @@
         const PRODUCTS = [
             {
                 series: "HIDDEN COMFORT 雲朵舒適系列",
-                description: "請填寫系列特色",
+                description: "柔軟舒適，全天候乾爽",
                 type: "NO SHOW 隱形襪",
                 items: [
                     { code: "8025-0200", color: "白", sizes: ["S","M","L","XL"], price: 450, image: "" },
@@ -693,7 +633,7 @@
             },
             {
                 series: "ULTRA LIGHT 超輕快系列",
-                description: "請填寫系列特色",
+                description: "超輕薄設計，速度首選",
                 type: "NO SHOW 隱形襪",
                 items: [
                     { code: "8926-3300", color: "黑", sizes: ["S","M","L","XL"], price: 450, image: "" },
@@ -706,7 +646,7 @@
             },
             {
                 series: "ULTRA LIGHT 超輕快系列",
-                description: "請填寫系列特色",
+                description: "超輕薄設計，速度首選",
                 type: "MINI CREW 中筒襪",
                 items: [
                     { code: "8927-3300", color: "黑", sizes: ["S","M","L","XL"], price: 550, image: "" },
@@ -715,7 +655,7 @@
             },
             {
                 series: "SILVER 抗菌銀離子系列",
-                description: "請填寫系列特色",
+                description: "銀離子抗菌，防臭防滑",
                 type: "NO SHOW 隱形襪",
                 items: [
                     { code: "8073-0339", color: "白灰", sizes: ["S","M","L","XL"], price: 450, image: "" },
@@ -731,7 +671,7 @@
             },
             {
                 series: "SILVER 抗菌銀離子系列",
-                description: "請填寫系列特色",
+                description: "銀離子抗菌，防臭防滑",
                 type: "MINI CREW 中筒襪",
                 items: [
                     { code: "8028-0300", color: "黑", sizes: ["S","M","L","XL"], price: 550, image: "" },
@@ -744,7 +684,7 @@
             },
             {
                 series: "ULTRAGLIDE 蹠骨緩衝系列",
-                description: "請填寫系列特色",
+                description: "減少摩擦，穩定包覆",
                 type: "NO SHOW 隱形襪",
                 items: [
                     { code: "8051-0200", color: "白", sizes: ["S","M","L","XL"], price: 450, image: "" },
@@ -755,7 +695,7 @@
             },
             {
                 series: "ENDURO 全能耐磨系列",
-                description: "請填寫系列特色",
+                description: "完美貼合，經久耐穿",
                 type: "QUARTER 短襪",
                 items: [
                     { code: "8537-3363", color: "岩灰", sizes: ["S","M","L","XL"], price: 450, image: "" },
@@ -766,7 +706,7 @@
             },
             {
                 series: "ENDURO 全能耐磨機能系列",
-                description: "請填寫系列特色",
+                description: "進階耐磨，足弓支撐",
                 type: "QUARTER 短襪",
                 items: [
                     { code: "8121-0200", color: "白", sizes: ["S","M","L","XL"], price: 450, image: "" },
@@ -777,7 +717,7 @@
             },
             {
                 series: "ENDURO 全能耐磨系列",
-                description: "請填寫系列特色",
+                description: "完美貼合，經久耐穿",
                 type: "CREW 中長筒襪",
                 items: [
                     { code: "8457-2332", color: "白", sizes: ["S","M","L","XL"], price: 550, image: "" },
@@ -786,7 +726,7 @@
             },
             {
                 series: "BLISTER RESIST LIGHT 馬海毛抗水泡輕量系列",
-                description: "請填寫系列特色",
+                description: "天然馬海毛，防禦水泡",
                 type: "MINI CREW 中筒襪",
                 items: [
                     { code: "8042-0200", color: "白", sizes: ["S","M","L","XL"], price: 550, image: "" },
@@ -798,7 +738,7 @@
             },
             {
                 series: "HIDDENDRY 極薄親膚系列",
-                description: "請填寫系列特色",
+                description: "極致薄透，宛如第二層肌膚",
                 type: "NO SHOW 隱形襪",
                 items: [
                     { code: "8125-0300", color: "黑", sizes: ["S","M","L","XL"], price: 450, image: "" },
@@ -809,7 +749,7 @@
             },
             {
                 series: "HIDDENDRY 極薄親膚系列",
-                description: "請填寫系列特色",
+                description: "極致薄透，宛如第二層肌膚",
                 type: "Mini Crew 中筒襪",
                 items: [
                     { code: "8141-0300", color: "黑", sizes: ["S","M","L","XL"], price: 550, image: "" },
@@ -822,13 +762,17 @@
 
         let cart = {};
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
-        
         let currentFilter = 'all';
 
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts();
             setupEventListeners();
         });
+
+        // 點擊懸浮列前往結帳
+        function scrollToCheckout() {
+            document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth' });
+        }
 
         function setFilter(type) {
             currentFilter = type;
@@ -838,17 +782,23 @@
         function renderProducts() {
             const container = document.getElementById('productsContainer');
             
-            const types = [...new Set(PRODUCTS.map(g => g.type))];
-            
             let html = '<div class="filter-container">';
             html += `<button type="button" class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">全部</button>`;
-            types.forEach(type => {
-                html += `<button type="button" class="filter-btn ${currentFilter === type ? 'active' : ''}" onclick="setFilter('${type}')">${type}</button>`;
-            });
+            html += `<button type="button" class="filter-btn ${currentFilter === '短筒' ? 'active' : ''}" onclick="setFilter('短筒')">短筒</button>`;
+            html += `<button type="button" class="filter-btn ${currentFilter === '中長筒' ? 'active' : ''}" onclick="setFilter('中長筒')">中長筒</button>`;
             html += '</div>';
 
             PRODUCTS.forEach((group, groupIndex) => {
-                if (currentFilter !== 'all' && group.type !== currentFilter) return;
+                let groupCategory = '';
+                const typeUpper = group.type.toUpperCase();
+                
+                if (typeUpper.includes('隱形襪') || typeUpper.includes('短襪')) {
+                    groupCategory = '短筒';
+                } else if (typeUpper.includes('中筒襪') || typeUpper.includes('長筒襪')) {
+                    groupCategory = '中長筒';
+                }
+
+                if (currentFilter !== 'all' && groupCategory !== currentFilter) return;
 
                 html += `
                     <div class="series-group">
@@ -941,11 +891,13 @@
 
         function updateCart() {
             let total = 0;
+            let totalItemsCount = 0;
             let cartHtml = '';
 
             Object.entries(cart).forEach(([key, item]) => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
+                totalItemsCount += item.qty;
                 cartHtml += `
                     <div class="cart-item">
                         <div class="cart-item-info">
@@ -960,6 +912,16 @@
             document.getElementById('cartItems').innerHTML = cartHtml || '<p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>';
             document.getElementById('cartTotal').textContent = `$${total}`;
             document.getElementById('totalAmount').value = total;
+
+            // 控制手機版懸浮列顯示狀態
+            const mobileBar = document.getElementById('mobileFloatingBar');
+            if (totalItemsCount > 0) {
+                document.getElementById('floatingItemCount').textContent = `${totalItemsCount} 件商品`;
+                document.getElementById('floatingTotal').textContent = `$${total}`;
+                mobileBar.classList.add('show');
+            } else {
+                mobileBar.classList.remove('show');
+            }
         }
 
         function setupEventListeners() {
@@ -1067,6 +1029,9 @@
                 cart = {};
                 updateCart();
                 setFilter('all'); 
+                
+                // 表單送出後，平滑捲動回到頁首
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             })
             .catch(error => {
                 document.getElementById('loading').classList.remove('show');
