@@ -181,22 +181,40 @@
             gap: 20px;
         }
 
-        /* 手機版：左右滑動顯示 (Swipe) */
+        /* 手機版：左右滑動顯示 (Swipe) 且縮小卡片 */
         @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            .form-section {
+                padding: 20px 15px;
+            }
+            .series-group {
+                padding: 15px 10px;
+            }
             .products-grid {
                 display: flex;
                 overflow-x: auto;
                 scroll-snap-type: x mandatory;
-                gap: 15px;
-                padding-bottom: 10px;
-                scrollbar-width: none; /* Firefox 隱藏卷軸 */
+                gap: 12px;
+                padding-bottom: 15px;
+                scrollbar-width: none; 
             }
             .products-grid::-webkit-scrollbar {
-                display: none; /* Chrome/Safari 隱藏卷軸 */
+                display: none; 
             }
             .product-card {
-                flex: 0 0 75%; /* 讓卡片佔螢幕 75%，使下一張卡片微露，提示可滑動 */
-                scroll-snap-align: center;
+                flex: 0 0 45%; /* 卡片寬度縮小，一次顯示兩雙 */
+                scroll-snap-align: start;
+                padding: 10px;
+            }
+            .qty-btn {
+                width: 28px;
+                height: 28px;
+            }
+            select.size-select {
+                padding: 4px 8px;
+                font-size: 0.85em;
             }
         }
 
@@ -561,7 +579,6 @@
                         <input type="email" id="email" name="email" required>
                     </div>
 
-                    <!-- 產品區塊 (含篩選器) -->
                     <div class="products-section" id="productsContainer"></div>
 
                     <div class="form-group">
@@ -791,7 +808,6 @@
         let cart = {};
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         
-        // 目前選擇的篩選條件
         let currentFilter = 'all';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -799,7 +815,6 @@
             setupEventListeners();
         });
 
-        // 設定篩選條件並重新渲染
         function setFilter(type) {
             currentFilter = type;
             renderProducts();
@@ -808,10 +823,8 @@
         function renderProducts() {
             const container = document.getElementById('productsContainer');
             
-            // 抓出所有不重複的襪子類型作為按鈕
             const types = [...new Set(PRODUCTS.map(g => g.type))];
             
-            // 建立篩選器按鈕
             let html = '<div class="filter-container">';
             html += `<button type="button" class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">全部</button>`;
             types.forEach(type => {
@@ -820,7 +833,6 @@
             html += '</div>';
 
             PRODUCTS.forEach((group, groupIndex) => {
-                // 如果目前篩選的不是全部，且該類別不符合，就跳過不顯示
                 if (currentFilter !== 'all' && group.type !== currentFilter) return;
 
                 html += `
@@ -834,7 +846,8 @@
                 `;
 
                 group.items.forEach((item, itemIndex) => {
-                    const fallbackImage = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" style="background:%23f0f0f0"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="14" fill="%23999">暫無圖片</text></svg>';
+                    // 修正編碼，解決語法衝突印出亂碼的問題
+                    const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' style='background:%23f0f0f0'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%23999'%3E暫無圖片%3C/text%3E%3C/svg%3E";
                     const imgSrc = item.image ? item.image : fallbackImage;
                     
                     html += `
@@ -1039,7 +1052,6 @@
                 
                 cart = {};
                 updateCart();
-                // 點擊送出後重置篩選器為「全部」並重新渲染畫面
                 setFilter('all'); 
             })
             .catch(error => {
