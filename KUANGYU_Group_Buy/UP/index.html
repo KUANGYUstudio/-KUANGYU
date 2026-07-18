@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光聿團購 - UP Sports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 3px solid #E8601C;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #E8601C;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #666;
+            font-weight: 300;
+        }
+
+        /* Main Layout */
+        form.main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            margin-bottom: 30px;
+            align-items: start;
+        }
+
+        form.main-content > div {
+            min-width: 0;
+        }
+
+        @media (max-width: 900px) {
+            form.main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Form Section */
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #E8601C;
+            box-shadow: 0 0 0 3px rgba(232, 96, 28, 0.1);
+        }
+
+        /* Filter Section */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 8px 18px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .filter-btn:hover {
+            border-color: #E8601C;
+            color: #E8601C;
+        }
+
+        .filter-btn.active {
+            background: #E8601C;
+            color: white;
+            border-color: #E8601C;
+        }
+
+        .filter-break {
+            display: none;
+        }
+
+        /* Products Section */
+        .series-group {
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            overflow: visible;
+            width: 100%;
+        }
+
+        .series-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .series-name {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .series-description {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .product-type {
+            font-size: 0.9em;
+            color: #E8601C;
+            font-weight: 600;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .products-grid {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            gap: 20px;
+            width: 100%;
+            padding-bottom: 15px;
+            scrollbar-width: none;
+        }
+
+        .products-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scroll-arrow {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 10;
+            color: #666;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.2s ease;
+        }
+
+        .scroll-arrow:hover {
+            color: #E8601C;
+            border-color: #E8601C;
+            background: white;
+        }
+
+        .scroll-arrow.left { left: -15px; }
+        .scroll-arrow.right { right: -15px; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .form-section { padding: 20px 15px; }
+            .series-group { padding: 15px 10px; }
+            
+            .filter-break {
+                display: block;
+                flex-basis: 100%;
+                height: 0;
+                margin: 0;
+                padding: 0;
+            }
+            .filter-btn {
+                padding: 6px 14px;
+                font-size: 0.9em;
+            }
+
+            .scroll-arrow { display: none; }
+            .products-grid {
+                scroll-snap-type: x mandatory;
+                gap: 12px;
+            }
+            .product-card {
+                flex: 0 0 55%; 
+                scroll-snap-align: start;
+            }
+            .qty-btn { width: 28px; height: 28px; }
+        }
+
+        .product-card {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s;
+            flex: 0 0 220px;
+        }
+
+        .product-card:hover {
+            border-color: #ddd;
+            background: #f5f5f5;
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            background-color: #fff;
+            border: 1px solid #eee;
+        }
+
+        .product-info {
+            text-align: center;
+            margin-bottom: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .product-code {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+        
+        .product-name {
+            color: #666;
+            font-weight: 400;
+            font-size: 0.95em;
+            margin-bottom: 6px;
+        }
+
+        .product-spec {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 8px;
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            align-self: center;
+        }
+
+        .product-price {
+            color: #E8601C;
+            font-weight: 700;
+            font-size: 1.1em;
+            margin-top: auto;
+        }
+
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            width: 35px;
+            height: 30px;
+            border: none;
+            background: #f0f0f0;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333;
+            transition: background-color 0.2s;
+        }
+
+        .qty-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .qty-input {
+            width: 100%;
+            text-align: center;
+            border: none;
+            font-size: 0.9em;
+            padding: 0;
+            pointer-events: none;
+            background: transparent;
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            background: white;
+            padding: 25px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .cart-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #E8601C;
+        }
+
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 5px;
+        }
+
+        .cart-item {
+            font-size: 0.85em;
+            color: #333;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .cart-item-info { flex-grow: 1; padding-right: 10px; }
+        .cart-item-title { font-weight: 600; margin-bottom: 4px; }
+        .cart-item-detail { color: #666; font-size: 0.9em; }
+        .cart-item-price { font-weight: 700; color: #E8601C; text-align: right; min-width: 60px; }
+
+        .cart-total {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            border-left: 4px solid #E8601C;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label { font-size: 0.9em; font-weight: 600; color: #333; }
+        .total-amount { font-size: 1.5em; font-weight: 700; color: #E8601C; }
+
+        /* Payment */
+        .payment-section {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .radio-group { display: flex; flex-direction: column; gap: 10px; }
+        .radio-item {
+            display: flex; align-items: center; gap: 10px; padding: 10px;
+            border: 1px solid #eee; border-radius: 4px; cursor: pointer; transition: background-color 0.2s;
+        }
+        .radio-item:hover { background-color: #f9f9f9; }
+
+        .bank-info {
+            background: #f9f9f9; padding: 15px; border-radius: 6px; margin-top: 10px;
+            border-left: 4px solid #E8601C; display: none; font-size: 0.9em;
+        }
+        .bank-info.show { display: block; }
+        #accountLast5Group { display: none; margin-top: 15px; }
+        #accountLast5Group.show { display: block; }
+
+        .bank-info-item { margin-bottom: 8px; }
+        .bank-info-label { font-weight: 600; color: #333; }
+        .bank-info-value { color: #E8601C; font-weight: 700; }
+
+        /* Submit Button */
+        button.submit-btn {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.05em;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #E8601C;
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(232, 96, 28, 0.2);
+        }
+
+        button.submit-btn:hover {
+            background: #d14d0a;
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Floating Cart Bar */
+        .mobile-floating-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            z-index: 999;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 2px solid #E8601C;
+        }
+
+        .floating-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .floating-count {
+            font-size: 0.85em;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .floating-total {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #E8601C;
+        }
+
+        .floating-btn {
+            background: #E8601C;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .mobile-floating-bar.show {
+                display: flex;
+            }
+            body {
+                padding-bottom: 90px; 
+            }
+        }
+
+        /* Modal & Status */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.6);
+        }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .modal-content {
+            background: white; padding: 30px; border-radius: 8px;
+            max-width: 90%; max-height: 90vh; position: relative;
+        }
+        .modal-close {
+            position: absolute; top: -15px; right: -15px; background: #333; color: white;
+            border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1.2em;
+        }
+        .modal-image { max-width: 100%; max-height: 80vh; display: block; }
+        
+        .error-message, .loading {
+            display: none; padding: 15px; border-radius: 6px; margin-bottom: 20px; text-align: center;
+        }
+        .error-message.show { display: block; background: #ffebee; color: #c62828; border: 1px solid #f44336; }
+        .loading.show { display: block; }
+        
+        .success-modal-body { text-align: center; padding: 20px 10px; }
+        .success-modal-title { color: #E8601C; font-size: 1.8em; margin-bottom: 15px; font-weight: 700; }
+        .success-modal-text { font-size: 1.1em; color: #333; margin-bottom: 25px; }
+        .success-modal-btn {
+            background: #E8601C; color: white; border: none; padding: 10px 30px;
+            font-size: 1em; border-radius: 6px; cursor: pointer; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>光聿團購</h1>
+        <p class="subtitle">UP Sports 運動補給</p>
+    </header>
+
+    <div class="container">
+        <form id="orderForm" class="main-content">
+            
+            <div class="left-column">
+                <div class="error-message" id="errorMessage"></div>
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="name">姓名 *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+
+                <div class="products-section" id="productsContainer"></div>
+            </div>
+
+            <div class="cart-sidebar" id="checkoutSection">
+                <div class="cart-title">購物車清單</div>
+                <div class="cart-items" id="cartItems">
+                    <p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>
+                </div>
+                <div class="cart-total">
+                    <div class="total-label">總計金額</div>
+                    <div class="total-amount" id="cartTotal">$0</div>
+                </div>
+
+                <div class="payment-section">
+                    <div class="form-group">
+                        <label>付款方式 *</label>
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <input type="radio" name="paymentMethod" value="bank" required>
+                                <span>銀行轉帳</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="paymentMethod" value="cash">
+                                <span>現金</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="paymentMethod" value="linepay">
+                                <span>LINE Pay</span>
+                            </label>
+                        </div>
+                        
+                        <div class="bank-info" id="bankInfo">
+                            <div class="bank-info-item">
+                                <span class="bank-info-label">銀行：</span>
+                                <span class="bank-info-value">國泰世華 (013)</span>
+                            </div>
+                            <div class="bank-info-item">
+                                <span class="bank-info-label">帳戶名稱：</span>
+                                <span class="bank-info-value">費聿凡</span>
+                            </div>
+                            <div class="bank-info-item">
+                                <span class="bank-info-label">匯款帳號：</span>
+                                <span class="bank-info-value">269506136805</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="accountLast5Group">
+                            <label for="accountLast5">帳號後五碼 (選擇銀行轉帳時填寫)</label>
+                            <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" id="totalAmount" name="totalAmount" value="0">
+                <button type="submit" class="submit-btn">送出訂單</button>
+                <div class="loading" id="loading" style="margin-top: 15px;">正在處理中...</div>
+            </div>
+        </form>
+    </div>
+
+    <!-- 手機版專屬：底部懸浮購物車資訊列 -->
+    <div class="mobile-floating-bar" id="mobileFloatingBar">
+        <div class="floating-info">
+            <span class="floating-count" id="floatingItemCount">0 件商品</span>
+            <span class="floating-total" id="floatingTotal">$0</span>
+        </div>
+        <button type="button" class="floating-btn" onclick="scrollToCheckout()">前往結帳</button>
+    </div>
+
+    <!-- 圖片放大視窗 -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeImageModal()">×</button>
+            <img id="modalImage" class="modal-image" src="" alt="放大圖片">
+        </div>
+    </div>
+
+    <!-- 訂購完成視窗 -->
+    <div class="modal" id="successModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="success-modal-body">
+                <div class="success-modal-title">完成訂購</div>
+                <div class="success-modal-text">您的訂單已成功送出，系統將寄發確認信至您的 Email 信箱。</div>
+                <button class="success-modal-btn" onclick="closeSuccessModal()">確認並關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 請在此陣列填寫對應的「價格 (price)」與「商品圖 (image)」
+        const PRODUCTS = [
+            {
+                series: "超效乳清蛋白",
+                description: "優質蛋白質補充，加速運動後恢復",
+                type: "乳清蛋白",
+                items: [
+                    { code: "A01", name: "香濃芋頭", spec: "盒", price: 0, image: "" },
+                    { code: "A011", name: "香濃芋頭", spec: "包", price: 0, image: "" },
+                    { code: "A02", name: "綠豆沙奶", spec: "盒", price: 0, image: "" },
+                    { code: "A021", name: "綠豆沙奶", spec: "包", price: 0, image: "" },
+                    { code: "A03", name: "海鹽焦糖", spec: "盒", price: 0, image: "" },
+                    { code: "A031", name: "海鹽焦糖", spec: "包", price: 0, image: "" },
+                    { code: "A04", name: "UP PURE ISO 原味分離乳清蛋白", spec: "包", price: 0, image: "" }
+                ]
+            },
+            {
+                series: "咖啡因能量棒",
+                description: "快速提供能量與飽足感",
+                type: "能量棒",
+                items: [
+                    { code: "B01", name: "香蕉可可", spec: "盒", price: 0, image: "" },
+                    { code: "B011", name: "香蕉可可", spec: "支", price: 0, image: "" },
+                    { code: "B03", name: "芒果可可", spec: "盒", price: 0, image: "" },
+                    { code: "B031", name: "芒果可可", spec: "支", price: 0, image: "" }
+                ]
+            },
+            {
+                series: "FAST 能量果膠",
+                description: "迅速補給，好吞嚥不卡喉",
+                type: "能量果膠",
+                items: [
+                    { code: "C01", name: "檸檬萊姆", spec: "盒", price: 0, image: "" },
+                    { code: "C011", name: "檸檬萊姆", spec: "包", price: 0, image: "" },
+                    { code: "C02", name: "海鹽莓果", spec: "盒", price: 0, image: "" },
+                    { code: "C021", name: "海鹽莓果", spec: "包", price: 0, image: "" },
+                    { code: "C03", name: "百香蜜桃", spec: "盒", price: 0, image: "" },
+                    { code: "C031", name: "百香蜜桃", spec: "包", price: 0, image: "" },
+                    { code: "C04", name: "洛神烏梅 (FAST-X)", spec: "盒", price: 0, image: "" },
+                    { code: "C041", name: "洛神烏梅 (FAST-X)", spec: "包", price: 0, image: "" },
+                    { code: "C05", name: "酸櫻桃汁", spec: "盒", price: 0, image: "" },
+                    { code: "C051", name: "酸櫻桃汁", spec: "包", price: 0, image: "" },
+                    { code: "C07", name: "沁涼藍莓", spec: "盒", price: 0, image: "" },
+                    { code: "C071", name: "沁涼藍莓", spec: "包", price: 0, image: "" },
+                    { code: "C08", name: "芒果青風味 (FAST FLOW)", spec: "盒", price: 0, image: "" },
+                    { code: "C081", name: "芒果青風味 (FAST FLOW)", spec: "包", price: 0, image: "" }
+                ]
+            },
+            {
+                series: "運動機能膠囊",
+                description: "賽季保養與賽中支援",
+                type: "運動膠囊",
+                items: [
+                    { code: "D01", name: "UP RC膠囊", spec: "罐", price: 0, image: "" },
+                    { code: "D02", name: "UP 電解力Plus+", spec: "罐", price: 0, image: "" },
+                    { code: "D03", name: "UP 運動保護膠囊", spec: "罐", price: 0, image: "" },
+                    { code: "D04", name: "UP 運動魚油", spec: "罐", price: 0, image: "" },
+                    { code: "D05", name: "UP 牛磺酸膠囊", spec: "罐", price: 0, image: "" },
+                    { code: "D06", name: "UP O2膠囊", spec: "罐", price: 0, image: "" },
+                    { code: "D07", name: "UP 綠茶咖啡因膠囊", spec: "罐", price: 0, image: "" },
+                    { code: "D08", name: "UP 微鐵膠囊", spec: "罐", price: 0, image: "" },
+                    { code: "D09", name: "UP 全鎂膠囊", spec: "罐", price: 0, image: "" }
+                ]
+            },
+            {
+                series: "能量軟糖與配件",
+                description: "日常訓練好幫手",
+                type: "其他",
+                items: [
+                    { code: "E01", name: "FOCHEWS能量軟糖-多多風味", spec: "盒", price: 0, image: "" },
+                    { code: "E011", name: "FOCHEWS能量軟糖-多多風味", spec: "包", price: 0, image: "" },
+                    { code: "F02", name: "UP 品牌膠囊收納盒", spec: "個", price: 0, image: "" }
+                ]
+            }
+        ];
+
+        let cart = {};
+        let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            setupEventListeners();
+        });
+
+        function scrollToCheckout() {
+            document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollGrid(btn, amount) {
+            const grid = btn.parentElement.querySelector('.products-grid');
+            grid.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+
+        function setFilter(type) {
+            currentFilter = type;
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('productsContainer');
+            
+            let html = '<div class="filter-container">';
+            html += `<button type="button" class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">全部</button>`;
+            html += `<button type="button" class="filter-btn ${currentFilter === '乳清蛋白' ? 'active' : ''}" onclick="setFilter('乳清蛋白')">乳清蛋白</button>`;
+            html += `<button type="button" class="filter-btn ${currentFilter === '能量果膠' ? 'active' : ''}" onclick="setFilter('能量果膠')">能量果膠</button>`;
+            html += `<div class="filter-break"></div>`;
+            html += `<button type="button" class="filter-btn ${currentFilter === '能量棒' ? 'active' : ''}" onclick="setFilter('能量棒')">能量棒</button>`;
+            html += `<button type="button" class="filter-btn ${currentFilter === '運動膠囊' ? 'active' : ''}" onclick="setFilter('運動膠囊')">運動膠囊</button>`;
+            html += `<button type="button" class="filter-btn ${currentFilter === '其他' ? 'active' : ''}" onclick="setFilter('其他')">其他</button>`;
+            html += '</div>';
+
+            PRODUCTS.forEach((group, groupIndex) => {
+                if (currentFilter !== 'all' && group.type !== currentFilter) return;
+
+                html += `
+                    <div class="series-group">
+                        <div class="series-header">
+                            <div class="series-name">${group.series}</div>
+                            <div class="series-description">${group.description}</div>
+                            <div class="product-type">${group.type}</div>
+                        </div>
+                        <div class="slider-wrapper">
+                            <button type="button" class="scroll-arrow left" onclick="scrollGrid(this, -300)">❮</button>
+                            <div class="products-grid">
+                `;
+
+                group.items.forEach((item, itemIndex) => {
+                    const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' style='background:%23f0f0f0'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%23999'%3E暫無圖片%3C/text%3E%3C/svg%3E";
+                    const imgSrc = item.image ? item.image : fallbackImage;
+                    
+                    html += `
+                                <div class="product-card">
+                                    <img src="${imgSrc}" alt="${item.name}" class="product-image" onclick="openImageModal('${imgSrc}')">
+                                    <div class="product-info">
+                                        <div class="product-code">${item.code}</div>
+                                        <div class="product-name">${item.name}</div>
+                                        <div class="product-spec">規格：${item.spec}</div>
+                                        <div class="product-price">$${item.price}</div>
+                                    </div>
+                                    <div class="controls-wrapper">
+                                        <input type="hidden" id="spec-${groupIndex}-${itemIndex}" value="${item.spec}">
+                                        <div class="qty-control">
+                                            <button type="button" class="qty-btn" onclick="changeQty(${groupIndex}, ${itemIndex}, -1)">−</button>
+                                            <input type="number" class="qty-input" id="qty-${groupIndex}-${itemIndex}" value="0" readonly>
+                                            <button type="button" class="qty-btn" onclick="changeQty(${groupIndex}, ${itemIndex}, 1)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                    `;
+                });
+
+                html += `       </div>
+                            <button type="button" class="scroll-arrow right" onclick="scrollGrid(this, 300)">❯</button>
+                        </div>
+                    </div>`;
+            });
+
+            container.innerHTML = html;
+            syncCartQuantities();
+        }
+
+        // 當重新渲染時，同步保留先前購物車內的數量顯示
+        function syncCartQuantities() {
+            PRODUCTS.forEach((group, gIdx) => {
+                group.items.forEach((item, iIdx) => {
+                    const input = document.getElementById(`qty-${gIdx}-${iIdx}`);
+                    if (input) {
+                        const cartKey = `${gIdx}-${iIdx}-${item.spec}`;
+                        input.value = cart[cartKey] ? cart[cartKey].qty : 0;
+                    }
+                });
+            });
+        }
+
+        function changeQty(gIdx, iIdx, delta) {
+            const spec = document.getElementById(`spec-${gIdx}-${iIdx}`).value;
+            const cartKey = `${gIdx}-${iIdx}-${spec}`;
+            const product = PRODUCTS[gIdx].items[iIdx];
+
+            if (!cart[cartKey]) {
+                cart[cartKey] = {
+                    series: PRODUCTS[gIdx].series,
+                    code: product.code,
+                    name: product.name,
+                    spec: spec,
+                    price: product.price,
+                    qty: 0
+                };
+            }
+
+            let newQty = cart[cartKey].qty + delta;
+            if (newQty < 0) newQty = 0;
+
+            if (newQty === 0) {
+                delete cart[cartKey];
+            } else {
+                cart[cartKey].qty = newQty;
+            }
+
+            document.getElementById(`qty-${gIdx}-${iIdx}`).value = newQty;
+            updateCart();
+        }
+
+        function updateCart() {
+            let total = 0;
+            let totalItemsCount = 0;
+            let cartHtml = '';
+
+            Object.entries(cart).forEach(([key, item]) => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                totalItemsCount += item.qty;
+                cartHtml += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <div class="cart-item-title">${item.code} - ${item.name}</div>
+                            <div class="cart-item-detail">規格: ${item.spec} | 數量: ${item.qty}</div>
+                        </div>
+                        <div class="cart-item-price">$${subtotal}</div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('cartItems').innerHTML = cartHtml || '<p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>';
+            document.getElementById('cartTotal').textContent = `$${total}`;
+            document.getElementById('totalAmount').value = total;
+
+            const mobileBar = document.getElementById('mobileFloatingBar');
+            if (totalItemsCount > 0) {
+                document.getElementById('floatingItemCount').textContent = `${totalItemsCount} 件商品`;
+                document.getElementById('floatingTotal').textContent = `$${total}`;
+                mobileBar.classList.add('show');
+            } else {
+                mobileBar.classList.remove('show');
+            }
+        }
+
+        function setupEventListeners() {
+            document.getElementById('orderForm').addEventListener('submit', handleSubmit);
+
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const bankInfo = document.getElementById('bankInfo');
+                    const accountLast5Group = document.getElementById('accountLast5Group');
+                    if (e.target.value === 'bank') {
+                        bankInfo.classList.add('show');
+                        accountLast5Group.classList.add('show');
+                    } else {
+                        bankInfo.classList.remove('show');
+                        accountLast5Group.classList.remove('show');
+                        document.getElementById('accountLast5').value = '';
+                    }
+                });
+            });
+        }
+
+        function openImageModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('imageModal').classList.add('show');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.remove('show');
+        }
+        
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('show');
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+            const accountLast5 = document.getElementById('accountLast5').value.trim();
+            const totalAmount = parseInt(document.getElementById('totalAmount').value);
+
+            if (!name || !email || !paymentMethod) {
+                showError('請填寫完整必填資訊');
+                return;
+            }
+            if (paymentMethod === 'bank' && !accountLast5) {
+                showError('請填寫帳號後五碼');
+                return;
+            }
+            if (Object.keys(cart).length === 0) {
+                showError('請選擇至少一件商品');
+                return;
+            }
+
+            const orderItems = Object.values(cart).map(item => ({
+                code: item.code,
+                name: item.name,
+                spec: item.spec,
+                qty: item.qty,
+                price: item.price,
+                subtotal: item.price * item.qty
+            }));
+
+            const orderData = {
+                name,
+                email,
+                paymentMethod,
+                accountLast5,
+                totalAmount,
+                items: orderItems,
+                timestamp: new Date().toISOString()
+            };
+
+            document.getElementById('loading').classList.add('show');
+            submitToGAS(orderData);
+        }
+
+        function submitToGAS(orderData) {
+            fetch(GAS_URL, {
+                redirect: 'follow',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('網路連線異常，請稍後再試');
+                return response.json();
+            })
+            .then(data => {
+                if(data.result === 'error') {
+                    throw new Error(data.message);
+                }
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('successModal').classList.add('show');
+                
+                document.getElementById('orderForm').reset();
+                document.getElementById('bankInfo').classList.remove('show');
+                const accountLast5Group = document.getElementById('accountLast5Group');
+                if (accountLast5Group) accountLast5Group.classList.remove('show');
+                
+                cart = {};
+                updateCart();
+                setFilter('all'); 
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            })
+            .catch(error => {
+                document.getElementById('loading').classList.remove('show');
+                console.error('Error:', error);
+                showError('提交失敗，錯誤訊息：' + error.message);
+            });
+        }
+
+        function showError(message) {
+            const el = document.getElementById('errorMessage');
+            el.textContent = message;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
+
+        window.addEventListener('click', (e) => {
+            const imgModal = document.getElementById('imageModal');
+            const successModal = document.getElementById('successModal');
+            if (e.target === imgModal) closeImageModal();
+            if (e.target === successModal) closeSuccessModal();
+        });
+    </script>
+</body>
+</html>
