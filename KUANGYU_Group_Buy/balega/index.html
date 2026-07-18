@@ -16,12 +16,16 @@
             background-color: #f8f8f8;
             color: #333;
             line-height: 1.6;
+            /* 修正一：禁止整個網頁出現水平滑動 */
+            overflow-x: hidden;
+            width: 100%;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            width: 100%;
         }
 
         /* Header */
@@ -56,6 +60,11 @@
             align-items: start;
         }
 
+        /* 修正二：防止 Grid 內部元素撐破外層框架 */
+        .main-content > div {
+            min-width: 0;
+        }
+
         @media (max-width: 900px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -68,6 +77,7 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            width: 100%;
         }
 
         .form-group {
@@ -147,6 +157,9 @@
             padding: 20px;
             border-radius: 8px;
             border: 1px solid #eee;
+            /* 修正三：確保群組框內不會有東西破版溢出 */
+            overflow: hidden;
+            width: 100%;
         }
 
         .series-header {
@@ -179,6 +192,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
+            width: 100%;
         }
 
         /* 手機版：左右滑動顯示 (Swipe) 且縮小卡片 */
@@ -204,7 +218,7 @@
                 display: none; 
             }
             .product-card {
-                flex: 0 0 45%; /* 卡片寬度縮小，一次顯示兩雙 */
+                flex: 0 0 45%; 
                 scroll-snap-align: start;
                 padding: 10px;
             }
@@ -298,7 +312,7 @@
         }
 
         .qty-btn:hover {
-            background-color: #e0e0e0;
+            background: #e0e0e0;
         }
 
         .qty-input {
@@ -579,6 +593,7 @@
                         <input type="email" id="email" name="email" required>
                     </div>
 
+                    <!-- 產品區塊 (含篩選器) -->
                     <div class="products-section" id="productsContainer"></div>
 
                     <div class="form-group">
@@ -846,7 +861,6 @@
                 `;
 
                 group.items.forEach((item, itemIndex) => {
-                    // 修正編碼，解決語法衝突印出亂碼的問題
                     const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' style='background:%23f0f0f0'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%23999'%3E暫無圖片%3C/text%3E%3C/svg%3E";
                     const imgSrc = item.image ? item.image : fallbackImage;
                     
