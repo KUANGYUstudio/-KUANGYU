@@ -366,6 +366,14 @@
         .bank-info.show {
             display: block;
         }
+        
+        #accountLast5Group {
+            display: none;
+        }
+        
+        #accountLast5Group.show {
+            display: block;
+        }
 
         .bank-info-item {
             margin-bottom: 8px;
@@ -425,7 +433,7 @@
         }
         .modal-content {
             background: white;
-            padding: 20px;
+            padding: 30px;
             border-radius: 8px;
             max-width: 90%;
             max-height: 90vh;
@@ -456,9 +464,34 @@
             margin-bottom: 20px;
             text-align: center;
         }
-        .success-message.show { display: block; background: #e8f5e9; color: #2e7d32; border: 1px solid #4caf50; }
         .error-message.show { display: block; background: #ffebee; color: #c62828; border: 1px solid #f44336; }
         .loading.show { display: block; }
+        
+        .success-modal-body {
+            text-align: center;
+            padding: 20px 10px;
+        }
+        .success-modal-title {
+            color: #E8601C;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .success-modal-text {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .success-modal-btn {
+            background: #E8601C;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 1em;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -470,7 +503,6 @@
     <div class="container">
         <div class="main-content">
             <div>
-                <div class="success-message" id="successMessage"></div>
                 <div class="error-message" id="errorMessage"></div>
 
                 <form id="orderForm" class="form-section">
@@ -518,7 +550,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="accountLast5Group">
                         <label for="accountLast5">帳號後五碼 (選擇銀行轉帳時填寫)</label>
                         <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
                     </div>
@@ -546,6 +578,7 @@
         </div>
     </div>
 
+    <!-- 圖片放大視窗 -->
     <div class="modal" id="imageModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeImageModal()">×</button>
@@ -553,7 +586,19 @@
         </div>
     </div>
 
+    <!-- 訂購完成視窗 -->
+    <div class="modal" id="successModal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="success-modal-body">
+                <div class="success-modal-title">完成訂購</div>
+                <div class="success-modal-text">您的訂單已成功送出，系統將寄發確認信至您的 Email 信箱。</div>
+                <button class="success-modal-btn" onclick="closeSuccessModal()">確認並關閉</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // 您的 57 款商品資料維持不變
         const PRODUCTS = [
             {
                 series: "HIDDEN COMFORT 雲朵舒適系列",
@@ -698,7 +743,7 @@
             }
         ];
 
-        // 購物車資料庫
+        // 購物車資料庫與網址
         let cart = {};
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
 
@@ -755,7 +800,6 @@
             container.innerHTML = html;
         }
 
-        // 當切換下拉尺寸時，下方數量會對應變更
         function handleSizeChange(gIdx, iIdx) {
             const size = document.getElementById(`size-${gIdx}-${iIdx}`).value;
             const cartKey = `${gIdx}-${iIdx}-${size}`;
@@ -831,10 +875,15 @@
             document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     const bankInfo = document.getElementById('bankInfo');
+                    const accountLast5Group = document.getElementById('accountLast5Group');
                     if (e.target.value === 'bank') {
                         bankInfo.classList.add('show');
+                        accountLast5Group.classList.add('show');
                     } else {
                         bankInfo.classList.remove('show');
+                        accountLast5Group.classList.remove('show');
+                        // 切換為其他付款方式時，自動清空填寫的後五碼
+                        document.getElementById('accountLast5').value = '';
                     }
                 });
             });
@@ -848,6 +897,10 @@
         function closeImageModal() {
             document.getElementById('imageModal').classList.remove('show');
         }
+        
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('show');
+        }
 
         function handleSubmit(e) {
             e.preventDefault();
@@ -860,6 +913,11 @@
 
             if (!name || !email || !paymentMethod) {
                 showError('請填寫完整必填資訊');
+                return;
+            }
+            // 檢查如果選擇轉帳，是否有填寫帳號後五碼
+            if (paymentMethod === 'bank' && !accountLast5) {
+                showError('請填寫帳號後五碼');
                 return;
             }
             if (Object.keys(cart).length === 0) {
@@ -898,11 +956,16 @@
             })
             .then(() => {
                 document.getElementById('loading').classList.remove('show');
-                showSuccess('訂單已提交！');
+                // 顯示成功彈出視窗
+                document.getElementById('successModal').classList.add('show');
+                
                 document.getElementById('orderForm').reset();
+                // 確保清單等狀態也復原
+                document.getElementById('bankInfo').classList.remove('show');
+                document.getElementById('accountLast5Group').classList.remove('show');
+                
                 cart = {};
                 updateCart();
-                // 重置所有畫面上商品卡片的數量為 0
                 document.querySelectorAll('.qty-input').forEach(input => input.value = 0);
                 document.querySelectorAll('.size-select').forEach(select => select.value = "");
             })
@@ -913,13 +976,6 @@
             });
         }
 
-        function showSuccess(message) {
-            const el = document.getElementById('successMessage');
-            el.textContent = message;
-            el.classList.add('show');
-            setTimeout(() => el.classList.remove('show'), 5000);
-        }
-
         function showError(message) {
             const el = document.getElementById('errorMessage');
             el.textContent = message;
@@ -928,10 +984,10 @@
         }
 
         window.addEventListener('click', (e) => {
-            const modal = document.getElementById('imageModal');
-            if (e.target === modal) {
-                closeImageModal();
-            }
+            const imgModal = document.getElementById('imageModal');
+            const successModal = document.getElementById('successModal');
+            if (e.target === imgModal) closeImageModal();
+            if (e.target === successModal) closeSuccessModal();
         });
     </script>
 </body>
