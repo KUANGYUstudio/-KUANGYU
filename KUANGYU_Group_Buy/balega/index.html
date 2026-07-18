@@ -165,7 +165,7 @@
             padding: 20px;
             border-radius: 8px;
             border: 1px solid #eee;
-            overflow: hidden;
+            overflow: visible; /* 修改為可見以容納箭頭 */
             width: 100%;
         }
 
@@ -194,12 +194,57 @@
             font-weight: 600;
         }
 
+        /* 統一為左右滑動版面 */
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
         .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
             gap: 20px;
             width: 100%;
+            padding-bottom: 15px;
+            scrollbar-width: none; /* Firefox */
         }
+
+        .products-grid::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .scroll-arrow {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 10;
+            color: #666;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.2s ease;
+        }
+
+        .scroll-arrow:hover {
+            color: #E8601C;
+            border-color: #E8601C;
+            background: white;
+        }
+
+        .scroll-arrow.left { left: -15px; }
+        .scroll-arrow.right { right: -15px; }
 
         @media (max-width: 768px) {
             h1 { font-size: 2em; }
@@ -219,22 +264,18 @@
                 font-size: 0.9em;
             }
 
+            /* 手機版隱藏箭頭，保持滑動吸附 */
+            .scroll-arrow { display: none; }
             .products-grid {
-                display: flex;
-                overflow-x: auto;
                 scroll-snap-type: x mandatory;
                 gap: 12px;
-                padding-bottom: 15px;
-                scrollbar-width: none; 
             }
-            .products-grid::-webkit-scrollbar { display: none; }
             .product-card {
-                flex: 0 0 45%; 
+                flex: 0 0 55%; 
                 scroll-snap-align: start;
-                padding: 10px;
             }
             .qty-btn { width: 28px; height: 28px; }
-            select.size-select { padding: 4px 8px; font-size: 0.85em; }
+            .size-select { padding: 4px 8px; font-size: 0.85em; }
         }
 
         .product-card {
@@ -245,6 +286,7 @@
             display: flex;
             flex-direction: column;
             transition: border-color 0.2s;
+            flex: 0 0 220px; /* 電腦版固定寬度 */
         }
 
         .product-card:hover {
@@ -788,6 +830,11 @@
             document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth' });
         }
 
+        function scrollGrid(btn, amount) {
+            const grid = btn.parentElement.querySelector('.products-grid');
+            grid.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+
         function setFilter(type) {
             currentFilter = type;
             renderProducts();
@@ -828,7 +875,9 @@
                             <div class="series-description">${group.description}</div>
                             <div class="product-type">${group.type}</div>
                         </div>
-                        <div class="products-grid">
+                        <div class="slider-wrapper">
+                            <button type="button" class="scroll-arrow left" onclick="scrollGrid(this, -300)">❮</button>
+                            <div class="products-grid">
                 `;
 
                 group.items.forEach((item, itemIndex) => {
@@ -836,29 +885,32 @@
                     const imgSrc = item.image ? item.image : fallbackImage;
                     
                     html += `
-                        <div class="product-card">
-                            <img src="${imgSrc}" alt="${item.color}" class="product-image" onclick="openImageModal('${imgSrc}')">
-                            <div class="product-info">
-                                <div class="product-code">${item.code}</div>
-                                <div class="product-code" style="color: #666; font-weight: 400;">${item.color}</div>
-                                <div class="product-price">$${item.price}</div>
-                            </div>
-                            <div class="controls-wrapper">
-                                <select class="size-select" id="size-${groupIndex}-${itemIndex}" onchange="handleSizeChange(${groupIndex}, ${itemIndex})">
-                                    <option value="">選擇尺寸</option>
-                                    ${item.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
-                                </select>
-                                <div class="qty-control">
-                                    <button type="button" class="qty-btn" onclick="changeQty(${groupIndex}, ${itemIndex}, -1)">−</button>
-                                    <input type="number" class="qty-input" id="qty-${groupIndex}-${itemIndex}" value="0" readonly>
-                                    <button type="button" class="qty-btn" onclick="changeQty(${groupIndex}, ${itemIndex}, 1)">+</button>
+                                <div class="product-card">
+                                    <img src="${imgSrc}" alt="${item.color}" class="product-image" onclick="openImageModal('${imgSrc}')">
+                                    <div class="product-info">
+                                        <div class="product-code">${item.code}</div>
+                                        <div class="product-code" style="color: #666; font-weight: 400;">${item.color}</div>
+                                        <div class="product-price">$${item.price}</div>
+                                    </div>
+                                    <div class="controls-wrapper">
+                                        <select class="size-select" id="size-${groupIndex}-${itemIndex}" onchange="handleSizeChange(${groupIndex}, ${itemIndex})">
+                                            <option value="">選擇尺寸</option>
+                                            ${item.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
+                                        </select>
+                                        <div class="qty-control">
+                                            <button type="button" class="qty-btn" onclick="changeQty(${groupIndex}, ${itemIndex}, -1)">−</button>
+                                            <input type="number" class="qty-input" id="qty-${groupIndex}-${itemIndex}" value="0" readonly>
+                                            <button type="button" class="qty-btn" onclick="changeQty(${groupIndex}, ${itemIndex}, 1)">+</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
                     `;
                 });
 
-                html += `</div></div>`;
+                html += `       </div>
+                            <button type="button" class="scroll-arrow right" onclick="scrollGrid(this, 300)">❯</button>
+                        </div>
+                    </div>`;
             });
 
             container.innerHTML = html;
