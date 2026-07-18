@@ -104,7 +104,39 @@
             box-shadow: 0 0 0 3px rgba(232, 96, 28, 0.1);
         }
 
-        /* Products Section - Grid Layout */
+        /* Filter Section */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 8px 18px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: #E8601C;
+            color: #E8601C;
+        }
+
+        .filter-btn.active {
+            background: #E8601C;
+            color: white;
+            border-color: #E8601C;
+        }
+
+        /* Products Section */
         .products-section {
             margin-bottom: 30px;
         }
@@ -142,16 +174,29 @@
             font-weight: 600;
         }
 
+        /* 電腦版：多排網格顯示 */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
         }
 
-        @media (max-width: 600px) {
+        /* 手機版：左右滑動顯示 (Swipe) */
+        @media (max-width: 768px) {
             .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 15px;
+                padding-bottom: 10px;
+                scrollbar-width: none; /* Firefox 隱藏卷軸 */
+            }
+            .products-grid::-webkit-scrollbar {
+                display: none; /* Chrome/Safari 隱藏卷軸 */
+            }
+            .product-card {
+                flex: 0 0 75%; /* 讓卡片佔螢幕 75%，使下一張卡片微露，提示可滑動 */
+                scroll-snap-align: center;
             }
         }
 
@@ -516,6 +561,7 @@
                         <input type="email" id="email" name="email" required>
                     </div>
 
+                    <!-- 產品區塊 (含篩選器) -->
                     <div class="products-section" id="productsContainer"></div>
 
                     <div class="form-group">
@@ -598,7 +644,6 @@
     </div>
 
     <script>
-        // 您的 57 款商品資料維持不變
         const PRODUCTS = [
             {
                 series: "HIDDEN COMFORT 雲朵舒適系列",
@@ -743,20 +788,41 @@
             }
         ];
 
-        // 購物車資料庫與網址
         let cart = {};
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
+        
+        // 目前選擇的篩選條件
+        let currentFilter = 'all';
 
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts();
             setupEventListeners();
         });
 
+        // 設定篩選條件並重新渲染
+        function setFilter(type) {
+            currentFilter = type;
+            renderProducts();
+        }
+
         function renderProducts() {
             const container = document.getElementById('productsContainer');
-            let html = '';
+            
+            // 抓出所有不重複的襪子類型作為按鈕
+            const types = [...new Set(PRODUCTS.map(g => g.type))];
+            
+            // 建立篩選器按鈕
+            let html = '<div class="filter-container">';
+            html += `<button type="button" class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">全部</button>`;
+            types.forEach(type => {
+                html += `<button type="button" class="filter-btn ${currentFilter === type ? 'active' : ''}" onclick="setFilter('${type}')">${type}</button>`;
+            });
+            html += '</div>';
 
             PRODUCTS.forEach((group, groupIndex) => {
+                // 如果目前篩選的不是全部，且該類別不符合，就跳過不顯示
+                if (currentFilter !== 'all' && group.type !== currentFilter) return;
+
                 html += `
                     <div class="series-group">
                         <div class="series-header">
@@ -882,7 +948,6 @@
                     } else {
                         bankInfo.classList.remove('show');
                         accountLast5Group.classList.remove('show');
-                        // 切換為其他付款方式時，自動清空填寫的後五碼
                         document.getElementById('accountLast5').value = '';
                     }
                 });
@@ -915,7 +980,6 @@
                 showError('請填寫完整必填資訊');
                 return;
             }
-            // 檢查如果選擇轉帳，是否有填寫帳號後五碼
             if (paymentMethod === 'bank' && !accountLast5) {
                 showError('請填寫帳號後五碼');
                 return;
@@ -950,34 +1014,33 @@
 
         function submitToGAS(orderData) {
             fetch(GAS_URL, {
-                redirect: 'follow', // 允許 Google 系統的重新導向
+                redirect: 'follow',
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'text/plain;charset=utf-8', // 避免被 CORS 阻擋
+                    'Content-Type': 'text/plain;charset=utf-8',
                 },
                 body: JSON.stringify(orderData)
             })
             .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) throw new Error('網路連線異常，請稍後再試');
                 return response.json();
             })
             .then(data => {
                 if(data.result === 'error') {
-                    throw new Error(data.message); // 如果 GAS 回傳錯誤，這裡會抓到
+                    throw new Error(data.message);
                 }
                 document.getElementById('loading').classList.remove('show');
-                document.getElementById('successModal').classList.add('show'); // 如果有加上成功彈出視窗請保留這行
+                document.getElementById('successModal').classList.add('show');
                 
                 document.getElementById('orderForm').reset();
-                // 復原介面狀態
                 document.getElementById('bankInfo').classList.remove('show');
                 const accountLast5Group = document.getElementById('accountLast5Group');
                 if (accountLast5Group) accountLast5Group.classList.remove('show');
                 
                 cart = {};
                 updateCart();
-                document.querySelectorAll('.qty-input').forEach(input => input.value = 0);
-                document.querySelectorAll('.size-select').forEach(select => select.value = "");
+                // 點擊送出後重置篩選器為「全部」並重新渲染畫面
+                setFilter('all'); 
             })
             .catch(error => {
                 document.getElementById('loading').classList.remove('show');
