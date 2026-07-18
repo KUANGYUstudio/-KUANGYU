@@ -950,19 +950,29 @@
 
         function submitToGAS(orderData) {
             fetch(GAS_URL, {
+                redirect: 'follow', // 允許 Google 系統的重新導向
                 method: 'POST',
-                body: JSON.stringify(orderData),
-                mode: 'no-cors'
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8', // 避免被 CORS 阻擋
+                },
+                body: JSON.stringify(orderData)
             })
-            .then(() => {
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
+            .then(data => {
+                if(data.result === 'error') {
+                    throw new Error(data.message); // 如果 GAS 回傳錯誤，這裡會抓到
+                }
                 document.getElementById('loading').classList.remove('show');
-                // 顯示成功彈出視窗
-                document.getElementById('successModal').classList.add('show');
+                document.getElementById('successModal').classList.add('show'); // 如果有加上成功彈出視窗請保留這行
                 
                 document.getElementById('orderForm').reset();
-                // 確保清單等狀態也復原
+                // 復原介面狀態
                 document.getElementById('bankInfo').classList.remove('show');
-                document.getElementById('accountLast5Group').classList.remove('show');
+                const accountLast5Group = document.getElementById('accountLast5Group');
+                if (accountLast5Group) accountLast5Group.classList.remove('show');
                 
                 cart = {};
                 updateCart();
@@ -972,7 +982,7 @@
             .catch(error => {
                 document.getElementById('loading').classList.remove('show');
                 console.error('Error:', error);
-                showError('提交失敗，請稍後重試。');
+                showError('提交失敗，錯誤訊息：' + error.message);
             });
         }
 
