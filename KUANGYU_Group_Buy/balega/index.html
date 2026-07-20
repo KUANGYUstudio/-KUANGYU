@@ -819,6 +819,8 @@
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
 
+        const imageExtension = ".png";
+
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts();
             setupEventListeners();
@@ -880,11 +882,12 @@
 
                 group.items.forEach((item, itemIndex) => {
                     const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' style='background:%23f0f0f0'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%23999'%3E暫無圖片%3C/text%3E%3C/svg%3E";
-                    const imgSrc = item.image ? item.image : fallbackImage;
+                    const autoImgPath = "balega_pics/" + item.code + imageExtension;
+                    const imgSrc = item.image ? item.image : autoImgPath;
                     
                     html += `
                                 <div class="product-card">
-                                    <img src="${imgSrc}" alt="${item.color}" class="product-image" onclick="openImageModal('${imgSrc}')">
+                                    <img src="${imgSrc}" alt="${item.color}" class="product-image" onclick="openImageModal('${imgSrc}')" onerror="this.onerror=null; this.src='${fallbackImage}';">
                                     <div class="product-info">
                                         <div class="product-code">${item.code}</div>
                                         <div class="product-code" style="color: #666; font-weight: 400;">${item.color}</div>
