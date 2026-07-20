@@ -185,6 +185,7 @@
             border: 1px solid #eee;
             overflow: visible;
             width: 100%;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         .series-header {
@@ -439,6 +440,23 @@
             margin-bottom: 8px;
             padding-bottom: 4px;
             border-bottom: 1px dashed #eee;
+            cursor: pointer;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-group-title:hover {
+            color: #157FBA;
+            text-decoration: underline;
+        }
+        
+        .cart-group-title::after {
+            content: "前往 ↗";
+            font-size: 0.8em;
+            font-weight: 400;
+            opacity: 0.5;
         }
 
         .cart-item {
@@ -698,6 +716,18 @@
             padding: 20px;
             transition: opacity 0.5s;
         }
+
+        /* 刪除確認視窗按鈕 */
+        .delete-btn-cancel {
+            padding: 10px 20px; border: 1px solid #ddd; background: white; 
+            border-radius: 6px; cursor: pointer; flex: 1; font-weight: 600; color: #666;
+        }
+        .delete-btn-cancel:hover { background: #f5f5f5; }
+        .delete-btn-confirm {
+            padding: 10px 20px; border: none; background: #d9534f; 
+            color: white; border-radius: 6px; cursor: pointer; flex: 1; font-weight: 600;
+        }
+        .delete-btn-confirm:hover { background: #c9302c; }
     </style>
 </head>
 <body>
@@ -806,6 +836,18 @@
         <div class="modal-content">
             <button class="modal-close" onclick="closeImageModal()">×</button>
             <img id="modalImage" class="modal-image" src="" alt="放大圖片">
+        </div>
+    </div>
+
+    <!-- 刪除確認視窗 (新增) -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content" style="max-width: 320px; text-align: center; padding: 25px;">
+            <div style="font-size: 1.4em; color: #d9534f; margin-bottom: 12px; font-weight: 700;">移除商品</div>
+            <div style="margin-bottom: 25px; color: #666; font-size: 1.05em;">確定要將此商品從購物車中移除嗎？</div>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button type="button" class="delete-btn-cancel" onclick="cancelDelete()">保留</button>
+                <button type="button" class="delete-btn-confirm" onclick="confirmDelete()">確定移除</button>
+            </div>
         </div>
     </div>
 
@@ -968,6 +1010,7 @@
         let cart = {};
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
+        let pendingDeleteData = null; // 用來儲存準備刪除的商品資訊
 
         const imageExtension = ".png";
 
@@ -983,19 +1026,16 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'open') {
-                        // 開放中，淡出並關閉遮罩
                         const overlay = document.getElementById('statusOverlay');
                         overlay.style.opacity = '0';
                         setTimeout(() => overlay.style.display = 'none', 500);
                     } else {
-                        // 尚未開始或已結束，顯示對應文字並繼續鎖定畫面
                         document.getElementById('statusMessage').textContent = data.message;
                         document.getElementById('statusDesc').style.display = 'none';
                     }
                 })
                 .catch(error => {
                     console.error('狀態讀取失敗:', error);
-                    // 若讀取失敗，預設關閉遮罩避免網頁卡死無法使用
                     document.getElementById('statusOverlay').style.display = 'none';
                 });
         }
@@ -1042,8 +1082,9 @@
 
                 if (currentFilter !== 'all' && groupCategory !== currentFilter) return;
 
+                // 新增 id 以便購物車系列名稱點擊捲動
                 html += `
-                    <div class="series-group">
+                    <div class="series-group" id="series-group-${groupIndex}">
                         <div class="series-header">
                             <div class="series-name">${group.series}</div>
                             <div class="series-description">${group.description}</div>
@@ -1091,6 +1132,28 @@
             container.innerHTML = html;
         }
 
+        // 客製化刪除確認邏輯
+        function askDeleteConfirm(cartKey, onSuccess, onCancel) {
+            pendingDeleteData = { cartKey, onSuccess, onCancel };
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function confirmDelete() {
+            if (pendingDeleteData) {
+                pendingDeleteData.onSuccess();
+            }
+            document.getElementById('deleteModal').classList.remove('show');
+            pendingDeleteData = null;
+        }
+
+        function cancelDelete() {
+            if (pendingDeleteData && pendingDeleteData.onCancel) {
+                pendingDeleteData.onCancel();
+            }
+            document.getElementById('deleteModal').classList.remove('show');
+            pendingDeleteData = null;
+        }
+
         function handleSizeChange(gIdx, iIdx) {
             const size = document.getElementById(`size-${gIdx}-${iIdx}`).value;
             const cartKey = `${gIdx}-${iIdx}-${size}`;
@@ -1132,12 +1195,15 @@
             
             if (newQty <= 0) {
                 if (cart[cartKey].qty > 0) {
-                    if (confirm('確認刪除品項？')) {
+                    // 使用客製化視窗詢問
+                    askDeleteConfirm(cartKey, () => {
                         delete cart[cartKey];
-                        newQty = 0;
-                    } else {
-                        return;
-                    }
+                        document.getElementById(`qty-${gIdx}-${iIdx}`).value = 0;
+                        updateCart();
+                    }, () => {
+                        // 取消則維持原樣
+                    });
+                    return; 
                 } else {
                     delete cart[cartKey];
                     newQty = 0;
@@ -1155,21 +1221,53 @@
             
             const gIdx = cart[cartKey].gIdx;
             const iIdx = cart[cartKey].iIdx;
-
             const newQty = cart[cartKey].qty + delta;
             
             if (newQty <= 0) {
-                if (confirm('確認刪除品項？')) {
+                // 使用客製化視窗詢問
+                askDeleteConfirm(cartKey, () => {
                     delete cart[cartKey];
-                } else {
-                    return;
-                }
+                    updateCart();
+                    handleSizeChange(gIdx, iIdx);
+                }, () => {
+                    // 取消則維持原樣
+                });
+                return;
             } else {
                 cart[cartKey].qty = newQty;
             }
             
             updateCart();
             handleSizeChange(gIdx, iIdx);
+        }
+
+        // 點擊購物車內的系列名稱時，捲動至該系列區塊並加入提示特效
+        function scrollToSeries(gIdx) {
+            let seriesGroup = document.getElementById(`series-group-${gIdx}`);
+            
+            if (!seriesGroup) {
+                // 代表目前在其他篩選頁籤被隱藏了，先切回全部
+                setFilter('all');
+                setTimeout(() => {
+                    seriesGroup = document.getElementById(`series-group-${gIdx}`);
+                    performSeriesHighlight(seriesGroup);
+                }, 100);
+            } else {
+                performSeriesHighlight(seriesGroup);
+            }
+        }
+
+        function performSeriesHighlight(element) {
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // 加入高亮提示特效
+                element.style.borderColor = '#1A9CDB';
+                element.style.boxShadow = '0 0 15px rgba(26, 156, 219, 0.2)';
+                setTimeout(() => {
+                    element.style.borderColor = '#eee';
+                    element.style.boxShadow = 'none';
+                }, 1500);
+            }
         }
 
         function scrollToProduct(gIdx, iIdx) {
@@ -1183,10 +1281,8 @@
                 card = document.getElementById(`product-${gIdx}-${iIdx}`);
                 if (card) {
                     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
                     card.style.borderColor = '#1A9CDB';
                     card.style.boxShadow = '0 0 15px rgba(26, 156, 219, 0.4)';
-                    
                     setTimeout(() => {
                         card.style.borderColor = '#eee';
                         card.style.boxShadow = 'none';
@@ -1217,7 +1313,11 @@
                 cartHtml = '<p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>';
             } else {
                 for (let groupName in groupedCart) {
-                    cartHtml += `<div class="cart-group"><div class="cart-group-title">${groupName}</div>`;
+                    // 抓取該群組的第一個商品的系列 index (gIdx) 供捲動使用
+                    const groupGIdx = groupedCart[groupName][0].item.gIdx;
+                    
+                    cartHtml += `<div class="cart-group">
+                        <div class="cart-group-title" onclick="scrollToSeries(${groupGIdx})" title="點擊回到此系列">${groupName}</div>`;
                     
                     groupedCart[groupName].forEach(cartData => {
                         const k = cartData.key;
@@ -1384,11 +1484,16 @@
             setTimeout(() => el.classList.remove('show'), 5000);
         }
 
+        // 點擊背景關閉各式 Modal
         window.addEventListener('click', (e) => {
             const imgModal = document.getElementById('imageModal');
             const successModal = document.getElementById('successModal');
+            const deleteModal = document.getElementById('deleteModal');
+            
             if (e.target === imgModal) closeImageModal();
             if (e.target === successModal) closeSuccessModal();
+            // 點擊背景時若要直接取消刪除也可以打開此設定（目前預設一定要點按鈕）
+            // if (e.target === deleteModal) cancelDelete(); 
         });
     </script>
 </body>
