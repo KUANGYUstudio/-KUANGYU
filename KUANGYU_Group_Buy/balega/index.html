@@ -442,21 +442,11 @@
             border-bottom: 1px dashed #eee;
             cursor: pointer;
             transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
         .cart-group-title:hover {
             color: #157FBA;
             text-decoration: underline;
-        }
-        
-        .cart-group-title::after {
-            content: "前往 ↗";
-            font-size: 0.8em;
-            font-weight: 400;
-            opacity: 0.5;
         }
 
         .cart-item {
@@ -839,7 +829,7 @@
         </div>
     </div>
 
-    <!-- 刪除確認視窗 (新增) -->
+    <!-- 刪除確認視窗 -->
     <div class="modal" id="deleteModal">
         <div class="modal-content" style="max-width: 320px; text-align: center; padding: 25px;">
             <div style="font-size: 1.4em; color: #d9534f; margin-bottom: 12px; font-weight: 700;">移除商品</div>
@@ -1010,7 +1000,7 @@
         let cart = {};
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
-        let pendingDeleteData = null; // 用來儲存準備刪除的商品資訊
+        let pendingDeleteData = null; 
 
         const imageExtension = ".png";
 
@@ -1082,7 +1072,6 @@
 
                 if (currentFilter !== 'all' && groupCategory !== currentFilter) return;
 
-                // 新增 id 以便購物車系列名稱點擊捲動
                 html += `
                     <div class="series-group" id="series-group-${groupIndex}">
                         <div class="series-header">
@@ -1132,7 +1121,6 @@
             container.innerHTML = html;
         }
 
-        // 客製化刪除確認邏輯
         function askDeleteConfirm(cartKey, onSuccess, onCancel) {
             pendingDeleteData = { cartKey, onSuccess, onCancel };
             document.getElementById('deleteModal').classList.add('show');
@@ -1195,14 +1183,11 @@
             
             if (newQty <= 0) {
                 if (cart[cartKey].qty > 0) {
-                    // 使用客製化視窗詢問
                     askDeleteConfirm(cartKey, () => {
                         delete cart[cartKey];
                         document.getElementById(`qty-${gIdx}-${iIdx}`).value = 0;
                         updateCart();
-                    }, () => {
-                        // 取消則維持原樣
-                    });
+                    }, () => {});
                     return; 
                 } else {
                     delete cart[cartKey];
@@ -1224,14 +1209,11 @@
             const newQty = cart[cartKey].qty + delta;
             
             if (newQty <= 0) {
-                // 使用客製化視窗詢問
                 askDeleteConfirm(cartKey, () => {
                     delete cart[cartKey];
                     updateCart();
                     handleSizeChange(gIdx, iIdx);
-                }, () => {
-                    // 取消則維持原樣
-                });
+                }, () => {});
                 return;
             } else {
                 cart[cartKey].qty = newQty;
@@ -1241,12 +1223,10 @@
             handleSizeChange(gIdx, iIdx);
         }
 
-        // 點擊購物車內的系列名稱時，捲動至該系列區塊並加入提示特效
         function scrollToSeries(gIdx) {
             let seriesGroup = document.getElementById(`series-group-${gIdx}`);
             
             if (!seriesGroup) {
-                // 代表目前在其他篩選頁籤被隱藏了，先切回全部
                 setFilter('all');
                 setTimeout(() => {
                     seriesGroup = document.getElementById(`series-group-${gIdx}`);
@@ -1260,7 +1240,6 @@
         function performSeriesHighlight(element) {
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                // 加入高亮提示特效
                 element.style.borderColor = '#1A9CDB';
                 element.style.boxShadow = '0 0 15px rgba(26, 156, 219, 0.2)';
                 setTimeout(() => {
@@ -1313,7 +1292,6 @@
                 cartHtml = '<p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>';
             } else {
                 for (let groupName in groupedCart) {
-                    // 抓取該群組的第一個商品的系列 index (gIdx) 供捲動使用
                     const groupGIdx = groupedCart[groupName][0].item.gIdx;
                     
                     cartHtml += `<div class="cart-group">
@@ -1484,16 +1462,12 @@
             setTimeout(() => el.classList.remove('show'), 5000);
         }
 
-        // 點擊背景關閉各式 Modal
         window.addEventListener('click', (e) => {
             const imgModal = document.getElementById('imageModal');
             const successModal = document.getElementById('successModal');
-            const deleteModal = document.getElementById('deleteModal');
             
             if (e.target === imgModal) closeImageModal();
             if (e.target === successModal) closeSuccessModal();
-            // 點擊背景時若要直接取消刪除也可以打開此設定（目前預設一定要點按鈕）
-            // if (e.target === deleteModal) cancelDelete(); 
         });
     </script>
 </body>
