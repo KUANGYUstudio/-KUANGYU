@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>光聿團購 - balega Running Socks</title>
+    <title>光聿團購 - Balega Running Socks</title>
     <style>
         * {
             margin: 0;
@@ -31,6 +31,34 @@
             width: 100%;
         }
 
+        /* 網頁初始讀取遮罩 */
+        .page-loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .page-loading-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1A9CDB;
+            border-radius: 50%;
+            width: 50px; height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         /* Header */
         header {
             background: white;
@@ -39,13 +67,6 @@
             border-bottom: 3px solid #1A9CDB;
             margin-bottom: 30px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .header-logo {
-            width: 70px;
-            height: auto;
-            margin-bottom: 12px;
-            display: inline-block;
         }
 
         h1 {
@@ -185,7 +206,6 @@
             border: 1px solid #eee;
             overflow: visible;
             width: 100%;
-            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         .series-header {
@@ -306,8 +326,9 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s, opacity 0.3s;
             flex: 0 0 220px;
+            position: relative;
         }
 
         .product-card:hover {
@@ -315,15 +336,45 @@
             background: #f5f5f5;
         }
 
-        .product-image {
+        /* 售完的卡片外觀 */
+        .product-card.is-sold-out {
+            opacity: 0.6;
+            pointer-events: none; /* 讓整張卡片無法被點擊 */
+            background: #eee;
+        }
+
+        .image-wrapper {
+            position: relative;
+            margin-bottom: 12px;
             width: 100%;
             aspect-ratio: 1;
-            object-fit: cover;
             border-radius: 4px;
-            margin-bottom: 12px;
-            cursor: pointer;
             background-color: #fff;
             border: 1px solid #eee;
+            overflow: hidden;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        /* 售完的黑色標籤 */
+        .sold-out-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            z-index: 2;
+            pointer-events: none;
         }
 
         .product-info {
@@ -440,13 +491,6 @@
             margin-bottom: 8px;
             padding-bottom: 4px;
             border-bottom: 1px dashed #eee;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .cart-group-title:hover {
-            color: #157FBA;
-            text-decoration: underline;
         }
 
         .cart-item {
@@ -469,7 +513,7 @@
             justify-content: space-between;
             align-items: flex-start;
             cursor: pointer;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .cart-item-header:hover .cart-item-title {
@@ -508,19 +552,17 @@
         }
 
         .cart-qty-control {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            justify-content: space-between;
             border: 1px solid #ddd;
             border-radius: 4px;
             background: white;
             overflow: hidden;
-            height: 26px;
-            width: 90px;
+            height: 24px;
         }
 
         .cart-qty-btn {
-            flex: 0 0 22px;
+            width: 24px;
             height: 100%;
             border: none;
             background: #f0f0f0;
@@ -538,14 +580,12 @@
         }
 
         .cart-qty-input {
-            flex: 1;
-            width: 100%;
+            width: 30px;
             text-align: center;
             border: none;
             font-size: 0.9em;
             pointer-events: none;
             background: transparent;
-            padding: 0;
         }
 
         .cart-total {
@@ -690,47 +730,18 @@
             background: #1A9CDB; color: white; border: none; padding: 10px 30px;
             font-size: 1em; border-radius: 6px; cursor: pointer; font-weight: 600;
         }
-
-        /* 全螢幕鎖定畫面 */
-        #statusOverlay {
-            display: flex;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(248, 248, 248, 0.98);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-            padding: 20px;
-            transition: opacity 0.5s;
-        }
-
-        /* 刪除確認視窗按鈕 */
-        .delete-btn-cancel {
-            padding: 10px 20px; border: 1px solid #ddd; background: white; 
-            border-radius: 6px; cursor: pointer; flex: 1; font-weight: 600; color: #666;
-        }
-        .delete-btn-cancel:hover { background: #f5f5f5; }
-        .delete-btn-confirm {
-            padding: 10px 20px; border: none; background: #d9534f; 
-            color: white; border-radius: 6px; cursor: pointer; flex: 1; font-weight: 600;
-        }
-        .delete-btn-confirm:hover { background: #c9302c; }
     </style>
 </head>
 <body>
-    <!-- 狀態遮罩 -->
-    <div id="statusOverlay">
-        <h1 id="statusMessage" style="color:#1A9CDB; font-size:2.5em; margin-bottom:10px;">光聿團購連線中...</h1>
-        <p id="statusDesc" style="color:#666;">請稍候，正在確認活動狀態</p>
+    <!-- 新增的讀取遮罩 -->
+    <div class="page-loading-overlay show" id="pageLoading">
+        <div class="spinner"></div>
+        <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在讀取即時庫存...</div>
     </div>
 
     <header>
-        <img src="https://kuangyustudio.github.io/-KUANGYU/KUANGYU_logo_icon.png" alt="光聿 Logo" class="header-logo">
         <h1>光聿團購</h1>
-        <p class="subtitle">balega Running Socks</p>
+        <p class="subtitle">Balega Running Socks</p>
     </header>
 
     <div class="container">
@@ -806,13 +817,12 @@
                 </div>
 
                 <input type="hidden" id="totalAmount" name="totalAmount" value="0">
-                <button type="submit" class="submit-btn" id="submit-btn">送出訂單</button>
+                <button type="submit" class="submit-btn">送出訂單</button>
                 <div class="loading" id="loading" style="margin-top: 15px;">正在處理中...</div>
             </div>
         </form>
     </div>
 
-    <!-- 手機版專屬：底部懸浮購物車資訊列 -->
     <div class="mobile-floating-bar" id="mobileFloatingBar">
         <div class="floating-info">
             <span class="floating-count" id="floatingItemCount">0 件商品</span>
@@ -821,7 +831,6 @@
         <button type="button" class="floating-btn" onclick="scrollToCheckout()">前往結帳</button>
     </div>
 
-    <!-- 圖片放大視窗 -->
     <div class="modal" id="imageModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeImageModal()">×</button>
@@ -829,19 +838,6 @@
         </div>
     </div>
 
-    <!-- 刪除確認視窗 -->
-    <div class="modal" id="deleteModal">
-        <div class="modal-content" style="max-width: 320px; text-align: center; padding: 25px;">
-            <div style="font-size: 1.4em; color: #d9534f; margin-bottom: 12px; font-weight: 700;">移除商品</div>
-            <div style="margin-bottom: 25px; color: #666; font-size: 1.05em;">確定要將此商品從購物車中移除嗎？</div>
-            <div style="display: flex; gap: 15px; justify-content: center;">
-                <button type="button" class="delete-btn-cancel" onclick="cancelDelete()">保留</button>
-                <button type="button" class="delete-btn-confirm" onclick="confirmDelete()">確定移除</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 訂購完成視窗 -->
     <div class="modal" id="successModal">
         <div class="modal-content" style="max-width: 400px;">
             <div class="success-modal-body">
@@ -998,36 +994,46 @@
         ];
 
         let cart = {};
+        // 將此處替換為您最新部署的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
-        let pendingDeleteData = null; 
+        let inventoryData = null; // 用來儲存從試算表抓下來的即時庫存
 
         const imageExtension = ".png";
 
         document.addEventListener('DOMContentLoaded', () => {
-            checkStatusFromGAS();
-            renderProducts();
+            fetchInventoryAndRender();
             setupEventListeners();
         });
 
-        // 讀取 GAS 狀態並決定是否解除鎖定
-        function checkStatusFromGAS() {
+        // ==========================================
+        // 核心功能：抓取庫存與畫面渲染
+        // ==========================================
+        function fetchInventoryAndRender() {
+            // 利用 fetch 發送 GET 請求給 GAS
             fetch(GAS_URL)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === 'open') {
-                        const overlay = document.getElementById('statusOverlay');
-                        overlay.style.opacity = '0';
-                        setTimeout(() => overlay.style.display = 'none', 500);
-                    } else {
-                        document.getElementById('statusMessage').textContent = data.message;
-                        document.getElementById('statusDesc').style.display = 'none';
-                    }
+                    inventoryData = data;
+                    // 隱藏讀取遮罩
+                    document.getElementById('pageLoading').classList.remove('show');
+                    // 取得資料後再渲染商品
+                    renderProducts(); 
                 })
                 .catch(error => {
-                    console.error('狀態讀取失敗:', error);
-                    document.getElementById('statusOverlay').style.display = 'none';
+                    console.error('取得庫存失敗:', error);
+                    // 若發生異常，將庫存預設為空白物件，讓系統不至崩潰
+                    inventoryData = {};
+                    document.getElementById('pageLoading').classList.remove('show');
+                    renderProducts();
                 });
+        }
+
+        // 從存下來的資料中查找特定款式的剩餘數量
+        function getStock(code, color, size) {
+            if (!inventoryData) return 0;
+            const key = code + "|" + color + "|" + size;
+            return inventoryData[key] !== undefined ? parseInt(inventoryData[key]) : 0;
         }
 
         function scrollToCheckout() {
@@ -1073,7 +1079,7 @@
                 if (currentFilter !== 'all' && groupCategory !== currentFilter) return;
 
                 html += `
-                    <div class="series-group" id="series-group-${groupIndex}">
+                    <div class="series-group">
                         <div class="series-header">
                             <div class="series-name">${group.series}</div>
                             <div class="series-description">${group.description}</div>
@@ -1089,18 +1095,35 @@
                     const autoImgPath = "balega_pics/" + item.code + imageExtension;
                     const imgSrc = item.image ? item.image : autoImgPath;
                     
+                    // 計算這款襪子所有尺寸的總庫存，若皆為 0 則判定為整款售完
+                    let totalStockForThisItem = 0;
+                    item.sizes.forEach(size => {
+                        totalStockForThisItem += getStock(item.code, item.color, size);
+                    });
+                    const isCompletelySoldOut = totalStockForThisItem <= 0;
+                    
                     html += `
-                                <div class="product-card" id="product-${groupIndex}-${itemIndex}">
-                                    <img src="${imgSrc}" alt="${item.color}" class="product-image" onclick="openImageModal('${imgSrc}')" onerror="this.onerror=null; this.src='${fallbackImage}';">
+                                <div class="product-card ${isCompletelySoldOut ? 'is-sold-out' : ''}" id="product-${groupIndex}-${itemIndex}">
+                                    <div class="image-wrapper">
+                                        <img src="${imgSrc}" alt="${item.color}" class="product-image" onclick="openImageModal('${imgSrc}')" onerror="this.onerror=null; this.src='${fallbackImage}';">
+                                        ${isCompletelySoldOut ? '<div class="sold-out-badge">已售完</div>' : ''}
+                                    </div>
                                     <div class="product-info">
                                         <div class="product-code">${item.code}</div>
                                         <div class="product-code" style="color: #666; font-weight: 400;">${item.color}</div>
                                         <div class="product-price">$${item.price}</div>
                                     </div>
                                     <div class="controls-wrapper">
-                                        <select class="size-select" id="size-${groupIndex}-${itemIndex}" onchange="handleSizeChange(${groupIndex}, ${itemIndex})">
+                                        <select class="size-select" id="size-${groupIndex}-${itemIndex}" onchange="handleSizeChange(${groupIndex}, ${itemIndex})" ${isCompletelySoldOut ? 'disabled' : ''}>
                                             <option value="">選擇尺寸</option>
-                                            ${item.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
+                                            ${item.sizes.map(size => {
+                                                const stock = getStock(item.code, item.color, size);
+                                                if (stock <= 0) {
+                                                    return `<option value="${size}" disabled>${size} (已售完)</option>`;
+                                                } else {
+                                                    return `<option value="${size}">${size}</option>`;
+                                                }
+                                            }).join('')}
                                         </select>
                                         <div class="qty-control">
                                             <button type="button" class="qty-btn" onclick="changeQty(${groupIndex}, ${itemIndex}, -1)">−</button>
@@ -1121,27 +1144,6 @@
             container.innerHTML = html;
         }
 
-        function askDeleteConfirm(cartKey, onSuccess, onCancel) {
-            pendingDeleteData = { cartKey, onSuccess, onCancel };
-            document.getElementById('deleteModal').classList.add('show');
-        }
-
-        function confirmDelete() {
-            if (pendingDeleteData) {
-                pendingDeleteData.onSuccess();
-            }
-            document.getElementById('deleteModal').classList.remove('show');
-            pendingDeleteData = null;
-        }
-
-        function cancelDelete() {
-            if (pendingDeleteData && pendingDeleteData.onCancel) {
-                pendingDeleteData.onCancel();
-            }
-            document.getElementById('deleteModal').classList.remove('show');
-            pendingDeleteData = null;
-        }
-
         function handleSizeChange(gIdx, iIdx) {
             const size = document.getElementById(`size-${gIdx}-${iIdx}`).value;
             const cartKey = `${gIdx}-${iIdx}-${size}`;
@@ -1154,6 +1156,9 @@
             }
         }
 
+        // ==========================================
+        // 修改：加入數量極限判斷的增減邏輯
+        // ==========================================
         function changeQty(gIdx, iIdx, delta) {
             const size = document.getElementById(`size-${gIdx}-${iIdx}`).value;
             if (!size) {
@@ -1161,11 +1166,12 @@
                 return;
             }
 
-            const cartKey = `${gIdx}-${iIdx}-${size}`;
             const product = PRODUCTS[gIdx].items[iIdx];
+            const stock = getStock(product.code, product.color, size);
+            const cartKey = `${gIdx}-${iIdx}-${size}`;
 
             if (!cart[cartKey]) {
-                if (delta <= 0) return;
+                if (delta <= 0) return; 
                 cart[cartKey] = {
                     gIdx: gIdx,
                     iIdx: iIdx,
@@ -1181,14 +1187,20 @@
 
             let newQty = cart[cartKey].qty + delta;
             
+            // 數量極限防呆
+            if (delta > 0 && newQty > stock) {
+                alert('【庫存不足】\n此款式尺寸目前僅剩 ' + stock + ' 雙');
+                return;
+            }
+            
             if (newQty <= 0) {
                 if (cart[cartKey].qty > 0) {
-                    askDeleteConfirm(cartKey, () => {
+                    if (confirm('確認刪除品項？')) {
                         delete cart[cartKey];
-                        document.getElementById(`qty-${gIdx}-${iIdx}`).value = 0;
-                        updateCart();
-                    }, () => {});
-                    return; 
+                        newQty = 0;
+                    } else {
+                        return; 
+                    }
                 } else {
                     delete cart[cartKey];
                     newQty = 0;
@@ -1206,47 +1218,29 @@
             
             const gIdx = cart[cartKey].gIdx;
             const iIdx = cart[cartKey].iIdx;
-            const newQty = cart[cartKey].qty + delta;
+            const item = cart[cartKey];
+            const stock = getStock(item.code, item.color, item.size);
+
+            const newQty = item.qty + delta;
+            
+            // 數量極限防呆
+            if (delta > 0 && newQty > stock) {
+                alert('【庫存不足】\n此款式尺寸目前僅剩 ' + stock + ' 雙');
+                return;
+            }
             
             if (newQty <= 0) {
-                askDeleteConfirm(cartKey, () => {
+                if (confirm('確認刪除品項？')) {
                     delete cart[cartKey];
-                    updateCart();
-                    handleSizeChange(gIdx, iIdx);
-                }, () => {});
-                return;
+                } else {
+                    return; 
+                }
             } else {
                 cart[cartKey].qty = newQty;
             }
             
             updateCart();
             handleSizeChange(gIdx, iIdx);
-        }
-
-        function scrollToSeries(gIdx) {
-            let seriesGroup = document.getElementById(`series-group-${gIdx}`);
-            
-            if (!seriesGroup) {
-                setFilter('all');
-                setTimeout(() => {
-                    seriesGroup = document.getElementById(`series-group-${gIdx}`);
-                    performSeriesHighlight(seriesGroup);
-                }, 100);
-            } else {
-                performSeriesHighlight(seriesGroup);
-            }
-        }
-
-        function performSeriesHighlight(element) {
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                element.style.borderColor = '#1A9CDB';
-                element.style.boxShadow = '0 0 15px rgba(26, 156, 219, 0.2)';
-                setTimeout(() => {
-                    element.style.borderColor = '#eee';
-                    element.style.boxShadow = 'none';
-                }, 1500);
-            }
         }
 
         function scrollToProduct(gIdx, iIdx) {
@@ -1260,8 +1254,10 @@
                 card = document.getElementById(`product-${gIdx}-${iIdx}`);
                 if (card) {
                     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
                     card.style.borderColor = '#1A9CDB';
                     card.style.boxShadow = '0 0 15px rgba(26, 156, 219, 0.4)';
+                    
                     setTimeout(() => {
                         card.style.borderColor = '#eee';
                         card.style.boxShadow = 'none';
@@ -1292,10 +1288,7 @@
                 cartHtml = '<p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>';
             } else {
                 for (let groupName in groupedCart) {
-                    const groupGIdx = groupedCart[groupName][0].item.gIdx;
-                    
-                    cartHtml += `<div class="cart-group">
-                        <div class="cart-group-title" onclick="scrollToSeries(${groupGIdx})" title="點擊回到此系列">${groupName}</div>`;
+                    cartHtml += `<div class="cart-group"><div class="cart-group-title">${groupName}</div>`;
                     
                     groupedCart[groupName].forEach(cartData => {
                         const k = cartData.key;
@@ -1446,6 +1439,10 @@
                 updateCart();
                 setFilter('all'); 
                 
+                // 重新載入最新庫存，讓畫面重置
+                document.getElementById('pageLoading').classList.add('show');
+                fetchInventoryAndRender();
+
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             })
             .catch(error => {
@@ -1465,7 +1462,6 @@
         window.addEventListener('click', (e) => {
             const imgModal = document.getElementById('imageModal');
             const successModal = document.getElementById('successModal');
-            
             if (e.target === imgModal) closeImageModal();
             if (e.target === successModal) closeSuccessModal();
         });
