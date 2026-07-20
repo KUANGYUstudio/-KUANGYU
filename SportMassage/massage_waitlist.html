@@ -199,7 +199,6 @@
             <input type="tel" id="phone" class="form-input" required placeholder="請輸入手機號碼">
         </div>
 
-        <!-- 新增：LINE ID 或名稱（選填） -->
         <div class="form-group">
             <label class="form-label">LINE ID 或 LINE 名稱（選填）</label>
             <input type="text" id="lineInfo" class="form-input" placeholder="請輸入可聯繫到您的 LINE 資訊">
@@ -353,21 +352,38 @@
         const formData = {
             name: document.getElementById('name').value,
             phone: document.getElementById('phone').value,
-            lineInfo: document.getElementById('lineInfo').value, // 取得新欄位資料
+            lineInfo: document.getElementById('lineInfo').value,
             days: selectedDays.join(', '),
             times: selectedTimes.join(', '),
             note: document.getElementById('note').value
         };
 
-        // 這裡預留未來串接 LIFF / GAS 的發送邏輯
-        console.log('準備送出的資料：', formData);
-        
-        // 模擬送出成功
-        setTimeout(() => {
-            alert('候補登記成功！');
+        const gasUrl = "https://script.google.com/macros/s/AKfycbwmohHc7mQPRzkrzWxxGhzjUEQoNIWXTbKjjYnTeoOGqnaFO6UQFqDakffk8HpZbI53UA/exec";
+
+        // 發送資料至 Google Apps Script
+        fetch(gasUrl, {
+            method: 'POST',
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('候補登記成功！');
+                document.getElementById('waitlistForm').reset(); // 清空表單
+                dayAllCheckbox.checked = false;
+                timeAllCheckbox.checked = false;
+            } else {
+                alert('發生錯誤：' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('網路發生問題，請確認連線後再試一次。');
+        })
+        .finally(() => {
             submitBtn.disabled = false;
             submitBtn.innerText = '送出候補登記';
-        }, 1000);
+        });
     });
 </script>
 
