@@ -492,7 +492,6 @@
             font-size: 0.95em;
         }
 
-        /* 購物車內專屬的緊湊型數量按鈕 */
         .cart-qty-control {
             display: inline-flex;
             align-items: center;
@@ -594,13 +593,6 @@
             transform: translateY(-2px);
         }
 
-        button.submit-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
         /* Mobile Floating Cart Bar */
         .mobile-floating-bar {
             display: none;
@@ -683,9 +675,31 @@
             background: #1A9CDB; color: white; border: none; padding: 10px 30px;
             font-size: 1em; border-radius: 6px; cursor: pointer; font-weight: 600;
         }
+
+        /* 全螢幕鎖定畫面 */
+        #statusOverlay {
+            display: flex;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(248, 248, 248, 0.98);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            transition: opacity 0.5s;
+        }
     </style>
 </head>
 <body>
+    <!-- 狀態遮罩 -->
+    <div id="statusOverlay">
+        <h1 id="statusMessage" style="color:#1A9CDB; font-size:2.5em; margin-bottom:10px;">光聿團購連線中...</h1>
+        <p id="statusDesc" style="color:#666;">請稍候，正在確認活動狀態</p>
+    </div>
+
     <header>
         <h1>光聿團購</h1>
         <p class="subtitle">Balega Running Socks</p>
@@ -950,9 +964,33 @@
         const imageExtension = ".png";
 
         document.addEventListener('DOMContentLoaded', () => {
+            checkStatusFromGAS();
             renderProducts();
             setupEventListeners();
         });
+
+        // 讀取 GAS 狀態並決定是否解除鎖定
+        function checkStatusFromGAS() {
+            fetch(GAS_URL)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'open') {
+                        // 開放中，淡出並關閉遮罩
+                        const overlay = document.getElementById('statusOverlay');
+                        overlay.style.opacity = '0';
+                        setTimeout(() => overlay.style.display = 'none', 500);
+                    } else {
+                        // 尚未開始或已結束，顯示對應文字並繼續鎖定畫面
+                        document.getElementById('statusMessage').textContent = data.message;
+                        document.getElementById('statusDesc').style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('狀態讀取失敗:', error);
+                    // 若讀取失敗，預設關閉遮罩避免網頁卡死無法使用
+                    document.getElementById('statusOverlay').style.display = 'none';
+                });
+        }
 
         function scrollToCheckout() {
             document.getElementById('checkoutSection').scrollIntoView({ behavior: 'smooth' });
@@ -1068,7 +1106,7 @@
             const product = PRODUCTS[gIdx].items[iIdx];
 
             if (!cart[cartKey]) {
-                if (delta <= 0) return; // 若尚未選購，按減號不動作
+                if (delta <= 0) return;
                 cart[cartKey] = {
                     gIdx: gIdx,
                     iIdx: iIdx,
@@ -1090,7 +1128,7 @@
                         delete cart[cartKey];
                         newQty = 0;
                     } else {
-                        return; // 使用者取消刪除
+                        return;
                     }
                 } else {
                     delete cart[cartKey];
@@ -1116,14 +1154,13 @@
                 if (confirm('確認刪除品項？')) {
                     delete cart[cartKey];
                 } else {
-                    return; // 使用者取消刪除
+                    return;
                 }
             } else {
                 cart[cartKey].qty = newQty;
             }
             
             updateCart();
-            // 同步更新左側商品卡片的數字
             handleSizeChange(gIdx, iIdx);
         }
 
@@ -1345,31 +1382,6 @@
             if (e.target === imgModal) closeImageModal();
             if (e.target === successModal) closeSuccessModal();
         });
-
-        // 團購時間防護鎖
-        function checkGroupBuyStatus() {
-            // 在此設定開放與結束時間
-            const startTime = new Date("2026-07-21T12:00:00+08:00");
-            const endTime = new Date("2026-07-31T23:59:59+08:00");
-            const now = new Date();
-            
-            const submitButton = document.getElementById("submit-btn"); 
-            if (!submitButton) return;
-
-            if (now < startTime) {
-                submitButton.disabled = true;
-                submitButton.innerText = "光聿團購尚未開始";
-            } else if (now > endTime) {
-                submitButton.disabled = true;
-                submitButton.innerText = "光聿團購已結束";
-            } else {
-                submitButton.disabled = false;
-                submitButton.innerText = "送出訂單";
-            }
-        }
-
-        checkGroupBuyStatus();
-        setInterval(checkGroupBuyStatus, 1000);
     </script>
 </body>
 </html>
