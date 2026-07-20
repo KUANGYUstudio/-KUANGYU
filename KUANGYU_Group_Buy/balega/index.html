@@ -83,11 +83,23 @@
             margin-bottom: 30px;
         }
 
+        /* 讓表單欄位並排的設定 */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
         .form-group {
             margin-bottom: 25px;
         }
 
         .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-row .form-group {
             margin-bottom: 0;
         }
 
@@ -250,6 +262,12 @@
             h1 { font-size: 2em; }
             .form-section { padding: 20px 15px; }
             .series-group { padding: 15px 10px; }
+            
+            /* 手機版時，把並排的欄位改回上下排列 */
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
             
             .filter-break {
                 display: block;
@@ -572,13 +590,16 @@
                 <div class="error-message" id="errorMessage"></div>
                 
                 <div class="form-section">
-                    <div class="form-group">
-                        <label for="name">姓名 *</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email *</label>
-                        <input type="email" id="email" name="email" required>
+                    <!-- 新增 form-row 讓這兩個欄位並排 -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">姓名 *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
                     </div>
                 </div>
 
