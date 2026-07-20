@@ -454,7 +454,7 @@
             justify-content: space-between;
             align-items: flex-start;
             cursor: pointer;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
         .cart-item-header:hover .cart-item-title {
@@ -494,17 +494,19 @@
 
         /* 購物車內專屬的緊湊型數量按鈕 */
         .cart-qty-control {
-            display: flex;
+            display: inline-flex;
             align-items: center;
+            justify-content: space-between;
             border: 1px solid #ddd;
             border-radius: 4px;
             background: white;
             overflow: hidden;
-            height: 24px;
+            height: 26px;
+            width: 75px;
         }
 
         .cart-qty-btn {
-            width: 24px;
+            flex: 0 0 22px;
             height: 100%;
             border: none;
             background: #f0f0f0;
@@ -522,12 +524,14 @@
         }
 
         .cart-qty-input {
-            width: 30px;
+            flex: 1;
+            width: 100%;
             text-align: center;
             border: none;
             font-size: 0.9em;
             pointer-events: none;
             background: transparent;
+            padding: 0;
         }
 
         .cart-total {
@@ -588,6 +592,13 @@
         button.submit-btn:hover {
             background: #157FBA;
             transform: translateY(-2px);
+        }
+
+        button.submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         /* Mobile Floating Cart Bar */
@@ -753,7 +764,7 @@
                 </div>
 
                 <input type="hidden" id="totalAmount" name="totalAmount" value="0">
-                <button type="submit" class="submit-btn">送出訂單</button>
+                <button type="submit" class="submit-btn" id="submit-btn">送出訂單</button>
                 <div class="loading" id="loading" style="margin-top: 15px;">正在處理中...</div>
             </div>
         </form>
@@ -1334,6 +1345,31 @@
             if (e.target === imgModal) closeImageModal();
             if (e.target === successModal) closeSuccessModal();
         });
+
+        // 團購時間防護鎖
+        function checkGroupBuyStatus() {
+            // 在此設定開放與結束時間
+            const startTime = new Date("2026-07-21T12:00:00+08:00");
+            const endTime = new Date("2026-07-31T23:59:59+08:00");
+            const now = new Date();
+            
+            const submitButton = document.getElementById("submit-btn"); 
+            if (!submitButton) return;
+
+            if (now < startTime) {
+                submitButton.disabled = true;
+                submitButton.innerText = "光聿團購尚未開始";
+            } else if (now > endTime) {
+                submitButton.disabled = true;
+                submitButton.innerText = "光聿團購已結束";
+            } else {
+                submitButton.disabled = false;
+                submitButton.innerText = "送出訂單";
+            }
+        }
+
+        checkGroupBuyStatus();
+        setInterval(checkGroupBuyStatus, 1000);
     </script>
 </body>
 </html>
