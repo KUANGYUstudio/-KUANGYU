@@ -322,8 +322,14 @@
                 flex: 0 0 55%; 
                 scroll-snap-align: start;
             }
+            
+            /* 手機版縮小商品卡片與購物車的按鈕 */
             .qty-btn { width: 28px; height: 28px; }
             .size-select { padding: 4px 8px; font-size: 0.85em; }
+            
+            .cart-qty-control { height: 22px; }
+            .cart-qty-btn { width: 24px; font-size: 1.1em; }
+            .cart-qty-input { width: 26px; font-size: 0.9em; }
         }
 
         .product-card {
@@ -343,10 +349,9 @@
             background: #f5f5f5;
         }
 
-        /* 售完的卡片外觀 */
         .product-card.is-sold-out {
             opacity: 0.6;
-            pointer-events: none; /* 讓整張卡片無法被點擊 */
+            pointer-events: none; 
             background: #eee;
         }
 
@@ -368,7 +373,6 @@
             cursor: pointer;
         }
 
-        /* 售完的黑色標籤 */
         .sold-out-badge {
             position: absolute;
             top: 50%;
@@ -435,6 +439,10 @@
             font-weight: bold;
             color: #333;
             transition: background-color 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 0;
+            margin: 0;
         }
 
         .qty-btn:hover {
@@ -443,12 +451,16 @@
 
         .qty-input {
             width: 100%;
+            height: 100%;
             text-align: center;
             border: none;
             font-size: 0.9em;
             padding: 0;
+            margin: 0;
             pointer-events: none;
             background: transparent;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
         /* Cart Sidebar */
@@ -580,6 +592,10 @@
             align-items: center;
             justify-content: center;
             transition: background-color 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 0;
+            margin: 0;
         }
 
         .cart-qty-btn:hover {
@@ -588,11 +604,16 @@
 
         .cart-qty-input {
             width: 30px;
+            height: 100%;
             text-align: center;
             border: none;
             font-size: 0.9em;
             pointer-events: none;
             background: transparent;
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 0;
+            margin: 0;
         }
 
         .cart-total {
@@ -740,7 +761,6 @@
     </style>
 </head>
 <body>
-    <!-- 新增的讀取遮罩 -->
     <div class="page-loading-overlay show" id="pageLoading">
         <div class="spinner"></div>
         <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在讀取即時庫存...</div>
@@ -1005,7 +1025,7 @@
         // 將此處替換為您最新部署的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
-        let inventoryData = null; // 用來儲存從試算表抓下來的即時庫存
+        let inventoryData = null; 
 
         const imageExtension = ".png";
 
@@ -1014,30 +1034,22 @@
             setupEventListeners();
         });
 
-        // ==========================================
-        // 核心功能：抓取庫存與畫面渲染
-        // ==========================================
         function fetchInventoryAndRender() {
-            // 利用 fetch 發送 GET 請求給 GAS
             fetch(GAS_URL)
                 .then(response => response.json())
                 .then(data => {
                     inventoryData = data;
-                    // 隱藏讀取遮罩
                     document.getElementById('pageLoading').classList.remove('show');
-                    // 取得資料後再渲染商品
                     renderProducts(); 
                 })
                 .catch(error => {
                     console.error('取得庫存失敗:', error);
-                    // 若發生異常，將庫存預設為空白物件，讓系統不至崩潰
                     inventoryData = {};
                     document.getElementById('pageLoading').classList.remove('show');
                     renderProducts();
                 });
         }
 
-        // 從存下來的資料中查找特定款式的剩餘數量
         function getStock(code, color, size) {
             if (!inventoryData) return 0;
             const key = code + "|" + color + "|" + size;
@@ -1103,7 +1115,6 @@
                     const autoImgPath = "balega_pics/" + item.code + imageExtension;
                     const imgSrc = item.image ? item.image : autoImgPath;
                     
-                    // 計算這款襪子所有尺寸的總庫存，若皆為 0 則判定為整款售完
                     let totalStockForThisItem = 0;
                     item.sizes.forEach(size => {
                         totalStockForThisItem += getStock(item.code, item.color, size);
@@ -1164,9 +1175,6 @@
             }
         }
 
-        // ==========================================
-        // 修改：加入數量極限判斷的增減邏輯
-        // ==========================================
         function changeQty(gIdx, iIdx, delta) {
             const size = document.getElementById(`size-${gIdx}-${iIdx}`).value;
             if (!size) {
@@ -1195,7 +1203,6 @@
 
             let newQty = cart[cartKey].qty + delta;
             
-            // 數量極限防呆
             if (delta > 0 && newQty > stock) {
                 alert('【庫存不足】\n此款式尺寸目前僅剩 ' + stock + ' 雙');
                 return;
@@ -1221,6 +1228,7 @@
             updateCart();
         }
 
+        // 移除了讓 iOS Safari 發生錯誤的 event.stopPropagation()
         function updateCartItemQty(cartKey, delta) {
             if (!cart[cartKey]) return;
             
@@ -1231,7 +1239,6 @@
 
             const newQty = item.qty + delta;
             
-            // 數量極限防呆
             if (delta > 0 && newQty > stock) {
                 alert('【庫存不足】\n此款式尺寸目前僅剩 ' + stock + ' 雙');
                 return;
@@ -1303,6 +1310,7 @@
                         const i = cartData.item;
                         const st = cartData.subtotal;
                         
+                        // 將原本有問題的 onclick 語法替換為更乾淨的安全寫法
                         cartHtml += `
                             <div class="cart-item">
                                 <div class="cart-item-header" onclick="scrollToProduct(${i.gIdx}, ${i.iIdx})" title="點擊回到商品位置">
@@ -1314,9 +1322,9 @@
                                 <div class="cart-item-body">
                                     <div class="cart-item-size">尺寸: ${i.size}</div>
                                     <div class="cart-qty-control">
-                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', -1)">−</button>
+                                        <button type="button" class="cart-qty-btn" onclick="updateCartItemQty('${k}', -1)">−</button>
                                         <input type="text" class="cart-qty-input" value="${i.qty}" readonly>
-                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', 1)">+</button>
+                                        <button type="button" class="cart-qty-btn" onclick="updateCartItemQty('${k}', 1)">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -1447,7 +1455,6 @@
                 updateCart();
                 setFilter('all'); 
                 
-                // 重新載入最新庫存，讓畫面重置
                 document.getElementById('pageLoading').classList.add('show');
                 fetchInventoryAndRender();
 
