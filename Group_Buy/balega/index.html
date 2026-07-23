@@ -145,6 +145,7 @@
             font-size: 0.95em;
         }
 
+        /* 全域輸入框設定 */
         input[type="text"],
         input[type="email"],
         input[type="number"],
@@ -323,13 +324,14 @@
                 scroll-snap-align: start;
             }
             
-            /* 手機版縮小商品卡片與購物車的按鈕 */
             .qty-btn { width: 28px; height: 28px; }
             .size-select { padding: 4px 8px; font-size: 0.85em; }
             
-            .cart-qty-control { height: 22px; }
+            .cart-qty-control { height: 24px; }
             .cart-qty-btn { width: 24px; font-size: 1.1em; }
-            .cart-qty-input { width: 26px; font-size: 0.9em; }
+            
+            /* 手機版強制縮小輸入框寬度 */
+            input.cart-qty-input { width: 26px !important; font-size: 0.9em !important; }
         }
 
         .product-card {
@@ -449,16 +451,17 @@
             background-color: #e0e0e0;
         }
 
-        .qty-input {
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            border: none;
-            font-size: 0.9em;
-            padding: 0;
-            margin: 0;
+        /* 強制覆蓋全域的 input 樣式 */
+        input.qty-input {
+            width: 100% !important;
+            height: 100% !important;
+            text-align: center !important;
+            border: none !important;
+            font-size: 0.9em !important;
+            padding: 0 !important;
+            margin: 0 !important;
             pointer-events: none;
-            background: transparent;
+            background: transparent !important;
             -webkit-appearance: none;
             appearance: none;
         }
@@ -602,18 +605,19 @@
             background-color: #e0e0e0;
         }
 
-        .cart-qty-input {
-            width: 30px;
-            height: 100%;
-            text-align: center;
-            border: none;
-            font-size: 0.9em;
+        /* 強制覆蓋全域的 input 樣式 */
+        input.cart-qty-input {
+            width: 30px !important;
+            height: 100% !important;
+            text-align: center !important;
+            border: none !important;
+            font-size: 0.9em !important;
+            padding: 0 !important;
+            margin: 0 !important;
             pointer-events: none;
-            background: transparent;
+            background: transparent !important;
             -webkit-appearance: none;
             appearance: none;
-            padding: 0;
-            margin: 0;
         }
 
         .cart-total {
@@ -1228,7 +1232,7 @@
             updateCart();
         }
 
-        // 移除了讓 iOS Safari 發生錯誤的 event.stopPropagation()
+        // 徹底移除 event.stopPropagation() 以防止 iOS Safari 報錯
         function updateCartItemQty(cartKey, delta) {
             if (!cart[cartKey]) return;
             
@@ -1310,7 +1314,7 @@
                         const i = cartData.item;
                         const st = cartData.subtotal;
                         
-                        // 將原本有問題的 onclick 語法替換為更乾淨的安全寫法
+                        // 移除 onclick 中的 event.stopPropagation()
                         cartHtml += `
                             <div class="cart-item">
                                 <div class="cart-item-header" onclick="scrollToProduct(${i.gIdx}, ${i.iIdx})" title="點擊回到商品位置">
