@@ -189,7 +189,7 @@
             color: #333;
             font-size: 0.95em;
         }
-        
+
         /* 必填星號標示 */
         .required-star {
             color: #E74C3C;
@@ -255,12 +255,12 @@
             color: white;
             border-color: #1A9CDB;
         }
-        
-        /* 獨立的指南按鈕樣式 */
+
+        /* 獨立的指南按鈕樣式 (改為暖橘色) */
         .guide-btn {
             padding: 8px 18px;
-            background: #333;
-            border: 1px solid #333;
+            background: #F39C12;
+            border: 1px solid #F39C12;
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.95em;
@@ -269,10 +269,10 @@
             transition: all 0.2s;
             white-space: nowrap;
         }
-        
+
         .guide-btn:hover {
-            background: #555;
-            border-color: #555;
+            background: #E67E22;
+            border-color: #E67E22;
         }
 
         .filter-break {
@@ -813,10 +813,31 @@
             background: white; padding: 30px; border-radius: 8px;
             max-width: 90%; max-height: 90vh; position: relative;
         }
+        
+        /* 將關閉按鈕移至視窗內部，避免手機邊緣切斷 */
         .modal-close {
-            position: absolute; top: -15px; right: -15px; background: #333; color: white;
-            border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1.2em;
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            background: #f0f0f0; 
+            color: #666;
+            border: none; 
+            width: 30px; 
+            height: 30px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
         }
+        .modal-close:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
         .modal-image { max-width: 100%; max-height: 80vh; display: block; }
         
         .loading {
@@ -859,10 +880,10 @@
         .cancel-btn { background: #95A5A6; }
         .cancel-btn:hover { background: #7F8C8D; }
         
-        /* 指南視窗專屬排版 */
+        /* 指南視窗專屬排版 (加大上方留白，避免文字與叉叉重疊) */
         .guide-modal-content {
             background: white; 
-            padding: 30px 20px; 
+            padding: 45px 20px 30px 20px; 
             border-radius: 8px;
             max-width: 600px; 
             width: 95%; 
@@ -957,6 +978,7 @@
                             </div>
                         </div>
 
+                        <!-- 真正乾淨且正確的 HTML 標籤 -->
                         <div id="accountLast5Group">
                             <div class="form-group">
                                 <label for="accountLast5">帳號後五碼<span class="required-star">*</span></label>
@@ -1016,6 +1038,7 @@
         </div>
     </div>
     
+    <!-- 挑選指南專屬視窗 -->
     <div class="modal" id="guideModal">
         <div class="guide-modal-content">
             <button class="modal-close" onclick="closeGuideModal()">×</button>
@@ -1172,6 +1195,7 @@
         ];
 
         let cart = {};
+        // 將此處替換為您最新部署的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
         let inventoryData = null; 
@@ -1695,6 +1719,7 @@
             const successModal = document.getElementById('successModal');
             const deleteModal = document.getElementById('deleteModal');
             const guideModal = document.getElementById('guideModal');
+            
             if (e.target === imgModal) closeImageModal();
             if (e.target === successModal) closeSuccessModal();
             if (e.target === deleteModal) cancelDelete(); 
