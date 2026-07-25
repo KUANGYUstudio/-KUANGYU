@@ -172,7 +172,7 @@
             font-size: 0.95em;
         }
 
-        /* 全域輸入框設定 (新增了 type="date") */
+        /* 全域輸入框設定 */
         input[type="text"],
         input[type="email"],
         input[type="number"],
@@ -1248,7 +1248,7 @@
             
             if (newQty <= 0) {
                 if (cart[cartKey].qty > 0) {
-                    if (confirm('確認刪除品項？')) {
+                    if (window.confirm('確認刪除品項？')) {
                         delete cart[cartKey];
                         newQty = 0;
                     } else {
@@ -1283,7 +1283,7 @@
             }
             
             if (newQty <= 0) {
-                if (confirm('確認刪除品項？')) {
+                if (window.confirm('確認刪除品項？')) {
                     delete cart[cartKey];
                 } else {
                     return; 
@@ -1296,6 +1296,7 @@
             handleSizeChange(gIdx, iIdx);
         }
 
+        // 完美版跨裝置商品跳轉定位
         function scrollToProduct(gIdx, iIdx) {
             let card = document.getElementById(`product-${gIdx}-${iIdx}`);
             
@@ -1306,16 +1307,8 @@
             setTimeout(() => {
                 card = document.getElementById(`product-${gIdx}-${iIdx}`);
                 if (card) {
-                    const grid = card.closest('.products-grid');
-                    if (grid) {
-                        grid.scrollTo({
-                            left: card.offsetLeft - grid.offsetLeft - 15,
-                            behavior: 'smooth'
-                        });
-                    }
-                    
-                    const y = card.getBoundingClientRect().top + window.scrollY - 120;
-                    window.scrollTo({ top: y, behavior: 'smooth' });
+                    // 使用最無敵的 scrollIntoView 語法，自動處理包含水平與垂直方向的所有捲動
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
                     
                     card.style.transition = 'all 0.3s';
                     card.style.borderColor = '#1A9CDB';
@@ -1358,6 +1351,7 @@
                         const i = cartData.item;
                         const st = cartData.subtotal;
                         
+                        // 乾淨且安全的 HTML 組裝 (移除了多餘的錯誤指令)
                         cartHtml += `
                             <div class="cart-item">
                                 <div class="cart-item-header" onclick="scrollToProduct(${i.gIdx}, ${i.iIdx})" title="點擊回到商品位置">
@@ -1369,9 +1363,9 @@
                                 <div class="cart-item-body">
                                     <div class="cart-item-size">尺寸: ${i.size}</div>
                                     <div class="cart-qty-control">
-                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', -1)">−</button>
+                                        <button type="button" class="cart-qty-btn" onclick="updateCartItemQty('${k}', -1)">−</button>
                                         <div class="cart-qty-input">${i.qty}</div>
-                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', 1)">+</button>
+                                        <button type="button" class="cart-qty-btn" onclick="updateCartItemQty('${k}', 1)">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -1409,8 +1403,13 @@
                     } else {
                         bankInfo.classList.remove('show');
                         accountLast5Group.classList.remove('show');
-                        document.getElementById('accountLast5').value = '';
-                        document.getElementById('remittanceDate').value = '';
+                        
+                        const accountLast5 = document.getElementById('accountLast5');
+                        const remittanceDate = document.getElementById('remittanceDate');
+                        
+                        // 安全防護：確認元素存在才清空數值
+                        if(accountLast5) accountLast5.value = '';
+                        if(remittanceDate) remittanceDate.value = '';
                     }
                 });
             });
@@ -1442,8 +1441,13 @@
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
-            const accountLast5 = document.getElementById('accountLast5').value.trim();
-            const remittanceDate = document.getElementById('remittanceDate').value;
+            
+            // 安全防護：確認元素存在才讀取數值
+            const accountLast5El = document.getElementById('accountLast5');
+            const remittanceDateEl = document.getElementById('remittanceDate');
+            const accountLast5 = accountLast5El ? accountLast5El.value.trim() : "";
+            const remittanceDate = remittanceDateEl ? remittanceDateEl.value : "";
+            
             const totalAmount = parseInt(document.getElementById('totalAmount').value);
 
             if (!name || !email || !paymentMethod) {
