@@ -356,7 +356,6 @@
             .qty-btn { width: 28px; height: 28px; }
             .size-select { padding: 4px 8px; font-size: 0.85em; }
             
-            /* 手機版縮小購物車內的數量按鈕與數字區域 */
             .cart-qty-control { height: 24px; }
             .cart-qty-btn { width: 24px; font-size: 1.1em; }
             .cart-qty-input { width: 24px; line-height: 24px; font-size: 0.9em; }
@@ -676,8 +675,7 @@
             border-left: 4px solid #1A9CDB; display: none; font-size: 0.9em;
         }
         .bank-info.show { display: block; }
-        #accountLast5Group { display: none; margin-top: 15px; }
-        #accountLast5Group.show { display: block; }
+        #accountLast5Group { margin-top: 15px; } /* 移除了 display: none 的行內干擾 */
 
         .bank-info-item { margin-bottom: 8px; }
         .bank-info-label { font-weight: 600; color: #333; }
@@ -780,12 +778,33 @@
         .success-modal-body { text-align: center; padding: 20px 10px; }
         .success-modal-title { color: #1A9CDB; font-size: 1.8em; margin-bottom: 15px; font-weight: 700; }
         .success-modal-text { font-size: 1.1em; color: #333; margin-bottom: 25px; }
+        
+        /* 刪除確認視窗專用按鈕排版 (強迫不換行、完美對半切) */
+        .delete-modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+        .delete-modal-actions button {
+            flex: 1;
+            padding: 12px 0;
+            margin: 0;
+            white-space: nowrap;
+            font-size: 1em; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 600;
+            color: white;
+            border: none;
+        }
+
         .success-modal-btn {
             background: #1A9CDB; color: white; border: none; padding: 10px 30px;
             font-size: 1em; border-radius: 6px; cursor: pointer; font-weight: 600;
             margin: 0 5px;
         }
-        /* 自訂移除按鈕的樣式 */
+        
         .delete-btn { background: #E74C3C; }
         .delete-btn:hover { background: #C0392B; }
         .cancel-btn { background: #95A5A6; }
@@ -869,7 +888,7 @@
                             </div>
                         </div>
 
-                        <div id="accountLast5Group" style="display: none; margin-top: 15px;">
+                        <div id="accountLast5Group" style="display: none;">
                             <div class="form-group">
                                 <label for="accountLast5">帳號後五碼 (銀行轉帳必填)</label>
                                 <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
@@ -916,13 +935,13 @@
     </div>
 
     <div class="modal" id="deleteModal">
-        <div class="modal-content" style="max-width: 320px; text-align: center;">
+        <div class="modal-content" style="max-width: 350px; text-align: center; width: 90%;">
             <div class="success-modal-body" style="padding: 10px;">
-                <div class="success-modal-title" style="color: #E74C3C; font-size: 1.5em;">移除商品</div>
-                <div class="success-modal-text" style="margin-bottom: 25px;">確定要將此商品從購物車移除嗎？</div>
-                <div style="display: flex; justify-content: center; gap: 15px;">
-                    <button class="success-modal-btn cancel-btn" onclick="cancelDelete()">取消</button>
-                    <button class="success-modal-btn delete-btn" onclick="confirmDelete()">確定移除</button>
+                <div class="success-modal-title" style="color: #E74C3C; font-size: 1.5em; white-space: nowrap;">移除商品</div>
+                <div class="success-modal-text" style="margin-bottom: 25px; white-space: nowrap;">確定要將此商品從購物車移除嗎？</div>
+                <div class="delete-modal-actions">
+                    <button class="cancel-btn" onclick="cancelDelete()">取消</button>
+                    <button class="delete-btn" onclick="confirmDelete()">確定移除</button>
                 </div>
             </div>
         </div>
@@ -1079,7 +1098,7 @@
         let currentFilter = 'all';
         let inventoryData = null; 
         
-        let pendingDeleteKey = null; // 用來記錄準備要刪除的購物車商品鑰匙
+        let pendingDeleteKey = null;
 
         const imageExtension = ".png";
 
@@ -1233,9 +1252,6 @@
             }
         }
 
-        // ==========================================
-        // 刪除確認視窗專屬邏輯
-        // ==========================================
         function promptDelete(cartKey) {
             pendingDeleteKey = cartKey;
             document.getElementById('deleteModal').classList.add('show');
@@ -1244,7 +1260,7 @@
         function cancelDelete() {
             pendingDeleteKey = null;
             document.getElementById('deleteModal').classList.remove('show');
-            updateCart(); // 強制刷新畫面，讓被按掉的數字恢復原狀
+            updateCart(); 
         }
 
         function confirmDelete() {
@@ -1255,11 +1271,10 @@
                 document.getElementById('deleteModal').classList.remove('show');
                 pendingDeleteKey = null;
                 updateCart();
-                handleSizeChange(gIdx, iIdx); // 同步刷新左側卡片數字
+                handleSizeChange(gIdx, iIdx); 
             }
         }
 
-        // 左側商品卡片數量增減
         function changeQty(gIdx, iIdx, delta) {
             const sizeSelect = document.getElementById(`size-${gIdx}-${iIdx}`);
             if (!sizeSelect) return;
@@ -1297,7 +1312,7 @@
             
             if (newQty <= 0) {
                 if (cart[cartKey].qty > 0) {
-                    promptDelete(cartKey); // 呼叫自訂的防呆刪除視窗
+                    promptDelete(cartKey);
                     return; 
                 } else {
                     delete cart[cartKey];
@@ -1312,7 +1327,6 @@
             updateCart();
         }
 
-        // 右側購物車數量增減
         function updateCartItemQty(cartKey, delta) {
             if (!cart[cartKey]) return;
             
@@ -1329,7 +1343,7 @@
             }
             
             if (newQty <= 0) {
-                promptDelete(cartKey); // 呼叫自訂的防呆刪除視窗
+                promptDelete(cartKey); 
                 return; 
             } else {
                 cart[cartKey].qty = newQty;
@@ -1339,7 +1353,6 @@
             handleSizeChange(gIdx, iIdx);
         }
 
-        // 完美修復版：跨裝置皆能順暢跳轉定位
         function scrollToProduct(gIdx, iIdx) {
             let card = document.getElementById(`product-${gIdx}-${iIdx}`);
             
@@ -1350,11 +1363,10 @@
             setTimeout(() => {
                 card = document.getElementById(`product-${gIdx}-${iIdx}`);
                 if (card) {
-                    // 使用相容性最強的 scrollIntoView
                     try {
                         card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
                     } catch(e) {
-                        card.scrollIntoView(); // 如果老舊瀏覽器不支援參數，直接使用預設滑動
+                        card.scrollIntoView(); 
                     }
                     
                     card.style.transition = 'all 0.3s';
@@ -1409,9 +1421,9 @@
                                 <div class="cart-item-body">
                                     <div class="cart-item-size">尺寸: ${i.size}</div>
                                     <div class="cart-qty-control">
-                                        <button type="button" class="cart-qty-btn" onclick="updateCartItemQty('${k}', -1)">−</button>
+                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', -1)">−</button>
                                         <div class="cart-qty-input">${i.qty}</div>
-                                        <button type="button" class="cart-qty-btn" onclick="updateCartItemQty('${k}', 1)">+</button>
+                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', 1)">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -1580,7 +1592,7 @@
             const deleteModal = document.getElementById('deleteModal');
             if (e.target === imgModal) closeImageModal();
             if (e.target === successModal) closeSuccessModal();
-            if (e.target === deleteModal) cancelDelete(); // 點擊灰色背景時取消刪除
+            if (e.target === deleteModal) cancelDelete(); 
         });
     </script>
 </body>
