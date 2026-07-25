@@ -172,10 +172,11 @@
             font-size: 0.95em;
         }
 
-        /* 全域輸入框設定 */
+        /* 全域輸入框設定 (新增了 type="date") */
         input[type="text"],
         input[type="email"],
         input[type="number"],
+        input[type="date"],
         select {
             width: 100%;
             padding: 12px;
@@ -189,6 +190,7 @@
         input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="number"]:focus,
+        input[type="date"]:focus,
         select:focus {
             outline: none;
             border-color: #1A9CDB;
@@ -354,7 +356,6 @@
             .qty-btn { width: 28px; height: 28px; }
             .size-select { padding: 4px 8px; font-size: 0.85em; }
             
-            /* 手機版縮小購物車內的數量按鈕與數字區域 */
             .cart-qty-control { height: 24px; }
             .cart-qty-btn { width: 24px; font-size: 1.1em; }
             .cart-qty-input { width: 24px; line-height: 24px; font-size: 0.9em; }
@@ -477,7 +478,6 @@
             background-color: #e0e0e0;
         }
 
-        /* 確保商品卡片的 input 也不被 iOS 改變 */
         input.qty-input {
             width: 100% !important;
             height: 100% !important;
@@ -631,7 +631,6 @@
             background-color: #e0e0e0;
         }
 
-        /* 將購物車數量顯示改為 div，徹底擺脫 iOS input 的魔咒 */
         .cart-qty-input {
             width: 32px;
             text-align: center;
@@ -863,10 +862,17 @@
                             </div>
                         </div>
 
-                        <div class="form-group" id="accountLast5Group">
-                            <label for="accountLast5">帳號後五碼 (選擇銀行轉帳時填寫)</label>
-                            <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
+                        <div id="accountLast5Group" style="display: none; margin-top: 15px;">
+                            <div class="form-group">
+                                <label for="accountLast5">帳號後五碼 (銀行轉帳必填)</label>
+                                <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
+                            </div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label for="remittanceDate">匯款日期 (銀行轉帳必填)</label>
+                                <input type="date" id="remittanceDate" name="remittanceDate">
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -1261,7 +1267,6 @@
             updateCart();
         }
 
-        // 修改：加入「確認刪除」視窗
         function updateCartItemQty(cartKey, delta) {
             if (!cart[cartKey]) return;
             
@@ -1405,6 +1410,7 @@
                         bankInfo.classList.remove('show');
                         accountLast5Group.classList.remove('show');
                         document.getElementById('accountLast5').value = '';
+                        document.getElementById('remittanceDate').value = '';
                     }
                 });
             });
@@ -1437,15 +1443,18 @@
             const email = document.getElementById('email').value.trim();
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
             const accountLast5 = document.getElementById('accountLast5').value.trim();
+            const remittanceDate = document.getElementById('remittanceDate').value;
             const totalAmount = parseInt(document.getElementById('totalAmount').value);
 
             if (!name || !email || !paymentMethod) {
                 showError('請填寫完整必填資訊');
                 return;
             }
-            if (paymentMethod === 'bank' && !accountLast5) {
-                showError('請填寫帳號後五碼');
-                return;
+            if (paymentMethod === 'bank') {
+                if (!accountLast5 || !remittanceDate) {
+                    showError('請填寫帳號後五碼與匯款日期');
+                    return;
+                }
             }
             if (Object.keys(cart).length === 0) {
                 showError('請選擇至少一件商品');
@@ -1466,6 +1475,7 @@
                 email,
                 paymentMethod,
                 accountLast5,
+                remittanceDate,
                 totalAmount,
                 items: orderItems,
                 timestamp: new Date().toISOString()
