@@ -1241,8 +1241,17 @@
             }
             
             if (newQty <= 0) {
-                delete cart[cartKey];
-                newQty = 0;
+                if (cart[cartKey].qty > 0) {
+                    if (confirm('確認刪除品項？')) {
+                        delete cart[cartKey];
+                        newQty = 0;
+                    } else {
+                        return; 
+                    }
+                } else {
+                    delete cart[cartKey];
+                    newQty = 0;
+                }
             } else {
                 cart[cartKey].qty = newQty;
             }
@@ -1252,6 +1261,7 @@
             updateCart();
         }
 
+        // 修改：加入「確認刪除」視窗
         function updateCartItemQty(cartKey, delta) {
             if (!cart[cartKey]) return;
             
@@ -1268,7 +1278,11 @@
             }
             
             if (newQty <= 0) {
-                delete cart[cartKey];
+                if (confirm('確認刪除品項？')) {
+                    delete cart[cartKey];
+                } else {
+                    return; 
+                }
             } else {
                 cart[cartKey].qty = newQty;
             }
@@ -1277,7 +1291,6 @@
             handleSizeChange(gIdx, iIdx);
         }
 
-        // 優化手機版雙軸滾動定位
         function scrollToProduct(gIdx, iIdx) {
             let card = document.getElementById(`product-${gIdx}-${iIdx}`);
             
@@ -1288,7 +1301,6 @@
             setTimeout(() => {
                 card = document.getElementById(`product-${gIdx}-${iIdx}`);
                 if (card) {
-                    // 自動滑動水平捲軸讓卡片置中
                     const grid = card.closest('.products-grid');
                     if (grid) {
                         grid.scrollTo({
@@ -1297,7 +1309,6 @@
                         });
                     }
                     
-                    // 讓頁面垂直滑動定位
                     const y = card.getBoundingClientRect().top + window.scrollY - 120;
                     window.scrollTo({ top: y, behavior: 'smooth' });
                     
@@ -1353,9 +1364,9 @@
                                 <div class="cart-item-body">
                                     <div class="cart-item-size">尺寸: ${i.size}</div>
                                     <div class="cart-qty-control">
-                                        <button type="button" class="cart-qty-btn" onclick="updateCartItemQty('${k}', -1)">−</button>
+                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', -1)">−</button>
                                         <div class="cart-qty-input">${i.qty}</div>
-                                        <button type="button" class="cart-qty-btn" onclick="updateCartItemQty('${k}', 1)">+</button>
+                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', 1)">+</button>
                                     </div>
                                 </div>
                             </div>
