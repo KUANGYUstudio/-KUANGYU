@@ -363,7 +363,6 @@
             .qty-btn { width: 28px; height: 28px; }
             .size-select { padding: 4px 8px; font-size: 0.85em; }
             
-            /* 手機版縮小購物車內的數量按鈕與數字區域 */
             .cart-qty-control { height: 24px; }
             .cart-qty-btn { width: 24px; font-size: 1.1em; }
             .cart-qty-input { width: 24px; line-height: 24px; font-size: 0.9em; }
@@ -685,8 +684,7 @@
         }
         .bank-info.show { display: block; }
         
-        /* 確保此處的樣式完全交給 CSS 類別控制 */
-        #accountLast5Group { display: none; margin-top: 15px; } 
+        #accountLast5Group { display: none; margin-top: 15px; }
         #accountLast5Group.show { display: block; }
 
         .bank-info-item { margin-bottom: 8px; }
@@ -903,7 +901,7 @@
                         <div id="accountLast5Group">
                             <div class="form-group">
                                 <label for="accountLast5">帳號後五碼<span class="required-star">*</span></label>
-                                <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
+                                <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5" inputmode="numeric" pattern="\d*">
                             </div>
                             <div class="form-group" style="margin-top: 15px;">
                                 <label for="remittanceDate">匯款日期<span class="required-star">*</span></label>
@@ -1365,6 +1363,7 @@
             handleSizeChange(gIdx, iIdx);
         }
 
+        // 終極防呆版：拆解雙軸滑動以完全相容手機瀏覽器
         function scrollToProduct(gIdx, iIdx) {
             let card = document.getElementById(`product-${gIdx}-${iIdx}`);
             
@@ -1375,10 +1374,15 @@
             setTimeout(() => {
                 card = document.getElementById(`product-${gIdx}-${iIdx}`);
                 if (card) {
-                    try {
-                        card.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-                    } catch(e) {
-                        card.scrollIntoView(); 
+                    // 1. 垂直定位 (讓卡片出現在畫面中央附近，並扣除 Header 的高度)
+                    const y = card.getBoundingClientRect().top + window.scrollY - 120;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+
+                    // 2. 水平定位 (針對有 overflow-x 的父層 grid 進行捲動)
+                    const grid = card.closest('.products-grid');
+                    if (grid) {
+                        const scrollLeftPos = card.offsetLeft - grid.offsetLeft - 15;
+                        grid.scrollTo({ left: scrollLeftPos, behavior: 'smooth' });
                     }
                     
                     card.style.transition = 'all 0.3s';
@@ -1522,12 +1526,28 @@
                 showError('請填寫完整必填資訊');
                 return;
             }
+            
+            // 【新增】正規表達式驗證 Email 格式
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('請輸入有效的 Email 格式');
+                return;
+            }
+
             if (paymentMethod === 'bank') {
                 if (!accountLast5 || !remittanceDate) {
                     showError('請填寫帳號後五碼與匯款日期');
                     return;
                 }
+                
+                // 【新增】正規表達式驗證後五碼 (必須剛好是 5 個數字)
+                const accountRegex = /^\d{5}$/;
+                if (!accountRegex.test(accountLast5)) {
+                    showError('「帳號後五碼」請填寫精準的 5 位數字');
+                    return;
+                }
             }
+            
             if (Object.keys(cart).length === 0) {
                 showError('請選擇至少一件商品');
                 return;
