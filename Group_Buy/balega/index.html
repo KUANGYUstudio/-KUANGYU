@@ -492,7 +492,7 @@
             appearance: none;
         }
 
-        /* Cart Sidebar */
+        /* Cart Sidebar 新增獨立滑動功能 */
         .cart-sidebar {
             background: white;
             padding: 25px 20px;
@@ -501,6 +501,17 @@
             position: sticky;
             top: 20px;
             height: fit-content;
+            max-height: calc(100vh - 40px); /* 限制最大高度，避免超出螢幕底部 */
+            overflow-y: auto; /* 內容過多時可獨立上下滑動 */
+        }
+        
+        /* 美化購物車外框捲軸 */
+        .cart-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .cart-sidebar::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
         }
 
         .cart-title {
@@ -513,18 +524,9 @@
         }
 
         .cart-items {
-            max-height: 400px;
-            overflow-y: auto;
+            /* 移除 max-height，讓它能跟著 .cart-sidebar 順暢延展 */
             margin-bottom: 15px;
             padding-right: 5px;
-        }
-
-        .cart-items::-webkit-scrollbar {
-            width: 6px;
-        }
-        .cart-items::-webkit-scrollbar-thumb {
-            background: #ddd;
-            border-radius: 3px;
         }
 
         .cart-group {
@@ -675,7 +677,9 @@
             border-left: 4px solid #1A9CDB; display: none; font-size: 0.9em;
         }
         .bank-info.show { display: block; }
-        #accountLast5Group { margin-top: 15px; } /* 移除了 display: none 的行內干擾 */
+        
+        #accountLast5Group { display: none; margin-top: 15px; }
+        #accountLast5Group.show { display: block; }
 
         .bank-info-item { margin-bottom: 8px; }
         .bank-info-label { font-weight: 600; color: #333; }
@@ -779,7 +783,7 @@
         .success-modal-title { color: #1A9CDB; font-size: 1.8em; margin-bottom: 15px; font-weight: 700; }
         .success-modal-text { font-size: 1.1em; color: #333; margin-bottom: 25px; }
         
-        /* 刪除確認視窗專用按鈕排版 (強迫不換行、完美對半切) */
+        /* 刪除確認視窗專用按鈕排版 */
         .delete-modal-actions {
             display: flex;
             justify-content: center;
@@ -888,7 +892,7 @@
                             </div>
                         </div>
 
-                        <div id="accountLast5Group" style="display: none;">
+                        <div id="accountLast5Group">
                             <div class="form-group">
                                 <label for="accountLast5">帳號後五碼 (銀行轉帳必填)</label>
                                 <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
@@ -1093,7 +1097,6 @@
         ];
 
         let cart = {};
-        // 將此處替換為您最新部署的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
         let inventoryData = null; 
