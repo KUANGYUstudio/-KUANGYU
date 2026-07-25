@@ -222,7 +222,7 @@
             box-shadow: 0 0 0 3px rgba(26, 156, 219, 0.1);
         }
 
-        /* Filter Section */
+        /* Filter Section (電腦版預設排列) */
         .filter-container {
             display: flex;
             flex-wrap: wrap;
@@ -256,7 +256,7 @@
             border-color: #1A9CDB;
         }
 
-        /* 獨立的指南按鈕樣式 (改為暖橘色) */
+        /* 獨立的指南按鈕樣式 (暖橘色) */
         .guide-btn {
             padding: 8px 18px;
             background: #F39C12;
@@ -376,17 +376,24 @@
                 gap: 25px;
             }
             
-            .filter-break {
-                display: block;
-                flex-basis: 100%;
-                height: 0;
-                margin: 0;
-                padding: 0;
+            /* 手機版過濾按鈕排序微調：將中筒襪與中長筒襪移至第一排，全部移至第二排 */
+            .filter-container {
+                gap: 6px;
             }
-            .filter-btn {
-                padding: 6px 14px;
-                font-size: 0.9em;
+            .filter-btn, .guide-btn {
+                padding: 6px 10px;
+                font-size: 0.85em;
             }
+            
+            /* 個別指定按鈕順序 (order) */
+            .filter-btn-all { order: 5; flex-basis: 100%; margin-top: 5px; } /* 全部：第二排 */
+            .filter-btn-noshow { order: 1; }  /* 隱形襪 */
+            .filter-btn-quarter { order: 2; } /* 短襪 */
+            .filter-btn-minicrew { order: -2; } /* 中筒襪：第一排 */
+            .filter-btn-crew { order: -1; }     /* 中長筒襪：第一排 */
+            .guide-btn { order: 6; flex-basis: 100%; } /* 指南按鈕：最下方 */
+
+            .filter-break { display: none; }
 
             .scroll-arrow { display: none; }
             .products-grid {
@@ -401,7 +408,6 @@
             .qty-btn { width: 28px; height: 28px; }
             .size-select { padding: 4px 8px; font-size: 0.85em; }
             
-            /* 手機版縮小購物車內的數量按鈕與數字區域 */
             .cart-qty-control { height: 24px; }
             .cart-qty-btn { width: 24px; font-size: 1.1em; }
             .cart-qty-input { width: 24px; line-height: 24px; font-size: 0.9em; }
@@ -814,7 +820,6 @@
             max-width: 90%; max-height: 90vh; position: relative;
         }
         
-        /* 將關閉按鈕移至視窗內部，避免手機邊緣切斷 */
         .modal-close {
             position: absolute; 
             top: 10px; 
@@ -880,7 +885,7 @@
         .cancel-btn { background: #95A5A6; }
         .cancel-btn:hover { background: #7F8C8D; }
         
-        /* 指南視窗專屬排版 (加大上方留白，避免文字與叉叉重疊) */
+        /* 指南視窗專屬排版 */
         .guide-modal-content {
             background: white; 
             padding: 45px 20px 30px 20px; 
@@ -978,7 +983,6 @@
                             </div>
                         </div>
 
-                        <!-- 真正乾淨且正確的 HTML 標籤 -->
                         <div id="accountLast5Group">
                             <div class="form-group">
                                 <label for="accountLast5">帳號後五碼<span class="required-star">*</span></label>
@@ -1038,7 +1042,6 @@
         </div>
     </div>
     
-    <!-- 挑選指南專屬視窗 -->
     <div class="modal" id="guideModal">
         <div class="guide-modal-content">
             <button class="modal-close" onclick="closeGuideModal()">×</button>
@@ -1183,7 +1186,7 @@
             },
             {
                 series: "HIDDENDRY 極薄親膚系列",
-                description: "極致薄透，宛如第二層肌膚",
+                description: "極致薄透, 宛如第二層肌膚",
                 type: "Mini Crew 中筒襪",
                 items: [
                     { code: "8141-0300", color: "黑", sizes: ["S","M","L","XL"], price: 550, image: "" },
@@ -1249,12 +1252,11 @@
             const container = document.getElementById('productsContainer');
             
             let html = '<div class="filter-container">';
-            html += `<button type="button" class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">全部</button>`;
-            html += `<button type="button" class="filter-btn ${currentFilter === '隱形襪' ? 'active' : ''}" onclick="setFilter('隱形襪')">隱形襪</button>`;
-            html += `<button type="button" class="filter-btn ${currentFilter === '短襪' ? 'active' : ''}" onclick="setFilter('短襪')">短襪</button>`;
-            html += `<div class="filter-break"></div>`;
-            html += `<button type="button" class="filter-btn ${currentFilter === '中筒襪' ? 'active' : ''}" onclick="setFilter('中筒襪')">中筒襪</button>`;
-            html += `<button type="button" class="filter-btn ${currentFilter === '中長筒襪' ? 'active' : ''}" onclick="setFilter('中長筒襪')">中長筒襪</button>`;
+            html += `<button type="button" class="filter-btn filter-btn-all ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">全部</button>`;
+            html += `<button type="button" class="filter-btn filter-btn-noshow ${currentFilter === '隱形襪' ? 'active' : ''}" onclick="setFilter('隱形襪')">隱形襪</button>`;
+            html += `<button type="button" class="filter-btn filter-btn-quarter ${currentFilter === '短襪' ? 'active' : ''}" onclick="setFilter('短襪')">短襪</button>`;
+            html += `<button type="button" class="filter-btn filter-btn-minicrew ${currentFilter === '中筒襪' ? 'active' : ''}" onclick="setFilter('中筒襪')">中筒襪</button>`;
+            html += `<button type="button" class="filter-btn filter-btn-crew ${currentFilter === '中長筒襪' ? 'active' : ''}" onclick="setFilter('中長筒襪')">中長筒襪</button>`;
             html += `<button type="button" class="guide-btn" onclick="openGuideModal()">尺寸與挑選指南</button>`;
             html += '</div>';
 
