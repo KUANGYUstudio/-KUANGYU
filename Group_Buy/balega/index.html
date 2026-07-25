@@ -171,6 +171,13 @@
             color: #333;
             font-size: 0.95em;
         }
+        
+        /* 必填星號標示 */
+        .required-star {
+            color: #E74C3C;
+            margin-left: 4px;
+            font-weight: bold;
+        }
 
         /* 全域輸入框設定 */
         input[type="text"],
@@ -356,6 +363,7 @@
             .qty-btn { width: 28px; height: 28px; }
             .size-select { padding: 4px 8px; font-size: 0.85em; }
             
+            /* 手機版縮小購物車內的數量按鈕與數字區域 */
             .cart-qty-control { height: 24px; }
             .cart-qty-btn { width: 24px; font-size: 1.1em; }
             .cart-qty-input { width: 24px; line-height: 24px; font-size: 0.9em; }
@@ -501,8 +509,8 @@
             position: sticky;
             top: 20px;
             height: fit-content;
-            max-height: calc(100vh - 40px); /* 限制最大高度，避免超出螢幕底部 */
-            overflow-y: auto; /* 內容過多時可獨立上下滑動 */
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
         }
         
         /* 美化購物車外框捲軸 */
@@ -524,7 +532,6 @@
         }
 
         .cart-items {
-            /* 移除 max-height，讓它能跟著 .cart-sidebar 順暢延展 */
             margin-bottom: 15px;
             padding-right: 5px;
         }
@@ -836,11 +843,11 @@
                 <div class="form-section">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">姓名 *</label>
+                            <label for="name">姓名<span class="required-star">*</span></label>
                             <input type="text" id="name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="email">Email *</label>
+                            <label for="email">Email<span class="required-star">*</span></label>
                             <input type="email" id="email" name="email" required>
                         </div>
                     </div>
@@ -861,7 +868,7 @@
 
                 <div class="payment-section">
                     <div class="form-group">
-                        <label>付款方式 *</label>
+                        <label>付款方式<span class="required-star">*</span></label>
                         <div class="radio-group">
                             <label class="radio-item">
                                 <input type="radio" name="paymentMethod" value="bank" required>
@@ -892,13 +899,13 @@
                             </div>
                         </div>
 
-                        <div id="accountLast5Group">
+                        <div id="accountLast5Group" style="display: none; margin-top: 15px;">
                             <div class="form-group">
-                                <label for="accountLast5">帳號後五碼 (銀行轉帳必填)</label>
+                                <label for="accountLast5">帳號後五碼<span class="required-star">*</span></label>
                                 <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
                             </div>
                             <div class="form-group" style="margin-top: 15px;">
-                                <label for="remittanceDate">匯款日期 (銀行轉帳必填)</label>
+                                <label for="remittanceDate">匯款日期<span class="required-star">*</span></label>
                                 <input type="date" id="remittanceDate" name="remittanceDate">
                             </div>
                         </div>
@@ -1097,6 +1104,7 @@
         ];
 
         let cart = {};
+        // 將此處替換為您最新部署的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
         let inventoryData = null; 
