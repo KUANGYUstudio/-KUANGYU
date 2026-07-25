@@ -685,7 +685,8 @@
         }
         .bank-info.show { display: block; }
         
-        #accountLast5Group { display: none; margin-top: 15px; }
+        /* 確保此處的樣式完全交給 CSS 類別控制 */
+        #accountLast5Group { display: none; margin-top: 15px; } 
         #accountLast5Group.show { display: block; }
 
         .bank-info-item { margin-bottom: 8px; }
@@ -899,7 +900,7 @@
                             </div>
                         </div>
 
-                        <div id="accountLast5Group" style="display: none; margin-top: 15px;">
+                        <div id="accountLast5Group">
                             <div class="form-group">
                                 <label for="accountLast5">帳號後五碼<span class="required-star">*</span></label>
                                 <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
