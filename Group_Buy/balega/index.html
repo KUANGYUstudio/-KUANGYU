@@ -209,7 +209,16 @@
             border-radius: 6px;
             font-size: 1em;
             font-family: inherit;
+            background-color: #ffffff;
+            color: #333;
             transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        /* 專門修復 iOS 系統 date 欄位的預設外觀與高度差異 */
+        input[type="date"] {
+            -webkit-appearance: none;
+            appearance: none;
+            min-height: 46px;
         }
 
         input[type="text"]:focus,
@@ -1042,6 +1051,7 @@
         </div>
     </div>
     
+    <!-- 挑選指南專屬視窗 -->
     <div class="modal" id="guideModal">
         <div class="guide-modal-content">
             <button class="modal-close" onclick="closeGuideModal()">×</button>
@@ -1186,7 +1196,7 @@
             },
             {
                 series: "HIDDENDRY 極薄親膚系列",
-                description: "極致薄透, 宛如第二層肌膚",
+                description: "極致薄透，宛如第二層肌膚",
                 type: "Mini Crew 中筒襪",
                 items: [
                     { code: "8141-0300", color: "黑", sizes: ["S","M","L","XL"], price: 550, image: "" },
