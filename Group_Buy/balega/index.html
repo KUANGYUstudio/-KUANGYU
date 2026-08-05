@@ -31,7 +31,7 @@
             width: 100%;
         }
 
-        /* 網頁初始讀取遮罩 */
+        /* 網頁初始讀取遮罩與鎖定畫面 */
         .page-loading-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -214,7 +214,6 @@
             transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        /* 專門修復 iOS 系統 date 欄位的預設外觀與高度差異 */
         input[type="date"] {
             -webkit-appearance: none;
             appearance: none;
@@ -231,7 +230,7 @@
             box-shadow: 0 0 0 3px rgba(26, 156, 219, 0.1);
         }
 
-        /* Filter Section (電腦版預設排列) */
+        /* Filter Section */
         .filter-container {
             display: flex;
             flex-wrap: wrap;
@@ -265,7 +264,6 @@
             border-color: #1A9CDB;
         }
 
-        /* 獨立的指南按鈕樣式 (暖橘色) */
         .guide-btn {
             padding: 8px 18px;
             background: #F39C12;
@@ -385,22 +383,20 @@
                 gap: 25px;
             }
             
-            /* 手機版過濾按鈕排序微調 */
             .filter-container {
-                gap: 10px; /* 增加按鈕之間的間距 */
+                gap: 10px; 
             }
             .filter-btn, .guide-btn {
-                padding: 8px 14px; /* 加大按鈕內邊距，讓文字不再擁擠 */
+                padding: 8px 14px;
                 font-size: 0.85em;
             }
             
-            /* 個別指定按鈕順序 (order) */
-            .filter-btn-all { order: 5; margin-top: 8px; } /* 移除全寬設定，並保留上方間距 */
-            .filter-btn-noshow { order: 1; }  /* 隱形襪 */
-            .filter-btn-quarter { order: 2; } /* 短襪 */
-            .filter-btn-minicrew { order: -2; } /* 中筒襪：第一排 */
-            .filter-btn-crew { order: -1; }     /* 中長筒襪：第一排 */
-            .guide-btn { order: 6; margin-top: 8px; } /* 移除全寬設定，與「全部」在同一行 */
+            .filter-btn-all { order: 5; margin-top: 8px; }
+            .filter-btn-noshow { order: 1; }  
+            .filter-btn-quarter { order: 2; } 
+            .filter-btn-minicrew { order: -2; } 
+            .filter-btn-crew { order: -1; }     
+            .guide-btn { order: 6; margin-top: 8px; }
 
             .filter-break { display: none; }
 
@@ -553,7 +549,6 @@
             appearance: none;
         }
 
-        /* Cart Sidebar 新增獨立滑動功能 */
         .cart-sidebar {
             background: white;
             padding: 25px 20px;
@@ -566,7 +561,6 @@
             overflow-y: auto;
         }
         
-        /* 美化購物車外框捲軸 */
         .cart-sidebar::-webkit-scrollbar {
             width: 6px;
         }
@@ -1196,7 +1190,7 @@
             },
             {
                 series: "HIDDENDRY 極薄親膚系列",
-                description: "極致薄透，宛如第二層肌膚",
+                description: "極致薄透, 宛如第二層肌膚",
                 type: "Mini Crew 中筒襪",
                 items: [
                     { code: "8141-0300", color: "黑", sizes: ["S","M","L","XL"], price: 550, image: "" },
@@ -1226,7 +1220,13 @@
             fetch(GAS_URL)
                 .then(response => response.json())
                 .then(data => {
-                    inventoryData = data;
+                    // 若 GAS 回傳 isOpen 為 false，顯示「團購未開放」鎖定畫面
+                    if (data.isOpen === false) {
+                        showClosedScreen();
+                        return;
+                    }
+                    
+                    inventoryData = data.stockData !== undefined ? data.stockData : data;
                     document.getElementById('pageLoading').classList.remove('show');
                     renderProducts(); 
                 })
@@ -1236,6 +1236,18 @@
                     document.getElementById('pageLoading').classList.remove('show');
                     renderProducts();
                 });
+        }
+        
+        function showClosedScreen() {
+            const loadingOverlay = document.getElementById('pageLoading');
+            loadingOverlay.innerHTML = `
+                <div style="text-align: center; padding: 40px; background: white; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-width: 90%; margin: 0 auto;">
+                    <h2 style="color: #1A9CDB; margin-bottom: 15px; font-size: 1.8em;">團購未開放</h2>
+                    <p style="color: #666; font-size: 1.1em; margin-bottom: 20px;">目前非團購開放時間，無法瀏覽商品與送出訂單。</p>
+                </div>
+            `;
+            loadingOverlay.style.background = "#f8f8f8";
+            loadingOverlay.classList.add('show');
         }
 
         function getStock(code, color, size) {
