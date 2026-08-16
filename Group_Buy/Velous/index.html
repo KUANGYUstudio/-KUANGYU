@@ -992,8 +992,8 @@
         <div class="guide-modal-content">
             <button class="modal-close" onclick="closeGuideModal()">×</button>
             <h2 style="text-align: center; color: #333; margin-bottom: 20px; font-size: 1.4em;">尺寸與挑選指南</h2>
-            <img src="velous_pics/Guide01.webp" alt="挑選指南1" class="guide-image">
-            <img src="velous_pics/Guide02.webp" alt="尺寸表" class="guide-image" style="margin-bottom: 0;">
+            <img src="Velous_pics/Guide01.webp" alt="挑選指南1" class="guide-image">
+            <img src="Velous_pics/Guide02.webp" alt="尺寸表" class="guide-image" style="margin-bottom: 0;">
         </div>
     </div>
 
@@ -1038,7 +1038,7 @@
         
         let pendingDeleteKey = null;
 
-        const imageExtension = ".png";
+        const imageExtension = ".webp";
 
         document.addEventListener('DOMContentLoaded', () => {
             // 因目前無需盤點庫存，直接渲染商品介面
@@ -1093,7 +1093,7 @@
 
                 group.items.forEach((item, itemIndex) => {
                     const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' style='background:%23f0f0f0'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%23999'%3E暫無圖片%3C/text%3E%3C/svg%3E";
-                    const autoImgPath = "velous_pics/" + item.code + imageExtension;
+                    const autoImgPath = "Velous_pics/" + item.code + imageExtension;
                     const imgSrc = item.image ? item.image : autoImgPath;
                     
                     html += `
