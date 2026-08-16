@@ -31,33 +31,10 @@
             width: 100%;
         }
 
-        /* 網頁初始讀取遮罩 */
+        /* 網頁初始讀取遮罩 (已隱藏，因為不需要讀取庫存) */
         .page-loading-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
+            display: none; 
         }
-        .page-loading-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #164082;
-            border-radius: 50%;
-            width: 50px; height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* 全局黑色懸浮提示 (Toast) */
         .error-message {
@@ -116,6 +93,23 @@
             color: #666;
             font-weight: 300;
             margin-bottom: 15px;
+        }
+
+        /* 官網連結樣式 */
+        .official-link {
+            display: inline-block;
+            font-size: 0.9em;
+            color: #164082;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid #164082;
+            padding: 6px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+        .official-link:hover {
+            background: #164082;
+            color: white;
         }
 
         /* Main Layout */
@@ -405,12 +399,6 @@
             background: #f5f5f5;
         }
 
-        .product-card.is-sold-out {
-            opacity: 0.6;
-            pointer-events: none; 
-            background: #eee;
-        }
-
         .image-wrapper {
             position: relative;
             margin-bottom: 12px;
@@ -427,21 +415,6 @@
             height: 100%;
             object-fit: cover;
             cursor: pointer;
-        }
-
-        .sold-out-badge {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 18px;
-            border-radius: 4px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            z-index: 2;
-            pointer-events: none;
         }
 
         .product-info {
@@ -878,9 +851,9 @@
     </style>
 </head>
 <body>
-    <div class="page-loading-overlay show" id="pageLoading">
+    <div class="page-loading-overlay" id="pageLoading">
         <div class="spinner"></div>
-        <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在讀取即時庫存...</div>
+        <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在讀取資料...</div>
     </div>
     
     <div class="error-message" id="errorMessage"></div>
@@ -889,6 +862,7 @@
         <img src="https://kuangyu.studio/KUANGYU_logo_icon.png" alt="光聿 Logo" class="header-logo">
         <h1>光聿團購</h1>
         <p class="subtitle">Velous 恢復拖鞋系列</p>
+        <a href="https://www.sinlyshare.com/collections/velous" target="_blank" class="official-link">前往 Velous 台灣官網</a>
     </header>
 
     <div class="container">
@@ -1062,37 +1036,20 @@
         // 將此處替換為您最新部署的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
-        let inventoryData = null; 
         
         let pendingDeleteKey = null;
 
         const imageExtension = ".png";
 
         document.addEventListener('DOMContentLoaded', () => {
-            fetchInventoryAndRender();
+            // 因目前無需盤點庫存，直接渲染商品介面
+            renderProducts();
             setupEventListeners();
         });
 
-        function fetchInventoryAndRender() {
-            fetch(GAS_URL)
-                .then(response => response.json())
-                .then(data => {
-                    inventoryData = data;
-                    document.getElementById('pageLoading').classList.remove('show');
-                    renderProducts(); 
-                })
-                .catch(error => {
-                    console.error('取得庫存失敗:', error);
-                    inventoryData = {};
-                    document.getElementById('pageLoading').classList.remove('show');
-                    renderProducts();
-                });
-        }
-
+        // 簡化取得庫存函數：一律回傳極大值代表現貨充足
         function getStock(code, color, size) {
-            if (!inventoryData) return 0;
-            const key = code + "|" + color + "|" + size;
-            return inventoryData[key] !== undefined ? parseInt(inventoryData[key]) : 0;
+            return 999;
         }
 
         function scrollToCheckout() {
@@ -1140,17 +1097,10 @@
                     const autoImgPath = "velous_pics/" + item.code + imageExtension;
                     const imgSrc = item.image ? item.image : autoImgPath;
                     
-                    let totalStockForThisItem = 0;
-                    item.sizes.forEach(size => {
-                        totalStockForThisItem += getStock(item.code, item.color, size);
-                    });
-                    const isCompletelySoldOut = totalStockForThisItem <= 0;
-                    
                     html += `
-                                <div class="product-card ${isCompletelySoldOut ? 'is-sold-out' : ''}" id="product-${groupIndex}-${itemIndex}">
+                                <div class="product-card" id="product-${groupIndex}-${itemIndex}">
                                     <div class="image-wrapper">
                                         <img src="${imgSrc}" alt="${item.color}" class="product-image" onclick="openImageModal('${imgSrc}')" onerror="this.onerror=null; this.src='${fallbackImage}';">
-                                        ${isCompletelySoldOut ? '<div class="sold-out-badge">已售完</div>' : ''}
                                     </div>
                                     <div class="product-info">
                                         <div class="product-code">${item.code}</div>
@@ -1158,15 +1108,10 @@
                                         <div class="product-price">$${item.price}</div>
                                     </div>
                                     <div class="controls-wrapper">
-                                        <select class="size-select" id="size-${groupIndex}-${itemIndex}" onchange="handleSizeChange(${groupIndex}, ${itemIndex})" ${isCompletelySoldOut ? 'disabled' : ''}>
+                                        <select class="size-select" id="size-${groupIndex}-${itemIndex}" onchange="handleSizeChange(${groupIndex}, ${itemIndex})">
                                             <option value="">選擇尺寸</option>
                                             ${item.sizes.map(size => {
-                                                const stock = getStock(item.code, item.color, size);
-                                                if (stock <= 0) {
-                                                    return `<option value="${size}" disabled>${size} (已售完)</option>`;
-                                                } else {
-                                                    return `<option value="${size}">${size}</option>`;
-                                                }
+                                                return `<option value="${size}">${size}</option>`;
                                             }).join('')}
                                         </select>
                                         <div class="qty-control">
@@ -1551,8 +1496,8 @@
                 updateCart();
                 setFilter('all'); 
                 
-                document.getElementById('pageLoading').classList.add('show');
-                fetchInventoryAndRender();
+                // 取消重新抓取庫存，改為直接渲染初始狀態
+                renderProducts();
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             })
