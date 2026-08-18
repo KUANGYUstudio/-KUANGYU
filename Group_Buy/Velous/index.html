@@ -241,24 +241,6 @@
             border-color: #164082;
         }
 
-        .guide-btn {
-            padding: 8px 18px;
-            background: #EFA51A;
-            border: 1px solid #EFA51A;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.95em;
-            font-weight: 700;
-            color: #164082;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .guide-btn:hover {
-            background: #D89010;
-            border-color: #D89010;
-        }
-
         /* Products Section */
         .series-group {
             margin-bottom: 40px;
@@ -359,7 +341,7 @@
             .filter-container {
                 gap: 10px;
             }
-            .filter-btn, .guide-btn {
+            .filter-btn {
                 padding: 8px 14px;
                 font-size: 0.85em;
             }
@@ -830,24 +812,6 @@
         .delete-btn:hover { background: #C0392B; }
         .cancel-btn { background: #95A5A6; }
         .cancel-btn:hover { background: #7F8C8D; }
-        
-        .guide-modal-content {
-            background: white; 
-            padding: 45px 20px 30px 20px; 
-            border-radius: 8px;
-            max-width: 600px; 
-            width: 95%; 
-            max-height: 85vh; 
-            position: relative;
-            overflow-y: auto;
-        }
-        .guide-image {
-            width: 100%;
-            height: auto;
-            margin-bottom: 20px;
-            display: block;
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body>
@@ -986,16 +950,6 @@
             </div>
         </div>
     </div>
-    
-    <!-- 挑選指南專屬視窗 -->
-    <div class="modal" id="guideModal">
-        <div class="guide-modal-content">
-            <button class="modal-close" onclick="closeGuideModal()">×</button>
-            <h2 style="text-align: center; color: #333; margin-bottom: 20px; font-size: 1.4em;">尺寸與挑選指南</h2>
-            <img src="Velous_pics/Guide01.webp" alt="挑選指南1" class="guide-image">
-            <img src="Velous_pics/Guide02.webp" alt="尺寸表" class="guide-image" style="margin-bottom: 0;">
-        </div>
-    </div>
 
     <script>
         // 更新為更容易閱讀的尺寸格式
@@ -1042,12 +996,10 @@
         const imageExtension = ".webp";
 
         document.addEventListener('DOMContentLoaded', () => {
-            // 因目前無需盤點庫存，直接渲染商品介面
             renderProducts();
             setupEventListeners();
         });
 
-        // 簡化取得庫存函數：一律回傳極大值代表現貨充足
         function getStock(code, color, size) {
             return 999;
         }
@@ -1074,7 +1026,6 @@
             html += `<button type="button" class="filter-btn ${currentFilter === '可調式' ? 'active' : ''}" onclick="setFilter('可調式')">可調式</button>`;
             html += `<button type="button" class="filter-btn ${currentFilter === '兩段式' ? 'active' : ''}" onclick="setFilter('兩段式')">兩段式</button>`;
             html += `<button type="button" class="filter-btn ${currentFilter === '夾腳式' ? 'active' : ''}" onclick="setFilter('夾腳式')">夾腳式</button>`;
-            html += `<button type="button" class="guide-btn" onclick="openGuideModal()">尺寸與挑選指南</button>`;
             html += '</div>';
 
             PRODUCTS.forEach((group, groupIndex) => {
@@ -1381,14 +1332,6 @@
             document.getElementById('imageModal').classList.remove('show');
         }
         
-        function openGuideModal() {
-            document.getElementById('guideModal').classList.add('show');
-        }
-        
-        function closeGuideModal() {
-            document.getElementById('guideModal').classList.remove('show');
-        }
-        
         function closeSuccessModal() {
             document.getElementById('successModal').classList.remove('show');
         }
@@ -1512,12 +1455,10 @@
             const imgModal = document.getElementById('imageModal');
             const successModal = document.getElementById('successModal');
             const deleteModal = document.getElementById('deleteModal');
-            const guideModal = document.getElementById('guideModal');
             
             if (e.target === imgModal) closeImageModal();
             if (e.target === successModal) closeSuccessModal();
             if (e.target === deleteModal) cancelDelete(); 
-            if (e.target === guideModal) closeGuideModal();
         });
     </script>
 </body>
