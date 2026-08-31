@@ -857,7 +857,6 @@
         .success-modal-title { color: #1A9CDB; font-size: 1.8em; margin-bottom: 15px; font-weight: 700; }
         .success-modal-text { font-size: 1.1em; color: #333; margin-bottom: 25px; }
         
-        /* 刪除確認視窗專用按鈕排版 */
         .delete-modal-actions {
             display: flex;
             justify-content: center;
@@ -911,7 +910,7 @@
 <body>
     <div class="page-loading-overlay show" id="pageLoading">
         <div class="spinner"></div>
-        <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在讀取即時庫存...</div>
+        <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在檢查團購狀態...</div>
     </div>
     
     <div class="error-message" id="errorMessage"></div>
@@ -1045,7 +1044,6 @@
         </div>
     </div>
     
-    <!-- 挑選指南專屬視窗 -->
     <div class="modal" id="guideModal">
         <div class="guide-modal-content">
             <button class="modal-close" onclick="closeGuideModal()">×</button>
@@ -1202,7 +1200,6 @@
         ];
 
         let cart = {};
-        // 將此處替換為您最新部署的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbzumHo-j78Gmud0Y8uriB6rXRbUE23l8OFKFCjxgF8LfbbjQaUKwBbT_Uhzj_i60NxH1g/exec";
         let currentFilter = 'all';
         let inventoryData = null; 
@@ -1212,20 +1209,35 @@
         const imageExtension = ".png";
 
         document.addEventListener('DOMContentLoaded', () => {
-            fetchInventoryAndRender();
+            fetchStatusAndRender();
             setupEventListeners();
         });
 
-        function fetchInventoryAndRender() {
+        // 這是檢查狀態與讀取庫存的關鍵函式
+        function fetchStatusAndRender() {
             fetch(GAS_URL)
                 .then(response => response.json())
                 .then(data => {
-                    // 若 GAS 回傳 isOpen 為 false，顯示「團購未開放」鎖定畫面
-                    if (data.isOpen === false) {
-                        showClosedScreen();
+                    // 若 GAS 回傳 isOpen 為 false，隱藏表單並顯示「團購未開放」
+                    if (data && data.isOpen === false) {
+                        document.getElementById('pageLoading').classList.remove('show');
+                        document.getElementById('orderForm').style.display = 'none';
+                        
+                        const closedDiv = document.createElement('div');
+                        closedDiv.style.textAlign = 'center';
+                        closedDiv.style.padding = '60px 20px';
+                        closedDiv.style.background = 'white';
+                        closedDiv.style.borderRadius = '8px';
+                        closedDiv.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)';
+                        closedDiv.style.fontSize = '1.5em';
+                        closedDiv.style.fontWeight = '700';
+                        closedDiv.style.color = '#1A9CDB';
+                        closedDiv.innerHTML = 'Balega 跑襪團購目前未開放<br><span style="font-size:0.6em; color:#666; font-weight:400; margin-top:10px; display:block;">敬請期待下次開團</span>';
+                        document.querySelector('.container').appendChild(closedDiv);
                         return;
                     }
                     
+                    // 若有開放，則寫入庫存資料並繪製商品
                     inventoryData = data.stockData !== undefined ? data.stockData : data;
                     document.getElementById('pageLoading').classList.remove('show');
                     renderProducts(); 
@@ -1236,18 +1248,6 @@
                     document.getElementById('pageLoading').classList.remove('show');
                     renderProducts();
                 });
-        }
-        
-        function showClosedScreen() {
-            const loadingOverlay = document.getElementById('pageLoading');
-            loadingOverlay.innerHTML = `
-                <div style="text-align: center; padding: 40px; background: white; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-width: 90%; margin: 0 auto;">
-                    <h2 style="color: #1A9CDB; margin-bottom: 15px; font-size: 1.8em;">團購未開放</h2>
-                    <p style="color: #666; font-size: 1.1em; margin-bottom: 20px;">目前非團購開放時間，無法瀏覽商品與送出訂單。</p>
-                </div>
-            `;
-            loadingOverlay.style.background = "#f8f8f8";
-            loadingOverlay.classList.add('show');
         }
 
         function getStock(code, color, size) {
@@ -1726,8 +1726,9 @@
                 updateCart();
                 setFilter('all'); 
                 
+                // 重新載入庫存與開放狀態
                 document.getElementById('pageLoading').classList.add('show');
-                fetchInventoryAndRender();
+                fetchStatusAndRender();
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             })
