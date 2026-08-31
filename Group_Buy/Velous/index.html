@@ -31,10 +31,33 @@
             width: 100%;
         }
 
-        /* 網頁初始讀取遮罩 (已隱藏，因為不需要讀取庫存) */
+        /* 網頁初始讀取遮罩恢復顯示，確保讀取狀態時畫面乾淨 */
         .page-loading-overlay {
-            display: none; 
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
         }
+        .page-loading-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #164082;
+            border-radius: 50%;
+            width: 50px; height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* 全局黑色懸浮提示 (Toast) */
         .error-message {
@@ -815,9 +838,9 @@
     </style>
 </head>
 <body>
-    <div class="page-loading-overlay" id="pageLoading">
+    <div class="page-loading-overlay show" id="pageLoading">
         <div class="spinner"></div>
-        <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在讀取資料...</div>
+        <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在檢查團購狀態...</div>
     </div>
     
     <div class="error-message" id="errorMessage"></div>
@@ -831,7 +854,6 @@
 
     <div class="container">
         <form id="orderForm" class="main-content">
-            
             <div class="left-column">
                 <div class="form-section">
                     <div class="form-row">
@@ -845,7 +867,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="products-section" id="productsContainer"></div>
             </div>
 
@@ -902,7 +923,6 @@
                                 <input type="date" id="remittanceDate" name="remittanceDate">
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -952,7 +972,6 @@
     </div>
 
     <script>
-        // 更新為更容易閱讀的尺寸格式
         const sizes = [
             "M4 / W6 (EU37)", "M5 / W7 (EU38)", "M6 / W8 (EU39)", "M7 / W9 (EU40)", 
             "M8 / W10 (EU41)", "M9 / W11 (EU42)", "M10 / W12 (EU43)", "M11 / W13 (EU44)", "M12 / W14 (EU45)"
@@ -990,15 +1009,49 @@
         let cart = {};
         let GAS_URL = "https://script.google.com/macros/s/AKfycbyHFzmPcUErI_87iUvODu_iC2-L1rK52gYjxdN_hgGrnbRkC2zoWJbbV7wzrNVMJdSUQg/exec";
         let currentFilter = 'all';
-        
         let pendingDeleteKey = null;
-
         const imageExtension = ".webp";
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderProducts();
+            fetchStatusAndRender();
             setupEventListeners();
         });
+
+        // 這是檢查狀態的關鍵函式
+        function fetchStatusAndRender() {
+            fetch(GAS_URL)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('pageLoading').classList.remove('show');
+                    
+                    if (data && data.isOpen === false) {
+                        // 隱藏表單內容
+                        document.getElementById('orderForm').style.display = 'none';
+                        
+                        // 建立並顯示「未開放」的精美提示區塊
+                        const closedDiv = document.createElement('div');
+                        closedDiv.style.textAlign = 'center';
+                        closedDiv.style.padding = '60px 20px';
+                        closedDiv.style.background = 'white';
+                        closedDiv.style.borderRadius = '8px';
+                        closedDiv.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)';
+                        closedDiv.style.fontSize = '1.5em';
+                        closedDiv.style.fontWeight = '700';
+                        closedDiv.style.color = '#164082';
+                        closedDiv.innerHTML = 'Velous 恢復拖鞋團購目前未開放<br><span style="font-size:0.6em; color:#666; font-weight:400; margin-top:10px; display:block;">敬請期待下次開團</span>';
+                        document.querySelector('.container').appendChild(closedDiv);
+                        return;
+                    }
+                    
+                    // 如果開放，就畫出商品
+                    renderProducts(); 
+                })
+                .catch(error => {
+                    // 如果網路連線有問題，還是先把表單畫出來，讓學生能操作
+                    document.getElementById('pageLoading').classList.remove('show');
+                    renderProducts();
+                });
+        }
 
         function getStock(code, color, size) {
             return 999;
@@ -1439,7 +1492,6 @@
                 updateCart();
                 setFilter('all'); 
                 
-                // 取消重新抓取庫存，改為直接渲染初始狀態
                 renderProducts();
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
