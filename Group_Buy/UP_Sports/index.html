@@ -54,7 +54,6 @@
             font-weight: 300;
         }
 
-        /* 請將下面這段加入到這裡 */
         .website-link {
             display: inline-block;
             margin-top: 12px;
@@ -117,9 +116,16 @@
             font-size: 0.95em;
         }
 
+        .required-star {
+            color: #E74C3C;
+            margin-left: 4px;
+            font-weight: bold;
+        }
+
         input[type="text"],
         input[type="email"],
         input[type="number"],
+        input[type="date"],
         select {
             width: 100%;
             padding: 12px;
@@ -133,6 +139,7 @@
         input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="number"]:focus,
+        input[type="date"]:focus,
         select:focus {
             outline: none;
             border-color: #E91B50;
@@ -290,6 +297,11 @@
                 scroll-snap-align: start;
             }
             .qty-btn { width: 28px; height: 28px; }
+            
+            /* 新增的手機版購物車調整樣式 */
+            .cart-qty-control { height: 24px; }
+            .cart-qty-btn { width: 24px; font-size: 1.1em; }
+            .cart-qty-input { width: 24px; line-height: 24px; font-size: 0.9em; }
         }
 
         .product-card {
@@ -299,7 +311,7 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.3s;
             flex: 0 0 220px;
         }
 
@@ -386,6 +398,10 @@
             font-weight: bold;
             color: #333;
             transition: background-color 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 0;
+            margin: 0;
         }
 
         .qty-btn:hover {
@@ -393,13 +409,17 @@
         }
 
         .qty-input {
-            width: 100%;
-            text-align: center;
-            border: none;
-            font-size: 0.9em;
-            padding: 0;
+            width: 100% !important;
+            height: 100% !important;
+            text-align: center !important;
+            border: none !important;
+            font-size: 0.9em !important;
+            padding: 0 !important;
+            margin: 0 !important;
             pointer-events: none;
-            background: transparent;
+            background: transparent !important;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
         /* Cart Sidebar */
@@ -411,22 +431,44 @@
             position: sticky;
             top: 20px;
             height: fit-content;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        .cart-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .cart-sidebar::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
         }
 
         .cart-title {
             font-size: 1.2em;
             font-weight: 700;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 2px solid #E91B50;
         }
 
         .cart-items {
-            max-height: 300px;
-            overflow-y: auto;
             margin-bottom: 15px;
             padding-right: 5px;
+        }
+
+        .cart-group {
+            margin-bottom: 15px;
+        }
+
+        .cart-group-title {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #E91B50;
+            margin-top: 10px;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed #eee;
         }
 
         .cart-item {
@@ -436,16 +478,100 @@
             padding: 10px;
             background: #f9f9f9;
             border: 1px solid #eee;
-            border-radius: 4px;
+            border-radius: 6px;
+            transition: border-color 0.2s;
+        }
+
+        .cart-item:hover {
+            border-color: #E91B50;
+        }
+
+        .cart-item-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            cursor: pointer;
+            margin-bottom: 4px;
         }
 
-        .cart-item-info { flex-grow: 1; padding-right: 10px; }
-        .cart-item-title { font-weight: 600; margin-bottom: 4px; }
-        .cart-item-detail { color: #666; font-size: 0.9em; }
-        .cart-item-price { font-weight: 700; color: #E91B50; text-align: right; min-width: 60px; }
+        .cart-item-header:hover .cart-item-title {
+            color: #E91B50;
+            text-decoration: underline;
+        }
+
+        .cart-item-title {
+            font-weight: 600;
+            flex-grow: 1;
+            padding-right: 10px;
+            line-height: 1.3;
+        }
+
+        .cart-item-model {
+            color: #999;
+            font-weight: 400;
+            font-size: 0.85em;
+        }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: #E91B50;
+            white-space: nowrap;
+        }
+
+        .cart-item-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item-spec {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        /* 購物車內的加減按鈕 */
+        .cart-qty-control {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            overflow: hidden;
+            height: 28px;
+        }
+
+        .cart-qty-btn {
+            width: 28px;
+            height: 100%;
+            border: none;
+            background: #f0f0f0;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cart-qty-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .cart-qty-input {
+            width: 32px;
+            text-align: center;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #333;
+            line-height: 28px;
+            pointer-events: none;
+            background: transparent;
+        }
 
         .cart-total {
             background: #FDE8ED;
@@ -579,7 +705,31 @@
         .error-message, .loading {
             display: none; padding: 15px; border-radius: 6px; margin-bottom: 20px; text-align: center;
         }
-        .error-message.show { display: block; background: #ffebee; color: #c62828; border: 1px solid #f44336; }
+        /* 全局錯誤訊息修改為浮動樣式 */
+        .error-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            z-index: 10000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            font-weight: 600;
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+        .error-message.show {
+            display: block;
+            animation: slideDown 0.3s ease forwards;
+        }
+        @keyframes slideDown {
+            from { top: -50px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
+        }
+
         .loading.show { display: block; }
         
         .success-modal-body { text-align: center; padding: 20px 10px; }
@@ -589,9 +739,35 @@
             background: #E91B50; color: white; border: none; padding: 10px 30px;
             font-size: 1em; border-radius: 6px; cursor: pointer; font-weight: 600;
         }
+
+        /* 刪除確認視窗樣式 */
+        .delete-modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+        .delete-modal-actions button {
+            flex: 1;
+            padding: 12px 0;
+            margin: 0;
+            white-space: nowrap;
+            font-size: 1em; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 600;
+            color: white;
+            border: none;
+        }
+        .delete-btn { background: #E74C3C; }
+        .delete-btn:hover { background: #C0392B; }
+        .cancel-btn { background: #95A5A6; }
+        .cancel-btn:hover { background: #7F8C8D; }
     </style>
 </head>
 <body>
+    <div class="error-message" id="errorMessage"></div>
+
     <header>
         <h1>光聿團購</h1>
         <p class="subtitle">UP Sports 運動補給</p>
@@ -602,15 +778,13 @@
         <form id="orderForm" class="main-content">
             
             <div class="left-column">
-                <div class="error-message" id="errorMessage"></div>
-                
                 <div class="form-section">
                     <div class="form-group">
-                        <label for="name">姓名 *</label>
+                        <label for="name">姓名 <span class="required-star">*</span></label>
                         <input type="text" id="name" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email *</label>
+                        <label for="email">Email <span class="required-star">*</span></label>
                         <input type="email" id="email" name="email" required>
                     </div>
                 </div>
@@ -630,7 +804,7 @@
 
                 <div class="payment-section">
                     <div class="form-group">
-                        <label>付款方式 *</label>
+                        <label>付款方式 <span class="required-star">*</span></label>
                         <div class="radio-group">
                             <label class="radio-item">
                                 <input type="radio" name="paymentMethod" value="bank" required>
@@ -662,7 +836,7 @@
                         </div>
 
                         <div class="form-group" id="accountLast5Group">
-                            <label for="accountLast5">帳號後五碼 (選擇銀行轉帳時填寫)</label>
+                            <label for="accountLast5" style="margin-top: 15px;">帳號後五碼 (選擇銀行轉帳時填寫)</label>
                             <input type="text" id="accountLast5" name="accountLast5" placeholder="例：12345" maxlength="5">
                         </div>
                     </div>
@@ -699,6 +873,20 @@
                 <div class="success-modal-title">完成訂購</div>
                 <div class="success-modal-text">您的訂單已成功送出，系統將寄發確認信至您的 Email 信箱。</div>
                 <button class="success-modal-btn" onclick="closeSuccessModal()">確認並關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 刪除確認視窗 -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content" style="max-width: 350px; text-align: center; width: 90%;">
+            <div class="success-modal-body" style="padding: 10px;">
+                <div class="success-modal-title" style="color: #E74C3C; font-size: 1.5em; white-space: nowrap;">移除商品</div>
+                <div class="success-modal-text" style="margin-bottom: 25px; white-space: nowrap;">確定要將此商品從購物車移除嗎？</div>
+                <div class="delete-modal-actions">
+                    <button type="button" class="cancel-btn" onclick="cancelDelete()">取消</button>
+                    <button type="button" class="delete-btn" onclick="confirmDelete()">確定移除</button>
+                </div>
             </div>
         </div>
     </div>
@@ -808,6 +996,7 @@
         ];
 
         let cart = {};
+        let pendingDeleteKey = null;
         let GAS_URL = "https://script.google.com/macros/s/AKfycbw2I5xCq2f58TH0uYc2sRPnUBHiVkNIscpjBIzGJoUPKPeNHqbiqH4vjsM1HRx-LgNx/exec";
         let currentFilter = 'all';
 
@@ -863,7 +1052,7 @@
                     const imgSrc = item.image ? item.image : fallbackImage;
                     
                     html += `
-                                <div class="product-card">
+                                <div class="product-card" id="product-${groupIndex}-${itemIndex}">
                                     <img src="${imgSrc}" alt="${item.name}" class="product-image" onclick="openImageModal('${imgSrc}')">
                                     <div class="product-info">
                                         <div class="product-code">${item.code}</div>
@@ -905,14 +1094,43 @@
             });
         }
 
+        function promptDelete(cartKey) {
+            pendingDeleteKey = cartKey;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function cancelDelete() {
+            pendingDeleteKey = null;
+            document.getElementById('deleteModal').classList.remove('show');
+            updateCart(); 
+        }
+
+        function confirmDelete() {
+            if (pendingDeleteKey && cart[pendingDeleteKey]) {
+                const gIdx = cart[pendingDeleteKey].gIdx;
+                const iIdx = cart[pendingDeleteKey].iIdx;
+                delete cart[pendingDeleteKey];
+                document.getElementById('deleteModal').classList.remove('show');
+                pendingDeleteKey = null;
+                updateCart();
+                
+                const input = document.getElementById(`qty-${gIdx}-${iIdx}`);
+                if (input) input.value = 0;
+            }
+        }
+
         function changeQty(gIdx, iIdx, delta) {
             const spec = document.getElementById(`spec-${gIdx}-${iIdx}`).value;
             const cartKey = `${gIdx}-${iIdx}-${spec}`;
             const product = PRODUCTS[gIdx].items[iIdx];
 
             if (!cart[cartKey]) {
+                if (delta <= 0) return;
                 cart[cartKey] = {
+                    gIdx: gIdx,
+                    iIdx: iIdx,
                     series: PRODUCTS[gIdx].series,
+                    type: PRODUCTS[gIdx].type,
                     code: product.code,
                     name: product.name,
                     spec: spec,
@@ -922,39 +1140,129 @@
             }
 
             let newQty = cart[cartKey].qty + delta;
-            if (newQty < 0) newQty = 0;
-
-            if (newQty === 0) {
-                delete cart[cartKey];
+            
+            if (newQty <= 0) {
+                if (cart[cartKey].qty > 0) {
+                    promptDelete(cartKey);
+                    return; 
+                } else {
+                    delete cart[cartKey];
+                    newQty = 0;
+                }
             } else {
                 cart[cartKey].qty = newQty;
             }
 
-            document.getElementById(`qty-${gIdx}-${iIdx}`).value = newQty;
+            const input = document.getElementById(`qty-${gIdx}-${iIdx}`);
+            if (input) input.value = newQty;
             updateCart();
+        }
+
+        function updateCartItemQty(cartKey, delta) {
+            if (!cart[cartKey]) return;
+            
+            const gIdx = cart[cartKey].gIdx;
+            const iIdx = cart[cartKey].iIdx;
+            const item = cart[cartKey];
+            const newQty = item.qty + delta;
+            
+            if (newQty <= 0) {
+                promptDelete(cartKey); 
+                return; 
+            } else {
+                cart[cartKey].qty = newQty;
+            }
+            
+            updateCart();
+            const input = document.getElementById(`qty-${gIdx}-${iIdx}`);
+            if (input) input.value = newQty;
+        }
+
+        function scrollToProduct(gIdx, iIdx) {
+            let card = document.getElementById(`product-${gIdx}-${iIdx}`);
+            
+            if (!card) {
+                setFilter('all');
+            }
+            
+            setTimeout(() => {
+                card = document.getElementById(`product-${gIdx}-${iIdx}`);
+                if (card) {
+                    const y = card.getBoundingClientRect().top + window.scrollY - 120;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+
+                    const grid = card.closest('.products-grid');
+                    if (grid) {
+                        const scrollLeftPos = card.offsetLeft - grid.offsetLeft - 15;
+                        grid.scrollTo({ left: scrollLeftPos, behavior: 'smooth' });
+                    }
+                    
+                    card.style.transition = 'all 0.3s';
+                    card.style.borderColor = '#E91B50';
+                    card.style.boxShadow = '0 0 15px rgba(233, 27, 80, 0.4)';
+                    
+                    setTimeout(() => {
+                        card.style.borderColor = '#eee';
+                        card.style.boxShadow = 'none';
+                    }, 2000);
+                }
+            }, 100);
         }
 
         function updateCart() {
             let total = 0;
             let totalItemsCount = 0;
-            let cartHtml = '';
+            let groupedCart = {};
 
             Object.entries(cart).forEach(([key, item]) => {
                 const subtotal = item.price * item.qty;
                 total += subtotal;
                 totalItemsCount += item.qty;
-                cartHtml += `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <div class="cart-item-title">${item.code} - ${item.name}</div>
-                            <div class="cart-item-detail">規格: ${item.spec} | 數量: ${item.qty}</div>
-                        </div>
-                        <div class="cart-item-price">$${subtotal}</div>
-                    </div>
-                `;
+                
+                const groupName = `${item.series}`;
+                if (!groupedCart[groupName]) {
+                    groupedCart[groupName] = [];
+                }
+                groupedCart[groupName].push({ key, item, subtotal });
             });
 
-            document.getElementById('cartItems').innerHTML = cartHtml || '<p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>';
+            let cartHtml = '';
+            if (totalItemsCount === 0) {
+                cartHtml = '<p style="color: #999; font-size: 0.9em; text-align: center; padding: 20px 0;">尚未選擇商品</p>';
+            } else {
+                for (let groupName in groupedCart) {
+                    cartHtml += `<div class="cart-group"><div class="cart-group-title">${groupName}</div>`;
+                    
+                    groupedCart[groupName].forEach(cartData => {
+                        const k = cartData.key;
+                        const i = cartData.item;
+                        const st = cartData.subtotal;
+                        
+                        cartHtml += `
+                            <div class="cart-item">
+                                <div class="cart-item-header" onclick="scrollToProduct(${i.gIdx}, ${i.iIdx})" title="點擊回到商品位置">
+                                    <div class="cart-item-title">
+                                        ${i.name} <span class="cart-item-model">(#${i.code})</span>
+                                    </div>
+                                    <div class="cart-item-price">$${st}</div>
+                                </div>
+                                <div class="cart-item-body">
+                                    <div class="cart-item-spec">規格: ${i.spec}</div>
+                                    <div class="cart-qty-control">
+                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', -1)">−</button>
+                                        <div class="cart-qty-input">${i.qty}</div>
+                                        <button type="button" class="cart-qty-btn" onclick="event.stopPropagation(); updateCartItemQty('${k}', 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    cartHtml += `</div>`;
+                }
+            }
+
+            document.getElementById('cartItems').innerHTML = cartHtml;
             document.getElementById('cartTotal').textContent = `$${total}`;
             document.getElementById('totalAmount').value = total;
 
@@ -1093,8 +1401,11 @@
         window.addEventListener('click', (e) => {
             const imgModal = document.getElementById('imageModal');
             const successModal = document.getElementById('successModal');
+            const deleteModal = document.getElementById('deleteModal');
+            
             if (e.target === imgModal) closeImageModal();
             if (e.target === successModal) closeSuccessModal();
+            if (e.target === deleteModal) cancelDelete(); 
         });
     </script>
 </body>
