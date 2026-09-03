@@ -687,48 +687,69 @@
     <script>
         const PRODUCTS = [
             {
-                series: "超效乳清蛋白",
+                series: "超效乳清蛋白 (盒裝)",
                 description: "優質蛋白質補充，加速運動後恢復",
                 type: "乳清蛋白",
                 items: [
                     { code: "A01", name: "香濃芋頭", spec: "盒", price: 590, image: "" },
-                    { code: "A011", name: "香濃芋頭", spec: "包", price: 59, image: "" },
                     { code: "A02", name: "綠豆沙奶", spec: "盒", price: 590, image: "" },
+                    { code: "A03", name: "海鹽焦糖", spec: "盒", price: 590, image: "" }
+                ]
+            },
+            {
+                series: "超效乳清蛋白 (單包)",
+                description: "優質蛋白質補充，加速運動後恢復",
+                type: "乳清蛋白",
+                items: [
+                    { code: "A011", name: "香濃芋頭", spec: "包", price: 59, image: "" },
                     { code: "A021", name: "綠豆沙奶", spec: "包", price: 59, image: "" },
-                    { code: "A03", name: "海鹽焦糖", spec: "盒", price: 590, image: "" },
                     { code: "A031", name: "海鹽焦糖", spec: "包", price: 59, image: "" },
                     { code: "A04", name: "UP PURE ISO 原味分離乳清蛋白", spec: "包", price: 0, image: "" }
                 ]
             },
             {
-                series: "咖啡因能量棒",
+                series: "咖啡因能量棒 (盒裝)",
                 description: "快速提供能量與飽足感",
                 type: "能量棒",
                 items: [
                     { code: "B01", name: "香蕉可可", spec: "盒", price: 550, image: "" },
+                    { code: "B03", name: "芒果可可", spec: "盒", price: 550, image: "" }
+                ]
+            },
+            {
+                series: "咖啡因能量棒 (單支)",
+                description: "快速提供能量與飽足感",
+                type: "能量棒",
+                items: [
                     { code: "B011", name: "香蕉可可", spec: "支", price: 55, image: "" },
-                    { code: "B03", name: "芒果可可", spec: "盒", price: 550, image: "" },
                     { code: "B031", name: "芒果可可", spec: "支", price: 55, image: "" }
                 ]
             },
             {
-                series: "FAST 能量果膠",
+                series: "FAST 能量果膠 (盒裝)",
                 description: "迅速補給，好吞嚥不卡喉",
                 type: "能量果膠",
                 items: [
                     { code: "C01", name: "檸檬萊姆", spec: "盒", price: 490, image: "" },
-                    { code: "C011", name: "檸檬萊姆", spec: "包", price: 49, image: "" },
                     { code: "C02", name: "海鹽莓果", spec: "盒", price: 490, image: "" },
-                    { code: "C021", name: "海鹽莓果", spec: "包", price: 49, image: "" },
                     { code: "C03", name: "百香蜜桃", spec: "盒", price: 490, image: "" },
-                    { code: "C031", name: "百香蜜桃", spec: "包", price: 49, image: "" },
                     { code: "C04", name: "洛神烏梅 (FAST-X)", spec: "盒", price: 590, image: "" },
-                    { code: "C041", name: "洛神烏梅 (FAST-X)", spec: "包", price: 59, image: "" },
                     { code: "C05", name: "酸櫻桃汁", spec: "盒", price: 590, image: "" },
-                    { code: "C051", name: "酸櫻桃汁", spec: "包", price: 59, image: "" },
                     { code: "C07", name: "沁涼藍莓", spec: "盒", price: 590, image: "" },
+                    { code: "C08", name: "芒果青風味 (FAST FLOW)", spec: "盒", price: 590, image: "" }
+                ]
+            },
+            {
+                series: "FAST 能量果膠 (單包)",
+                description: "迅速補給，好吞嚥不卡喉",
+                type: "能量果膠",
+                items: [
+                    { code: "C011", name: "檸檬萊姆", spec: "包", price: 49, image: "" },
+                    { code: "C021", name: "海鹽莓果", spec: "包", price: 49, image: "" },
+                    { code: "C031", name: "百香蜜桃", spec: "包", price: 49, image: "" },
+                    { code: "C041", name: "洛神烏梅 (FAST-X)", spec: "包", price: 59, image: "" },
+                    { code: "C051", name: "酸櫻桃汁", spec: "包", price: 59, image: "" },
                     { code: "C071", name: "沁涼藍莓", spec: "包", price: 59, image: "" },
-                    { code: "C08", name: "芒果青風味 (FAST FLOW)", spec: "盒", price: 590, image: "" },
                     { code: "C081", name: "芒果青風味 (FAST FLOW)", spec: "包", price: 59, image: "" }
                 ]
             },
@@ -749,13 +770,20 @@
                 ]
             },
             {
-                series: "能量軟糖與配件",
+                series: "能量軟糖與配件 (盒裝/個)",
                 description: "日常訓練好幫手",
                 type: "其他",
                 items: [
                     { code: "E01", name: "FOCHEWS能量軟糖-多多風味", spec: "盒", price: 430, image: "" },
-                    { code: "E011", name: "FOCHEWS能量軟糖-多多風味", spec: "包", price: 43, image: "" },
                     { code: "F02", name: "UP 品牌膠囊收納盒", spec: "個", price: 0, image: "" }
+                ]
+            },
+            {
+                series: "能量軟糖與配件 (單包)",
+                description: "日常訓練好幫手",
+                type: "其他",
+                items: [
+                    { code: "E011", name: "FOCHEWS能量軟糖-多多風味", spec: "包", price: 43, image: "" }
                 ]
             }
         ];
