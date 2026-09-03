@@ -54,6 +54,24 @@
             font-weight: 300;
         }
 
+        /* 請將下面這段加入到這裡 */
+        .website-link {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 0.9em;
+            color: #E91B50;
+            text-decoration: none;
+            border: 1px solid #E91B50;
+            padding: 6px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .website-link:hover {
+            background: #E91B50;
+            color: white;
+        }
+
         /* Main Layout */
         form.main-content {
             display: grid;
@@ -577,6 +595,7 @@
     <header>
         <h1>光聿團購</h1>
         <p class="subtitle">UP Sports 運動補給</p>
+        <a href="https://www.upsports.tw/" target="_blank" class="website-link">前往 UP Sports 官方網站</a>
     </header>
 
     <div class="container">
