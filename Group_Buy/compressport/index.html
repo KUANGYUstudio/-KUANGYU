@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>光聿團購 - Compressport 跑褲</title>
-
+    <!-- 加入這兩行讓 LINE 預覽顯示專屬文字 -->
     <meta name="description" content="光聿工作室 Compressport 跑褲專屬團購表單。提供多款輕量跑褲與雙層飄褲，歡迎填單選購！">
     <meta property="og:description" content="光聿工作室 Compressport 跑褲專屬團購表單。提供多款輕量跑褲與雙層飄褲，歡迎填單選購！">
     
+    <title>光聿團購 - Compressport 跑褲</title>
     <style>
         * {
             margin: 0;
@@ -745,9 +745,17 @@
             box-shadow: 0 4px 12px rgba(227, 0, 15, 0.2);
         }
 
-        button.submit-btn:hover {
+        button.submit-btn:hover:not(:disabled) {
             background: #B3000C;
             transform: translateY(-2px);
+        }
+        
+        /* 防呆機制：停用按鈕的樣式 */
+        button.submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
 
         /* Mobile Floating Cart Bar */
@@ -1499,8 +1507,12 @@
             document.getElementById('guideModal').classList.remove('show');
         }
         
+        // 修改這裡：關閉成功視窗時，才觸發重整與重新抓取資料
         function closeSuccessModal() {
             document.getElementById('successModal').classList.remove('show');
+            document.getElementById('pageLoading').classList.add('show');
+            fetchInventoryAndRender();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function showError(message) {
@@ -1524,6 +1536,7 @@
             
             const totalAmount = parseInt(document.getElementById('totalAmount').value);
 
+            // 1. 先執行所有防呆驗證
             if (!name || !email || !paymentMethod) {
                 showError('請填寫完整必填資訊');
                 return;
@@ -1553,6 +1566,11 @@
                 return;
             }
 
+            // 2. 驗證通過後，立刻鎖死送出按鈕防止連點
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '處理中...';
+
             const orderItems = Object.values(cart).map(item => ({
                 code: item.code,
                 color: item.color,
@@ -1578,6 +1596,8 @@
         }
 
         function submitToGAS(orderData) {
+            const submitBtn = document.querySelector('.submit-btn');
+            
             fetch(GAS_URL, {
                 redirect: 'follow',
                 method: 'POST',
@@ -1594,9 +1614,12 @@
                 if(data.result === 'error') {
                     throw new Error(data.message);
                 }
+                
+                // 成功送出：隱藏處理中字樣，只顯示成功視窗
                 document.getElementById('loading').classList.remove('show');
                 document.getElementById('successModal').classList.add('show');
                 
+                // 在背景悄悄清空表單
                 document.getElementById('orderForm').reset();
                 document.getElementById('bankInfo').classList.remove('show');
                 const accountLast5Group = document.getElementById('accountLast5Group');
@@ -1606,13 +1629,17 @@
                 updateCart();
                 setFilter('all'); 
                 
-                document.getElementById('pageLoading').classList.add('show');
-                fetchInventoryAndRender();
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // 解除按鈕鎖定
+                submitBtn.disabled = false;
+                submitBtn.textContent = '送出訂單';
             })
             .catch(error => {
                 document.getElementById('loading').classList.remove('show');
+                
+                // 發生錯誤時：解除按鈕鎖定，讓學生可以重試
+                submitBtn.disabled = false;
+                submitBtn.textContent = '送出訂單';
+                
                 console.error('Error:', error);
                 showError('提交失敗，錯誤訊息：' + error.message);
             });
@@ -1625,7 +1652,8 @@
             const guideModal = document.getElementById('guideModal');
             
             if (e.target === imgModal) closeImageModal();
-            if (e.target === successModal) closeSuccessModal();
+            // 點擊黑底時也會觸發 closeSuccessModal 進行重整
+            if (e.target === successModal) closeSuccessModal(); 
             if (e.target === deleteModal) cancelDelete(); 
             if (e.target === guideModal) closeGuideModal();
         });
