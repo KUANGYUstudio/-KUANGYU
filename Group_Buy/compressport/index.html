@@ -1057,7 +1057,7 @@
         ];
 
         let cart = {};
-        // 將此處替換為您最新部署的 GAS 網址
+        // 這是您為 Compressport 專屬建立的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbw5TwuhucK68CuBtbRh8mwo8A9-VTMkVx2-Y11F4XsZUZK05fwLF_K6aPWnNWMr8x4R/exec";
         let currentFilter = 'all';
         let inventoryData = null; 
@@ -1106,7 +1106,6 @@
         }
 
         function getStock(code, color, size) {
-            // 目前後端不控管庫存，預設回傳 999 避免按鈕被反灰鎖定
             if (!inventoryData || !inventoryData.stockData || Object.keys(inventoryData.stockData).length === 0) return 999;
             const key = code + "|" + color + "|" + size;
             return inventoryData.stockData[key] !== undefined ? parseInt(inventoryData.stockData[key]) : 999;
@@ -1178,9 +1177,9 @@
                                             ${item.sizes.map(size => {
                                                 const stock = getStock(item.code, item.color, size);
                                                 if (stock <= 0) {
-                                                    return \`<option value="${size}" disabled>${size} (已售完)</option>\`;
+                                                    return `<option value="${size}" disabled>${size} (已售完)</option>`;
                                                 } else {
-                                                    return \`<option value="${size}">${size}</option>\`;
+                                                    return `<option value="${size}">${size}</option>`;
                                                 }
                                             }).join('')}
                                         </select>
