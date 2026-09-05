@@ -1070,7 +1070,6 @@
         });
 
         function fetchInventoryAndRender() {
-            // 加入時間戳記，確保不會讀取到舊的快取狀態
             const noCacheUrl = GAS_URL + "?t=" + new Date().getTime();
 
             fetch(noCacheUrl)
