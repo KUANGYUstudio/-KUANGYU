@@ -212,7 +212,7 @@
             box-shadow: 0 0 0 3px rgba(227, 0, 15, 0.1);
         }
 
-        /* Filter Section (電腦版預設排列) */
+        /* Filter Section */
         .filter-container {
             display: flex;
             flex-wrap: wrap;
@@ -879,7 +879,7 @@
 <body>
     <div class="page-loading-overlay show" id="pageLoading">
         <div class="spinner"></div>
-        <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在讀取即時庫存...</div>
+        <div style="color: #333; font-weight: 700; font-size: 1.1em;">正在檢查團購狀態...</div>
     </div>
     
     <div class="error-message" id="errorMessage"></div>
@@ -1029,10 +1029,10 @@
                 description: "輕量透氣，舒適好跑",
                 type: "男款/中性款",
                 items: [
-                    { code: "CS1-2417", color: "極光黑", sizes: ["S","M","L","XL"], price: 1500, image: "" },
-                    { code: "CS1-2417", color: "黑", sizes: ["S","M","L","XL"], price: 1500, image: "" },
-                    { code: "CS1-2417", color: "靛藍", sizes: ["S","M","L","XL"], price: 1500, image: "" },
-                    { code: "CS1-2417", color: "虎百合橘", sizes: ["S","M","L","XL"], price: 1500, image: "" }
+                    { code: "CS1-2417", color: "極光黑", sizes: ["S","M","L","XL"], price: 1500, image: "compressport_pics/CS1-2417-1AU.jpeg" },
+                    { code: "CS1-2417", color: "黑", sizes: ["S","M","L","XL"], price: 1500, image: "compressport_pics/CS1-2417-1BK.jpeg" },
+                    { code: "CS1-2417", color: "靛藍", sizes: ["S","M","L","XL"], price: 1500, image: "compressport_pics/CS1-2417-1I.jpeg" },
+                    { code: "CS1-2417", color: "虎百合橘", sizes: ["S","M","L","XL"], price: 1500, image: "compressport_pics/CS1-2417-1TI.jpeg" }
                 ]
             },
             {
@@ -1040,8 +1040,8 @@
                 description: "雙層設計，防走光更安心",
                 type: "男款/中性款",
                 items: [
-                    { code: "CS1-2422", color: "黑色", sizes: ["S","M","L","XL"], price: 1500, image: "" },
-                    { code: "CS1-2422", color: "渲染粉", sizes: ["S","M","L","XL"], price: 1500, image: "" }
+                    { code: "CS1-2422", color: "黑色", sizes: ["S","M","L","XL"], price: 1500, image: "compressport_pics/CS1-2422-1BK.jpeg" },
+                    { code: "CS1-2422", color: "渲染粉", sizes: ["S","M","L","XL"], price: 1500, image: "compressport_pics/CS1-2422-1ZE.jpeg" }
                 ]
             },
             {
@@ -1049,9 +1049,9 @@
                 description: "專為女性設計，輕量貼合",
                 type: "女款",
                 items: [
-                    { code: "CS1-2426", color: "極光黑", sizes: ["XS","S","M","L"], price: 1500, image: "" },
-                    { code: "CS1-2426", color: "黑色", sizes: ["XS","S","M","L"], price: 1500, image: "" },
-                    { code: "CS1-2426", color: "渲染粉", sizes: ["XS","S","M","L"], price: 1500, image: "" }
+                    { code: "CS1-2426", color: "極光黑", sizes: ["XS","S","M","L"], price: 1500, image: "compressport_pics/CS1-2426-2AU.jpeg" },
+                    { code: "CS1-2426", color: "黑色", sizes: ["XS","S","M","L"], price: 1500, image: "compressport_pics/CS1-2426-2BK.jpeg" },
+                    { code: "CS1-2426", color: "渲染粉", sizes: ["XS","S","M","L"], price: 1500, image: "compressport_pics/CS1-2426-2ZE.jpeg" }
                 ]
             }
         ];
@@ -1064,23 +1064,42 @@
         
         let pendingDeleteKey = null;
 
-        const imageExtension = ".png";
-
         document.addEventListener('DOMContentLoaded', () => {
             fetchInventoryAndRender();
             setupEventListeners();
         });
 
         function fetchInventoryAndRender() {
-            fetch(GAS_URL)
+            // 加入時間戳記，確保不會讀取到舊的快取狀態
+            const noCacheUrl = GAS_URL + "?t=" + new Date().getTime();
+
+            fetch(noCacheUrl)
                 .then(response => response.json())
                 .then(data => {
+                    if (data && data.isOpen === false) {
+                        document.getElementById('pageLoading').classList.remove('show');
+                        document.getElementById('orderForm').style.display = 'none';
+                        
+                        const closedDiv = document.createElement('div');
+                        closedDiv.style.textAlign = 'center';
+                        closedDiv.style.padding = '60px 20px';
+                        closedDiv.style.background = 'white';
+                        closedDiv.style.borderRadius = '8px';
+                        closedDiv.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)';
+                        closedDiv.style.fontSize = '1.5em';
+                        closedDiv.style.fontWeight = '700';
+                        closedDiv.style.color = '#E3000F';
+                        closedDiv.innerHTML = 'Compressport 團購目前未開放<br><span style="font-size:0.6em; color:#666; font-weight:400; margin-top:10px; display:block;">敬請期待下次開團</span>';
+                        document.querySelector('.container').appendChild(closedDiv);
+                        return;
+                    }
+
                     inventoryData = data;
                     document.getElementById('pageLoading').classList.remove('show');
                     renderProducts(); 
                 })
                 .catch(error => {
-                    console.error('取得庫存失敗:', error);
+                    console.error('取得狀態失敗:', error);
                     inventoryData = {};
                     document.getElementById('pageLoading').classList.remove('show');
                     renderProducts();
@@ -1088,9 +1107,10 @@
         }
 
         function getStock(code, color, size) {
-            if (!inventoryData) return 0;
+            // 目前後端不控管庫存，預設回傳 999 避免按鈕被反灰鎖定
+            if (!inventoryData || !inventoryData.stockData || Object.keys(inventoryData.stockData).length === 0) return 999;
             const key = code + "|" + color + "|" + size;
-            return inventoryData[key] !== undefined ? parseInt(inventoryData[key]) : 0;
+            return inventoryData.stockData[key] !== undefined ? parseInt(inventoryData.stockData[key]) : 999;
         }
 
         function scrollToCheckout() {
@@ -1134,8 +1154,7 @@
 
                 group.items.forEach((item, itemIndex) => {
                     const fallbackImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' style='background:%23f0f0f0'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%23999'%3E暫無圖片%3C/text%3E%3C/svg%3E";
-                    const autoImgPath = "compressport_pics/" + item.code + imageExtension;
-                    const imgSrc = item.image ? item.image : autoImgPath;
+                    const imgSrc = item.image ? item.image : fallbackImage;
                     
                     let totalStockForThisItem = 0;
                     item.sizes.forEach(size => {
@@ -1160,9 +1179,9 @@
                                             ${item.sizes.map(size => {
                                                 const stock = getStock(item.code, item.color, size);
                                                 if (stock <= 0) {
-                                                    return `<option value="${size}" disabled>${size} (已售完)</option>`;
+                                                    return \`<option value="${size}" disabled>${size} (已售完)</option>\`;
                                                 } else {
-                                                    return `<option value="${size}">${size}</option>`;
+                                                    return \`<option value="${size}">${size}</option>\`;
                                                 }
                                             }).join('')}
                                         </select>
@@ -1255,7 +1274,7 @@
             let newQty = cart[cartKey].qty + delta;
             
             if (delta > 0 && newQty > stock) {
-                showError('此款式尺寸目前僅剩 ' + stock + ' 件');
+                showError('此款式尺寸目前庫存不足');
                 return;
             }
             
@@ -1287,7 +1306,7 @@
             const newQty = item.qty + delta;
             
             if (delta > 0 && newQty > stock) {
-                showError('此款式尺寸目前僅剩 ' + stock + ' 件');
+                showError('此款式尺寸目前庫存不足');
                 return;
             }
             
