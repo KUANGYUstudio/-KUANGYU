@@ -114,7 +114,24 @@
             font-size: 1.1em;
             color: #666;
             font-weight: 300;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+        }
+
+        .website-link {
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #E3000F;
+            text-decoration: none;
+            border: 1px solid #E3000F;
+            padding: 6px 16px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .website-link:hover {
+            background: #E3000F;
+            color: white;
         }
 
         /* Main Layout */
@@ -888,6 +905,7 @@
         <img src="https://kuangyu.studio/KUANGYU_logo_icon.png" alt="光聿 Logo" class="header-logo">
         <h1>光聿團購</h1>
         <p class="subtitle">Compressport 跑褲系列</p>
+        <a href="https://www.miosports.com.tw/v2/official/SalePageCategory/349640?sortMode=Curator" target="_blank" class="website-link">前往 Compressport 官方網站</a>
     </header>
 
     <div class="container">
@@ -1057,7 +1075,6 @@
         ];
 
         let cart = {};
-        // 這是您為 Compressport 專屬建立的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbw5TwuhucK68CuBtbRh8mwo8A9-VTMkVx2-Y11F4XsZUZK05fwLF_K6aPWnNWMr8x4R/exec";
         let currentFilter = 'all';
         let inventoryData = null; 
@@ -1177,9 +1194,9 @@
                                             ${item.sizes.map(size => {
                                                 const stock = getStock(item.code, item.color, size);
                                                 if (stock <= 0) {
-                                                    return `<option value="${size}" disabled>${size} (已售完)</option>`;
+                                                    return \`<option value="${size}" disabled>${size} (已售完)</option>\`;
                                                 } else {
-                                                    return `<option value="${size}">${size}</option>`;
+                                                    return \`<option value="${size}">${size}</option>\`;
                                                 }
                                             }).join('')}
                                         </select>
