@@ -891,6 +891,15 @@
             display: block;
             border-radius: 4px;
         }
+        
+        .guide-subtitle {
+            text-align: center; 
+            color: #E3000F; 
+            margin-top: 15px; 
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -1035,8 +1044,14 @@
         <div class="guide-modal-content">
             <button class="modal-close" onclick="closeGuideModal()">×</button>
             <h2 style="text-align: center; color: #333; margin-bottom: 20px; font-size: 1.4em;">尺寸與挑選指南</h2>
-            <img src="compressport_pics/Guide01.webp" alt="挑選指南1" class="guide-image">
-            <img src="compressport_pics/Guide02.webp" alt="尺寸表" class="guide-image" style="margin-bottom: 0;">
+            
+            <img src="compressport_pics/Guide01.webp" alt="挑選指南說明" class="guide-image">
+            
+            <div class="guide-subtitle">男款 / 中性款 尺寸表</div>
+            <img src="compressport_pics/Men_size.png" alt="男款尺寸表" class="guide-image">
+            
+            <div class="guide-subtitle">女款 尺寸表</div>
+            <img src="compressport_pics/Women_size.png" alt="女款尺寸表" class="guide-image" style="margin-bottom: 0;">
         </div>
     </div>
 
@@ -1075,6 +1090,7 @@
         ];
 
         let cart = {};
+        // 這是您為 Compressport 專屬建立的 GAS 網址
         let GAS_URL = "https://script.google.com/macros/s/AKfycbw5TwuhucK68CuBtbRh8mwo8A9-VTMkVx2-Y11F4XsZUZK05fwLF_K6aPWnNWMr8x4R/exec";
         let currentFilter = 'all';
         let inventoryData = null; 
