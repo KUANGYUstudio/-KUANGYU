@@ -1146,10 +1146,10 @@
             const container = document.getElementById('productsContainer');
             
             let html = '<div class="filter-container">';
-            html += `<button type="button" class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">全部</button>`;
-            html += `<button type="button" class="filter-btn ${currentFilter === '男款/中性款' ? 'active' : ''}" onclick="setFilter('男款/中性款')">男款/中性款</button>`;
-            html += `<button type="button" class="filter-btn ${currentFilter === '女款' ? 'active' : ''}" onclick="setFilter('女款')">女款</button>`;
-            html += `<button type="button" class="guide-btn" onclick="openGuideModal()">尺寸與挑選指南</button>`;
+            html += '<button type="button" class="filter-btn ' + (currentFilter === 'all' ? 'active' : '') + '" onclick="setFilter(\'all\')">全部</button>';
+            html += '<button type="button" class="filter-btn ' + (currentFilter === '男款/中性款' ? 'active' : '') + '" onclick="setFilter(\'男款/中性款\')">男款/中性款</button>';
+            html += '<button type="button" class="filter-btn ' + (currentFilter === '女款' ? 'active' : '') + '" onclick="setFilter(\'女款\')">女款</button>';
+            html += '<button type="button" class="guide-btn" onclick="openGuideModal()">尺寸與挑選指南</button>';
             html += '</div>';
 
             PRODUCTS.forEach((group, groupIndex) => {
@@ -1177,6 +1177,16 @@
                     });
                     const isCompletelySoldOut = totalStockForThisItem <= 0;
                     
+                    let optionsHtml = '<option value="">選擇尺寸</option>';
+                    item.sizes.forEach(size => {
+                        const stock = getStock(item.code, item.color, size);
+                        if (stock <= 0) {
+                            optionsHtml += '<option value="' + size + '" disabled>' + size + ' (已售完)</option>';
+                        } else {
+                            optionsHtml += '<option value="' + size + '">' + size + '</option>';
+                        }
+                    });
+                    
                     html += `
                                 <div class="product-card ${isCompletelySoldOut ? 'is-sold-out' : ''}" id="product-${groupIndex}-${itemIndex}">
                                     <div class="image-wrapper">
@@ -1190,15 +1200,7 @@
                                     </div>
                                     <div class="controls-wrapper">
                                         <select class="size-select" id="size-${groupIndex}-${itemIndex}" onchange="handleSizeChange(${groupIndex}, ${itemIndex})" ${isCompletelySoldOut ? 'disabled' : ''}>
-                                            <option value="">選擇尺寸</option>
-                                            ${item.sizes.map(size => {
-                                                const stock = getStock(item.code, item.color, size);
-                                                if (stock <= 0) {
-                                                    return \`<option value="${size}" disabled>${size} (已售完)</option>\`;
-                                                } else {
-                                                    return \`<option value="${size}">${size}</option>\`;
-                                                }
-                                            }).join('')}
+                                            ${optionsHtml}
                                         </select>
                                         <div class="qty-control">
                                             <button type="button" class="qty-btn" onclick="changeQty(${groupIndex}, ${itemIndex}, -1)">−</button>
