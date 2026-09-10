@@ -104,36 +104,6 @@
             border-radius: 4px;
             display: inline-block;
         }
-        /* Table */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            margin-bottom: 30px;
-        }
-        .size-table {
-            width: 100%;
-            min-width: 400px;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        .size-table th {
-            background-color: var(--main-light);
-            color: var(--main-dark);
-            font-weight: 600;
-            padding: 14px 16px;
-            text-align: left;
-            white-space: nowrap;
-        }
-        .size-table td {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border-color);
-            color: #444;
-        }
-        .size-table tr:last-child td {
-            border-bottom: none;
-        }
         /* Form elements */
         .form-row {
             display: flex;
@@ -231,7 +201,6 @@
 <body>
     <div class="container">
         <header>
-            <!-- 替換為實際的 Logo 圖片連結 -->
             <img src="https://kuangyu.studio/KUANGYU_logo_icon.png" alt="KUANGYU Logo" class="header-logo">
             <h1>光聿鐵人服 預購</h1>
         </header>
@@ -254,61 +223,19 @@
                 <div class="price-tag">售價：$8500</div>
             </div>
 
-            <!-- 請將 src 替換為實際的圖片連結 -->
             <div class="image-card">
                 <div class="image-card-title">商品款式外觀</div>
-                <img src="https://via.placeholder.com/800x600/eef2f5/164082?text=Suit+Image" alt="鐵人服商品圖">
+                <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/trisuit.jpg" alt="鐵人服商品圖">
             </div>
 
             <div class="image-card">
-                <div class="image-card-title">口袋細節說明</div>
-                <img src="https://via.placeholder.com/800x400/eef2f5/164082?text=Pocket+Details" alt="口袋說明圖">
+                <div class="image-card-title">口袋與細節說明</div>
+                <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/feature.jpg" alt="細節說明圖">
             </div>
 
-            <div class="table-responsive">
-                <table class="size-table">
-                    <thead>
-                        <tr>
-                            <th>尺寸</th>
-                            <th>胸圍 (cm)</th>
-                            <th>腰圍 (cm)</th>
-                            <th>臀圍 (cm)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- 尺寸數據為範例，請依實際尺寸表進行修改 -->
-                        <tr>
-                            <td><strong>XS</strong></td>
-                            <td>80 - 84</td>
-                            <td>64 - 68</td>
-                            <td>84 - 88</td>
-                        </tr>
-                        <tr>
-                            <td><strong>S</strong></td>
-                            <td>84 - 88</td>
-                            <td>68 - 72</td>
-                            <td>88 - 92</td>
-                        </tr>
-                        <tr>
-                            <td><strong>M</strong></td>
-                            <td>88 - 92</td>
-                            <td>72 - 76</td>
-                            <td>92 - 96</td>
-                        </tr>
-                        <tr>
-                            <td><strong>L</strong></td>
-                            <td>92 - 96</td>
-                            <td>76 - 80</td>
-                            <td>96 - 100</td>
-                        </tr>
-                        <tr>
-                            <td><strong>XL</strong></td>
-                            <td>96 - 100</td>
-                            <td>80 - 84</td>
-                            <td>100 - 104</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="image-card">
+                <div class="image-card-title">尺寸對照表</div>
+                <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/size.jpg" alt="尺寸對照表">
             </div>
 
             <div class="section-title">02 / 訂購人資料</div>
@@ -350,6 +277,7 @@
                     <option value="M">M</option>
                     <option value="L">L</option>
                     <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
                 </select>
             </div>
 
