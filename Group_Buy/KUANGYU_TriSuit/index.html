@@ -208,6 +208,10 @@
         <form id="preorderForm">
             <div class="section-title">01 / 產品資訊與尺寸</div>
             
+            <div class="image-card">
+                <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/trisuit.png" alt="鐵人服商品圖">
+            </div>
+
             <div class="product-desc">
                 <strong style="color: #102e5e; font-size: 16px;">FREVO連身三鐵服介紹</strong>
                 <ul class="feature-list">
@@ -224,11 +228,6 @@
             </div>
 
             <div class="image-card">
-                <div class="image-card-title">商品款式外觀</div>
-                <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/trisuit.png" alt="鐵人服商品圖">
-            </div>
-
-            <div class="image-card">
                 <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/feature.jpg" alt="細節說明圖">
             </div>
 
@@ -236,11 +235,11 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label class="field-label">姓名<span class="required-star">*</span></label>
+                    <label class="field-label">訂購人姓名<span class="required-star">*</span></label>
                     <input type="text" name="name" required>
                 </div>
                 <div class="form-group">
-                    <label class="field-label">性別<span class="required-star">*</span></label>
+                    <label class="field-label">性別 (Gender)<span class="required-star">*</span></label>
                     <div class="option-group">
                         <label class="option-label"><input type="radio" name="gender" value="男" required><span>男</span></label>
                         <label class="option-label"><input type="radio" name="gender" value="女"><span>女</span></label>
@@ -266,46 +265,74 @@
                 <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/size.jpg" alt="尺寸對照表">
             </div>
 
-            <div class="form-group">
-                <label class="field-label">尺寸選擇<span class="required-star">*</span></label>
-                <select name="size" required>
-                    <option value="" disabled selected>請選擇尺寸</option>
-                    <option value="XS">XS</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option value="XXL">XXL</option>
-                </select>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="field-label">上身尺寸 (Body Size)<span class="required-star">*</span></label>
+                    <select name="bodySize" required>
+                        <option value="" disabled selected>請選擇上身尺寸</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="field-label">下身尺寸 (Leg Size)<span class="required-star">*</span></label>
+                    <select name="legSize" required>
+                        <option value="" disabled selected>請選擇下身尺寸</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-group">
-                <label class="field-label">是否加印名字<span class="required-star">*</span></label>
+                <label class="field-label">腿圍寬度 (Leg Gripper Width)<span class="required-star">*</span></label>
+                <div class="option-group">
+                    <label class="option-label"><input type="radio" name="legGripperWidth" value="維持原尺寸" required><span>維持原尺寸</span></label>
+                    <label class="option-label"><input type="radio" name="legGripperWidth" value="放寬 1cm"><span>放寬 1cm</span></label>
+                    <label class="option-label"><input type="radio" name="legGripperWidth" value="放寬 2cm"><span>放寬 2cm</span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="field-label">腿長調整 (Leg Length)<span class="required-star">*</span></label>
+                <div class="option-group">
+                    <label class="option-label"><input type="radio" name="legLength" value="維持原尺寸" required><span>維持原尺寸</span></label>
+                    <label class="option-label"><input type="radio" name="legLength" value="加長 3cm"><span>加長 3cm</span></label>
+                    <label class="option-label"><input type="radio" name="legLength" value="縮短 3cm"><span>縮短 3cm</span></label>
+                    <label class="option-label"><input type="radio" name="legLength" value="加長 5cm"><span>加長 5cm</span></label>
+                    <label class="option-label"><input type="radio" name="legLength" value="縮短 5cm"><span>縮短 5cm</span></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="field-label">是否加印名字 (Printed Name)<span class="required-star">*</span></label>
                 <div class="option-group">
                     <label class="option-label"><input type="radio" name="printNameOption" value="否" required><span>否，不需要</span></label>
                     <label class="option-label"><input type="radio" name="printNameOption" value="是"><span>是，我要加印名字 (+$150)</span></label>
                 </div>
+                <span class="note-text">※ 包含中英文與空白，大小寫均可，最多 8 個字元</span>
             </div>
 
             <div class="dynamic-panel" id="printNamePanel">
                 <label class="field-label">加印的名稱<span class="required-star">*</span></label>
-                <input type="text" name="printName" id="printNameInput" placeholder="請輸入欲加印的名稱">
-            </div>
-
-            <div class="form-group">
-                <label class="field-label">腿圍調整<span class="required-star">*</span></label>
-                <div class="option-group">
-                    <label class="option-label"><input type="radio" name="thighOption" value="原尺寸" required><span>維持原尺寸</span></label>
-                    <label class="option-label"><input type="radio" name="thighOption" value="放寬 1cm"><span>放寬 1cm</span></label>
-                    <label class="option-label"><input type="radio" name="thighOption" value="放寬 2cm"><span>放寬 2cm</span></label>
-                </div>
+                <!-- 加入 maxlength="8" 限制最高輸入字元數 -->
+                <input type="text" name="printName" id="printNameInput" placeholder="請輸入欲加印的名稱 (最多 8 字)" maxlength="8">
             </div>
 
             <div class="section-title">04 / 其他</div>
 
             <div class="form-group">
-                <label class="field-label">備註 / 其他交辦事項</label>
-                <textarea name="remarks" placeholder="如果有其他特殊需求或疑問，請在此填寫..."></textarea>
+                <label class="field-label">備註 (Remarks)</label>
+                <!-- 更新備註欄預設提示文字 -->
+                <textarea name="remarks" placeholder="如果有其他特殊需求或疑問，請在此填寫...&#10;※ 若袖圍或袖長有壓迫或太鬆等特殊調整需求，請於此說明尺寸增減幅度。"></textarea>
             </div>
 
             <button type="submit">確認送出預購</button>
