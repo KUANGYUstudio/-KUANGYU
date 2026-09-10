@@ -86,6 +86,24 @@
             margin-bottom: 25px;
             line-height: 1.8;
         }
+        .feature-list {
+            margin: 15px 0 25px 0;
+            padding-left: 20px;
+            color: #444;
+        }
+        .feature-list li {
+            margin-bottom: 10px;
+        }
+        .price-tag {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--main-dark);
+            margin-bottom: 25px;
+            padding: 12px 18px;
+            background-color: var(--main-light);
+            border-radius: 4px;
+            display: inline-block;
+        }
         /* Table */
         .table-responsive {
             width: 100%;
@@ -135,6 +153,12 @@
             font-size: 14px;
             color: #444;
             margin-bottom: 8px;
+        }
+        .note-text {
+            font-size: 13px;
+            color: #666;
+            margin-top: 6px;
+            display: block;
         }
         input[type="text"], input[type="email"], input[type="tel"], select, textarea {
             width: 100%;
@@ -207,6 +231,7 @@
 <body>
     <div class="container">
         <header>
+            <!-- 替換為實際的 Logo 圖片連結 -->
             <img src="https://kuangyu.studio/KUANGYU_logo_icon.png" alt="KUANGYU Logo" class="header-logo">
             <h1>光聿鐵人服 預購</h1>
         </header>
@@ -215,7 +240,18 @@
             <div class="section-title">01 / 產品資訊與尺寸</div>
             
             <div class="product-desc">
-                光聿專屬訂製鐵人服，採用高彈力透氣排汗布料，提供極佳的肌肉支撐與舒適度。針對長距離賽事設計，背部與腿部配有補給口袋，方便拿取補給品。
+                <strong style="color: #102e5e; font-size: 16px;">FREVO連身三鐵服介紹</strong>
+                <ul class="feature-list">
+                    <li>韓國製，專為亞洲人設計</li>
+                    <li>上身義大利布料使用，良好的透氣效果</li>
+                    <li>下身為韓國布料，附加防潑水效果，提升游泳效率</li>
+                    <li>共 7 個口袋：後 4 個口袋，內側有多加 2 個，領口再 1 個，分散擺放不同功能補給品、冰塊等（現在補給膠囊、果膠等等功能分類比較多）</li>
+                    <li>袖緣設計穩定，無矽膠提升穿脫便利性</li>
+                    <li>韓國製拉鍊，具有防暴效果（拉鍊頭往下放好時不滑動）</li>
+                    <li>義大利褲墊選用，分男、女款</li>
+                    <li>版型不分男、女款</li>
+                </ul>
+                <div class="price-tag">售價：$8500</div>
             </div>
 
             <!-- 請將 src 替換為實際的圖片連結 -->
@@ -288,6 +324,7 @@
                         <label class="option-label"><input type="radio" name="gender" value="男" required><span>男</span></label>
                         <label class="option-label"><input type="radio" name="gender" value="女"><span>女</span></label>
                     </div>
+                    <span class="note-text">※ 版型不分男女，此選項為配置對應的義大利褲墊</span>
                 </div>
             </div>
 
@@ -320,7 +357,7 @@
                 <label class="field-label">是否加印名字<span class="required-star">*</span></label>
                 <div class="option-group">
                     <label class="option-label"><input type="radio" name="printNameOption" value="否" required><span>否，不需要</span></label>
-                    <label class="option-label"><input type="radio" name="printNameOption" value="是"><span>是，我要加印名字</span></label>
+                    <label class="option-label"><input type="radio" name="printNameOption" value="是"><span>是，我要加印名字 (+$150)</span></label>
                 </div>
             </div>
 
