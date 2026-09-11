@@ -60,17 +60,22 @@
             letter-spacing: 0.08em;
         }
         .image-card {
-            background: #fff;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .image-card img {
             width: 100%;
             height: auto;
-            border-radius: 4px;
+            border-radius: 6px;
             display: block;
+            margin: 0 auto;
+        }
+        .img-small {
+            width: 80% !important;
+        }
+        @media (max-width: 600px) {
+            .img-small {
+                width: 100% !important;
+            }
         }
         .product-desc {
             font-size: 15px;
@@ -189,7 +194,6 @@
             align-items: center;
         }
         
-        /* 獨立按鈕樣式 */
         .action-btn-group {
             display: flex;
             gap: 20px;
@@ -249,7 +253,6 @@
         </header>
 
         <form id="mainForm">
-            <!-- 移除 01 細節說明標題，直接從圖片與說明開始 -->
             <div class="image-card" style="margin-top: 20px;">
                 <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/trisuit.png" alt="鐵人服商品圖">
             </div>
@@ -270,20 +273,17 @@
             </div>
 
             <div class="image-card">
-                <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/feature.PNG" alt="細節說明圖">
+                <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/feature.PNG" alt="細節說明圖" class="img-small">
             </div>
 
-            <!-- 第一個標題改為選擇服務項目 -->
             <div class="section-title">01 / 請選擇服務項目</div>
             
             <div class="action-btn-group">
                 <button type="button" class="action-btn" id="btnPurchase">我要購買</button>
                 <button type="button" class="action-btn" id="btnFit">我要預約試穿</button>
             </div>
-            <!-- 隱藏欄位用來記錄選擇的服務項目 -->
             <input type="hidden" name="serviceType" id="serviceTypeInput">
 
-            <!-- 預約試穿流程 -->
             <div id="fittingFlow" style="display: none;">
                 <div class="section-title">02 / 預約資料與時段</div>
                 <div class="form-row">
@@ -318,7 +318,6 @@
                 <span class="note-text" style="color: var(--main-color); margin-bottom: 20px;">※ 送出後，工作室將有專人與您聯繫確認最終時段。</span>
             </div>
 
-            <!-- 購買預購流程 -->
             <div id="purchaseFlow" style="display: none;">
                 <div class="section-title">02 / 訂購人資料</div>
 
@@ -509,7 +508,6 @@
             displayTotalAmount.textContent = 'NT$ ' + currentTotal.toLocaleString();
         }
 
-        // 處理動態必填欄位與顯示隱藏
         function toggleFlowRequirements(isPurchase) {
             submitBtn.style.display = 'block';
 
@@ -518,11 +516,9 @@
                 fittingFlow.style.display = 'none';
                 submitBtn.textContent = '確認送出預購';
 
-                // 購買流程的必填
                 purchaseFlow.querySelectorAll('[data-req="true"]').forEach(el => el.required = true);
                 fittingFlow.querySelectorAll('input, select').forEach(el => el.required = false);
 
-                // 重新檢查動態欄位
                 if (document.querySelector('input[name="printNameOption"]:checked')?.value === '是') printNameInput.required = true;
                 const deliv = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
                 if (deliv === '郵寄' || deliv === '7-11店到店') {
@@ -537,13 +533,11 @@
                 fittingFlow.style.display = 'block';
                 submitBtn.textContent = '確認送出預約';
 
-                // 試穿流程的必填
                 fittingFlow.querySelectorAll('[data-req="true"]').forEach(el => el.required = true);
                 purchaseFlow.querySelectorAll('input, select, textarea').forEach(el => el.required = false);
             }
         }
 
-        // 獨立大按鈕切換邏輯
         function selectService(type) {
             serviceTypeInput.value = type;
             if (type === '我要購買') {
@@ -560,7 +554,6 @@
         btnPurchase.addEventListener('click', () => selectService('我要購買'));
         btnFit.addEventListener('click', () => selectService('我要預約試穿'));
 
-        // 處理加印名稱
         const printNamePanel = document.getElementById('printNamePanel');
         const printNameInput = document.getElementById('printNameInput');
         document.querySelectorAll('input[name="printNameOption"]').forEach(radio => {
@@ -579,7 +572,6 @@
             });
         });
 
-        // 處理取貨方式
         const shippingPanel = document.getElementById('shippingPanel');
         const recipientNameInput = document.getElementById('recipientNameInput');
         const recipientPhoneInput = document.getElementById('recipientPhoneInput');
@@ -598,12 +590,12 @@
                     shippingPriceValue = 0;
                     shippingPanel.style.display = 'none';
                     recipientNameInput.required = false; recipientPhoneInput.required = false; recipientAddressInput.required = false;
+                    recipientNameInput.value = ''; recipientPhoneInput.value = ''; recipientAddressInput.value = '';
                 }
                 updateTotalAmount();
             });
         });
 
-        // 處理匯款資訊
         const bankDetailsPanel = document.getElementById('bankDetailsPanel');
         const accountLast5Input = document.getElementById('accountLast5Input');
         const remittanceDateInput = document.getElementById('remittanceDateInput');
@@ -615,11 +607,11 @@
                 } else {
                     bankDetailsPanel.style.display = 'none';
                     accountLast5Input.required = false; remittanceDateInput.required = false;
+                    accountLast5Input.value = ''; remittanceDateInput.value = '';
                 }
             });
         });
 
-        // 處理表單送出
         document.getElementById('mainForm').addEventListener('submit', (e) => {
             e.preventDefault();
             
