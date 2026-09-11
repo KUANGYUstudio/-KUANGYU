@@ -661,6 +661,14 @@
             transform: translateY(-2px);
         }
 
+        /* 新增：按鈕被停用時的樣式 */
+        button.submit-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         /* Mobile Floating Cart Bar */
         .mobile-floating-bar {
             display: none;
@@ -1397,6 +1405,11 @@
                 return;
             }
 
+            // 新增：鎖定送出按鈕，防止重複點擊
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '處理中...';
+
             const orderItems = Object.values(cart).map(item => ({
                 code: item.code,
                 name: item.name,
@@ -1421,6 +1434,9 @@
         }
 
         function submitToGAS(orderData) {
+            // 準備取得送出按鈕
+            const submitBtn = document.querySelector('.submit-btn');
+
             fetch(GAS_URL, {
                 redirect: 'follow',
                 method: 'POST',
@@ -1450,11 +1466,19 @@
                 setFilter('all'); 
                 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // 新增：成功送出後，解鎖按鈕並恢復文字
+                submitBtn.disabled = false;
+                submitBtn.textContent = '送出訂單';
             })
             .catch(error => {
                 document.getElementById('loading').classList.remove('show');
                 console.error('Error:', error);
                 showError('提交失敗，錯誤訊息：' + error.message);
+
+                // 新增：發生錯誤時，解鎖按鈕讓使用者可以重試
+                submitBtn.disabled = false;
+                submitBtn.textContent = '送出訂單';
             });
         }
 
