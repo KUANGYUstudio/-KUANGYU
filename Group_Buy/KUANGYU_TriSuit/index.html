@@ -188,6 +188,40 @@
             justify-content: space-between;
             align-items: center;
         }
+        
+        /* 獨立按鈕樣式 */
+        .action-btn-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 16px;
+            background: #fff;
+            color: var(--main-dark);
+            border: 2px solid var(--main-color);
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        .action-btn.active {
+            background: var(--main-color);
+            color: #fff;
+        }
+        .action-btn:hover {
+            background: var(--main-light);
+        }
+        .action-btn.active:hover {
+            background: var(--main-dark);
+        }
+        @media (max-width: 600px) {
+            .action-btn-group { flex-direction: column; gap: 15px; }
+        }
+
         button[type="submit"] {
             width: 100%;
             padding: 16px;
@@ -205,9 +239,6 @@
         button[type="submit"]:hover { background: var(--main-dark); }
         .required-star { color: var(--error-color); margin-left: 4px; }
         .submit-btn-disabled { background: #c5d0d6 !important; cursor: not-allowed !important; }
-        .service-selection-box {
-            background: #fff; border: 2px solid var(--main-color); padding: 20px; border-radius: 8px;
-        }
     </style>
 </head>
 <body>
@@ -218,9 +249,8 @@
         </header>
 
         <form id="mainForm">
-            <div class="section-title">01 / 細節說明</div>
-            
-            <div class="image-card">
+            <!-- 移除 01 細節說明標題，直接從圖片與說明開始 -->
+            <div class="image-card" style="margin-top: 20px;">
                 <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/trisuit.png" alt="鐵人服商品圖">
             </div>
 
@@ -243,21 +273,19 @@
                 <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/feature.PNG" alt="細節說明圖">
             </div>
 
-            <div class="section-title">02 / 請選擇服務項目</div>
-            <div class="service-selection-box form-group" style="margin-bottom: 30px;">
-                <div class="option-group" style="gap: 30px; justify-content: center;">
-                    <label class="option-label" style="font-weight: 700; font-size: 17px; color: var(--main-dark);">
-                        <input type="radio" name="serviceType" value="我要購買" required><span>我要購買</span>
-                    </label>
-                    <label class="option-label" style="font-weight: 700; font-size: 17px; color: var(--main-dark);">
-                        <input type="radio" name="serviceType" value="我要預約試穿"><span>我要預約試穿</span>
-                    </label>
-                </div>
+            <!-- 第一個標題改為選擇服務項目 -->
+            <div class="section-title">01 / 請選擇服務項目</div>
+            
+            <div class="action-btn-group">
+                <button type="button" class="action-btn" id="btnPurchase">我要購買</button>
+                <button type="button" class="action-btn" id="btnFit">我要預約試穿</button>
             </div>
+            <!-- 隱藏欄位用來記錄選擇的服務項目 -->
+            <input type="hidden" name="serviceType" id="serviceTypeInput">
 
             <!-- 預約試穿流程 -->
             <div id="fittingFlow" style="display: none;">
-                <div class="section-title">03 / 預約資料與時段</div>
+                <div class="section-title">02 / 預約資料與時段</div>
                 <div class="form-row">
                     <div class="form-group">
                         <label class="field-label">姓名<span class="required-star">*</span></label>
@@ -292,7 +320,7 @@
 
             <!-- 購買預購流程 -->
             <div id="purchaseFlow" style="display: none;">
-                <div class="section-title">03 / 訂購人資料</div>
+                <div class="section-title">02 / 訂購人資料</div>
 
                 <div class="form-row">
                     <div class="form-group">
@@ -320,7 +348,7 @@
                     </div>
                 </div>
 
-                <div class="section-title">04 / 客製化選項</div>
+                <div class="section-title">03 / 客製化選項</div>
                 
                 <div class="image-card">
                     <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/size.jpg" alt="尺寸對照表">
@@ -387,7 +415,7 @@
                     <input type="text" name="printName" id="printNameInput" placeholder="請輸入欲加印的名稱 (最多 8 字)" maxlength="8">
                 </div>
 
-                <div class="section-title">05 / 取貨與收件資訊</div>
+                <div class="section-title">04 / 取貨與收件資訊</div>
 
                 <div class="form-group">
                     <label class="field-label">取貨方式<span class="required-star">*</span></label>
@@ -415,14 +443,14 @@
                     </div>
                 </div>
 
-                <div class="section-title">06 / 其他</div>
+                <div class="section-title">05 / 其他</div>
 
                 <div class="form-group">
                     <label class="field-label">備註 (Remarks)</label>
                     <textarea name="remarks" placeholder="如果有其他特殊需求或疑問，請在此填寫...&#10;※ 若袖圍或袖長有壓迫或太鬆等特殊調整需求，請於此說明尺寸增減幅度。"></textarea>
                 </div>
 
-                <div class="section-title">07 / 結帳與付款</div>
+                <div class="section-title">06 / 結帳與付款</div>
                 
                 <div class="form-group">
                     <label class="field-label">付款方式<span class="required-star">*</span></label>
@@ -467,6 +495,10 @@
         const submitBtn = document.getElementById('submitBtn');
         const purchaseFlow = document.getElementById('purchaseFlow');
         const fittingFlow = document.getElementById('fittingFlow');
+        
+        const btnPurchase = document.getElementById('btnPurchase');
+        const btnFit = document.getElementById('btnFit');
+        const serviceTypeInput = document.getElementById('serviceTypeInput');
 
         const basePrice = 8500;
         let printPriceValue = 0;
@@ -511,12 +543,22 @@
             }
         }
 
-        // 服務項目切換
-        document.querySelectorAll('input[name="serviceType"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                toggleFlowRequirements(e.target.value === '我要購買');
-            });
-        });
+        // 獨立大按鈕切換邏輯
+        function selectService(type) {
+            serviceTypeInput.value = type;
+            if (type === '我要購買') {
+                btnPurchase.classList.add('active');
+                btnFit.classList.remove('active');
+                toggleFlowRequirements(true);
+            } else {
+                btnFit.classList.add('active');
+                btnPurchase.classList.remove('active');
+                toggleFlowRequirements(false);
+            }
+        }
+
+        btnPurchase.addEventListener('click', () => selectService('我要購買'));
+        btnFit.addEventListener('click', () => selectService('我要預約試穿'));
 
         // 處理加印名稱
         const printNamePanel = document.getElementById('printNamePanel');
@@ -610,6 +652,11 @@
                     purchaseFlow.style.display = 'none';
                     fittingFlow.style.display = 'none';
                     submitBtn.style.display = 'none';
+                    
+                    btnPurchase.classList.remove('active');
+                    btnFit.classList.remove('active');
+                    serviceTypeInput.value = '';
+                    
                     printPriceValue = 0; shippingPriceValue = 0;
                     updateTotalAmount();
                 } else {
