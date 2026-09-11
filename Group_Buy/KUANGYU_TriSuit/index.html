@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>光聿鐵人服 預購</title>
+    <title>光聿鐵人服 預購與試穿預約</title>
     <style>
         :root {
             --main-color: #164082;
@@ -205,6 +205,9 @@
         button[type="submit"]:hover { background: var(--main-dark); }
         .required-star { color: var(--error-color); margin-left: 4px; }
         .submit-btn-disabled { background: #c5d0d6 !important; cursor: not-allowed !important; }
+        .service-selection-box {
+            background: #fff; border: 2px solid var(--main-color); padding: 20px; border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -214,9 +217,10 @@
             <h1>光聿鐵人服 預購</h1>
         </header>
 
-        <form id="preorderForm">
-            <!-- 移除原有的 01 產品資訊標題，直接顯示商品主視覺 -->
-            <div class="image-card" style="margin-top: 20px;">
+        <form id="mainForm">
+            <div class="section-title">01 / 細節說明</div>
+            
+            <div class="image-card">
                 <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/trisuit.png" alt="鐵人服商品圖">
             </div>
 
@@ -235,213 +239,354 @@
                 <div class="price-tag">售價：$8500</div>
             </div>
 
-            <!-- 新的標題位置 -->
-            <div class="section-title">01 / 細節說明</div>
-
             <div class="image-card">
                 <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/feature.PNG" alt="細節說明圖">
             </div>
 
-            <div class="section-title">02 / 訂購人資料</div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="field-label">訂購人姓名<span class="required-star">*</span></label>
-                    <input type="text" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label class="field-label">性別 (Gender)<span class="required-star">*</span></label>
-                    <div class="option-group">
-                        <label class="option-label"><input type="radio" name="gender" value="男" required><span>男</span></label>
-                        <label class="option-label"><input type="radio" name="gender" value="女"><span>女</span></label>
-                    </div>
-                    <span class="note-text">※ 版型不分男女，此選項為配置對應的義大利褲墊</span>
+            <div class="section-title">02 / 請選擇服務項目</div>
+            <div class="service-selection-box form-group" style="margin-bottom: 30px;">
+                <div class="option-group" style="gap: 30px; justify-content: center;">
+                    <label class="option-label" style="font-weight: 700; font-size: 17px; color: var(--main-dark);">
+                        <input type="radio" name="serviceType" value="我要購買" required><span>我要購買</span>
+                    </label>
+                    <label class="option-label" style="font-weight: 700; font-size: 17px; color: var(--main-dark);">
+                        <input type="radio" name="serviceType" value="我要預約試穿"><span>我要預約試穿</span>
+                    </label>
                 </div>
             </div>
 
-            <div class="form-row">
+            <!-- 預約試穿流程 -->
+            <div id="fittingFlow" style="display: none;">
+                <div class="section-title">03 / 預約資料與時段</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="field-label">姓名<span class="required-star">*</span></label>
+                        <input type="text" name="fitName" data-req="true">
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label">聯絡電話<span class="required-star">*</span></label>
+                        <input type="tel" name="fitPhone" data-req="true">
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="field-label">Email 信箱<span class="required-star">*</span></label>
-                    <input type="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label class="field-label">聯絡電話<span class="required-star">*</span></label>
-                    <input type="tel" name="phone" required>
-                </div>
-            </div>
-
-            <div class="section-title">03 / 客製化選項</div>
-            
-            <div class="image-card">
-                <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/size.jpg" alt="尺寸對照表">
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="field-label">上身尺寸 (Body Size)<span class="required-star">*</span></label>
-                    <select name="bodySize" required>
-                        <option value="" disabled selected>請選擇上身尺寸</option>
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="field-label">下身尺寸 (Leg Size)<span class="required-star">*</span></label>
-                    <select name="legSize" required>
-                        <option value="" disabled selected>請選擇下身尺寸</option>
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="field-label">腿圍寬度 (Leg Gripper Width)<span class="required-star">*</span></label>
-                <div class="option-group">
-                    <label class="option-label"><input type="radio" name="legGripperWidth" value="維持原尺寸" required><span>維持原尺寸</span></label>
-                    <label class="option-label"><input type="radio" name="legGripperWidth" value="放寬 1cm"><span>放寬 1cm</span></label>
-                    <label class="option-label"><input type="radio" name="legGripperWidth" value="放寬 2cm"><span>放寬 2cm</span></label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="field-label">腿長調整 (Leg Length)<span class="required-star">*</span></label>
-                <div class="option-group">
-                    <label class="option-label"><input type="radio" name="legLength" value="維持原尺寸" required><span>維持原尺寸</span></label>
-                    <label class="option-label"><input type="radio" name="legLength" value="加長 3cm"><span>加長 3cm</span></label>
-                    <label class="option-label"><input type="radio" name="legLength" value="縮短 3cm"><span>縮短 3cm</span></label>
-                    <label class="option-label"><input type="radio" name="legLength" value="加長 5cm"><span>加長 5cm</span></label>
-                    <label class="option-label"><input type="radio" name="legLength" value="縮短 5cm"><span>縮短 5cm</span></label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="field-label">是否加印名字 (Printed Name)<span class="required-star">*</span></label>
-                <div class="option-group">
-                    <label class="option-label"><input type="radio" name="printNameOption" value="否" required><span>否，不需要</span></label>
-                    <label class="option-label"><input type="radio" name="printNameOption" value="是"><span>是，我要加印名字 (+$150)</span></label>
-                </div>
-                <span class="note-text">※ 包含中英文與空白，大小寫均可，最多 8 個字元</span>
-            </div>
-
-            <div class="dynamic-panel" id="printNamePanel">
-                <label class="field-label">加印的名稱<span class="required-star">*</span></label>
-                <input type="text" name="printName" id="printNameInput" placeholder="請輸入欲加印的名稱 (最多 8 字)" maxlength="8">
-            </div>
-
-            <div class="section-title">04 / 其他</div>
-
-            <div class="form-group">
-                <label class="field-label">備註 (Remarks)</label>
-                <textarea name="remarks" placeholder="如果有其他特殊需求或疑問，請在此填寫...&#10;※ 若袖圍或袖長有壓迫或太鬆等特殊調整需求，請於此說明尺寸增減幅度。"></textarea>
-            </div>
-
-            <div class="section-title">05 / 結帳與付款</div>
-            
-            <div class="form-group">
-                <label class="field-label">付款方式<span class="required-star">*</span></label>
-                <div class="option-group">
-                    <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" required><span>銀行轉帳 (匯款)</span></label>
-                    <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
-                    <label class="option-label"><input type="radio" name="paymentMethod" value="LINE Pay"><span>LINE Pay</span></label>
-                </div>
-            </div>
-
-            <div class="dynamic-panel" id="bankDetailsPanel">
-                <div style="background: #eef2f5; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; color: #102e5e;">
-                    <strong style="font-size: 15px;">匯款帳戶資訊</strong><br>
-                    銀行：國泰世華 (013)<br>
-                    帳號：269506136805<br>
-                    戶名：費聿凡
+                    <input type="email" name="fitEmail" data-req="true">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="field-label">帳號後五碼<span class="required-star">*</span></label>
-                        <input type="text" name="accountLast5" id="accountLast5Input" placeholder="例：12345" maxlength="5">
+                        <label class="field-label">預約日期<span class="required-star">*</span></label>
+                        <input type="date" name="fitDate" data-req="true">
                     </div>
                     <div class="form-group">
-                        <label class="field-label">匯款日期<span class="required-star">*</span></label>
-                        <input type="date" name="remittanceDate" id="remittanceDateInput">
+                        <label class="field-label">預約時段<span class="required-star">*</span></label>
+                        <select name="fitTime" data-req="true">
+                            <option value="" disabled selected>請選擇時段</option>
+                            <option value="上午 (10:00 - 12:00)">上午 (10:00 - 12:00)</option>
+                            <option value="下午 (14:00 - 18:00)">下午 (14:00 - 18:00)</option>
+                            <option value="晚上 (18:00 - 21:00)">晚上 (18:00 - 21:00)</option>
+                        </select>
                     </div>
+                </div>
+                <span class="note-text" style="color: var(--main-color); margin-bottom: 20px;">※ 送出後，工作室將有專人與您聯繫確認最終時段。</span>
+            </div>
+
+            <!-- 購買預購流程 -->
+            <div id="purchaseFlow" style="display: none;">
+                <div class="section-title">03 / 訂購人資料</div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="field-label">訂購人姓名<span class="required-star">*</span></label>
+                        <input type="text" name="name" data-req="true">
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label">性別 (Gender)<span class="required-star">*</span></label>
+                        <div class="option-group">
+                            <label class="option-label"><input type="radio" name="gender" value="男" data-req="true"><span>男</span></label>
+                            <label class="option-label"><input type="radio" name="gender" value="女"><span>女</span></label>
+                        </div>
+                        <span class="note-text">※ 版型不分男女，此選項為配置對應的義大利褲墊</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="field-label">Email 信箱<span class="required-star">*</span></label>
+                        <input type="email" name="email" data-req="true">
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label">聯絡電話<span class="required-star">*</span></label>
+                        <input type="tel" name="phone" data-req="true">
+                    </div>
+                </div>
+
+                <div class="section-title">04 / 客製化選項</div>
+                
+                <div class="image-card">
+                    <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/size.jpg" alt="尺寸對照表">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="field-label">上身尺寸 (Body Size)<span class="required-star">*</span></label>
+                        <select name="bodySize" data-req="true">
+                            <option value="" disabled selected>請選擇上身尺寸</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label">下身尺寸 (Leg Size)<span class="required-star">*</span></label>
+                        <select name="legSize" data-req="true">
+                            <option value="" disabled selected>請選擇下身尺寸</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="field-label">腿圍寬度 (Leg Gripper Width)<span class="required-star">*</span></label>
+                    <div class="option-group">
+                        <label class="option-label"><input type="radio" name="legGripperWidth" value="維持原尺寸" data-req="true"><span>維持原尺寸</span></label>
+                        <label class="option-label"><input type="radio" name="legGripperWidth" value="放寬 1cm"><span>放寬 1cm</span></label>
+                        <label class="option-label"><input type="radio" name="legGripperWidth" value="放寬 2cm"><span>放寬 2cm</span></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="field-label">腿長調整 (Leg Length)<span class="required-star">*</span></label>
+                    <div class="option-group">
+                        <label class="option-label"><input type="radio" name="legLength" value="維持原尺寸" data-req="true"><span>維持原尺寸</span></label>
+                        <label class="option-label"><input type="radio" name="legLength" value="加長 3cm"><span>加長 3cm</span></label>
+                        <label class="option-label"><input type="radio" name="legLength" value="縮短 3cm"><span>縮短 3cm</span></label>
+                        <label class="option-label"><input type="radio" name="legLength" value="加長 5cm"><span>加長 5cm</span></label>
+                        <label class="option-label"><input type="radio" name="legLength" value="縮短 5cm"><span>縮短 5cm</span></label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="field-label">是否加印名字 (Printed Name)<span class="required-star">*</span></label>
+                    <div class="option-group">
+                        <label class="option-label"><input type="radio" name="printNameOption" value="否" data-req="true"><span>否，不需要</span></label>
+                        <label class="option-label"><input type="radio" name="printNameOption" value="是"><span>是，我要加印名字 (+$150)</span></label>
+                    </div>
+                    <span class="note-text">※ 包含中英文與空白，大小寫均可，最多 8 個字元</span>
+                </div>
+
+                <div class="dynamic-panel" id="printNamePanel">
+                    <label class="field-label">加印的名稱<span class="required-star">*</span></label>
+                    <input type="text" name="printName" id="printNameInput" placeholder="請輸入欲加印的名稱 (最多 8 字)" maxlength="8">
+                </div>
+
+                <div class="section-title">05 / 取貨與收件資訊</div>
+
+                <div class="form-group">
+                    <label class="field-label">取貨方式<span class="required-star">*</span></label>
+                    <div class="option-group">
+                        <label class="option-label"><input type="radio" name="deliveryMethod" value="面交" data-req="true"><span>面交（限光聿學員）</span></label>
+                        <label class="option-label"><input type="radio" name="deliveryMethod" value="郵寄"><span>郵寄 (+$80)</span></label>
+                        <label class="option-label"><input type="radio" name="deliveryMethod" value="7-11店到店"><span>7-11店到店 (+$60)</span></label>
+                    </div>
+                </div>
+
+                <div class="dynamic-panel" id="shippingPanel">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="field-label">收件人姓名<span class="required-star">*</span></label>
+                            <input type="text" name="recipientName" id="recipientNameInput">
+                        </div>
+                        <div class="form-group">
+                            <label class="field-label">收件人電話<span class="required-star">*</span></label>
+                            <input type="tel" name="recipientPhone" id="recipientPhoneInput">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label">收件地址（含郵遞區號）／ 7-11 門市名稱及店號<span class="required-star">*</span></label>
+                        <input type="text" name="recipientAddress" id="recipientAddressInput" placeholder="例：105 台北市松山區... ／ 7-11 延吉門市 (店號: 123456)">
+                    </div>
+                </div>
+
+                <div class="section-title">06 / 其他</div>
+
+                <div class="form-group">
+                    <label class="field-label">備註 (Remarks)</label>
+                    <textarea name="remarks" placeholder="如果有其他特殊需求或疑問，請在此填寫...&#10;※ 若袖圍或袖長有壓迫或太鬆等特殊調整需求，請於此說明尺寸增減幅度。"></textarea>
+                </div>
+
+                <div class="section-title">07 / 結帳與付款</div>
+                
+                <div class="form-group">
+                    <label class="field-label">付款方式<span class="required-star">*</span></label>
+                    <div class="option-group">
+                        <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" data-req="true"><span>銀行轉帳 (匯款)</span></label>
+                        <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
+                        <label class="option-label"><input type="radio" name="paymentMethod" value="LINE Pay"><span>LINE Pay</span></label>
+                    </div>
+                </div>
+
+                <div class="dynamic-panel" id="bankDetailsPanel">
+                    <div style="background: #eef2f5; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; color: #102e5e;">
+                        <strong style="font-size: 15px;">匯款帳戶資訊</strong><br>
+                        銀行：國泰世華 (013)<br>
+                        帳號：269506136805<br>
+                        戶名：費聿凡
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="field-label">帳號後五碼<span class="required-star">*</span></label>
+                            <input type="text" name="accountLast5" id="accountLast5Input" placeholder="例：12345" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label class="field-label">匯款日期<span class="required-star">*</span></label>
+                            <input type="date" name="remittanceDate" id="remittanceDateInput">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="total-amount-box">
+                    <span>總金額：</span>
+                    <span id="displayTotalAmount">NT$ 8,500</span>
                 </div>
             </div>
 
-            <div class="total-amount-box">
-                <span>總金額：</span>
-                <span id="displayTotalAmount">NT$ 8,500</span>
-            </div>
-
-            <button type="submit" id="submitBtn">確認送出預購</button>
+            <button type="submit" id="submitBtn" style="display: none;">確認送出</button>
         </form>
     </div>
 
     <script>
-        // 處理動態顯示「加印的名稱」與「總金額」計算
-        const printNameRadios = document.querySelectorAll('input[name="printNameOption"]');
+        const displayTotalAmount = document.getElementById('displayTotalAmount');
+        const submitBtn = document.getElementById('submitBtn');
+        const purchaseFlow = document.getElementById('purchaseFlow');
+        const fittingFlow = document.getElementById('fittingFlow');
+
+        const basePrice = 8500;
+        let printPriceValue = 0;
+        let shippingPriceValue = 0;
+
+        function updateTotalAmount() {
+            const currentTotal = basePrice + printPriceValue + shippingPriceValue;
+            displayTotalAmount.textContent = 'NT$ ' + currentTotal.toLocaleString();
+        }
+
+        // 處理動態必填欄位與顯示隱藏
+        function toggleFlowRequirements(isPurchase) {
+            submitBtn.style.display = 'block';
+
+            if (isPurchase) {
+                purchaseFlow.style.display = 'block';
+                fittingFlow.style.display = 'none';
+                submitBtn.textContent = '確認送出預購';
+
+                // 購買流程的必填
+                purchaseFlow.querySelectorAll('[data-req="true"]').forEach(el => el.required = true);
+                fittingFlow.querySelectorAll('input, select').forEach(el => el.required = false);
+
+                // 重新檢查動態欄位
+                if (document.querySelector('input[name="printNameOption"]:checked')?.value === '是') printNameInput.required = true;
+                const deliv = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
+                if (deliv === '郵寄' || deliv === '7-11店到店') {
+                    recipientNameInput.required = true; recipientPhoneInput.required = true; recipientAddressInput.required = true;
+                }
+                if (document.querySelector('input[name="paymentMethod"]:checked')?.value === '匯款') {
+                    accountLast5Input.required = true; remittanceDateInput.required = true;
+                }
+
+            } else {
+                purchaseFlow.style.display = 'none';
+                fittingFlow.style.display = 'block';
+                submitBtn.textContent = '確認送出預約';
+
+                // 試穿流程的必填
+                fittingFlow.querySelectorAll('[data-req="true"]').forEach(el => el.required = true);
+                purchaseFlow.querySelectorAll('input, select, textarea').forEach(el => el.required = false);
+            }
+        }
+
+        // 服務項目切換
+        document.querySelectorAll('input[name="serviceType"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                toggleFlowRequirements(e.target.value === '我要購買');
+            });
+        });
+
+        // 處理加印名稱
         const printNamePanel = document.getElementById('printNamePanel');
         const printNameInput = document.getElementById('printNameInput');
-        const displayTotalAmount = document.getElementById('displayTotalAmount');
-        
-        const basePrice = 8500;
-        const printPrice = 150;
-
-        printNameRadios.forEach(radio => {
+        document.querySelectorAll('input[name="printNameOption"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
-                let currentTotal = basePrice;
                 if (e.target.value === '是') {
                     printNamePanel.style.display = 'block';
                     printNameInput.required = true;
-                    currentTotal += printPrice;
+                    printPriceValue = 150;
                 } else {
                     printNamePanel.style.display = 'none';
                     printNameInput.required = false;
                     printNameInput.value = '';
+                    printPriceValue = 0;
                 }
-                displayTotalAmount.textContent = 'NT$ ' + currentTotal.toLocaleString();
+                updateTotalAmount();
             });
         });
 
-        // 處理動態顯示「匯款資訊」欄位
-        const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+        // 處理取貨方式
+        const shippingPanel = document.getElementById('shippingPanel');
+        const recipientNameInput = document.getElementById('recipientNameInput');
+        const recipientPhoneInput = document.getElementById('recipientPhoneInput');
+        const recipientAddressInput = document.getElementById('recipientAddressInput');
+        document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === '郵寄') {
+                    shippingPriceValue = 80;
+                    shippingPanel.style.display = 'block';
+                    recipientNameInput.required = true; recipientPhoneInput.required = true; recipientAddressInput.required = true;
+                } else if (e.target.value === '7-11店到店') {
+                    shippingPriceValue = 60;
+                    shippingPanel.style.display = 'block';
+                    recipientNameInput.required = true; recipientPhoneInput.required = true; recipientAddressInput.required = true;
+                } else {
+                    shippingPriceValue = 0;
+                    shippingPanel.style.display = 'none';
+                    recipientNameInput.required = false; recipientPhoneInput.required = false; recipientAddressInput.required = false;
+                }
+                updateTotalAmount();
+            });
+        });
+
+        // 處理匯款資訊
         const bankDetailsPanel = document.getElementById('bankDetailsPanel');
         const accountLast5Input = document.getElementById('accountLast5Input');
         const remittanceDateInput = document.getElementById('remittanceDateInput');
-
-        paymentRadios.forEach(radio => {
+        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 if (e.target.value === '匯款') {
                     bankDetailsPanel.style.display = 'block';
-                    accountLast5Input.required = true;
-                    remittanceDateInput.required = true;
+                    accountLast5Input.required = true; remittanceDateInput.required = true;
                 } else {
                     bankDetailsPanel.style.display = 'none';
-                    accountLast5Input.required = false;
-                    remittanceDateInput.required = false;
-                    accountLast5Input.value = '';
-                    remittanceDateInput.value = '';
+                    accountLast5Input.required = false; remittanceDateInput.required = false;
                 }
             });
         });
 
-        // 處理表單送出事件
-        document.getElementById('preorderForm').addEventListener('submit', (e) => {
+        // 處理表單送出
+        document.getElementById('mainForm').addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // 寫入您的 Google Apps Script 網址
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwrb4WIMDCo8AUNlyx4klMbnXmnBPYNEklhe2l62N04DRhWotEO_cwaCCYcHzAJzmS3/exec'; 
-            const submitBtn = document.getElementById('submitBtn');
             
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
             
+            const isPurchase = data.serviceType === '我要購買';
             submitBtn.disabled = true;
             submitBtn.textContent = '資料傳送中...';
             submitBtn.classList.add('submit-btn-disabled');
@@ -449,19 +594,24 @@
             fetch(scriptURL, {
                 redirect: 'follow',
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8',
-                },
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(data)
             })
             .then(response => response.json())
             .then(result => {
                 if(result.result === 'success') {
-                    alert('預購表單已成功送出！確認信將寄至您的信箱。');
+                    if(isPurchase) alert('預購表單已成功送出！確認信將寄至您的信箱。');
+                    else alert('試穿預約已成功送出！我們將盡快與您聯繫確認時段。');
+                    
                     e.target.reset();
                     printNamePanel.style.display = 'none';
+                    shippingPanel.style.display = 'none';
                     bankDetailsPanel.style.display = 'none';
-                    displayTotalAmount.textContent = 'NT$ 8,500';
+                    purchaseFlow.style.display = 'none';
+                    fittingFlow.style.display = 'none';
+                    submitBtn.style.display = 'none';
+                    printPriceValue = 0; shippingPriceValue = 0;
+                    updateTotalAmount();
                 } else {
                     alert('傳送失敗，請稍後再試：' + result.message);
                 }
@@ -472,7 +622,7 @@
             })
             .finally(() => {
                 submitBtn.disabled = false;
-                submitBtn.textContent = '確認送出預購';
+                submitBtn.textContent = '確認送出';
                 submitBtn.classList.remove('submit-btn-disabled');
             });
         });
