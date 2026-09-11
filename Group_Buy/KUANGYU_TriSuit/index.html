@@ -69,14 +69,9 @@
             display: block;
             margin: 0 auto;
         }
-        .img-small {
-            width: 80% !important;
-        }
-        @media (max-width: 600px) {
-            .img-small {
-                width: 100% !important;
-            }
-        }
+        .img-small { width: 80% !important; }
+        @media (max-width: 600px) { .img-small { width: 100% !important; } }
+        
         .product-desc {
             font-size: 15px;
             color: #444;
@@ -88,9 +83,7 @@
             padding-left: 20px;
             color: #444;
         }
-        .feature-list li {
-            margin-bottom: 10px;
-        }
+        .feature-list li { margin-bottom: 10px; }
         .price-tag {
             font-size: 18px;
             font-weight: 700;
@@ -139,9 +132,6 @@
             transition: all 0.2s ease;
             -webkit-appearance: none;
             appearance: none;
-        }
-        input[type="date"] {
-            min-height: 46px;
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
@@ -216,15 +206,9 @@
             background: var(--main-color);
             color: #fff;
         }
-        .action-btn:hover {
-            background: var(--main-light);
-        }
-        .action-btn.active:hover {
-            background: var(--main-dark);
-        }
-        @media (max-width: 600px) {
-            .action-btn-group { flex-direction: column; gap: 15px; }
-        }
+        .action-btn:hover { background: var(--main-light); }
+        .action-btn.active:hover { background: var(--main-dark); }
+        @media (max-width: 600px) { .action-btn-group { flex-direction: column; gap: 15px; } }
 
         button[type="submit"] {
             width: 100%;
@@ -243,6 +227,39 @@
         button[type="submit"]:hover { background: var(--main-dark); }
         .required-star { color: var(--error-color); margin-left: 4px; }
         .submit-btn-disabled { background: #c5d0d6 !important; cursor: not-allowed !important; }
+
+        /* 日曆 UI 樣式 */
+        .calendar-header, .calendar-grid { 
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; max-width: 100%; margin: 0 auto; 
+        }
+        .month-title { 
+            font-weight: bold; font-size: 1.2em; margin-top: 25px; margin-bottom: 10px; color: var(--main-dark); text-align: center; 
+        }
+        .weekday-header { 
+            font-weight: 700; color: #666; padding: 8px 0; text-align: center; font-size: 0.9em; 
+        }
+        .calendar-day {
+            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+            border-radius: 8px; font-weight: 600; background-color: #f5f5f5; color: #ccc; font-size: 1em;
+        }
+        .calendar-day.available { 
+            background-color: #fff; color: #444; cursor: pointer; border: 2px solid var(--border-color); 
+        }
+        .calendar-day.available:hover { 
+            background-color: var(--main-light); border-color: var(--main-color); 
+        }
+        .calendar-day.selected { 
+            background-color: var(--main-color); color: white; border: 2px solid var(--main-color); box-shadow: 0 4px 10px rgba(22, 64, 130, 0.2);
+        }
+        .time-slots { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; 
+        }
+        .time-slot {
+            padding: 12px 10px; text-align: center; border: 2px solid var(--border-color); border-radius: 8px;
+            cursor: pointer; background: #fff; color: #444; font-weight: 600; transition: 0.3s; font-size: 0.95em;
+        }
+        .time-slot:hover { border-color: var(--main-color); background: var(--main-light); }
+        .time-slot.selected { background: var(--main-color); color: white; border-color: var(--main-color); }
     </style>
 </head>
 <body>
@@ -284,6 +301,9 @@
             </div>
             <input type="hidden" name="serviceType" id="serviceTypeInput">
 
+            <!-- ===================== -->
+            <!-- 預約試穿流程          -->
+            <!-- ===================== -->
             <div id="fittingFlow" style="display: none;">
                 <div class="section-title">02 / 預約資料與時段</div>
                 <div class="form-row">
@@ -300,24 +320,28 @@
                     <label class="field-label">Email 信箱<span class="required-star">*</span></label>
                     <input type="email" name="fitEmail" data-req="true">
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="field-label">預約日期<span class="required-star">*</span></label>
-                        <input type="date" name="fitDate" data-req="true">
-                    </div>
-                    <div class="form-group">
-                        <label class="field-label">預約時段<span class="required-star">*</span></label>
-                        <select name="fitTime" data-req="true">
-                            <option value="" disabled selected>請選擇時段</option>
-                            <option value="上午 (10:00 - 12:00)">上午 (10:00 - 12:00)</option>
-                            <option value="下午 (14:00 - 18:00)">下午 (14:00 - 18:00)</option>
-                            <option value="晚上 (18:00 - 21:00)">晚上 (18:00 - 21:00)</option>
-                        </select>
-                    </div>
+                
+                <div class="form-group" style="background: #fff; border: 2px solid var(--main-light); padding: 20px; border-radius: 8px;">
+                    <label class="field-label" style="color: var(--main-dark); font-size: 16px;">選擇預約日期<span class="required-star">*</span></label>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 12px; background: #fef8f0; padding: 10px 15px; border-radius: 6px; border-left: 3px solid #d4a574;">
+                        請先點選日期，下方將會顯示可預約的時段
+                    </p>
+                    <div id="calendar-container"></div>
+                    <input type="hidden" id="fitDateInput" name="fitDate">
                 </div>
-                <span class="note-text" style="color: var(--main-color); margin-bottom: 20px;">※ 送出後，工作室將有專人與您聯繫確認最終時段。</span>
+
+                <div class="form-group" id="time-slot-section" style="display: none; background: #fff; border: 2px solid var(--main-light); padding: 20px; border-radius: 8px;">
+                    <label class="field-label" style="color: var(--main-dark); font-size: 16px;">選擇預約時段<span class="required-star">*</span></label>
+                    <div id="time-slots-container" class="time-slots"></div>
+                    <input type="hidden" id="fitTimeInput" name="fitTime">
+                </div>
+                
+                <span class="note-text" style="color: var(--main-color); margin-bottom: 20px; font-size: 14px; font-weight: 600;">※ 送出後，工作室將有專人與您聯繫確認最終時段。</span>
             </div>
 
+            <!-- ===================== -->
+            <!-- 購買預購流程          -->
+            <!-- ===================== -->
             <div id="purchaseFlow" style="display: none;">
                 <div class="section-title">02 / 訂購人資料</div>
 
@@ -499,6 +523,9 @@
         const btnFit = document.getElementById('btnFit');
         const serviceTypeInput = document.getElementById('serviceTypeInput');
 
+        const fitDateInput = document.getElementById('fitDateInput');
+        const fitTimeInput = document.getElementById('fitTimeInput');
+
         const basePrice = 8500;
         let printPriceValue = 0;
         let shippingPriceValue = 0;
@@ -508,6 +535,91 @@
             displayTotalAmount.textContent = 'NT$ ' + currentTotal.toLocaleString();
         }
 
+        // ==============================
+        // 日曆建置邏輯 (自動產生當月與次月)
+        // ==============================
+        function buildCalendar() {
+            const container = document.getElementById('calendar-container');
+            container.innerHTML = '';
+            const today = new Date();
+            
+            for (let i = 0; i < 2; i++) {
+                let year = today.getFullYear();
+                let month = today.getMonth() + i;
+                if (month > 11) { month -= 12; year++; }
+                renderMonth(container, year, month, today);
+            }
+        }
+
+        function renderMonth(container, year, month, today) {
+            const section = document.createElement('div');
+            section.innerHTML = `<div class="month-title">${year}年${month+1}月</div>`;
+            const header = document.createElement('div');
+            header.className = 'calendar-header';
+            ['日','一','二','三','四','五','六'].forEach(d => {
+                header.innerHTML += `<div class="weekday-header">${d}</div>`;
+            });
+            section.appendChild(header);
+
+            const grid = document.createElement('div');
+            grid.className = 'calendar-grid';
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for(let i=0; i<firstDay; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+
+            for(let d=1; d<=daysInMonth; d++) {
+                const cell = document.createElement('div');
+                const cellDate = new Date(year, month, d);
+                cell.textContent = d;
+                
+                // 只能選擇今天之後的日期
+                const todayReset = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                if(cellDate >= todayReset) {
+                    cell.className = 'calendar-day available';
+                    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                    cell.onclick = () => {
+                        document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
+                        cell.classList.add('selected');
+                        fitDateInput.value = dateStr;
+                        fitTimeInput.value = '';
+                        showTimeSlots(dateStr);
+                    };
+                } else {
+                    cell.className = 'calendar-day';
+                }
+                grid.appendChild(cell);
+            }
+            section.appendChild(grid);
+            container.appendChild(section);
+        }
+
+        function showTimeSlots(dateStr) {
+            document.getElementById('time-slot-section').style.display = 'block';
+            const container = document.getElementById('time-slots-container');
+            container.innerHTML = '';
+            const slots = ['上午 (10:00 - 12:00)', '下午 (14:00 - 18:00)', '晚上 (18:00 - 21:00)'];
+            slots.forEach(slot => {
+                const div = document.createElement('div');
+                div.className = 'time-slot';
+                div.textContent = slot;
+                div.onclick = () => {
+                    document.querySelectorAll('.time-slot.selected').forEach(s => s.classList.remove('selected'));
+                    div.classList.add('selected');
+                    fitTimeInput.value = slot;
+                };
+                container.appendChild(div);
+            });
+        }
+        
+        // 執行日曆初始化
+        buildCalendar();
+
+        // ==============================
+        // 流程切換與驗證邏輯
+        // ==============================
         function toggleFlowRequirements(isPurchase) {
             submitBtn.style.display = 'block';
 
@@ -554,6 +666,9 @@
         btnPurchase.addEventListener('click', () => selectService('我要購買'));
         btnFit.addEventListener('click', () => selectService('我要預約試穿'));
 
+        // ==============================
+        // 動態欄位監聽事件
+        // ==============================
         const printNamePanel = document.getElementById('printNamePanel');
         const printNameInput = document.getElementById('printNameInput');
         document.querySelectorAll('input[name="printNameOption"]').forEach(radio => {
@@ -612,15 +727,27 @@
             });
         });
 
+        // ==============================
+        // 表單送出處理
+        // ==============================
         document.getElementById('mainForm').addEventListener('submit', (e) => {
             e.preventDefault();
+            
+            const isPurchase = serviceTypeInput.value === '我要購買';
+            
+            // 針對自訂日曆的必填驗證
+            if (!isPurchase) {
+                if (!fitDateInput.value || !fitTimeInput.value) {
+                    alert('請完整選擇「預約日期」與「預約時段」後再送出。');
+                    return;
+                }
+            }
             
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwrb4WIMDCo8AUNlyx4klMbnXmnBPYNEklhe2l62N04DRhWotEO_cwaCCYcHzAJzmS3/exec'; 
             
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
             
-            const isPurchase = data.serviceType === '我要購買';
             submitBtn.disabled = true;
             submitBtn.textContent = '資料傳送中...';
             submitBtn.classList.add('submit-btn-disabled');
@@ -644,6 +771,8 @@
                     purchaseFlow.style.display = 'none';
                     fittingFlow.style.display = 'none';
                     submitBtn.style.display = 'none';
+                    document.getElementById('time-slot-section').style.display = 'none';
+                    document.querySelectorAll('.calendar-day.selected, .time-slot.selected').forEach(el => el.classList.remove('selected'));
                     
                     btnPurchase.classList.remove('active');
                     btnFit.classList.remove('active');
