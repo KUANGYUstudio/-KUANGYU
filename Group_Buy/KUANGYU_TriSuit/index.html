@@ -6,7 +6,6 @@
     <title>光聿鐵人服 預購</title>
     <style>
         :root {
-            /* 採用光聿藍與莫蘭迪色系的整合 */
             --main-color: #164082;
             --main-dark: #102e5e;
             --main-light: #eef2f5;
@@ -122,7 +121,7 @@
             margin-top: 6px;
             display: block;
         }
-        input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select, textarea {
             width: 100%;
             padding: 12px 14px;
             border: 1px solid var(--border-color);
@@ -135,6 +134,9 @@
             transition: all 0.2s ease;
             -webkit-appearance: none;
             appearance: none;
+        }
+        input[type="date"] {
+            min-height: 46px;
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
@@ -172,7 +174,6 @@
             margin-top: 10px;
             margin-bottom: 20px;
         }
-        /* 總金額區塊樣式 */
         .total-amount-box {
             background-color: var(--main-light);
             border-left: 4px solid var(--main-dark);
@@ -352,6 +353,25 @@
                 </div>
             </div>
 
+            <div class="dynamic-panel" id="bankDetailsPanel">
+                <div style="background: #eef2f5; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; color: #102e5e;">
+                    <strong style="font-size: 15px;">匯款帳戶資訊</strong><br>
+                    銀行：國泰世華 (013)<br>
+                    帳號：269506136805<br>
+                    戶名：費聿凡
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="field-label">帳號後五碼<span class="required-star">*</span></label>
+                        <input type="text" name="accountLast5" id="accountLast5Input" placeholder="例：12345" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label">匯款日期<span class="required-star">*</span></label>
+                        <input type="date" name="remittanceDate" id="remittanceDateInput">
+                    </div>
+                </div>
+            </div>
+
             <div class="total-amount-box">
                 <span>總金額：</span>
                 <span id="displayTotalAmount">NT$ 8,500</span>
@@ -383,8 +403,29 @@
                     printNameInput.required = false;
                     printNameInput.value = '';
                 }
-                // 更新畫面上的總金額顯示
                 displayTotalAmount.textContent = 'NT$ ' + currentTotal.toLocaleString();
+            });
+        });
+
+        // 處理動態顯示「匯款資訊」欄位
+        const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+        const bankDetailsPanel = document.getElementById('bankDetailsPanel');
+        const accountLast5Input = document.getElementById('accountLast5Input');
+        const remittanceDateInput = document.getElementById('remittanceDateInput');
+
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === '匯款') {
+                    bankDetailsPanel.style.display = 'block';
+                    accountLast5Input.required = true;
+                    remittanceDateInput.required = true;
+                } else {
+                    bankDetailsPanel.style.display = 'none';
+                    accountLast5Input.required = false;
+                    remittanceDateInput.required = false;
+                    accountLast5Input.value = '';
+                    remittanceDateInput.value = '';
+                }
             });
         });
 
@@ -396,16 +437,13 @@
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwrb4WIMDCo8AUNlyx4klMbnXmnBPYNEklhe2l62N04DRhWotEO_cwaCCYcHzAJzmS3/exec'; 
             const submitBtn = document.getElementById('submitBtn');
             
-            // 收集表單資料
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
             
-            // 狀態變更：鎖定按鈕，提示載入中
             submitBtn.disabled = true;
             submitBtn.textContent = '資料傳送中...';
             submitBtn.classList.add('submit-btn-disabled');
 
-            // 傳送資料到 Google Apps Script
             fetch(scriptURL, {
                 redirect: 'follow',
                 method: 'POST',
@@ -420,6 +458,7 @@
                     alert('預購表單已成功送出！確認信將寄至您的信箱。');
                     e.target.reset();
                     printNamePanel.style.display = 'none';
+                    bankDetailsPanel.style.display = 'none';
                     displayTotalAmount.textContent = 'NT$ 8,500';
                 } else {
                     alert('傳送失敗，請稍後再試：' + result.message);
@@ -430,7 +469,6 @@
                 console.error('Error:', error);
             })
             .finally(() => {
-                // 恢復按鈕狀態
                 submitBtn.disabled = false;
                 submitBtn.textContent = '確認送出預購';
                 submitBtn.classList.remove('submit-btn-disabled');
