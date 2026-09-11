@@ -196,6 +196,7 @@
         }
         button[type="submit"]:hover { background: var(--main-dark); }
         .required-star { color: var(--error-color); margin-left: 4px; }
+        .submit-btn-disabled { background: #c5d0d6 !important; cursor: not-allowed !important; }
     </style>
 </head>
 <body>
@@ -323,7 +324,6 @@
 
             <div class="dynamic-panel" id="printNamePanel">
                 <label class="field-label">加印的名稱<span class="required-star">*</span></label>
-                <!-- 加入 maxlength="8" 限制最高輸入字元數 -->
                 <input type="text" name="printName" id="printNameInput" placeholder="請輸入欲加印的名稱 (最多 8 字)" maxlength="8">
             </div>
 
@@ -331,11 +331,10 @@
 
             <div class="form-group">
                 <label class="field-label">備註 (Remarks)</label>
-                <!-- 更新備註欄預設提示文字 -->
                 <textarea name="remarks" placeholder="如果有其他特殊需求或疑問，請在此填寫...&#10;※ 若袖圍或袖長有壓迫或太鬆等特殊調整需求，請於此說明尺寸增減幅度。"></textarea>
             </div>
 
-            <button type="submit">確認送出預購</button>
+            <button type="submit" id="submitBtn">確認送出預購</button>
         </form>
     </div>
 
@@ -361,8 +360,49 @@
         // 處理表單送出事件
         document.getElementById('preorderForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            // 此處後續可接上 GAS 的 fetch 傳送程式碼
-            alert('表單已成功送出！');
+            
+            // 寫入您的 Google Apps Script 網址
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwrb4WIMDCo8AUNlyx4klMbnXmnBPYNEklhe2l62N04DRhWotEO_cwaCCYcHzAJzmS3/exec'; 
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // 收集表單資料
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // 狀態變更：鎖定按鈕，提示載入中
+            submitBtn.disabled = true;
+            submitBtn.textContent = '資料傳送中...';
+            submitBtn.classList.add('submit-btn-disabled');
+
+            // 傳送資料到 Google Apps Script
+            fetch(scriptURL, {
+                redirect: 'follow',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.result === 'success') {
+                    alert('預購表單已成功送出！確認信將寄至您的信箱。');
+                    e.target.reset();
+                    printNamePanel.style.display = 'none';
+                } else {
+                    alert('傳送失敗，請稍後再試：' + result.message);
+                }
+            })
+            .catch(error => {
+                alert('網路連線發生錯誤，請聯絡工作室。');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // 恢復按鈕狀態
+                submitBtn.disabled = false;
+                submitBtn.textContent = '確認送出預購';
+                submitBtn.classList.remove('submit-btn-disabled');
+            });
         });
     </script>
 </body>
