@@ -29,7 +29,6 @@
             align-items: center;
         }
 
-        /* 頂部 Logo 區塊 */
         .app-header {
             text-align: center;
             margin-bottom: 30px;
@@ -47,7 +46,6 @@
             color: var(--text-muted);
         }
 
-        /* 主佈局 */
         .app-container {
             display: flex;
             gap: 30px;
@@ -57,7 +55,6 @@
             align-items: flex-start;
         }
 
-        /* 面板共用樣式 */
         .panel {
             background: var(--panel-bg);
             border-radius: 8px;
@@ -68,7 +65,7 @@
 
         .controls {
             flex: 1;
-            max-width: 800px;
+            max-width: 850px; /* 稍微放寬一點讓欄位更好點擊 */
         }
         .preview-area {
             width: max-content;
@@ -86,7 +83,6 @@
             padding-bottom: 10px;
         }
 
-        /* 設定區塊 */
         .settings-group, .display-toggles {
             display: flex;
             gap: 20px;
@@ -104,7 +100,7 @@
             cursor: pointer;
         }
 
-        input[type="number"], input[type="text"] {
+        input[type="number"] {
             border: 1px solid var(--border-color);
             border-radius: 4px;
             padding: 8px 12px;
@@ -113,21 +109,24 @@
             transition: border-color 0.2s;
             box-sizing: border-box;
             background-color: #fafafa;
+            width: 80px;
         }
-        input[type="number"]:focus, input[type="text"]:focus {
+        input[type="number"]:focus {
             border-color: var(--text-main);
             background-color: #fff;
         }
-        input[type="number"] { width: 80px; }
 
-        /* 站點資料表單 */
         .data-grid {
             width: 100%;
         }
-        .header-row {
+        /* 微調欄位比例，讓整體更協調 */
+        .header-row, .row-entry {
             display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr 0.5fr;
-            gap: 8px;
+            grid-template-columns: 1.6fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1.1fr 0.5fr 0.5fr;
+            gap: 6px;
+            align-items: center;
+        }
+        .header-row {
             margin-bottom: 10px;
             font-size: 12px;
             color: var(--text-muted);
@@ -135,14 +134,27 @@
             text-align: left;
         }
         .row-entry {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr 0.5fr;
-            gap: 8px;
             margin-bottom: 8px;
-            align-items: center;
         }
         
-        /* 按鈕設計 */
+        /* 關鍵修復：加入 min-width: 0 */
+        .row-entry input[type="text"] {
+            width: 100%;
+            min-width: 0; 
+            padding: 8px;
+            font-size: 13px;
+            outline: none;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #fafafa;
+            transition: border-color 0.2s;
+        }
+        .row-entry input[type="text"]:focus {
+            border-color: var(--text-main);
+            background-color: #fff;
+        }
+
         button {
             background-color: var(--primary);
             color: #fff;
@@ -169,7 +181,6 @@
             border-top: 1px solid var(--border-color);
         }
 
-        /* 預覽區塊設定 - 維持精確輸出 */
         #render-container {
             background: #fff;
             border: 1px dashed #ccc;
@@ -211,7 +222,6 @@
         .val-cutoff { font-size: 11px; color: #c94646; font-weight: bold; }
         .unit { font-size: 10px; font-weight: normal; margin-left: 1px; }
 
-        /* Custom Checkbox */
         input[type="checkbox"] {
             accent-color: var(--primary);
             width: 16px;
@@ -223,7 +233,6 @@
 <body>
 
     <div class="app-header">
-        <!-- 自動讀取上一層目錄的 KUANGYU_logo_icon.png -->
         <img src="../KUANGYU_logo_icon.png" alt="光聿 KUANGYU">
         <h1>賽事配速表產生器</h1>
     </div>
