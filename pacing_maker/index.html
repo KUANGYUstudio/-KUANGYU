@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>配速表產生器 (進階版)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, 'Microsoft JhengHei', sans-serif;
+            display: flex;
+            gap: 40px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            font-size: 14px;
+        }
+        .controls {
+            width: 750px;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        .preview-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .settings-group, .display-toggles {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            align-items: center;
+        }
+        .settings-group label {
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+        }
+        .settings-group input[type="number"] {
+            width: 60px;
+            padding: 4px;
+            margin-top: 4px;
+        }
+        .display-toggles label {
+            flex-direction: row;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .row-entry {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr auto auto;
+            gap: 5px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .row-entry input[type="text"] {
+            width: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+            font-size: 12px;
+        }
+        .header-row {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr auto auto;
+            gap: 5px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+        }
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background-color: #555; }
+        
+        /* 預覽區塊設定 */
+        #render-container {
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            border: 1px dashed #ccc;
+            padding: 10px;
+        }
+        #pacing-table {
+            border-collapse: collapse;
+            border: 1px solid #000;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        #pacing-table .station-cell {
+            border: 1px solid #000;
+            padding: 2px 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+            gap: 2px;
+        }
+        #pacing-table .row:nth-child(even) .station-cell {
+            background-color: #f2f2f2;
+        }
+        .cell-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .station-name { font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 4px; }
+        .val-total-km { font-size: 13px; font-weight: bold; }
+        .val-int-km { font-size: 12px; color: #555; }
+        .val-time { font-weight: bold; font-size: 14px; }
+        .val-alt { font-size: 11px; color: #666; }
+        .val-watt { font-size: 12px; font-weight: bold; color: #d32f2f; }
+        .val-cutoff { font-size: 11px; color: #e65100; font-weight: bold; border-radius: 2px; padding: 0 2px; }
+        .unit { font-size: 10px; font-weight: normal; margin-left: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <h3>版面與顯示設定</h3>
+        <div class="settings-group">
+            <label>寬度 (公分)<input type="number" id="tb-width" value="4.5" step="0.1" onchange="generateTable()"></label>
+            <label>高度 (公分)<input type="number" id="tb-height" value="14" step="0.5" onchange="generateTable()"></label>
+        </div>
+        <div class="display-toggles">
+            <label><input type="checkbox" id="show-alt" onchange="generateTable()"> 顯示海拔</label>
+            <label><input type="checkbox" id="show-watt" checked onchange="generateTable()"> 顯示瓦數</label>
+            <label><input type="checkbox" id="show-cutoff" onchange="generateTable()"> 顯示關門時間</label>
+        </div>
+
+        <h3>站點資料</h3>
+        <div class="header-row">
+            <span>站點名稱</span>
+            <span>總里程</span>
+            <span>段里程</span>
+            <span>時間(分)</span>
+            <span>海拔(m)</span>
+            <span>瓦數(W)</span>
+            <span>關門時間</span>
+            <span>補給</span>
+            <span>刪除</span>
+        </div>
+        <div id="rows-container"></div>
+        
+        <button onclick="addRow()">+ 新增站點</button>
+        <button onclick="exportImage()" style="background-color: #2b78e4; float: right;">下載為圖片</button>
+    </div>
+
+    <div class="preview-area">
+        <h3>預覽區</h3>
+        <div id="render-container">
+            <div id="pacing-table"></div>
+        </div>
+    </div>
+
+<script>
+    let stations = [
+        { name: "人止關", totalKm: "16.1", intKm: "16", time: "35", alt: "790", watt: "180", cutoff: "", supply: false },
+        { name: "霧社", totalKm: "21.4", intKm: "5", time: "21", alt: "1148", watt: "185", cutoff: "", supply: true },
+        { name: "見晴", totalKm: "28.4", intKm: "7", time: "35", alt: "1550", watt: "180", cutoff: "09:00", supply: false },
+        { name: "清境小七", totalKm: "33.4", intKm: "5", time: "20", alt: "1748", watt: "175", cutoff: "", supply: false },
+        { name: "翠峰", totalKm: "39.4", intKm: "6", time: "24", alt: "2309", watt: "170", cutoff: "11:00", supply: true },
+        { name: "鳶峰", totalKm: "46.0", intKm: "6.6", time: "36", alt: "2750", watt: "160", cutoff: "12:30", supply: false },
+        { name: "昆陽", totalKm: "51.2", intKm: "5", time: "26", alt: "3070", watt: "155", cutoff: "13:30", supply: false },
+        { name: "武嶺", totalKm: "53.3", intKm: "2", time: "13", alt: "3275", watt: "160", cutoff: "14:00", supply: false }
+    ];
+
+    const svgWaterDrop = `<svg width="12" height="12" viewBox="0 0 24 24"><path fill="#4fc3f7" d="M12,21c-3.3,0-6-2.7-6-6c0-4,6-11,6-11s6,7,6,11C18,18.3,15.3,21,12,21z"/></svg>`;
+
+    function renderInputs() {
+        const container = document.getElementById("rows-container");
+        container.innerHTML = "";
+        stations.forEach((st, idx) => {
+            container.innerHTML += `
+                <div class="row-entry">
+                    <input type="text" value="${st.name}" onchange="updateData(${idx}, 'name', this.value)">
+                    <input type="text" value="${st.totalKm}" onchange="updateData(${idx}, 'totalKm', this.value)">
+                    <input type="text" value="${st.intKm}" onchange="updateData(${idx}, 'intKm', this.value)">
+                    <input type="text" value="${st.time}" onchange="updateData(${idx}, 'time', this.value)">
+                    <input type="text" value="${st.alt}" onchange="updateData(${idx}, 'alt', this.value)">
+                    <input type="text" value="${st.watt}" onchange="updateData(${idx}, 'watt', this.value)">
+                    <input type="text" value="${st.cutoff}" onchange="updateData(${idx}, 'cutoff', this.value)">
+                    <input type="checkbox" ${st.supply ? 'checked' : ''} onchange="updateData(${idx}, 'supply', this.checked)">
+                    <button onclick="removeRow(${idx})" style="margin:0; padding:2px 6px; background:#cc0000;">X</button>
+                </div>
+            `;
+        });
+    }
+
+    function updateData(idx, field, value) {
+        stations[idx][field] = value;
+        generateTable();
+    }
+
+    function addRow() {
+        stations.push({ name: "", totalKm: "", intKm: "", time: "", alt: "", watt: "", cutoff: "", supply: false });
+        renderInputs();
+        generateTable();
+    }
+
+    function removeRow(idx) {
+        stations.splice(idx, 1);
+        renderInputs();
+        generateTable();
+    }
+
+    function generateTable() {
+        const widthCm = document.getElementById("tb-width").value;
+        const heightCm = document.getElementById("tb-height").value;
+        const showAlt = document.getElementById("show-alt").checked;
+        const showWatt = document.getElementById("show-watt").checked;
+        const showCutoff = document.getElementById("show-cutoff").checked;
+        
+        const table = document.getElementById("pacing-table");
+        const pxPerCm = 37.8 * 1.5; 
+        table.style.width = (widthCm * pxPerCm) + "px";
+        table.style.height = (heightCm * pxPerCm) + "px";
+        
+        table.innerHTML = "";
+        const rowHeightPercent = 100 / stations.length;
+
+        stations.forEach(st => {
+            const supplyIcon = st.supply ? svgWaterDrop : "";
+            
+            // 條件渲染內容
+            const altHtml = (showAlt && st.alt) ? `<span class="val-alt">${st.alt}m</span>` : ``;
+            const wattHtml = (showWatt && st.watt) ? `<span class="val-watt">${st.watt}<span class="unit">w</span></span>` : ``;
+            const cutoffHtml = (showCutoff && st.cutoff) ? `<span class="val-cutoff">${st.cutoff}</span>` : ``;
+            
+            const rowHtml = `
+                <div class="row" style="height: ${rowHeightPercent}%;">
+                    <div class="station-cell" style="height: 100%;">
+                        <div class="cell-row">
+                            <span class="station-name">${st.name} ${supplyIcon}</span>
+                            ${cutoffHtml}
+                        </div>
+                        <div class="cell-row" style="border-top: 1px dotted #ccc; padding-top: 2px;">
+                            ${altHtml || `<span class="val-int-km">${st.intKm}<span class="unit">k</span></span>`}
+                            ${wattHtml}
+                            <span class="val-time">${st.time}<span class="unit">m</span></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            table.innerHTML += rowHtml;
+        });
+    }
+
+    function exportImage() {
+        generateTable(); 
+        const tableNode = document.getElementById("pacing-table");
+        html2canvas(tableNode, { scale: 3 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'pacing_table.png';
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
+    }
+
+    renderInputs();
+    generateTable();
+</script>
+
+</body>
+</html>
