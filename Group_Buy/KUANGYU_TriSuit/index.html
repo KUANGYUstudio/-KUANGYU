@@ -52,7 +52,7 @@
             font-size: 16px;
             font-weight: 600;
             color: var(--main-dark);
-            margin: 40px 0 25px; /* 稍微縮小標題下方的間距 */
+            margin: 40px 0 25px;
             padding: 12px 16px;
             background-color: var(--main-light);
             border-left: 4px solid var(--main-color);
@@ -74,10 +74,9 @@
             padding: 12px 18px; background-color: var(--main-light); border-radius: 4px; display: inline-block;
         }
         
-        /* 表單排版調整：修正疊加問題，間距統一為 30px */
         .form-row { display: flex; gap: 20px; margin-bottom: 30px; }
         .form-group { margin-bottom: 30px; }
-        .form-row .form-group { flex: 1; margin-bottom: 0; } /* 確保橫排內的群組不再重複增加下間距 */
+        .form-row .form-group { flex: 1; margin-bottom: 0; }
         @media (max-width: 600px) { 
             .form-row { flex-direction: column; gap: 30px; } 
         }
@@ -106,7 +105,7 @@
         input[type="radio"] { accent-color: var(--main-color); width: 18px; height: 18px; cursor: pointer; margin: 0; }
         .dynamic-panel {
             display: none; padding: 20px; background: var(--bg-color); border: 1px solid var(--border-color);
-            border-radius: 6px; margin-top: 10px; margin-bottom: 30px; /* 動態面板下間距同步調整為 30px */
+            border-radius: 6px; margin-top: 10px; margin-bottom: 30px;
         }
         .total-amount-box {
             background-color: var(--main-light); border-left: 4px solid var(--main-dark); padding: 16px 20px;
@@ -347,10 +346,10 @@
                 <div class="section-title">04 / 取貨與收件資訊</div>
 
                 <div class="form-group">
-                    <label class="field-label">取貨方式<span class="required-star">*</span></label>
+                    <label class="field-label">取貨與寄送方式<span class="required-star">*</span></label>
                     <div class="option-group">
                         <label class="option-label"><input type="radio" name="deliveryMethod" value="面交" data-req="true"><span>面交（限光聿學員）</span></label>
-                        <label class="option-label"><input type="radio" name="deliveryMethod" value="郵寄"><span>郵寄 (+$80)</span></label>
+                        <label class="option-label"><input type="radio" name="deliveryMethod" value="郵局寄送"><span>郵局寄送 (+$80)</span></label>
                         <label class="option-label"><input type="radio" name="deliveryMethod" value="7-11店到店"><span>7-11店到店 (+$60)</span></label>
                     </div>
                 </div>
@@ -367,8 +366,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="field-label">收件地址（含郵遞區號）／ 7-11 門市名稱及店號<span class="required-star">*</span></label>
-                        <input type="text" name="recipientAddress" id="recipientAddressInput" placeholder="例：105 台北市松山區... ／ 7-11 延吉門市 (店號: 123456)">
+                        <label class="field-label" id="addressLabel">收件地址<span class="required-star">*</span></label>
+                        <input type="text" name="recipientAddress" id="recipientAddressInput" placeholder="請填寫完整資訊">
+                        <a href="https://emap.pcsc.com.tw/" target="_blank" id="storeLocatorLink" style="display: none; margin-top: 10px; font-size: 14px; color: var(--main-color); text-decoration: underline; font-weight: 600; cursor: pointer;">點此前往查詢 7-11 門市資料</a>
                     </div>
                 </div>
 
@@ -571,12 +571,16 @@
                 fittingFlow.querySelectorAll('input, select').forEach(el => el.required = false);
 
                 if (document.querySelector('input[name="printNameOption"]:checked')?.value === '是') printNameInput.required = true;
+                
                 const deliv = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
-                if (deliv === '郵寄' || deliv === '7-11店到店') {
-                    recipientNameInput.required = true; recipientPhoneInput.required = true; recipientAddressInput.required = true;
+                if (deliv === '郵寄寄送' || deliv === '7-11店到店') {
+                    document.getElementById('recipientNameInput').required = true; 
+                    document.getElementById('recipientPhoneInput').required = true; 
+                    document.getElementById('recipientAddressInput').required = true;
                 }
                 if (document.querySelector('input[name="paymentMethod"]:checked')?.value === '匯款') {
-                    accountLast5Input.required = true; remittanceDateInput.required = true;
+                    document.getElementById('accountLast5Input').required = true; 
+                    document.getElementById('remittanceDateInput').required = true;
                 }
 
             } else {
@@ -631,19 +635,29 @@
             });
         });
 
+        // 收件與取貨方式切換邏輯
         const shippingPanel = document.getElementById('shippingPanel');
         const recipientNameInput = document.getElementById('recipientNameInput');
         const recipientPhoneInput = document.getElementById('recipientPhoneInput');
         const recipientAddressInput = document.getElementById('recipientAddressInput');
+        const addressLabel = document.getElementById('addressLabel');
+        const storeLocatorLink = document.getElementById('storeLocatorLink');
+        
         document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
-                if (e.target.value === '郵寄') {
+                if (e.target.value === '郵局寄送') {
                     shippingPriceValue = 80;
                     shippingPanel.style.display = 'block';
+                    addressLabel.innerHTML = '收件地址（含郵遞區號）<span class="required-star">*</span>';
+                    recipientAddressInput.placeholder = '例：105 台北市松山區... (請填寫完整地址)';
+                    storeLocatorLink.style.display = 'none';
                     recipientNameInput.required = true; recipientPhoneInput.required = true; recipientAddressInput.required = true;
                 } else if (e.target.value === '7-11店到店') {
                     shippingPriceValue = 60;
                     shippingPanel.style.display = 'block';
+                    addressLabel.innerHTML = '7-11 門市名稱及店號<span class="required-star">*</span>';
+                    recipientAddressInput.placeholder = '例：延吉門市 (店號: 123456)';
+                    storeLocatorLink.style.display = 'inline-block';
                     recipientNameInput.required = true; recipientPhoneInput.required = true; recipientAddressInput.required = true;
                 } else {
                     shippingPriceValue = 0;
