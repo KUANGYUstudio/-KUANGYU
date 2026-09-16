@@ -222,9 +222,28 @@
                         <input type="tel" name="fitPhone" data-req="true">
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <label class="field-label">Email 信箱<span class="required-star">*</span></label>
                     <input type="email" name="fitEmail" data-req="true">
+                </div>
+
+                <div class="form-row" style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="field-label">試穿人數<span class="required-star">*</span></label>
+                        <div class="option-group">
+                            <label class="option-label"><input type="radio" name="fitCount" value="1位" data-req="true"><span>1 位</span></label>
+                            <label class="option-label"><input type="radio" name="fitCount" value="2位"><span>2 位（同行）</span></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="field-label">不試穿的同行親友 (選填)</label>
+                        <input type="text" name="accompanyCount" placeholder="請註明人數，例：1位">
+                    </div>
+                </div>
+                
+                <div class="note-text" style="color: var(--main-dark); margin-bottom: 30px; font-size: 14px; line-height: 1.6; background-color: #eef2f5; padding: 15px; border-radius: 6px;">
+                    ※ 因工作室場地較小，且現場可能同時有課程進行，為維持服務品質，每個時段試穿人數最多限 2 位。若有同行親友請協助註明，以利我們預先安排空間。
                 </div>
                 
                 <div class="form-group" style="background: #fff; border: 2px solid var(--main-light); padding: 20px; border-radius: 8px;">
@@ -573,7 +592,7 @@
                 if (document.querySelector('input[name="printNameOption"]:checked')?.value === '是') printNameInput.required = true;
                 
                 const deliv = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
-                if (deliv === '郵寄寄送' || deliv === '7-11店到店') {
+                if (deliv === '郵局寄送' || deliv === '7-11店到店') {
                     document.getElementById('recipientNameInput').required = true; 
                     document.getElementById('recipientPhoneInput').required = true; 
                     document.getElementById('recipientAddressInput').required = true;
