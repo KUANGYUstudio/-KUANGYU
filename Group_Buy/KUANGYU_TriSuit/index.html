@@ -166,6 +166,33 @@
             .day-number { font-size: 18px !important; } 
             .day-label { font-size: 10px; }
         }
+
+        /* ==================== 
+            客製化彈出視窗 UI 
+            ==================== */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); z-index: 1000; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .modal-content {
+            background: #fff; padding: 40px 50px; border-radius: 12px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 80%; transform: translateY(-20px); transition: transform 0.3s ease;
+        }
+        .modal-overlay.show .modal-content { transform: translateY(0); }
+        .modal-icon {
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .modal-icon.success { background-color: #eef2f5; color: #164082; }
+        .modal-icon.error { background-color: #fdeef1; color: #d6556d; }
+        .modal-text { font-size: 16px; color: #333; margin-bottom: 30px; font-weight: 500; letter-spacing: 0.05em; line-height: 1.6; }
+        .modal-btn {
+            background: var(--main-color); color: #fff; border: none; padding: 12px 36px; border-radius: 6px;
+            font-size: 16px; letter-spacing: 0.1em; cursor: pointer; transition: background 0.2s; font-weight: 600;
+        }
+        .modal-btn:hover { background: var(--main-dark); }
     </style>
 </head>
 <body>
@@ -439,6 +466,15 @@
         </form>
     </div>
 
+    <!-- 自訂動態彈出視窗 -->
+    <div class="modal-overlay" id="customAlert">
+        <div class="modal-content">
+            <div class="modal-icon" id="alertIcon"></div>
+            <div class="modal-text" id="alertText"></div>
+            <button class="modal-btn" onclick="closeAlert()">確定</button>
+        </div>
+    </div>
+
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwrb4WIMDCo8AUNlyx4klMbnXmnBPYNEklhe2l62N04DRhWotEO_cwaCCYcHzAJzmS3/exec'; 
 
@@ -457,6 +493,33 @@
         const basePrice = 8500;
         let printPriceValue = 0;
         let shippingPriceValue = 0;
+
+        // ==============================
+        // 客製化視窗函式
+        // ==============================
+        function showAlert(message, isSuccess = true) {
+            const modal = document.getElementById('customAlert');
+            const icon = document.getElementById('alertIcon');
+            const text = document.getElementById('alertText');
+
+            text.innerHTML = message;
+            if (isSuccess) {
+                icon.className = 'modal-icon success';
+                icon.innerHTML = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            } else {
+                icon.className = 'modal-icon error';
+                icon.innerHTML = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+            }
+
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function closeAlert() {
+            const modal = document.getElementById('customAlert');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
 
         function updateTotalAmount() {
             const currentTotal = basePrice + printPriceValue + shippingPriceValue;
@@ -490,7 +553,6 @@
                     availableDates.add(dateObj.value);
                 });
 
-                // 動態渲染有資料的月份
                 Object.keys(datesByMonth).sort().forEach(yearMonth => {
                     const [year, month] = yearMonth.split('-');
                     renderMonthGrid(container, parseInt(year), parseInt(month) - 1, availableDates);
@@ -611,7 +673,6 @@
                 fittingFlow.querySelectorAll('[data-req="true"]').forEach(el => el.required = true);
                 purchaseFlow.querySelectorAll('input, select, textarea').forEach(el => el.required = false);
                 
-                // 動態必填檢核：如果人數選單選了「其他」，則把輸入框設為必填
                 const fitCountInput = document.querySelector('input[name="fitCountOther"]');
                 if (document.querySelector('input[name="fitCount"]:checked')?.value === '其他') {
                     fitCountInput.required = true;
@@ -626,7 +687,6 @@
                     companionCountInput.required = false;
                 }
                 
-                // 初次點擊預約時，才載入日曆資料
                 if (document.getElementById('calendar-container').innerHTML.includes('載入可預約日期中')) {
                     renderCalendar();
                 }
@@ -652,8 +712,6 @@
         // ==============================
         // 動態欄位監聽事件
         // ==============================
-        
-        // 人數欄位「其他」的展開邏輯
         document.querySelectorAll('input[name="fitCount"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 const otherInput = document.querySelector('input[name="fitCountOther"]');
@@ -700,7 +758,6 @@
             });
         });
 
-        // 收件與取貨方式切換邏輯
         const shippingPanel = document.getElementById('shippingPanel');
         const recipientNameInput = document.getElementById('recipientNameInput');
         const recipientPhoneInput = document.getElementById('recipientPhoneInput');
@@ -760,7 +817,7 @@
             
             if (!isPurchase) {
                 if (!fitDateInput.value || !fitTimeInput.value) {
-                    alert('請完整選擇「預約日期」與「預約時段」後再送出。');
+                    showAlert('請完整選擇「預約日期」與「預約時段」後再送出。', false);
                     return;
                 }
             }
@@ -781,8 +838,11 @@
             .then(response => response.json())
             .then(result => {
                 if(result.result === 'success') {
-                    if(isPurchase) alert('預購表單已成功送出！確認信將寄至您的信箱。');
-                    else alert('試穿預約已成功送出！我們將盡快與您聯繫確認時段。');
+                    if(isPurchase) {
+                        showAlert('預購表單已成功送出！<br>確認信將寄至您的 Email 信箱。', true);
+                    } else {
+                        showAlert('試穿預約已成功送出！<br>我們將盡快與您聯繫確認時段。', true);
+                    }
                     
                     e.target.reset();
                     printNamePanel.style.display = 'none';
@@ -793,7 +853,6 @@
                     submitBtn.style.display = 'none';
                     document.getElementById('time-slot-section').style.display = 'none';
                     
-                    // 隱藏「其他」的輸入框
                     document.querySelector('input[name="fitCountOther"]').style.display = 'none';
                     document.querySelector('input[name="companionCountOther"]').style.display = 'none';
                     
@@ -806,14 +865,13 @@
                     printPriceValue = 0; shippingPriceValue = 0;
                     updateTotalAmount();
                     
-                    // 重新抓取日曆，更新已被預約走的時間
                     if (!isPurchase) renderCalendar();
                 } else {
-                    alert('傳送失敗，請稍後再試：' + result.message);
+                    showAlert('傳送失敗，請稍後再試：<br>' + result.message, false);
                 }
             })
             .catch(error => {
-                alert('網路連線發生錯誤，請聯絡工作室。');
+                showAlert('網路連線發生錯誤，請聯絡工作室。', false);
                 console.error('Error:', error);
             })
             .finally(() => {
