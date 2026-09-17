@@ -222,28 +222,31 @@
                         <input type="tel" name="fitPhone" data-req="true">
                     </div>
                 </div>
-                
                 <div class="form-group">
                     <label class="field-label">Email 信箱<span class="required-star">*</span></label>
                     <input type="email" name="fitEmail" data-req="true">
                 </div>
 
-                <div class="form-row" style="margin-bottom: 10px;">
+                <div class="form-row">
                     <div class="form-group">
                         <label class="field-label">試穿人數<span class="required-star">*</span></label>
                         <div class="option-group">
-                            <label class="option-label"><input type="radio" name="fitCount" value="1位" data-req="true"><span>1 位</span></label>
-                            <label class="option-label"><input type="radio" name="fitCount" value="2位"><span>2 位（同行）</span></label>
+                            <label class="option-label"><input type="radio" name="fitCount" value="1人" data-req="true"><span>1人</span></label>
+                            <label class="option-label"><input type="radio" name="fitCount" value="2人"><span>2人</span></label>
+                            <label class="option-label"><input type="radio" name="fitCount" value="其他"><span>其他</span></label>
                         </div>
+                        <input type="text" name="fitCountOther" placeholder="請填寫人數或說明" style="display: none; margin-top: 10px;">
                     </div>
                     <div class="form-group">
-                        <label class="field-label">不試穿的同行親友 (選填)</label>
-                        <input type="text" name="accompanyCount" placeholder="請註明人數，例：1位">
+                        <label class="field-label">同行友人<span class="required-star">*</span></label>
+                        <div class="option-group">
+                            <label class="option-label"><input type="radio" name="companionCount" value="0人/無" data-req="true"><span>0人 / 無</span></label>
+                            <label class="option-label"><input type="radio" name="companionCount" value="1人"><span>1人</span></label>
+                            <label class="option-label"><input type="radio" name="companionCount" value="2人"><span>2人</span></label>
+                            <label class="option-label"><input type="radio" name="companionCount" value="其他"><span>其他</span></label>
+                        </div>
+                        <input type="text" name="companionCountOther" placeholder="請填寫人數或說明" style="display: none; margin-top: 10px;">
                     </div>
-                </div>
-                
-                <div class="note-text" style="color: var(--main-dark); margin-bottom: 30px; font-size: 14px; line-height: 1.6; background-color: #eef2f5; padding: 15px; border-radius: 6px;">
-                    ※ 因工作室場地較小，且現場可能同時有課程進行，為維持服務品質，每個時段試穿人數最多限 2 位。若有同行親友請協助註明，以利我們預先安排空間。
                 </div>
                 
                 <div class="form-group" style="background: #fff; border: 2px solid var(--main-light); padding: 20px; border-radius: 8px;">
@@ -260,7 +263,7 @@
                     <input type="hidden" id="fitTimeInput" name="fitTime">
                 </div>
                 
-                <span class="note-text" style="color: var(--main-color); margin-bottom: 20px; font-size: 14px; font-weight: 600;">※ 送出後，工作室將有專人與您聯繫確認最終時段。</span>
+                <span class="note-text" style="color: var(--main-color); margin-bottom: 20px; font-size: 14px; font-weight: 600;">※ 預約成功後該時段即為您專屬保留，不會再開放他人預約，請讓我們先知道人數哦！</span>
             </div>
 
             <!-- ===================== -->
@@ -592,7 +595,7 @@
                 if (document.querySelector('input[name="printNameOption"]:checked')?.value === '是') printNameInput.required = true;
                 
                 const deliv = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
-                if (deliv === '郵局寄送' || deliv === '7-11店到店') {
+                if (deliv === '郵寄寄送' || deliv === '7-11店到店') {
                     document.getElementById('recipientNameInput').required = true; 
                     document.getElementById('recipientPhoneInput').required = true; 
                     document.getElementById('recipientAddressInput').required = true;
@@ -609,6 +612,21 @@
 
                 fittingFlow.querySelectorAll('[data-req="true"]').forEach(el => el.required = true);
                 purchaseFlow.querySelectorAll('input, select, textarea').forEach(el => el.required = false);
+                
+                // 動態必填檢核：如果人數選單選了「其他」，則把輸入框設為必填
+                const fitCountInput = document.querySelector('input[name="fitCountOther"]');
+                if (document.querySelector('input[name="fitCount"]:checked')?.value === '其他') {
+                    fitCountInput.required = true;
+                } else {
+                    fitCountInput.required = false;
+                }
+                
+                const companionCountInput = document.querySelector('input[name="companionCountOther"]');
+                if (document.querySelector('input[name="companionCount"]:checked')?.value === '其他') {
+                    companionCountInput.required = true;
+                } else {
+                    companionCountInput.required = false;
+                }
                 
                 // 初次點擊預約時，才載入日曆資料
                 if (document.getElementById('calendar-container').innerHTML.includes('載入可預約日期中')) {
@@ -636,6 +654,36 @@
         // ==============================
         // 動態欄位監聽事件
         // ==============================
+        
+        // 人數欄位「其他」的展開邏輯
+        document.querySelectorAll('input[name="fitCount"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const otherInput = document.querySelector('input[name="fitCountOther"]');
+                if (e.target.value === '其他') {
+                    otherInput.style.display = 'block';
+                    otherInput.required = true;
+                } else {
+                    otherInput.style.display = 'none';
+                    otherInput.required = false;
+                    otherInput.value = '';
+                }
+            });
+        });
+
+        document.querySelectorAll('input[name="companionCount"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const otherInput = document.querySelector('input[name="companionCountOther"]');
+                if (e.target.value === '其他') {
+                    otherInput.style.display = 'block';
+                    otherInput.required = true;
+                } else {
+                    otherInput.style.display = 'none';
+                    otherInput.required = false;
+                    otherInput.value = '';
+                }
+            });
+        });
+
         const printNamePanel = document.getElementById('printNamePanel');
         const printNameInput = document.getElementById('printNameInput');
         document.querySelectorAll('input[name="printNameOption"]').forEach(radio => {
@@ -746,6 +794,11 @@
                     fittingFlow.style.display = 'none';
                     submitBtn.style.display = 'none';
                     document.getElementById('time-slot-section').style.display = 'none';
+                    
+                    // 隱藏「其他」的輸入框
+                    document.querySelector('input[name="fitCountOther"]').style.display = 'none';
+                    document.querySelector('input[name="companionCountOther"]').style.display = 'none';
+                    
                     document.querySelectorAll('.calendar-day.selected, .time-slot.selected').forEach(el => el.classList.remove('selected'));
                     
                     btnPurchase.classList.remove('active');
