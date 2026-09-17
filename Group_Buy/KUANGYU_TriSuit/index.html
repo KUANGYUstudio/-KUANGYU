@@ -289,6 +289,8 @@
                     <div id="time-slots-container" class="time-slots"></div>
                     <input type="hidden" id="fitTimeInput" name="fitTime">
                 </div>
+                
+                <span class="note-text" style="color: var(--main-color); margin-bottom: 20px; font-size: 14px; font-weight: 600;">※ 預約成功後該時段即為您專屬保留，不會再開放他人預約，請讓我們先知道人數哦！</span>
             </div>
 
             <!-- ===================== -->
@@ -841,7 +843,7 @@
                     if(isPurchase) {
                         showAlert('預購表單已成功送出！<br>確認信將寄至您的 Email 信箱。', true);
                     } else {
-                        showAlert('試穿預約已成功送出！<br>我們將盡快與您聯繫確認時段。', true);
+                        showAlert('試穿預約已成功送出！<br>時段已為您專屬保留，確認信將寄至您的 Email 信箱。', true);
                     }
                     
                     e.target.reset();
