@@ -74,6 +74,27 @@
             padding: 12px 18px; background-color: var(--main-light); border-radius: 4px; display: inline-block;
         }
         
+        /* 收單提醒區塊 */
+        .deadline-box {
+            background-color: var(--main-light);
+            border-left: 4px solid var(--main-dark);
+            padding: 18px 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .deadline-title {
+            font-weight: 700;
+            color: var(--main-dark);
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .deadline-text {
+            color: #444;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
         .form-row { display: flex; gap: 20px; margin-bottom: 30px; }
         .form-group { margin-bottom: 30px; }
         .form-row .form-group { flex: 1; margin-bottom: 0; }
@@ -226,6 +247,15 @@
                 <img src="https://raw.githubusercontent.com/KUANGYUstudio/-KUANGYU/main/Group_Buy/KUANGYU_TriSuit/TriSuit_pics/feature.PNG" alt="細節說明圖" class="img-small">
             </div>
 
+            <!-- 收單時間提醒區塊 -->
+            <div class="deadline-box">
+                <span class="deadline-title">【 預購時程提醒 】</span>
+                <div class="deadline-text">
+                    第一波收單：<strong>9/21</strong><br>
+                    最後收單日：<strong style="color: var(--error-color);">9/24</strong>
+                </div>
+            </div>
+
             <div class="section-title">01 / 請選擇服務項目</div>
             
             <div class="action-btn-group">
@@ -289,8 +319,6 @@
                     <div id="time-slots-container" class="time-slots"></div>
                     <input type="hidden" id="fitTimeInput" name="fitTime">
                 </div>
-                
-                <span class="note-text" style="color: var(--main-color); margin-bottom: 20px; font-size: 14px; font-weight: 600;">※ 預約成功後該時段即為您專屬保留，不會再開放他人預約，請讓我們先知道人數哦！</span>
             </div>
 
             <!-- ===================== -->
