@@ -123,7 +123,7 @@
         textarea { resize: vertical; min-height: 100px; }
         .option-group { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 5px; }
         .option-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 15px; color: #333; }
-        input[type="radio"] { accent-color: var(--main-color); width: 18px; height: 18px; cursor: pointer; margin: 0; }
+        input[type="radio"], input[type="checkbox"] { accent-color: var(--main-color); width: 18px; height: 18px; cursor: pointer; margin: 0; }
         .dynamic-panel {
             display: none; padding: 20px; background: var(--bg-color); border: 1px solid var(--border-color);
             border-radius: 6px; margin-top: 10px; margin-bottom: 30px;
@@ -330,7 +330,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="field-label">訂購人姓名<span class="required-star">*</span></label>
-                        <input type="text" name="name" data-req="true">
+                        <input type="text" name="name" id="purchaserNameInput" data-req="true">
                     </div>
                     <div class="form-group">
                         <label class="field-label">性別 (Gender)<span class="required-star">*</span></label>
@@ -349,7 +349,7 @@
                     </div>
                     <div class="form-group">
                         <label class="field-label">聯絡電話<span class="required-star">*</span></label>
-                        <input type="tel" name="phone" data-req="true">
+                        <input type="tel" name="phone" id="purchaserPhoneInput" data-req="true">
                     </div>
                 </div>
 
@@ -432,6 +432,14 @@
                 </div>
 
                 <div class="dynamic-panel" id="shippingPanel">
+                    <!-- 新增的同訂購人區塊 -->
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="option-label" style="font-weight: 600; color: var(--main-color);">
+                            <input type="checkbox" id="sameAsPurchaserBtn">
+                            <span>同訂購人姓名與電話</span>
+                        </label>
+                    </div>
+
                     <div class="form-row">
                         <div class="form-group">
                             <label class="field-label">收件人姓名<span class="required-star">*</span></label>
@@ -794,9 +802,26 @@
         const recipientAddressInput = document.getElementById('recipientAddressInput');
         const addressLabel = document.getElementById('addressLabel');
         const storeLocatorLink = document.getElementById('storeLocatorLink');
+        const sameAsPurchaserBtn = document.getElementById('sameAsPurchaserBtn');
+        const purchaserNameInput = document.getElementById('purchaserNameInput');
+        const purchaserPhoneInput = document.getElementById('purchaserPhoneInput');
+
+        // 監聽「同訂購人姓名與電話」的勾選事件
+        sameAsPurchaserBtn.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                recipientNameInput.value = purchaserNameInput.value;
+                recipientPhoneInput.value = purchaserPhoneInput.value;
+            } else {
+                recipientNameInput.value = '';
+                recipientPhoneInput.value = '';
+            }
+        });
         
         document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
+                // 切換取貨方式時，自動清除先前的勾選狀態
+                sameAsPurchaserBtn.checked = false;
+                
                 if (e.target.value === '郵局寄送') {
                     shippingPriceValue = 80;
                     shippingPanel.style.display = 'block';
@@ -882,6 +907,7 @@
                     fittingFlow.style.display = 'none';
                     submitBtn.style.display = 'none';
                     document.getElementById('time-slot-section').style.display = 'none';
+                    sameAsPurchaserBtn.checked = false;
                     
                     document.querySelector('input[name="fitCountOther"]').style.display = 'none';
                     document.querySelector('input[name="companionCountOther"]').style.display = 'none';
