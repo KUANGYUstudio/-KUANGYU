@@ -110,7 +110,7 @@
             margin-bottom: 12px; 
         }
         
-        .note-text { font-size: 13px; color: #666; margin-top: 6px; display: block; }
+        .note-text { font-size: 13px; color: #666; margin-top: 6px; display: block; line-height: 1.6;}
         input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select, textarea {
             width: 100%; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 6px;
             background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333; font-family: inherit;
@@ -155,7 +155,7 @@
 
         /* ==================== 
             日曆專屬 UI 樣式 
-            ==================== */
+            =================== */
         .month-title { font-weight: 800; font-size: 20px; margin: 1.5em 0 0.8em; color: var(--main-dark); text-align: center; }
         .calendar-header, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 0; box-sizing: border-box; max-width: 100%; }
         .weekday-header { font-weight: bold; font-size: 14px; text-align: center; color: #b0bec5; padding-bottom: 10px; }
@@ -319,6 +319,11 @@
                     <div id="time-slots-container" class="time-slots"></div>
                     <input type="hidden" id="fitTimeInput" name="fitTime">
                 </div>
+                
+                <span class="note-text" style="color: var(--main-color); margin-bottom: 20px; font-size: 14px; font-weight: 600;">
+                    ※ 若需取消或變動時間，請聯繫粉絲專頁：<br>
+                    <a href="https://www.facebook.com/KUANGYU.studio/" target="_blank" style="color: var(--main-color); text-decoration: underline;">FB 光聿 KUANGYU Studio</a> ｜ <a href="https://www.instagram.com/kuangyu.studio/" target="_blank" style="color: var(--main-color); text-decoration: underline;">IG @kuangyu.studio</a>
+                </span>
             </div>
 
             <!-- ===================== -->
@@ -330,7 +335,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="field-label">訂購人姓名<span class="required-star">*</span></label>
-                        <input type="text" name="name" id="purchaserNameInput" data-req="true">
+                        <input type="text" name="name" data-req="true">
                     </div>
                     <div class="form-group">
                         <label class="field-label">性別 (Gender)<span class="required-star">*</span></label>
@@ -349,7 +354,7 @@
                     </div>
                     <div class="form-group">
                         <label class="field-label">聯絡電話<span class="required-star">*</span></label>
-                        <input type="tel" name="phone" id="purchaserPhoneInput" data-req="true">
+                        <input type="tel" name="phone" data-req="true">
                     </div>
                 </div>
 
@@ -432,14 +437,6 @@
                 </div>
 
                 <div class="dynamic-panel" id="shippingPanel">
-                    <!-- 新增的同訂購人區塊 -->
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label class="option-label" style="font-weight: 600; color: var(--main-color);">
-                            <input type="checkbox" id="sameAsPurchaserBtn">
-                            <span>同訂購人姓名與電話</span>
-                        </label>
-                    </div>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label class="field-label">收件人姓名<span class="required-star">*</span></label>
@@ -471,8 +468,7 @@
                     <div class="option-group">
                         <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" data-req="true"><span>銀行轉帳 (匯款)</span></label>
                         <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
-                        <!-- 更新的 LINE Pay 選項 -->
-                        <label class="option-label"><input type="radio" name="paymentMethod" value="LINE Pay (限聿凡LINE好友)"><span>LINE Pay (限聿凡LINE好友)</span></label>
+                        <label class="option-label"><input type="radio" name="paymentMethod" value="LINE Pay"><span>LINE Pay</span></label>
                     </div>
                 </div>
 
@@ -803,26 +799,9 @@
         const recipientAddressInput = document.getElementById('recipientAddressInput');
         const addressLabel = document.getElementById('addressLabel');
         const storeLocatorLink = document.getElementById('storeLocatorLink');
-        const sameAsPurchaserBtn = document.getElementById('sameAsPurchaserBtn');
-        const purchaserNameInput = document.getElementById('purchaserNameInput');
-        const purchaserPhoneInput = document.getElementById('purchaserPhoneInput');
-
-        // 監聽「同訂購人姓名與電話」的勾選事件
-        sameAsPurchaserBtn.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                recipientNameInput.value = purchaserNameInput.value;
-                recipientPhoneInput.value = purchaserPhoneInput.value;
-            } else {
-                recipientNameInput.value = '';
-                recipientPhoneInput.value = '';
-            }
-        });
         
         document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
-                // 切換取貨方式時，自動清除先前的勾選狀態
-                sameAsPurchaserBtn.checked = false;
-                
                 if (e.target.value === '郵局寄送') {
                     shippingPriceValue = 80;
                     shippingPanel.style.display = 'block';
@@ -897,7 +876,7 @@
                     if(isPurchase) {
                         showAlert('預購表單已成功送出！<br>確認信將寄至您的 Email 信箱。', true);
                     } else {
-                        showAlert('試穿預約已成功送出！<br>時段已為您專屬保留，確認信將寄至您的 Email 信箱。', true);
+                        showAlert('試穿預約已成功送出！<br>確認信將寄至您的 Email 信箱。', true);
                     }
                     
                     e.target.reset();
@@ -908,7 +887,6 @@
                     fittingFlow.style.display = 'none';
                     submitBtn.style.display = 'none';
                     document.getElementById('time-slot-section').style.display = 'none';
-                    sameAsPurchaserBtn.checked = false;
                     
                     document.querySelector('input[name="fitCountOther"]').style.display = 'none';
                     document.querySelector('input[name="companionCountOther"]').style.display = 'none';
