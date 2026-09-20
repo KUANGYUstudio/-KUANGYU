@@ -321,8 +321,8 @@
                 </div>
                 
                 <span class="note-text" style="color: var(--main-color); margin-bottom: 20px; font-size: 14px; font-weight: 600;">
-                    ※ 若需取消或變動時間，請聯繫粉絲專頁：<br>
-                    <a href="https://www.facebook.com/KUANGYU.studio/" target="_blank" style="color: var(--main-color); text-decoration: underline;">FB 光聿 KUANGYU Studio</a> ｜ <a href="https://www.instagram.com/kuangyu.studio/" target="_blank" style="color: var(--main-color); text-decoration: underline;">IG @kuangyu.studio</a>
+                    ※ 若需取消或變動時間，請聯繫光聿KUANGYU粉絲專頁：<br>
+                    <a href="https://www.facebook.com/KUANGYU.studio/" target="_blank" style="color: var(--main-color); text-decoration: underline;">Facebook</a> ｜ <a href="https://www.instagram.com/kuangyu.studio/" target="_blank" style="color: var(--main-color); text-decoration: underline;">Instagram</a>
                 </span>
             </div>
 
@@ -335,7 +335,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="field-label">訂購人姓名<span class="required-star">*</span></label>
-                        <input type="text" name="name" data-req="true">
+                        <input type="text" name="name" id="purchaserNameInput" data-req="true">
                     </div>
                     <div class="form-group">
                         <label class="field-label">性別 (Gender)<span class="required-star">*</span></label>
@@ -354,7 +354,7 @@
                     </div>
                     <div class="form-group">
                         <label class="field-label">聯絡電話<span class="required-star">*</span></label>
-                        <input type="tel" name="phone" data-req="true">
+                        <input type="tel" name="phone" id="purchaserPhoneInput" data-req="true">
                     </div>
                 </div>
 
@@ -437,6 +437,13 @@
                 </div>
 
                 <div class="dynamic-panel" id="shippingPanel">
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="option-label" style="font-weight: 600; color: var(--main-color);">
+                            <input type="checkbox" id="sameAsPurchaserBtn">
+                            <span>同訂購人姓名與電話</span>
+                        </label>
+                    </div>
+
                     <div class="form-row">
                         <div class="form-group">
                             <label class="field-label">收件人姓名<span class="required-star">*</span></label>
@@ -468,7 +475,7 @@
                     <div class="option-group">
                         <label class="option-label"><input type="radio" name="paymentMethod" value="匯款" data-req="true"><span>銀行轉帳 (匯款)</span></label>
                         <label class="option-label"><input type="radio" name="paymentMethod" value="現金"><span>現金</span></label>
-                        <label class="option-label"><input type="radio" name="paymentMethod" value="LINE Pay"><span>LINE Pay</span></label>
+                        <label class="option-label"><input type="radio" name="paymentMethod" value="LINE Pay (限聿凡LINE好友)"><span>LINE Pay (限聿凡LINE好友)</span></label>
                     </div>
                 </div>
 
@@ -799,9 +806,24 @@
         const recipientAddressInput = document.getElementById('recipientAddressInput');
         const addressLabel = document.getElementById('addressLabel');
         const storeLocatorLink = document.getElementById('storeLocatorLink');
+        const sameAsPurchaserBtn = document.getElementById('sameAsPurchaserBtn');
+        const purchaserNameInput = document.getElementById('purchaserNameInput');
+        const purchaserPhoneInput = document.getElementById('purchaserPhoneInput');
+
+        sameAsPurchaserBtn.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                recipientNameInput.value = purchaserNameInput.value;
+                recipientPhoneInput.value = purchaserPhoneInput.value;
+            } else {
+                recipientNameInput.value = '';
+                recipientPhoneInput.value = '';
+            }
+        });
         
         document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
+                sameAsPurchaserBtn.checked = false;
+                
                 if (e.target.value === '郵局寄送') {
                     shippingPriceValue = 80;
                     shippingPanel.style.display = 'block';
@@ -887,6 +909,7 @@
                     fittingFlow.style.display = 'none';
                     submitBtn.style.display = 'none';
                     document.getElementById('time-slot-section').style.display = 'none';
+                    sameAsPurchaserBtn.checked = false;
                     
                     document.querySelector('input[name="fitCountOther"]').style.display = 'none';
                     document.querySelector('input[name="companionCountOther"]').style.display = 'none';
