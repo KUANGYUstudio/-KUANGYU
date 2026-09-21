@@ -991,7 +991,6 @@
         <span class="info-label-clean">課程費用</span>
         <div style="display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap;">
           <span class="info-value-clean">$5,400 / 人</span>
-          <span style="font-size: 12.5px; color: #777; font-weight: 500; letter-spacing: 0.02em;">(單堂 $500)</span>
         </div>
       </div>
     </div>
@@ -1383,28 +1382,6 @@
             <input type="radio" name="plan" value="整期 12 堂（$5,400）" checked required>
             <span>整期 12 堂（$5,400）</span>
           </label>
-          <label class="option-label">
-            <input type="radio" name="plan" value="單堂報名（$500／堂）" required>
-            <span>單堂報名（$500／堂）</span>
-          </label>
-        </div>
-
-        <div id="singleClassPanel" class="dynamic-panel">
-          <label class="field-label">請選擇報名日期（可複選）</label>
-          <div class="option-group row-layout" style="margin-bottom: 10px;">
-            <label class="option-label"><input type="checkbox" name="singleDates" value="9/23"><span>9/23</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="9/30"><span>9/30</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="10/7"><span>10/7</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="10/14"><span>10/14</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="10/21"><span>10/21</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="10/28"><span>10/28</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="11/4"><span>11/4</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="11/18"><span>11/18</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="11/25"><span>11/25</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="12/2"><span>12/2</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="12/9"><span>12/9</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="12/16"><span>12/16</span></label>
-          </div>
         </div>
       </div>
 
@@ -1716,22 +1693,6 @@
     });
   });
 
-  // --- 方案選擇動態展開邏輯 ---
-  const planRadios = document.querySelectorAll('input[name="plan"]');
-  const singleClassPanel = document.getElementById('singleClassPanel');
-
-  planRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-      if (e.target.value.includes('單堂報名')) {
-        singleClassPanel.style.display = 'block';
-      } else {
-        singleClassPanel.style.display = 'none';
-        // 切換回一期時，清空單堂勾選
-        document.querySelectorAll('input[name="singleDates"]').forEach(cb => cb.checked = false);
-      }
-    });
-  });
-
   // --- 匯款選項動態展開邏輯 ---
   document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
     r.addEventListener('change', (e) => {
@@ -1804,19 +1765,6 @@
       }
     }
 
-    // --- 單堂報名前端驗證 ---
-    const selectedPlan = document.querySelector('input[name="plan"]:checked');
-    if (selectedPlan && selectedPlan.value.includes('單堂報名')) {
-      const checkedDates = document.querySelectorAll('input[name="singleDates"]:checked');
-      if (checkedDates.length === 0) {
-        showAlert('請至少選擇一天單堂報名的日期', false);
-        const group = document.getElementById('singleClassPanel');
-        group.classList.add('group-error-border');
-        group.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-    }
-    
     btn.disabled = true; 
     btn.innerText = '處理中...';
     
@@ -1838,7 +1786,6 @@
 
           roadracePanel.style.display = 'none';
           pacePanel.style.display = 'none';
-          singleClassPanel.style.display = 'none';
           
           // 復原新生狀態與畫面
           document.querySelectorAll('.new-student-only').forEach(el => el.style.display = '');
