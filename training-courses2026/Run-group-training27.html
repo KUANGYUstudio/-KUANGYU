@@ -1819,7 +1819,9 @@
           const policyBoxes = document.querySelectorAll('.policy-box');
           policyBoxes.forEach(box => {
             box.classList.remove('is-checked');
-            const acceptBtn = document.getElementById(box.getAttribute('onclick').match(/'([^']+)'/)).querySelector('.policy-accept-btn');
+            // 【修復】加上 [1] 取出正確的 ID 字串，避免 querySelector 因 null 報錯進入 catch 區塊
+            const modalId = box.getAttribute('onclick').match(/'([^']+)'/)[1];
+            const acceptBtn = document.getElementById(modalId).querySelector('.policy-accept-btn');
             acceptBtn.disabled = true;
           });
 
@@ -1832,7 +1834,8 @@
           btn.innerText = '確認送出報名';
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error(error); // 加上 error log 方便未來除錯
         showAlert('網路傳送失敗，請連繫工作室。', false); 
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
