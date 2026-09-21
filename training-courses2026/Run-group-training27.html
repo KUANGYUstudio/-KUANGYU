@@ -1785,7 +1785,7 @@
         }
       }
     }
-
+    
     btn.disabled = true; 
     btn.innerText = '處理中...';
     
@@ -1819,9 +1819,7 @@
           const policyBoxes = document.querySelectorAll('.policy-box');
           policyBoxes.forEach(box => {
             box.classList.remove('is-checked');
-            // 【修復】加上 [1] 取出正確的 ID 字串，避免 querySelector 因 null 報錯進入 catch 區塊
-            const modalId = box.getAttribute('onclick').match(/'([^']+)'/)[1];
-            const acceptBtn = document.getElementById(modalId).querySelector('.policy-accept-btn');
+            const acceptBtn = document.getElementById(box.getAttribute('onclick').match(/'([^']+)'/)[1]).querySelector('.policy-accept-btn');
             acceptBtn.disabled = true;
           });
 
