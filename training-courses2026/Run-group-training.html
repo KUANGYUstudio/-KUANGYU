@@ -1892,7 +1892,8 @@
           btn.innerText = '確認送出報名';
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error(error); // 加上 error log 方便未來除錯
         showAlert('網路傳送失敗，請連繫工作室。', false); 
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
