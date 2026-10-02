@@ -13,22 +13,17 @@
        ========================================== */
     
     :root {
-      /* 田徑曜石橘 (表單區與按鈕) */
       --orange-main: #e65c00;
       --orange-dark: #b33600;
       --orange-light: #fff0e6;
       --orange-border: #ffd1b3;
       --orange-bg: #fffbf8;
       --orange-tint: #fff5ed;
-
-      /* 極簡灰黑經典 (課表區) */
       --slate-main: #5c6b73;
       --slate-dark: #2f3e46;
       --slate-light: #f4f6f7;
       --slate-border: #d3d9dc;
       --slate-bg: #f8f9fa;
-
-      /* 錯誤提示紅 */
       --error-color: #d6556d;
     }
 
@@ -56,7 +51,6 @@
       body { padding: 30px 15px; }
     }
 
-    /* Logo 樣式 */
     .main-logo { 
       display: block; 
       margin: 0 auto 5px; 
@@ -67,7 +61,6 @@
       .main-logo { width: 60px; margin-bottom: 10px; } 
     }
     
-    /* 主標題 */
     h1 { 
       font-size: 26px; 
       font-weight: 600; 
@@ -80,9 +73,23 @@
       border-bottom: 1px solid var(--slate-border);
     }
 
-    /* ==========================================
-       課程資訊摘要 (清透膠囊網格)
-       ========================================== */
+    /* === 額滿公告橫幅樣式 === */
+    .sold-out-banner {
+      display: none; /* 預設隱藏，系統自動偵測後顯示 */
+      background-color: #fef2f2;
+      border: 1px dashed #ef4444;
+      color: #dc2626;
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 30px;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.08);
+      animation: fadeIn 0.4s ease;
+    }
+
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -160,9 +167,6 @@
       }
     }
 
-    /* ==========================================
-       招募引言與社群連結
-       ========================================== */
     .intro-text {
       text-align: center;
       font-size: 16px;
@@ -199,9 +203,6 @@
       object-fit: contain;
     }
 
-    /* ==========================================
-       展開/收合 漸層動畫
-       ========================================== */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -272,9 +273,6 @@
       animation: fadeIn 0.6s ease;
     }
 
-    /* ==========================================
-       適合對象 (灰黑版)
-       ========================================== */
     .qual-section { 
       margin-top: 20px;
       margin-bottom: 50px; 
@@ -304,9 +302,6 @@
       margin-bottom: 0; 
     }
 
-    /* ==========================================
-       關於教練區塊 
-       ========================================== */
     .coach-section {
       margin-bottom: 50px;
     }
@@ -334,7 +329,6 @@
       margin-bottom: 16px;
     }
     
-    /* 教練圓形照片樣式 */
     .coach-avatar {
       width: 76px;
       height: 76px;
@@ -408,9 +402,6 @@
       border-radius: 50%;
     }
 
-    /* ==========================================
-       MUJI 風格課程安排
-       ========================================== */
     .schedule-section {
       margin-bottom: 50px;
     }
@@ -588,54 +579,24 @@
       white-space: nowrap;
     }
 
-    /* 莫蘭迪色系標籤 */
-    .tag-core { background-color: #f8eaed; color: #a37c86; border: 1px solid #ebd6da; } /* 中軸核心-粉 */
-    .tag-lower { background-color: #e8f0f6; color: #728c9f; border: 1px solid #d5e2eb; } /* 下肢-藍 */
-    .tag-upper { background-color: #fbf5e8; color: #b69c70; border: 1px solid #ece2cf; } /* 上肢-黃 */
-    .tag-integrate { background-color: #eef4ed; color: #7f9b84; border: 1px solid #dae5d8; } /* 整合-綠 */
+    .tag-core { background-color: #f8eaed; color: #a37c86; border: 1px solid #ebd6da; } 
+    .tag-lower { background-color: #e8f0f6; color: #728c9f; border: 1px solid #d5e2eb; } 
+    .tag-upper { background-color: #fbf5e8; color: #b69c70; border: 1px solid #ece2cf; } 
+    .tag-integrate { background-color: #eef4ed; color: #7f9b84; border: 1px solid #dae5d8; } 
     
     @media (max-width: 600px) {
-      .schedule-list {
-        column-count: 1; 
-      }
-      .schedule-card {
-        padding: 8px 12px; 
-        margin-bottom: 8px; 
-      }
-      .card-left {
-        width: 65px; 
-      }
-      .card-week {
-        font-size: 10px; 
-        margin-bottom: 2px; 
-        padding-bottom: 0;
-        border-bottom: none; 
-      }
-      .card-date {
-        font-size: 18px; 
-        margin-bottom: 2px;
-      }
-      .card-location {
-        font-size: 11px; 
-      }
-      .card-center {
-        padding: 0 8px;
-      }
-      .card-content {
-        font-size: 16px; 
-      }
-      .card-right {
-        min-width: 45px;
-      }
-      .goal-tag-muji {
-        font-size: 10px;
-        padding: 3px 6px;
-      }
+      .schedule-list { column-count: 1; }
+      .schedule-card { padding: 8px 12px; margin-bottom: 8px; }
+      .card-left { width: 65px; }
+      .card-week { font-size: 10px; margin-bottom: 2px; padding-bottom: 0; border-bottom: none; }
+      .card-date { font-size: 18px; margin-bottom: 2px; }
+      .card-location { font-size: 11px; }
+      .card-center { padding: 0 8px; }
+      .card-content { font-size: 16px; }
+      .card-right { min-width: 45px; }
+      .goal-tag-muji { font-size: 10px; padding: 3px 6px; }
     }
 
-    /* ==========================================
-       下半部：表單區塊
-       ========================================== */
     .section-title { 
       font-size: 15px; 
       font-weight: 600; 
@@ -656,9 +617,7 @@
       .form-row { flex-direction: column; gap: 20px; margin-bottom: 20px; }
     }
     
-    label.field-label { 
-      display: block; font-weight: 600; font-size: 14px; color: #444; margin-bottom: 6px; 
-    }
+    label.field-label { display: block; font-weight: 600; font-size: 14px; color: #444; margin-bottom: 6px; }
     
     input[type="text"], input[type="email"] { 
       display: block; width: 100%; max-width: 100%; -webkit-appearance: none; appearance: none;
@@ -687,9 +646,7 @@
 
     .payment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
     
-    .option-label { 
-      font-weight: 400; font-size: 15px; color: #333; display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 0;
-    }
+    .option-label { font-weight: 400; font-size: 15px; color: #333; display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 0; }
 
     input[type="radio"], input[type="checkbox"] { accent-color: var(--orange-main); width: 18px; height: 18px; cursor: pointer; margin: 0; }
     
@@ -703,7 +660,6 @@
       border-radius: 6px; font-size: 14.5px; margin-top: 0; margin-bottom: 16px; line-height: 1.8; color: #444;
     }
 
-    /* 橘色通知卡片樣式 */
     .schedule-notice-box {
       background-color: var(--orange-light);
       border: 1px solid var(--orange-border);
@@ -718,9 +674,6 @@
       box-shadow: 0 2px 8px rgba(230, 92, 0, 0.04);
     }
 
-    /* ==========================================
-       自訂條款卡片 (彈出視窗機制)
-       ========================================== */
     .policy-box {
       border: 1px solid #d1d9e0;
       border-radius: 8px;
@@ -754,7 +707,7 @@
       position: relative;
       user-select: none;
       flex: 1;
-      pointer-events: none; /* 鎖定點擊，強制使用外層盒子呼叫視窗 */
+      pointer-events: none; 
     }
 
     .custom-checkbox-container input[type="checkbox"] {
@@ -821,7 +774,6 @@
       color: var(--orange-main);
     }
 
-    /* 條款彈出視窗 */
     .policy-modal-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.5); z-index: 2000; align-items: center; justify-content: center;
@@ -896,9 +848,6 @@
     button[type="submit"]:hover { background: #cc5200; }
     button[type="submit"]:disabled { background: #c5d0d6; cursor: not-allowed; }
 
-    /* ==========================================
-       一般彈出視窗樣式
-       ========================================== */
     .modal-overlay {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.4); z-index: 1000; align-items: center; justify-content: center;
@@ -921,7 +870,6 @@
     }
     .modal-btn:hover { background: #cc5200; }
 
-    /* === 增強表單小標題視覺層次 === */
     .form-group { margin-bottom: 34px; }
     label.field-label { 
       font-weight: 700; 
@@ -941,6 +889,11 @@
   
   <img src="../KUANGYU_logo_icon.png" alt="KUANGYU Logo" class="main-logo">
   <h1>光聿第 27 期跑班</h1>
+
+  <!-- ✨ 額滿橫幅 (預設隱藏，若額滿系統會自動打開) -->
+  <div class="sold-out-banner" id="soldOutBanner">
+    🎉 本期跑班報名已達滿班上限，感謝您的支持！
+  </div>
 
   <div class="intro-text">
     這一期跑班我們將回到身體感受和控制，<br>
@@ -1578,10 +1531,36 @@
 <script>
   const scriptURL = 'https://script.google.com/macros/s/AKfycbytDGwDw9-P_3JaW575Ph8meYn-EXXNUMR7knpdV-4KdI4py_hS3i3PUV1UfngWelmsTQ/exec';
   
+  // ✨ 新增防呆：網頁載入時自動去 GAS 檢查是否已滿班
+  document.addEventListener("DOMContentLoaded", () => {
+    fetch(scriptURL)
+      .then(response => {
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          return response.json();
+        } else {
+          throw new Error('Not JSON (Backend might not be updated yet)');
+        }
+      })
+      .then(data => {
+        if (data && data.isFull) {
+          document.getElementById('soldOutBanner').style.display = 'block';
+          const sBtn = document.getElementById('submitBtn');
+          sBtn.disabled = true;
+          sBtn.innerText = '本期已達 8 人滿班';
+          sBtn.style.backgroundColor = '#cbd5e1';
+          sBtn.style.color = '#475569';
+          sBtn.style.cursor = 'not-allowed';
+        }
+      })
+      .catch(error => {
+         console.log('自動檢查滿班狀態失敗', error);
+      });
+  });
+
   const form = document.getElementById('trainingForm');
   const btn = document.getElementById('submitBtn');
 
-  // --- 資訊區塊展開與收合邏輯 (含漸層) ---
   const toggleInfoBtn = document.getElementById('toggleInfoBtn');
   const collapseInfoBtn = document.getElementById('collapseInfoBtn');
   const moreInfoWrapper = document.getElementById('moreInfoWrapper');
@@ -1592,13 +1571,11 @@
 
   collapseInfoBtn.addEventListener('click', () => {
     moreInfoWrapper.classList.remove('expanded');
-    // 平滑滾動回到區塊頂部附近,避免畫面跳動
     setTimeout(() => {
       moreInfoWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
   });
 
-  // --- 新舊生切換與表單展開邏輯 ---
   const statusRadios = document.querySelectorAll('input[name="studentStatus"]');
   const newStudentElements = document.querySelectorAll('.new-student-only');
   const newStudentReqs = document.querySelectorAll('.req-new');
@@ -1607,7 +1584,6 @@
 
   statusRadios.forEach(radio => {
     radio.addEventListener('change', (e) => {
-      // 顯示下方表單
       if (mainFormContent.style.display === 'none') {
         mainFormContent.style.display = 'block';
         setTimeout(() => {
@@ -1617,20 +1593,16 @@
 
       const isNew = e.target.value === '新生';
       
-      // 顯示或隱藏新生專屬區塊
       newStudentElements.forEach(el => {
         el.style.display = isNew ? '' : 'none'; 
       });
 
-      // 動態解除必填限制
       newStudentReqs.forEach(el => {
         el.required = isNew;
       });
 
-      // 處理付款方式：新生隱藏現金與LINE PAY
       if (isNew) {
         oldStudentPayments.forEach(el => el.style.display = 'none');
-        // 若原本選了現金或LINE PAY，強制改為匯款並展開匯款資訊
         const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
         if (selectedPayment && selectedPayment.value !== '匯款') {
           document.querySelector('input[name="paymentMethod"][value="匯款"]').checked = true;
@@ -1641,7 +1613,6 @@
         oldStudentPayments.forEach(el => el.style.display = 'flex');
       }
 
-      // 如果切換成舊生，清空並隱藏參考成績面版
       if (!isNew) {
         document.getElementById('roadracePanel').style.display = 'none';
         document.getElementById('pacePanel').style.display = 'none';
@@ -1653,7 +1624,6 @@
   const bankDetailsGroup = document.getElementById('bankDetailsGroup');
   const bankLastFiveInput = document.querySelector('input[name="bankLastFive"]');
 
-  // --- Alert 邏輯 ---
   function showAlert(message, isSuccess = false) {
     const modal = document.getElementById('customAlert');
     const icon = document.getElementById('alertIcon');
@@ -1683,13 +1653,11 @@
     }, 300);
   }
 
-  // --- 條款彈出視窗與同意邏輯 ---
   function openPolicyModal(modalId) {
     const modal = document.getElementById(modalId);
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('show'), 10);
     
-    // 如果內容很短不需滾動，直接啟用同意按鈕
     const body = modal.querySelector('.policy-modal-body');
     const acceptBtn = modal.querySelector('.policy-accept-btn');
     if (body.scrollHeight <= body.clientHeight + 10) {
@@ -1719,7 +1687,6 @@
     closePolicyModal(modalId);
   }
 
-  // --- 參考成績動態展開邏輯 ---
   const perfRadios = document.querySelectorAll('input[name="perfType"]');
   const roadracePanel = document.getElementById('roadracePanel');
   const pacePanel = document.getElementById('pacePanel');
@@ -1736,7 +1703,6 @@
     });
   });
 
-  // --- 方案選擇動態展開邏輯 ---
   const planRadios = document.querySelectorAll('input[name="plan"]');
   const singleClassPanel = document.getElementById('singleClassPanel');
 
@@ -1746,13 +1712,11 @@
         singleClassPanel.style.display = 'block';
       } else {
         singleClassPanel.style.display = 'none';
-        // 切換回一期時，清空單堂勾選
         document.querySelectorAll('input[name="singleDates"]').forEach(cb => cb.checked = false);
       }
     });
   });
 
-  // --- 匯款選項動態展開邏輯 ---
   document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
     r.addEventListener('change', (e) => {
       if (e.target.value === '匯款') {
@@ -1766,7 +1730,6 @@
     });
   });
 
-  // --- 表單送出邏輯 ---
   form.onsubmit = e => {
     e.preventDefault();
 
@@ -1802,7 +1765,6 @@
       }
     }
 
-    // --- 參考成績前端驗證 (僅限新生) ---
     const studentStatus = document.querySelector('input[name="studentStatus"]:checked').value;
     if (studentStatus === '新生') {
       const selectedPerf = document.querySelector('input[name="perfType"]:checked');
@@ -1824,7 +1786,6 @@
       }
     }
 
-    // --- 單堂報名前端驗證 ---
     const selectedPlan = document.querySelector('input[name="plan"]:checked');
     if (selectedPlan && selectedPlan.value.includes('單堂報名')) {
       const checkedDates = document.querySelectorAll('input[name="singleDates"]:checked');
@@ -1860,14 +1821,11 @@
           pacePanel.style.display = 'none';
           singleClassPanel.style.display = 'none';
           
-          // 復原新生狀態與畫面
           document.querySelectorAll('.new-student-only').forEach(el => el.style.display = '');
           document.querySelectorAll('.req-new').forEach(el => el.required = true);
 
-          // 隱藏主要表單區域
           mainFormContent.style.display = 'none';
 
-          // 重置條款勾選狀態
           const policyBoxes = document.querySelectorAll('.policy-box');
           policyBoxes.forEach(box => {
             box.classList.remove('is-checked');
@@ -1885,7 +1843,7 @@
         }
       })
       .catch((error) => {
-        console.error(error); // 加上 error log 方便未來除錯
+        console.error(error); 
         showAlert('網路傳送失敗，請連繫工作室。', false); 
         btn.disabled = false; 
         btn.innerText = '確認送出報名';
