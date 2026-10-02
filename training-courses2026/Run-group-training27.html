@@ -13,17 +13,22 @@
        ========================================== */
     
     :root {
+      /* 田徑曜石橘 (表單區與按鈕) */
       --orange-main: #e65c00;
       --orange-dark: #b33600;
       --orange-light: #fff0e6;
       --orange-border: #ffd1b3;
       --orange-bg: #fffbf8;
       --orange-tint: #fff5ed;
+
+      /* 極簡灰黑經典 (課表區) */
       --slate-main: #5c6b73;
       --slate-dark: #2f3e46;
       --slate-light: #f4f6f7;
       --slate-border: #d3d9dc;
       --slate-bg: #f8f9fa;
+
+      /* 錯誤提示紅 */
       --error-color: #d6556d;
     }
 
@@ -51,6 +56,7 @@
       body { padding: 30px 15px; }
     }
 
+    /* Logo 樣式 */
     .main-logo { 
       display: block; 
       margin: 0 auto 5px; 
@@ -61,6 +67,7 @@
       .main-logo { width: 60px; margin-bottom: 10px; } 
     }
     
+    /* 主標題 */
     h1 { 
       font-size: 26px; 
       font-weight: 600; 
@@ -90,6 +97,9 @@
       animation: fadeIn 0.4s ease;
     }
 
+    /* ==========================================
+       課程資訊摘要 (清透膠囊網格)
+       ========================================== */
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -167,6 +177,9 @@
       }
     }
 
+    /* ==========================================
+       招募引言與社群連結
+       ========================================== */
     .intro-text {
       text-align: center;
       font-size: 16px;
@@ -203,6 +216,9 @@
       object-fit: contain;
     }
 
+    /* ==========================================
+       展開/收合 漸層動畫
+       ========================================== */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -273,6 +289,9 @@
       animation: fadeIn 0.6s ease;
     }
 
+    /* ==========================================
+       適合對象 (灰黑版)
+       ========================================== */
     .qual-section { 
       margin-top: 20px;
       margin-bottom: 50px; 
@@ -302,6 +321,9 @@
       margin-bottom: 0; 
     }
 
+    /* ==========================================
+       關於教練區塊 
+       ========================================== */
     .coach-section {
       margin-bottom: 50px;
     }
@@ -329,6 +351,7 @@
       margin-bottom: 16px;
     }
     
+    /* 教練圓形照片樣式 */
     .coach-avatar {
       width: 76px;
       height: 76px;
@@ -402,6 +425,9 @@
       border-radius: 50%;
     }
 
+    /* ==========================================
+       MUJI 風格課程安排
+       ========================================== */
     .schedule-section {
       margin-bottom: 50px;
     }
@@ -597,6 +623,9 @@
       .goal-tag-muji { font-size: 10px; padding: 3px 6px; }
     }
 
+    /* ==========================================
+       下半部：表單區塊
+       ========================================== */
     .section-title { 
       font-size: 15px; 
       font-weight: 600; 
@@ -619,18 +648,18 @@
     
     label.field-label { display: block; font-weight: 600; font-size: 14px; color: #444; margin-bottom: 6px; }
     
-    input[type="text"], input[type="email"] { 
+    input[type="text"], input[type="email"], textarea { 
       display: block; width: 100%; max-width: 100%; -webkit-appearance: none; appearance: none;
       padding: 12px 14px; border: 1px solid #d1d9e0; border-radius: 6px; 
       background-color: #fff; box-sizing: border-box; font-size: 15px; color: #333;
       transition: all 0.2s ease;
     }
     
-    input[type="text"]:focus, input[type="email"]:focus {
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
       outline: none; border-color: var(--orange-main); box-shadow: 0 0 0 3px rgba(230, 92, 0, 0.15);
     }
 
-    input.error-border {
+    input.error-border, textarea.error-border {
       border-color: var(--error-color) !important;
       box-shadow: 0 0 0 3px rgba(214, 85, 109, 0.15) !important;
     }
@@ -674,6 +703,9 @@
       box-shadow: 0 2px 8px rgba(230, 92, 0, 0.04);
     }
 
+    /* ==========================================
+       自訂條款卡片 (彈出視窗機制)
+       ========================================== */
     .policy-box {
       border: 1px solid #d1d9e0;
       border-radius: 8px;
@@ -890,9 +922,9 @@
   <img src="../KUANGYU_logo_icon.png" alt="KUANGYU Logo" class="main-logo">
   <h1>光聿第 27 期跑班</h1>
 
-  <!-- ✨ 額滿橫幅 (預設隱藏，若額滿系統會自動打開) -->
+  <!-- ✨ 額滿橫幅 (文字已極簡化) -->
   <div class="sold-out-banner" id="soldOutBanner">
-    🎉 本期跑班報名已達滿班上限，感謝您的支持！
+    本期跑班已額滿
   </div>
 
   <div class="intro-text">
@@ -1356,28 +1388,6 @@
             <input type="radio" name="plan" value="整期 12 堂（$5,400）" checked required>
             <span>整期 12 堂（$5,400）</span>
           </label>
-          <label class="option-label">
-            <input type="radio" name="plan" value="單堂報名（$550／堂）" required>
-            <span>單堂報名（$550／堂）</span>
-          </label>
-        </div>
-
-        <div id="singleClassPanel" class="dynamic-panel">
-          <label class="field-label">請選擇報名日期（可複選）</label>
-          <div class="option-group row-layout" style="margin-bottom: 10px;">
-            <label class="option-label"><input type="checkbox" name="singleDates" value="9/23"><span>9/23</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="9/30"><span>9/30</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="10/7"><span>10/7</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="10/14"><span>10/14</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="10/21"><span>10/21</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="10/28"><span>10/28</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="11/4"><span>11/4</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="11/18"><span>11/18</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="11/25"><span>11/25</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="12/2"><span>12/2</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="12/9"><span>12/9</span></label>
-            <label class="option-label"><input type="checkbox" name="singleDates" value="12/16"><span>12/16</span></label>
-          </div>
         </div>
       </div>
 
@@ -1529,9 +1539,10 @@
 </div>
 
 <script>
+  // 請記得替換為您最新部署的 GAS 網址
   const scriptURL = 'https://script.google.com/macros/s/AKfycbytDGwDw9-P_3JaW575Ph8meYn-EXXNUMR7knpdV-4KdI4py_hS3i3PUV1UfngWelmsTQ/exec';
   
-  // ✨ 新增防呆：網頁載入時自動去 GAS 檢查是否已滿班
+  // ✨ 終極防呆：網頁載入時自動去 GAS 檢查是否已滿班，若滿班直接從最外層鎖死表單
   document.addEventListener("DOMContentLoaded", () => {
     fetch(scriptURL)
       .then(response => {
@@ -1539,18 +1550,31 @@
         if (contentType && contentType.indexOf("application/json") !== -1) {
           return response.json();
         } else {
-          throw new Error('Not JSON (Backend might not be updated yet)');
+          throw new Error('Not JSON');
         }
       })
       .then(data => {
         if (data && data.isFull) {
-          document.getElementById('soldOutBanner').style.display = 'block';
+          // 1. 顯示極簡版額滿橫幅
+          const banner = document.getElementById('soldOutBanner');
+          if(banner) banner.style.display = 'block';
+          
+          // 2. 鎖定送出按鈕
           const sBtn = document.getElementById('submitBtn');
-          sBtn.disabled = true;
-          sBtn.innerText = '本期已達 8 人滿班';
-          sBtn.style.backgroundColor = '#cbd5e1';
-          sBtn.style.color = '#475569';
-          sBtn.style.cursor = 'not-allowed';
+          if(sBtn) {
+            sBtn.disabled = true;
+            sBtn.innerText = '本期跑班已額滿';
+            sBtn.style.backgroundColor = '#cbd5e1';
+            sBtn.style.color = '#475569';
+            sBtn.style.cursor = 'not-allowed';
+          }
+
+          // 3. ✨ 終極鎖定：讓整個表單區域視覺變半透明，且完全無法點擊
+          const formArea = document.getElementById('trainingForm');
+          if(formArea) {
+            formArea.style.pointerEvents = 'none';
+            formArea.style.opacity = '0.7'; 
+          }
         }
       })
       .catch(error => {
@@ -1703,20 +1727,6 @@
     });
   });
 
-  const planRadios = document.querySelectorAll('input[name="plan"]');
-  const singleClassPanel = document.getElementById('singleClassPanel');
-
-  planRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-      if (e.target.value.includes('單堂報名')) {
-        singleClassPanel.style.display = 'block';
-      } else {
-        singleClassPanel.style.display = 'none';
-        document.querySelectorAll('input[name="singleDates"]').forEach(cb => cb.checked = false);
-      }
-    });
-  });
-
   document.querySelectorAll('input[name="paymentMethod"]').forEach(r => {
     r.addEventListener('change', (e) => {
       if (e.target.value === '匯款') {
@@ -1786,18 +1796,6 @@
       }
     }
 
-    const selectedPlan = document.querySelector('input[name="plan"]:checked');
-    if (selectedPlan && selectedPlan.value.includes('單堂報名')) {
-      const checkedDates = document.querySelectorAll('input[name="singleDates"]:checked');
-      if (checkedDates.length === 0) {
-        showAlert('請至少選擇一天單堂報名的日期', false);
-        const group = document.getElementById('singleClassPanel');
-        group.classList.add('group-error-border');
-        group.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-    }
-    
     btn.disabled = true; 
     btn.innerText = '處理中...';
     
@@ -1819,7 +1817,6 @@
 
           roadracePanel.style.display = 'none';
           pacePanel.style.display = 'none';
-          singleClassPanel.style.display = 'none';
           
           document.querySelectorAll('.new-student-only').forEach(el => el.style.display = '');
           document.querySelectorAll('.req-new').forEach(el => el.required = true);
