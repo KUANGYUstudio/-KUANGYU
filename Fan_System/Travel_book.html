@@ -289,7 +289,6 @@
                     <button v-if="isEditMode" class="tab-btn" @click="addDay" style="background:var(--bg-color)">+ 新增天數</button>
                 </div>
 
-                <!-- 加上 :key 強制重新渲染以觸發 bounce 動畫 -->
                 <div v-if="trip.days[currentDay]" :key="animationKey" class="bounce">
                     <div v-if="isEditMode" style="margin-bottom: 15px;">
                         <input v-model="trip.days[currentDay].name" placeholder="標籤名稱 (如 Day 1)">
@@ -348,8 +347,9 @@
             <div id="todo" class="card" style="background-color: var(--coral-pink);">
                 <h2>出發前準備</h2>
                 <div v-for="(todo, tIndex) in trip.todos" :key="tIndex" class="todo-item" :class="{ done: todo.done }">
-                    <div class="checkbox" @click="if(!isEditMode) todo.done = !todo.done"></div>
-                    <span v-if="!isEditMode" @click="todo.done = !todo.done">{{ todo.text }}</span>
+                    <!-- 使用函數處理點擊 -->
+                    <div class="checkbox" @click="toggleTodo(todo)"></div>
+                    <span v-if="!isEditMode" @click="toggleTodo(todo)">{{ todo.text }}</span>
                     <input v-else v-model="todo.text" style="margin:0; width:calc(100% - 40px);">
                     <button v-if="isEditMode" @click="trip.todos.splice(tIndex, 1)" style="margin-left:5px; background:transparent; border:none; cursor:pointer;">❌</button>
                 </div>
@@ -365,7 +365,7 @@
     <script>
         const { createApp, ref, computed, watch, onMounted } = Vue;
 
-        // 預設資料 (包含第一版的完整內容)
+        // 預設資料
         const defaultData = {
             title: "青森・弘前 春日家族旅行",
             subtitle: "與媽媽、Mike 的賞櫻與新幹線之旅",
@@ -428,7 +428,7 @@
             setup() {
                 const isEditMode = ref(false);
                 const currentDay = ref(0);
-                const animationKey = ref(0); // 用來觸發彈跳動畫
+                const animationKey = ref(0);
                 const trip = ref(defaultData);
 
                 // 讀取 LocalStorage
@@ -452,9 +452,16 @@
 
                 const toggleEdit = () => { isEditMode.value = !isEditMode.value; };
 
+                // 將判斷寫成獨立函數，避免在 HTML 中發生語法錯誤
+                const toggleTodo = (todo) => {
+                    if (!isEditMode.value) {
+                        todo.done = !todo.done;
+                    }
+                };
+
                 const changeTab = (index) => {
                     currentDay.value = index;
-                    animationKey.value++; // 改變 key 來重新觸發 Vue 元件的掛載，播放 bounce 動畫
+                    animationKey.value++; 
                 };
 
                 const getTagClass = (tag) => {
@@ -489,7 +496,7 @@
 
                 return {
                     isEditMode, trip, currentDay, daysLeft, animationKey,
-                    toggleEdit, changeTab, getTagClass, addDay, removeDay, addEvent, removeEvent, exportData
+                    toggleEdit, toggleTodo, changeTab, getTagClass, addDay, removeDay, addEvent, removeEvent, exportData
                 }
             }
         }).mount('#app');
