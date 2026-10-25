@@ -45,12 +45,19 @@
             z-index: 1000;
         }
 
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .nav-links::-webkit-scrollbar { display: none; }
+
         .nav-links a {
             text-decoration: none;
             color: var(--stroke-color);
             font-weight: bold;
             padding: 5px 10px;
-            margin-right: 10px;
             border-radius: var(--radius-small);
         }
         .nav-links a:hover { background-color: var(--yamabuki-yellow); }
@@ -65,6 +72,7 @@
             cursor: pointer;
             box-shadow: 2px 2px 0px var(--stroke-color);
             margin-left: 10px;
+            white-space: nowrap;
         }
         .controls button.editing { background-color: var(--coral-pink); }
         .controls button:active { transform: translateY(2px); box-shadow: none; }
@@ -89,22 +97,47 @@
             padding: 8px;
             font-family: inherit;
             font-size: inherit;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             box-sizing: border-box;
         }
         input:focus, textarea:focus { outline: none; border-style: solid; background: #fff; }
+        label.edit-label { font-size: 0.9rem; font-weight: bold; display: block; margin-bottom: 5px; color: #555;}
 
+        /* 首頁標題與倒數 */
         .hero { text-align: center; background-color: var(--water-blue); }
+        .hero h1 { margin: 10px 0; font-size: 1.8rem; }
         .countdown {
             display: inline-block;
             background-color: #FFFFFF;
             border: var(--border-width) solid var(--stroke-color);
             border-radius: var(--radius-small);
             padding: 10px 20px;
+            font-size: 1.2rem;
             font-weight: bold;
             margin-top: 10px;
         }
 
+        /* 動畫與插圖 */
+        .svg-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        .floating { animation: float 3s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .bounce { animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .floating, .bounce { animation: none !important; transform: none !important; opacity: 1 !important; }
+        }
+
+        /* 標籤 */
         .tag {
             display: inline-block;
             border: var(--border-width) solid var(--stroke-color);
@@ -118,6 +151,7 @@
         .tag-train { background-color: var(--wakatake-green); }
         .tag-flight { background-color: var(--water-blue); }
 
+        /* 行程切換 */
         .tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; }
         .tabs::-webkit-scrollbar { display: none; }
         .tab-btn {
@@ -136,6 +170,7 @@
             box-shadow: 2px 2px 0px var(--stroke-color);
         }
 
+        /* 時間軸 */
         .timeline-item { display: flex; margin-bottom: 20px; position: relative; }
         .timeline-item::before {
             content: ''; position: absolute; left: 48px; top: 30px; bottom: -20px;
@@ -153,20 +188,22 @@
             border: var(--border-width) solid var(--stroke-color);
             border-radius: var(--radius-small); padding: 12px;
         }
+        .event h3 { margin: 0 0 8px 0; font-size: 1.1rem; }
+        .event p { margin: 0; font-size: 0.95rem; line-height: 1.5; }
         
+        /* 待辦清單 */
         .todo-item { display: flex; align-items: center; margin-bottom: 12px; cursor: pointer; }
         .checkbox {
             width: 20px; height: 20px; border: var(--border-width) solid var(--stroke-color);
             border-radius: 6px; margin-right: 12px; display: flex;
             align-items: center; justify-content: center; background-color: #FFFFFF;
+            flex-shrink: 0;
         }
         .todo-item.done .checkbox { background-color: var(--wakatake-green); }
         .todo-item.done .checkbox::after { content: '✓'; font-weight: bold; }
         .todo-item.done span { text-decoration: line-through; opacity: 0.7; }
 
-        .tool-box iframe { width: 100%; border: 2px solid var(--stroke-color); border-radius: var(--radius-small); margin-top:10px; }
-        
-        .btn-small { background: #fff; border: 2px solid var(--stroke-color); border-radius: 6px; cursor: pointer; font-family: inherit; margin-top: 5px; }
+        .btn-small { background: #fff; border: 2px solid var(--stroke-color); border-radius: 6px; cursor: pointer; font-family: inherit; margin-top: 5px; font-weight: bold;}
     </style>
 </head>
 <body>
@@ -174,48 +211,86 @@
         <header>
             <div class="nav-links">
                 <a href="#itinerary">行程</a>
-                <a href="#tools">工具</a>
+                <a href="#flight">航班</a>
+                <a href="#hotel">住宿</a>
                 <a href="#todo">清單</a>
             </div>
             <div class="controls">
-                <button @click="exportData">匯出資料</button>
                 <button :class="{ editing: isEditMode }" @click="toggleEdit">
-                    {{ isEditMode ? '儲存變更' : '進入編輯模式' }}
+                    {{ isEditMode ? '儲存變更' : '編輯行程' }}
                 </button>
             </div>
         </header>
 
         <div class="container">
-            <!-- 首頁區塊 -->
+            <!-- 首頁標題與倒數 -->
             <div class="card hero">
+                <div class="svg-container floating" v-show="!isEditMode">
+                    <!-- 櫻花與新幹線插圖 SVG -->
+                    <svg width="120" height="80" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10,60 L110,60" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M20,60 C20,30 40,20 80,20 L100,20 C110,20 115,30 115,60 Z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/>
+                        <rect x="35" y="30" width="20" height="15" rx="4" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
+                        <rect x="65" y="30" width="20" height="15" rx="4" fill="#FFFCF6" stroke="#3E3A39" stroke-width="3"/>
+                        <circle cx="20" cy="15" r="10" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+                        <circle cx="100" cy="10" r="8" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
+                    </svg>
+                </div>
                 <div v-if="!isEditMode">
                     <h1 v-text="trip.title"></h1>
                     <p v-text="trip.subtitle"></p>
                     <div class="countdown">距離出發還有 {{ daysLeft }} 天</div>
                 </div>
-                <div v-else>
+                <div v-else style="margin-top: 15px;">
+                    <label class="edit-label">主標題</label>
                     <input v-model="trip.title" placeholder="主標題">
+                    <label class="edit-label">副標題</label>
                     <input v-model="trip.subtitle" placeholder="副標題">
+                    <label class="edit-label">出發日期</label>
                     <input type="date" v-model="trip.date">
                 </div>
             </div>
 
-            <!-- 行程區塊 -->
+            <!-- 航班資訊 -->
+            <div id="flight" class="card" style="background-color: var(--yamabuki-yellow);">
+                <div class="svg-container" v-show="!isEditMode">
+                    <!-- 飛機插圖 SVG -->
+                    <svg width="60" height="40" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10,25 C10,15 20,10 40,10 L55,10 C58,10 58,20 55,25 Z" fill="#FFFFFF" stroke="#3E3A39" stroke-width="3"/>
+                        <path d="M25,15 L35,5 L40,5 L35,15" fill="#FFFFFF" stroke="#3E3A39" stroke-width="3"/>
+                        <path d="M20,25 L30,35 L35,35 L30,25" fill="#FFFFFF" stroke="#3E3A39" stroke-width="3"/>
+                    </svg>
+                </div>
+                <h2 style="text-align: center; margin-top:0;">航班資訊</h2>
+                <div v-if="!isEditMode">
+                    <p><span class="tag tag-flight">去程</span> {{ trip.flight.outbound }}</p>
+                    <p><span class="tag tag-flight">回程</span> {{ trip.flight.inbound }}</p>
+                </div>
+                <div v-else>
+                    <label class="edit-label">去程航班</label>
+                    <input v-model="trip.flight.outbound" placeholder="例如：台北 (TPE) 飛往 函館 (HKD)">
+                    <label class="edit-label">回程航班</label>
+                    <input v-model="trip.flight.inbound" placeholder="例如：青森 (AOJ) 飛往 台北">
+                </div>
+            </div>
+
+            <!-- 每日行程 -->
             <div id="itinerary" class="card">
-                <h2>每日行程</h2>
+                <h2>行程總覽</h2>
                 <div class="tabs">
                     <button 
                         v-for="(day, index) in trip.days" 
                         :key="index"
                         class="tab-btn" 
                         :class="{ active: currentDay === index }"
-                        @click="currentDay = index">
+                        @click="changeTab(index)">
                         {{ day.name }}
                     </button>
                     <button v-if="isEditMode" class="tab-btn" @click="addDay" style="background:var(--bg-color)">+ 新增天數</button>
                 </div>
 
-                <div v-if="trip.days[currentDay]">
+                <!-- 加上 :key 強制重新渲染以觸發 bounce 動畫 -->
+                <div v-if="trip.days[currentDay]" :key="animationKey" class="bounce">
                     <div v-if="isEditMode" style="margin-bottom: 15px;">
                         <input v-model="trip.days[currentDay].name" placeholder="標籤名稱 (如 Day 1)">
                     </div>
@@ -244,26 +319,28 @@
                                     <option value="JR">JR</option>
                                 </select>
                                 <textarea v-model="event.desc" placeholder="行程細節說明"></textarea>
-                                <button class="btn-small" @click="removeEvent(eIndex)">刪除此行程</button>
+                                <button class="btn-small" @click="removeEvent(eIndex)">刪除此行程點</button>
                             </div>
                         </div>
                     </div>
                     
                     <button v-if="isEditMode" class="btn-small" @click="addEvent" style="width:100%; padding:10px;">+ 新增行程點</button>
-                    <button v-if="isEditMode" class="btn-small" @click="removeDay" style="width:100%; padding:10px; margin-top:10px; color:red; border-color:red;">- 刪除整天</button>
+                    <button v-if="isEditMode" class="btn-small" @click="removeDay" style="width:100%; padding:10px; margin-top:10px; color:red; border-color:red;">- 刪除整天行程</button>
                 </div>
             </div>
 
-            <!-- 擴充工具區塊 -->
-            <div id="tools" class="card" style="background-color: var(--yamabuki-yellow);">
-                <h2>實用工具與地圖</h2>
-                <div class="tool-box" v-if="!isEditMode">
-                    <!-- 預設嵌入青森地圖，可隨時在編輯模式改成其他 iframe -->
-                    <div v-html="trip.toolIframe"></div>
+            <!-- 住宿資訊 -->
+            <div id="hotel" class="card" style="background-color: var(--water-blue);">
+                <h2>住宿資訊</h2>
+                <div v-if="!isEditMode">
+                    <p><strong>函館住宿：</strong> {{ trip.hotel.hakodate }}</p>
+                    <p><strong>青森住宿：</strong> {{ trip.hotel.aomori }}</p>
                 </div>
                 <div v-else>
-                    <p style="font-size:0.9rem;">在此貼上 Google Maps 或其他網頁小工具的 iframe 語法：</p>
-                    <textarea v-model="trip.toolIframe" rows="4"></textarea>
+                    <label class="edit-label">函館住宿</label>
+                    <textarea v-model="trip.hotel.hakodate" rows="2"></textarea>
+                    <label class="edit-label">青森住宿</label>
+                    <textarea v-model="trip.hotel.aomori" rows="2"></textarea>
                 </div>
             </div>
 
@@ -276,7 +353,11 @@
                     <input v-else v-model="todo.text" style="margin:0; width:calc(100% - 40px);">
                     <button v-if="isEditMode" @click="trip.todos.splice(tIndex, 1)" style="margin-left:5px; background:transparent; border:none; cursor:pointer;">❌</button>
                 </div>
-                <button v-if="isEditMode" class="btn-small" @click="trip.todos.push({text:'', done:false})">+ 新增項目</button>
+                <button v-if="isEditMode" class="btn-small" @click="trip.todos.push({text:'', done:false})">+ 新增準備項目</button>
+            </div>
+            
+            <div v-if="isEditMode" style="text-align: center; margin-bottom: 20px;">
+                <button class="btn-small" @click="exportData" style="padding: 10px 20px;">💾 備份下載 JSON</button>
             </div>
         </div>
     </div>
@@ -284,31 +365,60 @@
     <script>
         const { createApp, ref, computed, watch, onMounted } = Vue;
 
-        // 預設資料 (對應你的青森旅行計畫)
+        // 預設資料 (包含第一版的完整內容)
         const defaultData = {
             title: "青森・弘前 春日家族旅行",
             subtitle: "與媽媽、Mike 的賞櫻與新幹線之旅",
             date: "2027-04-10",
-            toolIframe: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d152778.68334465492!2d140.6384236!3d40.8246221!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5f9b411f18fc4a03%3A0xc3f83737ed98099e!2z5pel5pys6Z2S5qOu57ij6Z2S5qOu5biC!5e0!3m2!1szh-TW!2stw!4v1700000000000!5m2!1szh-TW!2stw" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>',
+            flight: {
+                outbound: "台北 (TPE) 飛往 函館 (HKD)",
+                inbound: "青森 (AOJ) 或 函館 飛往 台北"
+            },
+            hotel: {
+                hakodate: "預計安排車站周邊，方便移動。",
+                aomori: "安排於新青森或青森車站附近，便於搭乘新幹線與前往弘前。"
+            },
             todos: [
                 { text: "確認媽媽的護照效期", done: false },
                 { text: "預訂北海道新幹線車票", done: false },
                 { text: "打包防風與保暖衣物", done: false },
-                { text: "幫 Mike 確認攝影器材", done: false }
+                { text: "幫 Mike 確認攝影器材與電池", done: false },
+                { text: "預訂弘前城周邊餐廳", done: false }
             ],
             days: [
                 {
                     name: "Day 1",
                     events: [
-                        { time: "13:00", title: "抵達函館", tag: "航班", desc: "辦理入境手續，前往市區飯店。" },
+                        { time: "13:00", title: "抵達函館", tag: "", desc: "辦理入境手續，前往市區飯店寄放行李。" },
                         { time: "17:00", title: "函館山百萬夜景", tag: "必去", desc: "搭乘纜車上山，欣賞經典的海灣夜景。" }
                     ]
                 },
                 {
                     name: "Day 2",
                     events: [
-                        { time: "08:00", title: "函館朝市", tag: "", desc: "與媽媽和 Mike 品嚐新鮮海產。" },
+                        { time: "08:00", title: "函館朝市", tag: "", desc: "與媽媽和 Mike 一起品嚐新鮮海產與朝市早餐。" },
                         { time: "11:00", title: "穿越青函隧道", tag: "新幹線", desc: "搭乘北海道新幹線由函館前往新青森站。" }
+                    ]
+                },
+                {
+                    name: "Day 3",
+                    events: [
+                        { time: "09:00", title: "抵達弘前", tag: "JR", desc: "轉乘前往弘前市區。" },
+                        { time: "11:00", title: "弘前城賞櫻", tag: "必去", desc: "欣賞著名的櫻花祭與花筏美景，並在周邊品嚐蘋果派。" }
+                    ]
+                },
+                {
+                    name: "Day 4",
+                    events: [
+                        { time: "10:00", title: "青森市區觀光", tag: "", desc: "參觀睡魔之家 Wa Rasse，感受傳統祭典震撼。" },
+                        { time: "14:00", title: "A-FACTORY 採買", tag: "", desc: "購買蘋果酒與青森在地特色伴手禮。" }
+                    ]
+                },
+                {
+                    name: "Day 5",
+                    events: [
+                        { time: "10:00", title: "市區早茶與行李打包", tag: "", desc: "享用最後的日式早餐，確認行李重量。" },
+                        { time: "13:00", title: "前往機場", tag: "航班", desc: "搭乘班機返回台北，結束美好的家族旅行。" }
                     ]
                 }
             ]
@@ -318,11 +428,12 @@
             setup() {
                 const isEditMode = ref(false);
                 const currentDay = ref(0);
+                const animationKey = ref(0); // 用來觸發彈跳動畫
                 const trip = ref(defaultData);
 
                 // 讀取 LocalStorage
                 onMounted(() => {
-                    const saved = localStorage.getItem('tripApp_Data');
+                    const saved = localStorage.getItem('tripApp_Data_V2');
                     if (saved) {
                         try { trip.value = JSON.parse(saved); } catch(e) {}
                     }
@@ -330,7 +441,7 @@
 
                 // 自動存檔機制
                 watch(trip, (newVal) => {
-                    localStorage.setItem('tripApp_Data', JSON.stringify(newVal));
+                    localStorage.setItem('tripApp_Data_V2', JSON.stringify(newVal));
                 }, { deep: true });
 
                 const daysLeft = computed(() => {
@@ -340,6 +451,11 @@
                 });
 
                 const toggleEdit = () => { isEditMode.value = !isEditMode.value; };
+
+                const changeTab = (index) => {
+                    currentDay.value = index;
+                    animationKey.value++; // 改變 key 來重新觸發 Vue 元件的掛載，播放 bounce 動畫
+                };
 
                 const getTagClass = (tag) => {
                     if(tag === '必去') return 'tag tag-must';
@@ -351,11 +467,11 @@
                 // 編輯操作
                 const addDay = () => {
                     trip.value.days.push({ name: `Day ${trip.value.days.length + 1}`, events: [] });
-                    currentDay.value = trip.value.days.length - 1;
+                    changeTab(trip.value.days.length - 1);
                 };
                 const removeDay = () => {
                     trip.value.days.splice(currentDay.value, 1);
-                    currentDay.value = Math.max(0, currentDay.value - 1);
+                    changeTab(Math.max(0, currentDay.value - 1));
                 };
                 const addEvent = () => { trip.value.days[currentDay.value].events.push({ time: "10:00", title: "新行程", tag: "", desc: "" }); };
                 const removeEvent = (idx) => { trip.value.days[currentDay.value].events.splice(idx, 1); };
@@ -372,8 +488,8 @@
                 };
 
                 return {
-                    isEditMode, trip, currentDay, daysLeft,
-                    toggleEdit, getTagClass, addDay, removeDay, addEvent, removeEvent, exportData
+                    isEditMode, trip, currentDay, daysLeft, animationKey,
+                    toggleEdit, changeTab, getTagClass, addDay, removeDay, addEvent, removeEvent, exportData
                 }
             }
         }).mount('#app');
