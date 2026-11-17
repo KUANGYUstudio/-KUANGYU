@@ -317,6 +317,10 @@
       resize: vertical;
     }
 
+    .mt-10 {
+      margin-top: 10px;
+    }
+
     .field-error {
       border-color: var(--accent-coral) !important;
       background-color: #fffafa !important;
@@ -688,7 +692,7 @@
     <div class="progress-inner">
       <div class="brand-bar">
         <span class="brand-title">KUANGYU STUDIO｜線上一對一課表評估</span>
-        <span class="remaining-badge" id="remainingBadge">剩餘 <strong>3</strong> 個階段・還有 <strong>18</strong> 題待填</span>
+        <span class="remaining-badge" id="remainingBadge">剩餘 <strong>3</strong> 個階段・還有 <strong>19</strong> 題待填</span>
       </div>
       <div class="stage-status-row">
         <div class="current-stage-label" id="currentStageLabel">階段 1 / 4：基本資料與聯絡資訊</div>
@@ -817,13 +821,27 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label" for="raceGoalAndHistory"><span class="q-index">09</span>目標設定與過往運動經驗<span class="req-tag">*</span></label>
-            <textarea id="raceGoalAndHistory" name="raceGoalAndHistory" placeholder="請簡述本次目標（完賽、突破 PB 或特定時間），以及過往運動背景、近期代表成績" required></textarea>
-            <div class="error-msg">請填寫目標設定與運動經驗</div>
+            <label class="q-label"><span class="q-index">09</span>訓練 / 賽事目標設定<span class="req-tag">*</span></label>
+            <div class="pill-grid" data-required-checkbox="goalType">
+              <label class="pill-option"><input type="checkbox" name="goalType" value="順利完賽" /><span>順利完賽</span></label>
+              <label class="pill-option"><input type="checkbox" name="goalType" value="突破個人最佳（PB）" /><span>突破個人最佳（PB）</span></label>
+              <label class="pill-option"><input type="checkbox" name="goalType" value="達成特定目標時間" /><span>達成特定目標時間</span></label>
+              <label class="pill-option"><input type="checkbox" name="goalType" value="提升單項能力" /><span>提升單項能力</span></label>
+              <label class="pill-option"><input type="checkbox" name="goalType" value="培養規律運動習慣" /><span>培養規律運動習慣</span></label>
+            </div>
+            <div class="error-msg">請至少選擇一項目標方向</div>
+            <textarea id="raceGoalDetail" name="raceGoalDetail" class="mt-10" placeholder="請補充具體目標說明（例如：目標完賽時間、想加強的弱項或期望達成的狀態）" required></textarea>
+            <div class="error-msg">請填寫具體目標說明</div>
           </div>
 
           <div class="form-group">
-            <label class="q-label" for="injuryHistory"><span class="q-index">10</span>傷痛史或目前身體緊繃、不適部位<span class="req-tag">*</span></label>
+            <label class="q-label" for="sportHistory"><span class="q-index">10</span>過往運動背景與代表成績<span class="req-tag">*</span></label>
+            <textarea id="sportHistory" name="sportHistory" placeholder="請簡述運動年資、接觸過哪些運動項目、過往完賽經歷或近期代表成績（例如：半馬 1:55、標鐵 2:45；若無經驗可填「運動新手」）" required></textarea>
+            <div class="error-msg">請填寫過往運動背景與代表成績</div>
+          </div>
+
+          <div class="form-group">
+            <label class="q-label" for="injuryHistory"><span class="q-index">11</span>傷痛史或目前身體緊繃、不適部位<span class="req-tag">*</span></label>
             <textarea id="injuryHistory" name="injuryHistory" placeholder="請列出舊傷、開刀史或目前容易緊繃疼痛的部位（若無請填「無」）" required></textarea>
             <div class="error-msg">請填寫身體狀況（若無請填「無」）</div>
           </div>
@@ -842,7 +860,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">11</span>TrainingPeaks 帳號狀態<span class="req-tag">*</span></label>
+            <label class="q-label"><span class="q-index">12</span>TrainingPeaks 帳號狀態<span class="req-tag">*</span></label>
             <div class="pill-grid" data-required-radio="tpStatus">
               <label class="pill-option"><input type="radio" name="tpStatus" value="已有帳號" /><span>已有 TrainingPeaks 帳號</span></label>
               <label class="pill-option"><input type="radio" name="tpStatus" value="尚未註冊" /><span>尚未註冊（需協助開通）</span></label>
@@ -851,12 +869,12 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label" for="tpAccount"><span class="q-index">12</span>TrainingPeaks 註冊 Email 或帳號名稱<span class="opt-tag">（已有帳號者請填寫，方便發送教練綁定邀請）</span></label>
+            <label class="q-label" for="tpAccount"><span class="q-index">13</span>TrainingPeaks 註冊 Email 或帳號名稱<span class="opt-tag">（已有帳號者請填寫，方便發送教練綁定邀請）</span></label>
             <input type="text" id="tpAccount" name="tpAccount" placeholder="請輸入 TrainingPeaks 登入 Email 或 Username" />
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">13</span>主要同步運動錶與訓練器材（可複選）<span class="opt-tag">（選填）</span></label>
+            <label class="q-label"><span class="q-index">14</span>主要同步運動錶與訓練器材（可複選）<span class="opt-tag">（選填）</span></label>
             <div class="pill-grid">
               <label class="pill-option"><input type="checkbox" name="devices" value="Garmin" /><span>Garmin</span></label>
               <label class="pill-option"><input type="checkbox" name="devices" value="Coros" /><span>Coros</span></label>
@@ -882,7 +900,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">14</span>現有能力基準值<span class="opt-tag">（選填，不知道可留白）</span></label>
+            <label class="q-label"><span class="q-index">15</span>現有能力基準值<span class="opt-tag">（選填，不知道可留白）</span></label>
             <div class="form-row-3">
               <div>
                 <input type="text" id="swimCss" name="swimCss" placeholder="游泳 CSS 或 100m 時間" />
@@ -910,7 +928,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">15</span>一週訓練規劃：頻率 / 次數 / 時數<span class="req-tag">*</span></label>
+            <label class="q-label"><span class="q-index">16</span>一週訓練規劃：頻率 / 次數 / 時數<span class="req-tag">*</span></label>
             <div class="schedule-note">
               請先選擇每天的「訓練 1」，下方的「訓練 2」、「訓練 3」與「可訓練時間」才會依序解鎖填寫（例如 40 分鐘填 40，2.5 小時填 150）。
             </div>
@@ -930,7 +948,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">16</span>固定不能練的日子 / 期望休息日（可複選）<span class="opt-tag">（選填）</span></label>
+            <label class="q-label"><span class="q-index">17</span>固定不能練的日子 / 期望休息日（可複選）<span class="opt-tag">（選填）</span></label>
             <div class="pill-grid">
               <label class="pill-option"><input type="checkbox" name="restDays" value="週一" /><span>週一</span></label>
               <label class="pill-option"><input type="checkbox" name="restDays" value="週二" /><span>週二</span></label>
@@ -944,7 +962,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">17</span>平日可訓練時段（可複選）<span class="req-tag">*</span></label>
+            <label class="q-label"><span class="q-index">18</span>平日可訓練時段（可複選）<span class="req-tag">*</span></label>
             <div class="pill-grid" data-required-checkbox="timeSlots">
               <label class="pill-option"><input type="checkbox" name="timeSlots" value="晨練（05:00-08:00）" /><span>晨練（05:00-08:00）</span></label>
               <label class="pill-option"><input type="checkbox" name="timeSlots" value="午休時段" /><span>午休時段</span></label>
@@ -955,7 +973,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">18</span>日常工作型態與平均睡眠時數<span class="req-tag">*</span></label>
+            <label class="q-label"><span class="q-index">19</span>日常工作型態與平均睡眠時數<span class="req-tag">*</span></label>
             <div class="form-row-2">
               <div>
                 <select id="workType" name="workType" required>
@@ -1011,8 +1029,8 @@
     const SPORT_OPTIONS = ["", "游", "騎", "跑", "肌力", "休息"];
 
     const STAGE_META = {
-      1: { title: "階段 1 / 4：基本資料與聯絡資訊", remainingStages: 3, remainingQuestions: 18 },
-      2: { title: "階段 2 / 4：運動背景與目標設定", remainingStages: 2, remainingQuestions: 12 },
+      1: { title: "階段 1 / 4：基本資料與聯絡資訊", remainingStages: 3, remainingQuestions: 19 },
+      2: { title: "階段 2 / 4：運動背景與目標設定", remainingStages: 2, remainingQuestions: 13 },
       3: { title: "階段 3 / 4：TrainingPeaks 帳號與訓練數據", remainingStages: 1, remainingQuestions: 8 },
       4: { title: "階段 4 / 4：一週訓練規劃與日常作息", remainingStages: 0, remainingQuestions: 4 }
     };
@@ -1357,7 +1375,15 @@
       const getCheckedValues = (name) =>
         Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value).join("、");
 
-      // 整理第 13 題同步裝置（含功率計品牌與多個其他項目）
+      // 整理第 09 題目標設定
+      const selectedGoalTypes = getCheckedValues("goalType");
+      const raceGoalDetail = document.getElementById("raceGoalDetail").value.trim();
+      const formattedRaceGoal = [
+        selectedGoalTypes ? `【目標類型】${selectedGoalTypes}` : "",
+        raceGoalDetail ? `【具體說明】${raceGoalDetail}` : ""
+      ].filter(Boolean).join("\n");
+
+      // 整理第 14 題同步裝置（含功率計品牌與多個其他項目）
       const deviceList = [];
       document.querySelectorAll('input[name="devices"]:checked').forEach(el => {
         if (el.value === "自行車功率計") {
@@ -1392,7 +1418,8 @@
         trainingFocus: getCheckedValues("trainingFocus"),
         targetRace: document.getElementById("targetRace").value.trim(),
         targetRaceDate: document.getElementById("targetRaceDate").value,
-        raceGoalAndHistory: document.getElementById("raceGoalAndHistory").value.trim(),
+        raceGoal: formattedRaceGoal,
+        sportHistory: document.getElementById("sportHistory").value.trim(),
         injuryHistory: document.getElementById("injuryHistory").value.trim(),
         tpStatus: document.querySelector('input[name="tpStatus"]:checked')?.value || "",
         tpAccount: document.getElementById("tpAccount").value.trim(),
