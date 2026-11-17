@@ -55,6 +55,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
+      gap: 8px;
     }
 
     .brand-title {
@@ -72,6 +73,7 @@
       padding: 4px 10px;
       border-radius: 999px;
       border: 1px solid var(--border);
+      white-space: nowrap;
     }
 
     .remaining-badge strong {
@@ -226,6 +228,11 @@
       gap: 16px;
     }
 
+    .form-row-2 > div,
+    .form-row-2 > input {
+      min-width: 0;
+    }
+
     .form-row-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -270,6 +277,9 @@
     select,
     textarea {
       width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      display: block;
       padding: 11px 14px;
       font-size: 14px;
       color: var(--text-main);
@@ -278,6 +288,20 @@
       border-radius: 8px;
       transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
       font-family: inherit;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input[type="date"] {
+      height: 45px;
+      line-height: 1.4;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235c6873' d='M6 8.8L1.2 4l1.1-1.1L6 6.6l3.7-3.7L10.8 4z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
     }
 
     input:focus,
@@ -420,18 +444,28 @@
       color: #ffffff;
     }
 
-    /* 一週訓練規劃表（桌機版橫向表格） */
+    /* 一週訓練規劃表（全裝置橫向表格，手機支援左右滑動並固定左側列標題） */
     .schedule-note {
       font-size: 13px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       background: var(--brand-soft);
       padding: 10px 14px;
       border-radius: 8px;
       color: var(--brand-dark);
     }
 
+    .swipe-hint {
+      display: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      text-align: right;
+      margin-bottom: 6px;
+    }
+
     .schedule-table-wrap {
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       border: 1.5px solid var(--border);
       border-radius: 10px;
       background: #ffffff;
@@ -439,29 +473,41 @@
 
     .schedule-grid {
       display: grid;
-      grid-template-columns: 96px repeat(7, minmax(84px, 1fr));
-      min-width: 680px;
+      grid-template-columns: 92px repeat(7, minmax(78px, 1fr));
+      min-width: 638px;
     }
 
     .sg-cell {
-      padding: 10px 6px;
+      padding: 9px 6px;
       border-bottom: 1px solid var(--border);
       border-right: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 13px;
+      background: #ffffff;
+    }
+
+    .sg-grid-bottom {
+      border-bottom: none;
     }
 
     .sg-cell:nth-child(8n) {
       border-right: none;
     }
 
+    .sg-sticky {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      box-shadow: 2px 0 6px rgba(29, 36, 43, 0.05);
+    }
+
     .sg-header {
       background: var(--brand);
       color: #ffffff;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 14px;
     }
 
     .sg-row-label {
@@ -470,19 +516,21 @@
       color: var(--text-main);
       text-align: center;
       font-size: 12px;
+      line-height: 1.3;
     }
 
     .sg-cell select {
-      padding: 7px 4px;
+      padding: 7px 22px 7px 6px;
       font-size: 13px;
       text-align: center;
       border-radius: 6px;
       border: 1px solid var(--border);
-      background: #ffffff;
+      background-color: #ffffff;
+      background-position: right 6px center;
     }
 
     .sg-cell input[type="number"] {
-      padding: 7px 6px;
+      padding: 7px 4px;
       font-size: 13px;
       text-align: center;
       border-radius: 6px;
@@ -497,10 +545,6 @@
       border-color: #e0e4e8;
       cursor: not-allowed;
       opacity: 0.85;
-    }
-
-    .day-mobile-title {
-      display: none;
     }
 
     .total-summary-box {
@@ -527,7 +571,6 @@
       color: var(--text-sub);
     }
 
-    /* 手機版自動轉為垂直卡片 */
     @media (max-width: 720px) {
       .form-row-2,
       .form-row-3 {
@@ -543,54 +586,12 @@
         justify-content: space-between;
       }
 
-      .schedule-table-wrap {
-        border: none;
-        background: transparent;
-      }
-
-      .schedule-grid {
-        display: flex;
-        flex-direction: column;
-        min-width: 100%;
-        gap: 12px;
-      }
-
-      .sg-header,
-      .sg-row-label {
-        display: none;
-      }
-
-      .mobile-day-card {
-        border: 1.5px solid var(--border);
-        border-radius: 10px;
-        padding: 14px;
-        background: #ffffff;
-      }
-
-      .day-mobile-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 15px;
-        font-weight: 700;
-        color: var(--brand-dark);
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-        border-bottom: 1px solid var(--border);
-      }
-
-      .mobile-card-fields {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-
-      .mobile-field-wrap label {
+      .swipe-hint {
         display: block;
-        font-size: 11px;
-        color: var(--text-sub);
-        margin-bottom: 4px;
-        font-weight: 600;
+      }
+
+      .card {
+        padding: 22px 16px;
       }
     }
 
@@ -733,7 +734,7 @@
 
           <div class="form-group">
             <label class="q-label" for="birthDate"><span class="q-index">03</span>出生年月日<span class="req-tag">*</span></label>
-            <input type="date" id="birthDate" name="birthDate" required />
+            <input type="text" id="birthDate" name="birthDate" class="smart-date-input" placeholder="年 / 月 / 日" required />
             <div class="error-msg">請選擇出生年月日</div>
           </div>
 
@@ -797,9 +798,8 @@
               <label class="pill-option"><input type="checkbox" name="trainingFocus" value="標鐵 51.5km" /><span>標鐵 51.5km</span></label>
               <label class="pill-option"><input type="checkbox" name="trainingFocus" value="半程超鐵 113km" /><span>半程超鐵 113km</span></label>
               <label class="pill-option"><input type="checkbox" name="trainingFocus" value="超鐵 226km" /><span>超鐵 226km</span></label>
-              <label class="pill-option"><input type="checkbox" name="trainingFocus" value="路跑 / 越野" /><span>路跑 / 越野</span></label>
+              <label class="pill-option"><input type="checkbox" name="trainingFocus" value="跑步" /><span>跑步</span></label>
               <label class="pill-option"><input type="checkbox" name="trainingFocus" value="自行車" /><span>自行車</span></label>
-              <label class="pill-option"><input type="checkbox" name="trainingFocus" value="肌力與體能" /><span>肌力與體能</span></label>
             </div>
             <div class="error-msg">請至少選擇一項訓練方向</div>
           </div>
@@ -807,8 +807,12 @@
           <div class="form-group">
             <label class="q-label"><span class="q-index">08</span>近期目標賽事與日期<span class="opt-tag">（無特定賽事可留白）</span></label>
             <div class="form-row-2">
-              <input type="text" id="targetRace" name="targetRace" placeholder="賽事名稱，例如：2027 IRONMAN Taiwan" />
-              <input type="date" id="targetRaceDate" name="targetRaceDate" />
+              <div>
+                <input type="text" id="targetRace" name="targetRace" placeholder="賽事名稱，例如：2027 IRONMAN Taiwan" />
+              </div>
+              <div>
+                <input type="text" id="targetRaceDate" name="targetRaceDate" class="smart-date-input" placeholder="年 / 月 / 日" />
+              </div>
             </div>
           </div>
 
@@ -908,12 +912,13 @@
           <div class="form-group">
             <label class="q-label"><span class="q-index">15</span>一週訓練規劃：頻率 / 次數 / 時數<span class="req-tag">*</span></label>
             <div class="schedule-note">
-              請先選擇每天的「訓練 1」，下方的「訓練 2」、「訓練 3」與「時數」欄位才會依序解鎖填寫（例如 40 分鐘填 40，2.5 小時填 150）。
+              請先選擇每天的「訓練 1」，下方的「訓練 2」、「訓練 3」與「可訓練時間」才會依序解鎖填寫（例如 40 分鐘填 40，2.5 小時填 150）。
             </div>
+            <div class="swipe-hint">表格可左右滑動填寫一至日</div>
 
             <div class="schedule-table-wrap">
               <div class="schedule-grid" id="scheduleGrid">
-                <!-- 由 JS 動態產生桌機表格與手機卡片兼容結構 -->
+                <!-- 由 JS 動態產生橫向表格 -->
               </div>
             </div>
 
@@ -943,7 +948,7 @@
             <div class="pill-grid" data-required-checkbox="timeSlots">
               <label class="pill-option"><input type="checkbox" name="timeSlots" value="晨練（05:00-08:00）" /><span>晨練（05:00-08:00）</span></label>
               <label class="pill-option"><input type="checkbox" name="timeSlots" value="午休時段" /><span>午休時段</span></label>
-              <label class="pill-option"><input type="checkbox" name="timeSlots" value="下班後晚間（18:00-22:00）" /><span>下班後晚間（18:00-22:00）</span></label>
+              <label class="pill-option"><input type="checkbox" name="timeSlots" value="晚間（18:00-22:00）" /><span>晚間（18:00-22:00）</span></label>
               <label class="pill-option"><input type="checkbox" name="timeSlots" value="彈性不固定" /><span>彈性不固定</span></label>
             </div>
             <div class="error-msg">請至少選擇一個可訓練時段</div>
@@ -991,16 +996,16 @@
     const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyTyaD8WnoFdc_i-1v4vW4DGBYXADuD6Pdw0V6iOnhd5PqGzicPK0jIRLCu50SZYEb7Cw/exec";
 
     const DAYS = [
-      { key: "mon", label: "一", full: "星期一" },
-      { key: "tue", label: "二", full: "星期二" },
-      { key: "wed", label: "三", full: "星期三" },
-      { key: "thu", label: "四", full: "星期四" },
-      { key: "fri", label: "五", full: "星期五" },
-      { key: "sat", label: "六", full: "星期六" },
-      { key: "sun", label: "日", full: "星期日" }
+      { key: "mon", label: "一" },
+      { key: "tue", label: "二" },
+      { key: "wed", label: "三" },
+      { key: "thu", label: "四" },
+      { key: "fri", label: "五" },
+      { key: "sat", label: "六" },
+      { key: "sun", label: "日" }
     ];
 
-    const SPORT_OPTIONS = ["", "游", "騎", "跑", "肌力", "伸展/恢復", "休息"];
+    const SPORT_OPTIONS = ["", "游", "騎", "跑", "肌力", "休息"];
 
     const STAGE_META = {
       1: { title: "階段 1 / 4：基本資料與聯絡資訊", remainingStages: 3, remainingQuestions: 18 },
@@ -1008,6 +1013,21 @@
       3: { title: "階段 3 / 4：TrainingPeaks 帳號與訓練數據", remainingStages: 1, remainingQuestions: 8 },
       4: { title: "階段 4 / 4：一週訓練規劃與日常作息", remainingStages: 0, remainingQuestions: 4 }
     };
+
+    // 日期欄位未點選前顯示「年 / 月 / 日」，點選後開啟系統日曆並防止 iOS 寬度溢出
+    document.querySelectorAll(".smart-date-input").forEach(input => {
+      input.addEventListener("focus", function () {
+        this.type = "date";
+        if (typeof this.showPicker === "function") {
+          try { this.showPicker(); } catch (e) {}
+        }
+      });
+      input.addEventListener("blur", function () {
+        if (!this.value) {
+          this.type = "text";
+        }
+      });
+    });
 
     // 功率計品牌展開與收合
     const powerMeterCheckbox = document.getElementById("devicePowerMeter");
@@ -1065,62 +1085,35 @@
       if (autoFocus) input.focus();
     }
 
-    // 初始化一週訓練規劃表
+    // 初始化一週訓練規劃表（統一橫向表格，左側固定標題，可左右滑動）
     function buildScheduleGrid() {
       const grid = document.getElementById("scheduleGrid");
-      const isMobile = window.innerWidth <= 720;
       grid.innerHTML = "";
 
-      if (!isMobile) {
-        grid.appendChild(createCell("星期 / 訓練", "sg-cell sg-header"));
-        DAYS.forEach(d => grid.appendChild(createCell(d.label, "sg-cell sg-header")));
+      // 表頭列：左上角空白 + 一 二 三 四 五 六 日
+      grid.appendChild(createCell("", "sg-cell sg-header sg-sticky"));
+      DAYS.forEach(d => grid.appendChild(createCell(d.label, "sg-cell sg-header")));
 
-        for (let s = 1; s <= 3; s++) {
-          grid.appendChild(createCell(`訓練 ${s}`, "sg-cell sg-row-label"));
-          DAYS.forEach(d => {
-            const cell = createCell("", "sg-cell");
-            cell.appendChild(createSportSelect(`${d.key}_s${s}`));
-            grid.appendChild(cell);
-          });
-        }
-
-        grid.appendChild(createCell("時數 (min)", "sg-cell sg-row-label"));
+      // 訓練 1 ~ 3 列
+      for (let s = 1; s <= 3; s++) {
+        grid.appendChild(createCell(`訓練 ${s}`, "sg-cell sg-row-label sg-sticky"));
         DAYS.forEach(d => {
           const cell = createCell("", "sg-cell");
-          cell.appendChild(createMinutesInput(`${d.key}_min`));
+          cell.appendChild(createSportSelect(`${d.key}_s${s}`));
           grid.appendChild(cell);
         });
-      } else {
-        DAYS.forEach(d => {
-          const card = document.createElement("div");
-          card.className = "mobile-day-card";
-
-          const title = document.createElement("div");
-          title.className = "day-mobile-title";
-          title.innerHTML = `<span>${d.full}</span><span style="font-size:12px;color:#5c6873;">最多 3 堂訓練</span>`;
-          card.appendChild(title);
-
-          const fields = document.createElement("div");
-          fields.className = "mobile-card-fields";
-
-          for (let s = 1; s <= 3; s++) {
-            const wrap = document.createElement("div");
-            wrap.className = "mobile-field-wrap";
-            wrap.innerHTML = `<label>訓練 ${s}</label>`;
-            wrap.appendChild(createSportSelect(`${d.key}_s${s}`));
-            fields.appendChild(wrap);
-          }
-
-          const minWrap = document.createElement("div");
-          minWrap.className = "mobile-field-wrap";
-          minWrap.innerHTML = `<label>可訓練時間（分鐘）</label>`;
-          minWrap.appendChild(createMinutesInput(`${d.key}_min`));
-          fields.appendChild(minWrap);
-
-          card.appendChild(fields);
-          grid.appendChild(card);
-        });
       }
+
+      // 最下面列：可訓練時間 (min)
+      const timeLabelCell = createCell("", "sg-cell sg-row-label sg-sticky sg-grid-bottom");
+      timeLabelCell.innerHTML = "可訓練時間<br>(min)";
+      grid.appendChild(timeLabelCell);
+
+      DAYS.forEach(d => {
+        const cell = createCell("", "sg-cell sg-grid-bottom");
+        cell.appendChild(createMinutesInput(`${d.key}_min`));
+        grid.appendChild(cell);
+      });
 
       syncScheduleDisabledStates();
     }
@@ -1162,7 +1155,7 @@
       return input;
     }
 
-    // 依序鎖定未填寫第一格時的下方欄位（訓練 2、訓練 3、時數）
+    // 依序鎖定未填寫第一格時的下方欄位（訓練 2、訓練 3、可訓練時間）
     function syncScheduleDisabledStates() {
       DAYS.forEach(d => {
         const s1 = document.querySelector(`[name="${d.key}_s1"]`);
@@ -1200,28 +1193,8 @@
         scheduleState[el.name] = el.value;
       });
     }
-    function restoreScheduleState() {
-      document.querySelectorAll("[data-schedule-field]").forEach(el => {
-        if (scheduleState[el.name] !== undefined) {
-          el.value = scheduleState[el.name];
-        }
-      });
-      syncScheduleDisabledStates();
-      updateScheduleSummary();
-    }
 
-    let lastIsMobile = window.innerWidth <= 720;
     buildScheduleGrid();
-
-    window.addEventListener("resize", () => {
-      const currentIsMobile = window.innerWidth <= 720;
-      if (currentIsMobile !== lastIsMobile) {
-        saveScheduleState();
-        lastIsMobile = currentIsMobile;
-        buildScheduleGrid();
-        restoreScheduleState();
-      }
-    });
 
     function updateScheduleSummary() {
       saveScheduleState();
