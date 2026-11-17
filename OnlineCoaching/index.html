@@ -993,6 +993,9 @@
   </main>
 
   <script>
+    // 預覽檢視模式：true = 暫時解除所有必填限制方便瀏覽；確認完畢改回 false 即恢復必填檢查
+    const PREVIEW_MODE = true;
+
     const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyTyaD8WnoFdc_i-1v4vW4DGBYXADuD6Pdw0V6iOnhd5PqGzicPK0jIRLCu50SZYEb7Cw/exec";
 
     const DAYS = [
@@ -1249,6 +1252,8 @@
     }
 
     function validateStep(step) {
+      if (PREVIEW_MODE) return true;
+
       const panel = document.querySelector(`.step-panel[data-step="${step}"]`);
       let isValid = true;
       let firstInvalidEl = null;
@@ -1422,7 +1427,7 @@
         document.getElementById("remainingBadge").innerHTML = "填寫完成";
         document.getElementById("currentStageLabel").textContent = "已完成全部 4 個階段";
         document.getElementById("successSummaryText").textContent =
-          `${payload.fullName} 你好，你的每週可訓練總時數為 ${payload.totalHours} 小時（${payload.totalMinutes} 分鐘）。教練團隊檢視完畢後，將透過 LINE 或 TrainingPeaks 與你聯繫。`;
+          `${payload.fullName || "學員"} 你好，你的每週可訓練總時數為 ${payload.totalHours} 小時（${payload.totalMinutes} 分鐘）。教練團隊檢視完畢後，將透過 LINE 或 TrainingPeaks 與你聯繫。`;
         document.getElementById("successPanel").classList.add("active");
         window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (err) {
