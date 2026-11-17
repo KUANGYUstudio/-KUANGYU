@@ -9,8 +9,8 @@
       --brand: #0097b2;
       --brand-dark: #007a91;
       --brand-soft: #e6f5f8;
+      --accent-red: #dc3545;
       --accent-coral: #e07a7c;
-      --accent-amber: #e89c48;
       --bg-page: #f6f7f7;
       --bg-card: #ffffff;
       --text-main: #1d242b;
@@ -248,10 +248,11 @@
     }
 
     .req-tag {
-      color: var(--accent-coral);
-      font-size: 12px;
-      font-weight: 600;
+      color: var(--accent-red);
+      font-size: 15px;
+      font-weight: 700;
       margin-left: 4px;
+      line-height: 1;
     }
 
     .opt-tag {
@@ -275,7 +276,7 @@
       background: #ffffff;
       border: 1.5px solid var(--border);
       border-radius: 8px;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
       font-family: inherit;
     }
 
@@ -298,7 +299,7 @@
     }
 
     .error-msg {
-      color: var(--accent-coral);
+      color: var(--accent-red);
       font-size: 12px;
       margin-top: 5px;
       display: none;
@@ -345,6 +346,78 @@
       border-color: var(--brand);
       color: var(--brand-dark);
       font-weight: 700;
+    }
+
+    /* 條件展開子區塊（功率計品牌 / 多個其他項目） */
+    .sub-input-box {
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: #f9fbfb;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--brand);
+      border-radius: 8px;
+      animation: fadeIn 0.22s ease;
+    }
+
+    .sub-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      margin-bottom: 8px;
+    }
+
+    .dynamic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .dynamic-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-remove-item {
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sub);
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s;
+      font-family: inherit;
+    }
+
+    .btn-remove-item:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+
+    .btn-add-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      background: var(--brand-soft);
+      border: 1px solid var(--brand);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: inherit;
+    }
+
+    .btn-add-item:hover {
+      background: var(--brand);
+      color: #ffffff;
     }
 
     /* 一週訓練規劃表（桌機版橫向表格） */
@@ -414,6 +487,16 @@
       text-align: center;
       border-radius: 6px;
       border: 1px solid var(--border);
+    }
+
+    /* 未解鎖格子的灰色鎖定樣式 */
+    .schedule-grid select:disabled,
+    .schedule-grid input:disabled {
+      background-color: #eceff1;
+      color: #a0aab2;
+      border-color: #e0e4e8;
+      cursor: not-allowed;
+      opacity: 0.85;
     }
 
     .day-mobile-title {
@@ -634,13 +717,13 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label" for="fullName"><span class="q-index">01</span>姓名 / 常用暱稱<span class="req-tag">*必填</span></label>
+            <label class="q-label" for="fullName"><span class="q-index">01</span>姓名 / 常用暱稱<span class="req-tag">*</span></label>
             <input type="text" id="fullName" name="fullName" placeholder="請輸入你的姓名" required />
             <div class="error-msg">請填寫姓名或暱稱</div>
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">02</span>生理性別<span class="req-tag">*必填</span></label>
+            <label class="q-label"><span class="q-index">02</span>生理性別<span class="req-tag">*</span></label>
             <div class="pill-grid" data-required-radio="gender">
               <label class="pill-option"><input type="radio" name="gender" value="女性" /><span>女性</span></label>
               <label class="pill-option"><input type="radio" name="gender" value="男性" /><span>男性</span></label>
@@ -649,13 +732,13 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label" for="birthDate"><span class="q-index">03</span>出生年月日<span class="req-tag">*必填</span></label>
+            <label class="q-label" for="birthDate"><span class="q-index">03</span>出生年月日<span class="req-tag">*</span></label>
             <input type="date" id="birthDate" name="birthDate" required />
             <div class="error-msg">請選擇出生年月日</div>
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">04</span>身高與體重<span class="req-tag">*必填</span></label>
+            <label class="q-label"><span class="q-index">04</span>身高與體重<span class="req-tag">*</span></label>
             <div class="form-row-2">
               <div>
                 <input type="number" id="height" name="height" placeholder="身高（cm），例如：168" min="100" max="230" step="0.1" required />
@@ -669,7 +752,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">05</span>LINE 顯示名稱與常用 Email<span class="req-tag">*必填</span></label>
+            <label class="q-label"><span class="q-index">05</span>LINE 顯示名稱與常用 Email<span class="req-tag">*</span></label>
             <div class="form-row-2">
               <div>
                 <input type="text" id="lineName" name="lineName" placeholder="LINE 顯示名稱（方便核對聯絡）" required />
@@ -683,7 +766,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">06</span>緊急聯絡人與電話<span class="req-tag">*必填</span></label>
+            <label class="q-label"><span class="q-index">06</span>緊急聯絡人與電話<span class="req-tag">*</span></label>
             <div class="form-row-2">
               <div>
                 <input type="text" id="emergencyName" name="emergencyName" placeholder="緊急聯絡人姓名（關係）" required />
@@ -709,7 +792,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">07</span>主要訓練方向（可複選）<span class="req-tag">*必填</span></label>
+            <label class="q-label"><span class="q-index">07</span>主要訓練方向（可複選）<span class="req-tag">*</span></label>
             <div class="pill-grid" data-required-checkbox="trainingFocus">
               <label class="pill-option"><input type="checkbox" name="trainingFocus" value="標鐵 51.5km" /><span>標鐵 51.5km</span></label>
               <label class="pill-option"><input type="checkbox" name="trainingFocus" value="半程超鐵 113km" /><span>半程超鐵 113km</span></label>
@@ -730,13 +813,13 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label" for="raceGoalAndHistory"><span class="q-index">09</span>目標設定與過往運動經驗<span class="req-tag">*必填</span></label>
+            <label class="q-label" for="raceGoalAndHistory"><span class="q-index">09</span>目標設定與過往運動經驗<span class="req-tag">*</span></label>
             <textarea id="raceGoalAndHistory" name="raceGoalAndHistory" placeholder="請簡述本次目標（完賽、突破 PB 或特定時間），以及過往運動背景、近期代表成績" required></textarea>
             <div class="error-msg">請填寫目標設定與運動經驗</div>
           </div>
 
           <div class="form-group">
-            <label class="q-label" for="injuryHistory"><span class="q-index">10</span>傷痛史或目前身體緊繃、不適部位<span class="req-tag">*必填</span></label>
+            <label class="q-label" for="injuryHistory"><span class="q-index">10</span>傷痛史或目前身體緊繃、不適部位<span class="req-tag">*</span></label>
             <textarea id="injuryHistory" name="injuryHistory" placeholder="請列出舊傷、開刀史或目前容易緊繃疼痛的部位（若無請填「無」）" required></textarea>
             <div class="error-msg">請填寫身體狀況（若無請填「無」）</div>
           </div>
@@ -755,7 +838,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">11</span>TrainingPeaks 帳號狀態<span class="req-tag">*必填</span></label>
+            <label class="q-label"><span class="q-index">11</span>TrainingPeaks 帳號狀態<span class="req-tag">*</span></label>
             <div class="pill-grid" data-required-radio="tpStatus">
               <label class="pill-option"><input type="radio" name="tpStatus" value="已有帳號" /><span>已有 TrainingPeaks 帳號</span></label>
               <label class="pill-option"><input type="radio" name="tpStatus" value="尚未註冊" /><span>尚未註冊（需協助開通）</span></label>
@@ -775,8 +858,22 @@
               <label class="pill-option"><input type="checkbox" name="devices" value="Coros" /><span>Coros</span></label>
               <label class="pill-option"><input type="checkbox" name="devices" value="Apple Watch" /><span>Apple Watch</span></label>
               <label class="pill-option"><input type="checkbox" name="devices" value="Wahoo" /><span>Wahoo</span></label>
-              <label class="pill-option"><input type="checkbox" name="devices" value="自行車功率計" /><span>自行車功率計</span></label>
+              <label class="pill-option"><input type="checkbox" id="devicePowerMeter" name="devices" value="自行車功率計" /><span>自行車功率計</span></label>
               <label class="pill-option"><input type="checkbox" name="devices" value="智慧訓練台" /><span>智慧訓練台</span></label>
+              <label class="pill-option"><input type="checkbox" id="deviceOther" value="其他" /><span>其他</span></label>
+            </div>
+
+            <!-- 勾選「自行車功率計」時展開 -->
+            <div class="sub-input-box" id="powerMeterBrandBox" style="display: none;">
+              <label class="sub-label" for="powerMeterBrand">功率計品牌</label>
+              <input type="text" id="powerMeterBrand" name="powerMeterBrand" placeholder="請填寫功率計品牌或型號，例如：Assioma、Garmin Rally、Quarq、4iiii" />
+            </div>
+
+            <!-- 勾選「其他」時展開，可新增多個 -->
+            <div class="sub-input-box" id="otherDevicesBox" style="display: none;">
+              <label class="sub-label">其他裝置或訓練器材名稱</label>
+              <div class="dynamic-list" id="otherDevicesList"></div>
+              <button type="button" class="btn-add-item" onclick="addOtherDeviceInput()">+ 新增其他器材</button>
             </div>
           </div>
 
@@ -809,9 +906,9 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">15</span>一週訓練規劃：頻率 / 次數 / 時數<span class="req-tag">*必填</span></label>
+            <label class="q-label"><span class="q-index">15</span>一週訓練規劃：頻率 / 次數 / 時數<span class="req-tag">*</span></label>
             <div class="schedule-note">
-              請依序點選每天的訓練項目（最多 3 堂），並填入該日可訓練的總分鐘數（例如 40 分鐘填 40，2.5 小時填 150），下方會自動加總週時數。
+              請先選擇每天的「訓練 1」，下方的「訓練 2」、「訓練 3」與「時數」欄位才會依序解鎖填寫（例如 40 分鐘填 40，2.5 小時填 150）。
             </div>
 
             <div class="schedule-table-wrap">
@@ -824,7 +921,7 @@
               <div class="total-hours-text" id="totalHoursDisplay">Total：0 hr（0 分鐘）</div>
               <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇訓練項目</div>
             </div>
-            <div class="error-msg" id="scheduleError">請至少在其中一天填入可訓練時間（大於 0 分鐘）</div>
+            <div class="error-msg" id="scheduleError">請至少在其中一天選擇訓練項目並填入可訓練時間（大於 0 分鐘）</div>
           </div>
 
           <div class="form-group">
@@ -842,7 +939,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">17</span>平日可訓練時段（可複選）<span class="req-tag">*必填</span></label>
+            <label class="q-label"><span class="q-index">17</span>平日可訓練時段（可複選）<span class="req-tag">*</span></label>
             <div class="pill-grid" data-required-checkbox="timeSlots">
               <label class="pill-option"><input type="checkbox" name="timeSlots" value="晨練（05:00-08:00）" /><span>晨練（05:00-08:00）</span></label>
               <label class="pill-option"><input type="checkbox" name="timeSlots" value="午休時段" /><span>午休時段</span></label>
@@ -853,7 +950,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">18</span>日常工作型態與平均睡眠時數<span class="req-tag">*必填</span></label>
+            <label class="q-label"><span class="q-index">18</span>日常工作型態與平均睡眠時數<span class="req-tag">*</span></label>
             <div class="form-row-2">
               <div>
                 <select id="workType" name="workType" required>
@@ -912,6 +1009,62 @@
       4: { title: "階段 4 / 4：一週訓練規劃與日常作息", remainingStages: 0, remainingQuestions: 4 }
     };
 
+    // 功率計品牌展開與收合
+    const powerMeterCheckbox = document.getElementById("devicePowerMeter");
+    const powerMeterBrandBox = document.getElementById("powerMeterBrandBox");
+    powerMeterCheckbox.addEventListener("change", function () {
+      if (this.checked) {
+        powerMeterBrandBox.style.display = "block";
+        document.getElementById("powerMeterBrand").focus();
+      } else {
+        powerMeterBrandBox.style.display = "none";
+      }
+    });
+
+    // 「其他」器材展開與動態新增多個欄位
+    const deviceOtherCheckbox = document.getElementById("deviceOther");
+    const otherDevicesBox = document.getElementById("otherDevicesBox");
+    const otherDevicesList = document.getElementById("otherDevicesList");
+
+    deviceOtherCheckbox.addEventListener("change", function () {
+      if (this.checked) {
+        otherDevicesBox.style.display = "block";
+        if (otherDevicesList.children.length === 0) {
+          addOtherDeviceInput(true);
+        }
+      } else {
+        otherDevicesBox.style.display = "none";
+      }
+    });
+
+    function addOtherDeviceInput(autoFocus = true) {
+      const row = document.createElement("div");
+      row.className = "dynamic-row";
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "other-device-input";
+      input.placeholder = "請輸入其他裝置或器材（例如：心率帶、Zwift、踏頻感測器）";
+
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "btn-remove-item";
+      removeBtn.textContent = "移除";
+      removeBtn.onclick = function () {
+        row.remove();
+        if (otherDevicesList.children.length === 0) {
+          deviceOtherCheckbox.checked = false;
+          otherDevicesBox.style.display = "none";
+        }
+      };
+
+      row.appendChild(input);
+      row.appendChild(removeBtn);
+      otherDevicesList.appendChild(row);
+
+      if (autoFocus) input.focus();
+    }
+
     // 初始化一週訓練規劃表
     function buildScheduleGrid() {
       const grid = document.getElementById("scheduleGrid");
@@ -968,6 +1121,8 @@
           grid.appendChild(card);
         });
       }
+
+      syncScheduleDisabledStates();
     }
 
     function createCell(text, className) {
@@ -987,7 +1142,10 @@
         option.textContent = opt === "" ? "—" : opt;
         sel.appendChild(option);
       });
-      sel.addEventListener("change", updateScheduleSummary);
+      sel.addEventListener("change", () => {
+        syncScheduleDisabledStates();
+        updateScheduleSummary();
+      });
       return sel;
     }
 
@@ -1004,6 +1162,38 @@
       return input;
     }
 
+    // 依序鎖定未填寫第一格時的下方欄位（訓練 2、訓練 3、時數）
+    function syncScheduleDisabledStates() {
+      DAYS.forEach(d => {
+        const s1 = document.querySelector(`[name="${d.key}_s1"]`);
+        const s2 = document.querySelector(`[name="${d.key}_s2"]`);
+        const s3 = document.querySelector(`[name="${d.key}_s3"]`);
+        const min = document.querySelector(`[name="${d.key}_min"]`);
+        if (!s1 || !s2 || !s3 || !min) return;
+
+        const hasS1 = s1.value !== "" && s1.value !== "休息";
+        if (!hasS1) {
+          s2.value = "";
+          s2.disabled = true;
+          s3.value = "";
+          s3.disabled = true;
+          min.value = "";
+          min.disabled = true;
+        } else {
+          s2.disabled = false;
+          min.disabled = false;
+
+          const hasS2 = s2.value !== "" && s2.value !== "休息";
+          if (!hasS2) {
+            s3.value = "";
+            s3.disabled = true;
+          } else {
+            s3.disabled = false;
+          }
+        }
+      });
+    }
+
     let scheduleState = {};
     function saveScheduleState() {
       document.querySelectorAll("[data-schedule-field]").forEach(el => {
@@ -1016,6 +1206,7 @@
           el.value = scheduleState[el.name];
         }
       });
+      syncScheduleDisabledStates();
       updateScheduleSummary();
     }
 
@@ -1188,6 +1379,28 @@
       const getCheckedValues = (name) =>
         Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value).join("、");
 
+      // 整理第 13 題同步裝置（含功率計品牌與多個其他項目）
+      const deviceList = [];
+      document.querySelectorAll('input[name="devices"]:checked').forEach(el => {
+        if (el.value === "自行車功率計") {
+          const brand = document.getElementById("powerMeterBrand").value.trim();
+          deviceList.push(brand ? `自行車功率計（${brand}）` : "自行車功率計");
+        } else {
+          deviceList.push(el.value);
+        }
+      });
+
+      if (deviceOtherCheckbox.checked) {
+        const customDevices = Array.from(document.querySelectorAll(".other-device-input"))
+          .map(input => input.value.trim())
+          .filter(Boolean);
+        if (customDevices.length > 0) {
+          customDevices.forEach(item => deviceList.push(`其他：${item}`));
+        } else {
+          deviceList.push("其他");
+        }
+      }
+
       const payload = {
         fullName: document.getElementById("fullName").value.trim(),
         gender: document.querySelector('input[name="gender"]:checked')?.value || "",
@@ -1205,7 +1418,7 @@
         injuryHistory: document.getElementById("injuryHistory").value.trim(),
         tpStatus: document.querySelector('input[name="tpStatus"]:checked')?.value || "",
         tpAccount: document.getElementById("tpAccount").value.trim(),
-        devices: getCheckedValues("devices"),
+        devices: deviceList.join("、"),
         swimCss: document.getElementById("swimCss").value.trim(),
         bikeFtp: document.getElementById("bikeFtp").value.trim(),
         runThreshold: document.getElementById("runThreshold").value.trim(),
