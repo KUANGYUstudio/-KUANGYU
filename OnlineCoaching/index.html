@@ -321,6 +321,10 @@
       margin-top: 10px;
     }
 
+    .mb-20 {
+      margin-bottom: 20px;
+    }
+
     .field-error {
       border-color: var(--accent-coral) !important;
       background-color: #fffafa !important;
@@ -376,14 +380,48 @@
       font-weight: 700;
     }
 
+    /* 垂直排列可展開時段列表（第 14 題） */
+    .vertical-slot-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .slot-item-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+    }
+
+    .slot-item-row .pill-option {
+      flex-shrink: 0;
+    }
+
+    .slot-item-row .pill-option span {
+      min-width: 72px;
+      text-align: center;
+      padding: 10px 16px;
+    }
+
+    .slot-detail-input {
+      display: none;
+      flex: 1;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .slot-detail-input.visible {
+      display: block;
+    }
+
     /* 提示資訊框 */
     .info-callout {
       font-size: 13px;
       background: var(--brand-soft);
-      padding: 11px 14px;
+      padding: 12px 15px;
       border-radius: 8px;
       color: var(--brand-dark);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .info-callout a {
@@ -464,7 +502,7 @@
       color: #ffffff;
     }
 
-    /* 一週訓練規劃表（全裝置橫向表格，手機支援左右滑動並固定左側列標題） */
+    /* 一週訓練規劃表（簡化版橫向表格，左側固定列標題） */
     .schedule-note {
       margin-bottom: 10px;
     }
@@ -488,12 +526,12 @@
 
     .schedule-grid {
       display: grid;
-      grid-template-columns: 92px repeat(7, minmax(78px, 1fr));
-      min-width: 638px;
+      grid-template-columns: 104px repeat(7, minmax(84px, 1fr));
+      min-width: 692px;
     }
 
     .sg-cell {
-      padding: 9px 6px;
+      padding: 10px 6px;
       border-bottom: 1px solid var(--border);
       border-right: 1px solid var(--border);
       display: flex;
@@ -530,18 +568,18 @@
       font-weight: 600;
       color: var(--text-main);
       text-align: center;
-      font-size: 13px;
-      line-height: 1.3;
+      font-size: 12px;
+      line-height: 1.35;
     }
 
     .sg-cell select {
-      padding: 7px 22px 7px 6px;
-      font-size: 13px;
+      padding: 7px 20px 7px 6px;
+      font-size: 12px;
       text-align: center;
       border-radius: 6px;
       border: 1px solid var(--border);
       background-color: #ffffff;
-      background-position: right 6px center;
+      background-position: right 5px center;
     }
 
     .sg-cell input[type="number"] {
@@ -550,16 +588,6 @@
       text-align: center;
       border-radius: 6px;
       border: 1px solid var(--border);
-    }
-
-    /* 未解鎖格子的灰色鎖定樣式 */
-    .schedule-grid select:disabled,
-    .schedule-grid input:disabled {
-      background-color: #eceff1;
-      color: #a0aab2;
-      border-color: #e0e4e8;
-      cursor: not-allowed;
-      opacity: 0.85;
     }
 
     .total-summary-box {
@@ -703,7 +731,7 @@
     <div class="progress-inner">
       <div class="brand-bar">
         <span class="brand-title">KUANGYU STUDIO｜線上一對一課表評估</span>
-        <span class="remaining-badge" id="remainingBadge">剩餘 <strong>3</strong> 個階段・還有 <strong>18</strong> 題待填</span>
+        <span class="remaining-badge" id="remainingBadge">剩餘 <strong>3</strong> 個階段・還有 <strong>17</strong> 題待填</span>
       </div>
       <div class="stage-status-row">
         <div class="current-stage-label" id="currentStageLabel">階段 1 / 4：基本資料與聯絡資訊</div>
@@ -869,20 +897,12 @@
             <p>線上課表統一透過 TrainingPeaks 派發與追蹤，基準數據不知道可留白。</p>
           </div>
 
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">12</span>TrainingPeaks 帳號狀態<span class="req-tag">*</span></label>
-            <div class="pill-grid" data-required-radio="tpStatus">
-              <label class="pill-option"><input type="radio" name="tpStatus" value="已有帳號" /><span>已有 TrainingPeaks 帳號</span></label>
-              <label class="pill-option"><input type="radio" name="tpStatus" value="尚未註冊" /><span>尚未註冊</span></label>
-            </div>
-            <div class="error-msg">請選擇 TrainingPeaks 帳號狀態</div>
-            <div class="info-callout mt-10">
-              若尚未註冊帳號，請先至 <a href="https://www.trainingpeaks.com/" target="_blank" rel="noopener noreferrer">TrainingPeaks 官網（https://www.trainingpeaks.com/）</a> 免費申請帳號；完成註冊並送出表單後，教練將透過 LINE 發送專屬綁定連結給你。
-            </div>
+          <div class="info-callout mb-20">
+            若尚未註冊帳號，請先至 <a href="https://www.trainingpeaks.com/" target="_blank" rel="noopener noreferrer">TrainingPeaks 官網</a> 免費申請帳號；完成註冊並送出表單後，教練將透過 LINE 發送專屬綁定連結給你。
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">13</span>主要同步運動錶與訓練器材（可複選）<span class="opt-tag">（選填）</span></label>
+            <label class="q-label"><span class="q-index">12</span>主要同步運動錶與訓練器材（可複選）<span class="opt-tag">（選填）</span></label>
             <div class="pill-grid">
               <label class="pill-option"><input type="checkbox" name="devices" value="Garmin" /><span>Garmin</span></label>
               <label class="pill-option"><input type="checkbox" name="devices" value="Coros" /><span>Coros</span></label>
@@ -908,7 +928,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">14</span>現有能力基準值<span class="opt-tag">（選填，不知道可留白）</span></label>
+            <label class="q-label"><span class="q-index">13</span>現有能力基準值<span class="opt-tag">（選填，不知道可留白）</span></label>
             <div class="form-row-3">
               <div>
                 <input type="text" id="swimTime" name="swimTime" placeholder="游泳 400m 或 100m 時間" />
@@ -932,13 +952,51 @@
         <section class="step-panel" data-step="4">
           <div class="section-intro">
             <h2>四、一週訓練規劃與日常作息</h2>
-            <p>請填寫你理想或目前習慣的一週訓練配置，以及每日可運用的訓練分鐘數。</p>
+            <p>請填寫你平日可訓練的時段，以及一週可運用的時間或固定運動習慣。</p>
+          </div>
+
+          <div class="form-group" id="timeSlotsGroup">
+            <label class="q-label"><span class="q-index">14</span>平日可訓練時段（可複選，點選後可於右方填寫具體時間）<span class="req-tag">*</span></label>
+            <div class="vertical-slot-list">
+              <div class="slot-item-row">
+                <label class="pill-option">
+                  <input type="checkbox" class="slot-toggle" name="timeSlots" value="早上" data-target="slotInputMorn" />
+                  <span>早上</span>
+                </label>
+                <input type="text" id="slotInputMorn" class="slot-detail-input" placeholder="請填寫時段，例如：06:00-07:30 或 10:00 之後" />
+              </div>
+
+              <div class="slot-item-row">
+                <label class="pill-option">
+                  <input type="checkbox" class="slot-toggle" name="timeSlots" value="午休" data-target="slotInputNoon" />
+                  <span>午休</span>
+                </label>
+                <input type="text" id="slotInputNoon" class="slot-detail-input" placeholder="請填寫時段，例如：12:00-13:00" />
+              </div>
+
+              <div class="slot-item-row">
+                <label class="pill-option">
+                  <input type="checkbox" class="slot-toggle" name="timeSlots" value="晚上" data-target="slotInputEve" />
+                  <span>晚上</span>
+                </label>
+                <input type="text" id="slotInputEve" class="slot-detail-input" placeholder="請填寫時段，例如：19:00-21:00" />
+              </div>
+
+              <div class="slot-item-row">
+                <label class="pill-option">
+                  <input type="checkbox" class="slot-toggle" name="timeSlots" value="彈性" data-target="slotInputFlex" />
+                  <span>彈性</span>
+                </label>
+                <input type="text" id="slotInputFlex" class="slot-detail-input" placeholder="請填寫可運用時段或彈性狀況" />
+              </div>
+            </div>
+            <div class="error-msg" id="timeSlotsError">請至少勾選一個可訓練時段</div>
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">15</span>一週訓練規劃：頻率 / 次數 / 時數<span class="req-tag">*</span></label>
+            <label class="q-label"><span class="q-index">15</span>一週訓練規劃：可訓練時間與固定項目<span class="req-tag">*</span></label>
             <div class="info-callout schedule-note">
-              請在每天的「早、午、晚」選擇可訓練的項目（無特定項目請選「皆可」），有選擇訓練項目的日子即可填寫最下方的「可訓練時間」（例如 40 分鐘填 40，2.5 小時填 150）。
+              可僅填寫每天「可訓練時間（分鐘）」或「固定項目 / 習慣」，無特別安排的日子留白即可（例如 40 分鐘填 40，2.5 小時填 150）。
             </div>
             <div class="swipe-hint">表格可左右滑動填寫一至日</div>
 
@@ -950,9 +1008,9 @@
 
             <div class="total-summary-box">
               <div class="total-hours-text" id="totalHoursDisplay">Total：0 hr（0 分鐘）</div>
-              <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇訓練項目</div>
+              <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇固定項目</div>
             </div>
-            <div class="error-msg" id="scheduleError">請至少在其中一天選擇訓練項目，並為有排訓練的日子填入可訓練時間（大於 0 分鐘）</div>
+            <div class="error-msg" id="scheduleError">請至少在其中一天填寫可訓練時間或選擇固定項目</div>
           </div>
 
           <div class="form-group">
@@ -970,18 +1028,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">17</span>平日可訓練時段（可複選）<span class="req-tag">*</span></label>
-            <div class="pill-grid" data-required-checkbox="timeSlots">
-              <label class="pill-option"><input type="checkbox" name="timeSlots" value="晨練（05:00-08:00）" /><span>晨練（05:00-08:00）</span></label>
-              <label class="pill-option"><input type="checkbox" name="timeSlots" value="午休時段" /><span>午休時段</span></label>
-              <label class="pill-option"><input type="checkbox" name="timeSlots" value="晚間（18:00-22:00）" /><span>晚間（18:00-22:00）</span></label>
-              <label class="pill-option"><input type="checkbox" name="timeSlots" value="彈性不固定" /><span>彈性不固定</span></label>
-            </div>
-            <div class="error-msg">請至少選擇一個可訓練時段</div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">18</span>日常工作型態與平均睡眠時數<span class="req-tag">*</span></label>
+            <label class="q-label"><span class="q-index">17</span>日常工作型態與平均睡眠時數<span class="req-tag">*</span></label>
             <div class="form-row-2">
               <div>
                 <select id="workType" name="workType" required>
@@ -1019,6 +1066,9 @@
   </main>
 
   <script>
+    // 預覽檢視模式：true = 暫時解除所有必填限制方便瀏覽；確認完畢改回 false 即恢復必填檢查
+    const PREVIEW_MODE = true;
+
     const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyTyaD8WnoFdc_i-1v4vW4DGBYXADuD6Pdw0V6iOnhd5PqGzicPK0jIRLCu50SZYEb7Cw/exec";
 
     const DAYS = [
@@ -1031,18 +1081,12 @@
       { key: "sun", label: "日" }
     ];
 
-    const DAY_SLOTS = [
-      { key: "morn", label: "早" },
-      { key: "noon", label: "午" },
-      { key: "eve", label: "晚" }
-    ];
-
-    const SPORT_OPTIONS = ["", "皆可", "游", "騎", "跑", "肌力", "休息"];
+    const SPORT_OPTIONS = ["", "皆可", "游", "騎", "跑", "肌力", "休息 / 恢復"];
 
     const STAGE_META = {
-      1: { title: "階段 1 / 4：基本資料與聯絡資訊", remainingStages: 3, remainingQuestions: 18 },
-      2: { title: "階段 2 / 4：運動背景與目標設定", remainingStages: 2, remainingQuestions: 12 },
-      3: { title: "階段 3 / 4：TrainingPeaks 帳號與訓練數據", remainingStages: 1, remainingQuestions: 7 },
+      1: { title: "階段 1 / 4：基本資料與聯絡資訊", remainingStages: 3, remainingQuestions: 17 },
+      2: { title: "階段 2 / 4：運動背景與目標設定", remainingStages: 2, remainingQuestions: 11 },
+      3: { title: "階段 3 / 4：TrainingPeaks 帳號與訓練數據", remainingStages: 1, remainingQuestions: 6 },
       4: { title: "階段 4 / 4：一週訓練規劃與日常作息", remainingStages: 0, remainingQuestions: 4 }
     };
 
@@ -1129,7 +1173,23 @@
       if (autoFocus) input.focus();
     }
 
-    // 初始化一週訓練規劃表（早、午、晚 + 可訓練時間）
+    // 第 14 題：平日可訓練時段點選後右方展開填寫欄
+    document.querySelectorAll(".slot-toggle").forEach(cb => {
+      cb.addEventListener("change", function () {
+        const targetInput = document.getElementById(this.dataset.target);
+        if (!targetInput) return;
+
+        if (this.checked) {
+          targetInput.classList.add("visible");
+          targetInput.focus();
+          document.getElementById("timeSlotsError").classList.remove("visible");
+        } else {
+          targetInput.classList.remove("visible");
+        }
+      });
+    });
+
+    // 初始化第 15 題一週訓練規劃表（簡化版：可訓練時間 + 固定項目/習慣）
     function buildScheduleGrid() {
       const grid = document.getElementById("scheduleGrid");
       grid.innerHTML = "";
@@ -1138,28 +1198,27 @@
       grid.appendChild(createCell("", "sg-cell sg-header sg-sticky"));
       DAYS.forEach(d => grid.appendChild(createCell(d.label, "sg-cell sg-header")));
 
-      // 早、午、晚三列
-      DAY_SLOTS.forEach(slot => {
-        grid.appendChild(createCell(slot.label, "sg-cell sg-row-label sg-sticky"));
-        DAYS.forEach(d => {
-          const cell = createCell("", "sg-cell");
-          cell.appendChild(createSportSelect(`${d.key}_${slot.key}`));
-          grid.appendChild(cell);
-        });
-      });
-
-      // 最下面列：可訓練時間 (min)
-      const timeLabelCell = createCell("", "sg-cell sg-row-label sg-sticky sg-grid-bottom");
+      // 第一列：可訓練時間 (min)
+      const timeLabelCell = createCell("", "sg-cell sg-row-label sg-sticky");
       timeLabelCell.innerHTML = "可訓練時間<br>(min)";
       grid.appendChild(timeLabelCell);
 
       DAYS.forEach(d => {
-        const cell = createCell("", "sg-cell sg-grid-bottom");
+        const cell = createCell("", "sg-cell");
         cell.appendChild(createMinutesInput(`${d.key}_min`));
         grid.appendChild(cell);
       });
 
-      syncScheduleDisabledStates();
+      // 第二列：固定項目 / 習慣（選填）
+      const sportLabelCell = createCell("", "sg-cell sg-row-label sg-sticky sg-grid-bottom");
+      sportLabelCell.innerHTML = "固定項目 / 習慣<br>（選填）";
+      grid.appendChild(sportLabelCell);
+
+      DAYS.forEach(d => {
+        const cell = createCell("", "sg-cell sg-grid-bottom");
+        cell.appendChild(createSportSelect(`${d.key}_sport`));
+        grid.appendChild(cell);
+      });
     }
 
     function createCell(text, className) {
@@ -1167,6 +1226,19 @@
       div.className = className;
       if (text) div.textContent = text;
       return div;
+    }
+
+    function createMinutesInput(name) {
+      const input = document.createElement("input");
+      input.type = "number";
+      input.name = name;
+      input.min = "0";
+      input.max = "600";
+      input.step = "5";
+      input.placeholder = "分鐘";
+      input.dataset.scheduleField = "minutes";
+      input.addEventListener("input", updateScheduleSummary);
+      return input;
     }
 
     function createSportSelect(name) {
@@ -1179,48 +1251,8 @@
         option.textContent = opt === "" ? "—" : opt;
         sel.appendChild(option);
       });
-      sel.addEventListener("change", () => {
-        syncScheduleDisabledStates();
-        updateScheduleSummary();
-      });
+      sel.addEventListener("change", updateScheduleSummary);
       return sel;
-    }
-
-    function createMinutesInput(name) {
-      const input = document.createElement("input");
-      input.type = "number";
-      input.name = name;
-      input.min = "0";
-      input.max = "600";
-      input.step = "5";
-      input.placeholder = "分鐘";
-      input.dataset.scheduleField = "minutes";
-      input.addEventListener("input", () => {
-        input.classList.remove("field-error");
-        updateScheduleSummary();
-      });
-      return input;
-    }
-
-    // 任一時段（早、午、晚）有選擇訓練項目時，解鎖當日最下方的可訓練時間
-    function syncScheduleDisabledStates() {
-      DAYS.forEach(d => {
-        const min = document.querySelector(`[name="${d.key}_min"]`);
-        if (!min) return;
-
-        const hasTraining = DAY_SLOTS.some(slot => {
-          const sel = document.querySelector(`[name="${d.key}_${slot.key}"]`);
-          return sel && sel.value !== "" && sel.value !== "休息";
-        });
-
-        if (!hasTraining) {
-          min.value = "";
-          min.disabled = true;
-          min.classList.remove("field-error");
-        } else {
-          min.disabled = false;
-        }
-      });
     }
 
     let scheduleState = {};
@@ -1242,12 +1274,10 @@
         if (!isNaN(minVal) && minVal > 0) {
           totalMinutes += minVal;
         }
-        DAY_SLOTS.forEach(slot => {
-          const sport = scheduleState[`${d.key}_${slot.key}`];
-          if (sport && sport !== "休息") {
-            counts[sport] = (counts[sport] || 0) + 1;
-          }
-        });
+        const sport = scheduleState[`${d.key}_sport`];
+        if (sport) {
+          counts[sport] = (counts[sport] || 0) + 1;
+        }
       });
 
       const totalHours = (totalMinutes / 60).toFixed(1).replace(/\.0$/, "");
@@ -1257,9 +1287,9 @@
       document.getElementById("sportBreakdownDisplay").textContent =
         breakdownKeys.length > 0
           ? breakdownKeys.map(k => `${k} ${counts[k]} 次`).join("・")
-          : "尚未選擇訓練項目";
+          : "尚未選擇固定項目";
 
-      if (totalMinutes > 0) {
+      if (totalMinutes > 0 || breakdownKeys.length > 0) {
         document.getElementById("scheduleError").classList.remove("visible");
       }
     }
@@ -1285,6 +1315,8 @@
     }
 
     function validateStep(step) {
+      if (PREVIEW_MODE) return true;
+
       const panel = document.querySelector(`.step-panel[data-step="${step}"]`);
       let isValid = true;
       let firstInvalidEl = null;
@@ -1338,34 +1370,28 @@
         }
       }
 
-      // 階段 4：第 15 題一週訓練規劃檢查
+      // 階段 4：第 14 題可訓練時段 & 第 15 題一週規劃檢查
       if (step === 4) {
+        const checkedSlots = panel.querySelectorAll('input[name="timeSlots"]:checked');
+        if (checkedSlots.length === 0) {
+          isValid = false;
+          document.getElementById("timeSlotsError").classList.add("visible");
+          if (!firstInvalidEl) firstInvalidEl = document.getElementById("timeSlotsGroup");
+        }
+
         saveScheduleState();
-        let totalMinutes = 0;
-        let missingDayMinutes = false;
-
+        let hasAnySchedule = false;
         DAYS.forEach(d => {
-          const minInput = document.querySelector(`[name="${d.key}_min"]`);
           const val = parseInt(scheduleState[`${d.key}_min`] || "0", 10);
-          const hasTraining = DAY_SLOTS.some(slot => {
-            const sVal = scheduleState[`${d.key}_${slot.key}`];
-            return sVal && sVal !== "休息";
-          });
-
-          if (hasTraining && (isNaN(val) || val <= 0)) {
-            missingDayMinutes = true;
-            if (minInput) minInput.classList.add("field-error");
-          }
-
-          if (!isNaN(val) && val > 0) {
-            totalMinutes += val;
+          const sport = scheduleState[`${d.key}_sport`];
+          if ((!isNaN(val) && val > 0) || sport) {
+            hasAnySchedule = true;
           }
         });
 
-        if (totalMinutes <= 0 || missingDayMinutes) {
+        if (!hasAnySchedule) {
           isValid = false;
-          const err = document.getElementById("scheduleError");
-          err.classList.add("visible");
+          document.getElementById("scheduleError").classList.add("visible");
           if (!firstInvalidEl) firstInvalidEl = document.getElementById("scheduleGrid");
         }
       }
@@ -1405,17 +1431,19 @@
       let totalMinutes = 0;
       const weeklyPlan = {};
       DAYS.forEach(d => {
-        const slotItems = DAY_SLOTS
-          .map(slot => {
-            const val = scheduleState[`${d.key}_${slot.key}`];
-            return val ? `${slot.label}：${val}` : "";
-          })
-          .filter(Boolean);
-
         const mins = parseInt(scheduleState[`${d.key}_min`] || "0", 10) || 0;
+        const sport = scheduleState[`${d.key}_sport`] || "";
         totalMinutes += mins;
-        const sessionText = slotItems.length > 0 ? slotItems.join(" / ") : "無排程";
-        weeklyPlan[d.key] = `${sessionText}（${mins}分）`;
+
+        if (mins > 0 && sport) {
+          weeklyPlan[d.key] = `${mins}分（${sport}）`;
+        } else if (mins > 0) {
+          weeklyPlan[d.key] = `${mins}分`;
+        } else if (sport) {
+          weeklyPlan[d.key] = sport;
+        } else {
+          weeklyPlan[d.key] = "無排程";
+        }
       });
 
       const getCheckedValues = (name) =>
@@ -1429,7 +1457,7 @@
         raceGoalDetail ? `【具體說明】${raceGoalDetail}` : ""
       ].filter(Boolean).join("\n");
 
-      // 整理第 13 題同步裝置（含功率計品牌與多個其他項目）
+      // 整理第 12 題同步裝置（含功率計品牌與多個其他項目）
       const deviceList = [];
       document.querySelectorAll('input[name="devices"]:checked').forEach(el => {
         if (el.value === "自行車功率計") {
@@ -1451,6 +1479,15 @@
         }
       }
 
+      // 整理第 14 題平日可訓練時段（含右方填寫的具體時間）
+      const formattedTimeSlots = Array.from(document.querySelectorAll(".slot-toggle:checked"))
+        .map(cb => {
+          const detailInput = document.getElementById(cb.dataset.target);
+          const detailText = detailInput ? detailInput.value.trim() : "";
+          return detailText ? `${cb.value}（${detailText}）` : cb.value;
+        })
+        .join("、");
+
       const payload = {
         fullName: document.getElementById("fullName").value.trim(),
         gender: document.querySelector('input[name="gender"]:checked')?.value || "",
@@ -1467,11 +1504,11 @@
         raceGoal: formattedRaceGoal,
         sportHistory: document.getElementById("sportHistory").value.trim(),
         injuryHistory: document.getElementById("injuryHistory").value.trim(),
-        tpStatus: document.querySelector('input[name="tpStatus"]:checked')?.value || "",
         devices: deviceList.join("、"),
         swimTime: document.getElementById("swimTime").value.trim(),
         bikeFtp: document.getElementById("bikeFtp").value.trim(),
         runTime: document.getElementById("runTime").value.trim(),
+        timeSlots: formattedTimeSlots,
         monPlan: weeklyPlan.mon,
         tuePlan: weeklyPlan.tue,
         wedPlan: weeklyPlan.wed,
@@ -1482,7 +1519,6 @@
         totalHours: Number((totalMinutes / 60).toFixed(2)),
         totalMinutes: totalMinutes,
         restDays: getCheckedValues("restDays"),
-        timeSlots: getCheckedValues("timeSlots"),
         workType: document.getElementById("workType").value,
         sleepHours: document.getElementById("sleepHours").value
       };
@@ -1499,7 +1535,7 @@
         document.getElementById("remainingBadge").innerHTML = "填寫完成";
         document.getElementById("currentStageLabel").textContent = "已完成全部 4 個階段";
         document.getElementById("successSummaryText").textContent =
-          `${payload.fullName} 你好，你的每週可訓練總時數為 ${payload.totalHours} 小時（${payload.totalMinutes} 分鐘）。教練團隊檢視完畢後，將透過 LINE 與你聯繫並傳送 TrainingPeaks 綁定連結。`;
+          `${payload.fullName || "學員"} 你好，你的每週可訓練總時數為 ${payload.totalHours} 小時（${payload.totalMinutes} 分鐘）。教練團隊檢視完畢後，將透過 LINE 與你聯繫並傳送 TrainingPeaks 綁定連結。`;
         document.getElementById("successPanel").classList.add("active");
         window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (err) {
