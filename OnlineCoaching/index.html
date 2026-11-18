@@ -940,11 +940,11 @@
         <section class="step-panel" data-step="3">
           <div class="section-intro">
             <h2>三、TrainingPeaks 帳號與訓練數據</h2>
-            <p>線上課表統一透過 TrainingPeaks 派發與追蹤，基準數據不知道可留白。</p>
+            <p>線上課表將透過 TrainingPeaks 進行，成績參考數據不知道可留白。</p>
           </div>
 
           <div class="info-callout mb-20">
-            若尚未註冊帳號，請先至 <a href="https://www.trainingpeaks.com/" target="_blank" rel="noopener noreferrer">TrainingPeaks 官網</a> 免費申請帳號；完成註冊並送出表單後，教練將透過 LINE 發送專屬綁定連結給你。
+            請先至 <a href="https://www.trainingpeaks.com/" target="_blank" rel="noopener noreferrer">TrainingPeaks 官網</a> 免費申請帳號；完成註冊並送出表單後，教練將透過 LINE 發送綁定連結給你。
           </div>
 
           <div class="form-group">
@@ -974,7 +974,7 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">13</span>現有能力基準值<span class="opt-tag">（選填，不知道可留白）</span></label>
+            <label class="q-label"><span class="q-index">13</span>數據參考<span class="opt-tag">（選填）</span></label>
             <div class="form-row-3">
               <div>
                 <input type="text" id="swimTime" name="swimTime" placeholder="游泳 400m 或 100m 時間" />
@@ -1040,7 +1040,21 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">15</span>一週訓練規劃：早 / 午 / 晚與可訓練時間<span class="req-tag">*</span></label>
+            <label class="q-label"><span class="q-index">15</span>固定不能練的日子 / 期望休息日（可複選）<span class="opt-tag">（選填）</span></label>
+            <div class="pill-grid">
+              <label class="pill-option"><input type="checkbox" name="restDays" value="週一" /><span>週一</span></label>
+              <label class="pill-option"><input type="checkbox" name="restDays" value="週二" /><span>週二</span></label>
+              <label class="pill-option"><input type="checkbox" name="restDays" value="週三" /><span>週三</span></label>
+              <label class="pill-option"><input type="checkbox" name="restDays" value="週四" /><span>週四</span></label>
+              <label class="pill-option"><input type="checkbox" name="restDays" value="週五" /><span>週五</span></label>
+              <label class="pill-option"><input type="checkbox" name="restDays" value="週六" /><span>週六</span></label>
+              <label class="pill-option"><input type="checkbox" name="restDays" value="週日" /><span>週日</span></label>
+              <label class="pill-option"><input type="checkbox" name="restDays" value="無固定限制" /><span>無固定限制</span></label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="q-label"><span class="q-index">16</span>一週訓練規劃：早 / 午 / 晚與可訓練時間<span class="req-tag">*</span></label>
             <div class="info-callout schedule-note">
               請在每天的「早、午、晚」選擇可以或習慣的訓練項目（無特定項目請選「皆可」，無安排請留白），並在最下方填寫當日「可訓練時間（分鐘）」（例如 40 分鐘填 40，2.5 小時填 150）。
             </div>
@@ -1057,20 +1071,6 @@
               <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇訓練項目</div>
             </div>
             <div class="error-msg" id="scheduleError">請至少在其中一天填寫可訓練時間或選擇訓練項目</div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">16</span>固定不能練的日子 / 期望休息日（可複選）<span class="opt-tag">（選填）</span></label>
-            <div class="pill-grid">
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週一" /><span>週一</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週二" /><span>週二</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週三" /><span>週三</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週四" /><span>週四</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週五" /><span>週五</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週六" /><span>週六</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週日" /><span>週日</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="無固定限制" /><span>無固定限制</span></label>
-            </div>
           </div>
 
           <div class="form-group">
@@ -1308,7 +1308,7 @@
       });
     });
 
-    // 初始化第 15 題一週訓練規劃表（早、午、晚 + 可訓練時間）
+    // 初始化第 16 題一週訓練規劃表（早、午、晚 + 可訓練時間）
     function buildScheduleGrid() {
       const grid = document.getElementById("scheduleGrid");
       grid.innerHTML = "";
@@ -1444,6 +1444,32 @@
       panel.querySelectorAll(".field-error").forEach(el => el.classList.remove("field-error"));
       panel.querySelectorAll(".error-msg").forEach(el => el.classList.remove("visible"));
 
+      // 階段 4：第 14 題可訓練時段 & 第 16 題一週規劃檢查
+      if (step === 4) {
+        const checkedSlots = panel.querySelectorAll('input[name="timeSlots"]:checked');
+        if (checkedSlots.length === 0) {
+          isValid = false;
+          document.getElementById("timeSlotsError").classList.add("visible");
+          if (!firstInvalidEl) firstInvalidEl = document.getElementById("timeSlotsGroup");
+        }
+
+        saveScheduleState();
+        let hasAnySchedule = false;
+        DAYS.forEach(d => {
+          const val = parseInt(scheduleState[`${d.key}_min`] || "0", 10);
+          const hasSlot = DAY_SLOTS.some(slot => Boolean(scheduleState[`${d.key}_${slot.key}`]));
+          if ((!isNaN(val) && val > 0) || hasSlot) {
+            hasAnySchedule = true;
+          }
+        });
+
+        if (!hasAnySchedule) {
+          isValid = false;
+          document.getElementById("scheduleError").classList.add("visible");
+          if (!firstInvalidEl) firstInvalidEl = document.getElementById("scheduleGrid");
+        }
+      }
+
       panel.querySelectorAll("[required]").forEach(input => {
         if (!input.value.trim()) {
           isValid = false;
@@ -1487,32 +1513,6 @@
           goalDetailInput.classList.add("field-error");
           document.getElementById("goalError").classList.add("visible");
           if (!firstInvalidEl) firstInvalidEl = document.getElementById("goalGroup");
-        }
-      }
-
-      // 階段 4：第 14 題可訓練時段 & 第 15 題一週規劃檢查
-      if (step === 4) {
-        const checkedSlots = panel.querySelectorAll('input[name="timeSlots"]:checked');
-        if (checkedSlots.length === 0) {
-          isValid = false;
-          document.getElementById("timeSlotsError").classList.add("visible");
-          if (!firstInvalidEl) firstInvalidEl = document.getElementById("timeSlotsGroup");
-        }
-
-        saveScheduleState();
-        let hasAnySchedule = false;
-        DAYS.forEach(d => {
-          const val = parseInt(scheduleState[`${d.key}_min`] || "0", 10);
-          const hasSlot = DAY_SLOTS.some(slot => Boolean(scheduleState[`${d.key}_${slot.key}`]));
-          if ((!isNaN(val) && val > 0) || hasSlot) {
-            hasAnySchedule = true;
-          }
-        });
-
-        if (!hasAnySchedule) {
-          isValid = false;
-          document.getElementById("scheduleError").classList.add("visible");
-          if (!firstInvalidEl) firstInvalidEl = document.getElementById("scheduleGrid");
         }
       }
 
