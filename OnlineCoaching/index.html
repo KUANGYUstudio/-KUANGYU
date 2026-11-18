@@ -449,7 +449,7 @@
       text-decoration: underline;
     }
 
-    /* 條件展開子區塊（功率計品牌 / 多個其他項目） */
+    /* 條件展開子區塊（訓練距離 / 功率計品牌 / 多個其他項目） */
     .sub-input-box {
       margin-top: 12px;
       padding: 14px 16px;
@@ -870,12 +870,32 @@
           <div class="form-group">
             <label class="q-label"><span class="q-index">07</span>主要訓練方向（可複選）<span class="req-tag">*</span></label>
             <div class="pill-grid" data-required-checkbox="trainingFocus">
-              <label class="pill-option"><input type="checkbox" name="trainingFocus" value="標鐵 51.5km" /><span>標鐵 51.5km</span></label>
-              <label class="pill-option"><input type="checkbox" name="trainingFocus" value="半程超鐵 113km" /><span>半程超鐵 113km</span></label>
-              <label class="pill-option"><input type="checkbox" name="trainingFocus" value="超鐵 226km" /><span>超鐵 226km</span></label>
-              <label class="pill-option"><input type="checkbox" name="trainingFocus" value="跑步" /><span>跑步</span></label>
+              <label class="pill-option"><input type="checkbox" id="focusTri" name="trainingFocus" value="鐵人三項" /><span>鐵人三項</span></label>
+              <label class="pill-option"><input type="checkbox" id="focusRun" name="trainingFocus" value="跑步" /><span>跑步</span></label>
               <label class="pill-option"><input type="checkbox" name="trainingFocus" value="自行車" /><span>自行車</span></label>
             </div>
+
+            <!-- 點選「鐵人三項」時展開 -->
+            <div class="sub-input-box" id="triDistanceBox" style="display: none;">
+              <label class="sub-label">鐵人三項目標距離（可複選）</label>
+              <div class="pill-grid">
+                <label class="pill-option"><input type="checkbox" name="triDistance" value="25.75K" /><span>25.75K</span></label>
+                <label class="pill-option"><input type="checkbox" name="triDistance" value="51.5K" /><span>51.5K</span></label>
+                <label class="pill-option"><input type="checkbox" name="triDistance" value="113K" /><span>113K</span></label>
+                <label class="pill-option"><input type="checkbox" name="triDistance" value="226K" /><span>226K</span></label>
+              </div>
+            </div>
+
+            <!-- 點選「跑步」時展開 -->
+            <div class="sub-input-box" id="runDistanceBox" style="display: none;">
+              <label class="sub-label">跑步目標距離（可複選）</label>
+              <div class="pill-grid">
+                <label class="pill-option"><input type="checkbox" name="runDistance" value="10K" /><span>10K</span></label>
+                <label class="pill-option"><input type="checkbox" name="runDistance" value="21K" /><span>21K</span></label>
+                <label class="pill-option"><input type="checkbox" name="runDistance" value="42K" /><span>42K</span></label>
+              </div>
+            </div>
+
             <div class="error-msg">請至少選擇一項訓練方向</div>
           </div>
 
@@ -1138,6 +1158,29 @@
     }
 
     document.querySelectorAll(".smart-date-input").forEach(bindSmartDateInput);
+
+    // 第 07 題：主要訓練方向子選項展開與收合
+    const focusTriCheckbox = document.getElementById("focusTri");
+    const triDistanceBox = document.getElementById("triDistanceBox");
+    focusTriCheckbox.addEventListener("change", function () {
+      if (this.checked) {
+        triDistanceBox.style.display = "block";
+      } else {
+        triDistanceBox.style.display = "none";
+        document.querySelectorAll('input[name="triDistance"]').forEach(cb => cb.checked = false);
+      }
+    });
+
+    const focusRunCheckbox = document.getElementById("focusRun");
+    const runDistanceBox = document.getElementById("runDistanceBox");
+    focusRunCheckbox.addEventListener("change", function () {
+      if (this.checked) {
+        runDistanceBox.style.display = "block";
+      } else {
+        runDistanceBox.style.display = "none";
+        document.querySelectorAll('input[name="runDistance"]').forEach(cb => cb.checked = false);
+      }
+    });
 
     // 第 08 題：近期目標賽事動態新增與移除
     const raceList = document.getElementById("raceList");
@@ -1532,6 +1575,20 @@
       const getCheckedValues = (name) =>
         Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value).join("、");
 
+      // 整理第 07 題主要訓練方向（含展開的目標距離）
+      const focusList = [];
+      document.querySelectorAll('input[name="trainingFocus"]:checked').forEach(el => {
+        if (el.value === "鐵人三項") {
+          const triDists = Array.from(document.querySelectorAll('input[name="triDistance"]:checked')).map(d => d.value);
+          focusList.push(triDists.length > 0 ? `鐵人三項（${triDists.join("、")}）` : "鐵人三項");
+        } else if (el.value === "跑步") {
+          const runDists = Array.from(document.querySelectorAll('input[name="runDistance"]:checked')).map(d => d.value);
+          focusList.push(runDists.length > 0 ? `跑步（${runDists.join("、")}）` : "跑步");
+        } else {
+          focusList.push(el.value);
+        }
+      });
+
       // 整理第 08 題多場目標賽事與日期
       const raceEntries = Array.from(document.querySelectorAll(".race-row"))
         .map(row => {
@@ -1605,7 +1662,7 @@
         email: document.getElementById("email").value.trim(),
         emergencyName: document.getElementById("emergencyName").value.trim(),
         emergencyPhone: document.getElementById("emergencyPhone").value.trim(),
-        trainingFocus: getCheckedValues("trainingFocus"),
+        trainingFocus: focusList.join("、"),
         targetRace: formattedTargetRace,
         targetRaceDate: formattedTargetRaceDate,
         raceGoal: formattedRaceGoal,
