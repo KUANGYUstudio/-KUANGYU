@@ -399,7 +399,7 @@
       grid-template-columns: 1.4fr 1fr;
     }
 
-    /* 垂直排列可展開時段列表（第 14 題） */
+    /* 垂直排列可展開時段列表（第 15 題） */
     .vertical-slot-list {
       display: flex;
       flex-direction: column;
@@ -998,11 +998,31 @@
         <section class="step-panel" data-step="4">
           <div class="section-intro">
             <h2>四、一週訓練規劃與日常作息</h2>
-            <p>請填寫你平日可訓練的時段，以及一週每日早、午、晚的規劃與可用時間。</p>
+            <p>請填寫你一週每日早、午、晚的規劃與可用時間，以及平日可訓練時段。</p>
+          </div>
+
+          <div class="form-group">
+            <label class="q-label"><span class="q-index">14</span>一週訓練規劃<span class="req-tag">*</span></label>
+            <div class="info-callout schedule-note">
+              請在每天的「早、午、晚」選擇可以或習慣的訓練項目（無特定項目請選「皆可」，無安排請留白），並在最下方填寫當日「可訓練時間（分鐘）」（例如 40 分鐘填 40，2.5 小時填 150）。
+            </div>
+            <div class="swipe-hint">表格可左右滑動填寫一至日</div>
+
+            <div class="schedule-table-wrap">
+              <div class="schedule-grid" id="scheduleGrid">
+                <!-- 由 JS 動態產生橫向表格 -->
+              </div>
+            </div>
+
+            <div class="total-summary-box">
+              <div class="total-hours-text" id="totalHoursDisplay">Total：0 hr（0 分鐘）</div>
+              <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇訓練項目</div>
+            </div>
+            <div class="error-msg" id="scheduleError">請至少在其中一天填寫可訓練時間或選擇訓練項目</div>
           </div>
 
           <div class="form-group" id="timeSlotsGroup">
-            <label class="q-label"><span class="q-index">14</span>平日可訓練時段（可複選，點選後可於右方填寫具體時間）<span class="req-tag">*</span></label>
+            <label class="q-label"><span class="q-index">15</span>平日可訓練時段（複選）<span class="opt-tag">（點選後請於右方填寫具體時間）</span><span class="req-tag">*</span></label>
             <div class="vertical-slot-list">
               <div class="slot-item-row">
                 <label class="pill-option">
@@ -1036,12 +1056,12 @@
                 <input type="text" id="slotInputFlex" class="slot-detail-input" placeholder="請填寫可運用時段或彈性狀況" />
               </div>
             </div>
-            <div class="error-msg" id="timeSlotsError">請至少勾選一個可訓練時段</div>
+            <div class="error-msg" id="timeSlotsError">請至少勾選一個可訓練時段，並於右方填寫具體時間</div>
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">15</span>固定不能練的日子 / 期望休息日（可複選）<span class="opt-tag">（選填）</span></label>
-            <div class="pill-grid">
+            <label class="q-label"><span class="q-index">16</span>固定不能練的日子 / 期望休息日（複選）<span class="req-tag">*</span></label>
+            <div class="pill-grid" data-required-checkbox="restDays">
               <label class="pill-option"><input type="checkbox" name="restDays" value="週一" /><span>週一</span></label>
               <label class="pill-option"><input type="checkbox" name="restDays" value="週二" /><span>週二</span></label>
               <label class="pill-option"><input type="checkbox" name="restDays" value="週三" /><span>週三</span></label>
@@ -1051,26 +1071,7 @@
               <label class="pill-option"><input type="checkbox" name="restDays" value="週日" /><span>週日</span></label>
               <label class="pill-option"><input type="checkbox" name="restDays" value="無固定限制" /><span>無固定限制</span></label>
             </div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">16</span>一週訓練規劃：早 / 午 / 晚與可訓練時間<span class="req-tag">*</span></label>
-            <div class="info-callout schedule-note">
-              請在每天的「早、午、晚」選擇可以或習慣的訓練項目（無特定項目請選「皆可」，無安排請留白），並在最下方填寫當日「可訓練時間（分鐘）」（例如 40 分鐘填 40，2.5 小時填 150）。
-            </div>
-            <div class="swipe-hint">表格可左右滑動填寫一至日</div>
-
-            <div class="schedule-table-wrap">
-              <div class="schedule-grid" id="scheduleGrid">
-                <!-- 由 JS 動態產生橫向表格 -->
-              </div>
-            </div>
-
-            <div class="total-summary-box">
-              <div class="total-hours-text" id="totalHoursDisplay">Total：0 hr（0 分鐘）</div>
-              <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇訓練項目</div>
-            </div>
-            <div class="error-msg" id="scheduleError">請至少在其中一天填寫可訓練時間或選擇訓練項目</div>
+            <div class="error-msg">請至少選擇一項（若無限制請選「無固定限制」）</div>
           </div>
 
           <div class="form-group">
@@ -1292,7 +1293,7 @@
       if (autoFocus) input.focus();
     }
 
-    // 第 14 題：平日可訓練時段點選後右方展開填寫欄
+    // 第 15 題：平日可訓練時段點選後右方展開填寫欄
     document.querySelectorAll(".slot-toggle").forEach(cb => {
       cb.addEventListener("change", function () {
         const targetInput = document.getElementById(this.dataset.target);
@@ -1304,11 +1305,21 @@
           document.getElementById("timeSlotsError").classList.remove("visible");
         } else {
           targetInput.classList.remove("visible");
+          targetInput.classList.remove("field-error");
         }
       });
     });
 
-    // 初始化第 16 題一週訓練規劃表（早、午、晚 + 可訓練時間）
+    document.querySelectorAll(".slot-detail-input").forEach(input => {
+      input.addEventListener("input", function () {
+        if (this.value.trim()) {
+          this.classList.remove("field-error");
+          document.getElementById("timeSlotsError").classList.remove("visible");
+        }
+      });
+    });
+
+    // 初始化第 14 題一週訓練規劃表（早、午、晚 + 可訓練時間）
     function buildScheduleGrid() {
       const grid = document.getElementById("scheduleGrid");
       grid.innerHTML = "";
@@ -1444,15 +1455,8 @@
       panel.querySelectorAll(".field-error").forEach(el => el.classList.remove("field-error"));
       panel.querySelectorAll(".error-msg").forEach(el => el.classList.remove("visible"));
 
-      // 階段 4：第 14 題可訓練時段 & 第 16 題一週規劃檢查
+      // 階段 4：第 14 題一週訓練規劃 & 第 15 題平日可訓練時段檢查
       if (step === 4) {
-        const checkedSlots = panel.querySelectorAll('input[name="timeSlots"]:checked');
-        if (checkedSlots.length === 0) {
-          isValid = false;
-          document.getElementById("timeSlotsError").classList.add("visible");
-          if (!firstInvalidEl) firstInvalidEl = document.getElementById("timeSlotsGroup");
-        }
-
         saveScheduleState();
         let hasAnySchedule = false;
         DAYS.forEach(d => {
@@ -1467,6 +1471,23 @@
           isValid = false;
           document.getElementById("scheduleError").classList.add("visible");
           if (!firstInvalidEl) firstInvalidEl = document.getElementById("scheduleGrid");
+        }
+
+        const checkedSlots = panel.querySelectorAll('input[name="timeSlots"]:checked');
+        if (checkedSlots.length === 0) {
+          isValid = false;
+          document.getElementById("timeSlotsError").classList.add("visible");
+          if (!firstInvalidEl) firstInvalidEl = document.getElementById("timeSlotsGroup");
+        } else {
+          checkedSlots.forEach(cb => {
+            const detailInput = document.getElementById(cb.dataset.target);
+            if (detailInput && !detailInput.value.trim()) {
+              isValid = false;
+              detailInput.classList.add("field-error");
+              document.getElementById("timeSlotsError").classList.add("visible");
+              if (!firstInvalidEl) firstInvalidEl = detailInput;
+            }
+          });
         }
       }
 
@@ -1643,7 +1664,7 @@
         }
       }
 
-      // 整理第 14 題平日可訓練時段（含右方填寫的具體時間）
+      // 整理第 15 題平日可訓練時段（含右方填寫的具體時間）
       const formattedTimeSlots = Array.from(document.querySelectorAll(".slot-toggle:checked"))
         .map(cb => {
           const detailInput = document.getElementById(cb.dataset.target);
