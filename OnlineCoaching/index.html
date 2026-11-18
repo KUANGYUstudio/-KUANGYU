@@ -380,6 +380,25 @@
       font-weight: 700;
     }
 
+    /* 第 08 題多賽事列表 */
+    .race-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .race-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .race-row.single-row {
+      grid-template-columns: 1.4fr 1fr;
+    }
+
     /* 垂直排列可展開時段列表（第 14 題） */
     .vertical-slot-list {
       display: flex;
@@ -502,7 +521,7 @@
       color: #ffffff;
     }
 
-    /* 一週訓練規劃表（簡化版橫向表格，左側固定列標題） */
+    /* 一週訓練規劃表（早、午、晚 + 可訓練時間，左側固定列標題） */
     .schedule-note {
       margin-bottom: 10px;
     }
@@ -526,12 +545,12 @@
 
     .schedule-grid {
       display: grid;
-      grid-template-columns: 104px repeat(7, minmax(84px, 1fr));
-      min-width: 692px;
+      grid-template-columns: 96px repeat(7, minmax(84px, 1fr));
+      min-width: 684px;
     }
 
     .sg-cell {
-      padding: 10px 6px;
+      padding: 9px 6px;
       border-bottom: 1px solid var(--border);
       border-right: 1px solid var(--border);
       display: flex;
@@ -568,8 +587,12 @@
       font-weight: 600;
       color: var(--text-main);
       text-align: center;
-      font-size: 12px;
+      font-size: 13px;
       line-height: 1.35;
+    }
+
+    .sg-row-label.sg-grid-bottom {
+      font-size: 12px;
     }
 
     .sg-cell select {
@@ -618,6 +641,15 @@
       .form-row-2,
       .form-row-3 {
         grid-template-columns: 1fr;
+      }
+
+      .race-row,
+      .race-row.single-row {
+        grid-template-columns: 1fr;
+        padding: 12px;
+        background: #f9fbfb;
+        border: 1px solid var(--border);
+        border-radius: 10px;
       }
 
       .step-dot-item span.step-text {
@@ -848,15 +880,9 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">08</span>近期目標賽事與日期<span class="opt-tag">（無特定賽事可留白）</span></label>
-            <div class="form-row-2">
-              <div>
-                <input type="text" id="targetRace" name="targetRace" placeholder="賽事名稱，例如：2027 IRONMAN Taiwan" />
-              </div>
-              <div>
-                <input type="text" id="targetRaceDate" name="targetRaceDate" class="smart-date-input" placeholder="年 / 月 / 日" />
-              </div>
-            </div>
+            <label class="q-label"><span class="q-index">08</span>近期目標賽事與日期<span class="opt-tag">（無特定賽事可留白，可新增多場已報名賽事）</span></label>
+            <div class="race-list" id="raceList"></div>
+            <button type="button" class="btn-add-item" onclick="addRaceRow(true)">+ 新增賽事</button>
           </div>
 
           <div class="form-group" id="goalGroup">
@@ -874,7 +900,7 @@
 
           <div class="form-group">
             <label class="q-label" for="sportHistory"><span class="q-index">10</span>過往運動背景與代表成績<span class="req-tag">*</span></label>
-            <textarea id="sportHistory" name="sportHistory" placeholder="請簡述運動年資、接觸過哪些運動項目、過往完賽經歷或近期代表成績（例如：半馬 1:55、標鐵 2:45；若無經驗可填「運動新手」）" required></textarea>
+            <textarea id="sportHistory" name="sportHistory" placeholder="請簡述運動年資、接觸過哪些運動項目、過往完賽經歷或近期代表成績（例如：半馬 1:55、標鐵 2:45；若無經驗請填「無經驗」）" required></textarea>
             <div class="error-msg">請填寫過往運動背景與代表成績</div>
           </div>
 
@@ -952,7 +978,7 @@
         <section class="step-panel" data-step="4">
           <div class="section-intro">
             <h2>四、一週訓練規劃與日常作息</h2>
-            <p>請填寫你平日可訓練的時段，以及一週可運用的時間或固定運動習慣。</p>
+            <p>請填寫你平日可訓練的時段，以及一週每日早、午、晚的規劃與可用時間。</p>
           </div>
 
           <div class="form-group" id="timeSlotsGroup">
@@ -994,9 +1020,9 @@
           </div>
 
           <div class="form-group">
-            <label class="q-label"><span class="q-index">15</span>一週訓練規劃：可訓練時間與固定項目<span class="req-tag">*</span></label>
+            <label class="q-label"><span class="q-index">15</span>一週訓練規劃：早 / 午 / 晚與可訓練時間<span class="req-tag">*</span></label>
             <div class="info-callout schedule-note">
-              可僅填寫每天「可訓練時間（分鐘）」或「固定項目 / 習慣」，無特別安排的日子留白即可（例如 40 分鐘填 40，2.5 小時填 150）。
+              請在每天的「早、午、晚」選擇可以或習慣的訓練項目（無特定項目請選「皆可」，無安排請留白），並在最下方填寫當日「可訓練時間（分鐘）」（例如 40 分鐘填 40，2.5 小時填 150）。
             </div>
             <div class="swipe-hint">表格可左右滑動填寫一至日</div>
 
@@ -1008,9 +1034,9 @@
 
             <div class="total-summary-box">
               <div class="total-hours-text" id="totalHoursDisplay">Total：0 hr（0 分鐘）</div>
-              <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇固定項目</div>
+              <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇訓練項目</div>
             </div>
-            <div class="error-msg" id="scheduleError">請至少在其中一天填寫可訓練時間或選擇固定項目</div>
+            <div class="error-msg" id="scheduleError">請至少在其中一天填寫可訓練時間或選擇訓練項目</div>
           </div>
 
           <div class="form-group">
@@ -1081,6 +1107,12 @@
       { key: "sun", label: "日" }
     ];
 
+    const DAY_SLOTS = [
+      { key: "morn", label: "早" },
+      { key: "noon", label: "午" },
+      { key: "eve", label: "晚" }
+    ];
+
     const SPORT_OPTIONS = ["", "皆可", "游", "騎", "跑", "肌力", "休息 / 恢復"];
 
     const STAGE_META = {
@@ -1091,7 +1123,7 @@
     };
 
     // 日期欄位未點選前顯示「年 / 月 / 日」，點選後開啟系統日曆並防止 iOS 寬度溢出
-    document.querySelectorAll(".smart-date-input").forEach(input => {
+    function bindSmartDateInput(input) {
       input.addEventListener("focus", function () {
         this.type = "date";
         if (typeof this.showPicker === "function") {
@@ -1103,7 +1135,51 @@
           this.type = "text";
         }
       });
-    });
+    }
+
+    document.querySelectorAll(".smart-date-input").forEach(bindSmartDateInput);
+
+    // 第 08 題：近期目標賽事動態新增與移除
+    const raceList = document.getElementById("raceList");
+
+    function addRaceRow(autoFocus = true) {
+      const isFirst = raceList.children.length === 0;
+      const row = document.createElement("div");
+      row.className = isFirst ? "race-row single-row" : "race-row";
+
+      const nameInput = document.createElement("input");
+      nameInput.type = "text";
+      nameInput.className = "race-name-input";
+      nameInput.placeholder = isFirst
+        ? "賽事名稱，例如：2027 IRONMAN Taiwan"
+        : "其他已報名賽事名稱";
+
+      const dateInput = document.createElement("input");
+      dateInput.type = "text";
+      dateInput.className = "smart-date-input race-date-input";
+      dateInput.placeholder = "年 / 月 / 日";
+      bindSmartDateInput(dateInput);
+
+      row.appendChild(nameInput);
+      row.appendChild(dateInput);
+
+      if (!isFirst) {
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "btn-remove-item";
+        removeBtn.textContent = "移除";
+        removeBtn.onclick = function () {
+          row.remove();
+        };
+        row.appendChild(removeBtn);
+      }
+
+      raceList.appendChild(row);
+      if (autoFocus && !isFirst) nameInput.focus();
+    }
+
+    // 初始化第 08 題預設第一列賽事欄位
+    addRaceRow(false);
 
     // 第 09 題即時清除錯誤提示
     document.querySelectorAll('input[name="goalType"]').forEach(cb => {
@@ -1189,7 +1265,7 @@
       });
     });
 
-    // 初始化第 15 題一週訓練規劃表（簡化版：可訓練時間 + 固定項目/習慣）
+    // 初始化第 15 題一週訓練規劃表（早、午、晚 + 可訓練時間）
     function buildScheduleGrid() {
       const grid = document.getElementById("scheduleGrid");
       grid.innerHTML = "";
@@ -1198,25 +1274,24 @@
       grid.appendChild(createCell("", "sg-cell sg-header sg-sticky"));
       DAYS.forEach(d => grid.appendChild(createCell(d.label, "sg-cell sg-header")));
 
-      // 第一列：可訓練時間 (min)
-      const timeLabelCell = createCell("", "sg-cell sg-row-label sg-sticky");
+      // 早、午、晚三列
+      DAY_SLOTS.forEach(slot => {
+        grid.appendChild(createCell(slot.label, "sg-cell sg-row-label sg-sticky"));
+        DAYS.forEach(d => {
+          const cell = createCell("", "sg-cell");
+          cell.appendChild(createSportSelect(`${d.key}_${slot.key}`));
+          grid.appendChild(cell);
+        });
+      });
+
+      // 最下面列：可訓練時間 (min)
+      const timeLabelCell = createCell("", "sg-cell sg-row-label sg-sticky sg-grid-bottom");
       timeLabelCell.innerHTML = "可訓練時間<br>(min)";
       grid.appendChild(timeLabelCell);
 
       DAYS.forEach(d => {
-        const cell = createCell("", "sg-cell");
-        cell.appendChild(createMinutesInput(`${d.key}_min`));
-        grid.appendChild(cell);
-      });
-
-      // 第二列：固定項目 / 習慣（選填）
-      const sportLabelCell = createCell("", "sg-cell sg-row-label sg-sticky sg-grid-bottom");
-      sportLabelCell.innerHTML = "固定項目 / 習慣<br>（選填）";
-      grid.appendChild(sportLabelCell);
-
-      DAYS.forEach(d => {
         const cell = createCell("", "sg-cell sg-grid-bottom");
-        cell.appendChild(createSportSelect(`${d.key}_sport`));
+        cell.appendChild(createMinutesInput(`${d.key}_min`));
         grid.appendChild(cell);
       });
     }
@@ -1226,19 +1301,6 @@
       div.className = className;
       if (text) div.textContent = text;
       return div;
-    }
-
-    function createMinutesInput(name) {
-      const input = document.createElement("input");
-      input.type = "number";
-      input.name = name;
-      input.min = "0";
-      input.max = "600";
-      input.step = "5";
-      input.placeholder = "分鐘";
-      input.dataset.scheduleField = "minutes";
-      input.addEventListener("input", updateScheduleSummary);
-      return input;
     }
 
     function createSportSelect(name) {
@@ -1253,6 +1315,19 @@
       });
       sel.addEventListener("change", updateScheduleSummary);
       return sel;
+    }
+
+    function createMinutesInput(name) {
+      const input = document.createElement("input");
+      input.type = "number";
+      input.name = name;
+      input.min = "0";
+      input.max = "600";
+      input.step = "5";
+      input.placeholder = "分鐘";
+      input.dataset.scheduleField = "minutes";
+      input.addEventListener("input", updateScheduleSummary);
+      return input;
     }
 
     let scheduleState = {};
@@ -1274,10 +1349,12 @@
         if (!isNaN(minVal) && minVal > 0) {
           totalMinutes += minVal;
         }
-        const sport = scheduleState[`${d.key}_sport`];
-        if (sport) {
-          counts[sport] = (counts[sport] || 0) + 1;
-        }
+        DAY_SLOTS.forEach(slot => {
+          const sport = scheduleState[`${d.key}_${slot.key}`];
+          if (sport) {
+            counts[sport] = (counts[sport] || 0) + 1;
+          }
+        });
       });
 
       const totalHours = (totalMinutes / 60).toFixed(1).replace(/\.0$/, "");
@@ -1287,7 +1364,7 @@
       document.getElementById("sportBreakdownDisplay").textContent =
         breakdownKeys.length > 0
           ? breakdownKeys.map(k => `${k} ${counts[k]} 次`).join("・")
-          : "尚未選擇固定項目";
+          : "尚未選擇訓練項目";
 
       if (totalMinutes > 0 || breakdownKeys.length > 0) {
         document.getElementById("scheduleError").classList.remove("visible");
@@ -1383,8 +1460,8 @@
         let hasAnySchedule = false;
         DAYS.forEach(d => {
           const val = parseInt(scheduleState[`${d.key}_min`] || "0", 10);
-          const sport = scheduleState[`${d.key}_sport`];
-          if ((!isNaN(val) && val > 0) || sport) {
+          const hasSlot = DAY_SLOTS.some(slot => Boolean(scheduleState[`${d.key}_${slot.key}`]));
+          if ((!isNaN(val) && val > 0) || hasSlot) {
             hasAnySchedule = true;
           }
         });
@@ -1431,16 +1508,22 @@
       let totalMinutes = 0;
       const weeklyPlan = {};
       DAYS.forEach(d => {
+        const slotItems = DAY_SLOTS
+          .map(slot => {
+            const val = scheduleState[`${d.key}_${slot.key}`];
+            return val ? `${slot.label}：${val}` : "";
+          })
+          .filter(Boolean);
+
         const mins = parseInt(scheduleState[`${d.key}_min`] || "0", 10) || 0;
-        const sport = scheduleState[`${d.key}_sport`] || "";
         totalMinutes += mins;
 
-        if (mins > 0 && sport) {
-          weeklyPlan[d.key] = `${mins}分（${sport}）`;
+        if (slotItems.length > 0 && mins > 0) {
+          weeklyPlan[d.key] = `${slotItems.join(" / ")}（${mins}分）`;
+        } else if (slotItems.length > 0) {
+          weeklyPlan[d.key] = slotItems.join(" / ");
         } else if (mins > 0) {
           weeklyPlan[d.key] = `${mins}分`;
-        } else if (sport) {
-          weeklyPlan[d.key] = sport;
         } else {
           weeklyPlan[d.key] = "無排程";
         }
@@ -1448,6 +1531,30 @@
 
       const getCheckedValues = (name) =>
         Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value).join("、");
+
+      // 整理第 08 題多場目標賽事與日期
+      const raceEntries = Array.from(document.querySelectorAll(".race-row"))
+        .map(row => {
+          const name = row.querySelector(".race-name-input").value.trim();
+          const date = row.querySelector(".race-date-input").value;
+          return { name, date };
+        })
+        .filter(item => item.name || item.date);
+
+      let formattedTargetRace = "";
+      let formattedTargetRaceDate = "";
+      if (raceEntries.length === 1) {
+        formattedTargetRace = raceEntries[0].name;
+        formattedTargetRaceDate = raceEntries[0].date;
+      } else if (raceEntries.length > 1) {
+        formattedTargetRace = raceEntries
+          .map(item => (item.date ? `${item.name || "未命名賽事"}（${item.date}）` : item.name))
+          .join("\n");
+        formattedTargetRaceDate = raceEntries
+          .map(item => item.date)
+          .filter(Boolean)
+          .join("\n");
+      }
 
       // 整理第 09 題目標設定
       const selectedGoalTypes = getCheckedValues("goalType");
@@ -1499,8 +1606,8 @@
         emergencyName: document.getElementById("emergencyName").value.trim(),
         emergencyPhone: document.getElementById("emergencyPhone").value.trim(),
         trainingFocus: getCheckedValues("trainingFocus"),
-        targetRace: document.getElementById("targetRace").value.trim(),
-        targetRaceDate: document.getElementById("targetRaceDate").value,
+        targetRace: formattedTargetRace,
+        targetRaceDate: formattedTargetRaceDate,
         raceGoal: formattedRaceGoal,
         sportHistory: document.getElementById("sportHistory").value.trim(),
         injuryHistory: document.getElementById("injuryHistory").value.trim(),
