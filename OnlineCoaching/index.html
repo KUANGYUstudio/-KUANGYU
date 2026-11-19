@@ -34,7 +34,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 頂部固定進度列 */
+    /* 頂部固定導覽與進度列 */
     .progress-header {
       position: sticky;
       top: 0;
@@ -42,7 +42,7 @@
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
-      padding: 14px 20px 16px;
+      padding: 12px 20px;
     }
 
     .progress-inner {
@@ -54,15 +54,43 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .brand-title {
+    .brand-bar.with-progress {
+      margin-bottom: 10px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      height: 28px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .brand-divider {
+      width: 1px;
+      height: 16px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .brand-subtitle {
       font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.04em;
       color: var(--brand);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .remaining-badge {
@@ -74,10 +102,19 @@
       border-radius: 999px;
       border: 1px solid var(--border);
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .remaining-badge strong {
       color: var(--brand-dark);
+    }
+
+    .progress-controls {
+      display: none;
+    }
+
+    .progress-controls.visible {
+      display: block;
     }
 
     .stage-status-row {
@@ -198,6 +235,226 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==================== 第 0 頁：教練介紹與費用說明 ==================== */
+    .intro-hero {
+      text-align: center;
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .intro-eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--brand-dark);
+      background: var(--brand-soft);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .intro-hero h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .intro-hero p {
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+
+    .coach-profile-card {
+      background: #f9fbfb;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 20px;
+      margin-bottom: 22px;
+    }
+
+    .coach-header-row {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .coach-photo-wrap {
+      width: 132px;
+      height: 164px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    .coach-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .coach-info-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .coach-role-en {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--brand);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .coach-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .coach-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .coach-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--brand-dark);
+      background: var(--brand-soft);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .coach-philosophy {
+      font-size: 14px;
+      color: var(--text-main);
+      line-height: 1.75;
+    }
+
+    .coach-credentials-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .credentials-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin-bottom: 8px;
+    }
+
+    .credentials-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 16px;
+    }
+
+    .credentials-list li {
+      font-size: 13px;
+      color: var(--text-main);
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .credentials-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--brand);
+    }
+
+    /* 費用方案區塊 */
+    .pricing-card {
+      border: 1.5px solid var(--brand);
+      border-radius: 12px;
+      padding: 22px 20px;
+      background: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .pricing-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pricing-title-group h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .pricing-title-group span {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .price-pill {
+      background: var(--brand-soft);
+      color: var(--brand-dark);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .price-pill small {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .service-grid {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .service-grid li {
+      background: var(--bg-page);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .service-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--brand);
+      flex-shrink: 0;
     }
 
     .section-intro {
@@ -654,6 +911,32 @@
         font-size: 16px;
       }
 
+      .brand-logo {
+        height: 24px;
+      }
+
+      .coach-header-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .coach-tags {
+        justify-content: center;
+      }
+
+      .coach-philosophy {
+        text-align: left;
+      }
+
+      .credentials-list {
+        grid-template-columns: 1fr;
+      }
+
+      .service-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
       .form-row-2,
       .form-row-3 {
         grid-template-columns: 1fr;
@@ -727,6 +1010,12 @@
       min-width: 140px;
     }
 
+    .btn-start-full {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 16px;
+    }
+
     .btn-next:hover,
     .btn-submit:hover {
       background: var(--brand-dark);
@@ -774,25 +1063,32 @@
 </head>
 <body>
 
-  <!-- 頂部進度橫槓 -->
+  <!-- 頂部品牌 LOGO 與進度列 -->
   <header class="progress-header" id="progressHeader">
     <div class="progress-inner">
-      <div class="brand-bar">
-        <span class="brand-title">KUANGYU STUDIO｜線上一對一課表評估</span>
-        <span class="remaining-badge" id="remainingBadge">剩餘 <strong>3</strong> 個階段・還有 <strong>17</strong> 題待填</span>
+      <div class="brand-bar" id="brandBar">
+        <div class="brand-left">
+          <img src="../KUANGYU_logo.png" alt="KUANGYU STUDIO" class="brand-logo" />
+          <span class="brand-divider"></span>
+          <span class="brand-subtitle">線上一對一課表評估</span>
+        </div>
+        <span class="remaining-badge" id="remainingBadge">共 <strong>4</strong> 個階段・<strong>17</strong> 題</span>
       </div>
-      <div class="stage-status-row">
-        <div class="current-stage-label" id="currentStageLabel">階段 1 / 4：基本資料與聯絡資訊</div>
-        <div class="progress-percent" id="progressPercent">25%</div>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
-      <div class="step-dots">
-        <div class="step-dot-item active" id="dot-1"><span class="step-num">1</span><span class="step-text">基本資料</span></div>
-        <div class="step-dot-item" id="dot-2"><span class="step-num">2</span><span class="step-text">運動背景與目標</span></div>
-        <div class="step-dot-item" id="dot-3"><span class="step-num">3</span><span class="step-text">TrainingPeaks 數據</span></div>
-        <div class="step-dot-item" id="dot-4"><span class="step-num">4</span><span class="step-text">一週規劃與作息</span></div>
+
+      <div class="progress-controls" id="progressControls">
+        <div class="stage-status-row">
+          <div class="current-stage-label" id="currentStageLabel">階段 1 / 4：基本資料與聯絡資訊</div>
+          <div class="progress-percent" id="progressPercent">25%</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="step-dots">
+          <div class="step-dot-item active" id="dot-1"><span class="step-num">1</span><span class="step-text">基本資料</span></div>
+          <div class="step-dot-item" id="dot-2"><span class="step-num">2</span><span class="step-text">運動背景與目標</span></div>
+          <div class="step-dot-item" id="dot-3"><span class="step-num">3</span><span class="step-text">TrainingPeaks 數據</span></div>
+          <div class="step-dot-item" id="dot-4"><span class="step-num">4</span><span class="step-text">一週規劃與作息</span></div>
+        </div>
       </div>
     </div>
   </header>
@@ -801,8 +1097,73 @@
     <div class="card">
       <form id="intakeForm" novalidate>
 
+        <!-- ==================== 第 0 頁：教練介紹與費用說明 ==================== -->
+        <section class="step-panel active" data-step="0">
+          <div class="intro-hero">
+            <span class="intro-eyebrow">ONLINE COACHING</span>
+            <h1>線上一對一週期化課表</h1>
+            <p>量身規劃個人訓練週期，協助忙碌的運動愛好者穩定進步、無傷完賽。</p>
+          </div>
+
+          <!-- 關於教練 -->
+          <div class="coach-profile-card">
+            <div class="coach-header-row">
+              <div class="coach-photo-wrap">
+                <img src="coach-mike.jpg" alt="劉光武教練 Coach Mike" class="coach-photo" onerror="this.parentElement.style.display='none'" />
+              </div>
+              <div class="coach-info-main">
+                <div class="coach-role-en">Coach Mike</div>
+                <h2 class="coach-name">劉光武 教練</h2>
+                <div class="coach-tags">
+                  <span class="coach-tag">素人選手出身</span>
+                  <span class="coach-tag">8 年教學經歷</span>
+                  <span class="coach-tag">百鐵累積 102 場</span>
+                </div>
+                <p class="coach-philosophy">
+                  致力於健康無痛的運動生活。熱衷於鐵人三項訓練，也喜歡鑽研背後的科學邏輯，藉由自身經驗發展的訓練系統，讓忙碌的人也能勇於追求進步、達成自我實現！
+                </p>
+              </div>
+            </div>
+
+            <div class="coach-credentials-box">
+              <div class="credentials-title">國際賽事與耐力實戰資歷</div>
+              <ul class="credentials-list">
+                <li>百鐵累積 102 場</li>
+                <li>2021 IRONMAN KONA 世錦賽</li>
+                <li>2019 法國尼斯 IRONMAN 70.3 世錦賽</li>
+                <li>2023 紐西蘭 IRONMAN 70.3 世錦賽</li>
+                <li>2025 西班牙 IRONMAN 70.3 世錦賽</li>
+                <li>2026 FXT 極限鐵人 完賽</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 費用與服務項目 -->
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-title-group">
+                <h3>線上課表方案</h3>
+                <span>透過 TrainingPeaks 平台同步課表與數據追蹤</span>
+              </div>
+              <div class="price-pill">NT$ 6,000 <small>/ 月</small></div>
+            </div>
+            <ul class="service-grid">
+              <li><span class="service-dot"></span>週期化課表</li>
+              <li><span class="service-dot"></span>數據分析</li>
+              <li><span class="service-dot"></span>三項技術輔導</li>
+              <li><span class="service-dot"></span>比賽策略</li>
+              <li><span class="service-dot"></span>補給諮詢</li>
+              <li><span class="service-dot"></span>訓練相關諮詢</li>
+            </ul>
+          </div>
+
+          <div class="nav-actions">
+            <button type="button" class="btn btn-next btn-start-full" onclick="goToStep(1)">開始填寫評估表</button>
+          </div>
+        </section>
+
         <!-- ==================== 階段 1：基本資料與聯絡資訊 ==================== -->
-        <section class="step-panel active" data-step="1">
+        <section class="step-panel" data-step="1">
           <div class="section-intro">
             <h2>一、基本資料與聯絡資訊</h2>
             <p>用於建立學員檔案、估算生理區間，以及課表確認通知。</p>
@@ -872,6 +1233,7 @@
           </div>
 
           <div class="nav-actions">
+            <button type="button" class="btn btn-prev" onclick="goToStep(0)">教練與費用說明</button>
             <button type="button" class="btn btn-next" onclick="nextStep(1)">下一步</button>
           </div>
         </section>
@@ -1445,6 +1807,19 @@
     }
 
     function updateProgressUI(step) {
+      const brandBar = document.getElementById("brandBar");
+      const progressControls = document.getElementById("progressControls");
+
+      if (step === 0) {
+        brandBar.classList.remove("with-progress");
+        progressControls.classList.remove("visible");
+        document.getElementById("remainingBadge").innerHTML = "共 <strong>4</strong> 個階段・<strong>17</strong> 題";
+        return;
+      }
+
+      brandBar.classList.add("with-progress");
+      progressControls.classList.add("visible");
+
       const meta = STAGE_META[step];
       const percent = step * 25;
 
@@ -1465,7 +1840,7 @@
     }
 
     function validateStep(step) {
-      if (PREVIEW_MODE) return true;
+      if (PREVIEW_MODE || step === 0) return true;
 
       const panel = document.querySelector(`.step-panel[data-step="${step}"]`);
       let isValid = true;
