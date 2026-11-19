@@ -9,13 +9,16 @@
       --brand: #0097b2;
       --brand-dark: #007a91;
       --brand-soft: #e6f5f8;
+      --coral: #e57a7c;
+      --coral-dark: #c4585b;
+      --coral-soft: #fdf0f0;
+      --coral-border: #f2c6c7;
       --accent-red: #dc3545;
-      --accent-coral: #e07a7c;
-      --bg-page: #f6f7f7;
+      --bg-page: #f8f7f5;
       --bg-card: #ffffff;
       --text-main: #1d242b;
       --text-sub: #5c6873;
-      --border: #dfe4e8;
+      --border: #e3e1de;
       --radius: 12px;
       --shadow: 0 4px 20px rgba(29, 36, 43, 0.05);
     }
@@ -96,17 +99,18 @@
     .remaining-badge {
       font-size: 12px;
       font-weight: 600;
-      color: var(--text-sub);
-      background: var(--bg-page);
-      padding: 4px 10px;
+      color: var(--coral-dark);
+      background: var(--coral-soft);
+      padding: 4px 11px;
       border-radius: 999px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--coral-border);
       white-space: nowrap;
       flex-shrink: 0;
     }
 
     .remaining-badge strong {
-      color: var(--brand-dark);
+      color: var(--coral-dark);
+      font-weight: 800;
     }
 
     .progress-controls {
@@ -134,15 +138,15 @@
     .progress-percent {
       font-size: 13px;
       font-weight: 700;
-      color: var(--brand);
+      color: var(--coral-dark);
       white-space: nowrap;
     }
 
-    /* 進度橫槓 */
+    /* 進度橫槓（藍綠過渡到暖珊瑚粉） */
     .progress-track {
       width: 100%;
       height: 8px;
-      background-color: #e6eaed;
+      background-color: #eceae7;
       border-radius: 999px;
       overflow: hidden;
       margin-bottom: 10px;
@@ -151,7 +155,7 @@
     .progress-fill {
       height: 100%;
       width: 25%;
-      background: linear-gradient(90deg, var(--brand) 0%, #26b4cc 100%);
+      background: linear-gradient(90deg, var(--brand) 0%, #48a9b8 55%, var(--coral) 100%);
       border-radius: 999px;
       transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -192,7 +196,7 @@
       border-radius: 50%;
       font-size: 10px;
       font-weight: 700;
-      background: #e6eaed;
+      background: #eceae7;
       color: var(--text-sub);
       flex-shrink: 0;
     }
@@ -203,9 +207,9 @@
     }
 
     .step-dot-item.done .step-num {
-      background: var(--brand-soft);
-      color: var(--brand-dark);
-      border: 1px solid var(--brand);
+      background: var(--coral-soft);
+      color: var(--coral-dark);
+      border: 1px solid var(--coral);
     }
 
     /* 主容器 */
@@ -250,9 +254,10 @@
       font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.08em;
-      color: var(--brand-dark);
-      background: var(--brand-soft);
-      padding: 4px 12px;
+      color: var(--coral-dark);
+      background: var(--coral-soft);
+      border: 1px solid var(--coral-border);
+      padding: 4px 13px;
       border-radius: 999px;
       margin-bottom: 10px;
     }
@@ -270,7 +275,7 @@
     }
 
     .coach-profile-card {
-      background: #f9fbfb;
+      background: #fbfaf8;
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 22px 20px;
@@ -332,8 +337,9 @@
     .coach-tag {
       font-size: 12px;
       font-weight: 600;
-      color: var(--brand-dark);
-      background: var(--brand-soft);
+      color: var(--coral-dark);
+      background: var(--coral-soft);
+      border: 1px solid var(--coral-border);
       padding: 4px 10px;
       border-radius: 6px;
     }
@@ -380,12 +386,12 @@
       width: 5px;
       height: 5px;
       border-radius: 50%;
-      background: var(--brand);
+      background: var(--coral);
     }
 
     /* 費用方案區塊 */
     .pricing-card {
-      border: 1.5px solid var(--brand);
+      border: 1.5px solid var(--coral);
       border-radius: 12px;
       padding: 22px 20px;
       background: #ffffff;
@@ -416,9 +422,10 @@
     }
 
     .price-pill {
-      background: var(--brand-soft);
-      color: var(--brand-dark);
-      padding: 8px 16px;
+      background: var(--coral-soft);
+      color: var(--coral-dark);
+      border: 1px solid var(--coral-border);
+      padding: 8px 18px;
       border-radius: 999px;
       font-size: 20px;
       font-weight: 800;
@@ -453,12 +460,12 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: var(--brand);
+      background: var(--coral);
       flex-shrink: 0;
     }
 
     .section-intro {
-      border-left: 4px solid var(--brand);
+      border-left: 4px solid var(--coral);
       padding-left: 14px;
       margin-bottom: 24px;
     }
@@ -583,7 +590,7 @@
     }
 
     .field-error {
-      border-color: var(--accent-coral) !important;
+      border-color: var(--coral) !important;
       background-color: #fffafa !important;
     }
 
@@ -711,9 +718,9 @@
     .sub-input-box {
       margin-top: 12px;
       padding: 14px 16px;
-      background: #f9fbfb;
+      background: #fbfaf8;
       border: 1px solid var(--border);
-      border-left: 3px solid var(--brand);
+      border-left: 3px solid var(--coral);
       border-radius: 8px;
       animation: fadeIn 0.22s ease;
     }
@@ -722,7 +729,7 @@
       display: block;
       font-size: 13px;
       font-weight: 600;
-      color: var(--brand-dark);
+      color: var(--coral-dark);
       margin-bottom: 8px;
     }
 
@@ -788,7 +795,7 @@
       display: none;
       font-size: 12px;
       font-weight: 600;
-      color: var(--brand-dark);
+      color: var(--coral-dark);
       text-align: right;
       margin-bottom: 6px;
     }
@@ -841,7 +848,7 @@
     }
 
     .sg-row-label {
-      background: #f9fafb;
+      background: #fbfaf8;
       font-weight: 600;
       color: var(--text-main);
       text-align: center;
@@ -876,8 +883,8 @@
     .total-summary-box {
       margin-top: 14px;
       padding: 14px 18px;
-      background: var(--bg-page);
-      border: 1.5px solid var(--brand);
+      background: var(--coral-soft);
+      border: 1.5px solid var(--coral);
       border-radius: 10px;
       display: flex;
       flex-wrap: wrap;
@@ -889,12 +896,13 @@
     .total-hours-text {
       font-size: 16px;
       font-weight: 700;
-      color: var(--brand-dark);
+      color: var(--coral-dark);
     }
 
     .sport-breakdown {
       font-size: 13px;
-      color: var(--text-sub);
+      color: var(--text-main);
+      font-weight: 500;
     }
 
     @media (max-width: 720px) {
@@ -946,7 +954,7 @@
       .race-row.single-row {
         grid-template-columns: 1fr;
         padding: 12px;
-        background: #f9fbfb;
+        background: #fbfaf8;
         border: 1px solid var(--border);
         border-radius: 10px;
       }
@@ -1040,8 +1048,9 @@
     .success-badge {
       display: inline-block;
       padding: 6px 14px;
-      background: var(--brand-soft);
-      color: var(--brand-dark);
+      background: var(--coral-soft);
+      color: var(--coral-dark);
+      border: 1px solid var(--coral-border);
       font-size: 13px;
       font-weight: 700;
       border-radius: 999px;
