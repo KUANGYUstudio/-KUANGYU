@@ -288,6 +288,9 @@ footer {
     <button class="tab" data-key="css">
       <b>CSS</b><small>游泳臨界配速</small>
     </button>
+    <button class="tab" data-key="atp">
+      <b>ATP</b><small>年度訓練量參考</small>
+    </button>
   </nav>
 
   <section class="panel" id="panel" aria-live="polite"></section>
@@ -485,6 +488,37 @@ const data = {
     note:"CSS 不是醫療或安全標準。泳姿技術、轉身、泳池長度、疲勞及測試協定都會影響結果；請使用選手實測資料。",
     sources:[
       ["TrainingPeaks Glossary","https://help.trainingpeaks.com/hc/en-us/articles/115001271712-Glossary"]
+    ]
+  },
+  atp:{
+    title:"ATP｜年度訓練量參考",en:"Annual Training Plan · TrainingPeaks",tag:"賽季規劃參考",
+    desc:"TrainingPeaks ATP 提供的概略指引，依賽季中最長一場目標賽事的預計完賽時間，以及選手的目標（完賽或高表現），估算年度訓練量與每週平均訓練時數／TSS。",
+    heads:["最長賽事預計時間","目標","每週平均訓練時數","每週平均 TSS"],
+    rows:[
+      ["3 小時內","完賽","7.5–10 小時","350–500"],
+      ["3–8 小時","完賽","10–12.5 小時","500–640"],
+      ["超過 8 小時","完賽","12.5–17.5 小時","640–890"],
+      ["3 小時內","高表現","10–20 小時","500–1,000"],
+      ["3–8 小時","高表現","15–25 小時","725–1,250"],
+      ["超過 8 小時","高表現","20–30 小時","1,000–1,500"]
+    ],
+    example:"例如選手賽季的 A 級目標賽事是鐵人三項全程，預計完賽時間為 11 小時，便落在「超過 8 小時」這一列。若目標是完賽，ATP 的概略參考為每週平均 12.5–17.5 小時、640–890 TSS。",
+    coach:"先確認選手賽季中最長目標賽事、目標、過去成功訓練季的平均時數與 TSS、目前 CTL／ATL／TSB、可用時間及恢復能力。初學或資料不足者可先以訓練時數規劃；具備穩定數據與經驗者，再考慮以平均 TSS 或目標 CTL 規劃。",
+    note:"表格中的比賽時間不是固定距離分類，也不是游泳／自行車／跑步單項時間；它指賽季中最長目標賽事的預計總完賽時間。可用於不同耐力賽事的時間級距參考，但不能把不同運動項目的 TSS 視為完全等價。這些數字是年度訓練量規劃的概略建議，不是每位選手必須達到的門檻、醫療安全標準或個人化處方。",
+    extraTitle:"使用 ATP 表格前，先確認這些條件",
+    extraHeads:["確認項目","教練判讀"],
+    extraRows:[
+      ["最長目標賽事","以該賽季最長一場目標賽事的預計總完賽時間選列，不以賽事名稱或距離直接代替時間。"],
+      ["選手目標","完賽與高表現是不同規劃目標，不能只看賽事時間。"],
+      ["過去訓練紀錄","優先檢視過去成功訓練季的平均每週 TSS／時數，以及選手是否能穩定恢復。"],
+      ["訓練經驗與資料品質","TrainingPeaks 將 Duration 方法定位為較適合初學者；Average TSS／Goal CTL 較適合已有相關數據與經驗的選手。"],
+      ["恢復週期","ATP 提供 4 週（3 週訓練＋1 週恢復）及 3 週（2 週訓練＋1 週恢復）週期選項，應依經驗與個人反應選擇。"]
+    ],
+    extraCaption:"ATP 表格是年度／賽季層級的平均規劃參考，不代表每週都必須固定達到該數字；實際週負荷仍需依週期、課表安排與恢復狀態調整。",
+    sources:[
+      ["TrainingPeaks Help：Annual Training Plan (ATP) Methodologies","https://help.trainingpeaks.com/hc/en-us/articles/224662768-Annual-Training-Plan-ATP-Methodologies"],
+      ["TrainingPeaks：The Comprehensive Guide to Creating an Annual Training Plan","https://www.trainingpeaks.com/learn/articles/the-comprehensive-guide-to-creating-an-annual-training-plan/"],
+      ["TrainingPeaks：How To Plan Your Season with Training Stress Score","https://www.trainingpeaks.com/learn/articles/how-to-plan-your-season-with-training-stress-score/"]
     ]
   }
 };
