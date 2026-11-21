@@ -401,7 +401,7 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
       padding-bottom: 16px;
       margin-bottom: 16px;
       border-bottom: 1px solid var(--border);
@@ -417,6 +417,13 @@
       font-size: 12px;
       font-weight: 600;
       color: var(--text-sub);
+    }
+
+    .price-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
     }
 
     .price-pill {
@@ -435,14 +442,23 @@
       font-weight: 600;
     }
 
+    .price-sub-note {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
     .service-grid {
       list-style: none;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 10px;
     }
 
     .service-grid li {
+      flex: 0 1 calc(33.333% - 7px);
+      min-width: 150px;
       background: var(--bg-page);
       border-radius: 8px;
       padding: 10px 12px;
@@ -938,8 +954,13 @@
         grid-template-columns: 1fr;
       }
 
-      .service-grid {
-        grid-template-columns: 1fr 1fr;
+      .price-group {
+        align-items: flex-start;
+      }
+
+      .service-grid li {
+        flex: 0 1 calc(50% - 5px);
+        min-width: 0;
       }
 
       .form-row-2,
@@ -1151,12 +1172,14 @@
                 <h3>線上課表方案</h3>
                 <span>透過 TrainingPeaks 平台同步課表與數據追蹤</span>
               </div>
-              <div class="price-pill">NT$ 6,000 <small>/ 月</small></div>
+              <div class="price-group">
+                <div class="price-pill">NT$ 6,000 <small>/ 月</small></div>
+                <span class="price-sub-note">不足一個月以單週 NT$ 1,500 計算</span>
+              </div>
             </div>
             <ul class="service-grid">
-              <li><span class="service-dot"></span>週期化課表</li>
+              <li><span class="service-dot"></span>客製化課表</li>
               <li><span class="service-dot"></span>數據分析</li>
-              <li><span class="service-dot"></span>三項技術輔導</li>
               <li><span class="service-dot"></span>比賽策略</li>
               <li><span class="service-dot"></span>補給諮詢</li>
               <li><span class="service-dot"></span>訓練相關諮詢</li>
