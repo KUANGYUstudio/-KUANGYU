@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101b2d">
+<title>Triathlon Coach Lab｜鐵人三項數據教室</title>
+<style>
+:root {
+  --bg:#f4f6f8;
+  --ink:#172338;
+  --muted:#697789;
+  --navy:#101b2d;
+  --lime:#c7f36b;
+  --line:#e3e8ee;
+  --card:#fff;
+  --blue:#eaf1fb;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,
+    "Segoe UI","Noto Sans TC",sans-serif;
+}
+header {
+  background:var(--navy);
+  color:white;
+  padding:34px max(22px,calc((100% - 1120px)/2)) 28px;
+  position:relative;
+  overflow:hidden;
+}
+header:after {
+  content:"";
+  position:absolute;
+  width:300px;height:300px;
+  border:1px solid #ffffff18;
+  border-radius:50%;
+  right:8%;top:-190px;
+  box-shadow:0 0 0 35px #ffffff08,0 0 0 70px #ffffff05;
+}
+.eyebrow {
+  color:var(--lime);
+  font-size:11px;
+  letter-spacing:2px;
+  font-weight:800;
+}
+.brand {
+  font-size:clamp(26px,4vw,38px);
+  font-weight:850;
+  letter-spacing:-1px;
+  margin:10px 0 6px;
+}
+.sub {
+  color:#b8c4d2;
+  font-size:14px;
+  max-width:650px;
+  line-height:1.7;
+}
+.wrap {
+  max-width:1120px;
+  margin:0 auto;
+  padding:26px 22px 60px;
+}
+.intro {
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:end;
+  margin-bottom:18px;
+}
+.intro h2 { font-size:19px;margin:0 0 5px; }
+.intro p { margin:0;color:var(--muted);font-size:13px; }
+.pill {
+  font-size:11px;
+  font-weight:750;
+  background:#eaf5d8;
+  color:#46631d;
+  border-radius:30px;
+  padding:8px 12px;
+  white-space:nowrap;
+}
+.tabs {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin:18px 0 20px;
+}
+.tab {
+  border:1px solid var(--line);
+  background:white;
+  border-radius:13px;
+  padding:14px 15px;
+  text-align:left;
+  cursor:pointer;
+  transition:.18s;
+  color:var(--ink);
+  min-height:76px;
+}
+.tab:hover { transform:translateY(-2px);border-color:#9cb86c; }
+.tab.active {
+  background:var(--navy);
+  color:white;
+  border-color:var(--navy);
+  box-shadow:0 7px 18px #101b2d20;
+}
+.tab b { display:block;font-size:17px;letter-spacing:.3px; }
+.tab small {
+  display:block;
+  margin-top:5px;
+  font-size:11px;
+  color:var(--muted);
+}
+.tab.active small { color:#c2cbd7; }
+.panel {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:clamp(18px,3vw,30px);
+  box-shadow:0 8px 28px #14243b08;
+}
+.panel-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:start;
+  gap:15px;
+  border-bottom:1px solid var(--line);
+  padding-bottom:18px;
+  margin-bottom:20px;
+}
+.kicker {
+  font-size:11px;
+  letter-spacing:1.5px;
+  color:#76913e;
+  font-weight:850;
+}
+.panel h3 { font-size:26px;margin:5px 0; }
+.english { font-size:12px;color:var(--muted); }
+.tag {
+  background:var(--blue);
+  color:#38577d;
+  border-radius:7px;
+  padding:7px 10px;
+  font-size:11px;
+  font-weight:750;
+  white-space:nowrap;
+}
+.definition { font-size:15px;line-height:1.85;margin:0 0 20px; }
+.formula {
+  background:var(--navy);
+  color:white;
+  padding:15px 17px;
+  border-radius:11px;
+  font-size:15px;
+  font-weight:750;
+  margin:12px 0;
+}
+.formula small {
+  display:block;
+  color:#b8c4d2;
+  font-size:11px;
+  font-weight:450;
+  margin-top:6px;
+}
+.grid {
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:16px;
+}
+.section {
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:17px;
+}
+.section h4 { margin:0 0 12px;font-size:14px; }
+.section p {
+  font-size:13px;
+  line-height:1.8;
+  color:#4c5b6d;
+  margin:0;
+}
+table { border-collapse:collapse;width:100%;font-size:12px; }
+th {
+  text-align:left;
+  color:#687789;
+  background:#f5f7f9;
+  font-weight:750;
+}
+td,th {
+  padding:11px 10px;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+}
+tr:last-child td { border-bottom:0; }
+.note {
+  margin-top:17px;
+  background:#fff8e8;
+  border:1px solid #f2e4c4;
+  padding:14px 16px;
+  border-radius:11px;
+  font-size:12px;
+  line-height:1.8;
+  color:#6d572b;
+}
+footer {
+  text-align:center;
+  color:#8a96a5;
+  font-size:11px;
+  margin-top:24px;
+  line-height:1.8;
+}
+@media(max-width:720px) {
+  .tabs { grid-template-columns:repeat(2,1fr); }
+  .grid { grid-template-columns:1fr; }
+  .intro { align-items:start;flex-direction:column; }
+  .panel-head { flex-direction:column; }
+  .tab { min-height:68px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">KUANGYU STUDIO / COACH EDUCATION</div>
+  <div class="brand">TRIATHLON COACH LAB</div>
+  <div class="sub">
+    鐵人三項訓練數據教室｜把數字看懂，再把數據變成訓練決策。
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <div>
+      <h2>訓練數據快速查詢</h2>
+      <p>選擇下方指標，查看白話解釋、參考表與教練判讀方式。</p>
+    </div>
+    <span class="pill">COACH TOOLKIT · 01</span>
+  </div>
+
+  <nav class="tabs" id="tabs" aria-label="數據指標">
+    <button class="tab active" data-key="tss">
+      <b>TSS</b><small>單次訓練負荷</small>
+    </button>
+    <button class="tab" data-key="if">
+      <b>IF</b><small>強度係數</small>
+    </button>
+    <button class="tab" data-key="ctl">
+      <b>CTL</b><small>長期訓練負荷</small>
+    </button>
+    <button class="tab" data-key="atl">
+      <b>ATL</b><small>短期訓練負荷</small>
+    </button>
+    <button class="tab" data-key="tsb">
+      <b>TSB</b><small>訓練壓力平衡</small>
+    </button>
+    <button class="tab" data-key="lt">
+      <b>LT</b><small>乳酸閾值</small>
+    </button>
+    <button class="tab" data-key="zones">
+      <b>TRAINING ZONES</b><small>訓練強度區間</small>
+    </button>
+    <button class="tab" data-key="css">
+      <b>CSS</b><small>游泳臨界配速</small>
+    </button>
+  </nav>
+
+  <section class="panel" id="panel" aria-live="polite"></section>
+
+  <footer>
+    本工具為教學與訓練討論參考，不是醫療診斷或個人化處方。
+    數值需依運動項目、測試方法、閾值設定與個人反應解讀。<br>
+    KUANGYU STUDIO · TRIATHLON COACH LAB
+  </footer>
+</main>
+
+<script>
+const data = {
+  tss: {
+    title:"TSS｜訓練壓力分數",
+    en:"Training Stress Score",
+    tag:"單次訓練負荷",
+    desc:"TSS 是用來估算一堂訓練帶來多少相對訓練負荷。可以先把它想成：這堂課對身體累積了多少工作量。時間越長、相對強度越高，通常 TSS 越高。",
+    formula:"TSS = 時數 × IF² × 100",
+    fsub:"此簡式適用於以功率／FTP 計算的自行車 TSS；其他項目算法不同。",
+    heads:["情境","怎麼看"],
+    rows:[
+      ["低負荷課","短時間或低相對強度，常見於輕鬆／恢復訓練"],
+      ["中等負荷課","時間與強度適中，需搭配整週安排"],
+      ["高負荷課","長時間或高強度，通常需要安排恢復"],
+      ["每週總 TSS","觀察個人週與週的變化，不用單一數字替所有人評分"]
+    ],
+    example:"假設騎車 1.5 小時，IF = 0.70：TSS = 1.5 × 0.70² × 100 ≈ 74。這是公式示範，不是每個人都該完成的目標。",
+    coach:"先確認閾值設定正確，再看週負荷趨勢、課表目的、睡眠、痠痛與表現。bike TSS、rTSS、sTSS 的算法不同，跨項目加總只能當整體負荷線索。",
+    note:"TSS 不是疲勞百分比，也不是課表品質分數。不存在適用所有選手的每週標準 TSS。"
+  },
+
+  if: {
+    title:"IF｜強度係數",
+    en:"Intensity Factor",
+    tag:"相對強度",
+    desc:"IF 告訴你這堂課的整體強度，相對於自己的閾值有多高。它看的是有多用力，不是做了多久。",
+    formula:"自行車 IF = NP ÷ FTP",
+    fsub:"NP：標準化功率；FTP：功能性閾值功率。兩者單位皆為瓦特。",
+    heads:["IF 示意","可以怎麼理解"],
+    rows:[
+      ["0.55–0.65","通常偏輕鬆的耐力強度"],
+      ["0.65–0.75","常見於穩定耐力或較輕鬆的長課"],
+      ["0.75–0.85","中高負荷，視課程結構而定"],
+      ["0.85–0.95","偏高強度，需留意持續時間"],
+      ["接近或高於 1.00","接近／超過閾值的整堂課平均相對強度"]
+    ],
+    example:"FTP 假設為 200W，某堂課 NP 為 150W，IF = 150 ÷ 200 = 0.75。",
+    coach:"相同 IF 下，訓練時間越久，TSS 通常越高。間歇課的工作段可能很強，但整堂課 IF 會被恢復段拉低。",
+    note:"以上是自行車整堂課 IF 的粗略教學示意，不是訓練區間定義，也不適合直接套用跑步或游泳。"
+  },
+
+  ctl: {
+    title:"CTL｜長期訓練負荷",
+    en:"Chronic Training Load",
+    tag:"約 42 天趨勢",
+    desc:"CTL 是 TrainingPeaks 以近期訓練負荷計算出的長期趨勢指標，常被介面稱為 Fitness。你可以把它想成最近一段時間，身體持續承受訓練的累積程度。",
+    formula:"CTL ≈ 過去約 42 天 TSS 的加權平均",
+    fsub:"採指數加權移動平均（EWMA），近期訓練的影響較大。",
+    heads:["觀察到的變化","教練可以問"],
+    rows:[
+      ["逐漸上升","負荷正在累積；恢復與表現是否跟得上？"],
+      ["大致持平","訓練負荷相對穩定；是否符合目前訓練階段？"],
+      ["逐漸下降","可能是恢復期、休息、訓練中斷或負荷減少"]
+    ],
+    example:"CTL 從 35 緩慢升到 42，只能說長期負荷指標上升；不能單憑這個數字斷定體能一定進步。",
+    coach:"把 CTL 和選手自己的歷史、訓練完成率、比賽表現、恢復狀態一起看。不同選手的 CTL 不適合直接排名。",
+    note:"CTL 不是直接測量的體能，也不是 VO₂max、FTP 或競技能力分數。沒有人人都適用的理想 CTL。"
+  },
+
+  atl: {
+    title:"ATL｜短期訓練負荷",
+    en:"Acute Training Load",
+    tag:"約 7 天趨勢",
+    desc:"ATL 是近期訓練負荷的加權指標，常被 TrainingPeaks 稱為 Fatigue。它對最近幾天的訓練變化反應較快。",
+    formula:"ATL ≈ 過去約 7 天 TSS 的加權平均",
+    fsub:"同樣採用 EWMA；短期負荷變化會較快反映在 ATL。",
+    heads:["CTL 與 ATL 的關係","可能代表"],
+    rows:[
+      ["ATL 高於 CTL","近期負荷高於長期基準，可能正在加載"],
+      ["ATL 接近 CTL","近期負荷與長期基準大致接近"],
+      ["ATL 低於 CTL","近期負荷低於長期基準，可能正在恢復或減量"]
+    ],
+    example:"CTL = 40、ATL = 60：表示近期負荷相對長期基準較高；還要確認選手實際感受與訓練表現。",
+    coach:"如果 ATL 上升，同時睡眠變差、腿部持續沉重、表現下降，就要更謹慎評估課表。若身體狀態良好，也可能是計畫中的訓練刺激。",
+    note:"ATL 不是身體疲勞的直接測量，更不能單靠它診斷過度訓練。"
+  },
+
+  tsb: {
+    title:"TSB｜訓練壓力平衡",
+    en:"Training Stress Balance",
+    tag:"近期與長期負荷差",
+    desc:"TSB 用 CTL 和 ATL 的差值，幫助我們理解近期負荷相對長期負荷是偏高還是偏低。TrainingPeaks 常把它稱為 Form。",
+    formula:"TSB = CTL − ATL",
+    fsub:"實際圖表可能有前一日數值對齊方式，解讀時要確認日期。",
+    heads:["TSB 示意","初步解讀"],
+    rows:[
+      ["明顯負值","近期負荷高於長期基準；不代表一定不能訓練"],
+      ["接近 0","近期與長期負荷相近"],
+      ["正值","近期負荷低於長期基準；可能處於減量或恢復"]
+    ],
+    example:"CTL 40、ATL 60，TSB = 40 − 60 = −20。這代表近期負荷相對較高，不等於身體一定過度疲勞。",
+    coach:"搭配睡眠、主觀疲勞、痠痛、情緒、疾病、疼痛與運動表現。TSB 是提醒你進一步詢問選手的線索，不是自動下達休息指令。",
+    note:"TSB 的正負值不是醫療或安全門檻。不要因為 -20 就必須休息，也不要因為 +20 就認定完全恢復。"
+  },
+
+  lt: {
+    title:"LT｜乳酸閾值",
+    en:"Lactate Threshold",
+    tag:"生理強度參考點",
+    desc:"乳酸閾值是描述運動強度增加時，血乳酸開始出現特定變化的生理概念。實務上常討論 LT1 與 LT2，協助理解耐力訓練強度。",
+    heads:["概念","簡單理解"],
+    rows:[
+      ["LT1","較低的閾值；強度再往上時，乳酸開始較明顯偏離低強度基線"],
+      ["LT2","較高的閾值；代表較高強度下乳酸平衡能力的重要轉折"],
+      ["LT 配速","在特定測試協定下，對應閾值的跑步速度"],
+      ["LT 心率","在特定測試協定下，對應閾值的心率"]
+    ],
+    example:"假設測試估計跑步 LT2 配速為 5:00/km、心率 170 bpm。這兩個數字是該選手在該測試條件下的估計值，不是所有人的標準。",
+    coach:"閾值會受到測試方式、環境、疲勞、補給與項目影響。LT、通氣閾值、MLSS、FTP 等相關但不能直接視為同一個概念。",
+    note:"若沒有乳酸測試，可能使用心率、配速、呼吸與主觀用力程度估算訓練區間，但要清楚標示估算方法。"
+  },
+
+  zones: {
+    title:"Training Zones｜訓練強度區間",
+    en:"Training Intensity Zones",
+    tag:"依個人閾值設定",
+    desc:"訓練區間是把強度分層，讓教練和選手知道每堂課想刺激什麼能力。不同系統可能採 3 區、5 區或 7 區，分界也會因項目與模型不同。",
+    heads:["常見描述","訓練感受示意"],
+    rows:[
+      ["恢復／輕鬆","呼吸輕鬆，可以完整交談"],
+      ["耐力／有氧","穩定可持續，呼吸加深但仍可控制"],
+      ["節奏／閾值附近","需要專注，只能說較短句子"],
+      ["高強度間歇","呼吸急促，工作段難以交談"],
+      ["衝刺／最大努力","短時間高強度，無法長時間維持"]
+    ],
+    example:"同一個選手的自行車功率區間、跑步配速區間與游泳配速區間，必須分開設定，不能共用一套數字。",
+    coach:"先確認測試結果與閾值，再設定各運動項目的 zones。每次測試後，檢查區間是否需要更新。",
+    note:"這是感受描述，不是精確的五區百分比表。不要在未確認測試模型前，直接套用網路上的 zone 數字。"
+  },
+
+  css: {
+    title:"CSS｜游泳臨界游速",
+    en:"Critical Swim Speed",
+    tag:"游泳配速參考",
+    desc:"CSS 是用游泳測試估算出的臨界游速，常用來設定泳池訓練配速。通常以每 100 公尺需要多少時間表示。",
+    formula:"CSS 配速 = (較長距離時間 − 較短距離時間) ÷ 距離差",
+    fsub:"例如以 400m 與 200m 計算，結果換算為每 100m 配速。",
+    heads:["CSS 配速","訓練用途"],
+    rows:[
+      ["快於 CSS","較高強度，通常用於較短間歇"],
+      ["接近 CSS","閾值附近的持續或間歇訓練"],
+      ["慢於 CSS","較輕鬆的有氧、技術或恢復游"],
+      ["定期重測","觀察游泳能力變化並更新訓練配速"]
+    ],
+    example:"假設 400m 用時 8:00、200m 用時 3:50，CSS = (480−230)÷200 = 1.25 秒／公尺，即約 2:05／100m。",
+    coach:"測試需盡量保持一致的泳池長度、出發方式與努力程度。CSS 是訓練估算值，不等於所有比賽距離的實際配速。",
+    note:"泳姿、技術、轉身、測試距離與疲勞都會影響結果。請以選手實測資料設定，不要把示範數字當成目標。"
+  }
+};
+
+function render(key) {
+  const d = data[key];
+
+  document.querySelectorAll(".tab").forEach(button => {
+    button.classList.toggle("active",button.dataset.key===key);
+  });
+
+  const table = `
+    <table>
+      <thead>
+        <tr>${d.heads.map(x=>`<th>${x}</th>`).join("")}</tr>
+      </thead>
+      <tbody>
+        ${d.rows.map(row=>`
+          <tr>${row.map(v=>`<td>${v}</td>`).join("")}</tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  document.getElementById("panel").innerHTML = `
+    <div class="panel-head">
+      <div>
+        <div class="kicker">DATA GUIDE / ${key.toUpperCase()}</div>
+        <h3>${d.title}</h3>
+        <div class="english">${d.en}</div>
+      </div>
+      <span class="tag">${d.tag}</span>
+    </div>
+
+    <p class="definition">${d.desc}</p>
+
+    ${d.formula ? `
+      <div class="formula">
+        ${d.formula}
+        <small>${d.fsub}</small>
+      </div>
+    ` : ""}
+
+    <div class="grid">
+      <div class="section">
+        <h4>參考表｜快速理解</h4>
+        ${table}
+      </div>
+
+      <div class="section">
+        <h4>實際例子</h4>
+        <p>${d.example}</p>
+
+        <div style="height:14px"></div>
+
+        <h4>教練判讀</h4>
+        <p>${d.coach}</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>重要提醒</b><br>
+      ${d.note}
+    </div>
+  `;
+}
+
+document.getElementById("tabs").addEventListener("click",event=>{
+  const button=event.target.closest("button[data-key]");
+  if(button) render(button.dataset.key);
+});
+
+render("tss");
+</script>
+
+</body>
+</html>
