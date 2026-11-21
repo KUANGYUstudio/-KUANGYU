@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>線上一對一課表評估表｜KUANGYU STUDIO</title>
+  <title>線上一對一課表申請表｜KUANGYU STUDIO</title>
   <style>
     :root {
       --brand: #0097b2;
@@ -338,7 +338,7 @@
       font-weight: 600;
       color: var(--brand-dark);
       background: var(--brand-soft);
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 6px;
     }
 
@@ -448,26 +448,24 @@
       color: var(--text-sub);
     }
 
+    /* 服務項目兩欄嚴格對齊 */
     .service-grid {
       list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px 14px;
     }
 
     .service-grid li {
-      flex: 0 1 calc(33.333% - 7px);
-      min-width: 150px;
       background: var(--bg-page);
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 11px 14px;
       font-size: 13px;
       font-weight: 600;
       color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
     }
 
     .service-dot {
@@ -958,11 +956,6 @@
         align-items: flex-start;
       }
 
-      .service-grid li {
-        flex: 0 1 calc(50% - 5px);
-        min-width: 0;
-      }
-
       .form-row-2,
       .form-row-3 {
         grid-template-columns: 1fr;
@@ -1097,7 +1090,7 @@
         <div class="brand-left">
           <img src="../KUANGYU_logo_icon.png" alt="KUANGYU STUDIO" class="brand-logo" />
           <span class="brand-divider"></span>
-          <span class="brand-subtitle">線上一對一課表評估</span>
+          <span class="brand-subtitle">線上一對一課表申請</span>
         </div>
         <span class="remaining-badge" id="remainingBadge">共 <strong>4</strong> 個階段・<strong>17</strong> 題</span>
       </div>
@@ -1142,9 +1135,7 @@
                 <div class="coach-role-en">Coach Mike</div>
                 <h2 class="coach-name">劉光武 教練</h2>
                 <div class="coach-tags">
-                  <span class="coach-tag">素人選手出身</span>
-                  <span class="coach-tag">8 年教學經歷</span>
-                  <span class="coach-tag">百鐵累積 102 場</span>
+                  <span class="coach-tag">10 年教學經歷</span>
                 </div>
                 <p class="coach-philosophy">
                   致力於健康無痛的運動生活。熱衷於鐵人三項訓練，也喜歡鑽研背後的科學邏輯，藉由自身經驗發展的訓練系統，讓忙碌的人也能勇於追求進步、達成自我實現！
@@ -1187,7 +1178,7 @@
           </div>
 
           <div class="nav-actions">
-            <button type="button" class="btn btn-next btn-start-full" onclick="goToStep(1)">開始填寫評估表</button>
+            <button type="button" class="btn btn-next btn-start-full" onclick="goToStep(1)">我要開始線上課表！</button>
           </div>
         </section>
 
@@ -1514,7 +1505,7 @@
       <!-- 送出成功畫面 -->
       <div class="success-panel" id="successPanel">
         <div class="success-badge">資料已成功送出</div>
-        <h2>感謝你的填寫，我們已收到課表評估資料</h2>
+        <h2>感謝你的填寫，我們已收到線上課表申請資料</h2>
         <p id="successSummaryText">教練團隊將檢視你的一週訓練規劃與目標設定，並透過 LINE 與你聯繫後續安排。</p>
       </div>
     </div>
