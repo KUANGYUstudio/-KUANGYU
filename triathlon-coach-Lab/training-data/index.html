@@ -289,6 +289,9 @@ footer {
     <button class="tab" data-key="cycle">
       <b>TRAINING CYCLE</b><small>基礎期、強化期、恢復週與 Taper</small>
     </button>
+    <button class="tab" data-key="ramp">
+      <b>RAMP RATE</b><small>CTL 每週變化速度與負荷爬升</small>
+    </button>
     <button class="tab" data-key="lt">
       <b>LT</b><small>乳酸閾值</small>
     </button>
@@ -507,6 +510,38 @@ const data = {
       ["TrainingPeaks：The Science of Tapering","https://www.trainingpeaks.com/learn/articles/the-science-of-tapering/"]
     ]
   },
+  ramp:{
+    title:"Ramp Rate｜CTL 負荷爬升率",
+    en:"Rate of Change in Chronic Training Load",
+    tag:"觀察長期負荷增加或下降的速度",
+    desc:"Ramp Rate 用來觀察 CTL 在一段時間內變化多少。教練最常先看 7 天變化，了解長期訓練負荷最近增加或下降的速度。正值代表 CTL 上升，接近 0 代表大致持平，負值代表 CTL 下降。它是訓練負荷模型的變化指標，不是直接測量體能，也不是傷病預測器。",
+    formula:"7-day Ramp Rate = 今日 CTL − 7 天前 CTL",
+    fsub:"單位為 CTL 點數／7 天。例：CTL 從 60 變成 66，7-day Ramp Rate = +6。TrainingPeaks 也提供較長期間的 Ramp Rate 觀察；比較時請確認使用相同時間範圍。",
+    heads:["Ramp Rate","常見解讀","教練接著要確認"],
+    rows:[
+      ["正值（例如 +6）","CTL 正在增加，長期訓練負荷逐漸累積","增加是否符合訓練階段？近期疲勞與表現是否跟得上？"],
+      ["接近 0（例如 0）","CTL 大致維持","是否正在維持期？訓練刺激是否符合目前目標？"],
+      ["負值（例如 -4）","CTL 正在下降","是計畫中的恢復／減量，還是訓練中斷、資料缺漏？"]
+    ],
+    example:"七天前 CTL = 60，今天 CTL = 66：Ramp Rate = 66 − 60 = +6。這代表七天內 CTL 增加 6 點；不是這七天總共做了 6 TSS，也不是每一天增加 6 點。",
+    coach:"建議依序判讀：<br><br>① 確認 CTL 基礎：目前長期負荷是 30、60 還是 90？同樣增加 6 點，對不同基礎的選手代表的相對變化不同。<br><br>② 看 7-day Ramp Rate：最近一週 CTL 增加或下降多少？同時確認比較期間一致。<br><br>③ 看 ATL 與 TSB：近期負荷是否同步增加？TSB 是否持續下降？<br><br>④ 回看訓練內容：變化來自訓練時數、強度、頻率，還是三項運動負荷分布改變？<br><br>⑤ 對照選手反應：檢查配速／功率、心率、RPE、睡眠、痠痛、情緒與訓練完成品質，再決定維持、調整或恢復。",
+    note:"Ramp Rate 是觀察工具，不是通用安全門檻。較快的 CTL 上升可能增加負荷管理難度，但不能單憑 Ramp Rate 診斷過度訓練或預測傷病；負值也可能是恢復週或 Taper 的預期結果。訓練背景、年齡、運動經驗、既往傷病、生活壓力、恢復能力與資料品質都會影響判讀。",
+    extraTitle:"TrainingPeaks Athlete Home｜Fitness Ramp Rate 介面分類",
+    extraHeads:["7-day Ramp Rate","介面分類","如何理解"],
+    extraRows:[
+      ["+9 或以上","Going Hard","CTL 增加速度較快，值得檢查訓練安排與恢復反應。"],
+      ["+5 至 +8","Productive Training","介面標示為積極訓練區間；仍需依個人背景判斷。"],
+      ["0 至 +4","Keeping Fit","介面標示為維持或緩慢增加。"],
+      ["-1 或以下","Recovering","CTL 正在下降，可能是恢復／減量，也可能是訓練中斷。"]
+    ],
+    extraCaption:"這些是 TrainingPeaks Athlete Home 的介面標籤，不是低／中／高傷病風險分級，也不是所有運動員都應追求的目標區間。",
+    sources:[
+      ["TrainingPeaks Help：Athlete Home Performance Insights","https://help.trainingpeaks.com/hc/en-us/articles/41077784209165-Athlete-Home-Performance-Insights"],
+      ["TrainingPeaks：Tracking the Build Phase of Triathlon Training","https://www.trainingpeaks.com/blog/track-triathlon-training-trainingpeaks/"],
+      ["TrainingPeaks：Why Ramp Rate is an Important Training Metric","https://www.trainingpeaks.com/learn/articles/why-ramp-rate-is-an-important-training-metric/"],
+      ["TrainingPeaks：Understanding TrainingPeaks Ramp Rate for Better Coaching","https://www.trainingpeaks.com/blog/understanding-trainingpeaks-ramp-rate-for-better-coaching/"]
+    ]
+  },
   lt:{
     title:"LT｜乳酸閾值",en:"Lactate Threshold",tag:"個人生理測試參考",
     desc:"乳酸閾值描述運動強度增加時，血乳酸濃度出現特定變化的強度點或區域。常見討論包括 LT1 與 LT2，但定義與判讀會受測試協定、取樣方式及分析模型影響。",
@@ -690,6 +725,70 @@ function render(key) {
             ["3｜看 TSB","理解近期負荷相對長期基準的差距，並確認平台的日期計算方式。"],
             ["4｜對照反應","搭配配速／功率、心率、RPE、睡眠、情緒、痠痛、疼痛與疾病狀況。"],
             ["5｜做訓練決策","依整體趨勢與選手反應，決定維持、調整負荷或安排恢復；再追蹤後續反應。"]
+          ]
+        )}
+      </div>
+    ` : ""}
+
+    ${key === "ramp" ? `
+      <div class="section magnitude">
+        <h4>依目前 CTL 基礎觀察每週 Ramp Rate｜TrainingPeaks 教育文章參考</h4>
+        ${makeTable(
+          ["目前 CTL","較低爬升參考","中度爬升參考","較高爬升參考"],
+          [
+            ["45 或以下","≤ 3","4–6","≥ 7"],
+            ["45–70","≤ 4","6–7","≥ 8"],
+            ["70 或以上","≤ 5","6–8","≥ 9"]
+          ]
+        )}
+        <p class="magnitude-caption">此表整理自 TrainingPeaks 鐵人三項訓練教育文章，屬於規劃參考而非經驗證的個人傷病風險預測。不同文章或版本的區間邊界可能略有差異；請勿把它當作硬性安全線，也不要只憑表格決定加量或休息。</p>
+      </div>
+      <div class="section magnitude">
+        <h4>同樣 +6，對不同 CTL 基礎代表什麼？</h4>
+        ${makeTable(
+          ["運動員","CTL 七天前 → 今天","Ramp Rate","相對變化"],
+          [
+            ["A","30 → 36","+6","+20%"],
+            ["B","80 → 86","+6","+7.5%"]
+          ]
+        )}
+        <p class="magnitude-caption">兩位選手的絕對 Ramp Rate 相同，但相對於原本 CTL 的變化幅度不同。這不代表 A 一定不能承受、B 一定可以承受；還要看訓練史、近期負荷、恢復與專項表現。</p>
+      </div>
+      <div class="section magnitude">
+        <h4>整合判讀｜Ramp Rate × CTL × ATL × TSB</h4>
+        ${makeTable(
+          ["情境","數據組合（示意）","可能解讀與教練下一步"],
+          [
+            ["穩定累積","CTL 60→66；Ramp +6；ATL 70→78；TSB -10→-12","長期與近期負荷都增加。確認課表完成品質、恢復與專項表現是否跟得上。"],
+            ["增加速度偏快，需留意","CTL 50→60；Ramp +10；ATL 65→90；TSB -15→-30","近期負荷增加明顯。回看里程、強度、連續高負荷日與疲勞訊號，必要時調整負荷。"],
+            ["恢復週","CTL 75→73；Ramp -2；ATL 90→65；TSB -15→+5","近期負荷下降較快，CTL 小幅下降可能是計畫性恢復，不必為了追求正 Ramp 而急著加量。"],
+            ["比賽前 Taper","CTL 85→82；Ramp -3；ATL 80→55；TSB +5→+20","可能是計畫性減量。確認疲勞是否改善，同時保留適當專項刺激與比賽感覺。"]
+          ]
+        )}
+        <p class="magnitude-caption">以上數字為教學示意，並非實際選手資料。TSB 使用 TrainingPeaks 的日期計算規則；不可只用同一天畫面上的 CTL、ATL 直接推算今日 TSB。</p>
+      </div>
+      <div class="section magnitude">
+        <h4>常見誤判｜教練應避免的結論</h4>
+        ${makeTable(
+          ["不要直接推論","更好的判讀方式"],
+          [
+            ["Ramp Rate 高＝一定會受傷","視為負荷變化提醒，再檢查訓練史、疲勞、疼痛與恢復。"],
+            ["Ramp Rate 低或負值＝體能退步","確認是否為恢復週、Taper、訓練中斷或資料缺漏。"],
+            ["同樣 +6，所有人都能承受","比較個人 CTL 基礎、過去負荷、訓練經驗與實際反應。"],
+            ["只看 Ramp Rate 就決定加量","同時看 ATL、TSB、訓練內容、表現與主觀回饋。"]
+          ]
+        )}
+      </div>
+      <div class="section magnitude">
+        <h4>教練判讀流程｜五步驟</h4>
+        ${makeTable(
+          ["步驟","判讀任務"],
+          [
+            ["1｜確認基礎","先看 CTL 絕對值與最近 4–6 週走勢。"],
+            ["2｜看爬升速度","查看 7-day Ramp Rate，確認比較期間與數值方向。"],
+            ["3｜看近期負荷","搭配 ATL 與 TSB，確認近期負荷是否同步增加、負荷差距是否擴大。"],
+            ["4｜找出來源","回看游泳、自行車、跑步的時數、強度、頻率與高負荷日分布。"],
+            ["5｜對照反應並決策","搭配配速／功率、心率、RPE、睡眠、痠痛與訓練完成率，再決定維持、調整或恢復。"]
           ]
         )}
       </div>
