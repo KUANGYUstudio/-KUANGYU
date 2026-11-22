@@ -281,6 +281,9 @@ footer {
     <button class="tab" data-key="load">
       <b>CTL × ATL × TSB</b><small>整合判讀與教練應用</small>
     </button>
+    <button class="tab" data-key="cycle">
+      <b>TRAINING CYCLE</b><small>基礎期、強化期、恢復週與 Taper</small>
+    </button>
     <button class="tab" data-key="lt">
       <b>LT</b><small>乳酸閾值</small>
     </button>
@@ -468,6 +471,37 @@ const data = {
       ["TrainingPeaks Help：Athlete Home Performance Insights","https://help.trainingpeaks.com/hc/en-us/articles/41077784209165-Athlete-Home-Performance-Insights"]
     ]
   },
+  cycle:{
+    title:"Training Cycle｜訓練週期與教練決策",
+    en:"Base · Build · Recovery · Taper",
+    tag:"從負荷趨勢判斷訓練階段",
+    desc:"訓練週期不是只看 CTL、ATL、TSB 的單日數字，而是觀察數週的走勢，再對照課表內容、專項表現與選手反應。以下整理四種常見訓練階段的典型負荷變化，作為教練判讀的起點，而不是固定課表或必須遵守的數值規則。",
+    heads:["階段","主要目標","常見訓練安排"],
+    rows:[
+      ["基礎期（Base）","建立有氧耐力、訓練頻率與承受量","穩定耐力訓練、逐步建立訓練時間與總量"],
+      ["強化期（Build）","提高專項能力與訓練刺激","加入 LT、VO₂max、比賽配速或較具挑戰性的長課"],
+      ["恢復週（Recovery / Deload）","降低近期負荷，讓身體吸收訓練","降低總量與高強度密度，保留適量輕鬆訓練"],
+      ["比賽減量期（Taper）","減少疲勞，同時盡量保留已建立的體能","降低總量，視項目與選手狀況保留適量比賽配速或短強度刺激"]
+    ],
+    example:"例如一位選手在強化期連續數週增加訓練刺激，之後安排恢復週：ATL 通常會比 CTL 更快下降，TSB 因而逐漸上升。若比賽將近，教練可能再安排 Taper，讓近期負荷下降、長期負荷相對緩慢變化。",
+    coach:"先確認選手目前的賽季目標與課表安排，再看 CTL 最近 4–6 週走勢、ATL 最近約 7 天變化及 TSB 方向。接著對照配速／功率、心率、RPE、睡眠、痠痛與訓練完成率，最後才決定維持刺激、調整負荷或安排恢復。",
+    note:"表格描述的是常見趨勢，不代表每位選手都必須採用相同週期或固定的三週訓練、一週恢復。TSB 正值不保證完全恢復，TSB 負值也不代表一定要停止訓練。Taper 的長度、減量幅度與保留的強度，需依運動項目、賽事距離、訓練背景與個人反應調整。",
+    extraTitle:"四種訓練階段的 CTL／ATL／TSB 典型趨勢",
+    extraHeads:["訓練階段","CTL（長期負荷）","ATL（近期負荷）","TSB（負荷平衡）","教練觀察重點"],
+    extraRows:[
+      ["基礎期（Base）","通常緩慢上升","隨每週訓練波動","可能在 0 以下波動","負荷是否穩定建立？有氧表現與恢復是否跟得上？"],
+      ["強化期（Build）","可能持續上升","可能上升較快","可能更容易轉為負值","刺激增加是否合理？品質課表是否完成？表現是否維持？"],
+      ["恢復週（Recovery）","持平或小幅下降","通常較快下降","通常逐漸上升","疲勞、睡眠與主觀狀態是否改善？"],
+      ["比賽減量期（Taper）","通常持平或緩慢下降","通常下降","通常逐漸上升","疲勞是否減少？是否仍保留足夠專項感覺與比賽強度？"]
+    ],
+    extraCaption:"方向為典型示意，不是每位選手都會出現的固定曲線；請以個人歷史趨勢及實際訓練反應判讀。",
+    sources:[
+      ["TrainingPeaks Help：Fitness (CTL)","https://help.trainingpeaks.com/hc/en-us/articles/204071884-Fitness-CTL"],
+      ["TrainingPeaks Help：Fatigue (ATL)","https://help.trainingpeaks.com/hc/en-us/articles/204071894-Fatigue-ATL"],
+      ["TrainingPeaks Help：Form (TSB)","https://help.trainingpeaks.com/hc/en-us/articles/204071764-Form-TSB"],
+      ["TrainingPeaks：The Science of Tapering","https://www.trainingpeaks.com/learn/articles/the-science-of-tapering/"]
+    ]
+  },
   lt:{
     title:"LT｜乳酸閾值",en:"Lactate Threshold",tag:"個人生理測試參考",
     desc:"乳酸閾值描述運動強度增加時，血乳酸濃度出現特定變化的強度點或區域。常見討論包括 LT1 與 LT2，但定義與判讀會受測試協定、取樣方式及分析模型影響。",
@@ -651,6 +685,46 @@ function render(key) {
             ["3｜看 TSB","理解近期負荷相對長期基準的差距，並確認平台的日期計算方式。"],
             ["4｜對照反應","搭配配速／功率、心率、RPE、睡眠、情緒、痠痛、疼痛與疾病狀況。"],
             ["5｜做訓練決策","依整體趨勢與選手反應，決定維持、調整負荷或安排恢復；再追蹤後續反應。"]
+          ]
+        )}
+      </div>
+    ` : ""}
+
+    ${key === "cycle" ? `
+      <div class="section magnitude">
+        <h4>教練判讀流程｜從週期走向決策</h4>
+        ${makeTable(
+          ["步驟","先問自己什麼？","可採取的教練行動"],
+          [
+            ["1｜確認目標","目前距離 A 級賽事還有多久？目前屬於賽季哪個階段？","先確認賽事目標、專項需求與整體訓練計畫。"],
+            ["2｜看長期趨勢","CTL 最近 4–6 週是上升、持平還是下降？","判斷長期訓練負荷是否符合目前階段，不用單日數字下結論。"],
+            ["3｜看近期刺激","ATL 最近約 7 天是否明顯增加或下降？","回看訓練時間、強度、頻率，以及高負荷日是否集中。"],
+            ["4｜看負荷平衡","TSB 的方向是否符合目前訓練安排？","把 TSB 當作負荷差距線索，不把正負值直接當成恢復或安全判定。"],
+            ["5｜對照運動員反應","配速／功率、心率、RPE、睡眠、痠痛與情緒是否同步變化？","依整體資訊決定維持、調整、恢復或減量，並追蹤後續反應。"]
+          ]
+        )}
+      </div>
+      <div class="section magnitude">
+        <h4>情境練習｜讀懂恢復週與 Taper 的差別</h4>
+        ${makeTable(
+          ["觀察情境","數據可能呈現","教練判讀"],
+          [
+            ["訓練累積後安排恢復週","ATL 下降較快；CTL 持平或微降；TSB 上升","目的是降低近期負荷、促進恢復與吸收訓練，不是追求 CTL 繼續上升。"],
+            ["比賽前進入 Taper","ATL 下降；CTL 通常緩慢下降；TSB 上升","目的是降低累積疲勞並盡量保留專項能力，不代表完全停止訓練。"],
+            ["ATL 上升但表現與恢復變差","CTL、ATL、TSB 可能出現不同組合","回看負荷增加來源、課表完成品質與身體反應；必要時調整負荷並進一步評估。"]
+          ]
+        )}
+        <p class="magnitude-caption">恢復週是訓練計畫中的定期負荷調整；Taper 則通常以重要賽事為目標。兩者可能都讓 ATL 下降、TSB 上升，但目的與安排背景不同。</p>
+      </div>
+      <div class="section magnitude">
+        <h4>常見誤判｜這些結論不能只靠三個數字得出</h4>
+        ${makeTable(
+          ["不要直接推論","更好的判讀方式"],
+          [
+            ["CTL 上升＝體能一定進步","再看專項測試、配速／功率、心率反應與訓練完成品質。"],
+            ["ATL 上升＝過度訓練","先確認是否為計畫中的訓練累積，再看疲勞、疼痛、睡眠與表現。"],
+            ["TSB 正值＝完全恢復、適合衝強度","搭配主觀狀態、熱身反應與專項表現，確認是否適合當天課表。"],
+            ["TSB 負值＝一定要休息","看負值的持續時間、幅度、訓練階段及個人反應，不用單一門檻下指令。"]
           ]
         )}
       </div>
