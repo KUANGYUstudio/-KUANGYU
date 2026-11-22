@@ -81,11 +81,48 @@ header:after {
   padding:8px 12px;
   white-space:nowrap;
 }
-.tabs {
+.category-tabs {
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:10px;
-  margin:18px 0 20px;
+  margin:18px 0 12px;
+}
+.subnav-wrap {
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:12px 14px;
+  margin-bottom:20px;
+}
+.subnav-label {
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1px;
+  margin:0 0 9px;
+}
+.subtabs {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.subtab {
+  border:1px solid var(--line);
+  background:#f7f9fb;
+  color:var(--ink);
+  border-radius:9px;
+  padding:9px 12px;
+  cursor:pointer;
+  font:inherit;
+  font-size:12px;
+  font-weight:700;
+  transition:.18s;
+}
+.subtab:hover { border-color:#9cb86c; transform:translateY(-1px); }
+.subtab.active {
+  background:var(--navy);
+  border-color:var(--navy);
+  color:white;
 }
 .tab {
   border:1px solid var(--line);
@@ -240,7 +277,14 @@ footer {
   line-height:1.8;
 }
 @media(max-width:720px) {
-  .tabs { grid-template-columns:repeat(2,1fr); }
+  .category-tabs { grid-template-columns:repeat(2,1fr); }
+  .subtabs {
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:3px;
+    scrollbar-width:thin;
+  }
+  .subtab { flex:0 0 auto; white-space:nowrap; }
   .grid { grid-template-columns:1fr; }
   .intro { align-items:start;flex-direction:column; }
   .panel-head { flex-direction:column; }
@@ -267,44 +311,24 @@ footer {
     <span class="pill">COACH TOOLKIT · 01</span>
   </div>
 
-  <nav class="tabs" id="tabs" aria-label="數據指標">
-    <button class="tab active" data-key="tss">
-      <b>TSS</b><small>單次訓練負荷</small>
+  <nav class="category-tabs" id="categoryTabs" aria-label="教學主分類">
+    <button class="tab active" data-category="load">
+      <b>01｜訓練負荷分析</b><small>單次負荷、CTL、ATL、TSB 與 Ramp Rate</small>
     </button>
-    <button class="tab" data-key="if">
-      <b>IF</b><small>強度係數</small>
+    <button class="tab" data-category="physiology">
+      <b>02｜生理指標與強度</b><small>乳酸閾值、訓練區間與游泳配速</small>
     </button>
-    <button class="tab" data-key="ctl">
-      <b>CTL</b><small>長期訓練負荷</small>
+    <button class="tab" data-category="planning">
+      <b>03｜訓練週期與賽季</b><small>訓練階段與年度訓練計畫</small>
     </button>
-    <button class="tab" data-key="atl">
-      <b>ATL</b><small>短期訓練負荷</small>
-    </button>
-    <button class="tab" data-key="tsb">
-      <b>TSB</b><small>訓練壓力平衡</small>
-    </button>
-    <button class="tab" data-key="load">
-      <b>CTL × ATL × TSB</b><small>整合判讀與教練應用</small>
-    </button>
-    <button class="tab" data-key="cycle">
-      <b>TRAINING CYCLE</b><small>基礎期、強化期、恢復週與 Taper</small>
-    </button>
-    <button class="tab" data-key="ramp">
-      <b>RAMP RATE</b><small>CTL 每週變化速度與負荷爬升</small>
-    </button>
-    <button class="tab" data-key="lt">
-      <b>LT</b><small>乳酸閾值</small>
-    </button>
-    <button class="tab" data-key="zones">
-      <b>TRAINING ZONES</b><small>訓練強度區間</small>
-    </button>
-    <button class="tab" data-key="css">
-      <b>CSS</b><small>游泳臨界配速</small>
-    </button>
-    <button class="tab" data-key="atp">
-      <b>ATP</b><small>年度訓練量參考</small>
+    <button class="tab" data-category="practice">
+      <b>04｜教練實戰與案例</b><small>整合數據、辨識問題與訓練決策</small>
     </button>
   </nav>
+  <div class="subnav-wrap">
+    <div class="subnav-label" id="subnavLabel">TRAINING LOAD ANALYSIS｜選擇學習單元</div>
+    <nav class="subtabs" id="subtabs" aria-label="分類內學習單元"></nav>
+  </div>
 
   <section class="panel" id="panel" aria-live="polite"></section>
 
@@ -541,6 +565,33 @@ const data = {
       ["TrainingPeaks：Why Ramp Rate is an Important Training Metric","https://www.trainingpeaks.com/learn/articles/why-ramp-rate-is-an-important-training-metric/"],
       ["TrainingPeaks：Understanding TrainingPeaks Ramp Rate for Better Coaching","https://www.trainingpeaks.com/blog/understanding-trainingpeaks-ramp-rate-for-better-coaching/"]
     ]
+  },
+  practice:{
+    title:"教練實戰與案例分析",
+    en:"Coaching Practice · Integrated Athlete Review",
+    tag:"把數據轉換成教練決策",
+    desc:"實戰判讀要把訓練負荷模型與運動員的實際反應放在一起。先描述數據發生了什麼，再提出可能解釋，最後才決定是否調整訓練。單一指標不能直接診斷過度訓練、傷病或完全恢復。",
+    heads:["判讀層次","核心問題","需要的資料"],
+    rows:[
+      ["描述現象","哪些指標上升、下降或持平？變化持續多久？","CTL、ATL、TSB、Ramp Rate 的趨勢與日期範圍"],
+      ["尋找原因","負荷變化來自時數、強度、頻率，還是運動項目分配？","每週課表、游泳／自行車／跑步 TSS、訓練完成率"],
+      ["交叉驗證","數據變化是否反映在運動表現與主觀感受？","配速、功率、心率、RPE、睡眠、痠痛、情緒與疾病狀況"],
+      ["形成決策","維持、調整、恢復或進一步評估，哪個選項最合理？","賽事目標、訓練階段、近期反應與後續追蹤"]
+    ],
+    example:"案例：選手近期 Ramp Rate 上升、ATL 增加、TSB 逐漸下降。這只能先描述近期負荷增加、負荷差距擴大。接著要檢查是否為計畫中的 Build 期、是否增加跑量或高強度課，以及選手的睡眠、痠痛與專項表現是否同步變差。若多項恢復與表現訊號持續惡化，才進一步考慮調整訓練。",
+    coach:"每次個案分析可依序記錄：<br><br>① 數據事實：先寫出 CTL、ATL、TSB、Ramp Rate 的數值、變化量與觀察期間。<br><br>② 訓練背景：確認目前處於 Base、Build、Recovery 或 Taper，並了解近期課表內容。<br><br>③ 身體反應：比較相同配速／功率下的心率與 RPE，並詢問睡眠、痠痛、情緒及疾病狀況。<br><br>④ 教練假設：提出可能原因，清楚區分已知事實與尚待確認的推測。<br><br>⑤ 行動與追蹤：決定維持、重新分配負荷、降低刺激或安排恢復，並在後續訓練中確認反應。",
+    note:"這個模組提供教學用的分析框架，不取代醫療評估或個別化訓練處方。若出現持續或加劇的疼痛、疾病症狀、異常疲勞或表現明顯下降，應依情況停止相關訓練並尋求適當專業評估。",
+    extraTitle:"教練個案紀錄模板｜每次分析都留下可追蹤的脈絡",
+    extraHeads:["紀錄欄位","建議填寫內容"],
+    extraRows:[
+      ["選手與日期","選手代號、分析日期、資料涵蓋期間"],
+      ["賽季目標","A／B／C 級賽事、賽事日期、目前訓練階段"],
+      ["負荷指標","CTL、ATL、TSB、Ramp Rate，以及各自的變化期間"],
+      ["訓練內容","游泳、自行車、跑步的時數、強度、頻率與完成率"],
+      ["運動員回饋","睡眠、RPE、痠痛、情緒、疾病與疼痛狀況"],
+      ["教練決策","維持／調整／恢復／進一步評估，以及下次追蹤日期"]
+    ],
+    extraCaption:"紀錄時請標明資料來源與日期，避免把不同期間或不同運動項目的負荷直接混為一談。"
   },
   lt:{
     title:"LT｜乳酸閾值",en:"Lactate Threshold",tag:"個人生理測試參考",
@@ -846,10 +897,72 @@ function render(key) {
   `;
 }
 
-document.getElementById("tabs").addEventListener("click",event=>{
-  const button=event.target.closest("button[data-key]");
-  if(button) render(button.dataset.key);
+const categoryConfig = {
+  load: {
+    label:"TRAINING LOAD ANALYSIS｜訓練負荷分析",
+    items:[
+      ["tss","TSS｜單次負荷"],["if","IF｜強度係數"],
+      ["ctl","CTL｜長期負荷"],["atl","ATL｜近期負荷"],
+      ["tsb","TSB｜負荷平衡"],["ramp","Ramp Rate｜負荷爬升率"],
+      ["load","整合判讀｜教練應用"]
+    ]
+  },
+  physiology: {
+    label:"PHYSIOLOGY & INTENSITY｜生理指標與強度設定",
+    items:[
+      ["lt","LT｜乳酸閾值"],["zones","Training Zones｜強度區間"],
+      ["css","CSS｜游泳臨界配速"]
+    ]
+  },
+  planning: {
+    label:"TRAINING PLAN｜訓練週期與賽季規劃",
+    items:[
+      ["cycle","Training Cycle｜訓練週期"],["atp","ATP｜年度訓練計畫"]
+    ]
+  },
+  practice: {
+    label:"COACHING PRACTICE｜教練實戰與案例分析",
+    items:[["practice","個案分析流程與紀錄模板"]]
+  }
+};
+
+function categoryFor(key) {
+  return Object.keys(categoryConfig).find(category =>
+    categoryConfig[category].items.some(item => item[0] === key)
+  ) || "load";
+}
+
+function renderCategory(category, selectedKey) {
+  const config = categoryConfig[category];
+  document.querySelectorAll("#categoryTabs [data-category]").forEach(button => {
+    button.classList.toggle("active", button.dataset.category === category);
+  });
+  document.getElementById("subnavLabel").textContent = config.label + "｜選擇學習單元";
+  document.getElementById("subtabs").innerHTML = config.items.map(([key,label]) =>
+    `<button class="subtab ${key === selectedKey ? "active" : ""}" data-key="${key}">${label}</button>`
+  ).join("");
+}
+
+document.getElementById("categoryTabs").addEventListener("click", event => {
+  const button = event.target.closest("button[data-category]");
+  if (!button) return;
+  const category = button.dataset.category;
+  const firstKey = categoryConfig[category].items[0][0];
+  renderCategory(category, firstKey);
+  render(firstKey);
 });
+
+document.getElementById("subtabs").addEventListener("click", event => {
+  const button = event.target.closest("button[data-key]");
+  if (button) render(button.dataset.key);
+});
+
+const originalRender = render;
+render = function(key) {
+  const category = categoryFor(key);
+  renderCategory(category, key);
+  originalRender(key);
+};
 
 render("tss");
 </script>
