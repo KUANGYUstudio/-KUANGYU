@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101b2d">
+<title>Coach Development Roadmap｜教練學習地圖</title>
+<style>
+:root{
+  --bg:#f4f6f8;--ink:#172338;--muted:#697789;--navy:#101b2d;
+  --lime:#c7f36b;--line:#e3e8ee;--card:#fff;--blue:#eaf1fb;
+  --green:#eaf5d8;--purple:#f0ebff;--orange:#fff1df;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
+header{background:var(--navy);color:#fff;padding:34px max(22px,calc((100% - 1120px)/2)) 30px;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:320px;height:320px;border:1px solid #ffffff18;border-radius:50%;right:8%;top:-205px;box-shadow:0 0 0 38px #ffffff08,0 0 0 76px #ffffff05}
+.eyebrow{color:var(--lime);font-size:11px;letter-spacing:2px;font-weight:850}
+h1{font-size:clamp(27px,4vw,40px);letter-spacing:-1px;margin:10px 0 7px}
+header p{color:#bdc8d5;max-width:720px;line-height:1.8;font-size:14px;margin:0}
+.wrap{max-width:1120px;margin:auto;padding:26px 22px 60px}
+.topline{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:15px}
+.topline h2{font-size:19px;margin:0 0 5px}
+.topline p{margin:0;color:var(--muted);font-size:13px}
+.pill{font-size:11px;font-weight:800;background:var(--green);color:#46631d;border-radius:30px;padding:8px 12px;white-space:nowrap}
+.progress-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 19px;margin:16px 0 20px}
+.progress-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}
+.progress-head strong{font-size:14px}
+.progress-head span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.track{height:9px;background:#edf0f3;border-radius:20px;overflow:hidden}
+.track-fill{height:100%;width:0;background:#83a944;border-radius:20px;transition:width .2s}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px}
+.stat{background:#f7f9fb;border-radius:10px;padding:10px 12px}
+.stat b{display:block;font-size:19px}
+.stat small{color:var(--muted);font-size:11px}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:25px 0 12px}
+.section-title h2{font-size:17px;margin:0}
+.section-title small{font-size:11px;color:var(--muted)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+.filter{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer}
+.filter.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.modules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.module{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px;min-width:0}
+.module-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.module-number{font-size:10px;letter-spacing:1.2px;color:#789044;font-weight:850}
+.module h3{font-size:17px;margin:5px 0 6px}
+.module-desc{font-size:12px;line-height:1.7;color:var(--muted);margin:0 0 13px}
+.count{font-size:10px;color:var(--muted);background:#f3f5f7;padding:6px 8px;border-radius:20px;white-space:nowrap}
+.topics{display:grid;gap:8px}
+.topic{border:1px solid #e9edf1;border-radius:11px;padding:11px 12px;background:#fcfdfe}
+.topic-head{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.topic h4{font-size:13px;margin:0 0 4px}
+.topic p{font-size:11px;line-height:1.65;color:#687789;margin:0}
+.topic-status{flex:0 0 112px;max-width:112px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 7px;font:inherit;font-size:10px;color:#445166}
+.topic details{margin-top:8px}
+.topic summary{font-size:11px;color:#526a2b;font-weight:750;cursor:pointer}
+.topic details p{margin-top:7px}
+.status-done{border-color:#cfe1ad;background:#f8fbed}
+.status-learning{border-color:#d8cafa;background:#fbf9ff}
+.status-planned{border-color:#f0dfc6;background:#fffdfa}
+.feature{margin-top:18px;border-radius:15px;padding:17px 18px;background:var(--navy);color:#fff;display:grid;grid-template-columns:1fr auto;gap:15px;align-items:center}
+.feature .eyebrow{color:var(--lime)}
+.feature h3{margin:6px 0;font-size:17px}
+.feature p{margin:0;color:#c0cad6;font-size:12px;line-height:1.7;max-width:740px}
+.feature .tag{background:#26364d;color:#d9e3ee;border-radius:8px;padding:8px 10px;font-size:10px;font-weight:800;white-space:nowrap}
+.note{font-size:11px;line-height:1.7;color:var(--muted);margin-top:17px}
+footer{border-top:1px solid var(--line);padding-top:15px;margin-top:28px;color:var(--muted);font-size:11px;line-height:1.7}
+button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #b4d47b;outline-offset:2px}
+@media(max-width:760px){.modules{grid-template-columns:1fr}.feature{grid-template-columns:1fr}.feature .tag{justify-self:start}}
+@media(max-width:520px){.stats{grid-template-columns:repeat(3,1fr)}.topline{align-items:start;flex-direction:column}.topic-head{flex-direction:column}.topic-status{max-width:none;width:100%;flex-basis:auto}.module{padding:14px}.wrap{padding-left:15px;padding-right:15px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">KUANGYU STUDIO / COACH EDUCATION</div>
+  <h1>Coach Development Roadmap</h1>
+  <p>教練學習地圖｜把數據判讀、運動生理、恢復監控、動作評估與課表設計整理成循序漸進的學習目錄。先看地圖，再依自己的進度逐項學習，不需要一次吸收所有資訊。</p>
+</header>
+<main class="wrap">
+  <div class="topline">
+    <div>
+      <h2>我的教練學習進度</h2>
+      <p>每個主題都可以標記狀態；進度會保存在目前使用的瀏覽器中。</p>
+    </div>
+    <span class="pill">LEARNING ROADMAP · 01</span>
+  </div>
+
+  <section class="progress-card" aria-label="學習進度">
+    <div class="progress-head"><strong>整體學習進度</strong><span id="progressText">0 / 28 已完成 · 0%</span></div>
+    <div class="track"><div class="track-fill" id="progressFill"></div></div>
+    <div class="stats">
+      <div class="stat"><b id="doneCount">0</b><small>已完成</small></div>
+      <div class="stat"><b id="learningCount">0</b><small>學習中</small></div>
+      <div class="stat"><b id="todoCount">28</b><small>尚未開始</small></div>
+    </div>
+  </section>
+
+  <div class="section-title">
+    <h2>學習目錄</h2>
+    <small>由數據理解 → 生理反應 → 教練決策</small>
+  </div>
+  <div class="filters" role="group" aria-label="篩選學習狀態">
+    <button class="filter active" data-filter="all">全部主題</button>
+    <button class="filter" data-filter="todo">尚未開始</button>
+    <button class="filter" data-filter="learning">學習中</button>
+    <button class="filter" data-filter="done">已完成</button>
+  </div>
+
+  <div class="modules" id="modules">
+    <section class="module" data-module="load">
+      <div class="module-top"><div><div class="module-number">01 / TRAINING LOAD</div><h3>訓練負荷分析</h3></div><span class="count">6 個主題</span></div>
+      <p class="module-desc">了解每堂課帶來多少負荷、近期與長期負荷如何變化，以及如何把數字放在一起判讀。</p>
+      <div class="topics">
+        <article class="topic" data-id="tss"><div class="topic-head"><div><h4>TSS｜單次訓練負荷</h4><p>理解單堂訓練的負荷量化方式，以及不同運動項目 TSS 的差異。</p></div><select class="topic-status" aria-label="TSS 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>訓練時間、相對強度、單堂負荷；理解 TSS 是模型估算，不是直接測量身體疲勞。</p></details></article>
+        <article class="topic" data-id="if"><div class="topic-head"><div><h4>IF｜強度係數</h4><p>了解單堂訓練相對於個人閾值的強度。</p></div><select class="topic-status" aria-label="IF 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>IF 與閾值設定、訓練時間及 TSS 的關係；確認閾值設定是否合理。</p></details></article>
+        <article class="topic" data-id="ctl"><div class="topic-head"><div><h4>CTL｜長期訓練負荷</h4><p>觀察長期訓練負荷的累積與變化。</p></div><select class="topic-status" aria-label="CTL 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>42 天加權平均的概念、長期趨勢，以及 CTL 不等於直接測得的體能或比賽能力。</p></details></article>
+        <article class="topic" data-id="atl"><div class="topic-head"><div><h4>ATL｜近期訓練負荷</h4><p>觀察近期訓練刺激與負荷變化。</p></div><select class="topic-status" aria-label="ATL 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>7 天加權平均、近期負荷波動，以及 ATL 上升與實際疲勞感受之間的差別。</p></details></article>
+        <article class="topic" data-id="tsb"><div class="topic-head"><div><h4>TSB｜訓練負荷平衡</h4><p>理解近期負荷相對於長期負荷的差距。</p></div><select class="topic-status" aria-label="TSB 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>TSB 的日期計算方式、正負值的意義，以及為什麼不能把單一數值當成恢復或安全判定。</p></details></article>
+        <article class="topic" data-id="ramp"><div class="topic-head"><div><h4>Ramp Rate｜CTL 負荷爬升率</h4><p>觀察 CTL 每週增加或下降的速度。</p></div><select class="topic-status" aria-label="Ramp Rate 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>不同 CTL 基礎下的變化解讀、與 ATL／TSB 串聯，以及避免把 Ramp Rate 當成傷病預測值。</p></details></article>
+      </div>
+    </section>
+
+    <section class="module" data-module="performance">
+      <div class="module-top"><div><div class="module-number">02 / PERFORMANCE</div><h3>運動表現與生理反應</h3></div><span class="count">5 個主題</span></div>
+      <p class="module-desc">從心率、配速、功率與乳酸反應，判斷運動員是否真的產生訓練適應。</p>
+      <div class="topics">
+        <article class="topic" data-id="drift"><div class="topic-head"><div><h4>Cardiac Drift｜心率漂移</h4><p>觀察固定輸出下，心率是否隨運動時間逐漸上升。</p></div><select class="topic-status" aria-label="心率漂移學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>心率與配速／功率的解耦、長時間有氧運動反應，以及熱環境、補水、疲勞等干擾因素。</p></details></article>
+        <article class="topic" data-id="efficiency"><div class="topic-head"><div><h4>Pace / Power Efficiency｜配速與功率效率</h4><p>比較相同心率下的輸出，或相同輸出下的心率反應。</p></div><select class="topic-status" aria-label="效率分析學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>配速、功率、心率與主觀用力的交叉比較；控制地形、天氣、設備與測試條件。</p></details></article>
+        <article class="topic" data-id="lactate"><div class="topic-head"><div><h4>Lactate / LT｜血乳酸與乳酸閾值</h4><p>理解乳酸反應、LT1／LT2 與持續運動能力。</p></div><select class="topic-status" aria-label="血乳酸學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>乳酸測試的階段設計、閾值判讀方法、測試限制，以及閾值配速／心率的應用。</p></details></article>
+        <article class="topic" data-id="vo2"><div class="topic-head"><div><h4>VO₂max｜最大攝氧量</h4><p>認識最大攝氧量及其在耐力表現中的角色。</p></div><select class="topic-status" aria-label="VO2max 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>VO₂max、閾值與運動經濟性之間的關係；理解單一 VO₂max 數值不能完整代表耐力表現。</p></details></article>
+        <article class="topic" data-id="zones"><div class="topic-head"><div><h4>Training Zones｜訓練強度區間</h4><p>把閾值、心率、配速或功率轉換成可執行的訓練強度。</p></div><select class="topic-status" aria-label="訓練區間學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>不同分區模型的差異、區間依據、個人化設定與定期重新校準。</p></details></article>
+      </div>
+    </section>
+
+    <section class="module" data-module="recovery">
+      <div class="module-top"><div><div class="module-number">03 / RECOVERY & WELLNESS</div><h3>疲勞、恢復與主觀監控</h3></div><span class="count">4 個主題</span></div>
+      <p class="module-desc">把訓練設備看不到的身體感受納入監控，理解每天的狀態與長期趨勢。</p>
+      <div class="topics">
+        <article class="topic" data-id="hrv"><div class="topic-head"><div><h4>HRV｜心率變異度</h4><p>追蹤個人 HRV 基準與日常波動，不以單日數字定論。</p></div><select class="topic-status" aria-label="HRV 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>HRV 的基本概念、測量一致性、個人基準、趨勢觀察，以及與睡眠、壓力和訓練反應一起判讀。</p></details></article>
+        <article class="topic" data-id="rhr"><div class="topic-head"><div><h4>Resting HR｜靜息心率</h4><p>觀察休息狀態心率相對於個人基準的變化。</p></div><select class="topic-status" aria-label="靜息心率學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>固定測量條件、個人基準、持續偏離與可能干擾因素；避免單次讀值過度解讀。</p></details></article>
+        <article class="topic" data-id="rpe"><div class="topic-head"><div><h4>RPE / Session RPE｜主觀用力程度</h4><p>學習如何讓學員回報單堂訓練感受，並與課表負荷對照。</p></div><select class="topic-status" aria-label="RPE 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>RPE 量表、Session RPE 的回報時機與計算概念、不同運動項目的使用方式，以及如何降低學員填寫偏差。</p></details></article>
+        <article class="topic" data-id="wellness"><div class="topic-head"><div><h4>Wellness｜每日身體狀態</h4><p>把睡眠、疲勞、痠痛、情緒與壓力變成簡單可追蹤的回饋。</p></div><select class="topic-status" aria-label="Wellness 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>問卷題目設計、固定回報時間、個人趨勢、隱私與回報負擔；避免把主觀分數當成診斷。</p></details></article>
+      </div>
+    </section>
+
+    <section class="module" data-module="distribution">
+      <div class="module-top"><div><div class="module-number">04 / LOAD DISTRIBUTION</div><h3>訓練分配與負荷結構</h3></div><span class="count">3 個主題</span></div>
+      <p class="module-desc">不只看總負荷，也要看負荷如何分布在一週與不同強度之間。</p>
+      <div class="topics">
+        <article class="topic" data-id="intensity"><div class="topic-head"><div><h4>Intensity Distribution｜強度分布</h4><p>分析低、中、高強度訓練時間或訓練量的比例。</p></div><select class="topic-status" aria-label="強度分布學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>不同強度分布模型、三項運動的差異，以及如何將分布與選手目標、訓練階段連結。</p></details></article>
+        <article class="topic" data-id="monotony"><div class="topic-head"><div><h4>Monotony｜訓練單調性</h4><p>觀察每日負荷是否過於相似，缺少負荷變化。</p></div><select class="topic-status" aria-label="訓練單調性學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>每日負荷變異、週內安排與指標限制；不將單調性單獨視為傷病或過度訓練判定。</p></details></article>
+        <article class="topic" data-id="strain"><div class="topic-head"><div><h4>Strain｜訓練壓力累積</h4><p>理解訓練總量與負荷分布特性如何一起影響週期壓力。</p></div><select class="topic-status" aria-label="訓練壓力學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>Strain 與 Monotony 的常見概念、計算假設及使用限制；與 CTL／ATL 等模型區分。</p></details></article>
+      </div>
+    </section>
+
+    <section class="module" data-module="movement">
+      <div class="module-top"><div><div class="module-number">05 / MOVEMENT & BIOMECHANICS</div><h3>動作與生物力學評估</h3></div><span class="count">3 個主題</span></div>
+      <p class="module-desc">把動作品質、專項技術與疲勞後的變化納入教練觀察，不只依賴訓練平台數字。</p>
+      <div class="topics">
+        <article class="topic" data-id="gait"><div class="topic-head"><div><h4>Running Gait｜跑步步態</h4><p>觀察步頻、步幅、觸地時間與跑姿在不同速度下的變化。</p></div><select class="topic-status" aria-label="跑步步態學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>步態觀察的情境與限制、速度影響、疲勞前後比較，以及不把單一跑姿特徵當成傷病診斷。</p></details></article>
+        <article class="topic" data-id="movement"><div class="topic-head"><div><h4>Movement Assessment｜動作控制</h4><p>評估單腳控制、關節活動、穩定性與動作協調。</p></div><select class="topic-status" aria-label="動作控制學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>動作測試的標準化、左右差異、任務需求、疲勞影響，以及如何把評估結果轉成訓練內容。</p></details></article>
+        <article class="topic" data-id="cycling"><div class="topic-head"><div><h4>Cycling Biomechanics｜自行車生物力學</h4><p>理解踩踏、踏頻、騎乘姿勢與左右輸出資訊。</p></div><select class="topic-status" aria-label="自行車生物力學學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>功率與踏頻的關係、左右平衡數據的限制、車架設定與騎乘姿勢的觀察。</p></details></article>
+      </div>
+    </section>
+
+    <section class="module" data-module="testing">
+      <div class="module-top"><div><div class="module-number">06 / TESTING & CALIBRATION</div><h3>能力測試與數據校準</h3></div><span class="count">5 個主題</span></div>
+      <p class="module-desc">確認數據來源、測試條件與強度區間可靠，避免用過期或不準確的設定安排課表。</p>
+      <div class="topics">
+        <article class="topic" data-id="ftp"><div class="topic-head"><div><h4>FTP Test｜自行車功能性閾值功率</h4><p>理解 FTP 測試方式、估算限制與功率區間設定。</p></div><select class="topic-status" aria-label="FTP 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>測試協定、配速策略、測試重複性、FTP 更新與不同測試方法的差異。</p></details></article>
+        <article class="topic" data-id="css"><div class="topic-head"><div><h4>CSS Test｜游泳臨界配速</h4><p>透過游泳測試估算可持續速度並設定訓練配速。</p></div><select class="topic-status" aria-label="CSS 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>常見測試距離、計算方式、技術與池長影響，以及如何用 CSS 安排間歇。</p></details></article>
+        <article class="topic" data-id="field"><div class="topic-head"><div><h4>Field Test｜實地能力測試</h4><p>設計可重複、可比較的戶外測試流程。</p></div><select class="topic-status" aria-label="實地測試學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>路線、環境、設備、熱身、測試流程與結果紀錄標準化。</p></details></article>
+        <article class="topic" data-id="vo2test"><div class="topic-head"><div><h4>VO₂max Test｜最大攝氧量測試</h4><p>認識實驗室或可用設備進行的最大攝氧量評估。</p></div><select class="topic-status" aria-label="最大攝氧量測試學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>測試流程、氣體分析概念、結果解讀及測試資格與安全限制。</p></details></article>
+        <article class="topic" data-id="dataquality"><div class="topic-head"><div><h4>Data Quality｜資料品質與區間校準</h4><p>確認心率、GPS、功率計、閾值與訓練區間設定可信。</p></div><select class="topic-status" aria-label="資料品質學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>感測器異常、校正、資料缺漏、測試條件一致性與定期更新個人閾值。</p></details></article>
+      </div>
+    </section>
+
+    <section class="module" data-module="planning">
+      <div class="module-top"><div><div class="module-number">07 / PROGRAM DESIGN</div><h3>課表設計與訓練週期</h3></div><span class="count">4 個主題</span></div>
+      <p class="module-desc">把前面學到的資訊轉成可執行的單堂課表、每週安排與長期賽季計畫。</p>
+      <div class="topics">
+        <article class="topic" data-id="principles"><div class="topic-head"><div><h4>Training Principles｜訓練原則</h4><p>理解特異性、漸進超負荷、個別化、恢復與可持續性。</p></div><select class="topic-status" aria-label="訓練原則學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>從運動員目標、訓練史、能力與生活條件設定可執行的訓練方向。</p></details></article>
+        <article class="topic" data-id="workout"><div class="topic-head"><div><h4>Workout Design｜單堂課表設計</h4><p>設計熱身、主課表、強度、組數、休息與收操。</p></div><select class="topic-status" aria-label="單堂課表學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>Easy、Tempo、Threshold、Interval、Long Session 等課型的目的與處方要素。</p></details></article>
+        <article class="topic" data-id="weekly"><div class="topic-head"><div><h4>Weekly Scheduling｜每週訓練安排</h4><p>安排頻率、強弱日、長課、休息日與三項運動分配。</p></div><select class="topic-status" aria-label="每週安排學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>訓練量、強度、頻率與恢復的互動；游泳、自行車、跑步的負荷整合。</p></details></article>
+        <article class="topic" data-id="periodization"><div class="topic-head"><div><h4>Periodization｜週期化與賽季規劃</h4><p>把 Base、Build、Recovery、Peak、Taper 串成賽季計畫。</p></div><select class="topic-status" aria-label="週期化學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>年度訓練計畫、比賽優先順序、訓練區塊、恢復安排與賽前減量。</p></details></article>
+      </div>
+    </section>
+
+    <section class="module" data-module="monitoring">
+      <div class="module-top"><div><div class="module-number">08 / COACHING DECISIONS</div><h3>監控、回饋與教練決策</h3></div><span class="count">2 個主題</span></div>
+      <p class="module-desc">將訓練數據、身體回饋與表現放在一起，決定課表是否維持或調整。</p>
+      <div class="topics">
+        <article class="topic" data-id="integrated"><div class="topic-head"><div><h4>Integrated Monitoring｜整合監控</h4><p>串聯負荷、恢復、表現與動作品質，避免只看單一數字。</p></div><select class="topic-status" aria-label="整合監控學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>建立個人基準、觀察趨勢、辨識訊號不一致，以及區分事實、假設與教練決策。</p></details></article>
+        <article class="topic" data-id="adjustment"><div class="topic-head"><div><h4>Program Adjustment｜課表調整與追蹤</h4><p>依照訓練反應，決定維持、增加、降低或重新安排刺激。</p></div><select class="topic-status" aria-label="課表調整學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>追蹤課表完成率、表現變化、RPE／Wellness、恢復狀態與下一次訓練的調整理由。</p></details></article>
+      </div>
+    </section>
+  </div>
+
+  <section class="feature">
+    <div>
+      <div class="eyebrow">FUTURE PROJECT / RPE CHECK-IN</div>
+      <h3>下一步：建立學員可填寫的 RPE 回報系統</h3>
+      <p>先完成 RPE 與 Session RPE 的量表、填寫時機和題目設計，再把男友提出的 RPE 系統概念整理成學員端填寫介面，以及教練端查看與追蹤的資料頁。這個專案先列入路線圖，暫時不預設或改寫你們的量表規則。</p>
+    </div>
+    <span class="tag">PLANNED · 待討論規格</span>
+  </section>
+
+  <p class="note">進度儲存說明：學習狀態保存在目前瀏覽器的本機儲存空間；更換裝置或瀏覽器時不會自動同步。若清除瀏覽器資料，進度可能會消失。</p>
+  <footer>KUANGYU STUDIO · COACH DEVELOPMENT ROADMAP<br>此目錄是學習規劃工具；各主題會逐項展開，不需要一次學完。實際訓練決策仍須依個人資料品質、訓練背景、健康狀態與專業評估。</footer>
+</main>
+<script>
+(() => {
+  const STORAGE_KEY = "coach-development-roadmap-v1";
+  const statusLabels = {todo:"尚未開始", learning:"學習中", done:"已完成"};
+  const selects = [...document.querySelectorAll(".topic-status")];
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e) { saved = {}; }
+
+  selects.forEach(select => {
+    const card = select.closest(".topic");
+    const id = card.dataset.id;
+    if (saved[id]) select.value = saved[id];
+    updateCard(card, select.value);
+    select.addEventListener("change", () => {
+      saved[id] = select.value;
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(saved)); } catch(e) {}
+      updateCard(card, select.value);
+      updateProgress();
+      applyFilter(activeFilter);
+    });
+  });
+
+  function updateCard(card, status) {
+    card.classList.remove("status-done","status-learning","status-planned");
+    if (status === "done") card.classList.add("status-done");
+    if (status === "learning") card.classList.add("status-learning");
+    if (status === "todo") card.classList.add("status-planned");
+  }
+
+  function updateProgress() {
+    const values = selects.map(s => s.value);
+    const done = values.filter(v => v === "done").length;
+    const learning = values.filter(v => v === "learning").length;
+    const total = values.length;
+    const percent = total ? Math.round(done / total * 100) : 0;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("learningCount").textContent = learning;
+    document.getElementById("todoCount").textContent = total - done - learning;
+    document.getElementById("progressText").textContent = `${done} / ${total} 已完成 · ${percent}%`;
+    document.getElementById("progressFill").style.width = percent + "%";
+    document.querySelectorAll(".module").forEach(module => {
+      const topics = [...module.querySelectorAll(".topic-status")];
+      const complete = topics.filter(s => s.value === "done").length;
+      const count = module.querySelector(".count");
+      count.textContent = `${complete}/${topics.length} 已完成`;
+    });
+  }
+
+  let activeFilter = "all";
+  function applyFilter(filter) {
+    activeFilter = filter;
+    document.querySelectorAll(".topic").forEach(card => {
+      const value = card.querySelector(".topic-status").value;
+      card.hidden = filter !== "all" && value !== filter;
+    });
+    document.querySelectorAll(".module").forEach(module => {
+      const visible = [...module.querySelectorAll(".topic")].some(card => !card.hidden);
+      module.hidden = !visible;
+    });
+    document.querySelectorAll(".filter").forEach(button => {
+      button.classList.toggle("active", button.dataset.filter === filter);
+    });
+  }
+  document.querySelectorAll(".filter").forEach(button => {
+    button.addEventListener("click", () => applyFilter(button.dataset.filter));
+  });
+  updateProgress();
+})();
+</script>
+</body>
+</html>
