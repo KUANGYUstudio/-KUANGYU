@@ -271,6 +271,8 @@
     .intro-hero p {
       font-size: 14px;
       color: var(--text-sub);
+      max-width: 560px;
+      margin: 0 auto;
     }
 
     .coach-profile-card {
@@ -278,7 +280,7 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 22px 20px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .coach-header-row {
@@ -394,7 +396,7 @@
       border-radius: 12px;
       padding: 22px 20px;
       background: #ffffff;
-      margin-bottom: 8px;
+      margin-bottom: 20px;
     }
 
     .pricing-header {
@@ -449,7 +451,7 @@
       color: var(--text-sub);
     }
 
-    /* 服務項目兩欄嚴格對齊 */
+    /* 服務項目兩欄（標題＋具體說明） */
     .service-grid {
       list-style: none;
       display: grid;
@@ -460,13 +462,10 @@
     .service-grid li {
       background: var(--bg-page);
       border-radius: 8px;
-      padding: 11px 14px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-main);
+      padding: 12px 14px;
       display: flex;
-      align-items: center;
-      gap: 9px;
+      align-items: flex-start;
+      gap: 10px;
     }
 
     .service-dot {
@@ -475,6 +474,148 @@
       border-radius: 50%;
       background: var(--coral);
       flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .service-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .service-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+
+    .service-desc {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    /* 申請流程三步驟 */
+    .process-box {
+      background: #f9fbfb;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+
+    .process-box-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin-bottom: 12px;
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .process-step-item {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .process-step-num {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      background: var(--brand-soft);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+
+    .process-step-item h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 3px;
+    }
+
+    .process-step-item p {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    /* 折疊式常見問題 */
+    .faq-box {
+      margin-bottom: 8px;
+    }
+
+    .faq-box-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .faq-item summary {
+      list-style: none;
+      padding: 12px 14px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: "+";
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brand);
+      flex-shrink: 0;
+    }
+
+    .faq-item[open] summary {
+      background: #f9fbfb;
+      border-bottom: 1px solid var(--border);
+      color: var(--brand-dark);
+    }
+
+    .faq-item[open] summary::after {
+      content: "−";
+    }
+
+    .faq-answer {
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.65;
     }
 
     .section-intro {
@@ -949,7 +1090,9 @@
         text-align: left;
       }
 
-      .credentials-list {
+      .credentials-list,
+      .service-grid,
+      .process-steps {
         grid-template-columns: 1fr;
       }
 
@@ -1127,7 +1270,7 @@
           <div class="intro-hero">
             <span class="intro-eyebrow">ONLINE COACHING</span>
             <h1>線上一對一週期化課表</h1>
-            <p>量身規劃個人訓練週期，協助忙碌的運動愛好者穩定進步、無傷完賽。</p>
+            <p>無論是準備人生第一場賽事，或想在有限時間內突破個人最佳，從你現有的生活節奏與能力起步。</p>
           </div>
 
           <!-- 關於教練 -->
@@ -1175,16 +1318,91 @@
               </div>
               <div class="price-group">
                 <div class="price-pill">NT$ 6,000 <small>/ 月</small></div>
-                <span class="price-sub-note">不足一個月以單週 NT$ 1,500 計算</span>
+                <span class="price-sub-note">最低配合門檻為 1 個月（低於 4 週恕無法接單）</span>
               </div>
             </div>
             <ul class="service-grid">
-              <li><span class="service-dot"></span>客製化課表</li>
-              <li><span class="service-dot"></span>數據分析</li>
-              <li><span class="service-dot"></span>比賽策略</li>
-              <li><span class="service-dot"></span>補給諮詢</li>
-              <li><span class="service-dot"></span>訓練相關諮詢</li>
+              <li>
+                <span class="service-dot"></span>
+                <div class="service-text">
+                  <span class="service-title">週期化客製課表</span>
+                  <span class="service-desc">依生活作息量身排課，每週檢視並視需求微調（每週至多調整一次）</span>
+                </div>
+              </li>
+              <li>
+                <span class="service-dot"></span>
+                <div class="service-text">
+                  <span class="service-title">訓練數據分析</span>
+                  <span class="service-desc">透過 TrainingPeaks 追蹤心率、功率、配速與體能負荷</span>
+                </div>
+              </li>
+              <li>
+                <span class="service-dot"></span>
+                <div class="service-text">
+                  <span class="service-title">比賽策略規劃</span>
+                  <span class="service-desc">賽前制定配速、配瓦區間與轉換區執行細節</span>
+                </div>
+              </li>
+              <li>
+                <span class="service-dot"></span>
+                <div class="service-text">
+                  <span class="service-title">賽事與日常補給諮詢</span>
+                  <span class="service-desc">依個人腸胃耐受度與賽道條件規劃補給策略</span>
+                </div>
+              </li>
+              <li>
+                <span class="service-dot"></span>
+                <div class="service-text">
+                  <span class="service-title">課表執行隨時諮詢</span>
+                  <span class="service-desc">對課表操作或訓練進行方式有疑問，隨時可透過 LINE 詢問教練</span>
+                </div>
+              </li>
             </ul>
+          </div>
+
+          <!-- 申請流程 -->
+          <div class="process-box">
+            <div class="process-box-title">線上課表申請流程</div>
+            <div class="process-steps">
+              <div class="process-step-item">
+                <span class="process-step-num">STEP 01</span>
+                <h4>填寫申請表單</h4>
+                <p>提供運動背景、目標賽事與一週可訓練時段。</p>
+              </div>
+              <div class="process-step-item">
+                <span class="process-step-num">STEP 02</span>
+                <h4>2 個工作天內聯繫</h4>
+                <p>教練檢視資料後，於兩個工作天內透過 LINE 與你聯繫。</p>
+              </div>
+              <div class="process-step-item">
+                <span class="process-step-num">STEP 03</span>
+                <h4>綁定正式開課</h4>
+                <p>完成 TrainingPeaks 帳號串接，啟動第一週專屬課表。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 常見問題 FAQ -->
+          <div class="faq-box">
+            <div class="faq-box-title">常見問題</div>
+            <div class="faq-list">
+              <details class="faq-item">
+                <summary>沒有三鐵經驗，或沒有功率計／高階運動錶可以參加嗎？</summary>
+                <div class="faq-answer">可以。只要有基本的 GPS 運動手錶就能開始，初期會依你現有的設備，搭配心率與主觀體感安排強度，不需先買齊所有裝備。</div>
+              </details>
+              <details class="faq-item">
+                <summary>課表可以隨時修改嗎？執行課表時有疑問怎麼辦？</summary>
+                <div class="faq-answer">課表以週為單位規劃，每週至多調整一次；但只要對「如何執行課表」或動作操作有任何疑問，都可以隨時透過 LINE 詢問教練。</div>
+              </details>
+              <details class="faq-item">
+                <summary>最低需要配合多久？可以只買單週或兩週的課表嗎？</summary>
+                <div class="faq-answer">最低配合門檻為 1 個月（NT$ 6,000／月）。為確保訓練週期完整與安全，低於 4 週恕無法接單。</div>
+              </details>
+              <details class="faq-item">
+                <summary>送出申請表後，多久會收到教練聯繫？</summary>
+                <div class="faq-answer">接到你的表單資料後，教練將於 2 個工作天內透過 LINE 主動與你聯繫，確認訓練目標、付款方式與 TrainingPeaks 綁定連結。</div>
+              </details>
+            </div>
           </div>
 
           <div class="nav-actions">
@@ -1352,7 +1570,7 @@
           </div>
 
           <div class="info-callout mb-20">
-            請先至 <a href="https://www.trainingpeaks.com/" target="_blank" rel="noopener noreferrer">TrainingPeaks 官網</a> 免費申請帳號；完成註冊並送出表單後，教練將透過 LINE 發送綁定連結給你。
+            請先至 <a href="https://www.trainingpeaks.com/" target="_blank" rel="noopener noreferrer">TrainingPeaks 官網</a> 免費申請帳號；完成註冊並送出表單後，教練將於 2 個工作天內透過 LINE 發送綁定連結給你。
           </div>
 
           <div class="form-group">
@@ -1516,7 +1734,7 @@
       <div class="success-panel" id="successPanel">
         <div class="success-badge">資料已成功送出</div>
         <h2>感謝你的填寫，我們已收到線上課表申請資料</h2>
-        <p id="successSummaryText">教練團隊將檢視你的一週訓練規劃與目標設定，並透過 LINE 與你聯繫後續安排。</p>
+        <p id="successSummaryText">教練團隊將於 2 個工作天內透過 LINE 與你聯繫後續安排。</p>
       </div>
     </div>
   </main>
@@ -2144,7 +2362,7 @@
         document.getElementById("remainingBadge").innerHTML = "填寫完成";
         document.getElementById("currentStageLabel").textContent = "已完成全部 4 個階段";
         document.getElementById("successSummaryText").textContent =
-          `${payload.fullName || "學員"} 你好，你的每週可訓練總時數為 ${payload.totalHours} 小時（${payload.totalMinutes} 分鐘）。教練團隊檢視完畢後，將透過 LINE 與你聯繫並傳送 TrainingPeaks 綁定連結。`;
+          `${payload.fullName || "學員"} 你好，你的每週可訓練總時數為 ${payload.totalHours} 小時（${payload.totalMinutes} 分鐘）。教練團隊檢視完畢後，將於 2 個工作天內透過 LINE 與你聯繫並傳送 TrainingPeaks 綁定連結。`;
         document.getElementById("successPanel").classList.add("active");
         window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (err) {
