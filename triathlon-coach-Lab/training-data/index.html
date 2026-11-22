@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -279,6 +278,9 @@ footer {
     <button class="tab" data-key="tsb">
       <b>TSB</b><small>訓練壓力平衡</small>
     </button>
+    <button class="tab" data-key="load">
+      <b>CTL × ATL × TSB</b><small>整合判讀與教練應用</small>
+    </button>
     <button class="tab" data-key="lt">
       <b>LT</b><small>乳酸閾值</small>
     </button>
@@ -426,6 +428,42 @@ const data = {
     coach:"TSB 是負荷平衡指標，不是直接測量的恢復程度或比賽準備度。需搭配主觀感受、睡眠、痠痛、疾病、疼痛與實際表現。",
     note:"這是 TrainingPeaks Athlete Home 的介面分類，不是醫療安全標準，也不是通用最佳 TSB。不可把分類直接當成訓練處方。",
     sources:[
+      ["TrainingPeaks Help：Form (TSB)","https://help.trainingpeaks.com/hc/en-us/articles/204071764-Form-TSB"],
+      ["TrainingPeaks Help：Athlete Home Performance Insights","https://help.trainingpeaks.com/hc/en-us/articles/41077784209165-Athlete-Home-Performance-Insights"]
+    ]
+  },
+  load:{
+    title:"CTL × ATL × TSB｜訓練負荷整合判讀",
+    en:"Training Load Integration & Coaching Decisions",
+    tag:"從數字走向訓練決策",
+    desc:"這三個指標要一起看，而不是各自單獨下結論。CTL 描述較長期的訓練負荷累積（預設時間常數約 42 天）；ATL 描述較近期的訓練負荷變化（預設約 7 天）；TSB 描述兩者的差距。它們是由訓練負荷模型推估的指標，不是直接測量體能、肌肉疲勞或恢復程度。",
+    formula:"CTL：長期負荷　｜　ATL：近期負荷　｜　TSB：前一日 CTL − 前一日 ATL",
+    fsub:"TrainingPeaks 的今日 TSB 使用前一天的 CTL 與 ATL 計算；查看圖表時要確認日期對齊方式與平台設定。",
+    heads:["看到的變化","可以先怎麼理解","接著要確認什麼"],
+    rows:[
+      ["CTL 逐漸上升","長期訓練負荷正在累積","訓練完成率、表現測試、恢復是否跟得上？"],
+      ["CTL 大致持平","長期負荷維持在相近水準","是否符合目前訓練階段與賽季目標？"],
+      ["CTL 逐漸下降","長期負荷正在降低","是計畫減量、恢復期、訓練中斷，還是資料缺漏？"],
+      ["ATL 高於 CTL","近期負荷高於長期基準","是否剛增加訓練量、強度或連續高負荷日？"],
+      ["ATL 接近 CTL","近期負荷與長期基準相近","仍要看訓練內容、分布與選手實際反應。"],
+      ["ATL 低於 CTL","近期負荷低於長期基準","可能是恢復或減量，也可能是訓練中斷。"],
+      ["TSB 為負值","近期負荷高於長期負荷","負值本身不等於不好；確認疲勞、疼痛與表現趨勢。"],
+      ["TSB 為正值","近期負荷低於長期負荷","可能有較多恢復，但正值不保證已完全恢復。"]
+    ],
+    example:"例：CTL = 65、ATL = 90，兩者差距為 25。若依同一日期的簡化差值理解，TSB 約為 -25；TrainingPeaks 顯示今日 TSB 時，則要留意其採用前一天 CTL／ATL 的日期規則。這組數字表示近期負荷高於長期基準，可能正在累積訓練刺激與疲勞，但不能單憑它判定過度訓練或要求停止訓練。",
+    coach:"教練判讀建議依序進行：①先看 CTL 的 4–6 週走勢，確認長期負荷是上升、持平或下降；②再看 ATL 的近期變化，找出最近 7 天是否有訓練量或強度增加；③查看 TSB 的方向與幅度，理解近期負荷相對長期基準的落差；④回到課表與選手反應，確認配速／功率、心率、RPE、睡眠、痠痛、情緒、疾病與疼痛；⑤最後才決定維持、調整或安排恢復。不要只因 TSB 負值就休息，也不要只因 TSB 正值就認定適合高強度訓練。",
+    note:"CTL、ATL、TSB 都是訓練負荷模型指標。CTL 不等於 VO₂max、FTP 或實際競技能力；ATL 不等於直接測得的肌肉疲勞；TSB 不等於恢復量表或比賽準備度。數值會受 TSS 算法、運動項目、閾值設定、資料完整性與平台設定影響。跑步 rTSS、游泳 sTSS、自行車 TSS 不宜不加區分地當成完全等價的刺激。不同選手之間也不宜只用 CTL 高低排名。",
+    extraTitle:"常見訓練情境｜把三個數字放在一起看",
+    extraHeads:["情境與數字（示意）","可能的訓練狀態","教練下一步"],
+    extraRows:[
+      ["累積期：CTL 75／ATL 95／TSB -20","近期負荷高於長期基準，可能正在加載","確認表現是否穩定、恢復是否跟得上；若睡眠變差、疼痛或表現持續下降，調整負荷。"],
+      ["恢復／減量期：CTL 75／ATL 55／TSB +20","近期負荷降低，長期負荷仍保留一部分","觀察活力、主觀感受與專項表現是否回升；不要只靠正 TSB 判斷已恢復。"],
+      ["負荷落差大：CTL 45／ATL 90／TSB -45","近期負荷相對長期基準高出許多","回看近期增加幅度、運動項目分布與疼痛／疲勞訊號；考慮降低或重新分配負荷。"]
+    ],
+    extraCaption:"以上數字是教學情境，不是通用分級或訓練處方。TSB 的實際顯示需依平台日期計算規則確認。",
+    sources:[
+      ["TrainingPeaks Help：Fitness (CTL)","https://help.trainingpeaks.com/hc/en-us/articles/204071884-Fitness-CTL"],
+      ["TrainingPeaks Help：Fatigue (ATL)","https://help.trainingpeaks.com/hc/en-us/articles/204071894-Fatigue-ATL"],
       ["TrainingPeaks Help：Form (TSB)","https://help.trainingpeaks.com/hc/en-us/articles/204071764-Form-TSB"],
       ["TrainingPeaks Help：Athlete Home Performance Insights","https://help.trainingpeaks.com/hc/en-us/articles/41077784209165-Athlete-Home-Performance-Insights"]
     ]
@@ -588,6 +626,35 @@ function render(key) {
     </div>
 
     ${extraTable}
+
+    ${key === "load" ? `
+      <div class="section magnitude">
+        <h4>補充判斷｜不要只看 CTL／ATL／TSB</h4>
+        ${makeTable(
+          ["搭配資料","觀察問題","對判讀的幫助"],
+          [
+            ["配速 Pace／功率 Power","相同主觀強度下，輸出是否穩定或進步？","協助確認訓練適應與專項表現。"],
+            ["心率 HR","相同配速／功率下，心率反應是否和平常不同？","提供內在負荷線索；需考慮熱、補水、地形與睡眠等因素。"],
+            ["RPE 主觀用力程度","同一課表是否感覺比平常更吃力？","補足設備數據無法呈現的主觀反應。"],
+            ["睡眠、情緒、痠痛","是否連續數日變差，或出現局部疼痛？","協助辨識恢復不佳或需要進一步評估的訊號。"],
+            ["訓練完成率與課表內容","負荷增加來自時數、強度，還是頻率？","找出負荷變化來源，避免只看總分。"]
+          ]
+        )}
+      </div>
+      <div class="section magnitude">
+        <h4>教練判讀流程｜五步驟</h4>
+        ${makeTable(
+          ["步驟","判讀任務"],
+          [
+            ["1｜看 CTL","先看最近 4–6 週長期負荷趨勢，不以單日數字判斷。"],
+            ["2｜看 ATL","再看最近約 7 天的負荷變化，找出高負荷日與突然增加。"],
+            ["3｜看 TSB","理解近期負荷相對長期基準的差距，並確認平台的日期計算方式。"],
+            ["4｜對照反應","搭配配速／功率、心率、RPE、睡眠、情緒、痠痛、疼痛與疾病狀況。"],
+            ["5｜做訓練決策","依整體趨勢與選手反應，決定維持、調整負荷或安排恢復；再追蹤後續反應。"]
+          ]
+        )}
+      </div>
+    ` : ""}
 
     <div class="note">
       <b>重要提醒</b><br>
