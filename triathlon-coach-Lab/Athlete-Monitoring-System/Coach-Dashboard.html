@@ -16,12 +16,58 @@
 .profile-head{display:flex;align-items:center;gap:13px}.profile-avatar{width:52px;height:52px;border-radius:50%;background:var(--sage2);display:grid;place-items:center;color:var(--ink);font-size:17px;font-weight:700}.profile-head h2{margin:0 0 5px;font-size:18px}.profile-head p{margin:0;color:var(--muted);font-size:11px}.profile-actions{margin-left:auto;display:flex;gap:7px}.detail-grid{grid-template-columns:repeat(3,1fr);margin:14px 0}.detail{background:#fafbf7;border:1px solid var(--line);border-radius:9px;padding:13px}.detail small{color:var(--muted);font-size:10px}.detail strong{display:block;margin-top:7px;font-size:18px;color:var(--ink)}
 .field{margin:13px 0}.field label{display:block;font-size:11px;font-weight:650;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #dfe5db;border-radius:8px;padding:10px;background:#fffefa;color:#303b34;font-size:12px}.field textarea{min-height:70px;resize:vertical}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 13px}.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(35,48,40,.28);z-index:10;align-items:center;justify-content:center;padding:16px}.modal-backdrop.show{display:flex}.modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--paper);border-radius:15px;padding:22px;box-shadow:0 15px 50px #26352b30}.modal h2{font-size:18px;margin:0 0 5px}.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.hint{font-size:10px;color:var(--muted);line-height:1.6}.toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:white;padding:12px 16px;border-radius:9px;font-size:12px;display:none;z-index:20}
 @media(max-width:850px){.sidebar{width:205px}.two{grid-template-columns:1fr}.content{padding:22px 18px}}@media(max-width:620px){.app{display:block}.sidebar{width:100%;padding:12px}.brand{padding:3px 7px 10px}.brand h2{font-size:16px}.nav-label,.side-foot{display:none}.nav{display:flex;overflow:auto;gap:4px}.nav button{white-space:nowrap;width:auto;padding:9px;font-size:11px}.nav button b{width:auto;margin-right:5px}.topbar{height:52px;padding:0 14px}.content{padding:18px 13px}.stats{grid-template-columns:1fr 1fr}.page-head h1{font-size:21px}.card{padding:13px}.form-grid{grid-template-columns:1fr}.profile-actions{flex-direction:column}.detail-grid{gap:7px}.detail{padding:9px}.detail strong{font-size:15px}}
+
+/* Visual refinement: restore KUANGYU deep-green identity while keeping a light canvas */
+:root{
+  --ink:#294638;
+  --sage:#557762;
+  --sage2:#e8efe7;
+  --cream:#f6f6f0;
+  --paper:#fffefa;
+  --line:#dfe6dc;
+  --muted:#738177;
+  --shadow:0 5px 20px rgba(41,70,56,.07);
+}
+.sidebar{
+  background:#294638;
+  border-right:1px solid #294638;
+  color:#f7f7f2;
+}
+.brand small{color:#b9cdbd}
+.brand h2{color:#fffefa}
+.nav-label{color:#b7c8ba}
+.nav button{color:#e3ece4}
+.nav button.active,.nav button:hover{
+  background:#496b55;
+  color:#fffefa;
+  box-shadow:inset 3px 0 0 #c6d8c8;
+}
+.side-foot{border-top:1px solid #496354;color:#c1d0c3}
+.topbar{background:#fffefa}
+.eyebrow{color:#557762}
+.role{background:#e5ede4;color:#345641;font-weight:700}
+.avatar{background:#294638;color:#fffefa}
+.primary{background:#294638;color:#fffefa}
+.primary:hover{background:#365b45}
+.soft{background:#e5ede4;color:#345641}
+.outline{border-color:#cbd8cc;color:#345641}
+.stat-num{color:#294638}
+.card-head h3,.page-head h1{color:#294638}
+.initial,.profile-avatar{background:#e5ede4;color:#345641}
+.textlink{color:#426b50}
+.detail strong{color:#294638}
+.pill.ok{background:#e5ede4;color:#426b50}
+@media(max-width:620px){
+  .sidebar{background:#294638}
+  .nav button.active,.nav button:hover{background:#496b55}
+}
+
 </style></head>
 <body><div class="app">
 <aside class="sidebar"><div class="brand"><small>KUANGYU STUDIO</small><h2>ATHLETE<br><span>MONITORING SYSTEM</span></h2></div><div class="nav-label">COACH WORKSPACE</div>
 <nav class="nav"><button class="active" data-page="dashboard"><b>▦</b>教練工作台</button><button data-page="athletes"><b>♙</b>學員名單</button></nav>
 <div class="side-foot">COACH DASHBOARD<br>內部教練使用介面</div></aside>
-<main class="main"><header class="topbar"><div class="crumb">KUANGYU STUDIO　/　<span id="crumb">教練工作台</span></div><div class="top-right"><span class="role" id="roleLabel">System Owner · Assistant Coach + Engineer</span><div class="avatar" id="avatar">你</div></div></header>
+<main class="main"><header class="topbar"><div class="crumb">KUANGYU STUDIO　/　<span id="crumb">教練工作台</span></div><div class="top-right"><span class="role" id="roleLabel">System Owner · 聿凡｜Assistant Coach + Engineer</span><div class="avatar" id="avatar">你</div></div></header>
 <div class="content">
 <section class="page active" id="dashboard">
 <div class="page-head"><div><div class="eyebrow">COACH WORKSPACE</div><h1>教練工作台</h1><div class="sub">共同查看所有學員狀態；個別課表與評估由負責教練管理。</div></div><button class="btn soft" onclick="showPage('athletes')">管理學員名單 →</button></div>
@@ -38,7 +84,7 @@
 <div class="card"><div class="card-head"><h3>個人基本資料</h3><small>ATHLETE INFORMATION</small></div><div id="profileInfo" class="sub">尚無其他資料。</div><div class="hint" style="margin-top:12px">目前是前端原型：新增與編輯資料會保存在這台瀏覽器的 localStorage。尚未連接正式登入或雲端資料庫，因此其他教練裝置不會同步看到變更。</div></div>
 </section></div></main></div>
 <div class="modal-backdrop" id="athleteModal"><div class="modal"><h2 id="modalTitle">新增學員</h2><div class="hint">這些欄位先建立基本名單；之後再逐步加入恢復紀錄、課表與 TrainingPeaks 資料。</div>
-<div class="form-grid"><div class="field"><label>學員姓名 *</label><input id="fName" placeholder="輸入姓名"></div><div class="field"><label>運動項目</label><select id="fSport"><option>鐵人三項</option><option>跑步</option><option>自行車</option><option>游泳</option><option>其他</option></select></div><div class="field"><label>負責教練</label><select id="fCoach"><option value="光武">光武（Head Coach）</option><option value="你">你（Assistant Coach）</option></select></div><div class="field"><label>目標／比賽</label><input id="fGoal" placeholder="例如：半馬 PB、226 完賽"></div><div class="field"><label>TrainingPeaks Athlete ID（選填）</label><input id="fTp" placeholder="尚未串接可先留空"></div><div class="field"><label>狀態</label><select id="fActive"><option value="active">管理中</option><option value="paused">暫停課表</option></select></div></div>
+<div class="form-grid"><div class="field"><label>學員姓名 *</label><input id="fName" placeholder="輸入姓名"></div><div class="field"><label>運動項目</label><select id="fSport"><option>鐵人三項</option><option>跑步</option><option>自行車</option><option>游泳</option><option>其他</option></select></div><div class="field"><label>負責教練</label><select id="fCoach"><option value="光武">光武（Head Coach）</option><option value="聿凡">聿凡（Assistant Coach + Engineer）</option></select></div><div class="field"><label>目標／比賽</label><input id="fGoal" placeholder="例如：半馬 PB、226 完賽"></div><div class="field"><label>TrainingPeaks Athlete ID（選填）</label><input id="fTp" placeholder="尚未串接可先留空"></div><div class="field"><label>狀態</label><select id="fActive"><option value="active">管理中</option><option value="paused">暫停課表</option></select></div></div>
 <div class="field"><label>教練備註</label><textarea id="fNote" placeholder="選填"></textarea></div><div class="modal-foot"><button class="btn outline" onclick="closeModal()">取消</button><button class="btn primary" onclick="saveAthlete()">儲存資料</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
