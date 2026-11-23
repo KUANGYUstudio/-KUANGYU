@@ -67,6 +67,37 @@
 .remind-btn:hover{background:#e5ede4}
 .remind-btn.sent{background:#f7f0e5;border-color:#ead9bd;color:#98713d}
 
+
+/* TrainingPeaks-inspired performance management chart */
+.load-chart-card{overflow:hidden}
+.chart-title-row{align-items:flex-start}
+.chart-controls{background:#f7f8f4;border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.range-presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.range-presets button,.zoom-btn{border:1px solid #d7dfd5;background:#fffefa;color:#526257;border-radius:7px;padding:7px 10px;font-size:11px}
+.range-presets button.selected,.range-presets button:hover{background:#294638;color:#fffefa;border-color:#294638}
+.chart-control-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.chart-control-row label,.custom-dates label{display:flex;align-items:center;gap:7px;font-size:11px;color:#526257}
+.chart-control-row select,.custom-dates input{border:1px solid #d7dfd5;background:#fffefa;border-radius:7px;padding:8px;font-size:11px;color:#34483f}
+.custom-dates{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
+.zoom-controls{display:flex;gap:5px}
+.zoom-btn{min-width:34px;font-weight:700}
+.metric-toggles{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin:10px 2px 12px;font-size:11px;color:#526257}
+.metric-toggles>span{font-weight:700;margin-right:3px}
+.metric-toggle{display:flex;align-items:center;gap:5px;cursor:pointer}
+.metric-toggle input{accent-color:#294638}
+.metric-dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle}
+.metric-dot.ctl{background:#718b79}.metric-dot.atl{background:#c69a5b}.metric-dot.tsb{background:#648db5}.metric-dot.tss{background:#c86d69}
+.chart-plot-wrap{position:relative;border:1px solid #e7ebe4;border-radius:10px;background:#fffefa;padding:8px;min-height:260px}
+.chart-legend{display:flex;gap:14px;justify-content:flex-end;flex-wrap:wrap;padding:3px 8px 0;font-size:10px;color:#69776d}
+.chart-legend span{display:flex;align-items:center;gap:5px}
+#loadChart{width:100%;height:auto;display:block;min-height:230px;touch-action:pan-y}
+.chart-tooltip{position:absolute;z-index:3;min-width:145px;background:#294638;color:#fffefa;border-radius:8px;padding:9px 11px;font-size:10px;line-height:1.7;pointer-events:none;box-shadow:0 5px 18px #1b302544}
+.chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:9px;font-size:10px;color:var(--muted)}
+.chart-hint{font-size:10px;line-height:1.6;color:var(--muted);margin-top:8px}
+.load-chart-card.fullscreen{position:fixed;inset:12px;z-index:50;overflow:auto;background:#fffefa;box-shadow:0 10px 50px #0004}
+.load-chart-card.fullscreen .chart-plot-wrap{min-height:calc(100vh - 330px)}
+.load-chart-card.fullscreen #loadChart{min-height:calc(100vh - 390px)}
+@media(max-width:620px){.chart-control-row{align-items:stretch}.chart-control-row>label{width:100%;justify-content:space-between}.chart-control-row select{flex:1;max-width:65%}.custom-dates{width:100%}.custom-dates label{flex:1;flex-direction:column;align-items:flex-start}.custom-dates input{width:100%}.chart-foot{display:block}.chart-foot span{display:block;margin-top:4px}.metric-toggles{gap:10px}.load-chart-card.fullscreen{inset:4px}.load-chart-card.fullscreen #loadChart{min-height:55vh}}
 </style></head>
 <body><div class="app">
 <aside class="sidebar"><div class="brand"><small>KUANGYU STUDIO</small><h2>ATHLETE<br><span>MONITORING SYSTEM</span></h2></div><div class="nav-label">COACH WORKSPACE</div>
@@ -86,7 +117,67 @@
 <section class="page" id="profile"><div class="page-head"><div><div class="eyebrow">ATHLETE PROFILE</div><h1>學員個人頁面</h1><div class="sub">先查看完整資料，再從個人頁面進入編輯，降低誤操作。</div></div><button class="btn outline" onclick="showPage('athletes')">← 返回名單</button></div>
 <div class="card"><div class="profile-head"><div class="profile-avatar" id="pInitial">學</div><div><div class="eyebrow">ATHLETE PROFILE</div><h2 id="pName">學員</h2><p id="pMeta">運動項目 · 負責教練</p></div><div class="profile-actions"><button class="btn outline" id="profileReminderBtn" onclick="remindCurrentAthlete()">提醒回報</button><button class="btn soft" id="editProfileBtn" onclick="editCurrentAthlete()">編輯學員資料</button></div></div></div>
 <div class="grid detail-grid"><div class="detail"><small>今日疲勞</small><strong id="pFatigue">尚未回報</strong></div><div class="detail"><small>睡眠品質</small><strong id="pSleep">—</strong></div><div class="detail"><small>身體狀況</small><strong id="pBody">—</strong></div></div>
-<div class="card" style="margin-bottom:14px"><div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div><div class="grid detail-grid" style="margin:0"><div class="detail"><small>今日回報狀態</small><strong id="pReportStatus">尚未回報</strong></div><div class="detail"><small>負責教練</small><strong id="pCoach">—</strong></div><div class="detail"><small>學員目標</small><strong id="pGoal" style="font-size:13px">—</strong></div></div><div class="sub" style="margin-top:12px">未來這裡會顯示每日疲勞、睡眠、痠痛與疼痛紀錄，以及 CTL、ATL、TSB 等訓練負荷趨勢。</div></div><div class="card"><div class="card-head"><h3>個人基本資料</h3><small>ATHLETE INFORMATION</small></div><div id="profileInfo" class="sub">尚無其他資料。</div><div class="hint" style="margin-top:12px">目前是前端原型：新增與編輯資料會保存在這台瀏覽器的 localStorage。尚未連接正式登入或雲端資料庫，因此其他教練裝置不會同步看到變更。</div></div>
+<div class="card" style="margin-bottom:14px"><div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div><div class="grid detail-grid" style="margin:0"><div class="detail"><small>今日回報狀態</small><strong id="pReportStatus">尚未回報</strong></div><div class="detail"><small>負責教練</small><strong id="pCoach">—</strong></div><div class="detail"><small>學員目標</small><strong id="pGoal" style="font-size:13px">—</strong></div></div><div class="sub" style="margin-top:12px">每日疲勞、睡眠、痠痛與疼痛紀錄將在恢復資料串接後呈現；下方提供個人訓練負荷趨勢圖操作介面。</div>
+</div>
+<div class="card load-chart-card" style="margin-bottom:14px">
+  <div class="card-head chart-title-row">
+    <div><h3>個人訓練負荷趨勢</h3><div class="sub">PERFORMANCE MANAGEMENT · CTL / ATL / TSB</div></div>
+    <button class="btn outline" type="button" onclick="toggleChartFullscreen()">⛶ 放大圖表</button>
+  </div>
+  <div class="chart-controls">
+    <div class="range-presets" id="rangePresets">
+      <button type="button" data-range="7">近 7 天</button>
+      <button type="button" data-range="14">近 14 天</button>
+      <button type="button" data-range="28" class="selected">近 28 天</button>
+      <button type="button" data-range="90">近 90 天</button>
+      <button type="button" data-range="180">近 180 天</button>
+      <button type="button" data-range="365">近 1 年</button>
+      <button type="button" data-range="730">近 2 年</button>
+      <button type="button" data-range="all">全部</button>
+    </div>
+    <div class="chart-control-row">
+      <label>日期區間
+        <select id="chartRangeSelect" onchange="applyRangeSelect(this.value)">
+          <option value="dashboard">使用預設區間</option>
+          <option value="custom">自訂日期</option>
+          <option value="7">Last 7 days</option><option value="14">Last 14 days</option>
+          <option value="28" selected>Last 28 days</option><option value="90">Last 90 days</option>
+          <option value="180">Last 180 days</option><option value="365">Last 365 days</option>
+          <option value="730">Last 730 days</option>
+          <option value="thisWeek">This week</option><option value="thisMonth">This month</option>
+          <option value="thisYear">This year</option><option value="lastWeek">Last week</option>
+          <option value="lastMonth">Last month</option><option value="last3Months">Last 3 months</option>
+          <option value="lastYear">Last year</option><option value="last2Years">Last 2 years</option>
+        </select>
+      </label>
+      <div class="custom-dates" id="customDates" hidden>
+        <label>From <input type="date" id="chartFrom"></label>
+        <label>To <input type="date" id="chartTo"></label>
+        <button class="btn soft" type="button" onclick="applyCustomDates()">套用</button>
+      </div>
+      <div class="zoom-controls">
+        <button type="button" class="zoom-btn" onclick="zoomChart(0.67)" title="放大時間範圍">＋</button>
+        <button type="button" class="zoom-btn" onclick="zoomChart(1.5)" title="縮小時間範圍">－</button>
+        <button type="button" class="zoom-btn" onclick="resetChartZoom()" title="重設縮放">重設</button>
+      </div>
+    </div>
+  </div>
+  <div class="metric-toggles">
+    <span>顯示指標</span>
+    <label class="metric-toggle"><input type="checkbox" id="metricCTL" checked onchange="renderLoadChart()"><i class="metric-dot ctl"></i> CTL</label>
+    <label class="metric-toggle"><input type="checkbox" id="metricATL" checked onchange="renderLoadChart()"><i class="metric-dot atl"></i> ATL</label>
+    <label class="metric-toggle"><input type="checkbox" id="metricTSB" onchange="renderLoadChart()"><i class="metric-dot tsb"></i> TSB</label>
+    <label class="metric-toggle"><input type="checkbox" id="metricTSS" onchange="renderLoadChart()"><i class="metric-dot tss"></i> 每日 TSS</label>
+  </div>
+  <div class="chart-plot-wrap" id="chartPlotWrap">
+    <div class="chart-legend"><span><i class="metric-dot ctl"></i> CTL</span><span><i class="metric-dot atl"></i> ATL</span><span><i class="metric-dot tsb"></i> TSB</span><span><i class="metric-dot tss"></i> TSS</span></div>
+    <svg id="loadChart" viewBox="0 0 1000 390" role="img" aria-label="個人訓練負荷趨勢圖"></svg>
+    <div id="chartTooltip" class="chart-tooltip" hidden></div>
+  </div>
+  <div class="chart-foot"><span id="chartDateLabel">顯示最近 28 天</span><span>示意圖資料：尚未串接 TrainingPeaks／Supabase，非學員實際訓練數據。</span></div>
+  <div class="chart-hint">操作方式：使用日期範圍切換長短期趨勢；＋／－調整時間尺度；滑鼠或觸控點選圖表日期查看數值。CTL／ATL 以半透明面積呈現，TSB 以零為基準。</div>
+</div>
+<div class="card"><div class="card-head"><h3>個人基本資料</h3><small>ATHLETE INFORMATION</small></div><div id="profileInfo" class="sub">尚無其他資料。</div><div class="hint" style="margin-top:12px">目前是前端原型：新增與編輯資料會保存在這台瀏覽器的 localStorage。尚未連接正式登入或雲端資料庫，因此其他教練裝置不會同步看到變更。</div></div>
 </section></div></main></div>
 <div class="modal-backdrop" id="athleteModal"><div class="modal"><h2 id="modalTitle">新增學員</h2><div class="hint">這些欄位先建立基本名單；之後再逐步加入恢復紀錄、課表與 TrainingPeaks 資料。</div>
 <div class="form-grid"><div class="field"><label>學員姓名 *</label><input id="fName" placeholder="輸入姓名"></div><div class="field"><label>運動項目</label><select id="fSport"><option>鐵人三項</option><option>跑步</option><option>自行車</option><option>游泳</option><option>其他</option></select></div><div class="field"><label>負責教練</label><select id="fCoach"><option value="光武">光武（Head Coach）</option><option value="聿凡">聿凡（Assistant Coach + Engineer）</option></select></div><div class="field"><label>目標／比賽</label><input id="fGoal" placeholder="例如：半馬 PB、226 完賽"></div><div class="field"><label>TrainingPeaks Athlete ID（選填）</label><input id="fTp" placeholder="尚未串接可先留空"></div><div class="field"><label>狀態</label><select id="fActive"><option value="active">管理中</option><option value="paused">暫停課表</option></select></div></div>
@@ -107,7 +198,7 @@ document.getElementById('athleteRows').innerHTML=active.map(a=>`<tr><td><div cla
 document.getElementById('listCount').textContent=active.length+' 位學員';document.getElementById('listEmpty').style.display=active.length?'none':'block';
 let alerts=active.filter(a=>a.fatigue&&(Number(a.fatigue)>=7||a.body==='疼痛'));document.getElementById('noticeArea').innerHTML=alerts.length?alerts.map(a=>`<div class="notice"><i class="dot" style="background:var(--red)"></i><div><strong>${esc(a.name)}｜${status(a).replace(/<[^>]*>/g,'')}</strong><p>疲勞 ${esc(a.fatigue)}/10 · ${esc(a.body||'未填身體狀況')}。請進入個人頁面查看並聯繫負責教練（${esc(a.coach)}）。</p></div></div>`).join(''):'目前沒有待確認事項。';
 }
-function openProfile(id){currentId=id;let a=athletes.find(x=>x.id===id);if(!a)return;document.getElementById('pInitial').textContent=initials(a.name);document.getElementById('pName').textContent=a.name;document.getElementById('pMeta').textContent=a.sport+' · 負責教練：'+a.coach;document.getElementById('pFatigue').textContent=a.fatigue?a.fatigue+'/10':'尚未回報';document.getElementById('pSleep').textContent=a.sleep||'—';document.getElementById('pBody').textContent=a.body||'—';document.getElementById('pReportStatus').textContent=a.fatigue?'已完成回報':'尚未回報';document.getElementById('pCoach').textContent=a.coach;document.getElementById('pGoal').textContent=a.goal||'尚未設定';document.getElementById('profileReminderBtn').style.display=a.fatigue?'none':'inline-block';document.getElementById('profileInfo').innerHTML='<b>目標／比賽：</b>'+esc(a.goal||'尚未設定')+'<br><br><b>TrainingPeaks ID：</b>'+esc(a.tp||'尚未設定')+'<br><br><b>教練備註：</b>'+esc(a.note||'尚無備註')+'<br><br><b>學員狀態：</b>'+ (a.active==='paused'?'暫停課表':'管理中');showPage('profile')}
+function openProfile(id){currentId=id;let a=athletes.find(x=>x.id===id);if(!a)return;document.getElementById('pInitial').textContent=initials(a.name);document.getElementById('pName').textContent=a.name;document.getElementById('pMeta').textContent=a.sport+' · 負責教練：'+a.coach;document.getElementById('pFatigue').textContent=a.fatigue?a.fatigue+'/10':'尚未回報';document.getElementById('pSleep').textContent=a.sleep||'—';document.getElementById('pBody').textContent=a.body||'—';document.getElementById('pReportStatus').textContent=a.fatigue?'已完成回報':'尚未回報';document.getElementById('pCoach').textContent=a.coach;document.getElementById('pGoal').textContent=a.goal||'尚未設定';document.getElementById('profileReminderBtn').style.display=a.fatigue?'none':'inline-block';document.getElementById('profileInfo').innerHTML='<b>目標／比賽：</b>'+esc(a.goal||'尚未設定')+'<br><br><b>TrainingPeaks ID：</b>'+esc(a.tp||'尚未設定')+'<br><br><b>教練備註：</b>'+esc(a.note||'尚無備註')+'<br><br><b>學員狀態：</b>'+ (a.active==='paused'?'暫停課表':'管理中');showPage('profile');renderLoadChart()}
 function openAthleteModal(id=null){let a=id?athletes.find(x=>x.id===id):null;document.getElementById('modalTitle').textContent=a?'編輯學員資料':'新增學員';document.getElementById('fName').value=a?.name||'';document.getElementById('fSport').value=a?.sport||'鐵人三項';document.getElementById('fCoach').value=a?.coach||'光武';document.getElementById('fGoal').value=a?.goal||'';document.getElementById('fTp').value=a?.tp||'';document.getElementById('fActive').value=a?.active||'active';document.getElementById('fNote').value=a?.note||'';document.getElementById('athleteModal').dataset.editId=id||'';document.getElementById('athleteModal').classList.add('show')}
 function editCurrentAthlete(){openAthleteModal(currentId)}
 function remindCurrentAthlete(){if(currentId)remindAthlete(currentId)}
@@ -152,5 +243,92 @@ function clearDemoData(){
   toast('示範資料已清除');
 }
 
+
+// TrainingPeaks-inspired chart controls and interactive SVG trend view.
+// Until real TP/Supabase records are connected, the series below are clearly marked illustrative demo data.
+let chartDays=28, chartMode='days', chartEnd=new Date(), chartStart=null, chartOffset=0;
+const chartColors={CTL:'#718b79',ATL:'#c69a5b',TSB:'#648db5',TSS:'#c86d69'};
+function dayStart(d){let x=new Date(d);x.setHours(0,0,0,0);return x}
+function fmtDate(d){return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`}
+function dateMinus(d,n){let x=new Date(d);x.setDate(x.getDate()-n);return x}
+function setChartRange(days){chartMode='days';chartDays=days==='all'?730:Number(days);chartEnd=dayStart(new Date());chartOffset=0;syncRangeUI(String(days));renderLoadChart()}
+function syncRangeUI(v){document.querySelectorAll('#rangePresets button').forEach(b=>b.classList.toggle('selected',b.dataset.range===v));let s=document.getElementById('chartRangeSelect');if(s)s.value=v}
+function applyRangeSelect(v){
+ const custom=document.getElementById('customDates');custom.hidden=v!=='custom';
+ if(v==='custom')return;
+ chartOffset=0;chartEnd=dayStart(new Date());
+ if(['7','14','28','90','180','365','730'].includes(v)||v==='dashboard'){chartMode='days';chartDays=v==='dashboard'?28:Number(v);syncRangeUI(v==='dashboard'?'28':v)}
+ else{
+   chartMode='calendar';
+   const now=dayStart(new Date());let start=new Date(now),end=new Date(now);
+   if(v==='thisWeek'){start.setDate(now.getDate()-((now.getDay()+6)%7))}
+   if(v==='thisMonth')start=new Date(now.getFullYear(),now.getMonth(),1);
+   if(v==='thisYear')start=new Date(now.getFullYear(),0,1);
+   if(v==='lastWeek'){let mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7)-7);start=mon;end=new Date(mon);end.setDate(mon.getDate()+6)}
+   if(v==='lastMonth'){start=new Date(now.getFullYear(),now.getMonth()-1,1);end=new Date(now.getFullYear(),now.getMonth(),0)}
+   if(v==='last3Months')start=new Date(now.getFullYear(),now.getMonth()-3,now.getDate());
+   if(v==='lastYear'){start=new Date(now.getFullYear()-1,now.getMonth(),now.getDate())}
+   if(v==='last2Years'){start=new Date(now.getFullYear()-2,now.getMonth(),now.getDate())}
+   chartStart=start;chartEnd=end;chartDays=Math.max(7,Math.round((end-start)/86400000)+1);
+   document.querySelectorAll('#rangePresets button').forEach(b=>b.classList.remove('selected'));
+ }
+ renderLoadChart();
+}
+function applyCustomDates(){
+ const a=document.getElementById('chartFrom').value,b=document.getElementById('chartTo').value;
+ if(!a||!b||new Date(a)>new Date(b)){toast('請確認自訂日期區間');return}
+ chartStart=dayStart(new Date(a+'T00:00:00'));chartEnd=dayStart(new Date(b+'T00:00:00'));chartDays=Math.max(1,Math.round((chartEnd-chartStart)/86400000)+1);chartMode='custom';chartOffset=0;
+ document.querySelectorAll('#rangePresets button').forEach(x=>x.classList.remove('selected'));renderLoadChart();
+}
+function zoomChart(factor){
+ let days=Math.max(7,Math.min(730,Math.round(chartDays*factor)));chartDays=days;chartMode='days';chartStart=null;chartEnd=dayStart(new Date());chartOffset=0;
+ syncRangeUI(String([7,14,28,90,180,365,730].includes(days)?days:'custom'));renderLoadChart();
+}
+function resetChartZoom(){chartOffset=0;chartStart=null;chartEnd=dayStart(new Date());chartMode='days';chartDays=28;syncRangeUI('28');renderLoadChart()}
+function toggleChartFullscreen(){let el=document.querySelector('.load-chart-card');el.classList.toggle('fullscreen');let btn=el.querySelector('.chart-title-row button');btn.textContent=el.classList.contains('fullscreen')?'收合圖表':'⛶ 放大圖表';renderLoadChart()}
+function demoSeries(d,i){
+ // Deterministic visual-only sample curves; never presented as athlete records.
+ const w=i/7,ctl=43+0.11*i+7*Math.sin(w*.8)+3*Math.sin(w*2.1);
+ const atl=ctl+10*Math.sin(w*1.7)+9*Math.sin(w*.55+1.4);
+ const tsb=ctl-atl;
+ const tss=Math.max(0,35+55*Math.sin(w*1.9+1)+28*Math.sin(w*.63)+((i%7===2||i%7===5)?35:0));
+ return {CTL:ctl,ATL:atl,TSB:tsb,TSS:tss};
+}
+function renderLoadChart(){
+ const svg=document.getElementById('loadChart');if(!svg)return;
+ const end=chartEnd||dayStart(new Date()),start=chartStart||dateMinus(end,chartDays-1);
+ const total=Math.max(1,Math.round((end-start)/86400000)+1),data=[];
+ for(let i=0;i<total;i++){let d=new Date(start);d.setDate(start.getDate()+i);data.push({date:d,...demoSeries(d,i)})}
+ const W=1000,H=390,L=62,R=62,T=24,B=48,PW=W-L-R,PH=H-T-B;
+ const x=i=>L+(data.length===1?0:i/(data.length-1))*PW;
+ const yLoad=v=>T+PH-(v/100)*PH;
+ const yTsb=v=>T+PH-((v+50)/100)*PH;
+ const active={CTL:document.getElementById('metricCTL').checked,ATL:document.getElementById('metricATL').checked,TSB:document.getElementById('metricTSB').checked,TSS:document.getElementById('metricTSS').checked};
+ let out='';
+ for(let k=0;k<=4;k++){let yy=T+k*PH/4;out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e6eae4" stroke-width="1"/>`;out+=`<text x="${L-12}" y="${yy+4}" text-anchor="end" fill="#7b887e" font-size="11">${100-k*25}</text>`}
+ out+=`<text x="15" y="${T+PH/2}" fill="#718b79" font-size="11" transform="rotate(-90 15 ${T+PH/2})">CTL / ATL</text>`;
+ out+=`<text x="${W-12}" y="${T+PH/2}" fill="#648db5" font-size="11" transform="rotate(90 ${W-12} ${T+PH/2})">TSB</text>`;
+ // TSB zero baseline
+ const zeroY=yTsb(0);out+=`<line x1="${L}" y1="${zeroY}" x2="${W-R}" y2="${zeroY}" stroke="#648db5" stroke-dasharray="5 5" opacity=".45"/>`;
+ function linePath(key,scale){return data.map((d,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+scale(d[key]).toFixed(1)).join(' ')}
+ function areaPath(key,scale,base){return `M${x(0)},${base} `+data.map((d,i)=>`L${x(i).toFixed(1)},${scale(d[key]).toFixed(1)}`).join(' ') + ` L${x(data.length-1)},${base} Z`}
+ ['CTL','ATL'].forEach(k=>{if(active[k]){let sc=yLoad,base=T+PH;out+=`<path d="${areaPath(k,sc,base)}" fill="${chartColors[k]}" opacity=".17"/>`;out+=`<path d="${linePath(k,sc)}" fill="none" stroke="${chartColors[k]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`}});
+ if(active.TSB){out+=`<path d="${areaPath('TSB',yTsb,zeroY)}" fill="${chartColors.TSB}" opacity=".16"/>`;out+=`<path d="${linePath('TSB',yTsb)}" fill="none" stroke="${chartColors.TSB}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`}
+ if(active.TSS){data.forEach((d,i)=>{if(d.TSS>12)out+=`<circle cx="${x(i)}" cy="${T+PH-(d.TSS/150)*PH}" r="3" fill="${chartColors.TSS}" opacity=".75"/>`})}
+ // x labels, up to 8
+ let ticks=Math.min(8,data.length);for(let j=0;j<ticks;j++){let i=Math.round(j*(data.length-1)/Math.max(1,ticks-1));out+=`<text x="${x(i)}" y="${H-17}" text-anchor="middle" fill="#7b887e" font-size="10">${String(data[i].date.getMonth()+1).padStart(2,'0')}/${String(data[i].date.getDate()).padStart(2,'0')}</text>`}
+ // transparent hit targets for date tooltip
+ data.forEach((d,i)=>{out+=`<rect x="${x(i)-Math.max(3,PW/data.length/2)}" y="${T}" width="${Math.max(6,PW/data.length)}" height="${PH}" fill="transparent" data-index="${i}" class="chart-hit"/>`});
+ svg.innerHTML=out;
+ svg.querySelectorAll('.chart-hit').forEach(hit=>{const show=e=>{const d=data[Number(hit.dataset.index)],tip=document.getElementById('chartTooltip');tip.hidden=false;tip.innerHTML=`<b>${fmtDate(d.date)}</b><br>${active.CTL?`CTL：${d.CTL.toFixed(1)}<br>`:''}${active.ATL?`ATL：${d.ATL.toFixed(1)}<br>`:''}${active.TSB?`TSB：${d.TSB.toFixed(1)}<br>`:''}${active.TSS?`每日 TSS：${Math.round(d.TSS)}<br>`:''}<span style="opacity:.7">示意資料</span>`;const rect=document.getElementById('chartPlotWrap').getBoundingClientRect();let cx=e.clientX??rect.left+rect.width/2,cy=e.clientY??rect.top+50;tip.style.left=Math.max(5,Math.min(rect.width-165,cx-rect.left+10))+'px';tip.style.top=Math.max(35,Math.min(rect.height-110,cy-rect.top-15))+'px'};
+ hit.addEventListener('mousemove',show);hit.addEventListener('mouseenter',show);hit.addEventListener('click',show);hit.addEventListener('mouseleave',()=>{document.getElementById('chartTooltip').hidden=true});});
+ document.getElementById('chartDateLabel').textContent=`${fmtDate(start)} — ${fmtDate(end)} · ${total} 天`;
+}
+document.addEventListener('DOMContentLoaded',()=>{
+ document.querySelectorAll('#rangePresets button').forEach(b=>b.addEventListener('click',()=>setChartRange(b.dataset.range)));
+ renderLoadChart();
+});
+
 render();
+renderLoadChart();
 </script></body></html>
