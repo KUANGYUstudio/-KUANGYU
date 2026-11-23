@@ -62,6 +62,11 @@
   .nav button.active,.nav button:hover{background:#496b55}
 }
 
+
+.remind-btn{border:1px solid #cbd8cc;background:#f4f7f1;color:#345641;border-radius:7px;padding:7px 9px;font-size:10px;font-weight:700;white-space:nowrap}
+.remind-btn:hover{background:#e5ede4}
+.remind-btn.sent{background:#f7f0e5;border-color:#ead9bd;color:#98713d}
+
 </style></head>
 <body><div class="app">
 <aside class="sidebar"><div class="brand"><small>KUANGYU STUDIO</small><h2>ATHLETE<br><span>MONITORING SYSTEM</span></h2></div><div class="nav-label">COACH WORKSPACE</div>
@@ -70,13 +75,13 @@
 <main class="main"><header class="topbar"><div class="crumb">KUANGYU STUDIO　/　<span id="crumb">教練工作台</span></div><div class="top-right"><span class="role" id="roleLabel">System Owner · 聿凡｜Assistant Coach + Engineer</span><div class="avatar" id="avatar">你</div></div></header>
 <div class="content">
 <section class="page active" id="dashboard">
-<div class="page-head"><div><div class="eyebrow">COACH WORKSPACE</div><h1>教練工作台</h1><div class="sub">共同查看所有學員狀態；個別課表與評估由負責教練管理。</div></div><button class="btn soft" onclick="showPage('athletes')">管理學員名單 →</button></div>
+<div class="page-head"><div><div class="eyebrow">COACH WORKSPACE</div><h1>教練工作台</h1><div class="sub">共同查看所有學員狀態；個別課表與評估由負責教練管理。示範資料可隨時清除，不會當成正式學員。</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn outline" onclick="loadDemoData()">載入示範學員</button><button class="btn soft" onclick="showPage('athletes')">管理學員名單 →</button></div></div>
 <div class="grid stats"><div class="card"><div class="stat-label">管理中學員</div><div class="stat-num" id="countAthletes">0</div><div class="stat-note">目前正式學員資料</div></div><div class="card"><div class="stat-label">今日已回報</div><div class="stat-num" id="countReports">0</div><div class="stat-note">依每日恢復回報更新</div></div><div class="card"><div class="stat-label">待教練確認</div><div class="stat-num" id="countAlerts">0</div><div class="stat-note">需要進一步查看的回報</div></div></div>
-<div class="grid two"><div class="card"><div class="card-head"><h3>學員今日狀態</h3><small>共同監控 · 不做學員排名</small></div><div class="table-wrap"><table><thead><tr><th>學員</th><th>負責教練</th><th>疲勞 /10</th><th>睡眠</th><th>身體狀況</th><th>回報</th><th></th></tr></thead><tbody id="dashboardRows"></tbody></table></div><div id="dashboardEmpty" class="empty"><b>目前還沒有正式學員</b>這裡會顯示每位學員最新的恢復回報。<br>先到「學員名單」新增第一位學員。</div></div>
+<div class="grid two"><div class="card"><div class="card-head"><h3>學員今日狀態</h3><small>共同監控 · 不做學員排名</small></div><div class="table-wrap"><table><thead><tr><th>學員</th><th>負責教練</th><th>疲勞 /10</th><th>睡眠</th><th>身體狀況</th><th>回報</th><th>提醒紀錄</th><th>操作</th></tr></thead><tbody id="dashboardRows"></tbody></table></div><div id="dashboardEmpty" class="empty"><b>目前還沒有正式學員</b>這裡會顯示每位學員最新的恢復回報。<br>尚未回報的學員可以直接點選「提醒回報」。</div></div>
 <div class="card"><div class="card-head"><h3>教練提醒</h3><small>跨教練觀察</small></div><div id="noticeArea" class="empty">目前沒有待確認事項。<br>學員有異常回報時，提醒會顯示在這裡。</div></div></div>
-<div class="card" style="margin-top:14px"><div class="card-head"><h3>使用原則</h3><small>KUANGYU COACHING</small></div><div class="sub">首頁以查看為主，不提供直接修改，避免誤觸。點入學員個人頁面後，才會依登入教練的權限顯示編輯功能。兩位教練可以互相查看與留言，但課表由負責教練管理。</div></div>
+<div class="card" style="margin-top:14px"><div class="card-head"><h3>使用原則</h3><small>KUANGYU COACHING</small></div><div class="sub">首頁以查看為主，不提供直接修改，避免誤觸。點入學員個人頁面後，才會依登入教練的權限顯示編輯功能。兩位教練可以互相查看與留言，但課表由負責教練管理。</div><div style="margin-top:12px"><button class="btn outline" onclick="clearDemoData()">清除所有示範學員</button></div></div>
 </section>
-<section class="page" id="athletes"><div class="page-head"><div><div class="eyebrow">ATHLETE MANAGEMENT</div><h1>學員名單</h1><div class="sub">每位學員獨立管理，名單顯示負責教練與最新狀態。</div></div><button class="btn primary" onclick="openAthleteModal()">＋ 新增學員</button></div>
+<section class="page" id="athletes"><div class="page-head"><div><div class="eyebrow">ATHLETE MANAGEMENT</div><h1>學員名單</h1><div class="sub">每位學員獨立管理，名單顯示負責教練與最新狀態。</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn outline" onclick="loadDemoData()">載入示範學員</button><button class="btn primary" onclick="openAthleteModal()">＋ 新增學員</button></div></div>
 <div class="card"><div class="card-head"><h3>學員列表</h3><small id="listCount">0 位學員</small></div><div class="table-wrap"><table><thead><tr><th>學員</th><th>運動項目</th><th>負責教練</th><th>今日疲勞</th><th>睡眠</th><th>身體狀況</th><th>狀態</th><th></th></tr></thead><tbody id="athleteRows"></tbody></table></div><div id="listEmpty" class="empty"><b>尚未建立學員資料</b>原本六位示範選手已移除，不會被當成你的正式學生。<br>點選右上角「新增學員」開始建立真實名單。</div></div></section>
 <section class="page" id="profile"><div class="page-head"><div><div class="eyebrow">ATHLETE PROFILE</div><h1>學員個人頁面</h1><div class="sub">先查看完整資料，再從個人頁面進入編輯，降低誤操作。</div></div><button class="btn outline" onclick="showPage('athletes')">← 返回名單</button></div>
 <div class="card"><div class="profile-head"><div class="profile-avatar" id="pInitial">學</div><div><h2 id="pName">學員</h2><p id="pMeta">運動項目 · 負責教練</p></div><div class="profile-actions"><button class="btn soft" id="editProfileBtn" onclick="editCurrentAthlete()">編輯學員資料</button></div></div></div>
@@ -96,7 +101,7 @@ document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',(
 function initials(n){return (n||'學').trim().slice(0,1)}
 function status(a){if(a.active==='paused')return '<span class="pill">暫停課表</span>';if(!a.fatigue)return '<span class="pill">尚未回報</span>';if(Number(a.fatigue)>=7||a.body==='疼痛')return '<span class="pill alert">需要關注</span>';if(Number(a.fatigue)>=5||a.body==='肌肉痠痛')return '<span class="pill watch">留意</span>';return '<span class="pill ok">正常</span>'}
 function render(){let active=athletes.filter(a=>a.active!=='paused');document.getElementById('countAthletes').textContent=active.length;document.getElementById('countReports').textContent=active.filter(a=>a.fatigue).length;document.getElementById('countAlerts').textContent=active.filter(a=>a.fatigue&&(Number(a.fatigue)>=7||a.body==='疼痛')).length;
-let rows=active.map(a=>`<tr><td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><strong>${esc(a.name)}</strong><small>${esc(a.sport)}</small></div></div></td><td>${esc(a.coach)}</td><td>${a.fatigue?esc(a.fatigue):'—'}</td><td>${esc(a.sleep||'—')}</td><td>${esc(a.body||'—')}</td><td>${a.fatigue?'已回報':'尚未回報'}</td><td><button class="textlink" onclick="openProfile('${a.id}')">查看 →</button></td></tr>`).join('');
+let rows=active.map(a=>{const pending=!a.fatigue;const reminded=a.lastReminder?('已提醒 '+new Date(a.lastReminder).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})):'尚未提醒';return `<tr><td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><strong>${esc(a.name)}</strong><small>${esc(a.sport)}${a.isDemo?' · 示範資料':''}</small></div></div></td><td>${esc(a.coach)}</td><td>${a.fatigue?esc(a.fatigue):'—'}</td><td>${esc(a.sleep||'—')}</td><td>${esc(a.body||'—')}</td><td>${pending?'<span class="pill watch">尚未回報</span>':'<span class="pill ok">已回報</span>'}</td><td>${pending?esc(reminded):'—'}</td><td>${pending?`<button class="remind-btn ${a.lastReminder?'sent':''}" onclick="remindAthlete('${a.id}')">${a.lastReminder?'再次提醒':'提醒回報'}</button>`:'<button class="textlink" onclick="openProfile(\'${a.id}\')">查看 →</button>'}</td></tr>`}).join('');
 document.getElementById('dashboardRows').innerHTML=rows;document.getElementById('dashboardEmpty').style.display=active.length?'none':'block';
 document.getElementById('athleteRows').innerHTML=active.map(a=>`<tr><td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><strong>${esc(a.name)}</strong><small>${esc(a.goal||'尚未設定目標')}</small></div></div></td><td>${esc(a.sport)}</td><td>${esc(a.coach)}</td><td>${a.fatigue?esc(a.fatigue)+'/10':'—'}</td><td>${esc(a.sleep||'—')}</td><td>${esc(a.body||'—')}</td><td>${status(a)}</td><td><button class="textlink" onclick="openProfile('${a.id}')">個人頁面 →</button></td></tr>`).join('');
 document.getElementById('listCount').textContent=active.length+' 位學員';document.getElementById('listEmpty').style.display=active.length?'none':'block';
@@ -108,5 +113,42 @@ function editCurrentAthlete(){openAthleteModal(currentId)}
 function saveAthlete(){let name=document.getElementById('fName').value.trim();if(!name){toast('請先輸入學員姓名');return}let id=document.getElementById('athleteModal').dataset.editId;let data={name,sport:document.getElementById('fSport').value,coach:document.getElementById('fCoach').value,goal:document.getElementById('fGoal').value.trim(),tp:document.getElementById('fTp').value.trim(),active:document.getElementById('fActive').value,note:document.getElementById('fNote').value.trim()};if(id){let idx=athletes.findIndex(a=>a.id===id);athletes[idx]={...athletes[idx],...data}}else athletes.push({id:'ath_'+Date.now(),...data,fatigue:null,sleep:'',body:''});closeModal();persist();if(id)openProfile(id);toast(id?'學員資料已更新（僅本機保存）':'已新增學員（僅本機保存）')}
 function closeModal(){document.getElementById('athleteModal').classList.remove('show')}
 function toast(msg){let t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(window._toast);window._toast=setTimeout(()=>t.style.display='none',3000)}
+
+
+function remindAthlete(id){
+  const a=athletes.find(x=>x.id===id);
+  if(!a)return;
+  if(a.fatigue){toast('這位學員今日已完成回報');return}
+  const message=`嗨 ${a.name}！提醒你今天的每日恢復問卷還沒填寫喔。請記得花一點時間完成回報，讓${a.coach}教練掌握你的恢復狀態，謝謝！`;
+  a.lastReminder=new Date().toISOString();
+  persist();
+  const lineUrl='https://line.me/R/msg/text/?'+encodeURIComponent(message);
+  window.open(lineUrl,'_blank','noopener');
+  toast('已開啟 LINE 分享頁面，請確認收件人並按送出；系統已記錄提醒時間。');
+}
+
+function loadDemoData(){
+  const existingDemo=athletes.some(a=>a.isDemo);
+  if(existingDemo){toast('示範學員已經載入');return}
+  const demos=[
+    {id:'demo_kuangyu_01',name:'林子涵',sport:'鐵人三項',coach:'光武',goal:'半程鐵人完賽',tp:'',active:'active',note:'示範：近期訓練穩定。',fatigue:3,sleep:'良好',body:'正常',isDemo:true},
+    {id:'demo_kuangyu_02',name:'陳柏宇',sport:'自行車',coach:'光武',goal:'自行車爬坡能力提升',tp:'',active:'active',note:'示範：短期訓練負荷偏高，建議追蹤。',fatigue:7,sleep:'普通',body:'肌肉痠痛',isDemo:true},
+    {id:'demo_kuangyu_03',name:'王怡婷',sport:'跑步',coach:'聿凡',goal:'半馬 PB',tp:'',active:'active',note:'示範：恢復狀態良好。',fatigue:4,sleep:'良好',body:'正常',isDemo:true},
+    {id:'demo_kuangyu_04',name:'張家豪',sport:'鐵人三項',coach:'聿凡',goal:'226 完賽',tp:'',active:'active',note:'示範：回報疼痛，需由負責教練確認。',fatigue:8,sleep:'不佳',body:'疼痛',isDemo:true},
+    {id:'demo_kuangyu_05',name:'黃品蓉',sport:'跑步',coach:'光武',goal:'建立穩定訓練習慣',tp:'',active:'active',note:'示範：尚未填寫今日恢復回報。',fatigue:null,sleep:'',body:'',isDemo:true}
+  ];
+  athletes=athletes.concat(demos);
+  persist();
+  toast('已載入 5 位示範學員；提醒按鈕可開啟 LINE 分享頁面');
+}
+function clearDemoData(){
+  const n=athletes.filter(a=>a.isDemo).length;
+  if(!n){toast('目前沒有示範資料');return}
+  if(!confirm('確定移除 '+n+' 位示範學員？正式學員資料不會受影響。'))return;
+  athletes=athletes.filter(a=>!a.isDemo);
+  persist();
+  toast('示範資料已清除');
+}
+
 render();
 </script></body></html>
