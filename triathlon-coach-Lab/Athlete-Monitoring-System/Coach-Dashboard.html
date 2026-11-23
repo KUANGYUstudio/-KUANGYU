@@ -160,6 +160,21 @@
   .coach-roster-group .person small{font-size:9px;white-space:nowrap}
   .coach-roster-group .remind-btn{font-size:10px;padding:7px 8px;white-space:nowrap}
 }
+
+/* Session RPE is the primary coaching signal on the athlete profile */
+.session-rpe-card{border-color:#d5e2d5}
+.session-rpe-card .card-head{align-items:center}
+.rpe-scale-note{font-size:11px;color:var(--muted);background:#eef3ed;border-radius:20px;padding:6px 10px;white-space:nowrap}
+.session-rpe-list{display:flex;flex-direction:column;gap:0}
+.session-rpe-row{display:grid;grid-template-columns:minmax(0,1fr) 74px 95px;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line)}
+.session-rpe-row:last-child{border-bottom:0}
+.session-rpe-name{font-size:13px;font-weight:700;color:var(--ink)}
+.session-rpe-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.session-rpe-score{font-size:20px;font-weight:800;color:var(--green);text-align:center}
+.session-rpe-score small{font-size:10px;font-weight:500;color:var(--muted)}
+.session-rpe-status{font-size:11px;text-align:right;color:var(--muted)}
+.rpe-empty{padding:17px 14px;border:1px dashed #cfdace;border-radius:9px;background:#f8faf6;color:var(--muted);font-size:12px;line-height:1.7}
+@media(max-width:600px){.session-rpe-row{grid-template-columns:minmax(0,1fr) 58px}.session-rpe-status{grid-column:1/-1;text-align:left}}
 </style></head>
 <body><div class="app">
 <aside class="sidebar"><div class="brand"><small>KUANGYU STUDIO</small><h2>ATHLETE<br><span>MONITORING SYSTEM</span></h2></div><div class="nav-label">COACH WORKSPACE</div>
@@ -179,6 +194,12 @@
 <section class="page" id="profile"><div class="page-head"><div><div class="eyebrow">ATHLETE PROFILE</div><h1>學員個人頁面</h1><div class="sub">先查看完整資料，再從個人頁面進入編輯，降低誤操作。</div></div><button class="btn outline" onclick="showPage('athletes')">← 返回名單</button></div>
 <div class="card"><div class="profile-head"><div class="profile-avatar" id="pInitial">學</div><div><div class="eyebrow">ATHLETE PROFILE</div><h2 id="pName">學員</h2><p id="pMeta">運動項目 · 負責教練</p></div><div class="profile-actions"><button class="btn outline" id="profileReminderBtn" onclick="remindCurrentAthlete()">提醒回報</button><button class="btn soft" id="editProfileBtn" onclick="editCurrentAthlete()">編輯學員資料</button></div></div></div>
 <div class="grid detail-grid"><div class="detail"><small>今日疲勞</small><strong id="pFatigue">尚未回報</strong></div><div class="detail"><small>睡眠品質</small><strong id="pSleep">—</strong></div><div class="detail"><small>身體狀況</small><strong id="pBody">—</strong></div></div>
+<div class="card session-rpe-card" style="margin-bottom:14px">
+  <div class="card-head"><div><h3>單次訓練 RPE</h3><div class="sub">SESSION RPE · 每完成一堂訓練回報一次</div></div><span class="rpe-scale-note">主觀強度 1–10</span></div>
+  <div id="sessionRpeList" class="session-rpe-list">
+    <div class="rpe-empty">目前沒有訓練 RPE 紀錄。待 TrainingPeaks 訓練資料同步後，學員可針對每一堂已完成的訓練回報 RPE。</div>
+  </div>
+</div>
 <div class="card" style="margin-bottom:14px"><div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div><div class="grid detail-grid" style="margin:0"><div class="detail"><small>今日回報狀態</small><strong id="pReportStatus">尚未回報</strong></div><div class="detail"><small>負責教練</small><strong id="pCoach">—</strong></div><div class="detail"><small>學員目標</small><strong id="pGoal" style="font-size:13px">—</strong></div></div><div class="sub" style="margin-top:12px">每日疲勞、睡眠、痠痛與疼痛紀錄將在恢復資料串接後呈現；下方提供個人訓練負荷趨勢圖操作介面。</div>
 </div>
 <div class="card load-chart-card" style="margin-bottom:14px">
@@ -285,7 +306,22 @@ document.getElementById('athleteRows').innerHTML=active.map(a=>`<tr><td><div cla
 document.getElementById('listCount').textContent=active.length+' 位學員';document.getElementById('listEmpty').style.display=active.length?'none':'block';
 let alerts=active.filter(a=>a.fatigue&&(Number(a.fatigue)>=7||a.body==='疼痛'));document.getElementById('noticeArea').innerHTML=alerts.length?alerts.map(a=>`<div class="notice"><span class="notice-alert-icon" aria-label="需要關注">!</span><div class="notice-content"><strong>${esc(a.name)}</strong><p>疲勞 ${esc(a.fatigue)}/10 · ${esc(a.body||'未填身體狀況')}。（${esc(a.coach)}教練）</p></div></div>`).join(''):'目前沒有待確認事項。';
 }
-function openProfile(id){currentId=id;let a=athletes.find(x=>x.id===id);if(!a)return;document.getElementById('pInitial').textContent=initials(a.name);document.getElementById('pName').textContent=a.name;document.getElementById('pMeta').textContent=a.sport+' · 負責教練：'+a.coach;document.getElementById('pFatigue').textContent=a.fatigue?a.fatigue+'/10':'尚未回報';document.getElementById('pSleep').textContent=a.sleep||'—';document.getElementById('pBody').textContent=a.body||'—';document.getElementById('pReportStatus').textContent=a.fatigue?'已完成回報':'尚未回報';document.getElementById('pCoach').textContent=a.coach;document.getElementById('pGoal').textContent=a.goal||'尚未設定';document.getElementById('profileReminderBtn').style.display=a.fatigue?'none':'inline-block';document.getElementById('profileInfo').innerHTML='<b>目標／比賽：</b>'+esc(a.goal||'尚未設定')+'<br><br><b>TrainingPeaks ID：</b>'+esc(a.tp||'尚未設定')+'<br><br><b>教練備註：</b>'+esc(a.note||'尚無備註')+'<br><br><b>學員狀態：</b>'+ (a.active==='paused'?'暫停課表':'管理中');showPage('profile');renderLoadChart()}
+function renderSessionRpe(a){
+ const host=document.getElementById('sessionRpeList');
+ if(!host)return;
+ const records=Array.isArray(a.sessionRpe)?a.sessionRpe:[];
+ if(!records.length){
+  host.innerHTML='<div class="rpe-empty">目前沒有訓練 RPE 紀錄。待 TrainingPeaks 訓練資料同步後，學員可針對每一堂已完成的訓練回報 RPE。這裡會逐堂顯示訓練名稱、時間與 RPE 分數。</div>';
+  return;
+ }
+ host.innerHTML=records.slice().sort((x,y)=>String(y.date||'').localeCompare(String(x.date||''))).map(r=>{
+  const date=r.date?new Date(r.date+'T00:00:00').toLocaleDateString('zh-TW'):'日期未提供';
+  const duration=r.duration?`${esc(r.duration)} 分鐘`:'時間未提供';
+  const score=(r.rpe!==undefined&&r.rpe!==null&&r.rpe!=='')?esc(r.rpe):'—';
+  return `<div class="session-rpe-row"><div><div class="session-rpe-name">${esc(r.sessionName||r.type||'訓練紀錄')}</div><div class="session-rpe-meta">${date} · ${duration}</div></div><div class="session-rpe-score">${score}<small> / 10</small></div><div class="session-rpe-status">${score==='—'?'待回報':'已回報'}</div></div>`;
+ }).join('');
+}
+function openProfile(id){currentId=id;let a=athletes.find(x=>x.id===id);if(!a)return;document.getElementById('pInitial').textContent=initials(a.name);document.getElementById('pName').textContent=a.name;document.getElementById('pMeta').textContent=a.sport+' · 負責教練：'+a.coach;document.getElementById('pFatigue').textContent=a.fatigue?a.fatigue+'/10':'尚未回報';document.getElementById('pSleep').textContent=sleepScoreLabel(a);document.getElementById('pBody').textContent=a.body||'—';document.getElementById('pReportStatus').textContent=a.fatigue?'已完成回報':'尚未回報';document.getElementById('pCoach').textContent=a.coach;document.getElementById('pGoal').textContent=a.goal||'尚未設定';document.getElementById('profileReminderBtn').style.display=a.fatigue?'none':'inline-block';document.getElementById('profileInfo').innerHTML='<b>目標／比賽：</b>'+esc(a.goal||'尚未設定')+'<br><br><b>TrainingPeaks ID：</b>'+esc(a.tp||'尚未設定')+'<br><br><b>教練備註：</b>'+esc(a.note||'尚無備註')+'<br><br><b>學員狀態：</b>'+ (a.active==='paused'?'暫停課表':'管理中');renderSessionRpe(a);showPage('profile');renderLoadChart()}
 function openAthleteModal(id=null){let a=id?athletes.find(x=>x.id===id):null;document.getElementById('modalTitle').textContent=a?'編輯學員資料':'新增學員';document.getElementById('fName').value=a?.name||'';document.getElementById('fSport').value=a?.sport||'鐵人三項';document.getElementById('fCoach').value=a?.coach||'光武';document.getElementById('fGoal').value=a?.goal||'';document.getElementById('fTp').value=a?.tp||'';document.getElementById('fActive').value=a?.active||'active';document.getElementById('fNote').value=a?.note||'';document.getElementById('athleteModal').dataset.editId=id||'';document.getElementById('athleteModal').classList.add('show')}
 function editCurrentAthlete(){openAthleteModal(currentId)}
 function remindCurrentAthlete(){if(currentId)remindAthlete(currentId)}
