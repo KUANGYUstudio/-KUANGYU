@@ -98,6 +98,21 @@
 .load-chart-card.fullscreen .chart-plot-wrap{min-height:calc(100vh - 330px)}
 .load-chart-card.fullscreen #loadChart{min-height:calc(100vh - 390px)}
 @media(max-width:620px){.chart-control-row{align-items:stretch}.chart-control-row>label{width:100%;justify-content:space-between}.chart-control-row select{flex:1;max-width:65%}.custom-dates{width:100%}.custom-dates label{flex:1;flex-direction:column;align-items:flex-start}.custom-dates input{width:100%}.chart-foot{display:block}.chart-foot span{display:block;margin-top:4px}.metric-toggles{gap:10px}.load-chart-card.fullscreen{inset:4px}.load-chart-card.fullscreen #loadChart{min-height:55vh}}
+
+/* Dashboard refinements: compact KPI cards, coach-grouped roster, clickable names */
+.stats{gap:12px;margin-bottom:12px}
+.stat-card{padding:11px 16px!important;min-height:0}
+.stat-card .stat-label{font-size:11px}
+.stat-card .stat-num{font-size:24px;margin:3px 0 0;line-height:1.15}
+.coach-roster-group{margin-top:4px}
+.coach-roster-group+.coach-roster-group{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.coach-roster-title{font-size:13px;font-weight:750;color:var(--ink);margin:0 0 9px}
+.coach-roster-group .table-wrap{margin:0}
+.dashboard-name-link{border:0;background:none;padding:0;color:var(--ink);font:inherit;font-weight:750;font-size:13px;cursor:pointer;text-align:left}
+.dashboard-name-link:hover{color:var(--sage);text-decoration:underline}
+.dashboard-name-link:focus-visible{outline:2px solid var(--sage);outline-offset:3px;border-radius:3px}
+.dashboard-action-cell{white-space:nowrap}
+@media(max-width:700px){.stat-card{padding:10px 12px!important}.stat-card .stat-num{font-size:21px}}
 </style></head>
 <body><div class="app">
 <aside class="sidebar"><div class="brand"><small>KUANGYU STUDIO</small><h2>ATHLETE<br><span>MONITORING SYSTEM</span></h2></div><div class="nav-label">COACH WORKSPACE</div>
@@ -107,8 +122,8 @@
 <div class="content">
 <section class="page active" id="dashboard">
 <div class="page-head"><div><div class="eyebrow">COACH WORKSPACE</div><h1>教練工作台</h1><div class="sub">共同查看所有學員狀態；個別課表與評估由負責教練管理。示範資料可隨時清除，不會當成正式學員。</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn outline" onclick="loadDemoData()">載入示範學員</button><button class="btn soft" onclick="showPage('athletes')">管理學員名單 →</button></div></div>
-<div class="grid stats"><div class="card"><div class="stat-label">管理中學員</div><div class="stat-num" id="countAthletes">0</div><div class="stat-note">目前正式學員資料</div></div><div class="card"><div class="stat-label">今日已回報</div><div class="stat-num" id="countReports">0</div><div class="stat-note">依每日恢復回報更新</div></div><div class="card"><div class="stat-label">待教練確認</div><div class="stat-num" id="countAlerts">0</div><div class="stat-note">需要進一步查看的回報</div></div></div>
-<div class="grid two"><div class="card"><div class="card-head"><h3>學員今日狀態</h3><small>共同監控 · 不做學員排名</small></div><div class="table-wrap"><table><thead><tr><th>學員</th><th>負責教練</th><th>疲勞 /10</th><th>睡眠</th><th>身體狀況</th><th>回報</th><th>提醒紀錄</th><th>查看／提醒</th></tr></thead><tbody id="dashboardRows"></tbody></table></div><div id="dashboardEmpty" class="empty"><b>目前還沒有正式學員</b>這裡會顯示每位學員最新的恢復回報。<br>尚未回報的學員可以直接點選「提醒回報」。</div></div>
+<div class="grid stats"><div class="card stat-card"><div class="stat-label">管理中學員</div><div class="stat-num" id="countAthletes">0</div></div><div class="card stat-card"><div class="stat-label">今日已回報</div><div class="stat-num" id="countReports">0</div></div><div class="card stat-card"><div class="stat-label">待教練確認</div><div class="stat-num" id="countAlerts">0</div></div></div>
+<div class="grid two"><div class="card"><div class="card-head"><h3>學員今日狀態</h3><small>共同監控 · 不做學員排名</small></div><div id="coachGroups"></div><div id="dashboardEmpty" class="empty"><b>目前還沒有正式學員</b>這裡會顯示每位學員最新的恢復回報。<br>尚未回報的學員可以直接點選「提醒回報」。</div></div>
 <div class="card"><div class="card-head"><h3>教練提醒</h3><small>跨教練觀察</small></div><div id="noticeArea" class="empty">目前沒有待確認事項。<br>學員有異常回報時，提醒會顯示在這裡。</div></div></div>
 <div class="card" style="margin-top:14px"><div class="card-head"><h3>使用原則</h3><small>KUANGYU COACHING</small></div><div class="sub">首頁以查看為主，不提供直接修改，避免誤觸。點入學員個人頁面後，才會依登入教練的權限顯示編輯功能。兩位教練可以互相查看與留言，但課表由負責教練管理。</div><div style="margin-top:12px"><button class="btn outline" onclick="clearDemoData()">清除所有示範學員</button></div></div>
 </section>
@@ -192,8 +207,27 @@ document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',(
 function initials(n){return (n||'學').trim().slice(0,1)}
 function status(a){if(a.active==='paused')return '<span class="pill">暫停課表</span>';if(!a.fatigue)return '<span class="pill">尚未回報</span>';if(Number(a.fatigue)>=7||a.body==='疼痛')return '<span class="pill alert">需要關注</span>';if(Number(a.fatigue)>=5||a.body==='肌肉痠痛')return '<span class="pill watch">留意</span>';return '<span class="pill ok">正常</span>'}
 function render(){let active=athletes.filter(a=>a.active!=='paused');document.getElementById('countAthletes').textContent=active.length;document.getElementById('countReports').textContent=active.filter(a=>a.fatigue).length;document.getElementById('countAlerts').textContent=active.filter(a=>a.fatigue&&(Number(a.fatigue)>=7||a.body==='疼痛')).length;
-let rows=active.map(a=>{const pending=!a.fatigue;const reminded=a.lastReminder?('已提醒 '+new Date(a.lastReminder).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})):'尚未提醒';return `<tr><td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><strong>${esc(a.name)}</strong><small>${esc(a.sport)}${a.isDemo?' · 示範資料':''}</small></div></div></td><td>${esc(a.coach)}</td><td>${a.fatigue?esc(a.fatigue):'—'}</td><td>${esc(a.sleep||'—')}</td><td>${esc(a.body||'—')}</td><td>${pending?'<span class="pill watch">尚未回報</span>':'<span class="pill ok">已回報</span>'}</td><td>${pending?esc(reminded):'—'}</td><td style="white-space:nowrap">${pending?`<button class="remind-btn ${a.lastReminder?'sent':''}" onclick="remindAthlete('${a.id}')">${a.lastReminder?'再次提醒':'提醒回報'}</button>`:'—'} <button class="textlink" onclick="openProfile('${a.id}')">查看個人頁面 →</button></td></tr>`}).join('');
-document.getElementById('dashboardRows').innerHTML=rows;document.getElementById('dashboardEmpty').style.display=active.length?'none':'block';
+const coachOrder=['光武','聿凡'];
+const coachGroups=coachOrder.map(coach=>{
+ const members=active.filter(a=>(a.coach||'')===coach);
+ if(!members.length)return '';
+ const rows=members.map(a=>{
+  const pending=!a.fatigue;
+  const reminded=a.lastReminder?('已提醒 '+new Date(a.lastReminder).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})):'尚未提醒';
+  return `<tr>
+   <td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button><small>${esc(a.sport)}${a.isDemo?' · 示範資料':''}</small></div></div></td>
+   <td>${a.fatigue?esc(a.fatigue):'—'}</td><td>${esc(a.sleep||'—')}</td><td>${esc(a.body||'—')}</td>
+   <td>${pending?'<span class="pill watch">尚未回報</span>':'<span class="pill ok">已回報</span>'}</td>
+   <td>${pending?esc(reminded):'—'}</td>
+   <td class="dashboard-action-cell">${pending?`<button class="remind-btn ${a.lastReminder?'sent':''}" onclick="remindAthlete('${a.id}')">${a.lastReminder?'再次提醒':'提醒回報'}</button>`:'—'}</td>
+  </tr>`;
+ }).join('');
+ return `<section class="coach-roster-group"><h4 class="coach-roster-title">${coach}教練學員</h4><div class="table-wrap"><table><thead><tr><th>學員</th><th>疲勞 /10</th><th>睡眠</th><th>身體狀況</th><th>回報</th><th>提醒紀錄</th><th>提醒</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+}).join('');
+const otherCoachMembers=active.filter(a=>!coachOrder.includes(a.coach||''));
+const otherCoachHtml=otherCoachMembers.length?`<section class="coach-roster-group"><h4 class="coach-roster-title">其他負責教練學員</h4><div class="table-wrap"><table><thead><tr><th>學員</th><th>疲勞 /10</th><th>睡眠</th><th>身體狀況</th><th>回報</th><th>提醒紀錄</th><th>提醒</th></tr></thead><tbody>${otherCoachMembers.map(a=>{const pending=!a.fatigue;return `<tr><td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button><small>${esc(a.sport)}</small></div></div></td><td>${a.fatigue?esc(a.fatigue):'—'}</td><td>${esc(a.sleep||'—')}</td><td>${esc(a.body||'—')}</td><td>${pending?'<span class="pill watch">尚未回報</span>':'<span class="pill ok">已回報</span>'}</td><td>${pending?(a.lastReminder?'已提醒':'尚未提醒'):'—'}</td><td>${pending?`<button class="remind-btn" onclick="remindAthlete('${a.id}')">提醒回報</button>`:'—'}</td></tr>`}).join('')}</tbody></table></div></section>`:'';
+document.getElementById('coachGroups').innerHTML=coachGroups+otherCoachHtml;
+document.getElementById('dashboardEmpty').style.display=active.length?'none':'block';
 document.getElementById('athleteRows').innerHTML=active.map(a=>`<tr><td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><strong>${esc(a.name)}</strong><small>${esc(a.goal||'尚未設定目標')}</small></div></div></td><td>${esc(a.sport)}</td><td>${esc(a.coach)}</td><td>${a.fatigue?esc(a.fatigue)+'/10':'—'}</td><td>${esc(a.sleep||'—')}</td><td>${esc(a.body||'—')}</td><td>${status(a)}</td><td><button class="textlink" onclick="openProfile('${a.id}')">個人頁面 →</button></td></tr>`).join('');
 document.getElementById('listCount').textContent=active.length+' 位學員';document.getElementById('listEmpty').style.display=active.length?'none':'block';
 let alerts=active.filter(a=>a.fatigue&&(Number(a.fatigue)>=7||a.body==='疼痛'));document.getElementById('noticeArea').innerHTML=alerts.length?alerts.map(a=>`<div class="notice"><span class="notice-alert-icon" aria-label="需要關注">!</span><div class="notice-content"><strong>${esc(a.name)}</strong><p>疲勞 ${esc(a.fatigue)}/10 · ${esc(a.body||'未填身體狀況')}。（${esc(a.coach)}教練）</p></div></div>`).join(''):'目前沒有待確認事項。';
