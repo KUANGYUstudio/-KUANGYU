@@ -290,6 +290,29 @@ footer {
   .panel-head { flex-direction:column; }
   .tab { min-height:68px; }
 }
+
+/* TSB interactive calculator */
+.tsb-calc{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#edf3f9,#fff)}
+.tsb-calc h4{margin:0 0 7px;font-size:16px;color:var(--ink)}
+.tsb-calc-intro{margin:0 0 16px;color:var(--muted);font-size:13px;line-height:1.75}
+.tsb-calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tsb-calc-control{padding:14px;border:1px solid var(--line);border-radius:11px;background:#fff;min-width:0}
+.tsb-calc-control label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;font-weight:750;margin-bottom:10px}
+.tsb-calc-control output{font-size:21px;color:var(--navy);font-weight:850;font-variant-numeric:tabular-nums}
+.tsb-calc-control input{width:100%;accent-color:#477da8;cursor:pointer}
+.tsb-calc-scale{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}
+.tsb-calc-result{margin-top:12px;padding:18px;border:1px solid #cfdae6;border-radius:11px;background:#eaf1f8;text-align:center}
+.tsb-calc-result small{display:block;color:var(--muted);font-size:11px;margin-bottom:4px}
+.tsb-calc-number{font-size:38px;line-height:1.2;font-weight:850;color:var(--navy);font-variant-numeric:tabular-nums}
+.tsb-calc-formula{margin-top:5px;color:var(--muted);font-size:13px}
+.tsb-calc-status{display:inline-block;margin-top:10px;padding:6px 11px;border-radius:30px;font-size:11px;font-weight:800;background:#edf0f3;color:#526174}
+.tsb-calc-status.positive{color:#176d54;background:#def2e9}
+.tsb-calc-status.negative{color:#8a5b16;background:#fff0d4}
+.tsb-calc-explain{margin:12px 0 0;color:#4c5b6d;font-size:12px;line-height:1.8}
+.tsb-calc-actions{display:flex;justify-content:flex-end;margin-top:12px}
+.tsb-calc-reset{border:1px solid #cbd5df;border-radius:8px;background:#fff;color:var(--ink);padding:8px 12px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+@media(max-width:620px){.tsb-calc{padding:15px}.tsb-calc-grid{grid-template-columns:1fr}.tsb-calc-number{font-size:32px}}
+
 </style>
 </head>
 <body>
@@ -752,6 +775,33 @@ function render(key) {
 
     ${extraTable}
 
+    ${key === "tsb" ? `
+      <section class="tsb-calc" id="tsbInteractiveCalc" aria-labelledby="tsbCalcTitle">
+        <h4 id="tsbCalcTitle">TSB 互動計算器</h4>
+        <p class="tsb-calc-intro">調整 CTL 與 ATL，立即觀察兩者差距如何影響 TSB。計算方式：TSB = CTL − ATL。</p>
+        <div class="tsb-calc-grid">
+          <div class="tsb-calc-control">
+            <label for="tsbCtlInput"><span>CTL｜長期訓練負荷</span><output id="tsbCtlValue">80</output></label>
+            <input id="tsbCtlInput" type="range" min="0" max="150" step="1" value="80">
+            <div class="tsb-calc-scale"><span>0</span><span>150</span></div>
+          </div>
+          <div class="tsb-calc-control">
+            <label for="tsbAtlInput"><span>ATL｜短期訓練負荷</span><output id="tsbAtlValue">100</output></label>
+            <input id="tsbAtlInput" type="range" min="0" max="150" step="1" value="100">
+            <div class="tsb-calc-scale"><span>0</span><span>150</span></div>
+          </div>
+        </div>
+        <div class="tsb-calc-result" aria-live="polite">
+          <small>目前 TSB</small>
+          <div class="tsb-calc-number" id="tsbCalcValue">−20</div>
+          <div class="tsb-calc-formula" id="tsbCalcFormula">80 − 100 = −20</div>
+          <span class="tsb-calc-status negative" id="tsbCalcStatus">負值｜近期負荷較高</span>
+        </div>
+        <p class="tsb-calc-explain" id="tsbCalcExplain">近期負荷高於長期負荷。這可能出現在訓練負荷累積階段，但不能單憑 TSB 判定疲勞或過度訓練。</p>
+        <div class="tsb-calc-actions"><button class="tsb-calc-reset" type="button" id="tsbCalcReset">重設數值</button></div>
+      </section>
+    ` : ""}
+
     ${key === "load" ? `
       <div class="section magnitude">
         <h4>補充判斷｜不要只看 CTL／ATL／TSB</h4>
@@ -895,6 +945,48 @@ function render(key) {
       <ul>${sourceList}</ul>
     </div>
   `;
+
+  if (key === "tsb") {
+    const ctlInput = document.getElementById("tsbCtlInput");
+    const atlInput = document.getElementById("tsbAtlInput");
+    const ctlOutput = document.getElementById("tsbCtlValue");
+    const atlOutput = document.getElementById("tsbAtlValue");
+    const result = document.getElementById("tsbCalcValue");
+    const formula = document.getElementById("tsbCalcFormula");
+    const status = document.getElementById("tsbCalcStatus");
+    const explain = document.getElementById("tsbCalcExplain");
+    const reset = document.getElementById("tsbCalcReset");
+    const format = value => value > 0 ? "+" + value : String(value).replace("-", "−");
+
+    function updateTsbCalculator() {
+      const ctl = Number(ctlInput.value);
+      const atl = Number(atlInput.value);
+      const tsb = ctl - atl;
+      ctlOutput.textContent = ctl;
+      atlOutput.textContent = atl;
+      result.textContent = format(tsb);
+      formula.textContent = ctl + " − " + atl + " = " + format(tsb);
+      status.className = "tsb-calc-status" + (tsb > 0 ? " positive" : tsb < 0 ? " negative" : "");
+      if (tsb > 0) {
+        status.textContent = "正值｜近期負荷較低";
+        explain.textContent = "近期負荷低於長期負荷，可能代表近期訓練量降低或進入恢復／減量階段；仍需搭配實際恢復與表現判讀。";
+      } else if (tsb < 0) {
+        status.textContent = "負值｜近期負荷較高";
+        explain.textContent = "近期負荷高於長期負荷，可能出現在訓練負荷累積階段；不能單憑負值判定過度訓練，需搭配運動員的恢復與表現。";
+      } else {
+        status.textContent = "零值｜兩者相近";
+        explain.textContent = "近期負荷與長期負荷基準相同。這只描述負荷關係，不代表運動員一定疲勞或完全恢復。";
+      }
+    }
+    ctlInput.addEventListener("input", updateTsbCalculator);
+    atlInput.addEventListener("input", updateTsbCalculator);
+    reset.addEventListener("click", () => {
+      ctlInput.value = 80;
+      atlInput.value = 100;
+      updateTsbCalculator();
+    });
+    updateTsbCalculator();
+  }
 }
 
 const categoryConfig = {
