@@ -133,6 +133,33 @@
 .notice-content{width:100%;min-width:0;text-align:left}
 .notice strong{font-size:17px;text-align:left}
 .notice p{font-size:12px;text-align:left;line-height:1.55}
+
+/* Desktop: fit the complete coach roster without horizontal scrolling */
+@media (min-width: 900px){
+  .coach-roster-group .table-wrap{overflow-x:visible}
+  .coach-roster-group table{
+    width:100%;
+    min-width:0;
+    table-layout:fixed;
+  }
+  .coach-roster-group th,.coach-roster-group td{
+    padding-left:6px;
+    padding-right:6px;
+    overflow-wrap:anywhere;
+  }
+  .coach-roster-group th:nth-child(1),.coach-roster-group td:nth-child(1){width:25%;text-align:left}
+  .coach-roster-group th:nth-child(2),.coach-roster-group td:nth-child(2){width:7%;text-align:center}
+  .coach-roster-group th:nth-child(3),.coach-roster-group td:nth-child(3){width:9%;text-align:center}
+  .coach-roster-group th:nth-child(4),.coach-roster-group td:nth-child(4){width:13%;text-align:center}
+  .coach-roster-group th:nth-child(5),.coach-roster-group td:nth-child(5){width:10%;text-align:center}
+  .coach-roster-group th:nth-child(6),.coach-roster-group td:nth-child(6){width:17%;text-align:center}
+  .coach-roster-group th:nth-child(7),.coach-roster-group td:nth-child(7){width:19%;text-align:center}
+  .coach-roster-group .person{gap:7px}
+  .coach-roster-group .initial{flex:0 0 30px}
+  .coach-roster-group .dashboard-name-link{font-size:12px}
+  .coach-roster-group .person small{font-size:9px;white-space:nowrap}
+  .coach-roster-group .remind-btn{font-size:10px;padding:7px 8px;white-space:nowrap}
+}
 </style></head>
 <body><div class="app">
 <aside class="sidebar"><div class="brand"><small>KUANGYU STUDIO</small><h2>ATHLETE<br><span>MONITORING SYSTEM</span></h2></div><div class="nav-label">COACH WORKSPACE</div>
