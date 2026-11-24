@@ -1440,6 +1440,8 @@ button:active{transform:translateY(.5px)}
     font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;
     color:#1f2e26;
   }
+  .rpt-page{page-break-after:always;break-after:page;min-height:265mm;position:relative}
+  .rpt-page:last-child{page-break-after:auto;break-after:auto}
   .rpt-header{
     display:flex;
     justify-content:space-between;
@@ -1518,6 +1520,11 @@ button:active{transform:translateY(.5px)}
     border-radius:8px;
     padding:11px 13px;
   }
+  .rpt-chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .rpt-chart-card{border:1px solid #e0e8df;border-radius:9px;padding:9px;background:#fffefa;break-inside:avoid}
+  .rpt-chart-card h4{font-size:11.5px;margin:0 0 6px;color:#33483a}
+  .rpt-chart-card svg{display:block;width:100%;height:auto}
+  .rpt-chart-note{font-size:9.5px;color:#718076;margin-top:4px}
   .rpt-footer{
     display:flex;
     justify-content:space-between;
@@ -1528,6 +1535,15 @@ button:active{transform:translateY(.5px)}
     border-top:1px solid #e2e8e1;
   }
 }
+
+
+/* Profile refinement: compact hero + two-row recovery layout */
+.profile-hero-tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.profile-hero-tags .hero-tag{display:inline-flex;align-items:center;border:1px solid var(--line);background:#f4f7f2;color:#4b6152;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:700}
+.profile-note-strip{margin-top:14px;padding:10px 13px;border-radius:9px;background:#f5f7f2;color:#56665b;font-size:12.5px;line-height:1.6}
+.recovery-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin-top:10px}
+.recovery-summary-grid .detail{min-height:100px}
+@media(max-width:768px){.recovery-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.profile-note-strip{margin-top:12px}}
 
 /* Tablet & Compact Laptop Breakpoint */
 @media (max-width: 1180px){
@@ -1749,7 +1765,7 @@ button:active{transform:translateY(.5px)}
   #athletesRosterTable tr.athlete-row td:nth-child(3){grid-column:1 / 2}
   #athletesRosterTable tr.athlete-row td:nth-child(4){grid-column:2 / 3}
   #athletesRosterTable tr.athlete-row td:nth-child(5){grid-column:3 / 4}
-  #athletesRosterTable tr.athlete-row td:nth-child(3)::before{content:"今日疲勞";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #athletesRosterTable tr.athlete-row td:nth-child(3)::before{content:"RPE";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
   #athletesRosterTable tr.athlete-row td:nth-child(4)::before{content:"睡眠";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
   #athletesRosterTable tr.athlete-row td:nth-child(5)::before{content:"身體狀況";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
 
@@ -1873,7 +1889,6 @@ button:active{transform:translateY(.5px)}
       <button type="button" data-sec="sec-session-rpe" onclick="scrollToSection('sec-session-rpe')">單次訓練 RPE</button>
       <button type="button" data-sec="sec-load-chart" onclick="scrollToSection('sec-load-chart')">負荷與 RPE 趨勢</button>
       <button type="button" data-sec="sec-weekly" onclick="scrollToSection('sec-weekly')">週訓練量追蹤</button>
-      <button type="button" data-sec="sec-info" onclick="scrollToSection('sec-info')">基本資料</button>
     </div>
   </div>
 
@@ -1990,7 +2005,7 @@ button:active{transform:translateY(.5px)}
           <tr>
             <th>學員</th>
             <th>目標／比賽</th>
-            <th>今日疲勞</th>
+            <th>RPE</th>
             <th>睡眠 /5</th>
             <th>身體狀況</th>
             <th>狀態</th>
@@ -2020,12 +2035,14 @@ button:active{transform:translateY(.5px)}
         <div class="eyebrow">ATHLETE PROFILE</div>
         <h2 id="pName">學員</h2>
         <p id="pMeta">運動項目</p>
+        <div class="profile-hero-tags" id="pHeroTags"></div>
       </div>
       <div class="profile-actions">
         <button class="btn outline" id="profileReminderBtn" onclick="remindCurrentAthlete()">提醒回報</button>
         <button class="btn soft" id="editProfileBtn" onclick="editCurrentAthlete(this)">編輯學員資料</button>
       </div>
     </div>
+    <div class="profile-note-strip" id="pCoachNote">教練備註：尚無備註</div>
   </div>
 
   <!-- Non-sticky Mobile Quick Jump Bar (only visible <= 768px) -->
@@ -2047,7 +2064,7 @@ button:active{transform:translateY(.5px)}
     </div>
 
     <div class="grid detail-grid">
-      <div class="detail"><small>今日疲勞</small><strong id="pFatigue">尚未回報</strong></div>
+      <div class="detail"><small>RPE</small><strong id="pFatigue">尚未回報</strong></div>
       <div class="detail"><small>睡眠品質</small><strong id="pSleep">—</strong></div>
       <div class="detail"><small>身體狀況</small><strong id="pBody">—</strong></div>
     </div>
@@ -2057,11 +2074,6 @@ button:active{transform:translateY(.5px)}
         <small>今日判讀狀態</small>
         <strong id="pReportStatus">尚未回報</strong>
         <div class="detail-note" id="pReportReason">等待今日恢復問卷回報</div>
-      </div>
-      <div class="detail">
-        <small>恢復指標綜合檢視</small>
-        <strong id="pRecoverySummary" style="font-size:15.5px">—</strong>
-        <div class="detail-note" id="pRecoverySub">主觀疲勞、睡眠品質與肌肉狀態</div>
       </div>
       <div class="detail">
         <small>教練追蹤建議</small>
@@ -2257,11 +2269,7 @@ button:active{transform:translateY(.5px)}
     </div>
   </div>
 
-  <div class="card scroll-anchor" id="sec-info">
-    <div class="card-head"><h3>個人基本資料</h3><small>ATHLETE INFORMATION</small></div>
-    <div id="profileInfo" class="info-grid"></div>
-    <div class="hint" style="margin-top:14px">目前為前端原型：新增學員、編輯與匯入的 TrainingPeaks CSV 資料皆保存在這台瀏覽器的 localStorage。</div>
-  </div>
+
 </section>
 </div></main></div>
 
@@ -2415,7 +2423,7 @@ function scrollToSection(sectionId){
 
 /* Auto scroll-spy so sidebar & mobile subnav highlight follows current viewport */
 (function initScrollSpy(){
-  const ids=['sec-recovery','sec-session-rpe','sec-load-chart','sec-weekly','sec-info'];
+  const ids=['sec-recovery','sec-session-rpe','sec-load-chart','sec-weekly'];
   let ticking=false;
   window.addEventListener('scroll',()=>{
     if(ticking||Date.now()<scrollSpyLockUntil)return;
@@ -2707,6 +2715,8 @@ function openProfile(id){
   document.getElementById('pInitial').textContent=initials(a.name);
   document.getElementById('pName').textContent=a.name;
   document.getElementById('pMeta').textContent=a.goal?`${a.sport} · 目標：${a.goal}`:a.sport;
+  document.getElementById('pHeroTags').innerHTML=`<span class="hero-tag">${a.active==='paused'?'暫停課表':'管理中'}</span><span class="hero-tag">TP ID：${esc(a.tp||'尚未設定')}</span>`;
+  document.getElementById('pCoachNote').textContent=`教練備註：${a.note||'尚無備註'}`;
   document.getElementById('pFatigue').textContent=rpeVal?rpeVal+'/10':'尚未回報';
   document.getElementById('pSleep').textContent=sleepScoreLabel(a);
   document.getElementById('pBody').textContent=a.body||'—';
@@ -2714,17 +2724,7 @@ function openProfile(id){
   document.getElementById('pReportStatus').innerHTML=statusBadgeHtml(a,'',true);
   document.getElementById('pReportReason').textContent=st.reason;
 
-  if(st.level==='pending'){
-    document.getElementById('pRecoverySummary').textContent='今日尚未回報';
-    document.getElementById('pRecoverySub').textContent='請學員填寫疲勞、睡眠與身體狀態';
-  }else{
-    const parts=[];
-    if(rpeVal)parts.push(`疲勞 ${rpeVal}/10`);
-    if(sleepVal!==null)parts.push(`睡眠 ${sleepVal}/5`);
-    if(a.body)parts.push(`身體${a.body}`);
-    document.getElementById('pRecoverySummary').textContent=parts.join(' · ')||'已收到回報';
-    document.getElementById('pRecoverySub').textContent=(sleepVal!==null&&sleepVal<=2)?'睡眠品質偏低，留意恢復節奏':((rpeVal&&rpeVal>=7)?'主觀疲勞偏高，觀察隔日反應':'三項恢復指標皆在可接受範圍');
-  }
+
 
   const actionMap={
     ok:'維持原訂課表推進',
@@ -2747,13 +2747,7 @@ function openProfile(id){
   document.getElementById('clearCsvBtn').hidden=!hasCsv;
   document.getElementById('importCsvBtn').classList.toggle('is-active',hasCsv);
 
-  document.getElementById('profileInfo').innerHTML=`
-    <div class="info-item"><small>運動項目</small><span>${esc(a.sport)}</span></div>
-    <div class="info-item"><small>目標／比賽</small><span>${esc(a.goal||'尚未設定')}</span></div>
-    <div class="info-item"><small>TrainingPeaks ID</small><span>${esc(a.tp||'尚未設定')}</span></div>
-    <div class="info-item"><small>學員狀態</small><span>${a.active==='paused'?'暫停課表':'管理中'}</span></div>
-    <div class="info-item wide"><small>教練備註</small><span>${esc(a.note||'尚無備註')}</span></div>
-  `;
+
 
   setSubnavCurrent('sec-recovery');
   renderSessionRpe(a);
@@ -4037,107 +4031,83 @@ function printWeeklyPdf(){
   `:'';
 
   const printHost=document.getElementById('pdfPrintArea');
+  // Build chart series from the athlete's actual records; never fabricate missing metrics.
+  const chartStart=dateMinus(dayStart(new Date(w.date+'T00:00:00')),56);
+  const chartEnd=datePlus(dayStart(new Date(w.date+'T00:00:00')),6);
+  const series=buildAthleteSeries(a,chartStart,chartEnd).data;
+  const weekStart=dayStart(new Date(w.date+'T00:00:00'));
+  const daily=series.filter(d=>d.date>=weekStart&&d.date<=datePlus(weekStart,6));
+  const dayLabels=['一','二','三','四','五','六','日'];
+  const maxTss=Math.max(10,...daily.map(d=>Number(d.TSS||0)));
+  const dailyBars=daily.map((d,i)=>{const x=28+i*42,h=(Number(d.TSS||0)/maxTss)*74,y=94-h;return `<rect x="${x}" y="${y}" width="22" height="${h}" rx="3" fill="#6f9278"><title>${dayLabels[i]}：${Math.round(d.TSS||0)} TSS</title></rect><text x="${x+11}" y="108" text-anchor="middle" font-size="9" fill="#627067">${dayLabels[i]}</text>`}).join('');
+  const rpePts=daily.map((d,i)=>d.RPE?`${39+i*42},${94-(Number(d.RPE)/10)*74}`:null).filter(Boolean);
+  const rpeLine=rpePts.length>1?`<polyline points="${rpePts.join(' ')}" fill="none" stroke="#bd8751" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`:'';
+  const dailySvg=`<svg viewBox="0 0 330 120" role="img" aria-label="每日 TSS 與 RPE 圖表"><line x1="20" y1="94" x2="315" y2="94" stroke="#dfe7de"/>${dailyBars}${rpeLine}<text x="22" y="12" font-size="9" fill="#6f9278">TSS</text><text x="308" y="12" text-anchor="end" font-size="9" fill="#bd8751">RPE</text></svg>`;
+  const last4=series.slice(-28);
+  const weeklyPmc=[];
+  for(let i=0;i<4;i++){const chunk=last4.slice(i*7,(i+1)*7);if(chunk.length){const z=chunk[chunk.length-1];weeklyPmc.push({ctl:z.CTL||0,atl:z.ATL||0,tsb:z.TSB||0})}}
+  const pmcMax=Math.max(10,...weeklyPmc.flatMap(x=>[x.ctl,x.atl]));
+  const pmcSvg=`<svg viewBox="0 0 330 120" role="img" aria-label="四週 CTL ATL TSB 趨勢"><line x1="22" y1="92" x2="315" y2="92" stroke="#dfe7de"/>${weeklyPmc.map((d,i)=>{const x=40+i*70;return `<rect x="${x}" y="${92-d.ctl/pmcMax*70}" width="15" height="${d.ctl/pmcMax*70}" rx="2" fill="#557b61"/><rect x="${x+18}" y="${92-d.atl/pmcMax*70}" width="15" height="${d.atl/pmcMax*70}" rx="2" fill="#c18a57"/><text x="${x+16}" y="107" text-anchor="middle" font-size="9" fill="#627067">W${i+1}</text><text x="${x+16}" y="${Math.max(10,88-Math.max(d.ctl,d.atl)/pmcMax*70)}" text-anchor="middle" font-size="8" fill="#526257">${Math.round(d.tsb)}</text>`}).join('')}<text x="22" y="11" font-size="9" fill="#557b61">CTL</text><text x="58" y="11" font-size="9" fill="#c18a57">ATL</text><text x="95" y="11" font-size="9" fill="#627067">數字：TSB</text></svg>`;
+  const {weeks:allWeeks}=buildAthleteWeeklyData(a);
+  const last8=allWeeks.filter(x=>x.date<=w.date).slice(-8);
+  const maxHours=Math.max(1,...last8.flatMap(x=>[x.estMin/60,x.realMin/60]));
+  const hoursSvg=`<svg viewBox="0 0 330 130" role="img" aria-label="八週預計與實際訓練時數比較"><line x1="18" y1="102" x2="318" y2="102" stroke="#dfe7de"/>${last8.map((x,i)=>{const slot=300/Math.max(1,last8.length),cx=20+slot*(i+.5),bw=Math.min(12,slot*.25),eh=x.estMin/60/maxHours*78,rh=x.realMin/60/maxHours*78;return `<rect x="${cx-bw-1}" y="${102-eh}" width="${bw}" height="${eh}" rx="2" fill="#b7c6b6"/><rect x="${cx+1}" y="${102-rh}" width="${bw}" height="${rh}" rx="2" fill="#557b61"/><text x="${cx}" y="116" text-anchor="middle" font-size="8" fill="#627067">W${esc(x.weekNum)}</text>`}).join('')}<text x="20" y="10" font-size="9" fill="#b7c6b6">預計</text><text x="57" y="10" font-size="9" fill="#557b61">實際</text></svg>`;
+  const donutColors=['#557b61','#8ca88e','#c18a57','#9aa5a0'];
+  const positiveSports=Object.values(m.sports).filter(x=>x.mins>0);
+  let donutSvg='';
+  if(positiveSports.length){let offset=0;const total=positiveSports.reduce((z,x)=>z+x.mins,0);const circ=2*Math.PI*38;const segs=positiveSports.map((x,i)=>{const len=total?x.mins/total*circ:0;const seg=`<circle cx="70" cy="60" r="38" fill="none" stroke="${donutColors[i%4]}" stroke-width="15" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-offset}" transform="rotate(-90 70 60)"/>`;offset+=len;return seg}).join('');donutSvg=`<svg viewBox="0 0 330 125" role="img" aria-label="各運動項目訓練時間占比"><g>${segs}</g><text x="70" y="58" text-anchor="middle" font-size="13" font-weight="700" fill="#2b4032">${fmtHrMin(total)}</text><text x="70" y="72" text-anchor="middle" font-size="8" fill="#627067">總時數</text>${positiveSports.map((x,i)=>`<circle cx="142" cy="${28+i*21}" r="4" fill="${donutColors[i%4]}"/><text x="153" y="32+i*21" font-size="10" fill="#44564a">${esc(x.label)}　${Math.round(x.mins/total*100)}%</text>`).join('')}</svg>`
+  }else{donutSvg=`<svg viewBox="0 0 330 125"><text x="165" y="55" text-anchor="middle" font-size="11" fill="#627067">尚無可用的運動項目時間拆解</text><text x="165" y="72" text-anchor="middle" font-size="9" fill="#89958d">匯入訓練紀錄後顯示</text></svg>`}
+  if(a.sport!=='鐵人三項'){
+    const hoursPct=w.estMin>0?Math.min(100,Math.round(w.realMin/w.estMin*100)):null;
+    const runPctValue=w.estRun>0?Math.min(100,Math.round(w.realRun/w.estRun*100)):null;
+    const ring=(pct,cx,color)=>{const r=30,c=2*Math.PI*r,v=pct===null?0:c*pct/100;return `<circle cx="${cx}" cy="57" r="${r}" fill="none" stroke="#e7ede6" stroke-width="10"/><circle cx="${cx}" cy="57" r="${r}" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${v} ${c-v}" transform="rotate(-90 ${cx} 57)"/><text x="${cx}" y="61" text-anchor="middle" font-size="11" font-weight="700" fill="#2b4032">${pct===null?'—':pct+'%'}</text>`};
+    donutSvg=`<svg viewBox="0 0 330 125" role="img" aria-label="訓練時數與跑量達成率">${ring(hoursPct,82,'#557b61')}${ring(runPctValue,235,'#c18a57')}<text x="82" y="105" text-anchor="middle" font-size="10" fill="#526257">時數達成</text><text x="235" y="105" text-anchor="middle" font-size="10" fill="#526257">跑量達成</text></svg>`;
+  }
+  const trendNote=m.isRealSeries?'依 TrainingPeaks 匯入資料':'目前為示意趨勢資料';
+  const sportNote=m.sportSource==='csv'?'依 TrainingPeaks 訓練紀錄':'目前無真實分項時間資料';
+
   printHost.innerHTML=`
     <div class="rpt-wrap">
-      <div class="rpt-header" style="background:${palette.bg}">
-        <div>
-          <small>KUANGYU STUDIO · WEEKLY TRAINING REPORT</small>
-          <h1>${esc(a.name)} 週訓練分析報告</h1>
-          <p>${esc(a.sport)}${a.goal?' · 目標：'+esc(a.goal):''}</p>
+      <div class="rpt-page">
+        <div class="rpt-header" style="background:${palette.bg}">
+          <div><small>KUANGYU STUDIO · WEEKLY TRAINING REPORT</small><h1>${esc(a.name)} 週訓練分析報告</h1><p>${esc(a.sport)}${a.goal?' · 目標：'+esc(a.goal):''}</p></div>
+          <div class="rpt-header-right"><div class="rpt-week-badge">第 ${esc(w.weekNum)} 週</div><p>${fmtDate(m.startDate)} — ${fmtDate(m.endDate)}</p></div>
         </div>
-        <div class="rpt-header-right">
-          <div class="rpt-week-badge">第 ${esc(w.weekNum)} 週</div>
-          <p>${fmtDate(m.startDate)} — ${fmtDate(m.endDate)}</p>
+        <div class="rpt-section">
+          <div class="rpt-section-title" style="color:${palette.bg}">本週訓練摘要<span>WEEKLY SUMMARY</span></div>
+          <div class="rpt-kpi-4">
+            <div class="rpt-box"><small>實際訓練時數</small><strong>${fmtHrMin(w.realMin)}</strong><span class="rpt-sub">預計 ${fmtHrMin(w.estMin)}</span></div>
+            <div class="rpt-box"><small>時數達成率</small><strong>${m.durPct!==null?m.durPct+'%':'—'}</strong><span class="rpt-sub">${m.trainDays} 天訓練</span></div>
+            <div class="rpt-box"><small>週累計 TSS</small><strong>${m.weekTss}</strong><span class="rpt-sub">單日最高 ${m.maxTss}</span></div>
+            <div class="rpt-box"><small>平均 RPE</small><strong>${m.avgRpe!==null?m.avgRpe.toFixed(1)+'/10':'—'}</strong><span class="rpt-sub">sRPE ${m.weekSrpe} AU</span></div>
+          </div>
+          ${w.remark?`<div style="margin-top:9px;font-size:10.5px;color:#526257">本週備註：${esc(w.remark)}</div>`:''}
         </div>
+        <div class="rpt-section">
+          <div class="rpt-section-title" style="color:${palette.bg}">每日訓練節奏<span>DAILY TSS + RPE</span></div>
+          ${dailySvg}<div class="rpt-chart-note">長條為每日 TSS，折線為單日 RPE；缺少資料的日期不補值。</div>
+        </div>
+        <div class="rpt-chart-grid">
+          <div class="rpt-chart-card"><h4>各運動項目時間占比</h4>${donutSvg}<div class="rpt-chart-note">${sportNote}${m.sportSource==='demo-tri'?'；此為示意比例，非實際紀錄':''}</div></div>
+          <div class="rpt-chart-card"><h4>訓練完成度</h4>
+            <div class="rpt-bar-row"><div class="rpt-bar-label"><span>訓練時數</span><span>${m.durPct!==null?m.durPct+'%':'—'}</span></div><div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${durBarW}%;background:${palette.accent}"></div></div></div>
+            ${(w.estRun>0||w.realRun>0)?`<div class="rpt-bar-row"><div class="rpt-bar-label"><span>跑步里程</span><span>${m.runPct!==null?m.runPct+'%':'—'}</span></div><div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${runBarW}%;background:#47728c"></div></div><div class="rpt-chart-note">實際 ${w.realRun} km／預計 ${w.estRun} km</div></div>`:''}
+          </div>
+        </div>
+        <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 1 / 2 頁</span></div>
       </div>
-
-      <div class="rpt-section">
-        <div class="rpt-section-title" style="color:${palette.bg}">
-          一週訓練量與課表完成度
-          <span>預計 vs 實際執行統計</span>
-        </div>
-        <div class="rpt-bar-row">
-          <div class="rpt-bar-label">
-            <span>總訓練時數（實際 ${fmtHrMin(w.realMin)} ／ 預計 ${fmtHrMin(w.estMin)}）</span>
-            <span style="color:${palette.bg}">${m.durPct!==null?m.durPct+'%':'—'}</span>
-          </div>
-          <div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${durBarW}%;background:${palette.accent}"></div></div>
-        </div>
-        ${(w.estRun>0||w.realRun>0)?`
-        <div class="rpt-bar-row">
-          <div class="rpt-bar-label">
-            <span>跑步里程（實際 ${w.realRun} km ／ 預計 ${w.estRun} km）</span>
-            <span style="color:${palette.bg}">${m.runPct!==null?m.runPct+'%':'—'}</span>
-          </div>
-          <div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${runBarW}%;background:#47728c"></div></div>
-        </div>`:''}
-        ${w.remark?`<div style="margin-top:8px;font-size:11px;color:#4f5f55">本週備註：${esc(w.remark)}</div>`:''}
-      </div>
-
-      ${sportTableHtml}
-
-      <div class="rpt-section">
-        <div class="rpt-section-title" style="color:${palette.bg}">
-          體能、負荷與疲勞分析 (PMC &amp; Internal Load)
-          <span>${m.isRealSeries?'依據匯入之 TrainingPeaks 數據計算':'示意負荷趨勢基準'}</span>
-        </div>
-        <div class="rpt-kpi-4" style="margin-bottom:9px">
-          <div class="rpt-box">
-            <small>CTL 長期體能</small>
-            <strong>${m.ctl.toFixed(1)}</strong>
-            <span class="rpt-sub">${fmtDelta(m.dCtl)||'期末體能值'}</span>
-          </div>
-          <div class="rpt-box">
-            <small>ATL 短期疲勞</small>
-            <strong>${m.atl.toFixed(1)}</strong>
-            <span class="rpt-sub">${fmtDelta(m.dAtl)||'近 7 日負荷'}</span>
-          </div>
-          <div class="rpt-box">
-            <small>TSB 狀態值</small>
-            <strong>${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}</strong>
-            <span class="rpt-sub">${fmtDelta(m.dTsb)||'體能減疲勞'}</span>
-          </div>
-          <div class="rpt-box">
-            <small>ACWR 急慢性比</small>
-            <strong>${m.acwr!==null?m.acwr.toFixed(2):'—'}</strong>
-            <span class="rpt-sub">${esc(m.acwrLabel)}</span>
-          </div>
-        </div>
-        <div class="rpt-kpi-4">
-          <div class="rpt-box">
-            <small>單週累計 TSS</small>
-            <strong>${m.weekTss}</strong>
-            <span class="rpt-sub">單日最高 ${m.maxTss} TSS</span>
-          </div>
-          <div class="rpt-box">
-            <small>單週 sRPE 負荷</small>
-            <strong>${m.weekSrpe.toLocaleString('en-US')}</strong>
-            <span class="rpt-sub">單位：AU（強度 × 時間）</span>
-          </div>
-          <div class="rpt-box">
-            <small>週平均主觀 RPE</small>
-            <strong>${m.avgRpe!==null?m.avgRpe.toFixed(1)+' / 10':'—'}</strong>
-            <span class="rpt-sub">${m.maxRpe!==null?`單日最高 ${m.maxRpe}/10`:'尚無 RPE 紀錄'}</span>
-          </div>
-          <div class="rpt-box">
-            <small>最新恢復與訓練天數</small>
-            <strong>${m.trainDays} 天</strong>
-            <span class="rpt-sub">最新狀態：${esc(st.label)}（睡眠 ${sleepScoreLabel(a)}）</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="rpt-section">
-        <div class="rpt-section-title" style="color:${palette.bg}">
-          訓練分析與下週調整建議
-          <span>COACH &amp; AI SUMMARY</span>
-        </div>
-        <div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div>
-      </div>
-
-      <div class="rpt-footer">
-        <span>KUANGYU STUDIO · Athlete Monitoring System</span>
-        <span>報告產出日期：${fmtDate(new Date())}</span>
+      <div class="rpt-page">
+        <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · PERFORMANCE REVIEW</small><h1>進階趨勢與教練判讀</h1><p>${esc(a.name)} · 第 ${esc(w.weekNum)} 週</p></div><div class="rpt-header-right"><div class="rpt-week-badge">ADVANCED REVIEW</div><p>${fmtDate(m.startDate)} — ${fmtDate(m.endDate)}</p></div></div>
+        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">四週 CTL／ATL／TSB 趨勢（PMC）<span>${trendNote}</span></div>${pmcSvg}<div class="rpt-chart-note">每週末數值；柱狀為 CTL 與 ATL，數字標示 TSB。${m.isRealSeries?'':'目前為示意資料，請勿視為真實訓練負荷。'}</div></div>
+        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近八週預計與實際訓練時數<span>PLANNED VS ACTUAL</span></div>${hoursSvg}<div class="rpt-chart-note">淺色為預計時數，深色為實際時數；沒有紀錄的週次不會自行補造。</div></div>
+        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">負荷與疲勞指標<span>TRAINING LOAD</span></div><div class="rpt-kpi-4">
+          <div class="rpt-box"><small>CTL 長期體能</small><strong>${m.ctl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dCtl)||'期末值'}</span></div>
+          <div class="rpt-box"><small>ATL 短期疲勞</small><strong>${m.atl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dAtl)||'近七日負荷'}</span></div>
+          <div class="rpt-box"><small>TSB 狀態值</small><strong>${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dTsb)||'體能減疲勞'}</span></div>
+          <div class="rpt-box"><small>ACWR 急慢性比</small><strong>${m.acwr!==null?m.acwr.toFixed(2):'—'}</strong><span class="rpt-sub">${esc(m.acwrLabel)}</span></div>
+        </div></div>
+        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">教練／AI 判讀與下週建議<span>COACH &amp; AI RECOMMENDATIONS</span></div><div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div></div>
+        <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 2 / 2 頁 · 報告日期：${fmtDate(new Date())}</span></div>
       </div>
     </div>
   `;
