@@ -74,7 +74,7 @@ button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px soli
 <header>
   <div class="eyebrow">KUANGYU STUDIO / COACH EDUCATION</div>
   <h1>Coach Development Roadmap</h1>
-  <p>教練學習地圖｜把數據判讀、運動生理、恢復監控、動作評估與課表設計整理成循序漸進的學習目錄。先看地圖，再依自己的進度逐項學習，不需要一次吸收所有資訊。</p>
+  <p>教練學習地圖｜搭配 Training Data，將數據判讀、運動生理、恢復監控、動作評估與課表設計整理成循序漸進的學習目錄。先看地圖，再依自己的進度逐項學習，不需要一次吸收所有資訊。</p>
 </header>
 <main class="wrap">
   <div class="topline">
@@ -86,12 +86,12 @@ button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px soli
   </div>
 
   <section class="progress-card" aria-label="學習進度">
-    <div class="progress-head"><strong>整體學習進度</strong><span id="progressText">0 / 28 已完成 · 0%</span></div>
+    <div class="progress-head"><strong>整體學習進度</strong><span id="progressText">0 / 39 已完成 · 0%</span></div>
     <div class="track"><div class="track-fill" id="progressFill"></div></div>
     <div class="stats">
       <div class="stat"><b id="doneCount">0</b><small>已完成</small></div>
       <div class="stat"><b id="learningCount">0</b><small>學習中</small></div>
-      <div class="stat"><b id="todoCount">28</b><small>尚未開始</small></div>
+      <div class="stat"><b id="todoCount">39</b><small>尚未開始</small></div>
     </div>
   </section>
 
@@ -133,11 +133,15 @@ button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px soli
     </section>
 
     <section class="module" data-module="recovery">
-      <div class="module-top"><div><div class="module-number">03 / RECOVERY & WELLNESS</div><h3>疲勞、恢復與主觀監控</h3></div><span class="count">4 個主題</span></div>
-      <p class="module-desc">把訓練設備看不到的身體感受納入監控，理解每天的狀態與長期趨勢。</p>
+      <div class="module-top"><div><div class="module-number">03 / RECOVERY & WELLNESS</div><h3>疲勞、恢復與主觀監控</h3></div><span class="count">8 個主題</span></div>
+      <p class="module-desc">整合穿戴裝置的生理數據、睡眠與選手主觀回饋，理解每天的狀態與長期恢復趨勢。</p>
       <div class="topics">
         <article class="topic" data-id="hrv"><div class="topic-head"><div><h4>HRV｜心率變異度</h4><p>追蹤個人 HRV 基準與日常波動，不以單日數字定論。</p></div><select class="topic-status" aria-label="HRV 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>HRV 的基本概念、測量一致性、個人基準、趨勢觀察，以及與睡眠、壓力和訓練反應一起判讀。</p></details></article>
         <article class="topic" data-id="rhr"><div class="topic-head"><div><h4>Resting HR｜靜息心率</h4><p>觀察休息狀態心率相對於個人基準的變化。</p></div><select class="topic-status" aria-label="靜息心率學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>固定測量條件、個人基準、持續偏離與可能干擾因素；避免單次讀值過度解讀。</p></details></article>
+        <article class="topic" data-id="sleep"><div class="topic-head"><div><h4>Sleep｜睡眠時間與結構</h4><p>理解總睡眠時間、深層睡眠、淺層睡眠、REM 與夜間清醒時間。</p></div><select class="topic-status" aria-label="睡眠指標學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>優先看總睡眠時間與規律性，再把睡眠階段當作輔助資訊；理解穿戴裝置對睡眠階段的估算限制。</p></details></article>
+        <article class="topic" data-id="bodybattery"><div class="topic-head"><div><h4>Body Battery｜身體能量指數</h4><p>認識 Garmin 如何整合生理訊號估算身體能量變化。</p></div><select class="topic-status" aria-label="Body Battery 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>理解 5–100 分數的常見區間、日內回升與消耗，以及它不是直接測量的能量或恢復程度。</p></details></article>
+        <article class="topic" data-id="stress"><div class="topic-head"><div><h4>Stress Level｜生理壓力指數</h4><p>理解 Garmin 壓力分數與休息、低、中、高壓力分類。</p></div><select class="topic-status" aria-label="Stress Level 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>了解 HRV 等生理訊號、活動與生活因素的影響；區分生理壓力估算與心理壓力量表。</p></details></article>
+        <article class="topic" data-id="recoveryintegration"><div class="topic-head"><div><h4>Recovery Monitoring｜恢復監控整合判讀</h4><p>把 HRV、RHR、睡眠、Body Battery、Stress 與主觀回饋放在一起。</p></div><select class="topic-status" aria-label="恢復監控整合判讀學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>建立個人基準、觀察變化持續時間、交叉驗證多項指標，並結合 RPE、精神、痠痛與訓練表現形成教練判讀。</p></details></article>
         <article class="topic" data-id="rpe"><div class="topic-head"><div><h4>RPE / Session RPE｜主觀用力程度</h4><p>學習如何讓學員回報單堂訓練感受，並與課表負荷對照。</p></div><select class="topic-status" aria-label="RPE 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>RPE 量表、Session RPE 的回報時機與計算概念、不同運動項目的使用方式，以及如何降低學員填寫偏差。</p></details></article>
         <article class="topic" data-id="wellness"><div class="topic-head"><div><h4>Wellness｜每日身體狀態</h4><p>把睡眠、疲勞、痠痛、情緒與壓力變成簡單可追蹤的回饋。</p></div><select class="topic-status" aria-label="Wellness 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>問卷題目設計、固定回報時間、個人趨勢、隱私與回報負擔；避免把主觀分數當成診斷。</p></details></article>
       </div>
@@ -176,22 +180,25 @@ button:focus-visible,select:focus-visible,summary:focus-visible{outline:3px soli
     </section>
 
     <section class="module" data-module="planning">
-      <div class="module-top"><div><div class="module-number">07 / PROGRAM DESIGN</div><h3>課表設計與訓練週期</h3></div><span class="count">4 個主題</span></div>
-      <p class="module-desc">把前面學到的資訊轉成可執行的單堂課表、每週安排與長期賽季計畫。</p>
+      <div class="module-top"><div><div class="module-number">07 / PROGRAM DESIGN</div><h3>課表設計與訓練週期</h3></div><span class="count">6 個主題</span></div>
+      <p class="module-desc">把訓練原則、單堂課表、每週安排、訓練階段與年度賽季計畫串連起來。</p>
       <div class="topics">
         <article class="topic" data-id="principles"><div class="topic-head"><div><h4>Training Principles｜訓練原則</h4><p>理解特異性、漸進超負荷、個別化、恢復與可持續性。</p></div><select class="topic-status" aria-label="訓練原則學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>從運動員目標、訓練史、能力與生活條件設定可執行的訓練方向。</p></details></article>
         <article class="topic" data-id="workout"><div class="topic-head"><div><h4>Workout Design｜單堂課表設計</h4><p>設計熱身、主課表、強度、組數、休息與收操。</p></div><select class="topic-status" aria-label="單堂課表學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>Easy、Tempo、Threshold、Interval、Long Session 等課型的目的與處方要素。</p></details></article>
         <article class="topic" data-id="weekly"><div class="topic-head"><div><h4>Weekly Scheduling｜每週訓練安排</h4><p>安排頻率、強弱日、長課、休息日與三項運動分配。</p></div><select class="topic-status" aria-label="每週安排學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>訓練量、強度、頻率與恢復的互動；游泳、自行車、跑步的負荷整合。</p></details></article>
         <article class="topic" data-id="periodization"><div class="topic-head"><div><h4>Periodization｜週期化與賽季規劃</h4><p>把 Base、Build、Recovery、Peak、Taper 串成賽季計畫。</p></div><select class="topic-status" aria-label="週期化學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>年度訓練計畫、比賽優先順序、訓練區塊、恢復安排與賽前減量。</p></details></article>
+        <article class="topic" data-id="trainingcycle"><div class="topic-head"><div><h4>Training Cycle｜訓練階段與週期</h4><p>理解 Base、Build、Recovery、Peak 與 Taper 等階段的目的與銜接。</p></div><select class="topic-status" aria-label="Training Cycle 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>辨識各階段的訓練目標、負荷安排、恢復需求與進入下一階段的依據。</p></details></article>
+        <article class="topic" data-id="atp"><div class="topic-head"><div><h4>ATP｜年度訓練計畫</h4><p>把賽事目標、重要比賽與訓練區塊安排到年度時間軸。</p></div><select class="topic-status" aria-label="ATP 學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>學習賽事優先順序、年度週期、訓練區塊、測試節點、恢復週與賽前減量的整體規劃。</p></details></article>
       </div>
     </section>
 
     <section class="module" data-module="monitoring">
-      <div class="module-top"><div><div class="module-number">08 / COACHING DECISIONS</div><h3>監控、回饋與教練決策</h3></div><span class="count">2 個主題</span></div>
-      <p class="module-desc">將訓練數據、身體回饋與表現放在一起，決定課表是否維持或調整。</p>
+      <div class="module-top"><div><div class="module-number">08 / COACHING DECISIONS</div><h3>監控、回饋與教練決策</h3></div><span class="count">3 個主題</span></div>
+      <p class="module-desc">將訓練數據、身體回饋與表現放在一起，練習案例分析並決定課表是否維持或調整。</p>
       <div class="topics">
         <article class="topic" data-id="integrated"><div class="topic-head"><div><h4>Integrated Monitoring｜整合監控</h4><p>串聯負荷、恢復、表現與動作品質，避免只看單一數字。</p></div><select class="topic-status" aria-label="整合監控學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>建立個人基準、觀察趨勢、辨識訊號不一致，以及區分事實、假設與教練決策。</p></details></article>
         <article class="topic" data-id="adjustment"><div class="topic-head"><div><h4>Program Adjustment｜課表調整與追蹤</h4><p>依照訓練反應，決定維持、增加、降低或重新安排刺激。</p></div><select class="topic-status" aria-label="課表調整學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>追蹤課表完成率、表現變化、RPE／Wellness、恢復狀態與下一次訓練的調整理由。</p></details></article>
+        <article class="topic" data-id="caseanalysis"><div class="topic-head"><div><h4>Case Analysis｜教練案例分析</h4><p>練習從真實訓練紀錄辨識問題、整合證據並提出可追蹤的決策。</p></div><select class="topic-status" aria-label="教練案例分析學習狀態"><option value="todo">尚未開始</option><option value="learning">學習中</option><option value="done">已完成</option></select></div><details><summary>學習重點</summary><p>依序整理選手背景、訓練負荷、恢復指標、主觀回饋與表現；區分觀察事實、可能解釋與待確認資訊，最後提出調整理由與追蹤方式。</p></details></article>
       </div>
     </section>
   </div>
