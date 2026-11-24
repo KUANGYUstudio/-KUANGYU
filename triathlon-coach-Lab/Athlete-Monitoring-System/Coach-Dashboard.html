@@ -4,205 +4,651 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KUANGYU Athlete Monitoring System｜Coach Dashboard</title>
 <style>
-:root{--ink:#34483f;--sage:#718b79;--sage2:#edf2eb;--cream:#f7f7f2;--paper:#fffefa;--line:#e5e9e1;--muted:#7d897f;--amber:#b88745;--amberbg:#f7f0e5;--red:#b96860;--redbg:#f8ece9;--shadow:0 5px 20px rgba(52,72,63,.05)}
-*{box-sizing:border-box}body{margin:0;background:var(--cream);color:#303b34;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
-.app{display:flex;min-height:100vh}.sidebar{width:238px;background:#edf2eb;border-right:1px solid var(--line);padding:24px 16px;display:flex;flex-direction:column;flex-shrink:0}.brand{padding:4px 10px 25px}.brand small{font-size:10px;letter-spacing:2px;color:var(--sage);font-weight:700}.brand h2{font-size:18px;line-height:1.35;margin:8px 0;color:var(--ink)}.brand span{font-weight:400}.nav-label{font-size:10px;letter-spacing:1.5px;color:var(--muted);padding:10px}.nav button{width:100%;border:0;background:transparent;color:#526257;text-align:left;padding:12px;border-radius:9px;margin:3px 0;font-size:13px}.nav button.active,.nav button:hover{background:#dce7dc;color:var(--ink)}.nav button b{display:inline-block;width:25px;font-weight:500}.side-foot{margin-top:auto;padding:14px 10px;border-top:1px solid #dce4da;color:var(--muted);font-size:10px;line-height:1.7}
-.main{flex:1;min-width:0}.topbar{height:66px;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px}.crumb{font-size:12px;color:var(--muted)}.top-right{display:flex;align-items:center;gap:10px;font-size:12px}.role{background:var(--sage2);color:#526d59;border-radius:20px;padding:6px 10px}.avatar{width:32px;height:32px;border-radius:50%;background:#e3ebe1;color:var(--ink);display:grid;place-items:center;font-weight:700}
-.content{padding:28px 30px 45px;max-width:1450px;margin:auto}.page{display:none}.page.active{display:block}.page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:21px}.eyebrow{font-size:10px;letter-spacing:1.7px;color:var(--sage);font-weight:700}.page-head h1{font-size:24px;margin:6px 0}.sub{font-size:12px;color:var(--muted);line-height:1.6}
-.btn{border:0;border-radius:8px;padding:10px 14px;font-size:12px;font-weight:650}.primary{background:var(--ink);color:white}.soft{background:var(--sage2);color:#4f6655}.outline{background:var(--paper);border:1px solid var(--line);color:#526257}.btn:hover{filter:brightness(.97)}
-.grid{display:grid;gap:14px}.stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:16px}.card{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:var(--shadow)}.stat-label{font-size:11px;color:var(--muted)}.stat-num{font-size:27px;font-weight:700;margin:9px 0 3px;color:var(--ink)}.stat-note{font-size:10px;color:var(--muted)}.two{grid-template-columns:minmax(0,1.6fr) minmax(250px,.8fr)}.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px;gap:10px}.card-head h3{font-size:14px;margin:0}.card-head small{font-size:10px;color:var(--muted)}
-.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;text-align:left;min-width:690px}th{font-size:10px;color:var(--muted);font-weight:650;padding:10px 8px;border-bottom:1px solid var(--line)}td{font-size:11px;padding:12px 8px;border-bottom:1px solid #f0f1eb}tr:last-child td{border-bottom:0}.person{display:flex;align-items:center;gap:9px}.initial{width:30px;height:30px;border-radius:50%;background:var(--sage2);display:grid;place-items:center;color:#526d59;font-weight:700}.person strong{display:block;font-size:11px}.person small{display:block;font-size:9px;color:var(--muted);margin-top:3px}.pill{display:inline-block;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:700;background:#f0f1eb;color:#687469}.pill.ok{background:var(--sage2);color:#58765f}.pill.watch{background:var(--amberbg);color:#9b7745}.pill.alert{background:var(--redbg);color:#a85e57}.textlink{border:0;background:none;color:#5e7b65;font-size:10px;font-weight:700;padding:4px}
-.notice{padding:13px 0;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px}.notice:last-child{border:0}.notice-alert-icon{width:18px;height:18px;min-width:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:#fff;font-size:13px;font-weight:800;line-height:1;margin-top:2px}.notice-content{min-width:0}.notice strong{display:block;font-size:17px;line-height:1.35;color:var(--ink);font-weight:750}.notice p{font-size:12px;color:var(--muted);line-height:1.55;margin:4px 0 0}.empty{padding:34px 16px;text-align:center;color:var(--muted);font-size:12px;line-height:1.8}.empty b{display:block;color:var(--ink);font-size:14px;margin-bottom:5px}
-.profile-head{display:flex;align-items:center;gap:13px}.profile-avatar{width:52px;height:52px;border-radius:50%;background:var(--sage2);display:grid;place-items:center;color:var(--ink);font-size:17px;font-weight:700}.profile-head h2{margin:0 0 5px;font-size:18px}.profile-head p{margin:0;color:var(--muted);font-size:11px}.profile-actions{margin-left:auto;display:flex;gap:7px}.detail-grid{grid-template-columns:repeat(3,1fr);margin:14px 0}.detail{background:#fafbf7;border:1px solid var(--line);border-radius:9px;padding:13px}.detail small{color:var(--muted);font-size:10px}.detail strong{display:block;margin-top:7px;font-size:18px;color:var(--ink)}
-.field{margin:13px 0}.field label{display:block;font-size:11px;font-weight:650;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #dfe5db;border-radius:8px;padding:10px;background:#fffefa;color:#303b34;font-size:12px}.field textarea{min-height:70px;resize:vertical}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 13px}.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(35,48,40,.28);z-index:10;align-items:center;justify-content:center;padding:16px}.modal-backdrop.show{display:flex}.modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--paper);border-radius:15px;padding:22px;box-shadow:0 15px 50px #26352b30}.modal h2{font-size:18px;margin:0 0 5px}.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.hint{font-size:10px;color:var(--muted);line-height:1.6}.toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:white;padding:12px 16px;border-radius:9px;font-size:12px;display:none;z-index:20}
-@media(max-width:850px){.sidebar{width:205px}.two{grid-template-columns:1fr}.content{padding:22px 18px}}@media(max-width:620px){.app{display:block}.sidebar{width:100%;padding:12px}.brand{padding:3px 7px 10px}.brand h2{font-size:16px}.nav-label,.side-foot{display:none}.nav{display:flex;overflow:auto;gap:4px}.nav button{white-space:nowrap;width:auto;padding:9px;font-size:11px}.nav button b{width:auto;margin-right:5px}.topbar{height:52px;padding:0 14px}.content{padding:18px 13px}.stats{grid-template-columns:1fr 1fr}.page-head h1{font-size:21px}.card{padding:13px}.form-grid{grid-template-columns:1fr}.profile-actions{flex-direction:column}.detail-grid{gap:7px}.detail{padding:9px}.detail strong{font-size:15px}}
-
-/* Visual refinement: restore KUANGYU deep-green identity while keeping a light canvas */
 :root{
-  --ink:#294638;
-  --sage:#557762;
-  --sage2:#e8efe7;
-  --cream:#f6f6f0;
+  --ink:#264234;
+  --green:#264234;
+  --sage:#547661;
+  --sage2:#e7efe6;
+  --cream:#f5f5ef;
   --paper:#fffefa;
-  --line:#dfe6dc;
-  --muted:#738177;
-  --shadow:0 5px 20px rgba(41,70,56,.07);
+  --line:#dde5db;
+  --muted:#6d7b71;
+  --amber:#a87836;
+  --amberbg:#f7efe2;
+  --red:#b55f57;
+  --redbg:#f8ebe8;
+  --shadow:0 4px 18px rgba(38,66,52,.055);
 }
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--cream);color:#2d3831;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;transition:background-color .16s ease,border-color .16s ease,color .16s ease,opacity .16s ease}
+
+.app{display:flex;min-height:100vh}
+
+/* Sidebar */
 .sidebar{
-  background:#294638;
-  border-right:1px solid #294638;
-  color:#f7f7f2;
+  width:242px;
+  background:var(--ink);
+  color:#f6f6f0;
+  padding:26px 16px 20px;
+  display:flex;
+  flex-direction:column;
+  flex-shrink:0;
+  position:sticky;
+  top:0;
+  height:100vh;
 }
-.brand small{color:#b9cdbd}
-.brand h2{color:#fffefa}
-.nav-label{color:#b7c8ba}
-.nav button{color:#e3ece4}
+.brand{padding:2px 10px 24px}
+.brand small{display:block;font-size:10px;letter-spacing:2.2px;color:#b8ccb9;font-weight:700}
+.brand h2{font-size:18px;line-height:1.35;margin:8px 0 0;color:#fffefa;letter-spacing:.3px}
+.brand span{font-weight:400;opacity:.92}
+.nav-label{font-size:10px;letter-spacing:1.6px;color:#afc2b2;padding:10px 12px 8px;font-weight:600}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav button{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#e2ece3;
+  text-align:left;
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:13.5px;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+}
 .nav button.active,.nav button:hover{
-  background:#496b55;
+  background:#42634e;
   color:#fffefa;
-  box-shadow:inset 3px 0 0 #c6d8c8;
+  box-shadow:inset 3px 0 0 #c9dbc9;
 }
-.side-foot{border-top:1px solid #496354;color:#c1d0c3}
-.topbar{background:#fffefa}
-.eyebrow{color:#557762}
-.role{background:#e5ede4;color:#345641;font-weight:700}
-.avatar{background:#294638;color:#fffefa}
-.primary{background:#294638;color:#fffefa}
-.primary:hover{background:#365b45}
-.soft{background:#e5ede4;color:#345641}
-.outline{border-color:#cbd8cc;color:#345641}
-.stat-num{color:#294638}
-.card-head h3,.page-head h1{color:#294638}
-.initial,.profile-avatar{background:#e5ede4;color:#345641}
-.textlink{color:#426b50}
-.detail strong{color:#294638}
-.pill.ok{background:#e5ede4;color:#426b50}
-@media(max-width:620px){
-  .sidebar{background:#294638}
-  .nav button.active,.nav button:hover{background:#496b55}
+.nav button b{display:inline-block;width:24px;font-weight:500;opacity:.9}
+.side-foot{
+  margin-top:auto;
+  padding:14px 12px 4px;
+  border-top:1px solid rgba(255,255,255,.14);
+  color:#bccdc0;
+  font-size:11px;
+  line-height:1.65;
 }
 
+/* Main & Topbar */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{
+  height:64px;
+  background:rgba(255,254,250,.94);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:0 32px;
+  position:sticky;
+  top:0;
+  z-index:8;
+}
+.crumb{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.crumb span{color:var(--ink);font-weight:600}
+.top-right{display:flex;align-items:center;gap:10px;font-size:12px;min-width:0}
+.role{
+  background:var(--sage2);
+  color:#31523e;
+  border-radius:20px;
+  padding:6px 12px;
+  font-weight:650;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.avatar{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:var(--ink);
+  color:#fffefa;
+  display:grid;
+  place-items:center;
+  font-size:13px;
+  font-weight:700;
+  flex-shrink:0;
+}
 
-.remind-btn{border:1px solid #cbd8cc;background:#f4f7f1;color:#345641;border-radius:7px;padding:7px 9px;font-size:10px;font-weight:700;white-space:nowrap}
-.remind-btn:hover{background:#e5ede4}
-.remind-btn.sent{background:#f7f0e5;border-color:#ead9bd;color:#98713d}
+/* Page & Typography */
+.content{padding:28px 32px 52px;max-width:1440px;width:100%;margin:0 auto}
+.page{display:none}
+.page.active{display:block}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.eyebrow{font-size:10.5px;letter-spacing:1.8px;color:var(--sage);font-weight:700}
+.page-head h1{font-size:25px;margin:6px 0;color:var(--ink);letter-spacing:-.2px}
+.sub{font-size:13px;color:var(--muted);line-height:1.65;max-width:72ch}
 
+/* Buttons */
+.btn{border:0;border-radius:9px;padding:10px 15px;font-size:12.5px;font-weight:650;line-height:1.2;white-space:nowrap}
+.primary{background:var(--ink);color:#fffefa}
+.primary:hover{background:#345744}
+.soft{background:var(--sage2);color:#31523e}
+.soft:hover{background:#dce7db}
+.outline{background:var(--paper);border:1px solid #cbd7cc;color:#31523e}
+.outline:hover{background:#f3f6f1}
 
-/* TrainingPeaks-inspired performance management chart */
-.load-chart-card{overflow:hidden}
-.chart-title-row{align-items:flex-start}
-.chart-controls{background:#f7f8f4;border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
-.range-presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.range-presets button,.zoom-btn{border:1px solid #d7dfd5;background:#fffefa;color:#526257;border-radius:7px;padding:7px 10px;font-size:11px}
-.range-presets button.selected,.range-presets button:hover{background:#294638;color:#fffefa;border-color:#294638}
-.chart-control-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.chart-control-row label,.custom-dates label{display:flex;align-items:center;gap:7px;font-size:11px;color:#526257}
-.chart-control-row select,.custom-dates input{border:1px solid #d7dfd5;background:#fffefa;border-radius:7px;padding:8px;font-size:11px;color:#34483f}
-.custom-dates{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
-.zoom-controls{display:flex;gap:5px}
-.zoom-btn{min-width:34px;font-weight:700}
-.metric-toggles{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin:10px 2px 12px;font-size:11px;color:#526257}
-.metric-toggles>span{font-weight:700;margin-right:3px}
-.metric-toggle{display:flex;align-items:center;gap:5px;cursor:pointer}
-.metric-toggle input{accent-color:#294638}
-.metric-dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle}
-.metric-dot.ctl{background:#718b79}.metric-dot.atl{background:#c69a5b}.metric-dot.tsb{background:#648db5}.metric-dot.tss{background:#c86d69}
-.chart-plot-wrap{position:relative;border:1px solid #e7ebe4;border-radius:10px;background:#fffefa;padding:8px;min-height:260px}
-.chart-legend{display:flex;gap:14px;justify-content:flex-end;flex-wrap:wrap;padding:3px 8px 0;font-size:10px;color:#69776d}
-.chart-legend span{display:flex;align-items:center;gap:5px}
-#loadChart{width:100%;height:auto;display:block;min-height:230px;touch-action:pan-y}
-.chart-tooltip{position:absolute;z-index:3;min-width:145px;background:#294638;color:#fffefa;border-radius:8px;padding:9px 11px;font-size:10px;line-height:1.7;pointer-events:none;box-shadow:0 5px 18px #1b302544}
-.chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:9px;font-size:10px;color:var(--muted)}
-.chart-hint{font-size:10px;line-height:1.6;color:var(--muted);margin-top:8px}
-.load-chart-card.fullscreen{position:fixed;inset:12px;z-index:50;overflow:auto;background:#fffefa;box-shadow:0 10px 50px #0004}
-.load-chart-card.fullscreen .chart-plot-wrap{min-height:calc(100vh - 330px)}
-.load-chart-card.fullscreen #loadChart{min-height:calc(100vh - 390px)}
-@media(max-width:620px){.chart-control-row{align-items:stretch}.chart-control-row>label{width:100%;justify-content:space-between}.chart-control-row select{flex:1;max-width:65%}.custom-dates{width:100%}.custom-dates label{flex:1;flex-direction:column;align-items:flex-start}.custom-dates input{width:100%}.chart-foot{display:block}.chart-foot span{display:block;margin-top:4px}.metric-toggles{gap:10px}.load-chart-card.fullscreen{inset:4px}.load-chart-card.fullscreen #loadChart{min-height:55vh}}
+/* Cards & KPI Grid */
+.grid{display:grid;gap:16px}
+.stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:16px}
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+.stat-card{padding:14px 20px}
+.stat-label{font-size:12px;color:var(--muted);font-weight:500}
+.stat-num{font-size:28px;font-weight:750;margin:5px 0 0;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat-note{font-size:11px;color:var(--muted)}
+.two{grid-template-columns:minmax(0,1.8fr) minmax(280px,.85fr);align-items:start}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.card-head h3{font-size:15px;margin:0;color:var(--ink)}
+.card-head small{font-size:11px;color:var(--muted)}
 
-/* Dashboard refinements: compact KPI cards, coach-grouped roster, clickable names */
-.stats{gap:12px;margin-bottom:12px}
-.stat-card{padding:11px 16px!important;min-height:0}
-.stat-card .stat-label{font-size:11px}
-.stat-card .stat-num{font-size:24px;margin:3px 0 0;line-height:1.15}
-.coach-roster-group{margin-top:4px}
-.coach-roster-group+.coach-roster-group{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
-.coach-roster-title{font-size:13px;font-weight:750;color:var(--ink);margin:0 0 9px}
-.coach-roster-group .table-wrap{margin:0}
-.dashboard-name-link{border:0;background:none;padding:0;color:var(--ink);font:inherit;font-weight:750;font-size:13px;cursor:pointer;text-align:left}
+/* Tables & Coach Roster Groups */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;text-align:left}
+th{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:650;
+  padding:10px 8px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+td{
+  font-size:13px;
+  padding:13px 8px;
+  border-bottom:1px solid #eef1ea;
+  vertical-align:middle;
+  font-variant-numeric:tabular-nums;
+}
+tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:#fafbf7}
+
+.person{display:flex;align-items:center;gap:10px;min-width:0}
+.person>div:last-child{min-width:0}
+.initial{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:var(--sage2);
+  display:grid;
+  place-items:center;
+  color:#31523e;
+  font-size:13px;
+  font-weight:700;
+  flex-shrink:0;
+}
+.person strong{display:block;font-size:13.5px;color:var(--ink)}
+.person small{display:block;font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.dashboard-name-link{
+  border:0;
+  background:none;
+  padding:0;
+  color:var(--ink);
+  font:inherit;
+  font-weight:700;
+  font-size:13.5px;
+  text-align:left;
+}
 .dashboard-name-link:hover{color:var(--sage);text-decoration:underline}
 .dashboard-name-link:focus-visible{outline:2px solid var(--sage);outline-offset:3px;border-radius:3px}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:700;
+  background:#eef0ea;
+  color:#5f6b61;
+  white-space:nowrap;
+}
+.pill.ok{background:var(--sage2);color:#3b6147}
+.pill.watch{background:var(--amberbg);color:#946b32}
+.pill.alert{background:var(--redbg);color:#a3524b}
+
+.textlink{border:0;background:none;color:#3f684e;font-size:12px;font-weight:700;padding:6px 8px;border-radius:7px;white-space:nowrap}
+.textlink:hover{background:var(--sage2)}
+
+.remind-btn{
+  border:1px solid #c7d5c8;
+  background:#f3f7f0;
+  color:#31523e;
+  border-radius:8px;
+  padding:7px 11px;
+  font-size:11.5px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.remind-btn:hover{background:var(--sage2)}
+.remind-btn.sent{background:var(--amberbg);border-color:#e5d3b5;color:#916933}
 .dashboard-action-cell{white-space:nowrap}
-@media(max-width:700px){.stat-card{padding:10px 12px!important}.stat-card .stat-num{font-size:21px}}
 
-/* Consistent coach-group tables and aligned alert cards */
-.coach-roster-group table{table-layout:fixed;min-width:760px;width:100%;text-align:left}
-.coach-roster-group th,.coach-roster-group td{vertical-align:middle}
-.coach-roster-group th:nth-child(1),.coach-roster-group td:nth-child(1){width:29%;text-align:left}
-.coach-roster-group th:nth-child(2),.coach-roster-group td:nth-child(2){width:9%;text-align:center}
+.coach-roster-group{margin-top:4px}
+.coach-roster-group+.coach-roster-group{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.coach-roster-title{font-size:13.5px;font-weight:750;color:var(--ink);margin:0 0 10px}
+.coach-roster-group table{table-layout:fixed;width:100%}
+.coach-roster-group th:nth-child(1),.coach-roster-group td:nth-child(1){width:26%;text-align:left}
+.coach-roster-group th:nth-child(2),.coach-roster-group td:nth-child(2){width:8%;text-align:center}
 .coach-roster-group th:nth-child(3),.coach-roster-group td:nth-child(3){width:10%;text-align:center}
-.coach-roster-group th:nth-child(4),.coach-roster-group td:nth-child(4){width:14%;text-align:center}
+.coach-roster-group th:nth-child(4),.coach-roster-group td:nth-child(4){width:13%;text-align:center}
 .coach-roster-group th:nth-child(5),.coach-roster-group td:nth-child(5){width:12%;text-align:center}
-.coach-roster-group th:nth-child(6),.coach-roster-group td:nth-child(6){width:14%;text-align:center}
-.coach-roster-group th:nth-child(7),.coach-roster-group td:nth-child(7){width:12%;text-align:center}
-.coach-roster-group .person{min-width:0}
-.coach-roster-group .person>div:last-child{min-width:0}
-#noticeArea{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:0;padding:8px 18px}
-.notice{width:100%;box-sizing:border-box;display:grid;grid-template-columns:28px minmax(0,1fr);align-items:start;gap:12px;padding:17px 4px;border-bottom:1px solid var(--line);text-align:left}
-.notice:last-child{border-bottom:0}
-.notice-alert-icon{margin-top:2px;justify-self:center}
-.notice-content{width:100%;min-width:0;text-align:left}
-.notice strong{font-size:17px;text-align:left}
-.notice p{font-size:12px;text-align:left;line-height:1.55}
+.coach-roster-group th:nth-child(6),.coach-roster-group td:nth-child(6){width:16%;text-align:center;font-size:12px;color:var(--muted)}
+.coach-roster-group th:nth-child(7),.coach-roster-group td:nth-child(7){width:15%;text-align:center}
 
-/* Desktop: fit the complete coach roster without horizontal scrolling */
-@media (min-width: 900px){
-  .coach-roster-group .table-wrap{overflow-x:visible}
-  .coach-roster-group table{
-    width:100%;
-    min-width:0;
-    table-layout:fixed;
-  }
-  .coach-roster-group th,.coach-roster-group td{
-    padding-left:6px;
-    padding-right:6px;
-    overflow-wrap:anywhere;
-  }
-  .coach-roster-group th:nth-child(1),.coach-roster-group td:nth-child(1){width:25%;text-align:left}
-  .coach-roster-group th:nth-child(2),.coach-roster-group td:nth-child(2){width:7%;text-align:center}
-  .coach-roster-group th:nth-child(3),.coach-roster-group td:nth-child(3){width:9%;text-align:center}
-  .coach-roster-group th:nth-child(4),.coach-roster-group td:nth-child(4){width:13%;text-align:center}
-  .coach-roster-group th:nth-child(5),.coach-roster-group td:nth-child(5){width:10%;text-align:center}
-  .coach-roster-group th:nth-child(6),.coach-roster-group td:nth-child(6){width:17%;text-align:center}
-  .coach-roster-group th:nth-child(7),.coach-roster-group td:nth-child(7){width:19%;text-align:center}
-  .coach-roster-group .person{gap:7px}
-  .coach-roster-group .initial{flex:0 0 30px}
-  .coach-roster-group .dashboard-name-link{font-size:12px}
-  .coach-roster-group .person small{font-size:9px;white-space:nowrap}
-  .coach-roster-group .remind-btn{font-size:10px;padding:7px 8px;white-space:nowrap}
+/* Notice & Empty States */
+#noticeArea{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:0;padding:4px 0}
+#noticeArea.empty{padding:32px 12px;text-align:center;align-items:center}
+.notice{
+  width:100%;
+  display:grid;
+  grid-template-columns:24px minmax(0,1fr);
+  align-items:start;
+  gap:12px;
+  padding:14px 2px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+}
+.notice:last-child{border-bottom:0;padding-bottom:4px}
+.notice:first-child{padding-top:4px}
+.notice-alert-icon{
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--red);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  line-height:1;
+  margin-top:2px;
+}
+.notice-content{min-width:0}
+.notice strong{display:block;font-size:15px;line-height:1.35;color:var(--ink);font-weight:750}
+.notice p{font-size:12.5px;color:var(--muted);line-height:1.55;margin:4px 0 0}
+.empty{padding:36px 16px;text-align:center;color:var(--muted);font-size:13px;line-height:1.8}
+.empty b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:6px}
+
+/* Profile Page */
+.profile-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.profile-avatar{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:var(--sage2);
+  display:grid;
+  place-items:center;
+  color:var(--ink);
+  font-size:18px;
+  font-weight:750;
+  flex-shrink:0;
+}
+.profile-head h2{margin:3px 0 5px;font-size:20px;color:var(--ink)}
+.profile-head p{margin:0;color:var(--muted);font-size:12.5px}
+.profile-actions{margin-left:auto;display:flex;gap:8px}
+.detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin:16px 0}
+.detail{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:14px 16px;box-shadow:var(--shadow)}
+.card .detail{background:#fafbf7;box-shadow:none}
+.detail small{color:var(--muted);font-size:11.5px;display:block}
+.detail strong{display:block;margin-top:6px;font-size:19px;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* Session RPE */
+.session-rpe-card{border-color:#d2dfd2}
+.rpe-scale-note{font-size:11.5px;color:#3d5c47;background:var(--sage2);border-radius:20px;padding:6px 12px;font-weight:600;white-space:nowrap}
+.session-rpe-list{display:flex;flex-direction:column}
+.session-rpe-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 84px 96px;
+  align-items:center;
+  gap:12px;
+  padding:13px 4px;
+  border-bottom:1px solid var(--line);
+}
+.session-rpe-row:last-child{border-bottom:0}
+.session-rpe-name{font-size:14px;font-weight:700;color:var(--ink)}
+.session-rpe-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.session-rpe-score{font-size:21px;font-weight:800;color:var(--ink);text-align:center;font-variant-numeric:tabular-nums}
+.session-rpe-score small{font-size:11px;font-weight:500;color:var(--muted)}
+.session-rpe-status{font-size:12px;text-align:right;color:var(--muted)}
+.rpe-empty{
+  padding:18px 16px;
+  border:1px dashed #cbd7ca;
+  border-radius:10px;
+  background:#f8faf6;
+  color:var(--muted);
+  font-size:12.5px;
+  line-height:1.75;
 }
 
-/* Session RPE is the primary coaching signal on the athlete profile */
-.session-rpe-card{border-color:#d5e2d5}
-.session-rpe-card .card-head{align-items:center}
-.rpe-scale-note{font-size:11px;color:var(--muted);background:#eef3ed;border-radius:20px;padding:6px 10px;white-space:nowrap}
-.session-rpe-list{display:flex;flex-direction:column;gap:0}
-.session-rpe-row{display:grid;grid-template-columns:minmax(0,1fr) 74px 95px;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line)}
-.session-rpe-row:last-child{border-bottom:0}
-.session-rpe-name{font-size:13px;font-weight:700;color:var(--ink)}
-.session-rpe-meta{font-size:11px;color:var(--muted);margin-top:3px}
-.session-rpe-score{font-size:20px;font-weight:800;color:var(--green);text-align:center}
-.session-rpe-score small{font-size:10px;font-weight:500;color:var(--muted)}
-.session-rpe-status{font-size:11px;text-align:right;color:var(--muted)}
-.rpe-empty{padding:17px 14px;border:1px dashed #cfdace;border-radius:9px;background:#f8faf6;color:var(--muted);font-size:12px;line-height:1.7}
-@media(max-width:600px){.session-rpe-row{grid-template-columns:minmax(0,1fr) 58px}.session-rpe-status{grid-column:1/-1;text-align:left}}
+/* Performance Management Chart */
+.load-chart-card{overflow:hidden}
+.chart-title-row{align-items:flex-start}
+.chart-controls{background:#f7f8f3;border:1px solid var(--line);border-radius:11px;padding:13px;margin-bottom:12px}
+.range-presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.range-presets button,.zoom-btn{
+  border:1px solid #d4ddd2;
+  background:var(--paper);
+  color:#4c5d51;
+  border-radius:8px;
+  padding:7px 11px;
+  font-size:12px;
+  font-weight:500;
+}
+.range-presets button.selected,.range-presets button:hover{background:var(--ink);color:#fffefa;border-color:var(--ink)}
+.chart-control-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.chart-control-row label,.custom-dates label{display:flex;align-items:center;gap:8px;font-size:12px;color:#4c5d51}
+.chart-control-row select,.custom-dates input{
+  border:1px solid #d4ddd2;
+  background:var(--paper);
+  border-radius:8px;
+  padding:8px 10px;
+  font-size:12px;
+  color:var(--ink);
+}
+.custom-dates{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.zoom-controls{display:flex;gap:6px}
+.zoom-btn{min-width:36px;font-weight:700}
+.metric-toggles{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:10px 2px 12px;font-size:12px;color:#4c5d51}
+.metric-toggles>span{font-weight:700;color:var(--ink)}
+.metric-toggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+.metric-toggle input{accent-color:var(--ink);width:15px;height:15px}
+.metric-dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle}
+.metric-dot.ctl{background:#718b79}
+.metric-dot.atl{background:#c69a5b}
+.metric-dot.tsb{background:#648db5}
+.metric-dot.tss{background:#c86d69}
+.chart-plot-wrap{position:relative;border:1px solid #e4e9e1;border-radius:11px;background:var(--paper);padding:10px;min-height:260px}
+.chart-legend{display:flex;gap:14px;justify-content:flex-end;flex-wrap:wrap;padding:2px 8px 4px;font-size:11px;color:#66756a}
+.chart-legend span{display:inline-flex;align-items:center;gap:5px}
+#loadChart{width:100%;height:auto;display:block;min-height:230px;touch-action:pan-y}
+.chart-tooltip{
+  position:absolute;
+  z-index:3;
+  min-width:150px;
+  background:var(--ink);
+  color:#fffefa;
+  border-radius:9px;
+  padding:10px 12px;
+  font-size:11.5px;
+  line-height:1.7;
+  pointer-events:none;
+  box-shadow:0 6px 20px rgba(24,43,33,.28);
+}
+.chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:11.5px;color:var(--muted)}
+.chart-hint{font-size:11.5px;line-height:1.65;color:var(--muted);margin-top:6px}
+.load-chart-card.fullscreen{position:fixed;inset:14px;z-index:50;overflow:auto;background:var(--paper);box-shadow:0 12px 50px rgba(0,0,0,.25)}
+.load-chart-card.fullscreen .chart-plot-wrap{min-height:calc(100vh - 330px)}
+.load-chart-card.fullscreen #loadChart{min-height:calc(100vh - 390px)}
+
+/* Form & Modal */
+.field{margin:13px 0}
+.field label{display:block;font-size:12px;font-weight:650;color:var(--ink);margin-bottom:6px}
+.field input,.field select,.field textarea{
+  width:100%;
+  border:1px solid #d6dfd4;
+  border-radius:9px;
+  padding:10px 12px;
+  background:var(--paper);
+  color:#2d3831;
+  font-size:13px;
+}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid rgba(84,118,97,.35);border-color:var(--sage)}
+.field textarea{min-height:76px;resize:vertical}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.modal-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(28,42,34,.36);
+  backdrop-filter:blur(2px);
+  z-index:30;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.modal-backdrop.show{display:flex}
+.modal{
+  width:min(560px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:var(--paper);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 18px 50px rgba(24,38,30,.22);
+}
+.modal h2{font-size:19px;margin:0 0 6px;color:var(--ink)}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.hint{font-size:11.5px;color:var(--muted);line-height:1.65}
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  max-width:calc(100vw - 40px);
+  background:var(--ink);
+  color:#fffefa;
+  padding:12px 16px;
+  border-radius:10px;
+  font-size:13px;
+  line-height:1.5;
+  display:none;
+  z-index:40;
+  box-shadow:0 8px 24px rgba(24,43,33,.25);
+}
+
+/* Tablet & Compact Laptop Breakpoint */
+@media (max-width: 1180px){
+  .two{grid-template-columns:1fr}
+  .content{padding:24px 24px 44px}
+  .topbar{padding:0 24px}
+}
+
+/* Mobile Layout (<= 768px) */
+@media (max-width: 768px){
+  .app{display:block}
+  .sidebar{
+    width:100%;
+    height:auto;
+    position:sticky;
+    top:0;
+    z-index:15;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 14px;
+  }
+  .brand{padding:0}
+  .brand small{font-size:8.5px;letter-spacing:1.6px}
+  .brand h2{font-size:14px;margin:2px 0 0;line-height:1.2}
+  .brand h2 br{display:none}
+  .brand span{margin-left:4px}
+  .nav-label,.side-foot{display:none}
+  .nav{flex-direction:row;gap:6px;flex-shrink:0}
+  .nav button{width:auto;padding:8px 11px;font-size:12.5px;border-radius:8px;white-space:nowrap}
+  .nav button b{width:auto;margin-right:5px}
+
+  .topbar{position:static;height:auto;min-height:46px;padding:8px 14px}
+  .crumb{font-size:12px}
+  .role{font-size:11px;padding:5px 10px;max-width:190px}
+  .avatar{width:30px;height:30px;font-size:12px}
+
+  .content{padding:18px 14px 40px}
+  .page-head{align-items:stretch;margin-bottom:18px}
+  .page-head h1{font-size:21px}
+  .sub{font-size:12.5px}
+  .stats{gap:8px;margin-bottom:14px}
+  .stat-card{padding:12px}
+  .stat-label{font-size:11px}
+  .stat-num{font-size:22px}
+  .card{padding:15px 14px;border-radius:12px}
+
+  /* Transform tables into clean mobile cards (no sideways scroll needed) */
+  .table-wrap{overflow-x:visible}
+  .coach-roster-group table,
+  #athletes table{
+    display:block;
+    width:100%;
+    min-width:0;
+  }
+  .coach-roster-group thead,
+  #athletes thead{display:none}
+  .coach-roster-group tbody,
+  #athletes tbody{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .coach-roster-group tr,
+  #athletes tr{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+    background:#fafbf7;
+    border:1px solid var(--line);
+    border-radius:11px;
+    padding:12px;
+  }
+  .coach-roster-group td,
+  #athletes td{
+    display:block;
+    width:auto !important;
+    padding:0;
+    border:0;
+    text-align:left !important;
+    background:transparent !important;
+  }
+
+  /* Dashboard Roster Mobile Card Slots */
+  .coach-roster-group td:nth-child(1){grid-column:1 / 3;align-self:center}
+  .coach-roster-group td:nth-child(5){grid-column:3 / 4;justify-self:end;align-self:center}
+  .coach-roster-group td:nth-child(2),
+  .coach-roster-group td:nth-child(3),
+  .coach-roster-group td:nth-child(4){
+    background:var(--paper) !important;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:7px 6px;
+    text-align:center !important;
+    font-weight:700;
+    font-size:13px;
+    color:var(--ink);
+  }
+  .coach-roster-group td:nth-child(2)::before{content:"RPE";display:block;font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  .coach-roster-group td:nth-child(3)::before{content:"睡眠 /5";display:block;font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  .coach-roster-group td:nth-child(4)::before{content:"身體狀況";display:block;font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  .coach-roster-group td:nth-child(6){grid-column:1 / 3;align-self:center;font-size:11.5px;color:var(--muted);padding-top:2px}
+  .coach-roster-group td:nth-child(7){grid-column:3 / 4;justify-self:end;align-self:center;padding-top:2px}
+  .coach-roster-group .remind-btn{padding:8px 12px;font-size:12px}
+
+  /* Athletes List Mobile Card Slots */
+  #athletes td:nth-child(1){grid-column:1 / 3;align-self:center}
+  #athletes td:nth-child(7){grid-column:3 / 4;justify-self:end;align-self:center}
+  #athletes td:nth-child(2){grid-column:1 / 2;font-size:12px;color:var(--ink);font-weight:600}
+  #athletes td:nth-child(2)::before{content:"運動項目：";font-weight:400;color:var(--muted)}
+  #athletes td:nth-child(3){grid-column:2 / 4;font-size:12px;color:var(--ink);font-weight:600;text-align:right !important}
+  #athletes td:nth-child(3)::before{content:"教練：";font-weight:400;color:var(--muted)}
+  #athletes td:nth-child(4),
+  #athletes td:nth-child(5),
+  #athletes td:nth-child(6){
+    background:var(--paper) !important;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:7px 6px;
+    text-align:center !important;
+    font-weight:700;
+    font-size:13px;
+    color:var(--ink);
+  }
+  #athletes td:nth-child(4)::before{content:"今日疲勞";display:block;font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #athletes td:nth-child(5)::before{content:"睡眠";display:block;font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #athletes td:nth-child(6)::before{content:"身體狀況";display:block;font-size:10px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #athletes td:nth-child(8){grid-column:1 / -1;padding-top:4px}
+  #athletes td:nth-child(8) .textlink{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    padding:9px 12px;
+    background:var(--sage2);
+    border-radius:8px;
+    font-size:12.5px;
+  }
+
+  /* Profile & Chart Mobile Adjustments */
+  .profile-actions{width:100%;margin-left:0;margin-top:4px}
+  .profile-actions .btn{flex:1;text-align:center}
+  .detail-grid{gap:8px}
+  .detail{padding:11px 12px}
+  .detail strong{font-size:16px}
+
+  .session-rpe-row{grid-template-columns:minmax(0,1fr) 72px;gap:6px 10px}
+  .session-rpe-status{grid-column:1 / -1;text-align:left;font-size:11.5px}
+
+  .chart-control-row{align-items:stretch}
+  .chart-control-row>label{width:100%;justify-content:space-between}
+  .chart-control-row select{flex:1;max-width:65%}
+  .custom-dates{width:100%}
+  .custom-dates label{flex:1;flex-direction:column;align-items:flex-start}
+  .custom-dates input{width:100%}
+  .metric-toggles{gap:10px}
+  .chart-foot{flex-direction:column;gap:4px}
+  .load-chart-card.fullscreen{inset:6px;padding:14px}
+  .load-chart-card.fullscreen #loadChart{min-height:52vh}
+
+  /* Prevent iOS Safari zoom on input focus */
+  .field input,.field select,.field textarea,.chart-control-row select,.custom-dates input{font-size:16px}
+  .form-grid{grid-template-columns:1fr}
+  .modal{padding:18px 16px}
+  .toast{left:14px;right:14px;bottom:14px;max-width:none}
+}
+
+@media (max-width: 440px){
+  .detail-grid{grid-template-columns:1fr}
+  .role{max-width:140px}
+}
 </style></head>
 <body><div class="app">
 <aside class="sidebar"><div class="brand"><small>KUANGYU STUDIO</small><h2>ATHLETE<br><span>MONITORING SYSTEM</span></h2></div><div class="nav-label">COACH WORKSPACE</div>
 <nav class="nav"><button class="active" data-page="dashboard"><b>▦</b>教練工作台</button><button data-page="athletes"><b>♙</b>學員名單</button></nav>
 <div class="side-foot">COACH DASHBOARD<br>內部教練使用介面</div></aside>
-<main class="main"><header class="topbar"><div class="crumb">KUANGYU STUDIO　/　<span id="crumb">教練工作台</span></div><div class="top-right"><span class="role" id="roleLabel">System Owner · 聿凡｜Assistant Coach + Engineer</span><div class="avatar" id="avatar">你</div></div></header>
+<main class="main"><header class="topbar"><div class="crumb">KUANGYU STUDIO / <span id="crumb">教練工作台</span></div><div class="top-right"><span class="role" id="roleLabel">System Owner · 聿凡｜Assistant Coach + Engineer</span><div class="avatar" id="avatar">你</div></div></header>
 <div class="content">
 <section class="page active" id="dashboard">
 <div class="page-head"><div><div class="eyebrow">COACH WORKSPACE</div><h1>教練工作台</h1><div class="sub">共同查看所有學員狀態；個別課表與評估由負責教練管理。示範資料可隨時清除，不會當成正式學員。</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn outline" onclick="loadDemoData()">載入示範學員</button><button class="btn soft" onclick="showPage('athletes')">管理學員名單 →</button></div></div>
 <div class="grid stats"><div class="card stat-card"><div class="stat-label">管理中學員</div><div class="stat-num" id="countAthletes">0</div></div><div class="card stat-card"><div class="stat-label">今日已回報</div><div class="stat-num" id="countReports">0</div></div><div class="card stat-card"><div class="stat-label">待教練確認</div><div class="stat-num" id="countAlerts">0</div></div></div>
 <div class="grid two"><div class="card"><div class="card-head"><h3>學員今日狀態</h3><small>共同監控 · RPE 為單次訓練回報</small></div><div id="coachGroups"></div><div id="dashboardEmpty" class="empty"><b>目前還沒有正式學員</b>這裡會顯示每位學員最新的恢復回報。<br>尚未回報的學員可以直接點選「提醒回報」。</div></div>
 <div class="card"><div class="card-head"><h3>教練提醒</h3><small>跨教練觀察</small></div><div id="noticeArea" class="empty">目前沒有待確認事項。<br>學員有異常回報時，提醒會顯示在這裡。</div></div></div>
-<div class="card" style="margin-top:14px"><div class="card-head"><h3>使用原則</h3><small>KUANGYU COACHING</small></div><div class="sub">首頁以查看為主，不提供直接修改，避免誤觸。點入學員個人頁面後，才會依登入教練的權限顯示編輯功能。兩位教練可以互相查看與留言，但課表由負責教練管理。</div><div style="margin-top:12px"><button class="btn outline" onclick="clearDemoData()">清除所有示範學員</button></div></div>
+<div class="card" style="margin-top:16px"><div class="card-head"><h3>使用原則</h3><small>KUANGYU COACHING</small></div><div class="sub">首頁以查看為主，不提供直接修改，避免誤觸。點入學員個人頁面後，才會依登入教練的權限顯示編輯功能。兩位教練可以互相查看與留言，但課表由負責教練管理。</div><div style="margin-top:14px"><button class="btn outline" onclick="clearDemoData()">清除所有示範學員</button></div></div>
 </section>
 <section class="page" id="athletes"><div class="page-head"><div><div class="eyebrow">ATHLETE MANAGEMENT</div><h1>學員名單</h1><div class="sub">每位學員獨立管理，名單顯示負責教練與最新狀態。</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn outline" onclick="loadDemoData()">載入示範學員</button><button class="btn primary" onclick="openAthleteModal()">＋ 新增學員</button></div></div>
 <div class="card"><div class="card-head"><h3>學員列表</h3><small id="listCount">0 位學員</small></div><div class="table-wrap"><table><thead><tr><th>學員</th><th>運動項目</th><th>負責教練</th><th>今日疲勞</th><th>睡眠</th><th>身體狀況</th><th>狀態</th><th></th></tr></thead><tbody id="athleteRows"></tbody></table></div><div id="listEmpty" class="empty"><b>尚未建立學員資料</b>原本六位示範選手已移除，不會被當成你的正式學生。<br>點選右上角「新增學員」開始建立真實名單。</div></div></section>
 <section class="page" id="profile"><div class="page-head"><div><div class="eyebrow">ATHLETE PROFILE</div><h1>學員個人頁面</h1><div class="sub">先查看完整資料，再從個人頁面進入編輯，降低誤操作。</div></div><button class="btn outline" onclick="showPage('athletes')">← 返回名單</button></div>
 <div class="card"><div class="profile-head"><div class="profile-avatar" id="pInitial">學</div><div><div class="eyebrow">ATHLETE PROFILE</div><h2 id="pName">學員</h2><p id="pMeta">運動項目 · 負責教練</p></div><div class="profile-actions"><button class="btn outline" id="profileReminderBtn" onclick="remindCurrentAthlete()">提醒回報</button><button class="btn soft" id="editProfileBtn" onclick="editCurrentAthlete()">編輯學員資料</button></div></div></div>
 <div class="grid detail-grid"><div class="detail"><small>今日疲勞</small><strong id="pFatigue">尚未回報</strong></div><div class="detail"><small>睡眠品質</small><strong id="pSleep">—</strong></div><div class="detail"><small>身體狀況</small><strong id="pBody">—</strong></div></div>
-<div class="card session-rpe-card" style="margin-bottom:14px">
+<div class="card session-rpe-card" style="margin-bottom:16px">
   <div class="card-head"><div><h3>單次訓練 RPE</h3><div class="sub">SESSION RPE · 每完成一堂訓練回報一次</div></div><span class="rpe-scale-note">主觀強度 1–10</span></div>
   <div id="sessionRpeList" class="session-rpe-list">
     <div class="rpe-empty">目前沒有訓練 RPE 紀錄。待 TrainingPeaks 訓練資料同步後，學員可針對每一堂已完成的訓練回報 RPE。</div>
   </div>
 </div>
-<div class="card" style="margin-bottom:14px"><div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div><div class="grid detail-grid" style="margin:0"><div class="detail"><small>今日回報狀態</small><strong id="pReportStatus">尚未回報</strong></div><div class="detail"><small>負責教練</small><strong id="pCoach">—</strong></div><div class="detail"><small>學員目標</small><strong id="pGoal" style="font-size:13px">—</strong></div></div><div class="sub" style="margin-top:12px">每日疲勞、睡眠、痠痛與疼痛紀錄將在恢復資料串接後呈現；下方提供個人訓練負荷趨勢圖操作介面。</div>
+<div class="card" style="margin-bottom:16px"><div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div><div class="grid detail-grid" style="margin:0"><div class="detail"><small>今日回報狀態</small><strong id="pReportStatus">尚未回報</strong></div><div class="detail"><small>負責教練</small><strong id="pCoach">—</strong></div><div class="detail"><small>學員目標</small><strong id="pGoal" style="font-size:14px">—</strong></div></div><div class="sub" style="margin-top:12px">每日疲勞、睡眠、痠痛與疼痛紀錄將在恢復資料串接後呈現；下方提供個人訓練負荷趨勢圖操作介面。</div>
 </div>
-<div class="card load-chart-card" style="margin-bottom:14px">
+<div class="card load-chart-card" style="margin-bottom:16px">
   <div class="card-head chart-title-row">
     <div><h3>個人訓練負荷趨勢</h3><div class="sub">PERFORMANCE MANAGEMENT · CTL / ATL / TSB</div></div>
     <button class="btn outline" type="button" onclick="toggleChartFullscreen()">⛶ 放大圖表</button>
