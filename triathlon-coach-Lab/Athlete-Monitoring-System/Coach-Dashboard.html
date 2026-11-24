@@ -5,20 +5,23 @@
 <title>KUANGYU Athlete Monitoring System｜Coach Dashboard</title>
 <style>
 :root{
-  --ink:#243f32;
+  --ink:#1f382c;
   --green:#243f32;
-  --sage:#52745f;
-  --sage2:#e6eee5;
-  --cream:#f5f5ef;
+  --sage:#4d6f5a;
+  --sage2:#e3ede2;
+  --sage-surface:#edf3ec;
+  --sage-tint:#f5f8f3;
+  --cream:#eeefe8;
   --paper:#fffefa;
-  --line:#dce4da;
-  --muted:#647268;
-  --amber:#d49422;
+  --line:#d3ddd1;
+  --line-soft:#e5ece3;
+  --muted:#5e6d63;
+  --amber:#c98818;
   --amberbg:#f7efe1;
   --red:#c4453d;
   --redbg:#f8ebe8;
   --ok-green:#2f7a53;
-  --shadow:0 4px 20px rgba(36,63,50,.06);
+  --shadow:0 3px 16px rgba(31,56,44,.06);
 }
 
 *{box-sizing:border-box}
@@ -27,7 +30,7 @@ html,body{
   margin:0;
   padding:0;
   background:var(--cream);
-  color:#28332c;
+  color:#26322b;
   font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;
   font-size:15px;
   line-height:1.6;
@@ -42,7 +45,7 @@ button{cursor:pointer;transition:background-color .16s ease,border-color .16s ea
 /* Sidebar */
 .sidebar{
   width:256px;
-  background:var(--ink);
+  background:var(--green);
   color:#f6f6f0;
   padding:28px 18px 22px;
   display:flex;
@@ -90,8 +93,8 @@ button{cursor:pointer;transition:background-color .16s ease,border-color .16s ea
 /* Main & Topbar */
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
 .topbar{
-  height:68px;
-  background:rgba(255,254,250,.95);
+  height:66px;
+  background:rgba(255,254,250,.96);
   backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);
   display:flex;
@@ -108,9 +111,10 @@ button{cursor:pointer;transition:background-color .16s ease,border-color .16s ea
 .top-right{display:flex;align-items:center;gap:12px;font-size:13.5px;min-width:0}
 .role{
   background:var(--sage2);
-  color:#2d4e3a;
+  color:#284835;
+  border:1px solid #c6d6c4;
   border-radius:20px;
-  padding:7px 14px;
+  padding:6px 14px;
   font-weight:650;
   white-space:nowrap;
   overflow:hidden;
@@ -120,7 +124,7 @@ button{cursor:pointer;transition:background-color .16s ease,border-color .16s ea
   width:36px;
   height:36px;
   border-radius:50%;
-  background:var(--ink);
+  background:var(--green);
   color:#fffefa;
   display:grid;
   place-items:center;
@@ -130,26 +134,26 @@ button{cursor:pointer;transition:background-color .16s ease,border-color .16s ea
 }
 
 /* Page & Typography */
-.content{padding:32px 36px 56px;max-width:1500px;width:100%;margin:0 auto}
+.content{padding:30px 36px 56px;max-width:1460px;width:100%;margin:0 auto}
 .page{display:none}
 .page.active{display:block}
-.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:24px;flex-wrap:wrap}
-.eyebrow{font-size:11.5px;letter-spacing:1.8px;color:var(--sage);font-weight:700}
-.page-head h1{font-size:28px;margin:6px 0;color:var(--ink);letter-spacing:-.2px;line-height:1.25}
-.sub{font-size:14.5px;color:var(--muted);line-height:1.65;max-width:74ch}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.eyebrow{font-size:11.5px;letter-spacing:1.8px;color:var(--sage);font-weight:750}
+.page-head h1{font-size:27px;margin:5px 0;color:var(--ink);letter-spacing:-.2px;line-height:1.25}
+.sub{font-size:14px;color:var(--muted);line-height:1.65;max-width:74ch}
 
 /* Buttons */
-.btn{border:0;border-radius:9px;padding:11px 16px;font-size:14px;font-weight:650;line-height:1.25;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px}
-.primary{background:var(--ink);color:#fffefa}
+.btn{border:0;border-radius:9px;padding:10px 16px;font-size:14px;font-weight:650;line-height:1.25;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.primary{background:var(--green);color:#fffefa}
 .primary:hover{background:#325441}
-.soft{background:var(--sage2);color:#2d4e3a}
-.soft:hover{background:#dbe7da}
-.outline{background:var(--paper);border:1px solid #c7d4c8;color:#2d4e3a}
-.outline:hover{background:#f2f5ef}
+.soft{background:var(--sage2);color:#264633;border:1px solid #c4d5c3}
+.soft:hover{background:#d7e5d6}
+.outline{background:var(--paper);border:1px solid #bfcebe;color:#284835}
+.outline:hover{background:#f1f5ef}
 
 /* Cards & KPI Grid */
-.grid{display:grid;gap:18px}
-.stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:18px}
+.grid{display:grid;gap:20px}
+.stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:20px}
 .card{
   background:var(--paper);
   border:1px solid var(--line);
@@ -157,34 +161,49 @@ button{cursor:pointer;transition:background-color .16s ease,border-color .16s ea
   padding:22px 24px;
   box-shadow:var(--shadow);
 }
-.stat-card{padding:18px 22px}
-.stat-label{font-size:13.5px;color:var(--muted);font-weight:550}
-.stat-num{font-size:32px;font-weight:750;margin:6px 0 0;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
+.section-gap{margin-bottom:22px}
+.stat-card{
+  padding:18px 22px;
+  border-left:4px solid var(--sage);
+}
+.stat-label{font-size:13.5px;color:var(--muted);font-weight:600}
+.stat-num{font-size:32px;font-weight:800;margin:6px 0 0;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
 .two{grid-template-columns:minmax(0,1.85fr) minmax(300px,.85fr);align-items:start}
-.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap}
-.card-head h3{font-size:17px;margin:0;color:var(--ink)}
-.card-head small{font-size:12.5px;color:var(--muted)}
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-bottom:13px;
+  margin-bottom:16px;
+  border-bottom:1px solid var(--line-soft);
+  gap:12px;
+  flex-wrap:wrap;
+}
+.card-head h3{font-size:17px;margin:0;color:var(--ink);font-weight:750}
+.card-head small{font-size:12px;color:var(--muted);letter-spacing:.4px;font-weight:600}
 
 /* Tables & Coach Roster Groups */
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;text-align:left}
+.table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:11px}
+table{width:100%;border-collapse:collapse;text-align:left;background:var(--paper)}
 th{
   font-size:12.5px;
-  color:var(--muted);
-  font-weight:650;
-  padding:11px 10px;
+  color:#485a4e;
+  font-weight:700;
+  padding:11px 12px;
+  background:var(--sage-surface);
   border-bottom:1px solid var(--line);
   white-space:nowrap;
 }
 td{
   font-size:14.5px;
-  padding:15px 10px;
-  border-bottom:1px solid #edf1ea;
+  padding:14px 12px;
+  border-bottom:1px solid var(--line-soft);
   vertical-align:middle;
   font-variant-numeric:tabular-nums;
 }
 tr:last-child td{border-bottom:0}
-tbody tr:hover td{background:#fafbf7}
+tbody tr:nth-child(even) td{background:#fafbf8}
+tbody tr:hover td{background:#f2f6f0}
 
 .person{display:flex;align-items:center;gap:12px;min-width:0}
 .person>div:last-child{min-width:0;flex:1}
@@ -194,11 +213,12 @@ tbody tr:hover td{background:#fafbf7}
   height:38px;
   border-radius:50%;
   background:var(--sage2);
+  border:1px solid #c6d6c4;
   display:grid;
   place-items:center;
-  color:#2d4e3a;
+  color:#264633;
   font-size:14.5px;
-  font-weight:700;
+  font-weight:750;
   flex-shrink:0;
 }
 .person strong{display:block;font-size:15.5px;color:var(--ink)}
@@ -211,7 +231,7 @@ tbody tr:hover td{background:#fafbf7}
   color:var(--ink);
   font:inherit;
   font-weight:750;
-  font-size:16px;
+  font-size:15.5px;
   text-align:left;
 }
 .dashboard-name-link:hover{color:var(--sage);text-decoration:underline}
@@ -241,37 +261,49 @@ tbody tr:hover td{background:#fafbf7}
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:4px 10px;
+  padding:4px 11px;
   border-radius:20px;
-  font-size:12px;
+  font-size:12.5px;
   font-weight:700;
-  background:#eef0ea;
-  color:#59665b;
+  background:#ebeee8;
+  color:#526055;
   white-space:nowrap;
 }
-.pill.ok{background:var(--sage2);color:#375c43}
-.pill.watch{background:var(--amberbg);color:#926830}
-.pill.alert{background:var(--redbg);color:#a04f48}
+.pill.ok{background:var(--sage2);color:#2d523a}
+.pill.watch{background:var(--amberbg);color:#8c6127}
+.pill.alert{background:var(--redbg);color:#9d433c}
 
 .mobile-inline-status{display:none}
 
 .remind-btn{
-  border:1px solid #c3d2c4;
-  background:#f3f7f0;
-  color:#2d4e3a;
+  border:1px solid #bdcebe;
+  background:var(--sage-surface);
+  color:#264633;
   border-radius:8px;
-  padding:8px 13px;
+  padding:7px 12px;
   font-size:13px;
   font-weight:700;
   white-space:nowrap;
 }
 .remind-btn:hover{background:var(--sage2)}
-.remind-btn.sent{background:var(--amberbg);border-color:#e5d3b5;color:#8f6630}
+.remind-btn.sent{background:var(--amberbg);border-color:#e2cea9;color:#8a6028}
 .dashboard-action-cell{white-space:nowrap}
 
-.coach-roster-group{margin-top:4px}
-.coach-roster-group+.coach-roster-group{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
-.coach-roster-title{font-size:15.5px;font-weight:750;color:var(--ink);margin:0 0 12px}
+.coach-roster-group{margin-top:2px}
+.coach-roster-group+.coach-roster-group{margin-top:24px;padding-top:20px;border-top:1px dashed var(--line)}
+.coach-roster-title{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:14.5px;
+  font-weight:750;
+  color:var(--ink);
+  background:var(--sage-surface);
+  border:1px solid #cdd9cb;
+  padding:4px 12px;
+  border-radius:8px;
+  margin:0 0 12px;
+}
 .coach-roster-group table{table-layout:fixed;width:100%}
 .coach-roster-group th:nth-child(1),.coach-roster-group td:nth-child(1){width:28%;text-align:left}
 .coach-roster-group th:nth-child(2),.coach-roster-group td:nth-child(2){width:8%;text-align:center}
@@ -282,7 +314,7 @@ tbody tr:hover td{background:#fafbf7}
 .coach-roster-group th:nth-child(7),.coach-roster-group td:nth-child(7){width:15%;text-align:center}
 
 /* Notice & Coach Tags */
-#noticeArea{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:0;padding:4px 0}
+#noticeArea{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:10px;padding:2px 0}
 #noticeArea.empty{padding:36px 14px;text-align:center;align-items:center}
 .notice{
   width:100%;
@@ -290,12 +322,13 @@ tbody tr:hover td{background:#fafbf7}
   grid-template-columns:26px minmax(0,1fr);
   align-items:start;
   gap:12px;
-  padding:16px 2px;
-  border-bottom:1px solid var(--line);
+  padding:14px;
+  background:#fdf7f6;
+  border:1px solid #ebd2cf;
+  border-left:4px solid var(--red);
+  border-radius:11px;
   text-align:left;
 }
-.notice:last-child{border-bottom:0;padding-bottom:4px}
-.notice:first-child{padding-top:4px}
 .notice-alert-icon{
   width:23px;
   height:23px;
@@ -312,8 +345,8 @@ tbody tr:hover td{background:#fafbf7}
 }
 .notice-content{min-width:0}
 .notice-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.notice-name{display:block;font-size:18.5px;line-height:1.3;color:var(--ink);font-weight:800}
-.notice p{font-size:13.5px;color:var(--muted);line-height:1.55;margin:6px 0 0}
+.notice-name{display:block;font-size:17.5px;line-height:1.3;color:var(--ink);font-weight:800}
+.notice p{font-size:13.5px;color:#554846;line-height:1.55;margin:6px 0 0}
 
 .coach-tag{
   display:inline-flex;
@@ -330,65 +363,143 @@ tbody tr:hover td{background:#fafbf7}
 .coach-tag.kuangwu{background:#e2effb;color:#1d5d96;border:1px solid #b9d7f4}
 .coach-tag.other{background:var(--sage2);color:#2d4e3a;border:1px solid #c7d6c8}
 
-.empty{padding:40px 18px;text-align:center;color:var(--muted);font-size:14.5px;line-height:1.8}
-.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:6px}
+.empty{
+  padding:36px 18px;
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.8;
+  background:var(--sage-tint);
+  border:1px dashed #c8d4c6;
+  border-radius:12px;
+}
+.empty b{display:block;color:var(--ink);font-size:15.5px;margin-bottom:4px}
 
 /* Profile Page */
+.profile-hero-card{
+  background:linear-gradient(135deg,#fffefa 0%,#f2f6f0 100%);
+  border-color:#c9d6c7;
+}
 .profile-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .profile-avatar{
   width:58px;
   height:58px;
   border-radius:50%;
-  background:var(--sage2);
+  background:var(--green);
   display:grid;
   place-items:center;
-  color:var(--ink);
-  font-size:20px;
+  color:#fffefa;
+  font-size:21px;
   font-weight:750;
   flex-shrink:0;
 }
-.profile-head h2{margin:3px 0 5px;font-size:22px;color:var(--ink)}
-.profile-head p{margin:0;color:var(--muted);font-size:14px}
+.profile-head h2{margin:3px 0 4px;font-size:23px;color:var(--ink)}
+.profile-head p{margin:0;color:var(--muted);font-size:14px;font-weight:500}
 .profile-actions{margin-left:auto;display:flex;gap:10px}
-.detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin:18px 0}
-.detail{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
-.card .detail{background:#fafbf7;box-shadow:none}
-.detail small{color:var(--muted);font-size:13px;display:block}
-.detail strong{display:block;margin-top:6px;font-size:21px;color:var(--ink);font-variant-numeric:tabular-nums}
-.detail-note{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5}
+
+.detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin:20px 0 22px}
+.detail{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-top:3px solid var(--sage);
+  border-radius:13px;
+  padding:16px 20px;
+  box-shadow:var(--shadow);
+}
+.detail small{color:var(--muted);font-size:13px;font-weight:600;display:block}
+.detail strong{display:block;margin-top:6px;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums}
+.detail-note{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}
+
+/* Distinct Tinted Cards for Recovery Summary */
+.recovery-summary-grid{margin:0 !important}
+.recovery-summary-grid .detail{
+  background:var(--sage-surface);
+  border:1px solid #c9d7c7;
+  border-top:1px solid #c9d7c7;
+  border-left:4px solid var(--sage);
+  box-shadow:none;
+}
+
+/* Structured Personal Information Grid */
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
+.info-item{
+  background:var(--sage-tint);
+  border:1px solid var(--line-soft);
+  border-radius:10px;
+  padding:12px 15px;
+}
+.info-item.wide{grid-column:1 / -1}
+.info-item small{
+  display:block;
+  font-size:12px;
+  font-weight:650;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+.info-item span{
+  display:block;
+  font-size:14.5px;
+  font-weight:650;
+  color:var(--ink);
+  line-height:1.55;
+}
 
 /* Session RPE */
-.session-rpe-card{border-color:#d0ded0}
-.rpe-scale-note{font-size:13px;color:#355540;background:var(--sage2);border-radius:20px;padding:6px 13px;font-weight:650;white-space:nowrap}
-.session-rpe-list{display:flex;flex-direction:column}
+.session-rpe-card{border-color:#cbd9ca}
+.rpe-scale-note{font-size:12.5px;color:#284835;background:var(--sage2);border:1px solid #c4d5c3;border-radius:20px;padding:5px 13px;font-weight:700;white-space:nowrap}
+.session-rpe-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  max-height:380px;
+  overflow-y:auto;
+  padding-right:2px;
+}
 .session-rpe-row{
   display:grid;
-  grid-template-columns:minmax(0,1fr) 110px 110px;
+  grid-template-columns:minmax(0,1fr) 108px 112px;
   align-items:center;
   gap:14px;
-  padding:14px 4px;
-  border-bottom:1px solid var(--line);
+  padding:12px 16px;
+  background:var(--sage-tint);
+  border:1px solid var(--line-soft);
+  border-radius:11px;
 }
-.session-rpe-row:last-child{border-bottom:0}
+.session-rpe-row:hover{background:#eef4ec;border-color:#cad7c8}
 .session-rpe-name{font-size:15px;font-weight:700;color:var(--ink)}
 .session-rpe-meta{font-size:13px;color:var(--muted);margin-top:3px}
-.session-rpe-score{font-size:22px;font-weight:800;color:var(--ink);text-align:center;font-variant-numeric:tabular-nums}
-.session-rpe-score small{font-size:12.5px;font-weight:500;color:var(--muted)}
+.session-rpe-score{
+  font-size:20px;
+  font-weight:800;
+  color:var(--ink);
+  text-align:center;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:4px 8px;
+  font-variant-numeric:tabular-nums;
+}
+.session-rpe-score small{font-size:12px;font-weight:550;color:var(--muted)}
 .session-rpe-status{font-size:13px;text-align:right;color:var(--muted)}
 .rpe-quick-select{
-  border:1px solid #c7d4c8;
-  background:#f4f7f1;
+  width:100%;
+  border:1px solid #bfcebe;
+  background:var(--paper);
   color:var(--ink);
-  border-radius:7px;
-  padding:5px 8px;
+  border-radius:8px;
+  padding:6px 9px;
   font-size:13px;
   font-weight:650;
 }
 .rpe-empty{
   padding:20px 18px;
-  border:1px dashed #c8d5c7;
+  border:1px dashed #c4d3c2;
   border-radius:11px;
-  background:#f8faf6;
+  background:var(--sage-tint);
   color:var(--muted);
   font-size:14px;
   line-height:1.75;
@@ -398,15 +509,22 @@ tbody tr:hover td{background:#fafbf7}
 .load-chart-card{overflow:hidden}
 .chart-title-row{align-items:flex-start}
 .chart-title-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.chart-controls{background:#f7f8f3;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+
+.chart-toolbar{
+  background:var(--sage-surface);
+  border:1px solid #cdd9cb;
+  border-radius:12px;
+  padding:14px 16px;
+  margin-bottom:14px;
+}
 .chart-control-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .chart-range-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.chart-control-row label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:#485a4e;font-weight:550}
+.chart-control-row label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink);font-weight:650}
 .chart-control-row select,.custom-dates input{
-  border:1px solid #d1dbd0;
+  border:1px solid #c2d0c0;
   background:var(--paper);
   border-radius:8px;
-  padding:8px 11px;
+  padding:7px 11px;
   font-size:13.5px;
   color:var(--ink);
 }
@@ -418,14 +536,35 @@ tbody tr:hover td{background:#fafbf7}
   width:100%;
   margin-top:12px;
   padding-top:12px;
-  border-top:1px solid var(--line);
+  border-top:1px solid #d4dfd2;
 }
-.custom-dates label{display:flex;align-items:center;gap:7px;font-size:13px;color:#485a4e}
+.custom-dates label{display:flex;align-items:center;gap:7px;font-size:13px;color:#425348}
 
-.metric-toggles{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:12px 2px 14px;font-size:13.5px;color:#485a4e}
-.metric-toggles>span{font-weight:700;color:var(--ink)}
-.metric-toggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
-.metric-toggle input{accent-color:var(--ink);width:16px;height:16px}
+.metric-toggles{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid #d4dfd2;
+  font-size:13.5px;
+  color:#3c4d42;
+}
+.metric-toggles>span{font-weight:750;color:var(--ink)}
+.metric-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+  user-select:none;
+  background:rgba(255,254,250,.72);
+  border:1px solid #d4dfd2;
+  padding:4px 10px;
+  border-radius:999px;
+}
+.metric-toggle:hover{background:var(--paper)}
+.metric-toggle input{accent-color:var(--green);width:15px;height:15px;margin:0}
 .metric-dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;flex-shrink:0}
 .metric-dot.rpe{background:#3e6b52}
 .metric-dot.srpe{background:#8a7ca8}
@@ -437,10 +576,10 @@ tbody tr:hover td{background:#fafbf7}
 /* Allow native 2-finger browser pinch-to-zoom on the chart area */
 .chart-plot-wrap{
   position:relative;
-  border:1px solid #e1e7df;
+  border:1px solid #cdd9cb;
   border-radius:12px;
   background:var(--paper);
-  padding:12px;
+  padding:14px;
   touch-action:auto;
 }
 .chart-plot-top{
@@ -449,11 +588,11 @@ tbody tr:hover td{background:#fafbf7}
   justify-content:space-between;
   gap:10px;
   flex-wrap:wrap;
-  padding:2px 4px 8px;
-  border-bottom:1px solid #edf1ea;
-  margin-bottom:8px;
+  padding:0 4px 10px;
+  border-bottom:1px solid var(--line-soft);
+  margin-bottom:10px;
 }
-.chart-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#5c6b60}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#526157;font-weight:550}
 .chart-legend span{display:inline-flex;align-items:center;gap:6px}
 .chart-expand-btn{padding:6px 12px;font-size:12.5px;margin-left:auto}
 
@@ -472,10 +611,10 @@ tbody tr:hover td{background:#fafbf7}
   font-size:12.5px;
   color:var(--muted);
   text-align:center;
-  padding:6px 10px;
+  padding:6px 12px;
   border-radius:8px;
-  background:#fafbf7;
-  border:1px dashed #dbe3da;
+  background:var(--sage-tint);
+  border:1px dashed #cbd7c9;
 }
 .chart-callout-card{
   position:absolute;
@@ -492,7 +631,7 @@ tbody tr:hover td{background:#fafbf7}
   display:inline-flex;
   align-items:center;
   gap:6px;
-  background:var(--ink);
+  background:var(--green);
   color:#fffefa;
   padding:4px 11px;
   border-radius:999px;
@@ -526,7 +665,7 @@ tbody tr:hover td{background:#fafbf7}
   flex-wrap:wrap;
   gap:5px;
   background:rgba(255,254,250,.96);
-  border:1px solid #cbd7ca;
+  border:1px solid #c3d1c1;
   border-radius:9px;
   padding:4px 8px;
   box-shadow:0 3px 12px rgba(36,63,50,.08);
@@ -539,7 +678,7 @@ tbody tr:hover td{background:#fafbf7}
   color:var(--muted);
   padding:1px 5px;
   border-radius:5px;
-  background:#f4f7f1;
+  background:var(--sage-surface);
   white-space:nowrap;
   font-variant-numeric:tabular-nums;
 }
@@ -554,26 +693,32 @@ tbody tr:hover td{background:#fafbf7}
   touch-action:auto;
 }
 
-/* Balanced 2-Row Bento Summary below Chart */
+/* Single-Row 4-Card Summary Bar on Desktop */
 .combined-analysis{
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.55fr);
   gap:12px;
-  margin-top:14px;
+  margin-top:16px;
   padding:14px;
-  background:#f6f8f3;
-  border:1px solid var(--line);
+  background:var(--sage-surface);
+  border:1px solid #c9d7c7;
   border-radius:12px;
+  align-items:stretch;
 }
 .analysis-kpi-card{
   background:var(--paper);
-  border:1px solid #e1e8df;
+  border:1px solid #d5e0d4;
+  border-left:3.5px solid var(--sage);
   border-radius:10px;
-  padding:13px 16px;
+  padding:14px 16px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
 }
+.analysis-kpi-card.rpe-card{border-left-color:#3e6b52}
+.analysis-kpi-card.srpe-card{border-left-color:#8a7ca8}
+.analysis-kpi-card.tss-card{border-left-color:#c86d69}
+
 .analysis-label{
   display:inline-flex;
   align-items:center;
@@ -604,28 +749,40 @@ tbody tr:hover td{background:#fafbf7}
 .analysis-kpi-sub{
   font-size:12px;
   color:var(--muted);
-  margin-top:5px;
+  margin-top:6px;
 }
-.analysis-insight-bar{
-  grid-column:1 / -1;
-  background:var(--paper);
-  border:1px solid #e1e8df;
+
+/* 4th Card: Combined Judgment styled cleanly alongside the 3 KPI cards */
+.analysis-insight-card{
+  background:#f7faf5;
+  border:1px solid #bdd0bc;
+  border-left:4px solid var(--green);
   border-radius:10px;
-  padding:12px 16px;
+  padding:14px 16px;
   display:flex;
-  align-items:center;
+  flex-direction:column;
   justify-content:space-between;
-  gap:10px 18px;
-  flex-wrap:wrap;
 }
-.analysis-insight-bar strong{
-  font-size:15px;
+.analysis-insight-card strong{
+  display:block;
+  margin-top:8px;
+  font-size:15.5px;
   font-weight:750;
+  line-height:1.5;
   color:var(--ink);
 }
 
-.chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}
-.chart-hint{font-size:13px;line-height:1.65;color:var(--muted);margin-top:6px}
+.chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--muted)}
+.chart-hint{
+  font-size:13px;
+  line-height:1.65;
+  color:#4c5c51;
+  margin-top:10px;
+  padding:10px 14px;
+  background:var(--sage-tint);
+  border-radius:9px;
+  border:1px solid var(--line-soft);
+}
 .load-chart-card.fullscreen{position:fixed;inset:12px;z-index:50;overflow:auto;background:var(--paper);box-shadow:0 12px 50px rgba(0,0,0,.25)}
 .load-chart-card.fullscreen #loadChart{min-height:calc(100vh - 340px)}
 
@@ -634,14 +791,14 @@ tbody tr:hover td{background:#fafbf7}
 .field label{display:block;font-size:13.5px;font-weight:650;color:var(--ink);margin-bottom:6px}
 .field input,.field select,.field textarea{
   width:100%;
-  border:1px solid #d2dcd0;
+  border:1px solid #c7d4c5;
   border-radius:9px;
   padding:11px 13px;
   background:var(--paper);
-  color:#28332c;
+  color:#26322b;
   font-size:14.5px;
 }
-.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid rgba(82,116,95,.35);border-color:var(--sage)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid rgba(77,111,90,.35);border-color:var(--sage)}
 .field textarea{min-height:80px;resize:vertical}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .modal-backdrop{
@@ -673,7 +830,7 @@ tbody tr:hover td{background:#fafbf7}
   right:22px;
   bottom:22px;
   max-width:calc(100vw - 44px);
-  background:var(--ink);
+  background:var(--green);
   color:#fffefa;
   padding:13px 18px;
   border-radius:10px;
@@ -687,6 +844,7 @@ tbody tr:hover td{background:#fafbf7}
 /* Tablet & Compact Laptop Breakpoint */
 @media (max-width: 1180px){
   .two{grid-template-columns:1fr}
+  .combined-analysis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .content{padding:24px 24px 44px}
   .topbar{padding:0 24px}
 }
@@ -732,6 +890,7 @@ tbody tr:hover td{background:#fafbf7}
   .stat-label{font-size:11.5px}
   .stat-num{font-size:23px}
   .card{padding:16px 14px;border-radius:13px}
+  .card-head{padding-bottom:10px;margin-bottom:12px}
   .card-head h3{font-size:15.5px}
   .card-head small{font-size:11.5px}
 
@@ -741,12 +900,13 @@ tbody tr:hover td{background:#fafbf7}
   #athletes td:nth-child(7){display:none !important}
 
   /* Transform tables into clean mobile cards with explicit grid rows */
-  .table-wrap{overflow-x:visible}
+  .table-wrap{overflow-x:visible;border:0;background:transparent}
   .coach-roster-group table,
   #athletes table{
     display:block;
     width:100%;
     min-width:0;
+    background:transparent;
   }
   .coach-roster-group thead,
   #athletes thead{display:none}
@@ -761,7 +921,7 @@ tbody tr:hover td{background:#fafbf7}
     display:grid;
     grid-template-columns:repeat(3,minmax(0,1fr));
     gap:9px;
-    background:#fafbf7;
+    background:var(--sage-tint);
     border:1px solid var(--line);
     border-radius:12px;
     padding:13px;
@@ -842,11 +1002,11 @@ tbody tr:hover td{background:#fafbf7}
   .recovery-summary-grid{grid-template-columns:1fr !important}
   .recovery-summary-grid .detail{text-align:left;padding:12px 14px}
 
-  .session-rpe-row{grid-template-columns:minmax(0,1fr) 82px;gap:6px 10px}
+  .session-rpe-row{grid-template-columns:minmax(0,1fr) 82px;gap:6px 10px;padding:11px 12px}
   .session-rpe-status{grid-column:1 / -1;text-align:left;font-size:12px}
 
   /* Chart Controls & Aligned Custom Date Inputs on Mobile */
-  .chart-controls{padding:12px}
+  .chart-toolbar{padding:12px}
   .chart-control-row{flex-direction:column;align-items:stretch;gap:10px}
   .chart-range-main{width:100%}
   .chart-range-main label{width:100%;justify-content:space-between}
@@ -881,7 +1041,7 @@ tbody tr:hover td{background:#fafbf7}
     width:100%;
   }
 
-  .metric-toggles{gap:10px;font-size:12.5px}
+  .metric-toggles{gap:8px;font-size:12.5px}
   .chart-plot-wrap{padding:10px 8px}
   .chart-callout-band{min-height:62px}
   .callout-date-row{font-size:11.5px;padding:3px 9px}
@@ -891,10 +1051,9 @@ tbody tr:hover td{background:#fafbf7}
   #loadChart{min-height:215px}
 
   .combined-analysis{grid-template-columns:1fr;gap:8px;padding:10px}
-  .analysis-kpi-card{padding:11px 13px}
+  .analysis-kpi-card,.analysis-insight-card{padding:11px 13px}
   .analysis-kpi-value strong{font-size:20px}
-  .analysis-insight-bar{padding:11px 13px}
-  .analysis-insight-bar strong{font-size:14px}
+  .analysis-insight-card strong{font-size:14.5px}
 
   .chart-foot{flex-direction:column;gap:4px;font-size:12px}
   .chart-hint{font-size:12px}
@@ -910,7 +1069,7 @@ tbody tr:hover td{background:#fafbf7}
 
 @media (orientation: landscape) and (max-height: 520px){
   .load-chart-card.fullscreen{inset:4px;padding:8px 12px}
-  .load-chart-card.fullscreen .chart-controls,
+  .load-chart-card.fullscreen .chart-toolbar,
   .load-chart-card.fullscreen .combined-analysis,
   .load-chart-card.fullscreen .chart-foot,
   .load-chart-card.fullscreen .chart-hint{display:none}
@@ -980,7 +1139,7 @@ tbody tr:hover td{background:#fafbf7}
     </div>
   </div>
 
-  <div class="card" style="margin-top:18px">
+  <div class="card" style="margin-top:20px">
     <div class="card-head"><h3>使用原則</h3><small>KUANGYU COACHING</small></div>
     <div class="sub">首頁以查看為主，不提供直接修改，避免誤觸。點入學員個人頁面後，才會依登入教練的權限顯示編輯功能。兩位教練可以互相查看與留言，但課表由負責教練管理。</div>
     <div style="margin-top:14px"><button class="btn outline" onclick="clearDemoData()">清除所有示範學員</button></div>
@@ -1032,7 +1191,7 @@ tbody tr:hover td{background:#fafbf7}
     <button class="btn outline" onclick="showPage('athletes')">← 返回名單</button>
   </div>
 
-  <div class="card">
+  <div class="card profile-hero-card">
     <div class="profile-head">
       <div class="profile-avatar" id="pInitial">學</div>
       <div>
@@ -1053,7 +1212,7 @@ tbody tr:hover td{background:#fafbf7}
     <div class="detail"><small>身體狀況</small><strong id="pBody">—</strong></div>
   </div>
 
-  <div class="card session-rpe-card" style="margin-bottom:18px">
+  <div class="card session-rpe-card section-gap">
     <div class="card-head">
       <div><h3>單次訓練 RPE</h3><div class="sub">SESSION RPE · 每完成一堂訓練回報一次（匯入 TP CSV 後可逐堂補填或檢視）</div></div>
       <span class="rpe-scale-note">主觀強度 1–10</span>
@@ -1063,7 +1222,7 @@ tbody tr:hover td{background:#fafbf7}
     </div>
   </div>
 
-  <div class="card load-chart-card" style="margin-bottom:18px">
+  <div class="card load-chart-card section-gap">
     <div class="card-head chart-title-row">
       <div>
         <h3>RPE 與訓練負荷共同監測</h3>
@@ -1076,7 +1235,7 @@ tbody tr:hover td{background:#fafbf7}
       </div>
     </div>
 
-    <div class="chart-controls">
+    <div class="chart-toolbar">
       <div class="chart-control-row">
         <div class="chart-range-main">
           <label>日期區間
@@ -1105,16 +1264,16 @@ tbody tr:hover td{background:#fafbf7}
         <label>結束日期 (To) <input type="date" id="chartTo"></label>
         <button class="btn soft" type="button" onclick="applyCustomDates()">套用自訂區間</button>
       </div>
-    </div>
 
-    <div class="metric-toggles">
-      <span>顯示指標</span>
-      <label class="metric-toggle"><input type="checkbox" id="metricRPE" checked onchange="renderLoadChart()"><i class="metric-dot rpe"></i> 單次 RPE (1–10)</label>
-      <label class="metric-toggle"><input type="checkbox" id="metricCTL" checked onchange="renderLoadChart()"><i class="metric-dot ctl"></i> CTL (長期負荷)</label>
-      <label class="metric-toggle"><input type="checkbox" id="metricATL" checked onchange="renderLoadChart()"><i class="metric-dot atl"></i> ATL (短期疲勞)</label>
-      <label class="metric-toggle"><input type="checkbox" id="metricSRPE" onchange="renderLoadChart()"><i class="metric-dot srpe"></i> sRPE 負荷</label>
-      <label class="metric-toggle"><input type="checkbox" id="metricTSB" onchange="renderLoadChart()"><i class="metric-dot tsb"></i> TSB</label>
-      <label class="metric-toggle"><input type="checkbox" id="metricTSS" onchange="renderLoadChart()"><i class="metric-dot tss"></i> 每日 TSS</label>
+      <div class="metric-toggles">
+        <span>顯示指標</span>
+        <label class="metric-toggle"><input type="checkbox" id="metricRPE" checked onchange="renderLoadChart()"><i class="metric-dot rpe"></i> 單次 RPE (1–10)</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricCTL" checked onchange="renderLoadChart()"><i class="metric-dot ctl"></i> CTL (長期負荷)</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricATL" checked onchange="renderLoadChart()"><i class="metric-dot atl"></i> ATL (短期疲勞)</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricSRPE" onchange="renderLoadChart()"><i class="metric-dot srpe"></i> sRPE 負荷</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricTSB" onchange="renderLoadChart()"><i class="metric-dot tsb"></i> TSB</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricTSS" onchange="renderLoadChart()"><i class="metric-dot tss"></i> 每日 TSS</label>
+      </div>
     </div>
 
     <div class="chart-plot-wrap" id="chartPlotWrap">
@@ -1138,22 +1297,22 @@ tbody tr:hover td{background:#fafbf7}
     </div>
 
     <div class="combined-analysis" id="combinedAnalysisBox">
-      <div class="analysis-kpi-card">
+      <div class="analysis-kpi-card rpe-card">
         <small class="analysis-label"><i class="metric-dot rpe"></i> 區間平均 RPE</small>
         <div class="analysis-kpi-value"><strong id="statAvgRpe">—</strong><span id="statAvgRpeUnit"></span></div>
         <div class="analysis-kpi-sub" id="statAvgRpeSub">尚無 RPE 紀錄</div>
       </div>
-      <div class="analysis-kpi-card">
+      <div class="analysis-kpi-card srpe-card">
         <small class="analysis-label"><i class="metric-dot srpe"></i> 累計 sRPE 負荷</small>
         <div class="analysis-kpi-value"><strong id="statTotalSrpe">—</strong><span>AU</span></div>
         <div class="analysis-kpi-sub">主觀強度 × 訓練時間</div>
       </div>
-      <div class="analysis-kpi-card">
+      <div class="analysis-kpi-card tss-card">
         <small class="analysis-label"><i class="metric-dot tss"></i> 累計 TSS</small>
         <div class="analysis-kpi-value"><strong id="statTotalTss">—</strong><span>TSS</span></div>
         <div class="analysis-kpi-sub">外部訓練壓力總和</div>
       </div>
-      <div class="analysis-insight-bar">
+      <div class="analysis-insight-card">
         <small class="analysis-label">RPE 與負荷共同判讀</small>
         <strong id="statLoadInsight">—</strong>
       </div>
@@ -1166,9 +1325,9 @@ tbody tr:hover td{background:#fafbf7}
     <div class="chart-hint">共同分析說明：長條為每日主觀 RPE（右軸 1–10 分，8 分以上標為警示色），曲線為 TrainingPeaks 訓練負荷（左軸）。若外部 TSS 不高但主觀 RPE 連續偏高，代表恢復不足或非訓練壓力累積。</div>
   </div>
 
-  <div class="card" style="margin-bottom:18px">
+  <div class="card section-gap">
     <div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div>
-    <div class="grid detail-grid recovery-summary-grid" style="margin:0">
+    <div class="grid detail-grid recovery-summary-grid">
       <div class="detail">
         <small>今日判讀狀態</small>
         <strong id="pReportStatus">尚未回報</strong>
@@ -1189,8 +1348,8 @@ tbody tr:hover td{background:#fafbf7}
 
   <div class="card">
     <div class="card-head"><h3>個人基本資料</h3><small>ATHLETE INFORMATION</small></div>
-    <div id="profileInfo" class="sub">尚無其他資料。</div>
-    <div class="hint" style="margin-top:12px">目前為前端原型：新增學員、編輯與匯入的 TrainingPeaks CSV 資料皆保存在這台瀏覽器的 localStorage。</div>
+    <div id="profileInfo" class="info-grid"></div>
+    <div class="hint" style="margin-top:14px">目前為前端原型：新增學員、編輯與匯入的 TrainingPeaks CSV 資料皆保存在這台瀏覽器的 localStorage。</div>
   </div>
 </section>
 </div></main></div>
@@ -1484,7 +1643,13 @@ function openProfile(id){
 
   document.getElementById('profileReminderBtn').style.display=st.level==='pending'?'inline-flex':'none';
   document.getElementById('clearCsvBtn').hidden=!(Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length);
-  document.getElementById('profileInfo').innerHTML='<b>負責教練：</b>'+esc(a.coach)+'<br><br><b>目標／比賽：</b>'+esc(a.goal||'尚未設定')+'<br><br><b>TrainingPeaks ID：</b>'+esc(a.tp||'尚未設定')+'<br><br><b>教練備註：</b>'+esc(a.note||'尚無備註')+'<br><br><b>學員狀態：</b>'+(a.active==='paused'?'暫停課表':'管理中');
+  document.getElementById('profileInfo').innerHTML=`
+    <div class="info-item"><small>負責教練</small><span>${esc(a.coach)}</span></div>
+    <div class="info-item"><small>目標／比賽</small><span>${esc(a.goal||'尚未設定')}</span></div>
+    <div class="info-item"><small>TrainingPeaks ID</small><span>${esc(a.tp||'尚未設定')}</span></div>
+    <div class="info-item"><small>學員狀態</small><span>${a.active==='paused'?'暫停課表':'管理中'}</span></div>
+    <div class="info-item wide"><small>教練備註</small><span>${esc(a.note||'尚無備註')}</span></div>
+  `;
   renderSessionRpe(a);
   showPage('profile');
   chartEnd=getLatestAthleteDate(a);
