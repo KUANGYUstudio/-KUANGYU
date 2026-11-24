@@ -284,6 +284,7 @@
       color: var(--text-sub);
       max-width: 560px;
       margin: 0 auto;
+      text-wrap: pretty;
     }
 
     .coach-profile-card {
@@ -360,6 +361,7 @@
       font-size: 14px;
       color: var(--text-main);
       line-height: 1.75;
+      text-wrap: pretty;
     }
 
     .coach-credentials-box {
@@ -506,11 +508,7 @@
       font-weight: 400;
       color: var(--text-sub);
       line-height: 1.5;
-    }
-
-    /* 價格卡片底部快速開始列（電腦版顯示，手機版維持清爽） */
-    .pricing-quick-cta {
-      display: none;
+      text-wrap: pretty;
     }
 
     /* 申請流程三步驟 */
@@ -1093,6 +1091,10 @@
       gap: 12px;
     }
 
+    .nav-actions.intro-actions {
+      justify-content: center;
+    }
+
     .btn {
       padding: 12px 24px;
       font-size: 15px;
@@ -1128,6 +1130,7 @@
       width: 100%;
       padding: 14px 24px;
       font-size: 16px;
+      margin-left: 0;
     }
 
     .btn-next:hover,
@@ -1183,7 +1186,7 @@
       }
 
       .progress-inner {
-        max-width: 1020px;
+        max-width: 1060px;
       }
 
       .brand-logo {
@@ -1195,13 +1198,13 @@
       }
 
       .container {
-        max-width: 1020px;
+        max-width: 1060px;
         margin: 32px auto 72px;
         padding: 0 24px;
       }
 
       .card {
-        padding: 40px 44px;
+        padding: 38px 40px;
         border-radius: 16px;
       }
 
@@ -1223,7 +1226,7 @@
       }
 
       .coach-profile-card {
-        padding: 28px 30px;
+        padding: 28px 28px;
         margin-bottom: 24px;
         border-radius: 14px;
       }
@@ -1259,9 +1262,9 @@
         font-size: 13.5px;
       }
 
-      /* 費用卡片：第 5 項橫跨兩欄 + 底部快速報名列 */
+      /* 費用卡片：第 5 項橫跨兩欄，單字不孤單換行 */
       .pricing-card {
-        padding: 28px 30px;
+        padding: 26px 26px;
         margin-bottom: 24px;
         border-radius: 14px;
       }
@@ -1271,58 +1274,17 @@
       }
 
       .service-grid {
-        gap: 12px 16px;
+        gap: 12px 14px;
       }
 
       .service-grid li {
-        padding: 14px 16px;
+        padding: 14px 15px;
       }
 
       .service-grid li.service-highlight {
         grid-column: 1 / -1;
         background: var(--brand-soft);
         border: 1px solid rgba(0, 151, 178, 0.22);
-      }
-
-      .pricing-quick-cta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 16px;
-        margin-top: 20px;
-        padding-top: 18px;
-        border-top: 1px solid var(--border);
-      }
-
-      .pricing-quick-note {
-        font-size: 13px;
-        color: var(--text-sub);
-        font-weight: 500;
-      }
-
-      .pricing-quick-note strong {
-        color: var(--text-main);
-        font-weight: 700;
-      }
-
-      .btn-quick-start {
-        padding: 11px 24px;
-        font-size: 14px;
-        font-weight: 700;
-        background: var(--brand);
-        color: #ffffff;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: inherit;
-        white-space: nowrap;
-      }
-
-      .btn-quick-start:hover {
-        background: var(--brand-dark);
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-hover);
       }
 
       .process-box {
@@ -1353,20 +1315,25 @@
         color: var(--brand-dark);
       }
 
+      .btn-start-full {
+        width: 100%;
+        max-width: 380px;
+      }
+
       /* 階段 1~4：切換為「左進度導覽＋右表單」雙欄模式 */
       body.desktop-form-mode .progress-header {
         display: none;
       }
 
       body.desktop-form-mode .container {
-        max-width: 1180px;
+        max-width: 1220px;
         margin: 30px auto 72px;
       }
 
       .workspace-layout.has-sidebar {
         display: grid;
-        grid-template-columns: 280px minmax(0, 1fr);
-        gap: 28px;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 24px;
         align-items: start;
       }
 
@@ -1384,7 +1351,11 @@
       }
 
       .workspace-layout.has-sidebar .card {
-        padding: 36px 40px;
+        padding: 34px 36px;
+      }
+
+      .mobile-only-prev {
+        display: none;
       }
 
       .sidebar-brand {
@@ -1582,25 +1553,26 @@
         text-align: center;
       }
 
-      /* 階段 1 電腦版並排，縮短整頁長度 */
-      .desktop-form-row {
+      /* 階段 1 電腦版並排，按鈕高度對齊輸入框 */
+      .desktop-form-row.cols-name-gender {
         display: grid;
+        grid-template-columns: 1.45fr 1fr;
         gap: 20px;
         align-items: start;
       }
 
-      .desktop-form-row.cols-name-gender {
-        grid-template-columns: 1.35fr 1fr;
+      .cols-name-gender .pill-option span {
+        min-height: 45px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 22px;
       }
 
-      .desktop-form-row.cols-birth-body {
-        grid-template-columns: 1fr 1.45fr;
-      }
-
-      /* 階段 4：第 14 題表格加寬，讓「休息 / 恢復」完整顯示 */
+      /* 階段 4：第 14 題表格寬度調整，完整顯示所有選項 */
       .schedule-grid {
-        grid-template-columns: 58px repeat(7, minmax(96px, 1fr));
-        min-width: 730px;
+        grid-template-columns: 56px repeat(7, minmax(92px, 1fr));
+        min-width: 700px;
       }
 
       .sg-cell {
@@ -1608,15 +1580,37 @@
       }
 
       .sg-cell select {
-        padding: 7px 20px 7px 6px;
-        font-size: 13px;
+        padding: 7px 19px 7px 6px;
+        font-size: 12.5px;
       }
 
-      /* 階段 4：第 15 題改為兩欄並排，節省垂直空間 */
+      /* 階段 4：第 15 題 2x2 整齊卡片化，未展開也不顯空洞 */
       .vertical-slot-list {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px 18px;
+        gap: 12px 14px;
+      }
+
+      .slot-item-row {
+        background: #f9fbfb;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 8px 10px;
+        min-height: 58px;
+        transition: border-color 0.18s ease, background-color 0.18s ease;
+      }
+
+      .slot-item-row:has(.slot-toggle:checked) {
+        background: #ffffff;
+        border-color: rgba(0, 151, 178, 0.45);
+      }
+
+      .slot-item-row .pill-option span {
+        padding: 9px 14px;
+      }
+
+      .slot-item-row input.slot-detail-input {
+        padding: 9px 12px;
       }
 
       /* 電腦版滑鼠互動手感 */
@@ -1651,8 +1645,53 @@
       }
     }
 
-    /* ==================== 手機版規則（維持原設計） ==================== */
+    /* 寬螢幕電腦（>= 1120px）：再並排生日與身高體重，避免中小筆電截斷提示字 */
+    @media (min-width: 1120px) {
+      .workspace-layout.has-sidebar {
+        grid-template-columns: 272px minmax(0, 1fr);
+        gap: 28px;
+      }
+
+      .workspace-layout.has-sidebar .card {
+        padding: 36px 42px;
+      }
+
+      .desktop-form-row.cols-birth-body {
+        display: grid;
+        grid-template-columns: 0.9fr 1.55fr;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .cols-birth-body .form-row-2 {
+        gap: 12px;
+      }
+    }
+
+    /* ==================== 手機版規則（滿版無外框，擴大填寫空間） ==================== */
     @media (max-width: 720px) {
+      body {
+        background-color: #ffffff;
+      }
+
+      .progress-header {
+        padding: 10px 16px;
+        box-shadow: 0 2px 8px rgba(29, 36, 43, 0.04);
+      }
+
+      .container {
+        margin: 0 auto 48px;
+        padding: 0;
+      }
+
+      .card {
+        background: #ffffff;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 20px 18px 32px;
+      }
+
       /* 手機版輸入框與下拉選單統一 16px，避免 iOS 點擊輸入時自動放大畫面（保留雙指手動縮放） */
       input[type="text"],
       input[type="email"],
@@ -1723,10 +1762,6 @@
 
       .swipe-hint {
         display: block;
-      }
-
-      .card {
-        padding: 22px 16px;
       }
     }
   </style>
@@ -1922,13 +1957,6 @@
                   </div>
                 </li>
               </ul>
-
-              <div class="pricing-quick-cta">
-                <div class="pricing-quick-note">
-                  已確認方案內容？約 <strong>3 至 5 分鐘</strong> 即可完成申請表單。
-                </div>
-                <button type="button" class="btn-quick-start" onclick="goToStep(1)">立即開始填寫申請表</button>
-              </div>
             </div>
 
             <!-- 申請流程 -->
@@ -1976,7 +2004,7 @@
               </div>
             </div>
 
-            <div class="nav-actions">
+            <div class="nav-actions intro-actions">
               <button type="button" class="btn btn-next btn-start-full" onclick="goToStep(1)">我要開始線上課表！</button>
             </div>
           </section>
@@ -2056,7 +2084,7 @@
             </div>
 
             <div class="nav-actions">
-              <button type="button" class="btn btn-prev" onclick="goToStep(0)">教練與費用說明</button>
+              <button type="button" class="btn btn-prev mobile-only-prev" onclick="goToStep(0)">教練與費用說明</button>
               <button type="button" class="btn btn-next" onclick="nextStep(1)">下一步</button>
             </div>
           </section>
