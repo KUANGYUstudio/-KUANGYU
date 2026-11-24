@@ -782,6 +782,32 @@ button:active{transform:translateY(.5px)}
   .dashboard-coach-table{min-width:680px}
 }
 
+
+/* Clear visual separation between coach-owned groups on both list and dashboard */
+.coach-roster-groups{gap:26px !important}
+.coach-roster-section + .coach-roster-section{margin-top:2px}
+.dashboard-coach-groups{gap:24px !important}
+.dashboard-coach-section + .dashboard-coach-section{margin-top:2px}
+.coach-roster-section,.dashboard-coach-section{
+  border-radius:15px;
+  outline:4px solid #f3f5ef;
+  outline-offset:0;
+}
+
+/* Session RPE is athlete-reported and read-only; keep score beside its session. */
+.session-rpe-row{
+  grid-template-columns:minmax(0,1fr) 86px !important;
+  gap:10px 12px !important;
+  align-items:center;
+}
+.session-rpe-session{min-width:0}
+.session-rpe-score{width:86px;justify-self:end}
+.session-rpe-status{display:none !important}
+@media(max-width:760px){
+  .session-rpe-row{grid-template-columns:minmax(0,1fr) 76px !important;gap:8px !important}
+  .session-rpe-score{width:76px}
+}
+
 /* Column alignments for Dashboard Roster */
 #dashboardRosterTable{table-layout:fixed}
 #dashboardRosterTable th:nth-child(1),#dashboardRosterTable td:nth-child(1){width:29%;text-align:left}
@@ -2092,6 +2118,33 @@ button:active{transform:translateY(.5px)}
 @media (max-width: 440px){
   .role{max-width:140px}
 }
+
+@media print{
+  .rpt-page{min-height:0 !important;height:267mm;max-height:267mm;overflow:hidden;page-break-after:always;break-after:page}
+  .rpt-page:last-child{page-break-after:auto;break-after:auto}
+  .rpt-section{margin-bottom:8px !important}
+  .rpt-section-title{margin-bottom:5px !important}
+  .rpt-kpi-4{gap:6px !important}
+  .rpt-box{padding:8px 9px !important}
+  .rpt-box strong{font-size:17px !important}
+  .rpt-interpretation{
+    margin:7px 0 9px;padding:8px 11px;border:1px solid #e1e8df;
+    border-left:3px solid #6f9278;border-radius:7px;background:#f7faf6;
+    font-size:10px;line-height:1.42;break-inside:avoid;
+  }
+  .rpt-interpretation strong{display:block;margin-bottom:3px;font-size:11px}
+  .rpt-interpretation ul{margin:0;padding-left:17px}
+  .rpt-interpretation li{margin:2px 0}
+  .rpt-table{font-size:9.5px !important}
+  .rpt-table th,.rpt-table td{padding:4px 6px !important}
+  .rpt-chart-grid{gap:8px !important}
+  .rpt-chart-card{padding:8px !important}
+  .rpt-chart-card svg{max-height:100px}
+  .rpt-explain{font-size:10px;line-height:1.4;margin:4px 0 7px;color:#526257}
+  .rpt-ai-box{font-size:10px !important;line-height:1.45 !important;padding:9px 11px !important;white-space:pre-line}
+  .rpt-footer{position:absolute;bottom:0;left:0;right:0}
+}
+
 </style></head>
 <body><div class="app">
 <aside class="sidebar">
@@ -2292,7 +2345,7 @@ button:active{transform:translateY(.5px)}
 
   <div class="card session-rpe-card section-gap scroll-anchor" id="sec-session-rpe">
     <div class="card-head">
-      <div><h3>單次訓練 RPE</h3><div class="sub">SESSION RPE · 每完成一堂訓練回報一次（匯入 TP CSV 後可逐堂補填或檢視）</div></div>
+      <div><h3>單次訓練 RPE</h3><div class="sub">SESSION RPE · 學員每堂訓練後自主回報（教練僅檢視，不修改）</div></div>
       <span class="rpe-scale-note">主觀強度 1–10</span>
     </div>
     <div id="sessionRpeList" class="session-rpe-list">
@@ -2910,34 +2963,14 @@ function renderSessionRpe(a){
     const tssPart=r.tss?` · TSS ${Math.round(Number(r.tss))}`:'';
     const hasScore=r.rpe!==undefined&&r.rpe!==null&&r.rpe!=='';
     const score=hasScore?esc(r.rpe):'—';
-    const selectOpts=['','1','2','3','4','5','6','7','8','9','10'].map(v=>`<option value="${v}" ${String(r.rpe??'')===v?'selected':''}>${v?v+' 分':'補填 RPE'}</option>`).join('');
     return `<div class="session-rpe-row">
-      <div>
+      <div class="session-rpe-session">
         <div class="session-rpe-name">${esc(r.sessionName||r.type||'訓練紀錄')}</div>
         <div class="session-rpe-meta">${date} · ${duration}${tssPart}</div>
       </div>
       <div class="session-rpe-score">${score}<small> / 10</small></div>
-      <div class="session-rpe-status">
-        <select class="rpe-quick-select" aria-label="設定單次訓練 RPE" onchange="updateSessionRpeScore('${esc(r.uid||idx)}',this.value)">${selectOpts}</select>
-      </div>
     </div>`;
   }).join('');
-}
-
-function updateSessionRpeScore(uid,val){
-  const a=athletes.find(x=>x.id===currentId);
-  if(!a||!Array.isArray(a.sessionRpe))return;
-  const rec=a.sessionRpe.find((r,i)=>String(r.uid??i)===String(uid));
-  if(!rec)return;
-  rec.rpe=val===''?null:Number(val);
-  const sorted=a.sessionRpe.slice().sort((x,y)=>String(y.date||'').localeCompare(String(x.date||'')));
-  if(sorted[0]&&sorted[0].rpe){
-    a.rpe=sorted[0].rpe;
-    a.fatigue=sorted[0].rpe;
-  }
-  persist();
-  openProfile(a.id);
-  toast(val?`已更新該堂訓練 RPE 為 ${val}/10`:'已清除該堂訓練 RPE');
 }
 
 function openProfile(id){
@@ -3567,17 +3600,17 @@ function renderLoadChart(){
   }
 
   if(active.RPE){
-    const barW=Math.max(4,Math.min(18,(PW/Math.max(1,data.length))*0.54));
-    data.forEach((d,i)=>{
-      if(d.RPE!==null&&d.RPE>0){
-        const top=yRpe(d.RPE);
-        const h=(T+PH)-top;
-        const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#d49422':'#52745f');
-        const isSel=(i===selectedChartIndex);
-        out+=`<rect x="${(x(i)-barW/2).toFixed(1)}" y="${top.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${fill}" opacity="${isSel?'0.65':'0.28'}" ${isSel?`stroke="${fill}" stroke-width="1.8"`:''}/>`;
-        if(data.length<=35||isSel){
-          out+=`<text x="${x(i).toFixed(1)}" y="${Math.max(T+11,top-4).toFixed(1)}" text-anchor="middle" fill="${fill}" font-size="${isSel?(isMobile?'13.5':'12'):(isMobile?'11.5':'10.5')}" font-weight="800">${d.RPE}</text>`;
-        }
+    // RPE is a subjective 1–10 score: show it as a compact line with markers,
+    // not full-height bars that visually overpower CTL/ATL/TSS.
+    const rpePoints=data.map((d,i)=>d.RPE!==null&&d.RPE>0?{x:x(i),y:yRpe(d.RPE),v:d.RPE,i}:null).filter(Boolean);
+    if(rpePoints.length>1){
+      out+=`<polyline points="${rpePoints.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')}" fill="none" stroke="#52745f" stroke-width="${total>35?1.8:2.2}" stroke-linecap="round" stroke-linejoin="round" opacity=".88"/>`;
+    }
+    rpePoints.forEach(p=>{
+      const isSel=p.i===selectedChartIndex;
+      out+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isSel?5.2:3.2}" fill="#52745f" stroke="#fffefa" stroke-width="${isSel?1.8:1.1}"/>`;
+      if(total<=35||isSel){
+        out+=`<text x="${p.x.toFixed(1)}" y="${Math.max(T+11,p.y-8).toFixed(1)}" text-anchor="middle" fill="#52745f" font-size="${isSel?12:10}" font-weight="750">${p.v}</text>`;
       }
     });
   }
@@ -4400,6 +4433,25 @@ function printWeeklyPdf(){
     const ring=(pct,cx,color)=>{const r=30,c=2*Math.PI*r,v=pct===null?0:c*pct/100;return `<circle cx="${cx}" cy="57" r="${r}" fill="none" stroke="#e7ede6" stroke-width="10"/><circle cx="${cx}" cy="57" r="${r}" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${v} ${c-v}" transform="rotate(-90 ${cx} 57)"/><text x="${cx}" y="61" text-anchor="middle" font-size="11" font-weight="700" fill="#2b4032">${pct===null?'—':pct+'%'}</text>`};
     donutSvg=`<svg viewBox="0 0 330 125" role="img" aria-label="訓練時數與跑量達成率">${ring(hoursPct,82,'#557b61')}${ring(runPctValue,235,'#c18a57')}<text x="82" y="105" text-anchor="middle" font-size="10" fill="#526257">時數達成</text><text x="235" y="105" text-anchor="middle" font-size="10" fill="#526257">跑量達成</text></svg>`;
   }
+  const loadInterpretation=[];
+  if(m.durPct!==null){
+    loadInterpretation.push(m.durPct>=90&&m.durPct<=115
+      ?`本週完成 ${fmtHrMin(w.realMin)}，達成預計訓練時數 ${m.durPct}%，整體執行符合規劃。`
+      :m.durPct>115
+        ?`本週完成 ${fmtHrMin(w.realMin)}，達成率 ${m.durPct}%，高於原訂時數，需一併檢視恢復與課表強度。`
+        :`本週完成 ${fmtHrMin(w.realMin)}，達成率 ${m.durPct}%，低於原訂時數；建議對照缺課原因與身體反應解讀。`);
+  }else{
+    loadInterpretation.push(`本週累計 ${fmtHrMin(w.realMin)}，共 ${m.trainDays} 天有訓練紀錄。`);
+  }
+  if(m.avgRpe!==null){
+    loadInterpretation.push(`學員回報平均 RPE ${m.avgRpe.toFixed(1)}/10，單週 sRPE ${m.weekSrpe} AU；主觀感受可與 TSS、CTL／ATL 趨勢交叉判讀。`);
+  }else{
+    loadInterpretation.push('本週尚無足夠的單次 RPE 回報，主觀感受暫不作推論。');
+  }
+  if(m.acwr!==null){
+    loadInterpretation.push(`ACWR ${m.acwr.toFixed(2)}：${m.acwrLabel}。CTL ${m.ctl.toFixed(1)}、ATL ${m.atl.toFixed(1)}、TSB ${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}，需搭配訓練內容與恢復回報判讀。`);
+  }
+  const interpretationHtml=`<div class="rpt-interpretation"><strong>本週數據判讀</strong><ul>${loadInterpretation.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`;
   const trendNote=m.isRealSeries?'依 TrainingPeaks 匯入資料':'目前為示意趨勢資料';
   const sportNote=m.sportSource==='csv'?'依 TrainingPeaks 訓練紀錄':'目前無真實分項時間資料';
 
@@ -4420,6 +4472,8 @@ function printWeeklyPdf(){
           </div>
           ${w.remark?`<div style="margin-top:9px;font-size:10.5px;color:#526257">本週備註：${esc(w.remark)}</div>`:''}
         </div>
+        ${interpretationHtml}
+        ${sportTableHtml}
         <div class="rpt-section">
           <div class="rpt-section-title" style="color:${palette.bg}">每日訓練節奏<span>DAILY TSS + RPE</span></div>
           ${dailySvg}<div class="rpt-chart-note">長條為每日 TSS，折線為單日 RPE；缺少資料的日期不補值。</div>
@@ -4443,7 +4497,7 @@ function printWeeklyPdf(){
           <div class="rpt-box"><small>TSB 狀態值</small><strong>${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dTsb)||'體能減疲勞'}</span></div>
           <div class="rpt-box"><small>ACWR 急慢性比</small><strong>${m.acwr!==null?m.acwr.toFixed(2):'—'}</strong><span class="rpt-sub">${esc(m.acwrLabel)}</span></div>
         </div></div>
-        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">教練／AI 判讀與下週建議<span>COACH &amp; AI RECOMMENDATIONS</span></div><div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div></div>
+        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">教練／AI 判讀與下週建議<span>COACH &amp; AI RECOMMENDATIONS</span></div><p class="rpt-explain">以下建議以本週訓練完成度、主觀 RPE、外部負荷及近期體能趨勢為依據；教練仍需結合學員實際回報、生活壓力與身體反應作最終判斷。</p><div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div></div>
         <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 2 / 2 頁 · 報告日期：${fmtDate(new Date())}</span></div>
       </div>
     </div>
