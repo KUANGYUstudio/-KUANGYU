@@ -2688,7 +2688,7 @@ function render(){
   /* 2. Athletes List Borderless Grouped Roster (No coach column, grouped like dashboard) */
   const listBody=document.getElementById('athleteRows');
   const listWrap=document.getElementById('athletesRosterWrap');
-  listWrap.style.display=active.length?'block':'none';
+  listWrap.style.display=active.length?'flex':'none';
   document.getElementById('listEmpty').style.display=active.length?'none':'block';
   document.getElementById('listCount').textContent=active.length+' 位學員';
 
