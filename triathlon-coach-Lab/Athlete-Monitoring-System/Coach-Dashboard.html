@@ -5,32 +5,47 @@
 <title>KUANGYU Athlete Monitoring System｜Coach Dashboard</title>
 <style>
 :root{
-  --ink:#1f382c;
-  --green:#243f32;
-  --sage:#4d6f5a;
-  --sage2:#e3ede2;
-  --sage-surface:#edf3ec;
-  --sage-tint:#f5f8f3;
-  --cream:#eeefe8;
+  --ink:#1b3126;
+  --green:#213a2e;
+  --green-deep:#192e24;
+  --sage:#4b6e59;
+  --sage2:#e4eee3;
+  --sage-surface:#eff4ee;
+  --sage-tint:#f6f9f5;
+  --cream:#f1f2ec;
   --paper:#fffefa;
-  --line:#d3ddd1;
-  --line-soft:#e5ece3;
-  --muted:#5e6d63;
-  --amber:#c98818;
-  --amberbg:#f7efe1;
-  --red:#c4453d;
-  --redbg:#f8ebe8;
-  --ok-green:#2f7a53;
-  --shadow:0 3px 16px rgba(31,56,44,.06);
+  --line:#d7e0d5;
+  --line-soft:#e8eee6;
+  --muted:#606f65;
+  --amber:#c58415;
+  --amberbg:#f8f0df;
+  --red:#be443c;
+  --redbg:#f9ece9;
+  --ok-green:#2d7851;
+
+  /* Harmonized Estimate vs Real palette */
+  --est-bg:#edf2f5;
+  --est-head:#e1eaf0;
+  --est-ink:#2c4d63;
+  --real-bg:#f7efec;
+  --real-head:#f2e3dd;
+  --real-ink:#894032;
+
+  --shadow-sm:0 1px 2px rgba(24,44,33,.04), 0 4px 12px rgba(24,44,33,.04);
+  --shadow:0 2px 6px rgba(24,44,33,.04), 0 10px 28px rgba(24,44,33,.055);
+  --radius-lg:18px;
+  --radius-md:12px;
+  --radius-sm:9px;
 }
 
 *{box-sizing:border-box}
 [hidden]{display:none !important}
+html{scroll-behavior:smooth}
 html,body{
   margin:0;
   padding:0;
   background:var(--cream);
-  color:#26322b;
+  color:#25332b;
   font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;
   font-size:15px;
   line-height:1.6;
@@ -38,64 +53,77 @@ html,body{
   overflow-x:clip;
 }
 button,input,select,textarea{font:inherit}
-button{cursor:pointer;transition:background-color .16s ease,border-color .16s ease,color .16s ease,opacity .16s ease}
+button{cursor:pointer;transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease,transform .12s ease}
+button:active{transform:translateY(.5px)}
 
 .app{display:flex;min-height:100vh}
 
 /* Sidebar */
 .sidebar{
-  width:256px;
-  background:var(--green);
+  width:252px;
+  background:linear-gradient(180deg,var(--green) 0%,var(--green-deep) 100%);
   color:#f6f6f0;
-  padding:28px 18px 22px;
+  padding:28px 16px 22px;
   display:flex;
   flex-direction:column;
   flex-shrink:0;
   position:sticky;
   top:0;
   height:100vh;
+  border-right:1px solid rgba(255,255,255,.06);
 }
-.brand{padding:2px 10px 26px}
-.brand small{display:block;font-size:11px;letter-spacing:2.2px;color:#b8ccb9;font-weight:700}
-.brand h2{font-size:20px;line-height:1.35;margin:8px 0 0;color:#fffefa;letter-spacing:.3px}
-.brand span{font-weight:400;opacity:.92}
-.nav-label{font-size:11px;letter-spacing:1.6px;color:#afc2b2;padding:10px 12px 8px;font-weight:650}
-.nav{display:flex;flex-direction:column;gap:6px}
+.brand{
+  padding:4px 12px 22px;
+  margin-bottom:14px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.brand small{display:block;font-size:10.5px;letter-spacing:2.4px;color:#b2c7b6;font-weight:700}
+.brand h2{font-size:19px;line-height:1.35;margin:7px 0 0;color:#fffefa;letter-spacing:.4px;font-weight:800}
+.brand span{font-weight:400;opacity:.88}
+.nav-label{font-size:10.5px;letter-spacing:1.8px;color:#9eb5a3;padding:8px 12px 8px;font-weight:700}
+.nav{display:flex;flex-direction:column;gap:5px}
 .nav button{
   width:100%;
   border:0;
   background:transparent;
-  color:#e4ede5;
+  color:#dce8de;
   text-align:left;
-  padding:13px 15px;
-  border-radius:10px;
-  font-size:15px;
+  padding:12px 14px;
+  border-radius:11px;
+  font-size:14.5px;
   font-weight:550;
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:11px;
+  position:relative;
 }
-.nav button.active,.nav button:hover{
-  background:#40614c;
+.nav button:hover{
+  background:rgba(255,255,255,.08);
   color:#fffefa;
-  box-shadow:inset 3px 0 0 #c9dbc9;
 }
-.nav button svg{width:17px;height:17px;flex-shrink:0;opacity:.9}
+.nav button.active{
+  background:rgba(255,255,255,.14);
+  color:#fffefa;
+  font-weight:650;
+  box-shadow:inset 3px 0 0 #cbe0cc, 0 2px 8px rgba(0,0,0,.12);
+}
+.nav button svg{width:17px;height:17px;flex-shrink:0;opacity:.88}
 .side-foot{
   margin-top:auto;
   padding:16px 12px 4px;
-  border-top:1px solid rgba(255,255,255,.15);
-  color:#c2d2c5;
-  font-size:12.5px;
+  border-top:1px solid rgba(255,255,255,.1);
+  color:#b6c8ba;
+  font-size:12px;
   line-height:1.65;
 }
+.side-foot strong{display:block;color:#e6efe7;font-size:11.5px;letter-spacing:1.1px;margin-bottom:2px}
 
 /* Main & Topbar */
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
 .topbar{
-  height:66px;
-  background:rgba(255,254,250,.96);
-  backdrop-filter:blur(8px);
+  height:64px;
+  background:rgba(255,254,250,.92);
+  backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
   display:flex;
   align-items:center;
@@ -104,17 +132,17 @@ button{cursor:pointer;transition:background-color .16s ease,border-color .16s ea
   padding:0 36px;
   position:sticky;
   top:0;
-  z-index:8;
+  z-index:12;
 }
-.crumb{font-size:13.5px;color:var(--muted);white-space:nowrap}
-.crumb span{color:var(--ink);font-weight:650}
-.top-right{display:flex;align-items:center;gap:12px;font-size:13.5px;min-width:0}
+.crumb{font-size:13px;color:var(--muted);white-space:nowrap;letter-spacing:.2px}
+.crumb span{color:var(--ink);font-weight:700}
+.top-right{display:flex;align-items:center;gap:12px;font-size:13px;min-width:0}
 .role{
-  background:var(--sage2);
-  color:#284835;
-  border:1px solid #c6d6c4;
-  border-radius:20px;
-  padding:6px 14px;
+  background:var(--sage-surface);
+  color:#264633;
+  border:1px solid #cbd9ca;
+  border-radius:999px;
+  padding:5px 14px;
   font-weight:650;
   white-space:nowrap;
   overflow:hidden;
@@ -128,82 +156,164 @@ button{cursor:pointer;transition:background-color .16s ease,border-color .16s ea
   color:#fffefa;
   display:grid;
   place-items:center;
-  font-size:14px;
+  font-size:13.5px;
   font-weight:700;
   flex-shrink:0;
+  box-shadow:0 2px 6px rgba(33,58,46,.2);
 }
 
 /* Page & Typography */
-.content{padding:30px 36px 56px;max-width:1460px;width:100%;margin:0 auto}
+.content{padding:30px 36px 60px;max-width:1440px;width:100%;margin:0 auto}
 .page{display:none}
 .page.active{display:block}
-.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px;flex-wrap:wrap}
-.eyebrow{font-size:11.5px;letter-spacing:1.8px;color:var(--sage);font-weight:750}
-.page-head h1{font-size:27px;margin:5px 0;color:var(--ink);letter-spacing:-.2px;line-height:1.25}
-.sub{font-size:14px;color:var(--muted);line-height:1.65;max-width:74ch}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.eyebrow{font-size:11px;letter-spacing:2px;color:var(--sage);font-weight:750}
+.page-head h1{font-size:26px;margin:4px 0 6px;color:var(--ink);letter-spacing:-.3px;line-height:1.25;font-weight:800}
+.sub{font-size:14px;color:var(--muted);line-height:1.6;max-width:74ch}
+.head-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
 /* Buttons */
-.btn{border:0;border-radius:9px;padding:10px 16px;font-size:14px;font-weight:650;line-height:1.25;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px}
-.primary{background:var(--green);color:#fffefa}
-.primary:hover{background:#325441}
-.soft{background:var(--sage2);color:#264633;border:1px solid #c4d5c3}
-.soft:hover{background:#d7e5d6}
-.outline{background:var(--paper);border:1px solid #bfcebe;color:#284835}
-.outline:hover{background:#f1f5ef}
+.btn{
+  border:0;
+  border-radius:var(--radius-sm);
+  padding:9px 16px;
+  font-size:13.5px;
+  font-weight:650;
+  line-height:1.25;
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+.primary{background:var(--green);color:#fffefa;box-shadow:0 2px 6px rgba(33,58,46,.18)}
+.primary:hover{background:#2d503e}
+.soft{background:var(--sage2);color:#234330;border:1px solid #c6d7c5}
+.soft:hover{background:#d7e6d6}
+.outline{background:var(--paper);border:1px solid #c6d3c5;color:#274634}
+.outline:hover{background:#f2f6f0;border-color:#b2c4b1}
+.ghost-danger{background:transparent;border:1px solid #dec7c4;color:#8e413b}
+.ghost-danger:hover{background:var(--redbg);border-color:#d6b0ac}
 
 /* Cards & KPI Grid */
 .grid{display:grid;gap:20px}
-.stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:20px}
+.stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:22px}
 .card{
   background:var(--paper);
   border:1px solid var(--line);
-  border-radius:16px;
+  border-radius:var(--radius-lg);
   padding:22px 24px;
   box-shadow:var(--shadow);
 }
 .section-gap{margin-bottom:22px}
+.scroll-anchor{scroll-margin-top:128px}
+
+/* Refined KPI Cards */
 .stat-card{
-  padding:18px 22px;
-  border-left:4px solid var(--sage);
+  padding:20px 22px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
 }
-.stat-label{font-size:13.5px;color:var(--muted);font-weight:600}
-.stat-num{font-size:32px;font-weight:800;margin:6px 0 0;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
-.two{grid-template-columns:minmax(0,1.85fr) minmax(300px,.85fr);align-items:start}
+.stat-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:var(--sage);
+}
+.stat-card.kpi-reports::before{background:var(--ok-green)}
+.stat-card.kpi-alerts::before{background:#b8c7b7}
+.stat-card.kpi-alerts.has-alert{
+  background:linear-gradient(135deg,#fffefa 0%,#fdf5f4 100%);
+  border-color:#e8c7c3;
+}
+.stat-card.kpi-alerts.has-alert::before{background:var(--red)}
+.stat-card.kpi-alerts.has-alert .stat-num{color:var(--red)}
+.stat-card.kpi-alerts.has-alert .stat-icon{background:var(--redbg);color:var(--red);border-color:#ebc7c2}
+
+.stat-label{font-size:13px;color:var(--muted);font-weight:650;letter-spacing:.2px}
+.stat-num{font-size:32px;font-weight:800;margin:4px 0 0;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.stat-icon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:var(--sage-surface);
+  border:1px solid #d5e1d4;
+  color:var(--sage);
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+}
+.stat-icon svg{width:20px;height:20px}
+
+.two{grid-template-columns:minmax(0,1.88fr) minmax(300px,.88fr);align-items:start}
 .card-head{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding-bottom:13px;
+  padding-bottom:14px;
   margin-bottom:16px;
   border-bottom:1px solid var(--line-soft);
   gap:12px;
   flex-wrap:wrap;
 }
-.card-head h3{font-size:17px;margin:0;color:var(--ink);font-weight:750}
-.card-head small{font-size:12px;color:var(--muted);letter-spacing:.4px;font-weight:600}
+.card-head h3{font-size:17px;margin:0;color:var(--ink);font-weight:750;letter-spacing:-.1px}
+.card-head small{font-size:12px;color:var(--muted);letter-spacing:.3px;font-weight:600}
+
+/* Subtle Principle Strip on Dashboard */
+.principle-strip{
+  margin-top:22px;
+  padding:16px 22px;
+  background:rgba(255,254,250,.68);
+  border:1px dashed #c8d5c7;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.principle-strip-text{min-width:0;flex:1}
+.principle-strip-text strong{
+  display:inline-block;
+  font-size:12.5px;
+  letter-spacing:.8px;
+  color:var(--sage);
+  margin-bottom:3px;
+}
+.principle-strip-text p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.6}
 
 /* Tables & Coach Roster Groups */
-.table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:11px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:12px;background:var(--paper)}
 table{width:100%;border-collapse:collapse;text-align:left;background:var(--paper)}
 th{
-  font-size:12.5px;
-  color:#485a4e;
+  font-size:12px;
+  color:#4f6155;
   font-weight:700;
   padding:11px 12px;
   background:var(--sage-surface);
   border-bottom:1px solid var(--line);
   white-space:nowrap;
+  letter-spacing:.2px;
 }
 td{
   font-size:14.5px;
-  padding:14px 12px;
+  padding:13px 12px;
   border-bottom:1px solid var(--line-soft);
   vertical-align:middle;
   font-variant-numeric:tabular-nums;
 }
 tr:last-child td{border-bottom:0}
-tbody tr:nth-child(even) td{background:#fafbf8}
-tbody tr:hover td{background:#f2f6f0}
+tbody tr:nth-child(even) td{background:#fafcf9}
+tbody tr:hover td{background:#f1f6ef}
 
 .person{display:flex;align-items:center;gap:12px;min-width:0}
 .person>div:last-child{min-width:0;flex:1}
@@ -213,16 +323,16 @@ tbody tr:hover td{background:#f2f6f0}
   height:38px;
   border-radius:50%;
   background:var(--sage2);
-  border:1px solid #c6d6c4;
+  border:1px solid #c6d7c5;
   display:grid;
   place-items:center;
-  color:#264633;
+  color:#234330;
   font-size:14.5px;
   font-weight:750;
   flex-shrink:0;
 }
-.person strong{display:block;font-size:15.5px;color:var(--ink)}
-.person small{display:block;font-size:13px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.person strong{display:block;font-size:15px;color:var(--ink)}
+.person small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 .dashboard-name-link{
   border:0;
@@ -231,7 +341,7 @@ tbody tr:hover td{background:#f2f6f0}
   color:var(--ink);
   font:inherit;
   font-weight:750;
-  font-size:15.5px;
+  font-size:15px;
   text-align:left;
 }
 .dashboard-name-link:hover{color:var(--sage);text-decoration:underline}
@@ -239,8 +349,8 @@ tbody tr:hover td{background:#f2f6f0}
 
 /* Status Indicators */
 .status-icon{
-  width:21px;
-  height:21px;
+  width:22px;
+  height:22px;
   border-radius:50%;
   display:inline-flex;
   align-items:center;
@@ -262,26 +372,26 @@ tbody tr:hover td{background:#f2f6f0}
   align-items:center;
   justify-content:center;
   padding:4px 11px;
-  border-radius:20px;
+  border-radius:999px;
   font-size:12.5px;
   font-weight:700;
-  background:#ebeee8;
+  background:#ecefe9;
   color:#526055;
   white-space:nowrap;
 }
-.pill.ok{background:var(--sage2);color:#2d523a}
-.pill.watch{background:var(--amberbg);color:#8c6127}
-.pill.alert{background:var(--redbg);color:#9d433c}
+.pill.ok{background:var(--sage2);color:#264b34}
+.pill.watch{background:var(--amberbg);color:#8a5e22}
+.pill.alert{background:var(--redbg);color:#983d36}
 
 .mobile-inline-status{display:none}
 
 .remind-btn{
-  border:1px solid #bdcebe;
+  border:1px solid #bfcfbe;
   background:var(--sage-surface);
-  color:#264633;
+  color:#234330;
   border-radius:8px;
-  padding:7px 12px;
-  font-size:13px;
+  padding:6px 12px;
+  font-size:12.5px;
   font-weight:700;
   white-space:nowrap;
 }
@@ -290,19 +400,19 @@ tbody tr:hover td{background:#f2f6f0}
 .dashboard-action-cell{white-space:nowrap}
 
 .coach-roster-group{margin-top:2px}
-.coach-roster-group+.coach-roster-group{margin-top:24px;padding-top:20px;border-top:1px dashed var(--line)}
+.coach-roster-group+.coach-roster-group{margin-top:22px;padding-top:18px;border-top:1px dashed var(--line)}
 .coach-roster-title{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  font-size:14.5px;
+  font-size:13.5px;
   font-weight:750;
   color:var(--ink);
   background:var(--sage-surface);
-  border:1px solid #cdd9cb;
+  border:1px solid #cddacb;
   padding:4px 12px;
   border-radius:8px;
-  margin:0 0 12px;
+  margin:0 0 11px;
 }
 .coach-roster-group table{table-layout:fixed;width:100%}
 .coach-roster-group th:nth-child(1),.coach-roster-group td:nth-child(1){width:28%;text-align:left}
@@ -310,51 +420,54 @@ tbody tr:hover td{background:#f2f6f0}
 .coach-roster-group th:nth-child(3),.coach-roster-group td:nth-child(3){width:10%;text-align:center}
 .coach-roster-group th:nth-child(4),.coach-roster-group td:nth-child(4){width:13%;text-align:center}
 .coach-roster-group th:nth-child(5),.coach-roster-group td:nth-child(5){width:11%;text-align:center}
-.coach-roster-group th:nth-child(6),.coach-roster-group td:nth-child(6){width:15%;text-align:center;font-size:13px;color:var(--muted)}
+.coach-roster-group th:nth-child(6),.coach-roster-group td:nth-child(6){width:15%;text-align:center;font-size:12.5px;color:var(--muted)}
 .coach-roster-group th:nth-child(7),.coach-roster-group td:nth-child(7){width:15%;text-align:center}
 
 /* Notice & Coach Tags */
 #noticeArea{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:10px;padding:2px 0}
-#noticeArea.empty{padding:36px 14px;text-align:center;align-items:center}
+#noticeArea.empty{padding:36px 16px;text-align:center;align-items:center}
 .notice{
   width:100%;
   display:grid;
-  grid-template-columns:26px minmax(0,1fr);
+  grid-template-columns:24px minmax(0,1fr);
   align-items:start;
   gap:12px;
-  padding:14px;
+  padding:14px 15px;
   background:#fdf7f6;
-  border:1px solid #ebd2cf;
+  border:1px solid #ecd4d0;
   border-left:4px solid var(--red);
-  border-radius:11px;
+  border-radius:12px;
   text-align:left;
+  cursor:pointer;
+  transition:background-color .15s ease,transform .12s ease;
 }
+.notice:hover{background:#faefed}
 .notice-alert-icon{
-  width:23px;
-  height:23px;
+  width:22px;
+  height:22px;
   border-radius:50%;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   background:var(--red);
   color:#fff;
-  font-size:13.5px;
+  font-size:13px;
   font-weight:800;
   line-height:1;
   margin-top:2px;
 }
 .notice-content{min-width:0}
 .notice-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.notice-name{display:block;font-size:17.5px;line-height:1.3;color:var(--ink);font-weight:800}
-.notice p{font-size:13.5px;color:#554846;line-height:1.55;margin:6px 0 0}
+.notice-name{display:block;font-size:16.5px;line-height:1.3;color:var(--ink);font-weight:800}
+.notice p{font-size:13px;color:#5a4b49;line-height:1.55;margin:5px 0 0}
 
 .coach-tag{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:4px 12px;
+  padding:3px 11px;
   border-radius:999px;
-  font-size:12.5px;
+  font-size:12px;
   font-weight:750;
   letter-spacing:.4px;
   flex-shrink:0;
@@ -370,20 +483,21 @@ tbody tr:hover td{background:#f2f6f0}
   font-size:14px;
   line-height:1.8;
   background:var(--sage-tint);
-  border:1px dashed #c8d4c6;
+  border:1px dashed #c8d5c6;
   border-radius:12px;
 }
-.empty b{display:block;color:var(--ink);font-size:15.5px;margin-bottom:4px}
+.empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
 
-/* Profile Page */
+/* Profile Page & Quick Jump Bar */
 .profile-hero-card{
-  background:linear-gradient(135deg,#fffefa 0%,#f2f6f0 100%);
-  border-color:#c9d6c7;
+  background:linear-gradient(135deg,#fffefa 0%,#eff4ed 100%);
+  border-color:#c8d6c7;
+  margin-bottom:14px;
 }
 .profile-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .profile-avatar{
-  width:58px;
-  height:58px;
+  width:56px;
+  height:56px;
   border-radius:50%;
   background:var(--green);
   display:grid;
@@ -392,32 +506,73 @@ tbody tr:hover td{background:#f2f6f0}
   font-size:21px;
   font-weight:750;
   flex-shrink:0;
+  box-shadow:0 4px 12px rgba(33,58,46,.18);
 }
-.profile-head h2{margin:3px 0 4px;font-size:23px;color:var(--ink)}
-.profile-head p{margin:0;color:var(--muted);font-size:14px;font-weight:500}
-.profile-actions{margin-left:auto;display:flex;gap:10px}
+.profile-head h2{margin:2px 0 3px;font-size:22px;color:var(--ink);font-weight:800}
+.profile-head p{margin:0;color:var(--muted);font-size:13.5px;font-weight:550}
+.profile-actions{margin-left:auto;display:flex;gap:8px}
 
-.detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin:20px 0 22px}
+/* Sticky Profile Quick-Jump Navigation */
+.profile-subnav{
+  position:sticky;
+  top:72px;
+  z-index:9;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 8px;
+  margin-bottom:20px;
+  background:rgba(255,254,250,.92);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--line);
+  border-radius:13px;
+  box-shadow:var(--shadow-sm);
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.profile-subnav::-webkit-scrollbar{display:none}
+.profile-subnav button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:650;
+  padding:7px 14px;
+  border-radius:9px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.profile-subnav button:hover{
+  background:var(--sage-surface);
+  color:var(--ink);
+}
+.profile-subnav button.is-current{
+  background:var(--green);
+  color:#fffefa;
+}
+
+/* Integrated Daily Recovery Overview */
+.recovery-overview-card{
+  border-color:#ccd9cb;
+}
+.detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .detail{
   background:var(--paper);
   border:1px solid var(--line);
   border-top:3px solid var(--sage);
-  border-radius:13px;
-  padding:16px 20px;
-  box-shadow:var(--shadow);
+  border-radius:12px;
+  padding:15px 18px;
 }
-.detail small{color:var(--muted);font-size:13px;font-weight:600;display:block}
-.detail strong{display:block;margin-top:6px;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums}
-.detail-note{font-size:13px;color:var(--muted);margin-top:7px;line-height:1.5}
+.detail small{color:var(--muted);font-size:12.5px;font-weight:650;display:block}
+.detail strong{display:block;margin-top:5px;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.25}
+.detail-note{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5}
 
-/* Distinct Tinted Cards for Recovery Summary */
-.recovery-summary-grid{margin:0 !important}
+.recovery-summary-grid{margin-top:14px}
 .recovery-summary-grid .detail{
   background:var(--sage-surface);
-  border:1px solid #c9d7c7;
-  border-top:1px solid #c9d7c7;
+  border:1px solid #cddacb;
+  border-top:1px solid #cddacb;
   border-left:4px solid var(--sage);
-  box-shadow:none;
 }
 
 /* Structured Personal Information Grid */
@@ -429,7 +584,7 @@ tbody tr:hover td{background:#f2f6f0}
 .info-item{
   background:var(--sage-tint);
   border:1px solid var(--line-soft);
-  border-radius:10px;
+  border-radius:11px;
   padding:12px 15px;
 }
 .info-item.wide{grid-column:1 / -1}
@@ -449,31 +604,32 @@ tbody tr:hover td{background:#f2f6f0}
 }
 
 /* Session RPE */
-.session-rpe-card{border-color:#cbd9ca}
-.rpe-scale-note{font-size:12.5px;color:#284835;background:var(--sage2);border:1px solid #c4d5c3;border-radius:20px;padding:5px 13px;font-weight:700;white-space:nowrap}
+.session-rpe-card{border-color:#ccd9cb}
+.rpe-scale-note{font-size:12px;color:#264633;background:var(--sage2);border:1px solid #c6d7c5;border-radius:999px;padding:4px 12px;font-weight:700;white-space:nowrap}
 .session-rpe-list{
   display:flex;
   flex-direction:column;
-  gap:9px;
-  max-height:380px;
+  gap:8px;
+  max-height:360px;
   overflow-y:auto;
-  padding-right:2px;
+  padding-right:3px;
 }
 .session-rpe-row{
   display:grid;
-  grid-template-columns:minmax(0,1fr) 108px 112px;
+  grid-template-columns:minmax(0,1fr) 104px 116px;
   align-items:center;
   gap:14px;
-  padding:12px 16px;
+  padding:11px 15px;
   background:var(--sage-tint);
   border:1px solid var(--line-soft);
   border-radius:11px;
+  transition:background-color .14s ease,border-color .14s ease;
 }
-.session-rpe-row:hover{background:#eef4ec;border-color:#cad7c8}
-.session-rpe-name{font-size:15px;font-weight:700;color:var(--ink)}
-.session-rpe-meta{font-size:13px;color:var(--muted);margin-top:3px}
+.session-rpe-row:hover{background:#eef4ec;border-color:#c8d6c7}
+.session-rpe-name{font-size:14.5px;font-weight:700;color:var(--ink)}
+.session-rpe-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
 .session-rpe-score{
-  font-size:20px;
+  font-size:19px;
   font-weight:800;
   color:var(--ink);
   text-align:center;
@@ -483,11 +639,11 @@ tbody tr:hover td{background:#f2f6f0}
   padding:4px 8px;
   font-variant-numeric:tabular-nums;
 }
-.session-rpe-score small{font-size:12px;font-weight:550;color:var(--muted)}
+.session-rpe-score small{font-size:11.5px;font-weight:550;color:var(--muted)}
 .session-rpe-status{font-size:13px;text-align:right;color:var(--muted)}
 .rpe-quick-select{
   width:100%;
-  border:1px solid #bfcebe;
+  border:1px solid #c2d1c1;
   background:var(--paper);
   color:var(--ink);
   border-radius:8px;
@@ -496,13 +652,13 @@ tbody tr:hover td{background:#f2f6f0}
   font-weight:650;
 }
 .rpe-empty{
-  padding:20px 18px;
-  border:1px dashed #c4d3c2;
+  padding:22px 18px;
+  border:1px dashed #c6d4c4;
   border-radius:11px;
   background:var(--sage-tint);
   color:var(--muted);
-  font-size:14px;
-  line-height:1.75;
+  font-size:13.5px;
+  line-height:1.7;
 }
 
 /* Performance Management & RPE Chart */
@@ -512,20 +668,20 @@ tbody tr:hover td{background:#f2f6f0}
 
 .chart-toolbar{
   background:var(--sage-surface);
-  border:1px solid #cdd9cb;
-  border-radius:12px;
-  padding:14px 16px;
+  border:1px solid #d1ddd0;
+  border-radius:13px;
+  padding:13px 16px;
   margin-bottom:14px;
 }
 .chart-control-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .chart-range-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.chart-control-row label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink);font-weight:650}
+.chart-control-row label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);font-weight:700}
 .chart-control-row select,.custom-dates input{
-  border:1px solid #c2d0c0;
+  border:1px solid #c4d2c3;
   background:var(--paper);
   border-radius:8px;
   padding:7px 11px;
-  font-size:13.5px;
+  font-size:13px;
   color:var(--ink);
 }
 .custom-dates{
@@ -534,38 +690,48 @@ tbody tr:hover td{background:#f2f6f0}
   gap:10px;
   flex-wrap:wrap;
   width:100%;
-  margin-top:12px;
-  padding-top:12px;
-  border-top:1px solid #d4dfd2;
+  margin-top:11px;
+  padding-top:11px;
+  border-top:1px solid #d6e1d5;
 }
-.custom-dates label{display:flex;align-items:center;gap:7px;font-size:13px;color:#425348}
+.custom-dates label{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#425348;font-weight:650}
 
 .metric-toggles{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:8px;
   flex-wrap:wrap;
-  margin-top:12px;
-  padding-top:12px;
-  border-top:1px solid #d4dfd2;
-  font-size:13.5px;
-  color:#3c4d42;
+  margin-top:11px;
+  padding-top:11px;
+  border-top:1px solid #d6e1d5;
+  font-size:13px;
+  color:#4c5d52;
 }
-.metric-toggles>span{font-weight:750;color:var(--ink)}
+.metric-toggles>span{font-weight:750;color:var(--ink);margin-right:4px}
 .metric-toggle{
   display:inline-flex;
   align-items:center;
   gap:6px;
   cursor:pointer;
   user-select:none;
-  background:rgba(255,254,250,.72);
+  background:rgba(255,254,250,.55);
   border:1px solid #d4dfd2;
-  padding:4px 10px;
+  padding:5px 11px;
   border-radius:999px;
+  opacity:.72;
+  transition:background-color .15s ease,border-color .15s ease,opacity .15s ease,box-shadow .15s ease;
 }
-.metric-toggle:hover{background:var(--paper)}
-.metric-toggle input{accent-color:var(--green);width:15px;height:15px;margin:0}
-.metric-dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;flex-shrink:0}
+.metric-toggle:hover{opacity:1;background:var(--paper)}
+.metric-toggle:has(input:checked){
+  background:var(--paper);
+  border-color:#9eb5a1;
+  color:var(--ink);
+  font-weight:650;
+  opacity:1;
+  box-shadow:0 1px 4px rgba(24,44,33,.06);
+}
+.metric-toggle input{accent-color:var(--green);width:14px;height:14px;margin:0}
+.metric-dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;flex-shrink:0}
 .metric-dot.rpe{background:#3e6b52}
 .metric-dot.srpe{background:#8a7ca8}
 .metric-dot.ctl{background:#718b79}
@@ -576,10 +742,10 @@ tbody tr:hover td{background:#f2f6f0}
 /* Allow native 2-finger browser pinch-to-zoom on the chart area */
 .chart-plot-wrap{
   position:relative;
-  border:1px solid #cdd9cb;
-  border-radius:12px;
+  border:1px solid #d1ddd0;
+  border-radius:13px;
   background:var(--paper);
-  padding:14px;
+  padding:14px 16px;
   touch-action:auto;
 }
 .chart-plot-top{
@@ -588,33 +754,41 @@ tbody tr:hover td{background:#f2f6f0}
   justify-content:space-between;
   gap:10px;
   flex-wrap:wrap;
-  padding:0 4px 10px;
+  padding:0 2px 10px;
   border-bottom:1px solid var(--line-soft);
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
-.chart-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#526157;font-weight:550}
-.chart-legend span{display:inline-flex;align-items:center;gap:6px}
-.chart-expand-btn{padding:6px 12px;font-size:12.5px;margin-left:auto}
+.chart-axis-guide{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.chart-axis-guide span{display:inline-flex;align-items:center;gap:5px}
+.chart-expand-btn{padding:6px 12px;font-size:12px;margin-left:auto}
 
-/* Top Callout Strip: Date on top, Metrics directly underneath Date, aligned with vertical indicator line */
+/* Sleeker Top Callout Strip */
 .chart-stage{position:relative;width:100%;touch-action:auto}
 .chart-callout-band{
   position:relative;
   width:100%;
-  min-height:60px;
-  margin-bottom:2px;
+  min-height:48px;
+  margin-bottom:4px;
   display:flex;
   align-items:center;
   justify-content:center;
 }
 .chart-callout-placeholder{
-  font-size:12.5px;
+  font-size:12px;
   color:var(--muted);
   text-align:center;
-  padding:6px 12px;
-  border-radius:8px;
+  padding:4px 12px;
+  border-radius:999px;
   background:var(--sage-tint);
-  border:1px dashed #cbd7c9;
+  border:1px solid var(--line-soft);
 }
 .chart-callout-card{
   position:absolute;
@@ -624,7 +798,7 @@ tbody tr:hover td{background:#f2f6f0}
   display:inline-flex;
   flex-direction:column;
   align-items:center;
-  gap:5px;
+  gap:4px;
   max-width:calc(100% - 4px);
 }
 .callout-date-row{
@@ -633,42 +807,42 @@ tbody tr:hover td{background:#f2f6f0}
   gap:6px;
   background:var(--green);
   color:#fffefa;
-  padding:4px 11px;
+  padding:3px 11px;
   border-radius:999px;
   font-size:12px;
   font-weight:750;
   letter-spacing:.2px;
   white-space:nowrap;
-  box-shadow:0 3px 10px rgba(36,63,50,.18);
+  box-shadow:0 3px 10px rgba(33,58,46,.18);
   font-variant-numeric:tabular-nums;
 }
-.callout-date-row span{opacity:.85;font-weight:550;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+.callout-date-row span{opacity:.86;font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis}
 .callout-clear-btn{
   border:0;
-  background:rgba(255,255,255,.16);
+  background:rgba(255,255,255,.18);
   color:#fffefa;
   width:16px;
   height:16px;
   border-radius:50%;
   padding:0;
-  font-size:10.5px;
+  font-size:10px;
   line-height:1;
   display:inline-flex;
   align-items:center;
   justify-content:center;
 }
-.callout-clear-btn:hover{background:rgba(255,255,255,.3)}
+.callout-clear-btn:hover{background:rgba(255,255,255,.32)}
 .callout-metrics-row{
   display:flex;
   align-items:center;
   justify-content:center;
   flex-wrap:wrap;
   gap:5px;
-  background:rgba(255,254,250,.96);
-  border:1px solid #c3d1c1;
+  background:rgba(255,254,250,.97);
+  border:1px solid #c4d3c2;
   border-radius:9px;
   padding:4px 8px;
-  box-shadow:0 3px 12px rgba(36,63,50,.08);
+  box-shadow:0 4px 12px rgba(33,58,46,.08);
 }
 .callout-chip{
   display:inline-flex;
@@ -676,7 +850,7 @@ tbody tr:hover td{background:#f2f6f0}
   gap:4px;
   font-size:11.5px;
   color:var(--muted);
-  padding:1px 5px;
+  padding:1px 6px;
   border-radius:5px;
   background:var(--sage-surface);
   white-space:nowrap;
@@ -698,19 +872,19 @@ tbody tr:hover td{background:#f2f6f0}
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.55fr);
   gap:12px;
-  margin-top:16px;
+  margin-top:14px;
   padding:14px;
   background:var(--sage-surface);
-  border:1px solid #c9d7c7;
-  border-radius:12px;
+  border:1px solid #cddacb;
+  border-radius:13px;
   align-items:stretch;
 }
 .analysis-kpi-card{
   background:var(--paper);
-  border:1px solid #d5e0d4;
+  border:1px solid #d6e1d5;
   border-left:3.5px solid var(--sage);
   border-radius:10px;
-  padding:14px 16px;
+  padding:13px 15px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
@@ -723,7 +897,7 @@ tbody tr:hover td{background:#f2f6f0}
   display:inline-flex;
   align-items:center;
   gap:7px;
-  font-size:12.5px;
+  font-size:12px;
   color:var(--muted);
   font-weight:650;
 }
@@ -731,55 +905,55 @@ tbody tr:hover td{background:#f2f6f0}
   display:flex;
   align-items:baseline;
   gap:6px;
-  margin-top:8px;
+  margin-top:7px;
   font-variant-numeric:tabular-nums;
 }
 .analysis-kpi-value strong{
-  font-size:24px;
+  font-size:23px;
   font-weight:800;
   line-height:1.15;
   color:var(--ink);
   letter-spacing:-.3px;
 }
 .analysis-kpi-value span{
-  font-size:12.5px;
+  font-size:12px;
   font-weight:600;
   color:var(--muted);
 }
 .analysis-kpi-sub{
-  font-size:12px;
+  font-size:11.5px;
   color:var(--muted);
-  margin-top:6px;
+  margin-top:5px;
 }
 
 .analysis-insight-card{
-  background:#f7faf5;
-  border:1px solid #bdd0bc;
+  background:#f8fbf6;
+  border:1px solid #bfd2be;
   border-left:4px solid var(--green);
   border-radius:10px;
-  padding:14px 16px;
+  padding:13px 16px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
 }
 .analysis-insight-card strong{
   display:block;
-  margin-top:8px;
-  font-size:15.5px;
+  margin-top:7px;
+  font-size:15px;
   font-weight:750;
   line-height:1.5;
   color:var(--ink);
 }
 
-.chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--muted)}
+.chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--muted)}
 .chart-hint{
-  font-size:13px;
+  font-size:12.5px;
   line-height:1.65;
-  color:#4c5c51;
-  margin-top:10px;
+  color:#4f5f54;
+  margin-top:9px;
   padding:10px 14px;
   background:var(--sage-tint);
-  border-radius:9px;
+  border-radius:10px;
   border:1px solid var(--line-soft);
 }
 .load-chart-card.fullscreen{position:fixed;inset:12px;z-index:50;overflow:auto;background:var(--paper);box-shadow:0 12px 50px rgba(0,0,0,.25)}
@@ -788,7 +962,7 @@ tbody tr:hover td{background:#f2f6f0}
 /* =========================================================
    Weekly Training Volume & Compliance Tracker
    ========================================================= */
-.weekly-card{border-color:#c6d5c5}
+.weekly-card{border-color:#c8d6c7}
 .weekly-toolbar{
   display:flex;
   align-items:center;
@@ -796,15 +970,15 @@ tbody tr:hover td{background:#f2f6f0}
   gap:12px;
   flex-wrap:wrap;
   background:var(--sage-surface);
-  border:1px solid #cdd9cb;
-  border-radius:11px;
+  border:1px solid #d1ddd0;
+  border-radius:12px;
   padding:11px 15px;
   margin-bottom:16px;
 }
-.weekly-toolbar-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.weekly-toolbar-left label{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:650;color:var(--ink)}
+.weekly-toolbar-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.weekly-toolbar-left label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink)}
 .weekly-toolbar-left select{
-  border:1px solid #c2d0c0;
+  border:1px solid #c4d2c3;
   background:var(--paper);
   border-radius:8px;
   padding:6px 10px;
@@ -815,55 +989,60 @@ tbody tr:hover td{background:#f2f6f0}
 
 .weekly-layout{
   display:grid;
-  grid-template-columns:minmax(0,1.42fr) minmax(320px,1fr);
+  grid-template-columns:minmax(0,1.44fr) minmax(320px,1fr);
   gap:20px;
   align-items:start;
 }
 
 .weekly-table-wrap{
   overflow-x:auto;
-  border:1px solid #c8d6c7;
+  border:1px solid #ccd9cb;
   border-radius:12px;
   background:var(--paper);
 }
 .weekly-table{
   width:100%;
-  border-collapse:collapse;
+  border-collapse:separate;
+  border-spacing:0;
   text-align:center;
   font-size:13.5px;
   font-variant-numeric:tabular-nums;
 }
 .weekly-table th{
   padding:8px 8px;
-  border-bottom:1px solid #c8d6c7;
-  border-right:1px solid #d9e3d7;
+  border-bottom:1px solid #cbd8ca;
+  border-right:1px solid #dde6dc;
   font-size:12px;
   font-weight:750;
   line-height:1.35;
 }
 .weekly-table th:last-child,.weekly-table td:last-child{border-right:0}
 .weekly-table th.grp-basic{background:var(--sage-surface);color:var(--ink)}
-.weekly-table th.grp-est{background:#e4eef6;color:#234663}
-.weekly-table th.grp-real{background:#fbeae7;color:#8e342d}
-.weekly-table th.sub-est{background:#eff5fa;color:#355875;font-weight:650}
-.weekly-table th.sub-real{background:#fdf3f1;color:#8e342d;font-weight:650}
-.weekly-table th.sub-remark{background:var(--sage-surface);color:#485a4e;font-weight:650}
+.weekly-table th.grp-est{background:var(--est-head);color:var(--est-ink)}
+.weekly-table th.grp-real{background:var(--real-head);color:var(--real-ink)}
+.weekly-table th.sub-est{background:var(--est-bg);color:var(--est-ink);font-weight:650}
+.weekly-table th.sub-real{background:var(--real-bg);color:var(--real-ink);font-weight:650}
+.weekly-table th.sub-remark{background:var(--sage-surface);color:#4f6155;font-weight:650}
 
 .weekly-table td{
   padding:9px 7px;
   border-bottom:1px solid var(--line-soft);
-  border-right:1px solid #edf2eb;
+  border-right:1px solid #eef2ec;
   font-size:13.5px;
   color:var(--ink);
+  background:var(--paper);
 }
 .weekly-table tbody tr{cursor:pointer}
-.weekly-table tbody tr:hover td{background:#f0f6ee}
-.weekly-table td.col-real{background:rgba(251,234,231,.24);font-weight:650}
-.weekly-table td.col-est{background:rgba(228,238,246,.22)}
+.weekly-table tbody tr:hover td{background:#eef4ec}
+.weekly-table tbody tr:hover td.col-remark{color:var(--ink)}
+.weekly-table td.col-est{background:#f7fafc}
+.weekly-table td.col-real{background:#fcf7f5;font-weight:650}
+.weekly-table tbody tr:hover td.col-est{background:#eaf1f6}
+.weekly-table tbody tr:hover td.col-real{background:#f6e7e2}
 .weekly-table td.col-remark{
   text-align:left;
   font-size:12.5px;
-  color:#46574c;
+  color:#4f6055;
   max-width:165px;
   min-width:110px;
   white-space:nowrap;
@@ -874,20 +1053,20 @@ tbody tr:hover td{background:#f2f6f0}
 /* Total & Compliance Summary Rows */
 .weekly-table tfoot tr.total-row td{
   background:var(--sage-surface);
-  border-top:2px solid #b8c9b7;
-  border-bottom:1px solid #c8d6c7;
+  border-top:2px solid #bacbb9;
+  border-bottom:1px solid #cbd8ca;
   font-weight:800;
-  font-size:14px;
+  font-size:13.5px;
   color:var(--ink);
   padding:11px 7px;
 }
-.weekly-table tfoot tr.total-row td.col-real{background:#f9e4e0;color:#842d26}
-.weekly-table tfoot tr.total-row td.col-est{background:#dfeaf4;color:#1f415d}
+.weekly-table tfoot tr.total-row td.col-real{background:var(--real-head);color:var(--real-ink)}
+.weekly-table tfoot tr.total-row td.col-est{background:var(--est-head);color:var(--est-ink)}
 
 .weekly-table tfoot tr.rate-row td{
-  background:#f8faf6;
+  background:#f8faf7;
   font-weight:800;
-  font-size:14px;
+  font-size:13.5px;
   padding:11px 7px;
   border-bottom:0;
 }
@@ -897,7 +1076,7 @@ tbody tr:hover td{background:#f2f6f0}
   justify-content:center;
   padding:3px 10px;
   border-radius:999px;
-  font-size:13px;
+  font-size:12.5px;
   font-weight:800;
 }
 .rate-badge.good{background:var(--sage2);color:#254c34;border:1px solid #bfd3be}
@@ -911,8 +1090,8 @@ tbody tr:hover td{background:#f2f6f0}
 }
 .weekly-chart-box{
   background:var(--paper);
-  border:1px solid #cdd9cb;
-  border-radius:12px;
+  border:1px solid #d1ddd0;
+  border-radius:13px;
   padding:14px 16px;
 }
 .weekly-chart-head{
@@ -924,14 +1103,18 @@ tbody tr:hover td{background:#f2f6f0}
 }
 .weekly-chart-head h4{
   margin:0;
-  font-size:14.5px;
+  font-size:14px;
   font-weight:750;
   color:var(--ink);
 }
 .weekly-chart-head span{
   font-size:12px;
-  color:var(--muted);
-  font-weight:600;
+  color:var(--sage);
+  background:var(--sage-surface);
+  border:1px solid #d4dfd3;
+  border-radius:999px;
+  padding:2px 10px;
+  font-weight:700;
 }
 .weekly-bar-svg{
   width:100%;
@@ -940,26 +1123,44 @@ tbody tr:hover td{background:#f2f6f0}
 }
 
 /* Form & Modal */
-.field{margin:14px 0}
-.field label{display:block;font-size:13.5px;font-weight:650;color:var(--ink);margin-bottom:6px}
+.field{margin:12px 0}
+.field label{display:block;font-size:13px;font-weight:650;color:var(--ink);margin-bottom:5px}
 .field input,.field select,.field textarea{
   width:100%;
   border:1px solid #c7d4c5;
   border-radius:9px;
-  padding:11px 13px;
+  padding:10px 12px;
   background:var(--paper);
-  color:#26322b;
-  font-size:14.5px;
+  color:#25332b;
+  font-size:14px;
 }
-.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid rgba(77,111,90,.35);border-color:var(--sage)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid rgba(75,110,89,.32);border-color:var(--sage)}
 .field textarea{min-height:80px;resize:vertical}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+
+.modal-section-box{
+  border-radius:12px;
+  padding:10px 14px 4px;
+  margin:12px 0;
+  border:1px solid var(--line-soft);
+}
+.modal-section-box.est{background:#f4f8fa;border-color:#d4e1ea}
+.modal-section-box.real{background:#faf4f1;border-color:#ead8d2}
+.modal-section-title{
+  font-size:12px;
+  font-weight:750;
+  letter-spacing:.4px;
+  margin-bottom:2px;
+}
+.modal-section-box.est .modal-section-title{color:var(--est-ink)}
+.modal-section-box.real .modal-section-title{color:var(--real-ink)}
+
 .modal-backdrop{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(28,42,34,.36);
-  backdrop-filter:blur(2px);
+  background:rgba(24,38,30,.42);
+  backdrop-filter:blur(3px);
   z-index:30;
   align-items:center;
   justify-content:center;
@@ -971,27 +1172,28 @@ tbody tr:hover td{background:#f2f6f0}
   max-height:90vh;
   overflow:auto;
   background:var(--paper);
-  border-radius:16px;
-  padding:26px;
-  box-shadow:0 18px 50px rgba(24,38,30,.22);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px 26px;
+  box-shadow:0 20px 56px rgba(20,34,26,.24);
 }
-.modal h2{font-size:20px;margin:0 0 6px;color:var(--ink)}
-.modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
-.hint{font-size:13px;color:var(--muted);line-height:1.65}
+.modal h2{font-size:19px;margin:0 0 6px;color:var(--ink);font-weight:800}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.hint{font-size:12.5px;color:var(--muted);line-height:1.6}
 .toast{
   position:fixed;
   right:22px;
   bottom:22px;
   max-width:calc(100vw - 44px);
-  background:var(--green);
+  background:var(--green-deep);
   color:#fffefa;
-  padding:13px 18px;
-  border-radius:10px;
-  font-size:14px;
+  padding:12px 18px;
+  border-radius:11px;
+  font-size:13.5px;
   line-height:1.5;
   display:none;
   z-index:40;
-  box-shadow:0 8px 24px rgba(24,43,33,.25);
+  box-shadow:0 10px 28px rgba(20,36,27,.28);
 }
 
 /* Tablet & Compact Laptop Breakpoint */
@@ -1003,6 +1205,34 @@ tbody tr:hover td{background:#f2f6f0}
   .topbar{padding:0 24px}
 }
 
+/* Sticky Date & Week columns on narrower screens for Weekly Table */
+@media (max-width: 900px){
+  .weekly-table th.col-sticky-1,
+  .weekly-table td.col-sticky-1{
+    position:sticky;
+    left:0;
+    z-index:3;
+    min-width:54px;
+    width:54px;
+  }
+  .weekly-table th.col-sticky-2,
+  .weekly-table td.col-sticky-2{
+    position:sticky;
+    left:54px;
+    z-index:3;
+    min-width:46px;
+    width:46px;
+    box-shadow:3px 0 6px -2px rgba(27,49,38,.12);
+  }
+  .weekly-table th.col-sticky-group,
+  .weekly-table tfoot tr.total-row td.col-sticky-group{
+    position:sticky;
+    left:0;
+    z-index:4;
+    box-shadow:3px 0 6px -2px rgba(27,49,38,.12);
+  }
+}
+
 /* Mobile Layout (<= 768px) */
 @media (max-width: 768px){
   body{font-size:14px}
@@ -1012,41 +1242,51 @@ tbody tr:hover td{background:#f2f6f0}
     height:auto;
     position:sticky;
     top:0;
-    z-index:15;
+    z-index:16;
     flex-direction:row;
     align-items:center;
     justify-content:space-between;
     gap:10px;
     padding:10px 14px;
+    border-right:0;
+    border-bottom:1px solid rgba(255,255,255,.08);
   }
-  .brand{padding:0}
+  .brand{padding:0;margin:0;border:0}
   .brand small{font-size:8.5px;letter-spacing:1.6px}
   .brand h2{font-size:14px;margin:2px 0 0;line-height:1.2}
   .brand h2 br{display:none}
   .brand span{margin-left:4px}
   .nav-label,.side-foot{display:none}
   .nav{flex-direction:row;gap:6px;flex-shrink:0}
-  .nav button{width:auto;padding:8px 11px;font-size:12.5px;border-radius:8px;white-space:nowrap;gap:5px}
+  .nav button{width:auto;padding:7px 11px;font-size:12.5px;border-radius:8px;white-space:nowrap;gap:5px}
   .nav button svg{width:14px;height:14px}
 
-  .topbar{position:static;height:auto;min-height:46px;padding:8px 14px}
+  .topbar{position:static;height:auto;min-height:44px;padding:8px 14px}
   .crumb{font-size:12px}
-  .role{font-size:11px;padding:5px 10px;max-width:190px}
+  .role{font-size:11px;padding:4px 10px;max-width:190px}
   .avatar{width:30px;height:30px;font-size:12px}
 
-  .content{padding:18px 14px 40px}
-  .page-head{align-items:stretch;margin-bottom:18px}
+  .content{padding:16px 14px 44px}
+  .page-head{align-items:stretch;margin-bottom:16px}
   .page-head h1{font-size:21px}
   .sub{font-size:13px}
-  .btn{font-size:13px;padding:10px 14px}
+  .btn{font-size:13px;padding:9px 13px}
   .stats{gap:8px;margin-bottom:14px}
-  .stat-card{padding:12px}
+  .stat-card{padding:12px 11px;flex-direction:column;align-items:flex-start;gap:4px}
+  .stat-icon{display:none}
   .stat-label{font-size:11.5px}
   .stat-num{font-size:23px}
-  .card{padding:16px 14px;border-radius:13px}
+  .card{padding:16px 14px;border-radius:14px}
   .card-head{padding-bottom:10px;margin-bottom:12px}
   .card-head h3{font-size:15.5px}
   .card-head small{font-size:11.5px}
+
+  .principle-strip{padding:14px;gap:12px}
+  .principle-strip .btn{width:100%}
+
+  .profile-subnav{top:58px;margin-bottom:16px;padding:6px}
+  .profile-subnav button{padding:6px 11px;font-size:12.5px}
+  .scroll-anchor{scroll-margin-top:116px}
 
   /* Show inline status next to athlete name on mobile, hide desktop status column */
   .mobile-inline-status{display:inline-flex}
@@ -1118,7 +1358,7 @@ tbody tr:hover td{background:#f2f6f0}
   .coach-roster-group tr:not(.is-pending) td:nth-child(7){display:none !important}
   .coach-roster-group tr.is-pending td:nth-child(6){grid-column:1 / 3;grid-row:3;align-self:center;font-size:12px;color:var(--muted);padding-top:2px}
   .coach-roster-group tr.is-pending td:nth-child(7){grid-column:3 / 4;grid-row:3;justify-self:end;align-self:center;padding-top:2px}
-  .coach-roster-group .remind-btn{padding:8px 12px;font-size:12px}
+  .coach-roster-group .remind-btn{padding:7px 12px;font-size:12px}
 
   /* Athletes List Mobile Card Layout */
   #athletes td:nth-child(1){grid-column:1 / -1;grid-row:1;align-self:center}
@@ -1149,11 +1389,11 @@ tbody tr:hover td{background:#f2f6f0}
   /* Profile 3-column side-by-side detail cards on mobile */
   .profile-actions{width:100%;margin-left:0;margin-top:4px}
   .profile-actions .btn{flex:1;text-align:center}
-  .detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
+  .detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
   .detail{padding:11px 8px;text-align:center}
   .detail small{font-size:11px;white-space:nowrap}
   .detail strong{font-size:16px;margin-top:4px}
-  .recovery-summary-grid{grid-template-columns:1fr !important}
+  .recovery-summary-grid{grid-template-columns:1fr !important;margin-top:10px}
   .recovery-summary-grid .detail{text-align:left;padding:12px 14px}
 
   .session-rpe-row{grid-template-columns:minmax(0,1fr) 82px;gap:6px 10px;padding:11px 12px}
@@ -1195,9 +1435,10 @@ tbody tr:hover td{background:#f2f6f0}
     width:100%;
   }
 
-  .metric-toggles{gap:8px;font-size:12.5px}
+  .metric-toggles{gap:6px;font-size:12px}
+  .metric-toggle{padding:4px 9px}
   .chart-plot-wrap{padding:10px 8px}
-  .chart-callout-band{min-height:62px}
+  .chart-callout-band{min-height:52px}
   .callout-date-row{font-size:11.5px;padding:3px 9px}
   .callout-date-row span{max-width:110px}
   .callout-metrics-row{padding:3px 6px;gap:4px}
@@ -1227,7 +1468,7 @@ tbody tr:hover td{background:#f2f6f0}
   .load-chart-card.fullscreen .combined-analysis,
   .load-chart-card.fullscreen .chart-foot,
   .load-chart-card.fullscreen .chart-hint{display:none}
-  .load-chart-card.fullscreen .chart-callout-band{min-height:54px}
+  .load-chart-card.fullscreen .chart-callout-band{min-height:48px}
   .load-chart-card.fullscreen #loadChart{min-height:56vh;max-height:60vh}
 }
 
@@ -1249,7 +1490,7 @@ tbody tr:hover td{background:#f2f6f0}
       學員名單
     </button>
   </nav>
-  <div class="side-foot">COACH DASHBOARD<br>內部教練使用介面</div>
+  <div class="side-foot"><strong>COACH DASHBOARD</strong>內部教練監控介面</div>
 </aside>
 
 <main class="main">
@@ -1269,16 +1510,40 @@ tbody tr:hover td{background:#f2f6f0}
       <h1>教練工作台</h1>
       <div class="sub">共同查看所有學員狀態；個別課表與評估由負責教練管理。示範資料可隨時清除，不會當成正式學員。</div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="head-actions">
       <button class="btn outline" onclick="loadDemoData()">載入示範學員</button>
       <button class="btn soft" onclick="showPage('athletes')">管理學員名單 →</button>
     </div>
   </div>
 
   <div class="grid stats">
-    <div class="card stat-card"><div class="stat-label">管理中學員</div><div class="stat-num" id="countAthletes">0</div></div>
-    <div class="card stat-card"><div class="stat-label">今日已回報</div><div class="stat-num" id="countReports">0</div></div>
-    <div class="card stat-card"><div class="stat-label">待教練確認</div><div class="stat-num" id="countAlerts">0</div></div>
+    <div class="card stat-card">
+      <div>
+        <div class="stat-label">管理中學員</div>
+        <div class="stat-num" id="countAthletes">0</div>
+      </div>
+      <div class="stat-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
+      </div>
+    </div>
+    <div class="card stat-card kpi-reports">
+      <div>
+        <div class="stat-label">今日已回報</div>
+        <div class="stat-num" id="countReports">0</div>
+      </div>
+      <div class="stat-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+    </div>
+    <div class="card stat-card kpi-alerts" id="statAlertsCard">
+      <div>
+        <div class="stat-label">待教練確認</div>
+        <div class="stat-num" id="countAlerts">0</div>
+      </div>
+      <div class="stat-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+    </div>
   </div>
 
   <div class="grid two">
@@ -1293,10 +1558,12 @@ tbody tr:hover td{background:#f2f6f0}
     </div>
   </div>
 
-  <div class="card" style="margin-top:20px">
-    <div class="card-head"><h3>使用原則</h3><small>KUANGYU COACHING</small></div>
-    <div class="sub">首頁以查看為主，不提供直接修改，避免誤觸。點入學員個人頁面後，才會依登入教練的權限顯示編輯功能。兩位教練可以互相查看與留言，但課表由負責教練管理。</div>
-    <div style="margin-top:14px"><button class="btn outline" onclick="clearDemoData()">清除所有示範學員</button></div>
+  <div class="principle-strip">
+    <div class="principle-strip-text">
+      <strong>使用原則 · KUANGYU COACHING</strong>
+      <p>首頁以查看為主，不提供直接修改，避免誤觸。點入學員個人頁面後，才會依登入教練的權限顯示編輯功能。兩位教練可以互相查看與留言，但課表由負責教練管理。</p>
+    </div>
+    <button class="btn ghost-danger" onclick="clearDemoData()">清除所有示範學員</button>
   </div>
 </section>
 
@@ -1307,7 +1574,7 @@ tbody tr:hover td{background:#f2f6f0}
       <h1>學員名單</h1>
       <div class="sub">每位學員獨立管理，直接點擊學員姓名即可進入個人頁面檢視詳情。</div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="head-actions">
       <button class="btn outline" onclick="loadDemoData()">載入示範學員</button>
       <button class="btn primary" onclick="openAthleteModal()">＋ 新增學員</button>
     </div>
@@ -1360,13 +1627,49 @@ tbody tr:hover td{background:#f2f6f0}
     </div>
   </div>
 
-  <div class="grid detail-grid">
-    <div class="detail"><small>今日疲勞</small><strong id="pFatigue">尚未回報</strong></div>
-    <div class="detail"><small>睡眠品質</small><strong id="pSleep">—</strong></div>
-    <div class="detail"><small>身體狀況</small><strong id="pBody">—</strong></div>
+  <nav class="profile-subnav" aria-label="個人頁面快速跳轉">
+    <button type="button" class="is-current" onclick="scrollToSection('sec-recovery',this)">今日恢復總覽</button>
+    <button type="button" onclick="scrollToSection('sec-session-rpe',this)">單次訓練 RPE</button>
+    <button type="button" onclick="scrollToSection('sec-load-chart',this)">負荷與 RPE 趨勢</button>
+    <button type="button" onclick="scrollToSection('sec-weekly',this)">週訓練量追蹤</button>
+    <button type="button" onclick="scrollToSection('sec-info',this)">基本資料</button>
+  </nav>
+
+  <div class="card recovery-overview-card section-gap scroll-anchor" id="sec-recovery">
+    <div class="card-head">
+      <div>
+        <h3>今日恢復總覽與監控摘要</h3>
+        <div class="sub">DAILY RECOVERY · 整合今日主觀指標與系統自動判讀建議</div>
+      </div>
+      <small>DAILY STATUS</small>
+    </div>
+
+    <div class="grid detail-grid">
+      <div class="detail"><small>今日疲勞</small><strong id="pFatigue">尚未回報</strong></div>
+      <div class="detail"><small>睡眠品質</small><strong id="pSleep">—</strong></div>
+      <div class="detail"><small>身體狀況</small><strong id="pBody">—</strong></div>
+    </div>
+
+    <div class="grid detail-grid recovery-summary-grid">
+      <div class="detail">
+        <small>今日判讀狀態</small>
+        <strong id="pReportStatus">尚未回報</strong>
+        <div class="detail-note" id="pReportReason">等待今日恢復問卷回報</div>
+      </div>
+      <div class="detail">
+        <small>恢復指標綜合檢視</small>
+        <strong id="pRecoverySummary" style="font-size:15.5px">—</strong>
+        <div class="detail-note" id="pRecoverySub">主觀疲勞、睡眠品質與肌肉狀態</div>
+      </div>
+      <div class="detail">
+        <small>教練追蹤建議</small>
+        <strong id="pCoachAction" style="font-size:15.5px">—</strong>
+        <div class="detail-note" id="pReminderNote">—</div>
+      </div>
+    </div>
   </div>
 
-  <div class="card session-rpe-card section-gap">
+  <div class="card session-rpe-card section-gap scroll-anchor" id="sec-session-rpe">
     <div class="card-head">
       <div><h3>單次訓練 RPE</h3><div class="sub">SESSION RPE · 每完成一堂訓練回報一次（匯入 TP CSV 後可逐堂補填或檢視）</div></div>
       <span class="rpe-scale-note">主觀強度 1–10</span>
@@ -1376,7 +1679,7 @@ tbody tr:hover td{background:#f2f6f0}
     </div>
   </div>
 
-  <div class="card load-chart-card section-gap">
+  <div class="card load-chart-card section-gap scroll-anchor" id="sec-load-chart">
     <div class="card-head chart-title-row">
       <div>
         <h3>RPE 與訓練負荷共同監測</h3>
@@ -1421,30 +1724,26 @@ tbody tr:hover td{background:#f2f6f0}
 
       <div class="metric-toggles">
         <span>顯示指標</span>
-        <label class="metric-toggle"><input type="checkbox" id="metricRPE" checked onchange="renderLoadChart()"><i class="metric-dot rpe"></i> 單次 RPE (1–10)</label>
-        <label class="metric-toggle"><input type="checkbox" id="metricCTL" checked onchange="renderLoadChart()"><i class="metric-dot ctl"></i> CTL (長期負荷)</label>
-        <label class="metric-toggle"><input type="checkbox" id="metricATL" checked onchange="renderLoadChart()"><i class="metric-dot atl"></i> ATL (短期疲勞)</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricRPE" checked onchange="renderLoadChart()"><i class="metric-dot rpe"></i> 單次 RPE (右軸 1–10)</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricCTL" checked onchange="renderLoadChart()"><i class="metric-dot ctl"></i> CTL 長期負荷</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricATL" checked onchange="renderLoadChart()"><i class="metric-dot atl"></i> ATL 短期疲勞</label>
         <label class="metric-toggle"><input type="checkbox" id="metricSRPE" onchange="renderLoadChart()"><i class="metric-dot srpe"></i> sRPE 負荷</label>
-        <label class="metric-toggle"><input type="checkbox" id="metricTSB" onchange="renderLoadChart()"><i class="metric-dot tsb"></i> TSB</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricTSB" onchange="renderLoadChart()"><i class="metric-dot tsb"></i> TSB 狀態值</label>
         <label class="metric-toggle"><input type="checkbox" id="metricTSS" onchange="renderLoadChart()"><i class="metric-dot tss"></i> 每日 TSS</label>
       </div>
     </div>
 
     <div class="chart-plot-wrap" id="chartPlotWrap">
       <div class="chart-plot-top">
-        <div class="chart-legend">
-          <span><i class="metric-dot rpe"></i> RPE (右軸 1–10)</span>
-          <span><i class="metric-dot ctl"></i> CTL</span>
-          <span><i class="metric-dot atl"></i> ATL</span>
-          <span><i class="metric-dot srpe"></i> sRPE</span>
-          <span><i class="metric-dot tsb"></i> TSB</span>
-          <span><i class="metric-dot tss"></i> TSS</span>
+        <div class="chart-axis-guide">
+          <span>左軸：CTL / ATL / TSS</span>
+          <span>右軸：主觀 RPE (1–10)</span>
         </div>
         <button class="btn outline chart-expand-btn" type="button" id="fullscreenChartBtn" onclick="toggleChartFullscreen()">放大圖表</button>
       </div>
       <div class="chart-stage" id="chartStage">
         <div class="chart-callout-band" id="chartCalloutBand">
-          <div class="chart-callout-placeholder">點選圖表上的任一天，即可顯示垂直指示線與當日數據</div>
+          <div class="chart-callout-placeholder">點選圖表任一天可查看當日完整數據</div>
         </div>
         <svg id="loadChart" viewBox="0 0 1000 370" role="img" aria-label="RPE 與個人訓練負荷趨勢圖"></svg>
       </div>
@@ -1479,7 +1778,7 @@ tbody tr:hover td{background:#f2f6f0}
     <div class="chart-hint">共同分析說明：長條為每日主觀 RPE（右軸 1–10 分，8 分以上標為警示色），曲線為 TrainingPeaks 訓練負荷（左軸）。若外部 TSS 不高但主觀 RPE 連續偏高，代表恢復不足或非訓練壓力累積。</div>
   </div>
 
-  <div class="card weekly-card section-gap">
+  <div class="card weekly-card section-gap scroll-anchor" id="sec-weekly">
     <div class="card-head">
       <div>
         <h3>週訓練量與課表完成度追蹤</h3>
@@ -1498,7 +1797,7 @@ tbody tr:hover td{background:#f2f6f0}
             <option value="4">最近 4 週</option>
           </select>
         </label>
-        <span class="hint" style="font-size:12.5px">點選任一週次列即可編輯時數、跑量或備註</span>
+        <span class="hint">點選任一週次列即可編輯時數、跑量或備註</span>
       </div>
       <div class="weekly-toolbar-right">
         <button class="btn soft" type="button" onclick="openWeekModal()">＋ 新增週次紀錄</button>
@@ -1511,7 +1810,7 @@ tbody tr:hover td{background:#f2f6f0}
         <table class="weekly-table">
           <thead>
             <tr>
-              <th class="grp-basic" colspan="2">週期</th>
+              <th class="grp-basic col-sticky-group" colspan="2">週期</th>
               <th class="grp-est" colspan="2">預計訓練時間<br><span style="font-weight:500;font-size:11px">Estimate Duration</span></th>
               <th class="grp-real" colspan="2">實際完成時間<br><span style="font-weight:500;font-size:11px">Real Duration</span></th>
               <th class="grp-est">預計跑量<br><span style="font-weight:500;font-size:11px">Run (km)</span></th>
@@ -1519,8 +1818,8 @@ tbody tr:hover td{background:#f2f6f0}
               <th class="grp-basic">備註<br><span style="font-weight:500;font-size:11px">Remark</span></th>
             </tr>
             <tr>
-              <th class="sub-remark">日期 date</th>
-              <th class="sub-remark">週數 week</th>
+              <th class="sub-remark col-sticky-1">日期</th>
+              <th class="sub-remark col-sticky-2">週數</th>
               <th class="sub-est">小時 hr</th>
               <th class="sub-est">分鐘 min</th>
               <th class="sub-real">小時 hr</th>
@@ -1538,7 +1837,7 @@ tbody tr:hover td{background:#f2f6f0}
       <div class="weekly-charts-col">
         <div class="weekly-chart-box">
           <div class="weekly-chart-head">
-            <h4>小時 Duration（每週實際訓練時數）</h4>
+            <h4>每週實際訓練時數 (hr)</h4>
             <span id="weeklyDurAvgLabel">—</span>
           </div>
           <svg id="weeklyDurationChart" class="weekly-bar-svg" viewBox="0 0 520 220" role="img" aria-label="每週實際訓練時數長條圖"></svg>
@@ -1546,7 +1845,7 @@ tbody tr:hover td{background:#f2f6f0}
 
         <div class="weekly-chart-box">
           <div class="weekly-chart-head">
-            <h4>實際 Real 跑量 Run / 公里 km</h4>
+            <h4>每週實際跑量 (km)</h4>
             <span id="weeklyRunAvgLabel">—</span>
           </div>
           <svg id="weeklyRunChart" class="weekly-bar-svg" viewBox="0 0 520 220" role="img" aria-label="每週實際跑量長條圖"></svg>
@@ -1555,28 +1854,7 @@ tbody tr:hover td{background:#f2f6f0}
     </div>
   </div>
 
-  <div class="card section-gap">
-    <div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div>
-    <div class="grid detail-grid recovery-summary-grid">
-      <div class="detail">
-        <small>今日判讀狀態</small>
-        <strong id="pReportStatus">尚未回報</strong>
-        <div class="detail-note" id="pReportReason">等待今日恢復問卷回報</div>
-      </div>
-      <div class="detail">
-        <small>恢復指標綜合檢視</small>
-        <strong id="pRecoverySummary" style="font-size:16px">—</strong>
-        <div class="detail-note" id="pRecoverySub">主觀疲勞、睡眠品質與肌肉狀態</div>
-      </div>
-      <div class="detail">
-        <small>教練追蹤建議</small>
-        <strong id="pCoachAction" style="font-size:16px">—</strong>
-        <div class="detail-note" id="pReminderNote">—</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
+  <div class="card scroll-anchor" id="sec-info">
     <div class="card-head"><h3>個人基本資料</h3><small>ATHLETE INFORMATION</small></div>
     <div id="profileInfo" class="info-grid"></div>
     <div class="hint" style="margin-top:14px">目前為前端原型：新增學員、編輯與匯入的 TrainingPeaks CSV 資料皆保存在這台瀏覽器的 localStorage。</div>
@@ -1584,7 +1862,7 @@ tbody tr:hover td{background:#f2f6f0}
 </section>
 </div></main></div>
 
-<div class="modal-backdrop" id="athleteModal">
+<div class="modal-backdrop" id="athleteModal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <h2 id="modalTitle">新增學員</h2>
     <div class="hint">這些欄位先建立基本名單；之後可從學員個人頁面匯入 TrainingPeaks CSV 與查看 RPE 紀錄。</div>
@@ -1604,23 +1882,36 @@ tbody tr:hover td{background:#f2f6f0}
   </div>
 </div>
 
-<div class="modal-backdrop" id="weekModal">
+<div class="modal-backdrop" id="weekModal" onclick="if(event.target===this)closeWeekModal()">
   <div class="modal">
     <h2 id="weekModalTitle">編輯週次訓練量與備註</h2>
     <div class="hint">可手動微調該週的預計／實際訓練時數、跑步公里數與備註；若有匯入 TP CSV，手動修改的值會優先保留。</div>
     <div class="form-grid">
       <div class="field"><label>該週起始日期（週一）*</label><input type="date" id="wDate"></div>
       <div class="field"><label>週數標籤（選填）</label><input id="wWeekLabel" placeholder="例如：1"></div>
-      <div class="field"><label>預計訓練時間 — 小時 (hr)</label><input type="number" min="0" id="wEstHr" placeholder="0"></div>
-      <div class="field"><label>預計訓練時間 — 分鐘 (min)</label><input type="number" min="0" max="59" id="wEstMin" placeholder="0"></div>
-      <div class="field"><label>實際完成時間 — 小時 (hr)</label><input type="number" min="0" id="wRealHr" placeholder="0"></div>
-      <div class="field"><label>實際完成時間 — 分鐘 (min)</label><input type="number" min="0" max="59" id="wRealMin" placeholder="0"></div>
+    </div>
+
+    <div class="modal-section-box est">
+      <div class="modal-section-title">預計訓練量（Estimate）</div>
+      <div class="form-grid">
+        <div class="field"><label>預計時間 — 小時 (hr)</label><input type="number" min="0" id="wEstHr" placeholder="0"></div>
+        <div class="field"><label>預計時間 — 分鐘 (min)</label><input type="number" min="0" max="59" id="wEstMin" placeholder="0"></div>
+      </div>
       <div class="field"><label>預計跑量 (km)</label><input type="number" min="0" step="0.1" id="wEstRun" placeholder="0"></div>
+    </div>
+
+    <div class="modal-section-box real">
+      <div class="modal-section-title">實際完成量（Real）</div>
+      <div class="form-grid">
+        <div class="field"><label>實際時間 — 小時 (hr)</label><input type="number" min="0" id="wRealHr" placeholder="0"></div>
+        <div class="field"><label>實際時間 — 分鐘 (min)</label><input type="number" min="0" max="59" id="wRealMin" placeholder="0"></div>
+      </div>
       <div class="field"><label>實際跑量 (km)</label><input type="number" min="0" step="0.1" id="wRealRun" placeholder="0"></div>
     </div>
+
     <div class="field"><label>備註 Remark</label><input id="wRemark" placeholder="例如：半馬比賽週、出國旅遊、恢復週"></div>
     <div class="modal-foot">
-      <button class="btn outline" id="deleteWeekBtn" type="button" style="margin-right:auto;color:var(--red);border-color:#e5c3bf" onclick="deleteWeekOverride()">恢復自動計算 / 刪除</button>
+      <button class="btn ghost-danger" id="deleteWeekBtn" type="button" style="margin-right:auto" onclick="deleteWeekOverride()">恢復自動計算 / 刪除</button>
       <button class="btn outline" type="button" onclick="closeWeekModal()">取消</button>
       <button class="btn primary" type="button" onclick="saveWeekRecord()">儲存週次</button>
     </div>
@@ -1644,6 +1935,15 @@ function showPage(id){
   window.scrollTo(0,0);
 }
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+
+function scrollToSection(sectionId,btnEl){
+  const target=document.getElementById(sectionId);
+  if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+  if(btnEl){
+    document.querySelectorAll('.profile-subnav button').forEach(b=>b.classList.remove('is-current'));
+    btnEl.classList.add('is-current');
+  }
+}
 
 function initials(n){return (n||'學').trim().slice(0,1)}
 
@@ -1719,9 +2019,12 @@ function coachTagHtml(coach){
 
 function render(){
   let active=athletes.filter(a=>a.active!=='paused');
+  let alerts=active.filter(a=>evaluateAthleteStatus(a).level==='alert');
   document.getElementById('countAthletes').textContent=active.length;
   document.getElementById('countReports').textContent=active.filter(a=>evaluateAthleteStatus(a).level!=='pending').length;
-  document.getElementById('countAlerts').textContent=active.filter(a=>evaluateAthleteStatus(a).level==='alert').length;
+  document.getElementById('countAlerts').textContent=alerts.length;
+  const alertCard=document.getElementById('statAlertsCard');
+  if(alertCard)alertCard.classList.toggle('has-alert',alerts.length>0);
 
   const coachOrder=['光武','聿凡'];
   const coachGroups=coachOrder.map(coach=>{
@@ -1790,10 +2093,11 @@ function render(){
   document.getElementById('listCount').textContent=active.length+' 位學員';
   document.getElementById('listEmpty').style.display=active.length?'none':'block';
 
-  let alerts=active.filter(a=>evaluateAthleteStatus(a).level==='alert');
-  document.getElementById('noticeArea').innerHTML=alerts.length?alerts.map(a=>{
+  const noticeEl=document.getElementById('noticeArea');
+  noticeEl.classList.toggle('empty',alerts.length===0);
+  noticeEl.innerHTML=alerts.length?alerts.map(a=>{
     const st=evaluateAthleteStatus(a);
-    return `<div class="notice">
+    return `<div class="notice" onclick="openProfile('${a.id}')" title="點擊查看學員詳情">
       <span class="notice-alert-icon" aria-label="需要關注">!</span>
       <div class="notice-content">
         <div class="notice-top">
@@ -1902,6 +2206,8 @@ function openProfile(id){
     <div class="info-item"><small>學員狀態</small><span>${a.active==='paused'?'暫停課表':'管理中'}</span></div>
     <div class="info-item wide"><small>教練備註</small><span>${esc(a.note||'尚無備註')}</span></div>
   `;
+  const subnavBtns=document.querySelectorAll('.profile-subnav button');
+  subnavBtns.forEach((b,i)=>b.classList.toggle('is-current',i===0));
   renderSessionRpe(a);
   showPage('profile');
   chartEnd=getLatestAthleteDate(a);
@@ -2333,7 +2639,7 @@ function updateChartCallout(index,svgXRatio){
   const band=document.getElementById('chartCalloutBand');
   if(!band)return;
   if(index===null||index===undefined||!lastRenderedData[index]){
-    band.innerHTML='<div class="chart-callout-placeholder">點選圖表上的任一天，即可顯示垂直指示線與當日數據</div>';
+    band.innerHTML='<div class="chart-callout-placeholder">點選圖表任一天可查看當日完整數據</div>';
     return;
   }
   const d=lastRenderedData[index];
@@ -2445,7 +2751,7 @@ function renderLoadChart(){
   let out='';
   for(let k=0;k<=5;k++){
     let yy=T+k*PH/5;
-    out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e5eae3" stroke-width="1"/>`;
+    out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e7ece5" stroke-width="1"/>`;
     out+=`<text x="${L-8}" y="${yy+4}" text-anchor="end" fill="#6d7b71" font-size="${axisFont}">${Math.round(loadCeil*(1-k/5))}</text>`;
     out+=`<text x="${W-R+8}" y="${yy+4}" text-anchor="start" fill="#3e6b52" font-size="${axisFont}" font-weight="600">${10-k*2}</text>`;
   }
@@ -2454,7 +2760,7 @@ function renderLoadChart(){
 
   if(selectedChartIndex!==null&&data[selectedChartIndex]){
     const sx=x(selectedChartIndex);
-    out+=`<line x1="${sx.toFixed(1)}" y1="0" x2="${sx.toFixed(1)}" y2="${T+PH}" stroke="#243f32" stroke-width="2" stroke-dasharray="5 4"/>`;
+    out+=`<line x1="${sx.toFixed(1)}" y1="0" x2="${sx.toFixed(1)}" y2="${T+PH}" stroke="#213a2e" stroke-width="2" stroke-dasharray="5 4"/>`;
   }
 
   if(active.RPE){
@@ -2504,7 +2810,7 @@ function renderLoadChart(){
   if(active.RPE){
     data.forEach((d,i)=>{
       if(d.RPE!==null&&d.RPE>0){
-        const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#d49422':'#243f32');
+        const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#d49422':'#213a2e');
         const isSel=(i===selectedChartIndex);
         out+=`<circle cx="${x(i).toFixed(1)}" cy="${yRpe(d.RPE).toFixed(1)}" r="${isSel?'5.5':'3.6'}" fill="${fill}" ${isSel?'stroke="#fffefa" stroke-width="2"':''}/>`;
       }
@@ -2660,8 +2966,8 @@ function renderWeeklyVolume(){
     const realMn=Math.round(w.realMin%60);
 
     return `<tr onclick="openWeekModal('${esc(w.date)}')" title="點選編輯此週數據與備註">
-      <td><strong>${esc(fmtShortDate(w.date))}</strong></td>
-      <td>${esc(w.weekNum)}</td>
+      <td class="col-sticky-1"><strong>${esc(fmtShortDate(w.date))}</strong></td>
+      <td class="col-sticky-2">${esc(w.weekNum)}</td>
       <td class="col-est">${estHr}</td>
       <td class="col-est">${estMn}</td>
       <td class="col-real">${realHr}</td>
@@ -2688,7 +2994,7 @@ function renderWeeklyVolume(){
 
   tfoot.innerHTML=`
     <tr class="total-row">
-      <td colspan="2">總時數 Total</td>
+      <td class="col-sticky-group" colspan="2">總計 Total</td>
       <td class="col-est">${totEstHr}</td>
       <td class="col-est">${totEstMn}</td>
       <td class="col-real">${totRealHr}</td>
@@ -2698,9 +3004,9 @@ function renderWeeklyVolume(){
       <td></td>
     </tr>
     <tr class="rate-row">
-      <td colspan="4" style="text-align:right;color:var(--muted);font-size:13px">訓練時數完成度</td>
+      <td colspan="4" style="text-align:right;color:var(--muted);font-size:12.5px">訓練時數完成度</td>
       <td colspan="2">${pctBadge(durPct)}</td>
-      <td style="text-align:right;color:var(--muted);font-size:13px">跑量完成度</td>
+      <td style="text-align:right;color:var(--muted);font-size:12.5px">跑量完成度</td>
       <td>${pctBadge(runPct)}</td>
       <td></td>
     </tr>
@@ -2714,12 +3020,12 @@ function renderWeeklyVolume(){
   renderWeeklyBarSvg('weeklyDurationChart',visible.map(w=>({
     label:`W${w.weekNum}`,
     val:Math.round((w.realMin/60)*10)/10
-  })),'#4d6f5a','小時');
+  })),'#4b6e59','小時');
 
   renderWeeklyBarSvg('weeklyRunChart',visible.map(w=>({
     label:`W${w.weekNum}`,
     val:Math.round(w.realRun*10)/10
-  })),'#3b6e8c','km');
+  })),'#47728c','km');
 }
 
 function renderWeeklyBarSvg(svgId,items,barColor,unitLabel){
@@ -2741,20 +3047,20 @@ function renderWeeklyBarSvg(svgId,items,barColor,unitLabel){
   for(let g=0;g<=gridCount;g++){
     const yy=T+(g/gridCount)*PH;
     const v=Math.round(ceil*(1-g/gridCount));
-    out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e3eae2" stroke-width="1"/>`;
+    out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e5ece4" stroke-width="1"/>`;
     out+=`<text x="${L-6}" y="${yy+4}" text-anchor="end" fill="#647268" font-size="11">${v}</text>`;
   }
 
   const slotW=PW/items.length;
-  const barW=Math.max(6,Math.min(20,slotW*0.58));
+  const barW=Math.max(6,Math.min(20,slotW*0.56));
 
   items.forEach((item,idx)=>{
     const cx=L+slotW*(idx+0.5);
     const h=(item.val/ceil)*PH;
     const y=T+PH-h;
-    out+=`<rect x="${(cx-barW/2).toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(1,h).toFixed(1)}" rx="3" fill="${barColor}" opacity="0.88"><title>${item.label}: ${item.val} ${unitLabel}</title></rect>`;
+    out+=`<rect x="${(cx-barW/2).toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(1,h).toFixed(1)}" rx="3.5" fill="${barColor}" opacity="0.88"><title>${item.label}: ${item.val} ${unitLabel}</title></rect>`;
     if(items.length<=16&&item.val>0){
-      out+=`<text x="${cx.toFixed(1)}" y="${Math.max(11,y-4).toFixed(1)}" text-anchor="middle" fill="#26322b" font-size="10" font-weight="700">${Math.round(item.val)}</text>`;
+      out+=`<text x="${cx.toFixed(1)}" y="${Math.max(11,y-4).toFixed(1)}" text-anchor="middle" fill="#25332b" font-size="10" font-weight="700">${Math.round(item.val)}</text>`;
     }
     if(items.length<=14||idx%2===0){
       out+=`<text x="${cx.toFixed(1)}" y="${H-12}" text-anchor="middle" fill="#647268" font-size="10.5">${esc(item.label)}</text>`;
