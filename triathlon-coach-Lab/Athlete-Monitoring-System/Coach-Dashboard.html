@@ -23,7 +23,36 @@
   --redbg:#f9ece9;
   --ok-green:#2d7851;
 
-  /* Harmonized Estimate vs Real palette */
+  /* Coach Theme Palettes */
+  --kw-main:#2c4d66;
+  --kw-deep:#213b50;
+  --kw-accent:#497291;
+  --kw-surface:#edf3f7;
+  --kw-tint:#f6f9fb;
+  --kw-soft:#dfeaf2;
+  --kw-border:#c4d6e3;
+  --kw-hover:#38607e;
+
+  --yf-main:#87465b;
+  --yf-deep:#6b3446;
+  --yf-accent:#a46075;
+  --yf-surface:#f7eef1;
+  --yf-tint:#fbf6f8;
+  --yf-soft:#f1dfe5;
+  --yf-border:#e2c6cf;
+  --yf-hover:#9c536a;
+
+  /* Active Profile Theme Tokens (Default: Forest Green) */
+  --theme-main:var(--green);
+  --theme-deep:var(--green-deep);
+  --theme-accent:var(--sage);
+  --theme-surface:var(--sage-surface);
+  --theme-tint:var(--sage-tint);
+  --theme-soft:var(--sage2);
+  --theme-border:#c8d6c7;
+  --theme-hover:#2d503e;
+
+  /* Harmonized Estimate vs Real palette (Data colors stay fixed) */
   --est-bg:#edf2f5;
   --est-head:#e1eaf0;
   --est-ink:#2c4d63;
@@ -36,6 +65,28 @@
   --radius-lg:18px;
   --radius-md:12px;
   --radius-sm:9px;
+}
+
+/* Coach Theme Scoping on Profile Page */
+#profile[data-coach-theme="kuangwu"]{
+  --theme-main:var(--kw-main);
+  --theme-deep:var(--kw-deep);
+  --theme-accent:var(--kw-accent);
+  --theme-surface:var(--kw-surface);
+  --theme-tint:var(--kw-tint);
+  --theme-soft:var(--kw-soft);
+  --theme-border:var(--kw-border);
+  --theme-hover:var(--kw-hover);
+}
+#profile[data-coach-theme="yufan"]{
+  --theme-main:var(--yf-main);
+  --theme-deep:var(--yf-deep);
+  --theme-accent:var(--yf-accent);
+  --theme-surface:var(--yf-surface);
+  --theme-tint:var(--yf-tint);
+  --theme-soft:var(--yf-soft);
+  --theme-border:var(--yf-border);
+  --theme-hover:var(--yf-hover);
 }
 
 *{box-sizing:border-box}
@@ -60,10 +111,10 @@ button:active{transform:translateY(.5px)}
 
 /* Sidebar */
 .sidebar{
-  width:252px;
+  width:256px;
   background:linear-gradient(180deg,var(--green) 0%,var(--green-deep) 100%);
   color:#f6f6f0;
-  padding:28px 16px 22px;
+  padding:26px 16px 20px;
   display:flex;
   flex-direction:column;
   flex-shrink:0;
@@ -71,9 +122,10 @@ button:active{transform:translateY(.5px)}
   top:0;
   height:100vh;
   border-right:1px solid rgba(255,255,255,.06);
+  overflow-y:auto;
 }
 .brand{
-  padding:4px 12px 22px;
+  padding:4px 12px 20px;
   margin-bottom:14px;
   border-bottom:1px solid rgba(255,255,255,.1);
 }
@@ -98,16 +150,109 @@ button:active{transform:translateY(.5px)}
   position:relative;
 }
 .nav button:hover{
-  background:rgba(255,255,255,.08);
+  background:rgba(255,255,255,.09);
   color:#fffefa;
 }
 .nav button.active{
-  background:rgba(255,255,255,.14);
+  background:rgba(255,255,255,.16);
   color:#fffefa;
-  font-weight:650;
-  box-shadow:inset 3px 0 0 #cbe0cc, 0 2px 8px rgba(0,0,0,.12);
+  font-weight:700;
+  box-shadow:inset 3.5px 0 0 #d4e8d5, 0 2px 10px rgba(0,0,0,.15);
 }
-.nav button svg{width:17px;height:17px;flex-shrink:0;opacity:.88}
+.nav button svg{width:17px;height:17px;flex-shrink:0;opacity:.9}
+
+/* Sidebar Athlete Section Navigation (Desktop: replaces floating top bar) */
+.side-profile-nav{
+  margin-top:20px;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+.side-profile-head{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:4px 12px 10px;
+}
+.side-coach-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#cbe0cc;
+  flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(255,255,255,.12);
+}
+.side-profile-nav[data-coach-theme="kuangwu"] .side-coach-dot{background:#7cb3de}
+.side-profile-nav[data-coach-theme="yufan"] .side-coach-dot{background:#e89db6}
+.side-profile-title{
+  min-width:0;
+}
+.side-profile-title small{
+  display:block;
+  font-size:10px;
+  letter-spacing:1.4px;
+  color:#a9beb0;
+  font-weight:700;
+}
+.side-profile-title strong{
+  display:block;
+  font-size:14.5px;
+  color:#fffefa;
+  font-weight:750;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.side-subnav-list{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.side-subnav-list button{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#d2e0d4;
+  text-align:left;
+  padding:9px 14px 9px 18px;
+  border-radius:9px;
+  font-size:13.5px;
+  font-weight:550;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.side-subnav-list button::before{
+  content:"";
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:rgba(255,255,255,.28);
+  flex-shrink:0;
+  transition:background-color .15s ease,transform .15s ease;
+}
+.side-subnav-list button:hover{
+  background:rgba(255,255,255,.09);
+  color:#fffefa;
+}
+.side-subnav-list button.is-current{
+  background:rgba(255,255,255,.18);
+  color:#fffefa;
+  font-weight:700;
+  box-shadow:inset 3px 0 0 #cbe0cc;
+}
+.side-subnav-list button.is-current::before{
+  background:#fffefa;
+  transform:scale(1.25);
+}
+.side-profile-nav[data-coach-theme="kuangwu"] .side-subnav-list button.is-current{
+  background:rgba(93,146,189,.36);
+  box-shadow:inset 3px 0 0 #8ec2eb;
+}
+.side-profile-nav[data-coach-theme="yufan"] .side-subnav-list button.is-current{
+  background:rgba(196,115,141,.36);
+  box-shadow:inset 3px 0 0 #f0a8c0;
+}
+
 .side-foot{
   margin-top:auto;
   padding:16px 12px 4px;
@@ -121,8 +266,8 @@ button:active{transform:translateY(.5px)}
 /* Main & Topbar */
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
 .topbar{
-  height:64px;
-  background:rgba(255,254,250,.92);
+  height:62px;
+  background:rgba(255,254,250,.94);
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
   display:flex;
@@ -163,16 +308,17 @@ button:active{transform:translateY(.5px)}
 }
 
 /* Page & Typography */
-.content{padding:30px 36px 60px;max-width:1440px;width:100%;margin:0 auto}
+.content{padding:30px 36px 64px;max-width:1440px;width:100%;margin:0 auto}
 .page{display:none}
 .page.active{display:block}
 .page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:24px;flex-wrap:wrap}
 .eyebrow{font-size:11px;letter-spacing:2px;color:var(--sage);font-weight:750}
+#profile .eyebrow{color:var(--theme-accent)}
 .page-head h1{font-size:26px;margin:4px 0 6px;color:var(--ink);letter-spacing:-.3px;line-height:1.25;font-weight:800}
 .sub{font-size:14px;color:var(--muted);line-height:1.6;max-width:74ch}
 .head-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-/* Buttons */
+/* Buttons with Persistent Active / Selected Color Feedback */
 .btn{
   border:0;
   border-radius:var(--radius-sm);
@@ -188,12 +334,32 @@ button:active{transform:translateY(.5px)}
 }
 .primary{background:var(--green);color:#fffefa;box-shadow:0 2px 6px rgba(33,58,46,.18)}
 .primary:hover{background:#2d503e}
+.primary.is-active{background:var(--green-deep);box-shadow:0 0 0 2.5px rgba(75,110,89,.35)}
+
 .soft{background:var(--sage2);color:#234330;border:1px solid #c6d7c5}
 .soft:hover{background:#d7e6d6}
+.soft.is-active{background:var(--green);color:#fffefa;border-color:var(--green)}
+
 .outline{background:var(--paper);border:1px solid #c6d3c5;color:#274634}
 .outline:hover{background:#f2f6f0;border-color:#b2c4b1}
+.outline.is-active{background:var(--green);color:#fffefa;border-color:var(--green)}
+
 .ghost-danger{background:transparent;border:1px solid #dec7c4;color:#8e413b}
 .ghost-danger:hover{background:var(--redbg);border-color:#d6b0ac}
+.ghost-danger.is-active{background:var(--red);color:#fffefa;border-color:var(--red)}
+
+/* Profile Theme-Aware Buttons */
+#profile .primary{background:var(--theme-main);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+#profile .primary:hover{background:var(--theme-hover)}
+#profile .primary.is-active{background:var(--theme-deep);box-shadow:0 0 0 2.5px var(--theme-border)}
+
+#profile .soft{background:var(--theme-soft);color:var(--theme-deep);border-color:var(--theme-border)}
+#profile .soft:hover{background:var(--theme-surface)}
+#profile .soft.is-active{background:var(--theme-main);color:#fffefa;border-color:var(--theme-main)}
+
+#profile .outline{border-color:var(--theme-border);color:var(--theme-main)}
+#profile .outline:hover{background:var(--theme-tint)}
+#profile .outline.is-active{background:var(--theme-main);color:#fffefa;border-color:var(--theme-main)}
 
 /* Cards & KPI Grid */
 .grid{display:grid;gap:20px}
@@ -205,8 +371,11 @@ button:active{transform:translateY(.5px)}
   padding:22px 24px;
   box-shadow:var(--shadow);
 }
+#profile .card{
+  border-color:var(--theme-border);
+}
 .section-gap{margin-bottom:22px}
-.scroll-anchor{scroll-margin-top:128px}
+.scroll-anchor{scroll-margin-top:80px}
 
 /* Refined KPI Cards */
 .stat-card{
@@ -265,6 +434,9 @@ button:active{transform:translateY(.5px)}
   gap:12px;
   flex-wrap:wrap;
 }
+#profile .card-head{
+  border-bottom-color:var(--theme-soft);
+}
 .card-head h3{font-size:17px;margin:0;color:var(--ink);font-weight:750;letter-spacing:-.1px}
 .card-head small{font-size:12px;color:var(--muted);letter-spacing:.3px;font-weight:600}
 
@@ -291,29 +463,110 @@ button:active{transform:translateY(.5px)}
 }
 .principle-strip-text p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.6}
 
-/* Tables & Coach Roster Groups */
-.table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:12px;background:var(--paper)}
-table{width:100%;border-collapse:collapse;text-align:left;background:var(--paper)}
-th{
+/* =========================================================
+   Borderless Single-Table Grouped Roster (做法一)
+   ========================================================= */
+.roster-card{padding-bottom:8px}
+.roster-card .card-head{margin-bottom:0;border-bottom:0;padding-bottom:14px}
+.roster-table-wrap{
+  margin:0 -24px;
+  overflow-x:auto;
+}
+.roster-table{
+  width:100%;
+  border-collapse:collapse;
+  text-align:left;
+  background:transparent;
+}
+.roster-table thead th{
   font-size:12px;
-  color:#4f6155;
+  color:#56675c;
   font-weight:700;
-  padding:11px 12px;
-  background:var(--sage-surface);
+  padding:10px 12px;
+  background:#f7f9f5;
+  border-top:1px solid var(--line-soft);
   border-bottom:1px solid var(--line);
   white-space:nowrap;
   letter-spacing:.2px;
 }
-td{
+.roster-table thead th:first-child,
+.roster-table tbody td:first-child{padding-left:24px}
+.roster-table thead th:last-child,
+.roster-table tbody td:last-child{padding-right:24px}
+
+.roster-table tbody tr.athlete-row td{
   font-size:14.5px;
-  padding:13px 12px;
+  padding:14px 12px;
   border-bottom:1px solid var(--line-soft);
   vertical-align:middle;
   font-variant-numeric:tabular-nums;
+  background:transparent;
+  transition:background-color .14s ease;
 }
-tr:last-child td{border-bottom:0}
-tbody tr:nth-child(even) td{background:#fafcf9}
-tbody tr:hover td{background:#f1f6ef}
+.roster-table tbody tr.athlete-row:last-child td{border-bottom:0}
+.roster-table tbody tr.athlete-row:hover td{background:#f5f8f3}
+.roster-table tbody tr.athlete-row.theme-kuangwu:hover td{background:var(--kw-tint)}
+.roster-table tbody tr.athlete-row.theme-yufan:hover td{background:var(--yf-tint)}
+
+/* Coach Group Band Row (No box-in-box, clean color band + left bar) */
+.roster-table tbody tr.coach-group-row td{
+  padding:9px 24px;
+  border-bottom:1px solid var(--line-soft);
+  border-top:1px solid var(--line-soft);
+  font-size:13px;
+  font-weight:750;
+  letter-spacing:.3px;
+  background:var(--sage-tint);
+  color:var(--ink);
+}
+.roster-table tbody tr.coach-group-row:first-child td{border-top:0}
+.roster-table tbody tr.coach-group-row.theme-kuangwu td{
+  background:var(--kw-surface);
+  color:var(--kw-main);
+  box-shadow:inset 4px 0 0 var(--kw-main);
+  border-bottom-color:var(--kw-border);
+}
+.roster-table tbody tr.coach-group-row.theme-yufan td{
+  background:var(--yf-surface);
+  color:var(--yf-main);
+  box-shadow:inset 4px 0 0 var(--yf-main);
+  border-bottom-color:var(--yf-border);
+}
+.roster-table tbody tr.coach-group-row.theme-other td{
+  background:var(--sage-surface);
+  color:var(--green);
+  box-shadow:inset 4px 0 0 var(--sage);
+}
+.coach-group-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.coach-group-count{
+  font-size:12px;
+  font-weight:650;
+  opacity:.78;
+}
+
+/* Column alignments for Dashboard Roster */
+#dashboardRosterTable{table-layout:fixed}
+#dashboardRosterTable th:nth-child(1),#dashboardRosterTable td:nth-child(1){width:29%;text-align:left}
+#dashboardRosterTable th:nth-child(2),#dashboardRosterTable td:nth-child(2){width:8%;text-align:center}
+#dashboardRosterTable th:nth-child(3),#dashboardRosterTable td:nth-child(3){width:10%;text-align:center}
+#dashboardRosterTable th:nth-child(4),#dashboardRosterTable td:nth-child(4){width:13%;text-align:center}
+#dashboardRosterTable th:nth-child(5),#dashboardRosterTable td:nth-child(5){width:10%;text-align:center}
+#dashboardRosterTable th:nth-child(6),#dashboardRosterTable td:nth-child(6){width:15%;text-align:center;font-size:12.5px;color:var(--muted)}
+#dashboardRosterTable th:nth-child(7),#dashboardRosterTable td:nth-child(7){width:15%;text-align:center}
+
+/* Column alignments for Athletes List (No coach column needed!) */
+#athletesRosterTable{table-layout:fixed}
+#athletesRosterTable th:nth-child(1),#athletesRosterTable td:nth-child(1){width:28%;text-align:left}
+#athletesRosterTable th:nth-child(2),#athletesRosterTable td:nth-child(2){width:27%;text-align:left}
+#athletesRosterTable th:nth-child(3),#athletesRosterTable td:nth-child(3){width:11%;text-align:center}
+#athletesRosterTable th:nth-child(4),#athletesRosterTable td:nth-child(4){width:10%;text-align:center}
+#athletesRosterTable th:nth-child(5),#athletesRosterTable td:nth-child(5){width:13%;text-align:center}
+#athletesRosterTable th:nth-child(6),#athletesRosterTable td:nth-child(6){width:11%;text-align:center}
 
 .person{display:flex;align-items:center;gap:12px;min-width:0}
 .person>div:last-child{min-width:0;flex:1}
@@ -331,6 +584,9 @@ tbody tr:hover td{background:#f1f6ef}
   font-weight:750;
   flex-shrink:0;
 }
+.initial.theme-kuangwu{background:var(--kw-soft);border-color:var(--kw-border);color:var(--kw-main)}
+.initial.theme-yufan{background:var(--yf-soft);border-color:var(--yf-border);color:var(--yf-main)}
+
 .person strong{display:block;font-size:15px;color:var(--ink)}
 .person small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
@@ -345,9 +601,11 @@ tbody tr:hover td{background:#f1f6ef}
   text-align:left;
 }
 .dashboard-name-link:hover{color:var(--sage);text-decoration:underline}
+.theme-kuangwu .dashboard-name-link:hover{color:var(--kw-main)}
+.theme-yufan .dashboard-name-link:hover{color:var(--yf-main)}
 .dashboard-name-link:focus-visible{outline:2px solid var(--sage);outline-offset:3px;border-radius:3px}
 
-/* Status Indicators */
+/* Status Indicators (Data colors strictly unchanged) */
 .status-icon{
   width:22px;
   height:22px;
@@ -399,30 +657,6 @@ tbody tr:hover td{background:#f1f6ef}
 .remind-btn.sent{background:var(--amberbg);border-color:#e2cea9;color:#8a6028}
 .dashboard-action-cell{white-space:nowrap}
 
-.coach-roster-group{margin-top:2px}
-.coach-roster-group+.coach-roster-group{margin-top:22px;padding-top:18px;border-top:1px dashed var(--line)}
-.coach-roster-title{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-size:13.5px;
-  font-weight:750;
-  color:var(--ink);
-  background:var(--sage-surface);
-  border:1px solid #cddacb;
-  padding:4px 12px;
-  border-radius:8px;
-  margin:0 0 11px;
-}
-.coach-roster-group table{table-layout:fixed;width:100%}
-.coach-roster-group th:nth-child(1),.coach-roster-group td:nth-child(1){width:28%;text-align:left}
-.coach-roster-group th:nth-child(2),.coach-roster-group td:nth-child(2){width:8%;text-align:center}
-.coach-roster-group th:nth-child(3),.coach-roster-group td:nth-child(3){width:10%;text-align:center}
-.coach-roster-group th:nth-child(4),.coach-roster-group td:nth-child(4){width:13%;text-align:center}
-.coach-roster-group th:nth-child(5),.coach-roster-group td:nth-child(5){width:11%;text-align:center}
-.coach-roster-group th:nth-child(6),.coach-roster-group td:nth-child(6){width:15%;text-align:center;font-size:12.5px;color:var(--muted)}
-.coach-roster-group th:nth-child(7),.coach-roster-group td:nth-child(7){width:15%;text-align:center}
-
 /* Notice & Coach Tags */
 #noticeArea{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:10px;padding:2px 0}
 #noticeArea.empty{padding:36px 16px;text-align:center;align-items:center}
@@ -439,7 +673,7 @@ tbody tr:hover td{background:#f1f6ef}
   border-radius:12px;
   text-align:left;
   cursor:pointer;
-  transition:background-color .15s ease,transform .12s ease;
+  transition:background-color .15s ease;
 }
 .notice:hover{background:#faefed}
 .notice-alert-icon{
@@ -472,8 +706,8 @@ tbody tr:hover td{background:#f1f6ef}
   letter-spacing:.4px;
   flex-shrink:0;
 }
-.coach-tag.yufan{background:#fbe3ed;color:#b52862;border:1px solid #f2bdd3}
-.coach-tag.kuangwu{background:#e2effb;color:#1d5d96;border:1px solid #b9d7f4}
+.coach-tag.yufan{background:var(--yf-soft);color:var(--yf-main);border:1px solid var(--yf-border)}
+.coach-tag.kuangwu{background:var(--kw-soft);color:var(--kw-main);border:1px solid var(--kw-border)}
 .coach-tag.other{background:var(--sage2);color:#2d4e3a;border:1px solid #c7d6c8}
 
 .empty{
@@ -485,81 +719,46 @@ tbody tr:hover td{background:#f1f6ef}
   background:var(--sage-tint);
   border:1px dashed #c8d5c6;
   border-radius:12px;
+  margin:14px 0 8px;
 }
 .empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
 
-/* Profile Page & Quick Jump Bar */
+/* Profile Page (Themed by Coach) */
 .profile-hero-card{
-  background:linear-gradient(135deg,#fffefa 0%,#eff4ed 100%);
-  border-color:#c8d6c7;
-  margin-bottom:14px;
+  background:linear-gradient(135deg,#fffefa 0%,var(--theme-surface) 100%);
+  border-color:var(--theme-border);
+  border-left:5px solid var(--theme-main);
+  margin-bottom:20px;
 }
 .profile-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .profile-avatar{
   width:56px;
   height:56px;
   border-radius:50%;
-  background:var(--green);
+  background:var(--theme-main);
   display:grid;
   place-items:center;
   color:#fffefa;
   font-size:21px;
   font-weight:750;
   flex-shrink:0;
-  box-shadow:0 4px 12px rgba(33,58,46,.18);
+  box-shadow:0 4px 12px rgba(0,0,0,.14);
 }
-.profile-head h2{margin:2px 0 3px;font-size:22px;color:var(--ink);font-weight:800}
+.profile-head h2{margin:2px 0 3px;font-size:23px;color:var(--ink);font-weight:800}
 .profile-head p{margin:0;color:var(--muted);font-size:13.5px;font-weight:550}
 .profile-actions{margin-left:auto;display:flex;gap:8px}
 
-/* Sticky Profile Quick-Jump Navigation */
-.profile-subnav{
-  position:sticky;
-  top:72px;
-  z-index:9;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  padding:7px 8px;
-  margin-bottom:20px;
-  background:rgba(255,254,250,.92);
-  backdrop-filter:blur(10px);
-  border:1px solid var(--line);
-  border-radius:13px;
-  box-shadow:var(--shadow-sm);
-  overflow-x:auto;
-  scrollbar-width:none;
-}
-.profile-subnav::-webkit-scrollbar{display:none}
-.profile-subnav button{
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  font-size:13px;
-  font-weight:650;
-  padding:7px 14px;
-  border-radius:9px;
-  white-space:nowrap;
-  flex-shrink:0;
-}
-.profile-subnav button:hover{
-  background:var(--sage-surface);
-  color:var(--ink);
-}
-.profile-subnav button.is-current{
-  background:var(--green);
-  color:#fffefa;
+/* Mobile-only non-sticky profile subnav (Hidden on desktop where sidebar holds it) */
+.mobile-profile-subnav{
+  display:none;
 }
 
 /* Integrated Daily Recovery Overview */
-.recovery-overview-card{
-  border-color:#ccd9cb;
-}
 .detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .detail{
   background:var(--paper);
-  border:1px solid var(--line);
-  border-top:3px solid var(--sage);
+  border:1px solid var(--theme-border);
+  border-top:3px solid var(--theme-accent);
   border-radius:12px;
   padding:15px 18px;
 }
@@ -569,10 +768,10 @@ tbody tr:hover td{background:#f1f6ef}
 
 .recovery-summary-grid{margin-top:14px}
 .recovery-summary-grid .detail{
-  background:var(--sage-surface);
-  border:1px solid #cddacb;
-  border-top:1px solid #cddacb;
-  border-left:4px solid var(--sage);
+  background:var(--theme-tint);
+  border:1px solid var(--theme-border);
+  border-top:1px solid var(--theme-border);
+  border-left:4px solid var(--theme-main);
 }
 
 /* Structured Personal Information Grid */
@@ -582,8 +781,8 @@ tbody tr:hover td{background:#f1f6ef}
   gap:12px;
 }
 .info-item{
-  background:var(--sage-tint);
-  border:1px solid var(--line-soft);
+  background:var(--theme-tint);
+  border:1px solid var(--theme-soft);
   border-radius:11px;
   padding:12px 15px;
 }
@@ -604,8 +803,7 @@ tbody tr:hover td{background:#f1f6ef}
 }
 
 /* Session RPE */
-.session-rpe-card{border-color:#ccd9cb}
-.rpe-scale-note{font-size:12px;color:#264633;background:var(--sage2);border:1px solid #c6d7c5;border-radius:999px;padding:4px 12px;font-weight:700;white-space:nowrap}
+.rpe-scale-note{font-size:12px;color:var(--theme-deep);background:var(--theme-soft);border:1px solid var(--theme-border);border-radius:999px;padding:4px 12px;font-weight:700;white-space:nowrap}
 .session-rpe-list{
   display:flex;
   flex-direction:column;
@@ -620,12 +818,12 @@ tbody tr:hover td{background:#f1f6ef}
   align-items:center;
   gap:14px;
   padding:11px 15px;
-  background:var(--sage-tint);
-  border:1px solid var(--line-soft);
+  background:var(--theme-tint);
+  border:1px solid var(--theme-soft);
   border-radius:11px;
   transition:background-color .14s ease,border-color .14s ease;
 }
-.session-rpe-row:hover{background:#eef4ec;border-color:#c8d6c7}
+.session-rpe-row:hover{background:var(--theme-surface);border-color:var(--theme-border)}
 .session-rpe-name{font-size:14.5px;font-weight:700;color:var(--ink)}
 .session-rpe-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
 .session-rpe-score{
@@ -634,7 +832,7 @@ tbody tr:hover td{background:#f1f6ef}
   color:var(--ink);
   text-align:center;
   background:var(--paper);
-  border:1px solid var(--line);
+  border:1px solid var(--theme-border);
   border-radius:8px;
   padding:4px 8px;
   font-variant-numeric:tabular-nums;
@@ -643,7 +841,7 @@ tbody tr:hover td{background:#f1f6ef}
 .session-rpe-status{font-size:13px;text-align:right;color:var(--muted)}
 .rpe-quick-select{
   width:100%;
-  border:1px solid #c2d1c1;
+  border:1px solid var(--theme-border);
   background:var(--paper);
   color:var(--ink);
   border-radius:8px;
@@ -653,9 +851,9 @@ tbody tr:hover td{background:#f1f6ef}
 }
 .rpe-empty{
   padding:22px 18px;
-  border:1px dashed #c6d4c4;
+  border:1px dashed var(--theme-border);
   border-radius:11px;
-  background:var(--sage-tint);
+  background:var(--theme-tint);
   color:var(--muted);
   font-size:13.5px;
   line-height:1.7;
@@ -667,8 +865,8 @@ tbody tr:hover td{background:#f1f6ef}
 .chart-title-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
 .chart-toolbar{
-  background:var(--sage-surface);
-  border:1px solid #d1ddd0;
+  background:var(--theme-surface);
+  border:1px solid var(--theme-border);
   border-radius:13px;
   padding:13px 16px;
   margin-bottom:14px;
@@ -677,7 +875,7 @@ tbody tr:hover td{background:#f1f6ef}
 .chart-range-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .chart-control-row label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);font-weight:700}
 .chart-control-row select,.custom-dates input{
-  border:1px solid #c4d2c3;
+  border:1px solid var(--theme-border);
   background:var(--paper);
   border-radius:8px;
   padding:7px 11px;
@@ -692,7 +890,7 @@ tbody tr:hover td{background:#f1f6ef}
   width:100%;
   margin-top:11px;
   padding-top:11px;
-  border-top:1px solid #d6e1d5;
+  border-top:1px solid var(--theme-soft);
 }
 .custom-dates label{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#425348;font-weight:650}
 
@@ -703,7 +901,7 @@ tbody tr:hover td{background:#f1f6ef}
   flex-wrap:wrap;
   margin-top:11px;
   padding-top:11px;
-  border-top:1px solid #d6e1d5;
+  border-top:1px solid var(--theme-soft);
   font-size:13px;
   color:#4c5d52;
 }
@@ -715,22 +913,23 @@ tbody tr:hover td{background:#f1f6ef}
   cursor:pointer;
   user-select:none;
   background:rgba(255,254,250,.55);
-  border:1px solid #d4dfd2;
+  border:1px solid var(--theme-border);
   padding:5px 11px;
   border-radius:999px;
-  opacity:.72;
+  opacity:.7;
   transition:background-color .15s ease,border-color .15s ease,opacity .15s ease,box-shadow .15s ease;
 }
 .metric-toggle:hover{opacity:1;background:var(--paper)}
 .metric-toggle:has(input:checked){
   background:var(--paper);
-  border-color:#9eb5a1;
+  border-color:var(--theme-accent);
   color:var(--ink);
   font-weight:650;
   opacity:1;
-  box-shadow:0 1px 4px rgba(24,44,33,.06);
+  box-shadow:0 1px 4px rgba(0,0,0,.07);
 }
-.metric-toggle input{accent-color:var(--green);width:14px;height:14px;margin:0}
+.metric-toggle input{accent-color:var(--theme-main);width:14px;height:14px;margin:0}
+/* Metric dots strictly keep fixed data colors */
 .metric-dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;flex-shrink:0}
 .metric-dot.rpe{background:#3e6b52}
 .metric-dot.srpe{background:#8a7ca8}
@@ -739,10 +938,9 @@ tbody tr:hover td{background:#f1f6ef}
 .metric-dot.tsb{background:#648db5}
 .metric-dot.tss{background:#c86d69}
 
-/* Allow native 2-finger browser pinch-to-zoom on the chart area */
 .chart-plot-wrap{
   position:relative;
-  border:1px solid #d1ddd0;
+  border:1px solid var(--theme-border);
   border-radius:13px;
   background:var(--paper);
   padding:14px 16px;
@@ -767,10 +965,8 @@ tbody tr:hover td{background:#f1f6ef}
   gap:12px;
   flex-wrap:wrap;
 }
-.chart-axis-guide span{display:inline-flex;align-items:center;gap:5px}
 .chart-expand-btn{padding:6px 12px;font-size:12px;margin-left:auto}
 
-/* Sleeker Top Callout Strip */
 .chart-stage{position:relative;width:100%;touch-action:auto}
 .chart-callout-band{
   position:relative;
@@ -787,8 +983,8 @@ tbody tr:hover td{background:#f1f6ef}
   text-align:center;
   padding:4px 12px;
   border-radius:999px;
-  background:var(--sage-tint);
-  border:1px solid var(--line-soft);
+  background:var(--theme-tint);
+  border:1px solid var(--theme-soft);
 }
 .chart-callout-card{
   position:absolute;
@@ -805,7 +1001,7 @@ tbody tr:hover td{background:#f1f6ef}
   display:inline-flex;
   align-items:center;
   gap:6px;
-  background:var(--green);
+  background:var(--theme-main);
   color:#fffefa;
   padding:3px 11px;
   border-radius:999px;
@@ -813,7 +1009,7 @@ tbody tr:hover td{background:#f1f6ef}
   font-weight:750;
   letter-spacing:.2px;
   white-space:nowrap;
-  box-shadow:0 3px 10px rgba(33,58,46,.18);
+  box-shadow:0 3px 10px rgba(0,0,0,.16);
   font-variant-numeric:tabular-nums;
 }
 .callout-date-row span{opacity:.86;font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis}
@@ -839,10 +1035,10 @@ tbody tr:hover td{background:#f1f6ef}
   flex-wrap:wrap;
   gap:5px;
   background:rgba(255,254,250,.97);
-  border:1px solid #c4d3c2;
+  border:1px solid var(--theme-border);
   border-radius:9px;
   padding:4px 8px;
-  box-shadow:0 4px 12px rgba(33,58,46,.08);
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
 .callout-chip{
   display:inline-flex;
@@ -867,21 +1063,21 @@ tbody tr:hover td{background:#f1f6ef}
   touch-action:auto;
 }
 
-/* Single-Row 4-Card Summary Bar on Desktop */
+/* Single-Row 4-Card Summary Bar */
 .combined-analysis{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.55fr);
   gap:12px;
   margin-top:14px;
   padding:14px;
-  background:var(--sage-surface);
-  border:1px solid #cddacb;
+  background:var(--theme-surface);
+  border:1px solid var(--theme-border);
   border-radius:13px;
   align-items:stretch;
 }
 .analysis-kpi-card{
   background:var(--paper);
-  border:1px solid #d6e1d5;
+  border:1px solid var(--line-soft);
   border-left:3.5px solid var(--sage);
   border-radius:10px;
   padding:13px 15px;
@@ -915,21 +1111,13 @@ tbody tr:hover td{background:#f1f6ef}
   color:var(--ink);
   letter-spacing:-.3px;
 }
-.analysis-kpi-value span{
-  font-size:12px;
-  font-weight:600;
-  color:var(--muted);
-}
-.analysis-kpi-sub{
-  font-size:11.5px;
-  color:var(--muted);
-  margin-top:5px;
-}
+.analysis-kpi-value span{font-size:12px;font-weight:600;color:var(--muted)}
+.analysis-kpi-sub{font-size:11.5px;color:var(--muted);margin-top:5px}
 
 .analysis-insight-card{
-  background:#f8fbf6;
-  border:1px solid #bfd2be;
-  border-left:4px solid var(--green);
+  background:var(--paper);
+  border:1px solid var(--theme-border);
+  border-left:4px solid var(--theme-main);
   border-radius:10px;
   padding:13px 16px;
   display:flex;
@@ -952,9 +1140,9 @@ tbody tr:hover td{background:#f1f6ef}
   color:#4f5f54;
   margin-top:9px;
   padding:10px 14px;
-  background:var(--sage-tint);
+  background:var(--theme-tint);
   border-radius:10px;
-  border:1px solid var(--line-soft);
+  border:1px solid var(--theme-soft);
 }
 .load-chart-card.fullscreen{position:fixed;inset:12px;z-index:50;overflow:auto;background:var(--paper);box-shadow:0 12px 50px rgba(0,0,0,.25)}
 .load-chart-card.fullscreen #loadChart{min-height:calc(100vh - 340px)}
@@ -962,15 +1150,14 @@ tbody tr:hover td{background:#f1f6ef}
 /* =========================================================
    Weekly Training Volume & Compliance Tracker
    ========================================================= */
-.weekly-card{border-color:#c8d6c7}
 .weekly-toolbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
   flex-wrap:wrap;
-  background:var(--sage-surface);
-  border:1px solid #d1ddd0;
+  background:var(--theme-surface);
+  border:1px solid var(--theme-border);
   border-radius:12px;
   padding:11px 15px;
   margin-bottom:16px;
@@ -978,7 +1165,7 @@ tbody tr:hover td{background:#f1f6ef}
 .weekly-toolbar-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .weekly-toolbar-left label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink)}
 .weekly-toolbar-left select{
-  border:1px solid #c4d2c3;
+  border:1px solid var(--theme-border);
   background:var(--paper);
   border-radius:8px;
   padding:6px 10px;
@@ -996,7 +1183,7 @@ tbody tr:hover td{background:#f1f6ef}
 
 .weekly-table-wrap{
   overflow-x:auto;
-  border:1px solid #ccd9cb;
+  border:1px solid var(--theme-border);
   border-radius:12px;
   background:var(--paper);
 }
@@ -1050,7 +1237,6 @@ tbody tr:hover td{background:#f1f6ef}
   text-overflow:ellipsis;
 }
 
-/* Total & Compliance Summary Rows */
 .weekly-table tfoot tr.total-row td{
   background:var(--sage-surface);
   border-top:2px solid #bacbb9;
@@ -1083,14 +1269,10 @@ tbody tr:hover td{background:#f1f6ef}
 .rate-badge.high{background:var(--amberbg);color:#8b5c1c;border:1px solid #e2cfa9}
 .rate-badge.low{background:var(--redbg);color:#983932;border:1px solid #e6c3bf}
 
-.weekly-charts-col{
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
+.weekly-charts-col{display:flex;flex-direction:column;gap:16px}
 .weekly-chart-box{
   background:var(--paper);
-  border:1px solid #d1ddd0;
+  border:1px solid var(--theme-border);
   border-radius:13px;
   padding:14px 16px;
 }
@@ -1101,26 +1283,17 @@ tbody tr:hover td{background:#f1f6ef}
   gap:8px;
   margin-bottom:8px;
 }
-.weekly-chart-head h4{
-  margin:0;
-  font-size:14px;
-  font-weight:750;
-  color:var(--ink);
-}
+.weekly-chart-head h4{margin:0;font-size:14px;font-weight:750;color:var(--ink)}
 .weekly-chart-head span{
   font-size:12px;
-  color:var(--sage);
-  background:var(--sage-surface);
-  border:1px solid #d4dfd3;
+  color:var(--theme-main);
+  background:var(--theme-surface);
+  border:1px solid var(--theme-border);
   border-radius:999px;
   padding:2px 10px;
   font-weight:700;
 }
-.weekly-bar-svg{
-  width:100%;
-  height:auto;
-  display:block;
-}
+.weekly-bar-svg{width:100%;height:auto;display:block}
 
 /* Form & Modal */
 .field{margin:12px 0}
@@ -1135,7 +1308,7 @@ tbody tr:hover td{background:#f1f6ef}
   font-size:14px;
 }
 .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid rgba(75,110,89,.32);border-color:var(--sage)}
-.field textarea{min-height:80px;resize:vertical}
+.field textarea{min-height:86px;resize:vertical}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
 
 .modal-section-box{
@@ -1146,12 +1319,7 @@ tbody tr:hover td{background:#f1f6ef}
 }
 .modal-section-box.est{background:#f4f8fa;border-color:#d4e1ea}
 .modal-section-box.real{background:#faf4f1;border-color:#ead8d2}
-.modal-section-title{
-  font-size:12px;
-  font-weight:750;
-  letter-spacing:.4px;
-  margin-bottom:2px;
-}
+.modal-section-title{font-size:12px;font-weight:750;letter-spacing:.4px;margin-bottom:2px}
 .modal-section-box.est .modal-section-title{color:var(--est-ink)}
 .modal-section-box.real .modal-section-title{color:var(--real-ink)}
 
@@ -1177,8 +1345,9 @@ tbody tr:hover td{background:#f1f6ef}
   padding:24px 26px;
   box-shadow:0 20px 56px rgba(20,34,26,.24);
 }
+.modal.modal-wide{width:min(760px,100%)}
 .modal h2{font-size:19px;margin:0 0 6px;color:var(--ink);font-weight:800}
-.modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line-soft);flex-wrap:wrap}
 .hint{font-size:12.5px;color:var(--muted);line-height:1.6}
 .toast{
   position:fixed;
@@ -1196,12 +1365,176 @@ tbody tr:hover td{background:#f1f6ef}
   box-shadow:0 10px 28px rgba(20,36,27,.28);
 }
 
+/* PDF Preview Inside Modal */
+.pdf-preview-box{
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#fcfcf9;
+  padding:16px 18px;
+  margin:12px 0;
+}
+.pdf-mini-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-top:12px;
+}
+.pdf-mini-card{
+  background:var(--paper);
+  border:1px solid var(--line-soft);
+  border-radius:10px;
+  padding:10px 12px;
+}
+.pdf-mini-card small{display:block;font-size:11.5px;color:var(--muted);font-weight:650}
+.pdf-mini-card strong{display:block;font-size:17px;color:var(--ink);margin-top:3px;font-variant-numeric:tabular-nums}
+.pdf-mini-card span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.pdf-sport-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+.pdf-sport-chip{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:7px 11px;
+  font-size:12.5px;
+  color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.pdf-sport-chip strong{margin-right:6px}
+.pdf-ai-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:6px;
+  flex-wrap:wrap;
+}
+#pdfAiTextarea{
+  min-height:170px;
+  line-height:1.7;
+  font-size:13.5px;
+}
+
+/* =========================================================
+   Dedicated A4 Printable PDF Report Area (Hidden on Screen)
+   ========================================================= */
+#pdfPrintArea{display:none}
+
+@media print{
+  @page{size:A4 portrait;margin:12mm 13mm}
+  html,body{
+    background:#ffffff !important;
+    color:#1e2b24 !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+    font-size:12.5px;
+    line-height:1.5;
+  }
+  .app,.modal-backdrop,.toast{display:none !important}
+  #pdfPrintArea{display:block !important;width:100%}
+
+  .rpt-wrap{
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;
+    color:#1f2e26;
+  }
+  .rpt-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    padding:16px 20px;
+    border-radius:12px;
+    color:#fffefa;
+    margin-bottom:14px;
+  }
+  .rpt-header small{display:block;font-size:9.5px;letter-spacing:2.2px;opacity:.85;font-weight:700}
+  .rpt-header h1{margin:4px 0 2px;font-size:21px;line-height:1.2;font-weight:800}
+  .rpt-header p{margin:0;font-size:11.5px;opacity:.92}
+  .rpt-header-right{text-align:right}
+  .rpt-week-badge{
+    display:inline-block;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.32);
+    border-radius:999px;
+    padding:4px 12px;
+    font-size:11.5px;
+    font-weight:700;
+    margin-bottom:4px;
+  }
+  .rpt-section{
+    border:1px solid #d9e1d8;
+    border-radius:11px;
+    padding:12px 15px;
+    margin-bottom:11px;
+    background:#fffefa;
+    page-break-inside:avoid;
+  }
+  .rpt-section-title{
+    font-size:12.5px;
+    font-weight:800;
+    letter-spacing:.4px;
+    margin:0 0 10px;
+    padding-bottom:6px;
+    border-bottom:1px solid #e6ece5;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .rpt-section-title span{font-size:10.5px;font-weight:600;color:#627067}
+
+  .rpt-kpi-4{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  .rpt-kpi-3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .rpt-box{
+    background:#f7f9f6;
+    border:1px solid #e2e9e1;
+    border-radius:8px;
+    padding:9px 11px;
+  }
+  .rpt-box small{display:block;font-size:10px;color:#606f65;font-weight:650}
+  .rpt-box strong{display:block;font-size:16px;font-weight:800;color:#1b3126;margin-top:2px;font-variant-numeric:tabular-nums}
+  .rpt-box .rpt-sub{display:block;font-size:10px;color:#5c6b61;margin-top:2px}
+
+  .rpt-bar-row{margin-bottom:9px}
+  .rpt-bar-row:last-child{margin-bottom:0}
+  .rpt-bar-label{display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-bottom:4px}
+  .rpt-bar-track{height:9px;background:#e8eee7;border-radius:999px;overflow:hidden}
+  .rpt-bar-fill{height:100%;border-radius:999px}
+
+  .rpt-table{width:100%;border-collapse:collapse;font-size:11.5px;font-variant-numeric:tabular-nums}
+  .rpt-table th{background:#f0f4ef;color:#415247;font-weight:700;padding:6px 8px;border-bottom:1px solid #d4ddd3;text-align:left}
+  .rpt-table td{padding:6px 8px;border-bottom:1px solid #ebf0ea}
+  .rpt-table tr:last-child td{border-bottom:0}
+  .rpt-table th.num,.rpt-table td.num{text-align:right}
+
+  .rpt-ai-box{
+    white-space:pre-wrap;
+    font-size:12px;
+    line-height:1.72;
+    color:#23322a;
+    background:#fafbf8;
+    border:1px solid #dfe7de;
+    border-radius:8px;
+    padding:11px 13px;
+  }
+  .rpt-footer{
+    display:flex;
+    justify-content:space-between;
+    font-size:10px;
+    color:#6b7970;
+    margin-top:8px;
+    padding-top:6px;
+    border-top:1px solid #e2e8e1;
+  }
+}
+
 /* Tablet & Compact Laptop Breakpoint */
 @media (max-width: 1180px){
   .two{grid-template-columns:1fr}
   .combined-analysis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .weekly-layout{grid-template-columns:1fr}
-  .content{padding:24px 24px 44px}
+  .content{padding:24px 24px 48px}
   .topbar{padding:0 24px}
 }
 
@@ -1250,13 +1583,14 @@ tbody tr:hover td{background:#f1f6ef}
     padding:10px 14px;
     border-right:0;
     border-bottom:1px solid rgba(255,255,255,.08);
+    overflow:visible;
   }
   .brand{padding:0;margin:0;border:0}
   .brand small{font-size:8.5px;letter-spacing:1.6px}
   .brand h2{font-size:14px;margin:2px 0 0;line-height:1.2}
   .brand h2 br{display:none}
   .brand span{margin-left:4px}
-  .nav-label,.side-foot{display:none}
+  .nav-label,.side-foot,.side-profile-nav{display:none !important}
   .nav{flex-direction:row;gap:6px;flex-shrink:0}
   .nav button{width:auto;padding:7px 11px;font-size:12.5px;border-radius:8px;white-space:nowrap;gap:5px}
   .nav button svg{width:14px;height:14px}
@@ -1266,7 +1600,7 @@ tbody tr:hover td{background:#f1f6ef}
   .role{font-size:11px;padding:4px 10px;max-width:190px}
   .avatar{width:30px;height:30px;font-size:12px}
 
-  .content{padding:16px 14px 44px}
+  .content{padding:16px 14px 48px}
   .page-head{align-items:stretch;margin-bottom:16px}
   .page-head h1{font-size:21px}
   .sub{font-size:13px}
@@ -1284,107 +1618,140 @@ tbody tr:hover td{background:#f1f6ef}
   .principle-strip{padding:14px;gap:12px}
   .principle-strip .btn{width:100%}
 
-  .profile-subnav{top:58px;margin-bottom:16px;padding:6px}
-  .profile-subnav button{padding:6px 11px;font-size:12.5px}
-  .scroll-anchor{scroll-margin-top:116px}
-
-  /* Show inline status next to athlete name on mobile, hide desktop status column */
-  .mobile-inline-status{display:inline-flex}
-  .coach-roster-group td:nth-child(5),
-  #athletes td:nth-child(7){display:none !important}
-
-  /* Transform tables into clean mobile cards with explicit grid rows */
-  .table-wrap{overflow-x:visible;border:0;background:transparent}
-  .coach-roster-group table,
-  #athletes table{
-    display:block;
-    width:100%;
-    min-width:0;
-    background:transparent;
-  }
-  .coach-roster-group thead,
-  #athletes thead{display:none}
-  .coach-roster-group tbody,
-  #athletes tbody{
+  /* Non-sticky mobile quick-jump bar (shows once below profile hero, never blocks scrolling) */
+  .mobile-profile-subnav{
     display:flex;
-    flex-direction:column;
-    gap:10px;
+    align-items:center;
+    gap:6px;
+    margin:-6px 0 16px;
+    padding:4px 2px;
+    overflow-x:auto;
+    scrollbar-width:none;
   }
-  .coach-roster-group tr,
-  #athletes tr{
+  .mobile-profile-subnav::-webkit-scrollbar{display:none}
+  .mobile-profile-subnav button{
+    border:1px solid var(--theme-border);
+    background:var(--paper);
+    color:var(--theme-main);
+    font-size:12.5px;
+    font-weight:650;
+    padding:6px 12px;
+    border-radius:999px;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .mobile-profile-subnav button.is-current{
+    background:var(--theme-main);
+    color:#fffefa;
+    border-color:var(--theme-main);
+  }
+  .scroll-anchor{scroll-margin-top:64px}
+
+  /* Roster Tables -> Clean Grouped Mobile Cards */
+  .roster-card{padding:16px 14px}
+  .roster-table-wrap{margin:0;overflow:visible}
+  .roster-table{display:block;width:100%;min-width:0}
+  .roster-table thead{display:none}
+  .roster-table tbody{display:flex;flex-direction:column;gap:9px}
+
+  .roster-table tbody tr.coach-group-row{
+    display:block;
+    margin-top:8px;
+  }
+  .roster-table tbody tr.coach-group-row:first-child{margin-top:2px}
+  .roster-table tbody tr.coach-group-row td{
+    display:block;
+    width:100% !important;
+    padding:8px 12px !important;
+    border-radius:9px;
+    border:1px solid var(--line-soft);
+  }
+  .roster-table tbody tr.coach-group-row.theme-kuangwu td{border-color:var(--kw-border)}
+  .roster-table tbody tr.coach-group-row.theme-yufan td{border-color:var(--yf-border)}
+
+  .mobile-inline-status{display:inline-flex}
+  #dashboardRosterTable tr.athlete-row td:nth-child(5),
+  #athletesRosterTable tr.athlete-row td:nth-child(6){display:none !important}
+
+  .roster-table tbody tr.athlete-row{
     display:grid;
     grid-template-columns:repeat(3,minmax(0,1fr));
     gap:9px;
     background:var(--sage-tint);
     border:1px solid var(--line);
     border-radius:12px;
-    padding:13px;
+    padding:12px;
   }
-  .coach-roster-group td,
-  #athletes td{
+  .roster-table tbody tr.athlete-row.theme-kuangwu{background:var(--kw-tint);border-color:var(--kw-border)}
+  .roster-table tbody tr.athlete-row.theme-yufan{background:var(--yf-tint);border-color:var(--yf-border)}
+
+  .roster-table tbody tr.athlete-row td{
     display:block;
     width:auto !important;
-    padding:0;
-    border:0;
+    padding:0 !important;
+    border:0 !important;
     text-align:left !important;
     background:transparent !important;
     font-size:13.5px;
   }
 
-  /* Dashboard Roster Mobile Card Layout */
-  .coach-roster-group td:nth-child(1){grid-column:1 / -1;grid-row:1;align-self:center}
-  .coach-roster-group td:nth-child(2),
-  .coach-roster-group td:nth-child(3),
-  .coach-roster-group td:nth-child(4){
+  /* Dashboard Mobile Card Grid */
+  #dashboardRosterTable tr.athlete-row td:nth-child(1){grid-column:1 / -1;grid-row:1}
+  #dashboardRosterTable tr.athlete-row td:nth-child(2),
+  #dashboardRosterTable tr.athlete-row td:nth-child(3),
+  #dashboardRosterTable tr.athlete-row td:nth-child(4){
     grid-row:2;
     background:var(--paper) !important;
-    border:1px solid var(--line);
+    border:1px solid var(--line-soft) !important;
     border-radius:8px;
-    padding:8px 6px;
+    padding:7px 6px !important;
     text-align:center !important;
     font-weight:700;
-    font-size:13.5px;
     color:var(--ink);
   }
-  .coach-roster-group td:nth-child(2){grid-column:1 / 2}
-  .coach-roster-group td:nth-child(3){grid-column:2 / 3}
-  .coach-roster-group td:nth-child(4){grid-column:3 / 4}
-  .coach-roster-group td:nth-child(2)::before{content:"RPE";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
-  .coach-roster-group td:nth-child(3)::before{content:"睡眠 /5";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
-  .coach-roster-group td:nth-child(4)::before{content:"身體狀況";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #dashboardRosterTable tr.athlete-row td:nth-child(2){grid-column:1 / 2}
+  #dashboardRosterTable tr.athlete-row td:nth-child(3){grid-column:2 / 3}
+  #dashboardRosterTable tr.athlete-row td:nth-child(4){grid-column:3 / 4}
+  #dashboardRosterTable tr.athlete-row td:nth-child(2)::before{content:"RPE";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #dashboardRosterTable tr.athlete-row td:nth-child(3)::before{content:"睡眠 /5";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #dashboardRosterTable tr.athlete-row td:nth-child(4)::before{content:"身體狀況";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
 
-  /* Only show reminder row when athlete is pending report */
-  .coach-roster-group tr:not(.is-pending) td:nth-child(6),
-  .coach-roster-group tr:not(.is-pending) td:nth-child(7){display:none !important}
-  .coach-roster-group tr.is-pending td:nth-child(6){grid-column:1 / 3;grid-row:3;align-self:center;font-size:12px;color:var(--muted);padding-top:2px}
-  .coach-roster-group tr.is-pending td:nth-child(7){grid-column:3 / 4;grid-row:3;justify-self:end;align-self:center;padding-top:2px}
-  .coach-roster-group .remind-btn{padding:7px 12px;font-size:12px}
+  #dashboardRosterTable tr.athlete-row:not(.is-pending) td:nth-child(6),
+  #dashboardRosterTable tr.athlete-row:not(.is-pending) td:nth-child(7){display:none !important}
+  #dashboardRosterTable tr.athlete-row.is-pending td:nth-child(6){grid-column:1 / 3;grid-row:3;align-self:center;font-size:12px;color:var(--muted);padding-top:2px !important}
+  #dashboardRosterTable tr.athlete-row.is-pending td:nth-child(7){grid-column:3 / 4;grid-row:3;justify-self:end;align-self:center;padding-top:2px !important}
 
-  /* Athletes List Mobile Card Layout */
-  #athletes td:nth-child(1){grid-column:1 / -1;grid-row:1;align-self:center}
-  #athletes td:nth-child(2){grid-column:1 / 3;grid-row:2;font-size:12.5px;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  #athletes td:nth-child(2)::before{content:"目標：";font-weight:400;color:var(--muted)}
-  #athletes td:nth-child(3){grid-column:3 / 4;grid-row:2;font-size:12.5px;color:var(--ink);font-weight:600;text-align:right !important;white-space:nowrap}
-  #athletes td:nth-child(3)::before{content:"教練：";font-weight:400;color:var(--muted)}
-  #athletes td:nth-child(4),
-  #athletes td:nth-child(5),
-  #athletes td:nth-child(6){
+  /* Athletes List Mobile Card Grid (6 columns, grouped by coach) */
+  #athletesRosterTable tr.athlete-row td:nth-child(1){grid-column:1 / -1;grid-row:1}
+  #athletesRosterTable tr.athlete-row td:nth-child(2){
+    grid-column:1 / -1;
+    grid-row:2;
+    font-size:12.5px;
+    color:var(--ink);
+    font-weight:600;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  #athletesRosterTable tr.athlete-row td:nth-child(2)::before{content:"目標：";font-weight:400;color:var(--muted)}
+  #athletesRosterTable tr.athlete-row td:nth-child(3),
+  #athletesRosterTable tr.athlete-row td:nth-child(4),
+  #athletesRosterTable tr.athlete-row td:nth-child(5){
     grid-row:3;
     background:var(--paper) !important;
-    border:1px solid var(--line);
+    border:1px solid var(--line-soft) !important;
     border-radius:8px;
-    padding:8px 6px;
+    padding:7px 6px !important;
     text-align:center !important;
     font-weight:700;
-    font-size:13.5px;
     color:var(--ink);
   }
-  #athletes td:nth-child(4){grid-column:1 / 2}
-  #athletes td:nth-child(5){grid-column:2 / 3}
-  #athletes td:nth-child(6){grid-column:3 / 4}
-  #athletes td:nth-child(4)::before{content:"今日疲勞";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
-  #athletes td:nth-child(5)::before{content:"睡眠";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
-  #athletes td:nth-child(6)::before{content:"身體狀況";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #athletesRosterTable tr.athlete-row td:nth-child(3){grid-column:1 / 2}
+  #athletesRosterTable tr.athlete-row td:nth-child(4){grid-column:2 / 3}
+  #athletesRosterTable tr.athlete-row td:nth-child(5){grid-column:3 / 4}
+  #athletesRosterTable tr.athlete-row td:nth-child(3)::before{content:"今日疲勞";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #athletesRosterTable tr.athlete-row td:nth-child(4)::before{content:"睡眠";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
+  #athletesRosterTable tr.athlete-row td:nth-child(5)::before{content:"身體狀況";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
 
   /* Profile 3-column side-by-side detail cards on mobile */
   .profile-actions{width:100%;margin-left:0;margin-top:4px}
@@ -1430,10 +1797,7 @@ tbody tr:hover td{background:#f1f6ef}
     padding:8px 8px;
     -webkit-appearance:none;
   }
-  .custom-dates .btn{
-    grid-column:1 / -1;
-    width:100%;
-  }
+  .custom-dates .btn{grid-column:1 / -1;width:100%}
 
   .metric-toggles{gap:6px;font-size:12px}
   .metric-toggle{padding:4px 9px}
@@ -1454,6 +1818,10 @@ tbody tr:hover td{background:#f1f6ef}
   .chart-hint{font-size:12px}
   .load-chart-card.fullscreen{inset:6px;padding:12px}
   .load-chart-card.fullscreen #loadChart{min-height:48vh}
+
+  .pdf-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .weekly-toolbar-right{width:100%}
+  .weekly-toolbar-right .btn{flex:1}
 
   /* Prevent iOS Safari zoom on input focus */
   .field input,.field select,.field textarea,.chart-control-row select,.custom-dates input{font-size:16px}
@@ -1490,6 +1858,25 @@ tbody tr:hover td{background:#f1f6ef}
       學員名單
     </button>
   </nav>
+
+  <!-- Athlete Profile Section Nav inside Sidebar (Desktop, zero obstruction) -->
+  <div class="side-profile-nav" id="sideProfileNav" hidden>
+    <div class="side-profile-head">
+      <span class="side-coach-dot" aria-hidden="true"></span>
+      <div class="side-profile-title">
+        <small>目前檢視學員</small>
+        <strong id="sideProfileName">學員</strong>
+      </div>
+    </div>
+    <div class="side-subnav-list" id="sideSubnavList">
+      <button type="button" data-sec="sec-recovery" class="is-current" onclick="scrollToSection('sec-recovery')">今日恢復總覽</button>
+      <button type="button" data-sec="sec-session-rpe" onclick="scrollToSection('sec-session-rpe')">單次訓練 RPE</button>
+      <button type="button" data-sec="sec-load-chart" onclick="scrollToSection('sec-load-chart')">負荷與 RPE 趨勢</button>
+      <button type="button" data-sec="sec-weekly" onclick="scrollToSection('sec-weekly')">週訓練量追蹤</button>
+      <button type="button" data-sec="sec-info" onclick="scrollToSection('sec-info')">基本資料</button>
+    </div>
+  </div>
+
   <div class="side-foot"><strong>COACH DASHBOARD</strong>內部教練監控介面</div>
 </aside>
 
@@ -1511,7 +1898,7 @@ tbody tr:hover td{background:#f1f6ef}
       <div class="sub">共同查看所有學員狀態；個別課表與評估由負責教練管理。示範資料可隨時清除，不會當成正式學員。</div>
     </div>
     <div class="head-actions">
-      <button class="btn outline" onclick="loadDemoData()">載入示範學員</button>
+      <button class="btn outline" id="btnDashLoadDemo" onclick="loadDemoData(this)">載入示範學員</button>
       <button class="btn soft" onclick="showPage('athletes')">管理學員名單 →</button>
     </div>
   </div>
@@ -1547,9 +1934,24 @@ tbody tr:hover td{background:#f1f6ef}
   </div>
 
   <div class="grid two">
-    <div class="card">
+    <div class="card roster-card">
       <div class="card-head"><h3>學員今日狀態</h3><small>共同監控 · RPE 為單次訓練回報</small></div>
-      <div id="coachGroups"></div>
+      <div class="roster-table-wrap" id="dashboardRosterWrap">
+        <table class="roster-table" id="dashboardRosterTable">
+          <thead>
+            <tr>
+              <th>學員</th>
+              <th>RPE</th>
+              <th>睡眠 /5</th>
+              <th>身體狀況</th>
+              <th>狀態</th>
+              <th>提醒紀錄</th>
+              <th>提醒</th>
+            </tr>
+          </thead>
+          <tbody id="dashboardRosterBody"></tbody>
+        </table>
+      </div>
       <div id="dashboardEmpty" class="empty"><b>目前還沒有正式學員</b>這裡會顯示每位學員最新的恢復回報。<br>尚未回報的學員可以直接點選「提醒回報」。</div>
     </div>
     <div class="card">
@@ -1572,23 +1974,22 @@ tbody tr:hover td{background:#f1f6ef}
     <div>
       <div class="eyebrow">ATHLETE MANAGEMENT</div>
       <h1>學員名單</h1>
-      <div class="sub">每位學員獨立管理，直接點擊學員姓名即可進入個人頁面檢視詳情。</div>
+      <div class="sub">依教練分組排列，直接點擊學員姓名即可進入專屬色系個人頁面檢視詳情。</div>
     </div>
     <div class="head-actions">
-      <button class="btn outline" onclick="loadDemoData()">載入示範學員</button>
-      <button class="btn primary" onclick="openAthleteModal()">＋ 新增學員</button>
+      <button class="btn outline" id="btnListLoadDemo" onclick="loadDemoData(this)">載入示範學員</button>
+      <button class="btn primary" id="btnAddAthlete" onclick="openAthleteModal(null,this)">＋ 新增學員</button>
     </div>
   </div>
 
-  <div class="card">
+  <div class="card roster-card">
     <div class="card-head"><h3>學員列表</h3><small id="listCount">0 位學員</small></div>
-    <div class="table-wrap">
-      <table>
+    <div class="roster-table-wrap" id="athletesRosterWrap">
+      <table class="roster-table" id="athletesRosterTable">
         <thead>
           <tr>
             <th>學員</th>
             <th>目標／比賽</th>
-            <th>負責教練</th>
             <th>今日疲勞</th>
             <th>睡眠 /5</th>
             <th>身體狀況</th>
@@ -1602,7 +2003,7 @@ tbody tr:hover td{background:#f1f6ef}
   </div>
 </section>
 
-<section class="page" id="profile">
+<section class="page" id="profile" data-coach-theme="default">
   <div class="page-head">
     <div>
       <div class="eyebrow">ATHLETE PROFILE</div>
@@ -1618,21 +2019,22 @@ tbody tr:hover td{background:#f1f6ef}
       <div>
         <div class="eyebrow">ATHLETE PROFILE</div>
         <h2 id="pName">學員</h2>
-        <p id="pMeta">運動項目 · 負責教練</p>
+        <p id="pMeta">運動項目</p>
       </div>
       <div class="profile-actions">
         <button class="btn outline" id="profileReminderBtn" onclick="remindCurrentAthlete()">提醒回報</button>
-        <button class="btn soft" id="editProfileBtn" onclick="editCurrentAthlete()">編輯學員資料</button>
+        <button class="btn soft" id="editProfileBtn" onclick="editCurrentAthlete(this)">編輯學員資料</button>
       </div>
     </div>
   </div>
 
-  <nav class="profile-subnav" aria-label="個人頁面快速跳轉">
-    <button type="button" class="is-current" onclick="scrollToSection('sec-recovery',this)">今日恢復總覽</button>
-    <button type="button" onclick="scrollToSection('sec-session-rpe',this)">單次訓練 RPE</button>
-    <button type="button" onclick="scrollToSection('sec-load-chart',this)">負荷與 RPE 趨勢</button>
-    <button type="button" onclick="scrollToSection('sec-weekly',this)">週訓練量追蹤</button>
-    <button type="button" onclick="scrollToSection('sec-info',this)">基本資料</button>
+  <!-- Non-sticky Mobile Quick Jump Bar (only visible <= 768px) -->
+  <nav class="mobile-profile-subnav" id="mobileSubnavList" aria-label="個人頁面快速跳轉">
+    <button type="button" data-sec="sec-recovery" class="is-current" onclick="scrollToSection('sec-recovery')">今日恢復總覽</button>
+    <button type="button" data-sec="sec-session-rpe" onclick="scrollToSection('sec-session-rpe')">單次訓練 RPE</button>
+    <button type="button" data-sec="sec-load-chart" onclick="scrollToSection('sec-load-chart')">負荷與 RPE 趨勢</button>
+    <button type="button" data-sec="sec-weekly" onclick="scrollToSection('sec-weekly')">週訓練量追蹤</button>
+    <button type="button" data-sec="sec-info" onclick="scrollToSection('sec-info')">基本資料</button>
   </nav>
 
   <div class="card recovery-overview-card section-gap scroll-anchor" id="sec-recovery">
@@ -1687,7 +2089,7 @@ tbody tr:hover td{background:#f1f6ef}
       </div>
       <div class="chart-title-actions">
         <input type="file" id="tpCsvInput" accept=".csv,text/csv" hidden onchange="handleTpCsvUpload(event)">
-        <button class="btn primary" type="button" onclick="document.getElementById('tpCsvInput').click()">匯入 TP CSV</button>
+        <button class="btn primary" type="button" id="importCsvBtn" onclick="document.getElementById('tpCsvInput').click()">匯入 TP CSV</button>
         <button class="btn outline" type="button" id="clearCsvBtn" hidden onclick="clearImportedCsv()">清除 CSV</button>
       </div>
     </div>
@@ -1719,7 +2121,7 @@ tbody tr:hover td{background:#f1f6ef}
       <div class="custom-dates" id="customDates" hidden>
         <label>開始日期 (From) <input type="date" id="chartFrom"></label>
         <label>結束日期 (To) <input type="date" id="chartTo"></label>
-        <button class="btn soft" type="button" onclick="applyCustomDates()">套用自訂區間</button>
+        <button class="btn soft" type="button" onclick="applyCustomDates(this)">套用自訂區間</button>
       </div>
 
       <div class="metric-toggles">
@@ -1800,8 +2202,9 @@ tbody tr:hover td{background:#f1f6ef}
         <span class="hint">點選任一週次列即可編輯時數、跑量或備註</span>
       </div>
       <div class="weekly-toolbar-right">
-        <button class="btn soft" type="button" onclick="openWeekModal()">＋ 新增週次紀錄</button>
-        <button class="btn outline" type="button" onclick="exportWeeklyCsv()">匯出週報 CSV</button>
+        <button class="btn soft" type="button" id="btnAddWeek" onclick="openWeekModal(null,this)">＋ 新增週次紀錄</button>
+        <button class="btn outline" type="button" id="btnExportCsv" onclick="exportWeeklyCsv(this)">匯出週報 CSV</button>
+        <button class="btn primary" type="button" id="btnExportPdf" onclick="openPdfModal(this)">匯出週報 PDF</button>
       </div>
     </div>
 
@@ -1862,14 +2265,15 @@ tbody tr:hover td{background:#f1f6ef}
 </section>
 </div></main></div>
 
+<!-- Athlete Add/Edit Modal -->
 <div class="modal-backdrop" id="athleteModal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <h2 id="modalTitle">新增學員</h2>
-    <div class="hint">這些欄位先建立基本名單；之後可從學員個人頁面匯入 TrainingPeaks CSV 與查看 RPE 紀錄。</div>
+    <div class="hint">建立或調整學員基本資料；切換負責教練將同步套用對應的主題色系。</div>
     <div class="form-grid">
       <div class="field"><label>學員姓名 *</label><input id="fName" placeholder="輸入姓名"></div>
       <div class="field"><label>運動項目</label><select id="fSport"><option>鐵人三項</option><option>跑步</option><option>自行車</option><option>游泳</option><option>其他</option></select></div>
-      <div class="field"><label>負責教練</label><select id="fCoach"><option value="光武">光武（Head Coach）</option><option value="聿凡">聿凡（Assistant Coach + Engineer）</option></select></div>
+      <div class="field"><label>負責教練（對應頁面色系）</label><select id="fCoach"><option value="光武">光武（霧海藍色系）</option><option value="聿凡">聿凡（乾燥玫瑰色系）</option></select></div>
       <div class="field"><label>目標／比賽</label><input id="fGoal" placeholder="例如：半馬 PB、226 完賽"></div>
       <div class="field"><label>TrainingPeaks Athlete ID（選填）</label><input id="fTp" placeholder="尚未串接可先留空"></div>
       <div class="field"><label>狀態</label><select id="fActive"><option value="active">管理中</option><option value="paused">暫停課表</option></select></div>
@@ -1882,6 +2286,7 @@ tbody tr:hover td{background:#f1f6ef}
   </div>
 </div>
 
+<!-- Weekly Volume Edit Modal -->
 <div class="modal-backdrop" id="weekModal" onclick="if(event.target===this)closeWeekModal()">
   <div class="modal">
     <h2 id="weekModalTitle">編輯週次訓練量與備註</h2>
@@ -1918,32 +2323,122 @@ tbody tr:hover td{background:#f1f6ef}
   </div>
 </div>
 
+<!-- Weekly PDF Report Preview & AI Advice Edit Modal -->
+<div class="modal-backdrop" id="pdfModal" onclick="if(event.target===this)closePdfModal()">
+  <div class="modal modal-wide">
+    <h2>匯出週訓練分析報告 (PDF)</h2>
+    <div class="hint">請選擇要產出報告的週次，並檢視或修改下方的 AI 訓練建議；按下「產生 / 另存 PDF」後，於列印視窗選擇「另存為 PDF」即可下載高品質 A4 報告。</div>
+
+    <div class="field" style="margin-top:14px">
+      <label>選擇匯出週次</label>
+      <select id="pdfWeekSelect" onchange="refreshPdfModal()"></select>
+    </div>
+
+    <div class="pdf-preview-box" id="pdfSummaryPreview"></div>
+
+    <div class="field">
+      <div class="pdf-ai-head">
+        <label style="margin:0">AI 訓練分析與教練建議（可直接編輯，自動保存）</label>
+        <button class="btn outline" type="button" style="padding:5px 11px;font-size:12px" onclick="regeneratePdfAiAdvice()">重新產生建議草稿</button>
+      </div>
+      <textarea id="pdfAiTextarea" oninput="saveCurrentPdfNote()"></textarea>
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn outline" type="button" onclick="closePdfModal()">關閉</button>
+      <button class="btn primary" type="button" onclick="printWeeklyPdf()">產生 / 另存 PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- Printable A4 Report Container (Visible only during print / Save as PDF) -->
+<div id="pdfPrintArea" aria-hidden="true"></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const STORE='kuangyu_ams_athletes_v1';
 let athletes=JSON.parse(localStorage.getItem(STORE)||'[]');
 let currentId=null;
+let activeTriggerBtn=null;
+let scrollSpyLockUntil=0;
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function persist(){localStorage.setItem(STORE,JSON.stringify(athletes));render()}
 
+function coachThemeKey(coach){
+  const c=String(coach||'').trim();
+  if(c==='光武')return 'kuangwu';
+  if(c==='聿凡')return 'yufan';
+  return 'default';
+}
+
+function setTriggerActive(btnEl){
+  clearTriggerActive();
+  if(btnEl){
+    activeTriggerBtn=btnEl;
+    btnEl.classList.add('is-active');
+  }
+}
+function clearTriggerActive(){
+  if(activeTriggerBtn){
+    activeTriggerBtn.classList.remove('is-active');
+    activeTriggerBtn=null;
+  }
+}
+
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  document.querySelectorAll('.nav button').forEach(b=>{
+    const isMatch=(b.dataset.page===id)||(id==='profile'&&b.dataset.page==='athletes');
+    b.classList.toggle('active',isMatch);
+  });
+  const sideNav=document.getElementById('sideProfileNav');
+  if(sideNav)sideNav.hidden=(id!=='profile');
   document.getElementById('crumb').textContent=({dashboard:'教練工作台',athletes:'學員名單',profile:'學員個人頁面'})[id];
   window.scrollTo(0,0);
 }
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
 
-function scrollToSection(sectionId,btnEl){
-  const target=document.getElementById(sectionId);
-  if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
-  if(btnEl){
-    document.querySelectorAll('.profile-subnav button').forEach(b=>b.classList.remove('is-current'));
-    btnEl.classList.add('is-current');
-  }
+function setSubnavCurrent(sectionId){
+  document.querySelectorAll('#sideSubnavList button, #mobileSubnavList button').forEach(b=>{
+    b.classList.toggle('is-current',b.dataset.sec===sectionId);
+  });
 }
+
+function scrollToSection(sectionId){
+  const target=document.getElementById(sectionId);
+  scrollSpyLockUntil=Date.now()+700;
+  setSubnavCurrent(sectionId);
+  if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* Auto scroll-spy so sidebar & mobile subnav highlight follows current viewport */
+(function initScrollSpy(){
+  const ids=['sec-recovery','sec-session-rpe','sec-load-chart','sec-weekly','sec-info'];
+  let ticking=false;
+  window.addEventListener('scroll',()=>{
+    if(ticking||Date.now()<scrollSpyLockUntil)return;
+    const profilePage=document.getElementById('profile');
+    if(!profilePage||!profilePage.classList.contains('active'))return;
+    ticking=true;
+    requestAnimationFrame(()=>{
+      let current=ids[0];
+      const offset=140;
+      for(const id of ids){
+        const el=document.getElementById(id);
+        if(el&&el.getBoundingClientRect().top<=offset){
+          current=id;
+        }
+      }
+      if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-40){
+        current=ids[ids.length-1];
+      }
+      setSubnavCurrent(current);
+      ticking=false;
+    });
+  },{passive:true});
+})();
 
 function initials(n){return (n||'學').trim().slice(0,1)}
 
@@ -1989,7 +2484,7 @@ function evaluateAthleteStatus(a){
   return {level:'ok',label:'正常',pillClass:'pill ok',reason:'主觀疲勞與睡眠恢復平衡'};
 }
 
-/* Status indicator: green checkmark (正常), yellow circle + light triangle (留意), red ! (需要關注) */
+/* Status indicator: green checkmark (正常), amber triangle (留意), red ! (需要關注) */
 function statusBadgeHtml(a,extraClass='',verbose=false){
   const st=evaluateAthleteStatus(a);
   const cls=extraClass?' '+extraClass:'';
@@ -2017,29 +2512,63 @@ function coachTagHtml(coach){
   return `<span class="coach-tag ${cls}">${esc(c||'未指派')}</span>`;
 }
 
+function buildCoachSections(activeList){
+  const groups=[];
+  const coachOrder=[
+    {key:'光武',label:'光武教練',theme:'kuangwu'},
+    {key:'聿凡',label:'聿凡教練',theme:'yufan'}
+  ];
+  coachOrder.forEach(g=>{
+    const members=activeList.filter(a=>(a.coach||'')===g.key);
+    if(members.length)groups.push({...g,members});
+  });
+  const others=activeList.filter(a=>!coachOrder.some(g=>g.key===(a.coach||'')));
+  if(others.length)groups.push({key:'other',label:'其他負責教練',theme:'other',members:others});
+  return groups;
+}
+
 function render(){
   let active=athletes.filter(a=>a.active!=='paused');
   let alerts=active.filter(a=>evaluateAthleteStatus(a).level==='alert');
+  const hasDemo=athletes.some(a=>a.isDemo);
+
   document.getElementById('countAthletes').textContent=active.length;
   document.getElementById('countReports').textContent=active.filter(a=>evaluateAthleteStatus(a).level!=='pending').length;
   document.getElementById('countAlerts').textContent=alerts.length;
+
   const alertCard=document.getElementById('statAlertsCard');
   if(alertCard)alertCard.classList.toggle('has-alert',alerts.length>0);
 
-  const coachOrder=['光武','聿凡'];
-  const coachGroups=coachOrder.map(coach=>{
-    const members=active.filter(a=>(a.coach||'')===coach);
-    if(!members.length)return '';
-    const rows=members.map(a=>{
+  ['btnDashLoadDemo','btnListLoadDemo'].forEach(id=>{
+    const btn=document.getElementById(id);
+    if(btn){
+      btn.classList.toggle('is-active',hasDemo);
+      btn.textContent=hasDemo?'已載入示範學員':'載入示範學員';
+    }
+  });
+
+  const groups=buildCoachSections(active);
+
+  /* 1. Dashboard Borderless Grouped Roster */
+  const dashBody=document.getElementById('dashboardRosterBody');
+  const dashWrap=document.getElementById('dashboardRosterWrap');
+  dashWrap.style.display=active.length?'block':'none';
+  document.getElementById('dashboardEmpty').style.display=active.length?'none':'block';
+
+  dashBody.innerHTML=groups.map(g=>{
+    const headRow=`<tr class="coach-group-row theme-${g.theme}">
+      <td colspan="7"><div class="coach-group-inner"><span>${esc(g.label)}</span><span class="coach-group-count">${g.members.length} 位學員</span></div></td>
+    </tr>`;
+    const memberRows=g.members.map(a=>{
       const st=evaluateAthleteStatus(a);
       const pending=st.level==='pending';
       const rpeDisplay=a.rpe||a.fatigue||'—';
       const reminded=a.lastReminder?('已提醒 '+new Date(a.lastReminder).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})):'尚未提醒';
       const subLine=`${esc(a.sport)}${a.goal?' · '+esc(a.goal):''}`;
-      return `<tr class="${pending?'is-pending':''}">
+      return `<tr class="athlete-row theme-${g.theme} ${pending?'is-pending':''}">
         <td>
           <div class="person">
-            <div class="initial">${esc(initials(a.name))}</div>
+            <div class="initial theme-${g.theme}">${esc(initials(a.name))}</div>
             <div>
               <div class="person-title-row">
                 <button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button>
@@ -2057,42 +2586,46 @@ function render(){
         <td class="dashboard-action-cell">${pending?`<button class="remind-btn ${a.lastReminder?'sent':''}" onclick="remindAthlete('${a.id}')">${a.lastReminder?'再次提醒':'提醒回報'}</button>`:'—'}</td>
       </tr>`;
     }).join('');
-    return `<section class="coach-roster-group"><h4 class="coach-roster-title">${coach}教練</h4><div class="table-wrap"><table><thead><tr><th>學員</th><th>RPE</th><th>睡眠 /5</th><th>身體狀況</th><th>狀態</th><th>提醒紀錄</th><th>提醒</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+    return headRow+memberRows;
   }).join('');
 
-  const otherCoachMembers=active.filter(a=>!coachOrder.includes(a.coach||''));
-  const otherCoachHtml=otherCoachMembers.length?`<section class="coach-roster-group"><h4 class="coach-roster-title">其他負責教練</h4><div class="table-wrap"><table><thead><tr><th>學員</th><th>RPE</th><th>睡眠 /5</th><th>身體狀況</th><th>狀態</th><th>提醒紀錄</th><th>提醒</th></tr></thead><tbody>${otherCoachMembers.map(a=>{const st=evaluateAthleteStatus(a);const pending=st.level==='pending';const subLine=`${esc(a.sport)}${a.goal?' · '+esc(a.goal):''}`;return `<tr class="${pending?'is-pending':''}"><td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><div class="person-title-row"><button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button>${statusBadgeHtml(a,'mobile-inline-status',false)}</div><small>${subLine}</small></div></div></td><td>${esc(a.rpe||a.fatigue||'—')}</td><td>${sleepScoreLabel(a)}</td><td>${esc(a.body||'—')}</td><td>${statusBadgeHtml(a,'',false)}</td><td>${pending?(a.lastReminder?'已提醒':'尚未提醒'):'—'}</td><td>${pending?`<button class="remind-btn" onclick="remindAthlete('${a.id}')">提醒回報</button>`:'—'}</td></tr>`}).join('')}</tbody></table></div></section>`:'';
-
-  document.getElementById('coachGroups').innerHTML=coachGroups+otherCoachHtml;
-  document.getElementById('dashboardEmpty').style.display=active.length?'none':'block';
-
-  document.getElementById('athleteRows').innerHTML=active.map(a=>{
-    const rpeVal=a.rpe||a.fatigue;
-    return `<tr>
-      <td>
-        <div class="person">
-          <div class="initial">${esc(initials(a.name))}</div>
-          <div>
-            <div class="person-title-row">
-              <button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button>
-              ${statusBadgeHtml(a,'mobile-inline-status',false)}
-            </div>
-            <small>${esc(a.sport)}</small>
-          </div>
-        </div>
-      </td>
-      <td>${esc(a.goal||'尚未設定目標')}</td>
-      <td>${esc(a.coach)}</td>
-      <td>${rpeVal?esc(rpeVal)+'/10':'—'}</td>
-      <td>${sleepScoreLabel(a)}</td>
-      <td>${esc(a.body||'—')}</td>
-      <td>${statusBadgeHtml(a,'',false)}</td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('listCount').textContent=active.length+' 位學員';
+  /* 2. Athletes List Borderless Grouped Roster (No coach column, grouped like dashboard) */
+  const listBody=document.getElementById('athleteRows');
+  const listWrap=document.getElementById('athletesRosterWrap');
+  listWrap.style.display=active.length?'block':'none';
   document.getElementById('listEmpty').style.display=active.length?'none':'block';
+  document.getElementById('listCount').textContent=active.length+' 位學員';
 
+  listBody.innerHTML=groups.map(g=>{
+    const headRow=`<tr class="coach-group-row theme-${g.theme}">
+      <td colspan="6"><div class="coach-group-inner"><span>${esc(g.label)}</span><span class="coach-group-count">${g.members.length} 位學員</span></div></td>
+    </tr>`;
+    const memberRows=g.members.map(a=>{
+      const rpeVal=a.rpe||a.fatigue;
+      return `<tr class="athlete-row theme-${g.theme}">
+        <td>
+          <div class="person">
+            <div class="initial theme-${g.theme}">${esc(initials(a.name))}</div>
+            <div>
+              <div class="person-title-row">
+                <button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button>
+                ${statusBadgeHtml(a,'mobile-inline-status',false)}
+              </div>
+              <small>${esc(a.sport)}</small>
+            </div>
+          </div>
+        </td>
+        <td>${esc(a.goal||'尚未設定目標')}</td>
+        <td>${rpeVal?esc(rpeVal)+'/10':'—'}</td>
+        <td>${sleepScoreLabel(a)}</td>
+        <td>${esc(a.body||'—')}</td>
+        <td>${statusBadgeHtml(a,'',false)}</td>
+      </tr>`;
+    }).join('');
+    return headRow+memberRows;
+  }).join('');
+
+  /* 3. Cross-Coach Alerts */
   const noticeEl=document.getElementById('noticeArea');
   noticeEl.classList.toggle('empty',alerts.length===0);
   noticeEl.innerHTML=alerts.length?alerts.map(a=>{
@@ -2160,12 +2693,20 @@ function openProfile(id){
   let a=athletes.find(x=>x.id===id);
   if(!a)return;
   const st=evaluateAthleteStatus(a);
+  const theme=coachThemeKey(a.coach);
   const rpeVal=a.rpe||a.fatigue;
   const sleepVal=getSleepScore(a);
 
+  /* Apply Coach Theme Color to Profile & Sidebar Subnav */
+  document.getElementById('profile').setAttribute('data-coach-theme',theme);
+  const sideNav=document.getElementById('sideProfileNav');
+  if(sideNav)sideNav.setAttribute('data-coach-theme',theme);
+  document.getElementById('sideProfileName').textContent=a.name;
+
+  /* Omit redundant "負責教練" text; theme color represents the coach */
   document.getElementById('pInitial').textContent=initials(a.name);
   document.getElementById('pName').textContent=a.name;
-  document.getElementById('pMeta').textContent=a.sport+' · 負責教練：'+a.coach;
+  document.getElementById('pMeta').textContent=a.goal?`${a.sport} · 目標：${a.goal}`:a.sport;
   document.getElementById('pFatigue').textContent=rpeVal?rpeVal+'/10':'尚未回報';
   document.getElementById('pSleep').textContent=sleepScoreLabel(a);
   document.getElementById('pBody').textContent=a.body||'—';
@@ -2197,17 +2738,24 @@ function openProfile(id){
     ?`最近提醒：${new Date(a.lastReminder).toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}`
     :(st.level==='pending'?'尚未發送 LINE 提醒':'今日已完成回報，無需提醒');
 
-  document.getElementById('profileReminderBtn').style.display=st.level==='pending'?'inline-flex':'none';
-  document.getElementById('clearCsvBtn').hidden=!(Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length);
+  const remBtn=document.getElementById('profileReminderBtn');
+  remBtn.style.display=st.level==='pending'?'inline-flex':'none';
+  remBtn.classList.toggle('is-active',Boolean(a.lastReminder));
+  remBtn.textContent=a.lastReminder?'再次提醒回報':'提醒回報';
+
+  const hasCsv=Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length>0;
+  document.getElementById('clearCsvBtn').hidden=!hasCsv;
+  document.getElementById('importCsvBtn').classList.toggle('is-active',hasCsv);
+
   document.getElementById('profileInfo').innerHTML=`
-    <div class="info-item"><small>負責教練</small><span>${esc(a.coach)}</span></div>
+    <div class="info-item"><small>運動項目</small><span>${esc(a.sport)}</span></div>
     <div class="info-item"><small>目標／比賽</small><span>${esc(a.goal||'尚未設定')}</span></div>
     <div class="info-item"><small>TrainingPeaks ID</small><span>${esc(a.tp||'尚未設定')}</span></div>
     <div class="info-item"><small>學員狀態</small><span>${a.active==='paused'?'暫停課表':'管理中'}</span></div>
     <div class="info-item wide"><small>教練備註</small><span>${esc(a.note||'尚無備註')}</span></div>
   `;
-  const subnavBtns=document.querySelectorAll('.profile-subnav button');
-  subnavBtns.forEach((b,i)=>b.classList.toggle('is-current',i===0));
+
+  setSubnavCurrent('sec-recovery');
   renderSessionRpe(a);
   showPage('profile');
   chartEnd=getLatestAthleteDate(a);
@@ -2216,7 +2764,8 @@ function openProfile(id){
   renderWeeklyVolume();
 }
 
-function openAthleteModal(id=null){
+function openAthleteModal(id=null,triggerBtn=null){
+  setTriggerActive(triggerBtn);
   let a=id?athletes.find(x=>x.id===id):null;
   document.getElementById('modalTitle').textContent=a?'編輯學員資料':'新增學員';
   document.getElementById('fName').value=a?.name||'';
@@ -2229,7 +2778,7 @@ function openAthleteModal(id=null){
   document.getElementById('athleteModal').dataset.editId=id||'';
   document.getElementById('athleteModal').classList.add('show');
 }
-function editCurrentAthlete(){openAthleteModal(currentId)}
+function editCurrentAthlete(btn){openAthleteModal(currentId,btn)}
 function remindCurrentAthlete(){if(currentId)remindAthlete(currentId)}
 
 function saveAthlete(){
@@ -2256,7 +2805,10 @@ function saveAthlete(){
   if(id)openProfile(id);
   toast(id?'學員資料已更新（僅本機保存）':'已新增學員（僅本機保存）');
 }
-function closeModal(){document.getElementById('athleteModal').classList.remove('show')}
+function closeModal(){
+  document.getElementById('athleteModal').classList.remove('show');
+  clearTriggerActive();
+}
 function toast(msg){let t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(window._toast);window._toast=setTimeout(()=>t.style.display='none',3200)}
 
 function remindAthlete(id){
@@ -2473,6 +3025,7 @@ function dayStart(d){let x=new Date(d);x.setHours(0,0,0,0);return x}
 function fmtDate(d){return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`}
 function isoKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function dateMinus(d,n){let x=new Date(d);x.setDate(x.getDate()-n);return x}
+function datePlus(d,n){let x=new Date(d);x.setDate(x.getDate()+n);return x}
 
 function getLatestAthleteDate(a){
   if(a&&Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length){
@@ -2518,9 +3071,10 @@ function applyRangeSelect(v){
   }
   renderLoadChart();
 }
-function applyCustomDates(){
+function applyCustomDates(btn){
   const a=document.getElementById('chartFrom').value,b=document.getElementById('chartTo').value;
   if(!a||!b||new Date(a)>new Date(b)){toast('請確認開始與結束日期');return}
+  if(btn)btn.classList.add('is-active');
   chartStart=dayStart(new Date(a+'T00:00:00'));
   chartEnd=dayStart(new Date(b+'T00:00:00'));
   chartDays=Math.max(1,Math.round((chartEnd-chartStart)/86400000)+1);
@@ -2530,9 +3084,10 @@ function applyCustomDates(){
 }
 function toggleChartFullscreen(){
   let el=document.querySelector('.load-chart-card');
-  el.classList.toggle('fullscreen');
+  const isFull=el.classList.toggle('fullscreen');
   let btn=document.getElementById('fullscreenChartBtn');
-  btn.textContent=el.classList.contains('fullscreen')?'收合圖表':'放大圖表';
+  btn.textContent=isFull?'收合圖表':'放大圖表';
+  btn.classList.toggle('is-active',isFull);
   renderLoadChart();
 }
 
@@ -2554,10 +3109,12 @@ function buildAthleteSeries(a,start,end){
 
   if(!hasCsv){
     const arr=[];
+    const epoch=dayStart(new Date('2026-06-01T00:00:00'));
     for(let i=0;i<total;i++){
       let d=new Date(start);
       d.setDate(start.getDate()+i);
-      arr.push({date:d,...demoSeries(d,i)});
+      const dayIdx=Math.round((d-epoch)/86400000);
+      arr.push({date:d,...demoSeries(d,Math.max(0,dayIdx))});
     }
     return {data:arr,isReal:false,workoutCount:0};
   }
@@ -2854,10 +3411,25 @@ function fmtShortDate(iso){
   return `${Number(parts[1])}/${Number(parts[2])}`;
 }
 
-function isRunWorkout(w){
+function fmtHrMin(totalMin){
+  const mins=Math.max(0,Math.round(Number(totalMin)||0));
+  const h=Math.floor(mins/60);
+  const m=mins%60;
+  return `${h} 小時 ${m} 分`;
+}
+
+function classifyWorkoutSport(w){
   const t=String(w.type||'').toLowerCase();
   const name=String(w.sessionName||'').toLowerCase();
-  return t.includes('run')||t.includes('跑')||name.includes('run')||name.includes('跑')||name.includes('marathon')||name.includes('馬拉松');
+  const txt=t+' '+name;
+  if(txt.includes('swim')||txt.includes('泳'))return 'swim';
+  if(txt.includes('bike')||txt.includes('cycl')||txt.includes('ride')||txt.includes('騎')||txt.includes('自行車')||txt.includes('單車')||txt.includes('功率台'))return 'bike';
+  if(txt.includes('run')||txt.includes('跑')||txt.includes('marathon')||txt.includes('馬拉松'))return 'run';
+  return 'other';
+}
+
+function isRunWorkout(w){
+  return classifyWorkoutSport(w)==='run';
 }
 
 function buildDemoWeeks(){
@@ -3070,9 +3642,10 @@ function renderWeeklyBarSvg(svgId,items,barColor,unitLabel){
   svg.innerHTML=out;
 }
 
-function openWeekModal(dateIso=null){
+function openWeekModal(dateIso=null,triggerBtn=null){
   const a=athletes.find(x=>x.id===currentId);
   if(!a)return;
+  setTriggerActive(triggerBtn);
   const existing=dateIso?lastRenderedWeeks.find(w=>w.date===dateIso):null;
   const modal=document.getElementById('weekModal');
   document.getElementById('weekModalTitle').textContent=existing?`編輯週次（${fmtShortDate(existing.date)}）`:'新增週次訓練量紀錄';
@@ -3108,6 +3681,7 @@ function openWeekModal(dateIso=null){
 
 function closeWeekModal(){
   document.getElementById('weekModal').classList.remove('show');
+  clearTriggerActive();
 }
 
 function saveWeekRecord(){
@@ -3147,9 +3721,10 @@ function deleteWeekOverride(){
   }
 }
 
-function exportWeeklyCsv(){
+function exportWeeklyCsv(btn){
   const a=athletes.find(x=>x.id===currentId);
   if(!lastRenderedWeeks.length){toast('目前沒有可匯出的週次資料');return}
+  if(btn)btn.classList.add('is-active');
   const lines=[
     ['Date','Week','Estimate_Hr','Estimate_Min','Real_Hr','Real_Min','Estimate_Run_km','Real_Run_km','Remark'].join(',')
   ];
@@ -3175,6 +3750,404 @@ function exportWeeklyCsv(){
   link.click();
   URL.revokeObjectURL(url);
   toast('已下載週訓練量與完成度 CSV');
+}
+
+/* =========================================================
+   Weekly Report PDF Engine (Multi-Sport + PMC/ACWR + Editable AI Advice)
+   ========================================================= */
+let currentPdfData=null;
+
+function computeWeeklyReportMetrics(a,weekObj){
+  const startDate=dayStart(new Date(weekObj.date+'T00:00:00'));
+  const endDate=datePlus(startDate,6);
+  const prevStart=dateMinus(startDate,7);
+
+  const seriesRes=buildAthleteSeries(a,prevStart,endDate);
+  const allDays=seriesRes.data;
+  const prevWeekDays=allDays.filter(d=>d.date<startDate);
+  const thisWeekDays=allDays.filter(d=>d.date>=startDate&&d.date<=endDate);
+
+  const endDay=thisWeekDays[thisWeekDays.length-1]||{CTL:0,ATL:0,TSB:0,TSS:0,RPE:null,SRPE:0};
+  const prevEndDay=prevWeekDays[prevWeekDays.length-1]||null;
+
+  const ctl=endDay.CTL||0;
+  const atl=endDay.ATL||0;
+  const tsb=endDay.TSB||0;
+  const dCtl=prevEndDay?(ctl-prevEndDay.CTL):null;
+  const dAtl=prevEndDay?(atl-prevEndDay.ATL):null;
+  const dTsb=prevEndDay?(tsb-prevEndDay.TSB):null;
+  const acwr=ctl>1?(atl/ctl):null;
+
+  const weekTss=thisWeekDays.reduce((s,d)=>s+(d.TSS||0),0);
+  const weekSrpe=thisWeekDays.reduce((s,d)=>s+(d.SRPE||0),0);
+  const rpeList=thisWeekDays.filter(d=>d.RPE!==null&&d.RPE>0).map(d=>d.RPE);
+  const avgRpe=rpeList.length?(rpeList.reduce((s,v)=>s+v,0)/rpeList.length):null;
+  const maxRpe=rpeList.length?Math.max(...rpeList):null;
+  const maxTss=thisWeekDays.length?Math.max(...thisWeekDays.map(d=>d.TSS||0)):0;
+  const trainDays=thisWeekDays.filter(d=>(d.TSS||0)>0||(d.RPE||0)>0||(d.SRPE||0)>0).length;
+
+  const durPct=weekObj.estMin>0?Math.round((weekObj.realMin/weekObj.estMin)*100):null;
+  const runPct=weekObj.estRun>0?Math.round((weekObj.realRun/weekObj.estRun)*100):null;
+
+  /* Multi-sport Breakdown */
+  const hasRealCsv=a&&Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length>0;
+  const startIso=isoKey(startDate);
+  const endIso=isoKey(endDate);
+  const sports={
+    swim:{label:'游泳 Swim',mins:0,planMins:0,km:0,sessions:0},
+    bike:{label:'自行車 Bike',mins:0,planMins:0,km:0,sessions:0},
+    run:{label:'跑步 Run',mins:0,planMins:0,km:0,sessions:0},
+    other:{label:'肌力／其他 Other',mins:0,planMins:0,km:0,sessions:0}
+  };
+
+  let sportSource='none';
+  if(hasRealCsv){
+    const weekWorkouts=a.tpWorkouts.filter(w=>w.date>=startIso&&w.date<=endIso);
+    if(weekWorkouts.length){
+      sportSource='csv';
+      weekWorkouts.forEach(w=>{
+        const cat=classifyWorkoutSport(w);
+        sports[cat].mins+=Number(w.duration||0);
+        sports[cat].planMins+=Number(w.plannedDuration||0);
+        sports[cat].km+=Number(w.distanceKm||0);
+        sports[cat].sessions+=1;
+      });
+    }
+  }else if(a&&a.sport==='鐵人三項'){
+    /* Demo estimation for triathlon preview before CSV upload */
+    sportSource='demo-tri';
+    const runMins=Math.min(Math.round(weekObj.realMin*0.42),Math.round(weekObj.realRun*6.2));
+    const swimMins=Math.round(weekObj.realMin*0.16);
+    const bikeMins=Math.max(0,weekObj.realMin-runMins-swimMins);
+    sports.swim={label:'游泳 Swim',mins:swimMins,planMins:Math.round(weekObj.estMin*0.16),km:Math.round((swimMins/28)*10)/10,sessions:swimMins>0?2:0};
+    sports.bike={label:'自行車 Bike',mins:bikeMins,planMins:Math.round(weekObj.estMin*0.46),km:Math.round((bikeMins/60)*26),sessions:bikeMins>0?2:0};
+    sports.run={label:'跑步 Run',mins:runMins,planMins:Math.round(weekObj.estMin*0.38),km:weekObj.realRun,sessions:weekObj.realRun>0?3:0};
+  }
+
+  let acwrLabel='資料累積中';
+  if(acwr!==null){
+    if(acwr>1.35)acwrLabel='負荷急升（留意傷痛風險）';
+    else if(acwr>=0.8)acwrLabel='甜蜜區間（適應穩定）';
+    else acwrLabel='低負荷／減量恢復期';
+  }
+
+  return {
+    athlete:a,
+    week:weekObj,
+    startDate,
+    endDate,
+    isRealSeries:seriesRes.isReal,
+    ctl,atl,tsb,dCtl,dAtl,dTsb,acwr,acwrLabel,
+    weekTss:Math.round(weekTss),
+    weekSrpe:Math.round(weekSrpe),
+    avgRpe,maxRpe,maxTss:Math.round(maxTss),
+    trainDays,
+    durPct,runPct,
+    sports,
+    sportSource
+  };
+}
+
+function generateAiAdviceDraft(m){
+  const lines=[];
+  /* 1. Highlights */
+  const hl=[];
+  if(m.durPct!==null){
+    if(m.durPct>=90&&m.durPct<=115)hl.push(`本週實際完成 ${fmtHrMin(m.week.realMin)}，課表時數達成率 ${m.durPct}%，執行節奏穩定。`);
+    else if(m.durPct>115)hl.push(`本週完成 ${fmtHrMin(m.week.realMin)}（達成率 ${m.durPct}%），總訓練量高於原訂課表。`);
+    else hl.push(`本週完成 ${fmtHrMin(m.week.realMin)}（達成率 ${m.durPct}%），總量較原訂規劃保守。`);
+  }else{
+    hl.push(`本週累計訓練 ${fmtHrMin(m.week.realMin)}，共完成 ${m.trainDays} 天訓練。`);
+  }
+  if(m.week.realRun>0){
+    hl.push(`跑步累計 ${m.week.realRun} km${m.runPct!==null?`（達成率 ${m.runPct}%）`:''}。`);
+  }
+  if(m.dCtl!==null&&m.dCtl>=1){
+    hl.push(`長期體能 CTL 提升至 ${m.ctl.toFixed(1)}（較上週 +${m.dCtl.toFixed(1)}），有氧基礎持續堆疊。`);
+  }
+  lines.push('【本週表現亮點】\n'+hl.join(''));
+
+  /* 2. Fatigue & Risk */
+  const risk=[];
+  if(m.acwr!==null){
+    if(m.acwr>1.35)risk.push(`急慢性負荷比 ACWR 達 ${m.acwr.toFixed(2)}，短期疲勞（ATL ${m.atl.toFixed(1)}）上升速度較快，需密切追蹤下肢緊繃與關節反應。`);
+    else if(m.acwr>=0.8)risk.push(`目前 ACWR 為 ${m.acwr.toFixed(2)}（位於 0.8–1.3 穩定區間），短期疲勞 ATL ${m.atl.toFixed(1)} 與體能基礎匹配良好。`);
+    else risk.push(`目前 ACWR 為 ${m.acwr.toFixed(2)}，屬於減量或恢復週節奏，有助於消除前期累積疲勞。`);
+  }
+  if(m.tsb<-20){
+    risk.push(`狀態值 TSB 降至 ${m.tsb.toFixed(1)}，處於明顯疲勞累積階段。`);
+  }else if(m.tsb>10){
+    risk.push(`狀態值 TSB 維持在 +${m.tsb.toFixed(1)}，身體新鮮度佳。`);
+  }
+  if(m.avgRpe!==null){
+    risk.push(`本週平均主觀強度 RPE 為 ${m.avgRpe.toFixed(1)}/10（單週 sRPE ${m.weekSrpe.toLocaleString('en-US')} AU）${m.avgRpe>=7.5?'，主觀體感偏吃力，建議留意睡眠品質與非訓練壓力':''}。`);
+  }
+  if(m.week.remark){
+    risk.push(`本週備註事項：「${m.week.remark}」，評估數據時已納入考量。`);
+  }
+  lines.push('【疲勞與風險觀察】\n'+(risk.join('')||'目前主觀疲勞與外部負荷指標維持在可接受範圍內。'));
+
+  /* 3. Next Week Recommendations */
+  const next=[];
+  if((m.acwr!==null&&m.acwr>1.35)||m.tsb<-20||(m.avgRpe!==null&&m.avgRpe>=7.5)){
+    next.push('建議下週先安排 1 至 2 天低強度恢復日或減少 15–20% 總量，優先拉回睡眠與肌肉彈性，再恢復高強度間歇課表。');
+  }else if(m.durPct!==null&&m.durPct<80){
+    next.push('下週建議先以維持訓練頻率與基礎有氧節奏為主，避免為了補量而在單一課表過度拉高強度。');
+  }else{
+    next.push('目前身體適應良好，下週可依原訂週期推進，並維持高強度課表前後的動態熱身與課後收操伸展。');
+  }
+  if(m.athlete&&m.athlete.sport==='鐵人三項'){
+    next.push('三項配置上可留意高強度跑步與長距離騎乘之間的間隔，並於週中回報單次 RPE 以利微調配速與功率區間。');
+  }else{
+    next.push('請持續於每堂課後填寫單次 RPE 與每日睡眠評分，讓教練更精準掌握恢復曲線。');
+  }
+  lines.push('【下週調整建議】\n'+next.join(''));
+
+  return lines.join('\n\n');
+}
+
+function fmtDelta(v){
+  if(v===null||v===undefined||Number.isNaN(v))return '';
+  const sign=v>=0?'+':'';
+  return `較前週 ${sign}${v.toFixed(1)}`;
+}
+
+function openPdfModal(triggerBtn=null){
+  const a=athletes.find(x=>x.id===currentId);
+  if(!a){toast('請先開啟學員個人頁面');return}
+  const {weeks}=buildAthleteWeeklyData(a);
+  if(!weeks.length){toast('目前沒有可匯出的週次資料');return}
+
+  setTriggerActive(triggerBtn);
+  const sel=document.getElementById('pdfWeekSelect');
+  sel.innerHTML=weeks.slice().reverse().map(w=>{
+    const endIso=isoKey(datePlus(dayStart(new Date(w.date+'T00:00:00')),6));
+    return `<option value="${esc(w.date)}">第 ${esc(w.weekNum)} 週（${fmtShortDate(w.date)} – ${fmtShortDate(endIso)}）· 實際 ${fmtHrMin(w.realMin)}</option>`;
+  }).join('');
+
+  refreshPdfModal();
+  document.getElementById('pdfModal').classList.add('show');
+}
+
+function closePdfModal(){
+  document.getElementById('pdfModal').classList.remove('show');
+  clearTriggerActive();
+}
+
+function refreshPdfModal(){
+  const a=athletes.find(x=>x.id===currentId);
+  if(!a)return;
+  const {weeks}=buildAthleteWeeklyData(a);
+  const chosenDate=document.getElementById('pdfWeekSelect').value;
+  const w=weeks.find(x=>x.date===chosenDate)||weeks[weeks.length-1];
+  if(!w)return;
+
+  const m=computeWeeklyReportMetrics(a,w);
+  currentPdfData=m;
+
+  const savedNote=a.weeklyPdfNotes&&a.weeklyPdfNotes[w.date];
+  document.getElementById('pdfAiTextarea').value=(savedNote!==undefined&&savedNote!=='')?savedNote:generateAiAdviceDraft(m);
+
+  const sportEntries=Object.values(m.sports).filter(s=>s.mins>0||s.km>0);
+  const sportHtml=sportEntries.length
+    ?`<div class="pdf-sport-chips">${sportEntries.map(s=>`<div class="pdf-sport-chip"><strong>${esc(s.label)}</strong>${fmtHrMin(s.mins)}${s.km>0?` · ${Math.round(s.km*10)/10} km`:''}</div>`).join('')}</div>${m.sportSource==='demo-tri'?'<div class="hint" style="margin-top:6px">註：尚未匯入 TP CSV，以上三項拆解為示意比例；匯入 CSV 後將自動依真實課表統計。</div>':''}`
+    :'';
+
+  document.getElementById('pdfSummaryPreview').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <strong style="font-size:15px;color:var(--ink)">${esc(a.name)} · 第 ${esc(w.weekNum)} 週（${fmtDate(m.startDate)} – ${fmtDate(m.endDate)}）</strong>
+      <span class="pill ${m.durPct>=90&&m.durPct<=115?'ok':(m.durPct>115?'watch':'alert')}">時數達成率 ${m.durPct!==null?m.durPct+'%':'—'}</span>
+    </div>
+    <div class="pdf-mini-grid">
+      <div class="pdf-mini-card"><small>實際訓練時數</small><strong>${fmtHrMin(w.realMin)}</strong><span>預計 ${fmtHrMin(w.estMin)}</span></div>
+      <div class="pdf-mini-card"><small>週累計負荷</small><strong>${m.weekTss} TSS</strong><span>sRPE ${m.weekSrpe.toLocaleString('en-US')} AU</span></div>
+      <div class="pdf-mini-card"><small>CTL / ATL / TSB</small><strong>${m.ctl.toFixed(0)} / ${m.atl.toFixed(0)} / ${m.tsb>=0?'+':''}${m.tsb.toFixed(0)}</strong><span>${fmtDelta(m.dCtl)||'期末狀態'}</span></div>
+      <div class="pdf-mini-card"><small>ACWR / 平均 RPE</small><strong>${m.acwr!==null?m.acwr.toFixed(2):'—'} / ${m.avgRpe!==null?m.avgRpe.toFixed(1):'—'}</strong><span>${esc(m.acwrLabel)}</span></div>
+    </div>
+    ${sportHtml}
+  `;
+}
+
+function saveCurrentPdfNote(){
+  const a=athletes.find(x=>x.id===currentId);
+  if(!a||!currentPdfData)return;
+  if(!a.weeklyPdfNotes)a.weeklyPdfNotes={};
+  a.weeklyPdfNotes[currentPdfData.week.date]=document.getElementById('pdfAiTextarea').value;
+  localStorage.setItem(STORE,JSON.stringify(athletes));
+}
+
+function regeneratePdfAiAdvice(){
+  if(!currentPdfData)return;
+  const fresh=generateAiAdviceDraft(currentPdfData);
+  document.getElementById('pdfAiTextarea').value=fresh;
+  saveCurrentPdfNote();
+  toast('已重新產生本週建議草稿');
+}
+
+function printWeeklyPdf(){
+  if(!currentPdfData)return;
+  saveCurrentPdfNote();
+  const m=currentPdfData;
+  const a=m.athlete;
+  const w=m.week;
+  const adviceText=document.getElementById('pdfAiTextarea').value.trim()||'（無額外建議）';
+
+  const theme=coachThemeKey(a.coach);
+  const palette={
+    kuangwu:{bg:'#2c4d66',accent:'#497291',soft:'#edf3f7'},
+    yufan:{bg:'#87465b',accent:'#a46075',soft:'#f7eef1'},
+    default:{bg:'#213a2e',accent:'#4b6e59',soft:'#eff4ee'}
+  }[theme];
+
+  const st=evaluateAthleteStatus(a);
+  const durBarW=m.durPct!==null?Math.min(100,Math.max(4,m.durPct)):0;
+  const runBarW=m.runPct!==null?Math.min(100,Math.max(4,m.runPct)):0;
+
+  const sportEntries=Object.values(m.sports).filter(s=>s.mins>0||s.km>0);
+  const sportTableHtml=sportEntries.length?`
+    <div class="rpt-section">
+      <div class="rpt-section-title" style="color:${palette.bg}">
+        分項訓練量拆解
+        <span>${m.sportSource==='csv'?'依 TrainingPeaks 紀錄自動分類':'示意分項比例（匯入 CSV 後自動更新）'}</span>
+      </div>
+      <table class="rpt-table">
+        <thead>
+          <tr>
+            <th>訓練項目</th>
+            <th class="num">完成堂數</th>
+            <th class="num">實際時數</th>
+            <th class="num">距離 (km)</th>
+            <th class="num">時數佔比</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sportEntries.map(s=>{
+            const share=w.realMin>0?Math.round((s.mins/w.realMin)*100):0;
+            return `<tr>
+              <td><strong>${esc(s.label)}</strong></td>
+              <td class="num">${s.sessions||'—'}</td>
+              <td class="num">${fmtHrMin(s.mins)}</td>
+              <td class="num">${s.km>0?(Math.round(s.km*10)/10)+' km':'—'}</td>
+              <td class="num">${share}%</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `:'';
+
+  const printHost=document.getElementById('pdfPrintArea');
+  printHost.innerHTML=`
+    <div class="rpt-wrap">
+      <div class="rpt-header" style="background:${palette.bg}">
+        <div>
+          <small>KUANGYU STUDIO · WEEKLY TRAINING REPORT</small>
+          <h1>${esc(a.name)} 週訓練分析報告</h1>
+          <p>${esc(a.sport)}${a.goal?' · 目標：'+esc(a.goal):''}</p>
+        </div>
+        <div class="rpt-header-right">
+          <div class="rpt-week-badge">第 ${esc(w.weekNum)} 週</div>
+          <p>${fmtDate(m.startDate)} — ${fmtDate(m.endDate)}</p>
+        </div>
+      </div>
+
+      <div class="rpt-section">
+        <div class="rpt-section-title" style="color:${palette.bg}">
+          一週訓練量與課表完成度
+          <span>預計 vs 實際執行統計</span>
+        </div>
+        <div class="rpt-bar-row">
+          <div class="rpt-bar-label">
+            <span>總訓練時數（實際 ${fmtHrMin(w.realMin)} ／ 預計 ${fmtHrMin(w.estMin)}）</span>
+            <span style="color:${palette.bg}">${m.durPct!==null?m.durPct+'%':'—'}</span>
+          </div>
+          <div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${durBarW}%;background:${palette.accent}"></div></div>
+        </div>
+        ${(w.estRun>0||w.realRun>0)?`
+        <div class="rpt-bar-row">
+          <div class="rpt-bar-label">
+            <span>跑步里程（實際 ${w.realRun} km ／ 預計 ${w.estRun} km）</span>
+            <span style="color:${palette.bg}">${m.runPct!==null?m.runPct+'%':'—'}</span>
+          </div>
+          <div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${runBarW}%;background:#47728c"></div></div>
+        </div>`:''}
+        ${w.remark?`<div style="margin-top:8px;font-size:11px;color:#4f5f55">本週備註：${esc(w.remark)}</div>`:''}
+      </div>
+
+      ${sportTableHtml}
+
+      <div class="rpt-section">
+        <div class="rpt-section-title" style="color:${palette.bg}">
+          體能、負荷與疲勞分析 (PMC &amp; Internal Load)
+          <span>${m.isRealSeries?'依據匯入之 TrainingPeaks 數據計算':'示意負荷趨勢基準'}</span>
+        </div>
+        <div class="rpt-kpi-4" style="margin-bottom:9px">
+          <div class="rpt-box">
+            <small>CTL 長期體能</small>
+            <strong>${m.ctl.toFixed(1)}</strong>
+            <span class="rpt-sub">${fmtDelta(m.dCtl)||'期末體能值'}</span>
+          </div>
+          <div class="rpt-box">
+            <small>ATL 短期疲勞</small>
+            <strong>${m.atl.toFixed(1)}</strong>
+            <span class="rpt-sub">${fmtDelta(m.dAtl)||'近 7 日負荷'}</span>
+          </div>
+          <div class="rpt-box">
+            <small>TSB 狀態值</small>
+            <strong>${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}</strong>
+            <span class="rpt-sub">${fmtDelta(m.dTsb)||'體能減疲勞'}</span>
+          </div>
+          <div class="rpt-box">
+            <small>ACWR 急慢性比</small>
+            <strong>${m.acwr!==null?m.acwr.toFixed(2):'—'}</strong>
+            <span class="rpt-sub">${esc(m.acwrLabel)}</span>
+          </div>
+        </div>
+        <div class="rpt-kpi-4">
+          <div class="rpt-box">
+            <small>單週累計 TSS</small>
+            <strong>${m.weekTss}</strong>
+            <span class="rpt-sub">單日最高 ${m.maxTss} TSS</span>
+          </div>
+          <div class="rpt-box">
+            <small>單週 sRPE 負荷</small>
+            <strong>${m.weekSrpe.toLocaleString('en-US')}</strong>
+            <span class="rpt-sub">單位：AU（強度 × 時間）</span>
+          </div>
+          <div class="rpt-box">
+            <small>週平均主觀 RPE</small>
+            <strong>${m.avgRpe!==null?m.avgRpe.toFixed(1)+' / 10':'—'}</strong>
+            <span class="rpt-sub">${m.maxRpe!==null?`單日最高 ${m.maxRpe}/10`:'尚無 RPE 紀錄'}</span>
+          </div>
+          <div class="rpt-box">
+            <small>最新恢復與訓練天數</small>
+            <strong>${m.trainDays} 天</strong>
+            <span class="rpt-sub">最新狀態：${esc(st.label)}（睡眠 ${sleepScoreLabel(a)}）</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rpt-section">
+        <div class="rpt-section-title" style="color:${palette.bg}">
+          訓練分析與下週調整建議
+          <span>COACH &amp; AI SUMMARY</span>
+        </div>
+        <div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div>
+      </div>
+
+      <div class="rpt-footer">
+        <span>KUANGYU STUDIO · Athlete Monitoring System</span>
+        <span>報告產出日期：${fmtDate(new Date())}</span>
+      </div>
+    </div>
+  `;
+
+  const oldTitle=document.title;
+  document.title=`${a.name}_W${w.weekNum}_週訓練分析報告`;
+  setTimeout(()=>{
+    window.print();
+    document.title=oldTitle;
+  },80);
 }
 
 /* =========================================================
