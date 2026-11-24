@@ -13,7 +13,7 @@
   --paper:#fffefa;
   --line:#dce4da;
   --muted:#647268;
-  --amber:#a67634;
+  --amber:#d49422;
   --amberbg:#f7efe1;
   --red:#c4453d;
   --redbg:#f8ebe8;
@@ -22,6 +22,7 @@
 }
 
 *{box-sizing:border-box}
+[hidden]{display:none !important}
 html,body{
   margin:0;
   padding:0;
@@ -216,7 +217,7 @@ tbody tr:hover td{background:#fafbf7}
 .dashboard-name-link:hover{color:var(--sage);text-decoration:underline}
 .dashboard-name-link:focus-visible{outline:2px solid var(--sage);outline-offset:3px;border-radius:3px}
 
-/* Status Indicators: Green Checkmark (正常), Red Exclamation (需要關注), Compact Pills */
+/* Status Indicators: Green Checkmark (正常), Yellow Triangle (留意), Red Exclamation (需要關注) */
 .status-icon{
   width:21px;
   height:21px;
@@ -232,7 +233,14 @@ tbody tr:hover td{background:#fafbf7}
 }
 .status-icon.ok{background:var(--ok-green)}
 .status-icon.alert{background:var(--red)}
-.status-icon svg{width:12px;height:12px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.status-icon.watch{
+  width:22px;
+  height:22px;
+  border-radius:0;
+  background:transparent;
+}
+.status-icon.ok svg,.status-icon.alert svg{width:12px;height:12px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.status-icon.watch svg{width:21px;height:21px;display:block}
 
 .pill{
   display:inline-flex;
@@ -394,20 +402,10 @@ tbody tr:hover td{background:#fafbf7}
 .load-chart-card{overflow:hidden}
 .chart-title-row{align-items:flex-start}
 .chart-title-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.chart-controls{background:#f7f8f3;border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:14px}
-.range-presets{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px}
-.range-presets button,.zoom-btn{
-  border:1px solid #d1dbd0;
-  background:var(--paper);
-  color:#485a4e;
-  border-radius:8px;
-  padding:8px 12px;
-  font-size:13px;
-  font-weight:550;
-}
-.range-presets button.selected,.range-presets button:hover{background:var(--ink);color:#fffefa;border-color:var(--ink)}
+.chart-controls{background:#f7f8f3;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px}
 .chart-control-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.chart-control-row label,.custom-dates label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:#485a4e}
+.chart-range-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.chart-control-row label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:#485a4e;font-weight:550}
 .chart-control-row select,.custom-dates input{
   border:1px solid #d1dbd0;
   background:var(--paper);
@@ -416,9 +414,29 @@ tbody tr:hover td{background:#fafbf7}
   font-size:13.5px;
   color:var(--ink);
 }
-.custom-dates{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.custom-dates{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  width:100%;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+}
+.custom-dates label{display:flex;align-items:center;gap:7px;font-size:13px;color:#485a4e}
 .zoom-controls{display:flex;gap:6px}
-.zoom-btn{min-width:38px;font-weight:700}
+.zoom-btn{
+  border:1px solid #d1dbd0;
+  background:var(--paper);
+  color:#485a4e;
+  border-radius:8px;
+  padding:8px 12px;
+  min-width:40px;
+  font-size:13px;
+  font-weight:700;
+}
+.zoom-btn:hover{background:var(--sage2);color:var(--ink)}
 
 .metric-toggles{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:12px 2px 14px;font-size:13.5px;color:#485a4e}
 .metric-toggles>span{font-weight:700;color:var(--ink)}
@@ -433,8 +451,17 @@ tbody tr:hover td{background:#fafbf7}
 .metric-dot.tss{background:#c86d69}
 
 .chart-plot-wrap{position:relative;border:1px solid #e1e7df;border-radius:12px;background:var(--paper);padding:12px;min-height:280px}
-.chart-legend{display:flex;gap:16px;justify-content:flex-end;flex-wrap:wrap;padding:2px 8px 6px;font-size:12.5px;color:#5c6b60}
+.chart-plot-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:2px 4px 8px;
+}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#5c6b60}
 .chart-legend span{display:inline-flex;align-items:center;gap:6px}
+.chart-expand-btn{padding:6px 12px;font-size:12.5px;margin-left:auto}
 #loadChart{width:100%;height:auto;display:block;min-height:250px;touch-action:pan-y}
 .chart-tooltip{
   position:absolute;
@@ -672,23 +699,55 @@ tbody tr:hover td{background:#fafbf7}
   #athletes td:nth-child(5)::before{content:"睡眠";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
   #athletes td:nth-child(6)::before{content:"身體狀況";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
 
-  /* Profile & Chart Mobile Adjustments */
+  /* Profile 3-column side-by-side detail cards on mobile */
   .profile-actions{width:100%;margin-left:0;margin-top:4px}
   .profile-actions .btn{flex:1;text-align:center}
-  .detail-grid{gap:8px}
-  .detail{padding:11px 12px}
-  .detail small{font-size:11.5px}
-  .detail strong{font-size:16px}
+  .detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
+  .detail{padding:11px 8px;text-align:center}
+  .detail small{font-size:11px;white-space:nowrap}
+  .detail strong{font-size:16px;margin-top:4px}
 
   .session-rpe-row{grid-template-columns:minmax(0,1fr) 82px;gap:6px 10px}
   .session-rpe-status{grid-column:1 / -1;text-align:left;font-size:12px}
 
-  .chart-control-row{align-items:stretch}
-  .chart-control-row>label{width:100%;justify-content:space-between}
-  .chart-control-row select{flex:1;max-width:65%}
-  .custom-dates{width:100%}
-  .custom-dates label{flex:1;flex-direction:column;align-items:flex-start}
-  .custom-dates input{width:100%}
+  /* Chart Controls & Aligned Custom Date Inputs on Mobile */
+  .chart-controls{padding:12px}
+  .chart-control-row{flex-direction:column;align-items:stretch;gap:10px}
+  .chart-range-main{width:100%;justify-content:space-between}
+  .chart-range-main label{flex:1;min-width:0;justify-content:space-between}
+  .chart-range-main select{flex:1;min-width:0}
+  .zoom-controls{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .zoom-btn{width:100%;padding:8px 0}
+
+  .custom-dates{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    width:100%;
+    margin-top:10px;
+    padding-top:10px;
+  }
+  .custom-dates label{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:4px;
+    min-width:0;
+    font-size:12px;
+  }
+  .custom-dates input[type="date"]{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    display:block;
+    padding:8px 8px;
+    -webkit-appearance:none;
+  }
+  .custom-dates .btn{
+    grid-column:1 / -1;
+    width:100%;
+  }
+
   .metric-toggles{gap:10px;font-size:12.5px}
   .combined-analysis{grid-template-columns:1fr;gap:10px;padding:12px}
   .chart-foot{flex-direction:column;gap:4px;font-size:12px}
@@ -704,7 +763,6 @@ tbody tr:hover td{background:#fafbf7}
 }
 
 @media (max-width: 440px){
-  .detail-grid{grid-template-columns:1fr}
   .role{max-width:140px}
 }
 </style></head>
@@ -834,8 +892,8 @@ tbody tr:hover td{background:#fafbf7}
   </div>
 
   <div class="grid detail-grid">
-    <div class="detail"><small>今日疲勞 / RPE</small><strong id="pFatigue">尚未回報</strong></div>
-    <div class="detail"><small>睡眠品質（1–5 量表）</small><strong id="pSleep">—</strong></div>
+    <div class="detail"><small>今日疲勞</small><strong id="pFatigue">尚未回報</strong></div>
+    <div class="detail"><small>睡眠品質</small><strong id="pSleep">—</strong></div>
     <div class="detail"><small>身體狀況</small><strong id="pBody">—</strong></div>
   </div>
 
@@ -845,7 +903,7 @@ tbody tr:hover td{background:#fafbf7}
       <span class="rpe-scale-note">主觀強度 1–10</span>
     </div>
     <div id="sessionRpeList" class="session-rpe-list">
-      <div class="rpe-empty">目前沒有訓練 RPE 紀錄。匯入 TrainingPeaks CSV 訓練資料後，這裡會逐堂顯示訓練名稱、時間與 RPE 分數。</div>
+      <div class="rpe-empty">目前沒有訓練 RPE 紀錄。點選下方「匯入 TP CSV」上傳 TrainingPeaks 訓練紀錄後，這裡會逐堂顯示訓練名稱、時間與 RPE 分數。</div>
     </div>
   </div>
 
@@ -859,46 +917,42 @@ tbody tr:hover td{background:#fafbf7}
         <input type="file" id="tpCsvInput" accept=".csv,text/csv" hidden onchange="handleTpCsvUpload(event)">
         <button class="btn primary" type="button" onclick="document.getElementById('tpCsvInput').click()">匯入 TP CSV</button>
         <button class="btn outline" type="button" id="clearCsvBtn" hidden onclick="clearImportedCsv()">清除 CSV</button>
-        <button class="btn outline" type="button" id="fullscreenChartBtn" onclick="toggleChartFullscreen()">放大圖表</button>
       </div>
     </div>
 
     <div class="chart-controls">
-      <div class="range-presets" id="rangePresets">
-        <button type="button" data-range="7">近 7 天</button>
-        <button type="button" data-range="14">近 14 天</button>
-        <button type="button" data-range="28" class="selected">近 28 天</button>
-        <button type="button" data-range="90">近 90 天</button>
-        <button type="button" data-range="180">近 180 天</button>
-        <button type="button" data-range="365">近 1 年</button>
-        <button type="button" data-range="730">近 2 年</button>
-        <button type="button" data-range="all">全部</button>
-      </div>
       <div class="chart-control-row">
-        <label>日期區間
-          <select id="chartRangeSelect" onchange="applyRangeSelect(this.value)">
-            <option value="dashboard">使用預設區間</option>
-            <option value="custom">自訂日期</option>
-            <option value="7">Last 7 days</option><option value="14">Last 14 days</option>
-            <option value="28" selected>Last 28 days</option><option value="90">Last 90 days</option>
-            <option value="180">Last 180 days</option><option value="365">Last 365 days</option>
-            <option value="730">Last 730 days</option>
-            <option value="thisWeek">This week</option><option value="thisMonth">This month</option>
-            <option value="thisYear">This year</option><option value="lastWeek">Last week</option>
-            <option value="lastMonth">Last month</option><option value="last3Months">Last 3 months</option>
-            <option value="lastYear">Last year</option><option value="last2Years">Last 2 years</option>
-          </select>
-        </label>
-        <div class="custom-dates" id="customDates" hidden>
-          <label>From <input type="date" id="chartFrom"></label>
-          <label>To <input type="date" id="chartTo"></label>
-          <button class="btn soft" type="button" onclick="applyCustomDates()">套用</button>
+        <div class="chart-range-main">
+          <label>日期區間
+            <select id="chartRangeSelect" onchange="applyRangeSelect(this.value)">
+              <option value="custom">自訂日期</option>
+              <option value="7">近 7 天 (Last 7 days)</option>
+              <option value="14">近 14 天 (Last 14 days)</option>
+              <option value="28" selected>近 28 天 (Last 28 days)</option>
+              <option value="90">近 90 天 (Last 90 days)</option>
+              <option value="180">近 180 天 (Last 180 days)</option>
+              <option value="365">近 1 年 (Last 365 days)</option>
+              <option value="730">近 2 年 (Last 730 days)</option>
+              <option value="thisWeek">本週 (This week)</option>
+              <option value="thisMonth">本月 (This month)</option>
+              <option value="thisYear">今年 (This year)</option>
+              <option value="lastWeek">上週 (Last week)</option>
+              <option value="lastMonth">上月 (Last month)</option>
+              <option value="last3Months">近 3 個月 (Last 3 months)</option>
+              <option value="lastYear">去年 (Last year)</option>
+            </select>
+          </label>
         </div>
         <div class="zoom-controls">
           <button type="button" class="zoom-btn" onclick="zoomChart(0.67)" title="放大時間範圍">＋</button>
           <button type="button" class="zoom-btn" onclick="zoomChart(1.5)" title="縮小時間範圍">－</button>
           <button type="button" class="zoom-btn" onclick="resetChartZoom()" title="重設縮放">重設</button>
         </div>
+      </div>
+      <div class="custom-dates" id="customDates" hidden>
+        <label>開始日期 (From) <input type="date" id="chartFrom"></label>
+        <label>結束日期 (To) <input type="date" id="chartTo"></label>
+        <button class="btn soft" type="button" onclick="applyCustomDates()">套用自訂區間</button>
       </div>
     </div>
 
@@ -913,13 +967,16 @@ tbody tr:hover td{background:#fafbf7}
     </div>
 
     <div class="chart-plot-wrap" id="chartPlotWrap">
-      <div class="chart-legend">
-        <span><i class="metric-dot rpe"></i> RPE (右軸 1–10)</span>
-        <span><i class="metric-dot ctl"></i> CTL</span>
-        <span><i class="metric-dot atl"></i> ATL</span>
-        <span><i class="metric-dot srpe"></i> sRPE</span>
-        <span><i class="metric-dot tsb"></i> TSB</span>
-        <span><i class="metric-dot tss"></i> TSS</span>
+      <div class="chart-plot-top">
+        <div class="chart-legend">
+          <span><i class="metric-dot rpe"></i> RPE (右軸 1–10)</span>
+          <span><i class="metric-dot ctl"></i> CTL</span>
+          <span><i class="metric-dot atl"></i> ATL</span>
+          <span><i class="metric-dot srpe"></i> sRPE</span>
+          <span><i class="metric-dot tsb"></i> TSB</span>
+          <span><i class="metric-dot tss"></i> TSS</span>
+        </div>
+        <button class="btn outline chart-expand-btn" type="button" id="fullscreenChartBtn" onclick="toggleChartFullscreen()">放大圖表</button>
       </div>
       <svg id="loadChart" viewBox="0 0 1000 400" role="img" aria-label="RPE 與個人訓練負荷趨勢圖"></svg>
       <div id="chartTooltip" class="chart-tooltip" hidden></div>
@@ -933,7 +990,7 @@ tbody tr:hover td{background:#fafbf7}
 
     <div class="chart-foot">
       <span id="chartDateLabel">顯示最近 28 天</span>
-      <span id="chartDataSourceLabel">目前顯示視覺示意資料；可點選右上角「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。</span>
+      <span id="chartDataSourceLabel">目前顯示視覺示意資料；可點選上方「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。</span>
     </div>
     <div class="chart-hint">共同分析說明：長條為每日主觀 RPE（右軸 1–10 分，8 分以上標為警示色），曲線為 TrainingPeaks 訓練負荷（左軸）。若外部 TSS 不高但主觀 RPE 連續偏高，代表恢復不足或非訓練壓力累積。</div>
   </div>
@@ -941,9 +998,9 @@ tbody tr:hover td{background:#fafbf7}
   <div class="card" style="margin-bottom:18px">
     <div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div>
     <div class="grid detail-grid" style="margin:0">
-      <div class="detail"><small>系統自動判讀狀態</small><strong id="pReportStatus">尚未回報</strong></div>
+      <div class="detail"><small>自動判讀狀態</small><strong id="pReportStatus">尚未回報</strong></div>
       <div class="detail"><small>負責教練</small><strong id="pCoach">—</strong></div>
-      <div class="detail"><small>學員目標</small><strong id="pGoal" style="font-size:16px">—</strong></div>
+      <div class="detail"><small>學員目標</small><strong id="pGoal" style="font-size:15px">—</strong></div>
     </div>
   </div>
 
@@ -1037,13 +1094,20 @@ function evaluateAthleteStatus(a){
   return {level:'ok',label:'正常',pillClass:'pill ok',reason:'恢復與負荷平衡'};
 }
 
-/* Compact status indicator: green checkmark for 正常, red ! for 需要關注, compact badge for others */
+/* Status indicator: green checkmark (正常), yellow triangle (留意), red ! (需要關注) */
 function statusBadgeHtml(a,extraClass='',verbose=false){
   const st=evaluateAthleteStatus(a);
   const cls=extraClass?' '+extraClass:'';
+  const checkSvg='<svg viewBox="0 0 16 16"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"/></svg>';
+  const triSvg='<svg viewBox="0 0 18 18"><path d="M9 1.8L17 15.6H1L9 1.8Z" fill="#d49422"/><path d="M9 6.6v4.4M9 13.4h.01" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
+
   if(st.level==='ok'){
-    if(verbose)return `<span class="pill ok${cls}" style="gap:5px"><span class="status-icon ok" style="width:16px;height:16px"><svg viewBox="0 0 16 16"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"/></svg></span>正常</span>`;
-    return `<span class="status-icon ok${cls}" title="正常" aria-label="正常"><svg viewBox="0 0 16 16"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"/></svg></span>`;
+    if(verbose)return `<span class="pill ok${cls}" style="gap:5px"><span class="status-icon ok" style="width:16px;height:16px">${checkSvg}</span>正常</span>`;
+    return `<span class="status-icon ok${cls}" title="正常" aria-label="正常">${checkSvg}</span>`;
+  }
+  if(st.level==='watch'){
+    if(verbose)return `<span class="pill watch${cls}" style="gap:5px"><span class="status-icon watch" style="width:17px;height:17px">${triSvg}</span>留意</span>`;
+    return `<span class="status-icon watch${cls}" title="留意" aria-label="留意">${triSvg}</span>`;
   }
   if(st.level==='alert'){
     if(verbose)return `<span class="pill alert${cls}" style="gap:5px"><span class="status-icon alert" style="width:16px;height:16px;font-size:11px">!</span>需要關注</span>`;
@@ -1104,10 +1168,6 @@ function render(){
   document.getElementById('coachGroups').innerHTML=coachGroups+otherCoachHtml;
   document.getElementById('dashboardEmpty').style.display=active.length?'none':'block';
 
-  /* Athlete List (#athletes):
-     - Status icon (green check / red !) placed right beside athlete name.
-     - Sport name directly under athlete name (no "運動項目：" prefix).
-     - Goal clearly shown in column 2 (and mobile row 2). */
   document.getElementById('athleteRows').innerHTML=active.map(a=>{
     const rpeVal=a.rpe||a.fatigue;
     return `<tr>
@@ -1156,7 +1216,7 @@ function renderSessionRpe(a){
   if(!host)return;
   const records=Array.isArray(a.sessionRpe)?a.sessionRpe:[];
   if(!records.length){
-    host.innerHTML='<div class="rpe-empty">目前沒有訓練 RPE 紀錄。點選下方圖表右上角的「匯入 TP CSV」上傳 TrainingPeaks 訓練紀錄後，這裡會逐堂顯示訓練名稱、時間與 RPE 分數。</div>';
+    host.innerHTML='<div class="rpe-empty">目前沒有訓練 RPE 紀錄。點選下方「匯入 TP CSV」上傳 TrainingPeaks 訓練紀錄後，這裡會逐堂顯示訓練名稱、時間與 RPE 分數。</div>';
     return;
   }
   host.innerHTML=records.slice().sort((x,y)=>String(y.date||'').localeCompare(String(x.date||''))).slice(0,25).map((r,idx)=>{
@@ -1460,33 +1520,28 @@ function getLatestAthleteDate(a){
   return dayStart(new Date());
 }
 
-function setChartRange(days){
-  const a=athletes.find(x=>x.id===currentId);
-  chartMode='days';
-  chartDays=days==='all'?730:Number(days);
-  chartStart=null;
-  chartEnd=getLatestAthleteDate(a);
-  chartOffset=0;
-  syncRangeUI(String(days));
-  renderLoadChart();
-}
 function syncRangeUI(v){
-  document.querySelectorAll('#rangePresets button').forEach(b=>b.classList.toggle('selected',b.dataset.range===v));
   let s=document.getElementById('chartRangeSelect');
   if(s)s.value=v;
 }
 function applyRangeSelect(v){
   const a=athletes.find(x=>x.id===currentId);
   const custom=document.getElementById('customDates');
-  custom.hidden=v!=='custom';
-  if(v==='custom')return;
+  custom.hidden=(v!=='custom');
+  if(v==='custom'){
+    const end=chartEnd||getLatestAthleteDate(a);
+    const start=chartStart||dateMinus(end,chartDays-1);
+    document.getElementById('chartFrom').value=isoKey(start);
+    document.getElementById('chartTo').value=isoKey(end);
+    return;
+  }
   chartOffset=0;
   chartStart=null;
   chartEnd=getLatestAthleteDate(a);
-  if(['7','14','28','90','180','365','730'].includes(v)||v==='dashboard'){
+  if(['7','14','28','90','180','365','730'].includes(v)){
     chartMode='days';
-    chartDays=v==='dashboard'?28:Number(v);
-    syncRangeUI(v==='dashboard'?'28':v);
+    chartDays=Number(v);
+    syncRangeUI(v);
   }else{
     chartMode='calendar';
     const now=getLatestAthleteDate(a);let start=new Date(now),end=new Date(now);
@@ -1497,32 +1552,31 @@ function applyRangeSelect(v){
     if(v==='lastMonth'){start=new Date(now.getFullYear(),now.getMonth()-1,1);end=new Date(now.getFullYear(),now.getMonth(),0)}
     if(v==='last3Months')start=new Date(now.getFullYear(),now.getMonth()-3,now.getDate());
     if(v==='lastYear'){start=new Date(now.getFullYear()-1,now.getMonth(),now.getDate())}
-    if(v==='last2Years'){start=new Date(now.getFullYear()-2,now.getMonth(),now.getDate())}
     chartStart=start;chartEnd=end;chartDays=Math.max(7,Math.round((end-start)/86400000)+1);
-    document.querySelectorAll('#rangePresets button').forEach(b=>b.classList.remove('selected'));
   }
   renderLoadChart();
 }
 function applyCustomDates(){
   const a=document.getElementById('chartFrom').value,b=document.getElementById('chartTo').value;
-  if(!a||!b||new Date(a)>new Date(b)){toast('請確認自訂日期區間');return}
+  if(!a||!b||new Date(a)>new Date(b)){toast('請確認開始與結束日期');return}
   chartStart=dayStart(new Date(a+'T00:00:00'));
   chartEnd=dayStart(new Date(b+'T00:00:00'));
   chartDays=Math.max(1,Math.round((chartEnd-chartStart)/86400000)+1);
   chartMode='custom';chartOffset=0;
-  document.querySelectorAll('#rangePresets button').forEach(x=>x.classList.remove('selected'));
   renderLoadChart();
 }
 function zoomChart(factor){
   const a=athletes.find(x=>x.id===currentId);
   let days=Math.max(7,Math.min(730,Math.round(chartDays*factor)));
   chartDays=days;chartMode='days';chartStart=null;chartEnd=getLatestAthleteDate(a);chartOffset=0;
-  syncRangeUI(String([7,14,28,90,180,365,730].includes(days)?days:'custom'));
+  document.getElementById('customDates').hidden=true;
+  syncRangeUI([7,14,28,90,180,365,730].includes(days)?String(days):'custom');
   renderLoadChart();
 }
 function resetChartZoom(){
   const a=athletes.find(x=>x.id===currentId);
   chartOffset=0;chartStart=null;chartEnd=getLatestAthleteDate(a);chartMode='days';chartDays=28;
+  document.getElementById('customDates').hidden=true;
   syncRangeUI('28');
   renderLoadChart();
 }
@@ -1637,7 +1691,7 @@ function renderLoadChart(){
 
   document.getElementById('chartDataSourceLabel').textContent=isReal
     ?`已匯入 TrainingPeaks CSV（共 ${workoutCount} 筆訓練紀錄，本機保存）`
-    :'目前顯示視覺示意資料；可點選右上角「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。';
+    :'目前顯示視覺示意資料；可點選上方「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。';
 
   const maxLoad=Math.max(100,...data.map(d=>Math.max(d.CTL,d.ATL,d.TSS)));
   const loadCeil=Math.ceil(maxLoad/25)*25;
@@ -1675,7 +1729,7 @@ function renderLoadChart(){
       if(d.RPE!==null&&d.RPE>0){
         const top=yRpe(d.RPE);
         const h=(T+PH)-top;
-        const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#c69a5b':'#52745f');
+        const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#d49422':'#52745f');
         out+=`<rect x="${(x(i)-barW/2).toFixed(1)}" y="${top.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${fill}" opacity="0.28"/>`;
         if(data.length<=35){
           out+=`<text x="${x(i).toFixed(1)}" y="${Math.max(T+11,top-4).toFixed(1)}" text-anchor="middle" fill="${fill}" font-size="10.5" font-weight="700">${d.RPE}</text>`;
@@ -1715,7 +1769,7 @@ function renderLoadChart(){
   if(active.RPE){
     data.forEach((d,i)=>{
       if(d.RPE!==null&&d.RPE>0){
-        const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#a67634':'#243f32');
+        const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#d49422':'#243f32');
         out+=`<circle cx="${x(i).toFixed(1)}" cy="${yRpe(d.RPE).toFixed(1)}" r="3.6" fill="${fill}"/>`;
       }
     });
@@ -1759,11 +1813,6 @@ function renderLoadChart(){
 
   document.getElementById('chartDateLabel').textContent=`${fmtDate(start)} — ${fmtDate(end)} · 共 ${total} 天`;
 }
-
-document.addEventListener('DOMContentLoaded',()=>{
-  document.querySelectorAll('#rangePresets button').forEach(b=>b.addEventListener('click',()=>setChartRange(b.dataset.range)));
-  renderLoadChart();
-});
 
 render();
 renderLoadChart();
