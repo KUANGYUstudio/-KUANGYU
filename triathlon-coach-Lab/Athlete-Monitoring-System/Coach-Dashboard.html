@@ -2051,7 +2051,6 @@ button:active{transform:translateY(.5px)}
     <button type="button" data-sec="sec-session-rpe" onclick="scrollToSection('sec-session-rpe')">單次訓練 RPE</button>
     <button type="button" data-sec="sec-load-chart" onclick="scrollToSection('sec-load-chart')">負荷與 RPE 趨勢</button>
     <button type="button" data-sec="sec-weekly" onclick="scrollToSection('sec-weekly')">週訓練量追蹤</button>
-    <button type="button" data-sec="sec-info" onclick="scrollToSection('sec-info')">基本資料</button>
   </nav>
 
   <div class="card recovery-overview-card section-gap scroll-anchor" id="sec-recovery">
@@ -4043,15 +4042,27 @@ function printWeeklyPdf(){
   const rpePts=daily.map((d,i)=>d.RPE?`${39+i*42},${94-(Number(d.RPE)/10)*74}`:null).filter(Boolean);
   const rpeLine=rpePts.length>1?`<polyline points="${rpePts.join(' ')}" fill="none" stroke="#bd8751" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`:'';
   const dailySvg=`<svg viewBox="0 0 330 120" role="img" aria-label="每日 TSS 與 RPE 圖表"><line x1="20" y1="94" x2="315" y2="94" stroke="#dfe7de"/>${dailyBars}${rpeLine}<text x="22" y="12" font-size="9" fill="#6f9278">TSS</text><text x="308" y="12" text-anchor="end" font-size="9" fill="#bd8751">RPE</text></svg>`;
-  const last4=series.slice(-28);
-  const weeklyPmc=[];
-  for(let i=0;i<4;i++){const chunk=last4.slice(i*7,(i+1)*7);if(chunk.length){const z=chunk[chunk.length-1];weeklyPmc.push({ctl:z.CTL||0,atl:z.ATL||0,tsb:z.TSB||0})}}
-  const pmcMax=Math.max(10,...weeklyPmc.flatMap(x=>[x.ctl,x.atl]));
-  const pmcSvg=`<svg viewBox="0 0 330 120" role="img" aria-label="四週 CTL ATL TSB 趨勢"><line x1="22" y1="92" x2="315" y2="92" stroke="#dfe7de"/>${weeklyPmc.map((d,i)=>{const x=40+i*70;return `<rect x="${x}" y="${92-d.ctl/pmcMax*70}" width="15" height="${d.ctl/pmcMax*70}" rx="2" fill="#557b61"/><rect x="${x+18}" y="${92-d.atl/pmcMax*70}" width="15" height="${d.atl/pmcMax*70}" rx="2" fill="#c18a57"/><text x="${x+16}" y="107" text-anchor="middle" font-size="9" fill="#627067">W${i+1}</text><text x="${x+16}" y="${Math.max(10,88-Math.max(d.ctl,d.atl)/pmcMax*70)}" text-anchor="middle" font-size="8" fill="#526257">${Math.round(d.tsb)}</text>`}).join('')}<text x="22" y="11" font-size="9" fill="#557b61">CTL</text><text x="58" y="11" font-size="9" fill="#c18a57">ATL</text><text x="95" y="11" font-size="9" fill="#627067">數字：TSB</text></svg>`;
+  // 28-day PMC trend: three daily vector lines, with the selected report week highlighted.
+  const last28=series.slice(-28);
+  const pmcW=600,pmcH=190,pmcL=34,pmcR=18,pmcT=24;
+  const plotW=pmcW-pmcL-pmcR,plotH=pmcH-pmcT-30;
+  const maxLoad=Math.max(10,...last28.flatMap(d=>[Number(d.CTL||0),Number(d.ATL||0)]));
+  const maxTsb=Math.max(10,...last28.map(d=>Math.abs(Number(d.TSB||0))));
+  const xAt=i=>pmcL+(last28.length>1?i/(last28.length-1):0)*plotW;
+  const yLoad=v=>pmcT+plotH-(Number(v||0)/maxLoad)*plotH;
+  const yTsb=v=>pmcT+plotH/2-(Number(v||0)/maxTsb)*(plotH/2-3);
+  const makePmcPath=(key,mapper)=>last28.map((d,i)=>`${i?'L':'M'}${xAt(i).toFixed(1)},${mapper(d[key]).toFixed(1)}`).join(' ');
+  const currentBandStart=xAt(Math.max(0,last28.length-7))-10;
+  const currentBandEnd=xAt(Math.max(0,last28.length-1))+10;
+  const weekTicks=[0,7,14,21].filter(i=>i<last28.length).map((i,n)=>`<text x="${xAt(i)}" y="${pmcH-7}" text-anchor="middle" font-size="10" fill="#68766d">${['四週前','三週前','兩週前','本週'][n]}</text>`).join('');
+  const pmcSvg=`<svg viewBox="0 0 ${pmcW} ${pmcH}" role="img" aria-label="近四週每日 CTL、ATL、TSB 趨勢折線圖"><rect x="${currentBandStart}" y="${pmcT-5}" width="${Math.max(0,currentBandEnd-currentBandStart)}" height="${plotH+12}" rx="5" fill="#eaf1e8"/><line x1="${pmcL}" y1="${pmcT+plotH}" x2="${pmcW-pmcR}" y2="${pmcT+plotH}" stroke="#dfe7de"/><line x1="${pmcL}" y1="${yTsb(0)}" x2="${pmcW-pmcR}" y2="${yTsb(0)}" stroke="#cbd5cc" stroke-dasharray="4 4"/><path d="${makePmcPath('CTL',yLoad)}" fill="none" stroke="#557b61" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="${makePmcPath('ATL',yLoad)}" fill="none" stroke="#c18a57" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="${makePmcPath('TSB',yTsb)}" fill="none" stroke="#648db5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${weekTicks}<text x="${pmcL}" y="13" font-size="10" fill="#557b61">CTL</text><text x="${pmcL+42}" y="13" font-size="10" fill="#c18a57">ATL</text><text x="${pmcL+82}" y="13" font-size="10" fill="#648db5">TSB</text><text x="${pmcW-pmcR}" y="13" text-anchor="end" font-size="9" fill="#627067">淡綠底：本週</text></svg>`;
   const {weeks:allWeeks}=buildAthleteWeeklyData(a);
   const last8=allWeeks.filter(x=>x.date<=w.date).slice(-8);
   const maxHours=Math.max(1,...last8.flatMap(x=>[x.estMin/60,x.realMin/60]));
-  const hoursSvg=`<svg viewBox="0 0 330 130" role="img" aria-label="八週預計與實際訓練時數比較"><line x1="18" y1="102" x2="318" y2="102" stroke="#dfe7de"/>${last8.map((x,i)=>{const slot=300/Math.max(1,last8.length),cx=20+slot*(i+.5),bw=Math.min(12,slot*.25),eh=x.estMin/60/maxHours*78,rh=x.realMin/60/maxHours*78;return `<rect x="${cx-bw-1}" y="${102-eh}" width="${bw}" height="${eh}" rx="2" fill="#b7c6b6"/><rect x="${cx+1}" y="${102-rh}" width="${bw}" height="${rh}" rx="2" fill="#557b61"/><text x="${cx}" y="116" text-anchor="middle" font-size="8" fill="#627067">W${esc(x.weekNum)}</text>`}).join('')}<text x="20" y="10" font-size="9" fill="#b7c6b6">預計</text><text x="57" y="10" font-size="9" fill="#557b61">實際</text></svg>`;
+  const hasRunVolume=last8.some(x=>Number(x.estRun||0)>0||Number(x.realRun||0)>0);
+  const hoursBars=last8.map((x,i)=>{const slot=560/Math.max(1,last8.length),cx=20+slot*(i+.5),bw=Math.min(15,slot*.25),eh=x.estMin/60/maxHours*62,rh=x.realMin/60/maxHours*62;return `<rect x="${cx-bw-1}" y="${91-eh}" width="${bw}" height="${eh}" rx="2" fill="#b7c6b6"><title>第 ${x.weekNum} 週預計 ${fmtHrMin(x.estMin)}</title></rect><rect x="${cx+1}" y="${91-rh}" width="${bw}" height="${rh}" rx="2" fill="#557b61"><title>第 ${x.weekNum} 週實際 ${fmtHrMin(x.realMin)}</title></rect><text x="${cx}" y="105" text-anchor="middle" font-size="9" fill="#627067">W${esc(x.weekNum)}</text>`}).join('');
+  const runBars=hasRunVolume?last8.map((x,i)=>{const slot=560/Math.max(1,last8.length),cx=20+slot*(i+.5),bw=Math.min(15,slot*.25),maxRun=Math.max(1,...last8.flatMap(z=>[Number(z.estRun||0),Number(z.realRun||0)])),eh=Number(x.estRun||0)/maxRun*48,rh=Number(x.realRun||0)/maxRun*48;return `<rect x="${cx-bw-1}" y="${190-eh}" width="${bw}" height="${eh}" rx="2" fill="#cbd7ca"><title>第 ${x.weekNum} 週預計 ${x.estRun||0} km</title></rect><rect x="${cx+1}" y="${190-rh}" width="${bw}" height="${rh}" rx="2" fill="#648db5"><title>第 ${x.weekNum} 週實際 ${x.realRun||0} km</title></rect><text x="${cx}" y="203" text-anchor="middle" font-size="9" fill="#627067">W${esc(x.weekNum)}</text>`}).join(''):'';
+  const hoursSvg=`<svg viewBox="0 0 600 ${hasRunVolume?220:125}" role="img" aria-label="近八週預計與實際訓練時數${hasRunVolume?'及跑量':''}比較"><line x1="18" y1="91" x2="582" y2="91" stroke="#dfe7de"/>${hoursBars}<text x="20" y="15" font-size="10" fill="#8ca58d">預計時數</text><text x="92" y="15" font-size="10" fill="#557b61">實際時數</text>${hasRunVolume?`<line x1="18" y1="190" x2="582" y2="190" stroke="#dfe7de"/><text x="20" y="125" font-size="10" fill="#9eae9d">預計跑量</text><text x="92" y="125" font-size="10" fill="#648db5">實際跑量</text>${runBars}`:''}</svg>`;
   const donutColors=['#557b61','#8ca88e','#c18a57','#9aa5a0'];
   const positiveSports=Object.values(m.sports).filter(x=>x.mins>0);
   let donutSvg='';
@@ -4098,8 +4109,8 @@ function printWeeklyPdf(){
       </div>
       <div class="rpt-page">
         <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · PERFORMANCE REVIEW</small><h1>進階趨勢與教練判讀</h1><p>${esc(a.name)} · 第 ${esc(w.weekNum)} 週</p></div><div class="rpt-header-right"><div class="rpt-week-badge">ADVANCED REVIEW</div><p>${fmtDate(m.startDate)} — ${fmtDate(m.endDate)}</p></div></div>
-        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">四週 CTL／ATL／TSB 趨勢（PMC）<span>${trendNote}</span></div>${pmcSvg}<div class="rpt-chart-note">每週末數值；柱狀為 CTL 與 ATL，數字標示 TSB。${m.isRealSeries?'':'目前為示意資料，請勿視為真實訓練負荷。'}</div></div>
-        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近八週預計與實際訓練時數<span>PLANNED VS ACTUAL</span></div>${hoursSvg}<div class="rpt-chart-note">淺色為預計時數，深色為實際時數；沒有紀錄的週次不會自行補造。</div></div>
+        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近四週 CTL／ATL／TSB 趨勢（PMC）<span>${trendNote}</span></div>${pmcSvg}<div class="rpt-chart-note">每日曲線呈現 CTL、ATL 與 TSB；淡綠底標示本週區間。${m.isRealSeries?'':'目前為示意資料，請勿視為真實訓練負荷。'}</div></div>
+        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近八週預計與實際訓練量<span>PLANNED VS ACTUAL</span></div>${hoursSvg}<div class="rpt-chart-note">淺色為預計、深色為實際；有跑量資料時同步顯示跑量對比。沒有紀錄的週次不會自行補造。</div></div>
         <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">負荷與疲勞指標<span>TRAINING LOAD</span></div><div class="rpt-kpi-4">
           <div class="rpt-box"><small>CTL 長期體能</small><strong>${m.ctl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dCtl)||'期末值'}</span></div>
           <div class="rpt-box"><small>ATL 短期疲勞</small><strong>${m.atl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dAtl)||'近七日負荷'}</span></div>
