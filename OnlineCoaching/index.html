@@ -21,6 +21,7 @@
       --border: #dfe4e8;
       --radius: 12px;
       --shadow: 0 4px 20px rgba(29, 36, 43, 0.05);
+      --shadow-hover: 0 6px 18px rgba(0, 151, 178, 0.14);
     }
 
     * {
@@ -212,11 +213,20 @@
       border: 1px solid var(--brand);
     }
 
-    /* 主容器 */
+    /* 主容器與雙欄外框 */
     .container {
       max-width: 820px;
       margin: 24px auto 60px;
       padding: 0 16px;
+    }
+
+    .workspace-layout {
+      display: block;
+    }
+
+    /* 電腦版左側固定進度欄（手機與平板預設隱藏） */
+    .desktop-sidebar {
+      display: none;
     }
 
     .card {
@@ -225,6 +235,7 @@
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
       padding: 28px 24px;
+      min-width: 0;
     }
 
     .step-panel {
@@ -497,6 +508,11 @@
       line-height: 1.5;
     }
 
+    /* 價格卡片底部快速開始列（電腦版顯示，手機版維持清爽） */
+    .pricing-quick-cta {
+      display: none;
+    }
+
     /* 申請流程三步驟 */
     .process-box {
       background: #f9fbfb;
@@ -524,6 +540,7 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 12px 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .process-step-num {
@@ -573,6 +590,7 @@
       border-radius: 8px;
       background: #ffffff;
       overflow: hidden;
+      transition: border-color 0.2s ease;
     }
 
     .faq-item summary {
@@ -587,6 +605,7 @@
       align-items: center;
       gap: 12px;
       user-select: none;
+      transition: background-color 0.18s ease, color 0.18s ease;
     }
 
     .faq-item summary::-webkit-details-marker {
@@ -638,6 +657,10 @@
     /* 表單元件 */
     .form-group {
       margin-bottom: 22px;
+    }
+
+    .desktop-form-row {
+      display: block;
     }
 
     .form-row-2 {
@@ -917,6 +940,7 @@
     .btn-remove-item:hover {
       border-color: var(--accent-red);
       color: var(--accent-red);
+      background: #fff8f8;
     }
 
     .btn-add-item {
@@ -1058,6 +1082,576 @@
       color: var(--text-sub);
     }
 
+    /* 底部按鈕列 */
+    .nav-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-prev {
+      background: #ffffff;
+      color: var(--text-sub);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-prev:hover {
+      border-color: var(--text-sub);
+      color: var(--text-main);
+      background: #f9fbfb;
+    }
+
+    .btn-next,
+    .btn-submit {
+      background: var(--brand);
+      color: #ffffff;
+      margin-left: auto;
+      min-width: 140px;
+    }
+
+    .btn-start-full {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 16px;
+    }
+
+    .btn-next:hover,
+    .btn-submit:hover {
+      background: var(--brand-dark);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* 完成畫面 */
+    .success-panel {
+      display: none;
+      text-align: center;
+      padding: 36px 16px;
+    }
+
+    .success-panel.active {
+      display: block;
+    }
+
+    .success-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: var(--coral-soft);
+      color: var(--coral-dark);
+      border: 1px solid var(--coral-border);
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+
+    .success-panel h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .success-panel p {
+      color: var(--text-sub);
+      font-size: 14px;
+      max-width: 480px;
+      margin: 0 auto 20px;
+    }
+
+    /* ==================== 電腦版專屬優化（>= 960px） ==================== */
+    @media (min-width: 960px) {
+      /* 第 0 頁與完成頁：寬版置中展示 */
+      .progress-header {
+        padding: 14px 28px;
+      }
+
+      .progress-inner {
+        max-width: 1020px;
+      }
+
+      .brand-logo {
+        height: 28px;
+      }
+
+      .brand-subtitle {
+        font-size: 14px;
+      }
+
+      .container {
+        max-width: 1020px;
+        margin: 32px auto 72px;
+        padding: 0 24px;
+      }
+
+      .card {
+        padding: 40px 44px;
+        border-radius: 16px;
+      }
+
+      /* 第 0 頁質感強化 */
+      .intro-hero {
+        padding-bottom: 26px;
+        margin-bottom: 30px;
+      }
+
+      .intro-hero h1 {
+        font-size: 28px;
+        letter-spacing: 0.02em;
+        margin-bottom: 10px;
+      }
+
+      .intro-hero p {
+        font-size: 15px;
+        max-width: 640px;
+      }
+
+      .coach-profile-card {
+        padding: 28px 30px;
+        margin-bottom: 24px;
+        border-radius: 14px;
+      }
+
+      .coach-header-row {
+        gap: 28px;
+        margin-bottom: 22px;
+      }
+
+      .coach-photo-wrap {
+        width: 164px;
+        height: 204px;
+        border-radius: 12px;
+      }
+
+      .coach-name {
+        font-size: 25px;
+      }
+
+      .coach-philosophy {
+        font-size: 15px;
+      }
+
+      .coach-credentials-box {
+        padding: 18px 22px;
+      }
+
+      .credentials-list {
+        gap: 8px 28px;
+      }
+
+      .credentials-list li {
+        font-size: 13.5px;
+      }
+
+      /* 費用卡片：第 5 項橫跨兩欄 + 底部快速報名列 */
+      .pricing-card {
+        padding: 28px 30px;
+        margin-bottom: 24px;
+        border-radius: 14px;
+      }
+
+      .pricing-title-group h3 {
+        font-size: 20px;
+      }
+
+      .service-grid {
+        gap: 12px 16px;
+      }
+
+      .service-grid li {
+        padding: 14px 16px;
+      }
+
+      .service-grid li.service-highlight {
+        grid-column: 1 / -1;
+        background: var(--brand-soft);
+        border: 1px solid rgba(0, 151, 178, 0.22);
+      }
+
+      .pricing-quick-cta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+      }
+
+      .pricing-quick-note {
+        font-size: 13px;
+        color: var(--text-sub);
+        font-weight: 500;
+      }
+
+      .pricing-quick-note strong {
+        color: var(--text-main);
+        font-weight: 700;
+      }
+
+      .btn-quick-start {
+        padding: 11px 24px;
+        font-size: 14px;
+        font-weight: 700;
+        background: var(--brand);
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: inherit;
+        white-space: nowrap;
+      }
+
+      .btn-quick-start:hover {
+        background: var(--brand-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .process-box {
+        padding: 22px 26px;
+        margin-bottom: 24px;
+        border-radius: 14px;
+      }
+
+      .process-steps {
+        gap: 16px;
+      }
+
+      .process-step-item {
+        padding: 16px 18px;
+      }
+
+      .process-step-item:hover {
+        border-color: rgba(0, 151, 178, 0.45);
+        box-shadow: 0 4px 12px rgba(29, 36, 43, 0.04);
+      }
+
+      .faq-item:hover {
+        border-color: rgba(0, 151, 178, 0.4);
+      }
+
+      .faq-item summary:hover {
+        background: #f9fbfb;
+        color: var(--brand-dark);
+      }
+
+      /* 階段 1~4：切換為「左進度導覽＋右表單」雙欄模式 */
+      body.desktop-form-mode .progress-header {
+        display: none;
+      }
+
+      body.desktop-form-mode .container {
+        max-width: 1180px;
+        margin: 30px auto 72px;
+      }
+
+      .workspace-layout.has-sidebar {
+        display: grid;
+        grid-template-columns: 280px minmax(0, 1fr);
+        gap: 28px;
+        align-items: start;
+      }
+
+      .workspace-layout.has-sidebar .desktop-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        position: sticky;
+        top: 28px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        padding: 24px 20px;
+      }
+
+      .workspace-layout.has-sidebar .card {
+        padding: 36px 40px;
+      }
+
+      .sidebar-brand {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .sidebar-brand-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .sidebar-brand-logo {
+        height: 26px;
+        width: auto;
+        object-fit: contain;
+        display: block;
+      }
+
+      .sidebar-brand-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--brand-dark);
+        letter-spacing: 0.02em;
+      }
+
+      .sidebar-progress-box {
+        background: #f9fbfb;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 14px;
+      }
+
+      .sidebar-progress-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 8px;
+      }
+
+      .sidebar-progress-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-sub);
+      }
+
+      .sidebar-progress-percent {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--brand);
+      }
+
+      .sidebar-progress-box .progress-track {
+        margin-bottom: 8px;
+        height: 7px;
+      }
+
+      .sidebar-remaining-text {
+        font-size: 12px;
+        color: var(--text-sub);
+        font-weight: 500;
+      }
+
+      .sidebar-remaining-text strong {
+        color: var(--coral-dark);
+        font-weight: 700;
+      }
+
+      .sidebar-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .sidebar-step-item {
+        width: 100%;
+        text-align: left;
+        background: transparent;
+        border: 1.5px solid transparent;
+        border-radius: 10px;
+        padding: 10px 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        font-family: inherit;
+        cursor: default;
+        transition: all 0.18s ease;
+        color: var(--text-sub);
+      }
+
+      .sidebar-step-item.clickable {
+        cursor: pointer;
+      }
+
+      .sidebar-step-item.clickable:hover {
+        background: #f4f8f9;
+        border-color: var(--border);
+      }
+
+      .sidebar-step-item.active {
+        background: var(--brand-soft);
+        border-color: rgba(0, 151, 178, 0.35);
+        color: var(--brand-dark);
+      }
+
+      .sidebar-step-item.done {
+        color: var(--text-main);
+      }
+
+      .sidebar-step-badge {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        background: #e6eaed;
+        color: var(--text-sub);
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      .sidebar-step-item.active .sidebar-step-badge {
+        background: var(--brand);
+        color: #ffffff;
+      }
+
+      .sidebar-step-item.done .sidebar-step-badge {
+        background: #ffffff;
+        color: var(--brand-dark);
+        border: 1.5px solid var(--brand);
+      }
+
+      .sidebar-step-text {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        min-width: 0;
+      }
+
+      .sidebar-step-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+
+      .sidebar-step-meta {
+        font-size: 11.5px;
+        color: var(--text-sub);
+        font-weight: 500;
+      }
+
+      .sidebar-step-item.active .sidebar-step-meta {
+        color: var(--brand-dark);
+      }
+
+      .sidebar-footer {
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .btn-sidebar-back {
+        width: 100%;
+        padding: 9px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-sub);
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        font-family: inherit;
+      }
+
+      .btn-sidebar-back:hover {
+        border-color: var(--brand);
+        color: var(--brand-dark);
+        background: var(--brand-soft);
+      }
+
+      .sidebar-tip {
+        font-size: 11.5px;
+        color: var(--text-sub);
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      /* 階段 1 電腦版並排，縮短整頁長度 */
+      .desktop-form-row {
+        display: grid;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .desktop-form-row.cols-name-gender {
+        grid-template-columns: 1.35fr 1fr;
+      }
+
+      .desktop-form-row.cols-birth-body {
+        grid-template-columns: 1fr 1.45fr;
+      }
+
+      /* 階段 4：第 14 題表格加寬，讓「休息 / 恢復」完整顯示 */
+      .schedule-grid {
+        grid-template-columns: 58px repeat(7, minmax(96px, 1fr));
+        min-width: 730px;
+      }
+
+      .sg-cell {
+        padding: 10px 6px;
+      }
+
+      .sg-cell select {
+        padding: 7px 20px 7px 6px;
+        font-size: 13px;
+      }
+
+      /* 階段 4：第 15 題改為兩欄並排，節省垂直空間 */
+      .vertical-slot-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 18px;
+      }
+
+      /* 電腦版滑鼠互動手感 */
+      input[type="text"]:hover,
+      input[type="email"]:hover,
+      input[type="tel"]:hover,
+      input[type="number"]:hover,
+      input[type="date"]:hover,
+      select:hover,
+      textarea:hover {
+        border-color: #b7c4cd;
+      }
+
+      .pill-option:hover span {
+        border-color: var(--brand);
+        background: #f4fafb;
+        color: var(--brand-dark);
+      }
+
+      .pill-option input:checked + span:hover {
+        background: var(--brand-soft);
+      }
+
+      .btn-next:hover,
+      .btn-submit:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .btn-add-item:hover {
+        transform: translateY(-1px);
+      }
+    }
+
+    /* ==================== 手機版規則（維持原設計） ==================== */
     @media (max-width: 720px) {
       /* 手機版輸入框與下拉選單統一 16px，避免 iOS 點擊輸入時自動放大畫面（保留雙指手動縮放） */
       input[type="text"],
@@ -1135,103 +1729,11 @@
         padding: 22px 16px;
       }
     }
-
-    /* 底部按鈕列 */
-    .nav-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 28px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
-      gap: 12px;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      font-size: 15px;
-      font-weight: 700;
-      border-radius: 8px;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s ease;
-      font-family: inherit;
-    }
-
-    .btn-prev {
-      background: #ffffff;
-      color: var(--text-sub);
-      border: 1.5px solid var(--border);
-    }
-
-    .btn-prev:hover {
-      border-color: var(--text-sub);
-      color: var(--text-main);
-    }
-
-    .btn-next,
-    .btn-submit {
-      background: var(--brand);
-      color: #ffffff;
-      margin-left: auto;
-      min-width: 140px;
-    }
-
-    .btn-start-full {
-      width: 100%;
-      padding: 14px 24px;
-      font-size: 16px;
-    }
-
-    .btn-next:hover,
-    .btn-submit:hover {
-      background: var(--brand-dark);
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    /* 完成畫面 */
-    .success-panel {
-      display: none;
-      text-align: center;
-      padding: 36px 16px;
-    }
-
-    .success-panel.active {
-      display: block;
-    }
-
-    .success-badge {
-      display: inline-block;
-      padding: 6px 14px;
-      background: var(--coral-soft);
-      color: var(--coral-dark);
-      border: 1px solid var(--coral-border);
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: 999px;
-      margin-bottom: 14px;
-    }
-
-    .success-panel h2 {
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-
-    .success-panel p {
-      color: var(--text-sub);
-      font-size: 14px;
-      max-width: 480px;
-      margin: 0 auto 20px;
-    }
   </style>
 </head>
 <body>
 
-  <!-- 頂部品牌 LOGO 與進度列 -->
+  <!-- 頂部品牌 LOGO 與進度列（手機版全程顯示；電腦版於第 0 頁與完成頁顯示） -->
   <header class="progress-header" id="progressHeader">
     <div class="progress-inner">
       <div class="brand-bar" id="brandBar">
@@ -1262,480 +1764,555 @@
   </header>
 
   <main class="container">
-    <div class="card">
-      <form id="intakeForm" novalidate>
+    <div class="workspace-layout" id="workspaceLayout">
 
-        <!-- ==================== 第 0 頁：教練介紹與費用說明 ==================== -->
-        <section class="step-panel active" data-step="0">
-          <div class="intro-hero">
-            <span class="intro-eyebrow">ONLINE COACHING</span>
-            <h1>線上一對一週期化課表</h1>
-            <p>無論是準備人生第一場賽事，或想在有限時間內突破個人最佳，從你現有的生活節奏與能力起步。</p>
+      <!-- 電腦版左側固定進度導覽欄（僅於階段 1~4 顯示） -->
+      <aside class="desktop-sidebar" id="desktopSidebar" aria-label="填表進度導覽">
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-top">
+            <img src="../KUANGYU_logo_icon.png" alt="KUANGYU STUDIO" class="sidebar-brand-logo" />
           </div>
+          <div class="sidebar-brand-title">線上一對一課表申請表</div>
+        </div>
 
-          <!-- 關於教練 -->
-          <div class="coach-profile-card">
-            <div class="coach-header-row">
-              <div class="coach-photo-wrap">
-                <img src="../Coach-Mike-02.JPEG" alt="劉光武教練 Coach Mike" class="coach-photo" onerror="this.parentElement.style.display='none'" />
-              </div>
-              <div class="coach-info-main">
-                <div class="coach-role-en">Coach Mike</div>
-                <h2 class="coach-name">劉光武 教練</h2>
-                <div class="coach-tags">
-                  <span class="coach-tag">10 年教學經歷</span>
-                  <span class="coach-tag">鐵人三項・自行車・跑步</span>
+        <div class="sidebar-progress-box">
+          <div class="sidebar-progress-head">
+            <span class="sidebar-progress-label">填寫進度</span>
+            <span class="sidebar-progress-percent" id="sidebarPercent">25%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="sidebarProgressFill"></div>
+          </div>
+          <div class="sidebar-remaining-text" id="sidebarRemainingBadge">剩餘 <strong>3</strong> 個階段・還有 <strong>17</strong> 題待填</div>
+        </div>
+
+        <nav class="sidebar-steps">
+          <button type="button" class="sidebar-step-item active" id="side-step-1" data-target-step="1" onclick="handleSidebarStepClick(1)">
+            <span class="sidebar-step-badge">1</span>
+            <span class="sidebar-step-text">
+              <span class="sidebar-step-title">基本資料與聯絡資訊</span>
+              <span class="sidebar-step-meta">題號 01 – 06</span>
+            </span>
+          </button>
+
+          <button type="button" class="sidebar-step-item" id="side-step-2" data-target-step="2" onclick="handleSidebarStepClick(2)">
+            <span class="sidebar-step-badge">2</span>
+            <span class="sidebar-step-text">
+              <span class="sidebar-step-title">運動背景與目標設定</span>
+              <span class="sidebar-step-meta">題號 07 – 11</span>
+            </span>
+          </button>
+
+          <button type="button" class="sidebar-step-item" id="side-step-3" data-target-step="3" onclick="handleSidebarStepClick(3)">
+            <span class="sidebar-step-badge">3</span>
+            <span class="sidebar-step-text">
+              <span class="sidebar-step-title">TrainingPeaks 數據</span>
+              <span class="sidebar-step-meta">題號 12 – 13</span>
+            </span>
+          </button>
+
+          <button type="button" class="sidebar-step-item" id="side-step-4" data-target-step="4" onclick="handleSidebarStepClick(4)">
+            <span class="sidebar-step-badge">4</span>
+            <span class="sidebar-step-text">
+              <span class="sidebar-step-title">一週規劃與作息</span>
+              <span class="sidebar-step-meta">題號 14 – 17</span>
+            </span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button type="button" class="btn-sidebar-back" onclick="goToStep(0)">查看教練與費用說明</button>
+          <div class="sidebar-tip">已完成的階段可直接點選返回修改</div>
+        </div>
+      </aside>
+
+      <div class="card">
+        <form id="intakeForm" novalidate>
+
+          <!-- ==================== 第 0 頁：教練介紹與費用說明 ==================== -->
+          <section class="step-panel active" data-step="0">
+            <div class="intro-hero">
+              <span class="intro-eyebrow">ONLINE COACHING</span>
+              <h1>線上一對一週期化課表</h1>
+              <p>無論是準備人生第一場賽事，或想在有限時間內突破個人最佳，從你現有的生活節奏與能力起步。</p>
+            </div>
+
+            <!-- 關於教練 -->
+            <div class="coach-profile-card">
+              <div class="coach-header-row">
+                <div class="coach-photo-wrap">
+                  <img src="../Coach-Mike-02.JPEG" alt="劉光武教練 Coach Mike" class="coach-photo" onerror="this.parentElement.style.display='none'" />
                 </div>
-                <p class="coach-philosophy">
-                  致力於健康無痛的運動生活。熱衷於鐵人三項訓練，也喜歡鑽研背後的科學邏輯，藉由自身經驗發展的訓練系統，讓忙碌的人也能勇於追求進步、達成自我實現！
-                </p>
+                <div class="coach-info-main">
+                  <div class="coach-role-en">Coach Mike</div>
+                  <h2 class="coach-name">劉光武 教練</h2>
+                  <div class="coach-tags">
+                    <span class="coach-tag">10 年教學經歷</span>
+                    <span class="coach-tag">鐵人三項・自行車・跑步</span>
+                  </div>
+                  <p class="coach-philosophy">
+                    致力於健康無痛的運動生活。熱衷於鐵人三項訓練，也喜歡鑽研背後的科學邏輯，藉由自身經驗發展的訓練系統，讓忙碌的人也能勇於追求進步、達成自我實現！
+                  </p>
+                </div>
+              </div>
+
+              <div class="coach-credentials-box">
+                <div class="credentials-title">國內外賽事與耐力實戰資歷</div>
+                <ul class="credentials-list">
+                  <li>百鐵累積 102 場</li>
+                  <li>2019 法國尼斯 IRONMAN 70.3 世錦賽</li>
+                  <li>2021 台東超鐵 226 km 總排第 4 名</li>
+                  <li>2022 台東普悠瑪 226 km 總排第 2 名</li>
+                  <li>2022 墾丁 IRONMAN 70.3 總排第 2 名</li>
+                  <li>2022 夏威夷 KONA IRONMAN 世錦賽</li>
+                  <li>2024 蘭陽鐵人賽 113 km 總排第 1 名</li>
+                  <li>2024 紐西蘭 IRONMAN 70.3 世錦賽</li>
+                  <li>2025 西班牙 IRONMAN 70.3 世錦賽</li>
+                  <li>2026 FXT 極限鐵人 完賽</li>
+                </ul>
               </div>
             </div>
 
-            <div class="coach-credentials-box">
-              <div class="credentials-title">國內外賽事與耐力實戰資歷</div>
-              <ul class="credentials-list">
-                <li>百鐵累積 102 場</li>
-                <li>2019 法國尼斯 IRONMAN 70.3 世錦賽</li>
-                <li>2021 台東超鐵 226 km 總排第 4 名</li>
-                <li>2022 台東普悠瑪 226 km 總排第 2 名</li>
-                <li>2022 墾丁 IRONMAN 70.3 總排第 2 名</li>
-                <li>2022 夏威夷 KONA IRONMAN 世錦賽</li>
-                <li>2024 蘭陽鐵人賽 113 km 總排第 1 名</li>
-                <li>2024 紐西蘭 IRONMAN 70.3 世錦賽</li>
-                <li>2025 西班牙 IRONMAN 70.3 世錦賽</li>
-                <li>2026 FXT 極限鐵人 完賽</li>
+            <!-- 費用與服務項目 -->
+            <div class="pricing-card">
+              <div class="pricing-header">
+                <div class="pricing-title-group">
+                  <h3>線上課表方案</h3>
+                  <span>透過 TrainingPeaks 平台同步課表與數據追蹤</span>
+                </div>
+                <div class="price-group">
+                  <div class="price-pill">NT$ 6,000 <small>/ 月</small></div>
+                  <span class="price-sub-note">最低配合門檻為 1 個月（低於 4 週恕無法接單）</span>
+                </div>
+              </div>
+              <ul class="service-grid">
+                <li>
+                  <span class="service-dot"></span>
+                  <div class="service-text">
+                    <span class="service-title">週期化客製課表</span>
+                    <span class="service-desc">依生活作息量身排課，每週檢視並視需求微調（每週至多調整一次）</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="service-dot"></span>
+                  <div class="service-text">
+                    <span class="service-title">訓練數據分析</span>
+                    <span class="service-desc">透過 TrainingPeaks 追蹤心率、功率、配速與體能負荷</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="service-dot"></span>
+                  <div class="service-text">
+                    <span class="service-title">比賽策略規劃</span>
+                    <span class="service-desc">賽前制定配速、配瓦區間與轉換區執行細節</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="service-dot"></span>
+                  <div class="service-text">
+                    <span class="service-title">賽事與日常補給諮詢</span>
+                    <span class="service-desc">依個人腸胃耐受度與賽道條件規劃補給策略</span>
+                  </div>
+                </li>
+                <li class="service-highlight">
+                  <span class="service-dot"></span>
+                  <div class="service-text">
+                    <span class="service-title">課表執行隨時諮詢</span>
+                    <span class="service-desc">對課表操作或訓練進行方式有疑問，隨時可透過 LINE 詢問教練</span>
+                  </div>
+                </li>
               </ul>
-            </div>
-          </div>
 
-          <!-- 費用與服務項目 -->
-          <div class="pricing-card">
-            <div class="pricing-header">
-              <div class="pricing-title-group">
-                <h3>線上課表方案</h3>
-                <span>透過 TrainingPeaks 平台同步課表與數據追蹤</span>
-              </div>
-              <div class="price-group">
-                <div class="price-pill">NT$ 6,000 <small>/ 月</small></div>
-                <span class="price-sub-note">最低配合門檻為 1 個月（低於 4 週恕無法接單）</span>
-              </div>
-            </div>
-            <ul class="service-grid">
-              <li>
-                <span class="service-dot"></span>
-                <div class="service-text">
-                  <span class="service-title">週期化客製課表</span>
-                  <span class="service-desc">依生活作息量身排課，每週檢視並視需求微調（每週至多調整一次）</span>
+              <div class="pricing-quick-cta">
+                <div class="pricing-quick-note">
+                  已確認方案內容？約 <strong>3 至 5 分鐘</strong> 即可完成申請表單。
                 </div>
-              </li>
-              <li>
-                <span class="service-dot"></span>
-                <div class="service-text">
-                  <span class="service-title">訓練數據分析</span>
-                  <span class="service-desc">透過 TrainingPeaks 追蹤心率、功率、配速與體能負荷</span>
+                <button type="button" class="btn-quick-start" onclick="goToStep(1)">立即開始填寫申請表</button>
+              </div>
+            </div>
+
+            <!-- 申請流程 -->
+            <div class="process-box">
+              <div class="process-box-title">線上課表申請流程</div>
+              <div class="process-steps">
+                <div class="process-step-item">
+                  <span class="process-step-num">STEP 01</span>
+                  <h4>填寫申請表單</h4>
+                  <p>提供運動背景、目標賽事與一週可訓練時段。</p>
                 </div>
-              </li>
-              <li>
-                <span class="service-dot"></span>
-                <div class="service-text">
-                  <span class="service-title">比賽策略規劃</span>
-                  <span class="service-desc">賽前制定配速、配瓦區間與轉換區執行細節</span>
+                <div class="process-step-item">
+                  <span class="process-step-num">STEP 02</span>
+                  <h4>2 個工作天內聯繫</h4>
+                  <p>教練檢視資料後，於兩個工作天內透過 LINE 與你聯繫。</p>
                 </div>
-              </li>
-              <li>
-                <span class="service-dot"></span>
-                <div class="service-text">
-                  <span class="service-title">賽事與日常補給諮詢</span>
-                  <span class="service-desc">依個人腸胃耐受度與賽道條件規劃補給策略</span>
+                <div class="process-step-item">
+                  <span class="process-step-num">STEP 03</span>
+                  <h4>綁定正式開課</h4>
+                  <p>完成 TrainingPeaks 帳號串接，啟動第一週專屬課表。</p>
                 </div>
-              </li>
-              <li>
-                <span class="service-dot"></span>
-                <div class="service-text">
-                  <span class="service-title">課表執行隨時諮詢</span>
-                  <span class="service-desc">對課表操作或訓練進行方式有疑問，隨時可透過 LINE 詢問教練</span>
+              </div>
+            </div>
+
+            <!-- 常見問題 FAQ -->
+            <div class="faq-box">
+              <div class="faq-box-title">常見問題</div>
+              <div class="faq-list">
+                <details class="faq-item">
+                  <summary>沒有三鐵經驗，或沒有功率計／高階運動錶可以參加嗎？</summary>
+                  <div class="faq-answer">可以。只要有基本的 GPS 運動手錶就能開始，初期會依你現有的設備，搭配心率與主觀體感安排強度，不需先買齊所有裝備。</div>
+                </details>
+                <details class="faq-item">
+                  <summary>課表可以隨時修改嗎？執行課表時有疑問怎麼辦？</summary>
+                  <div class="faq-answer">課表以週為單位規劃，每週至多調整一次；但只要對「如何執行課表」或動作操作有任何疑問，都可以隨時透過 LINE 詢問教練。</div>
+                </details>
+                <details class="faq-item">
+                  <summary>最低需要配合多久？可以只買單週或兩週的課表嗎？</summary>
+                  <div class="faq-answer">最低配合門檻為 1 個月（NT$ 6,000／月）。為確保訓練週期完整與安全，低於 4 週恕無法接單。</div>
+                </details>
+                <details class="faq-item">
+                  <summary>送出申請表後，多久會收到教練聯繫？</summary>
+                  <div class="faq-answer">接到你的表單資料後，教練將於 2 個工作天內透過 LINE 主動與你聯繫，確認訓練目標、付款方式與 TrainingPeaks 綁定連結。</div>
+                </details>
+              </div>
+            </div>
+
+            <div class="nav-actions">
+              <button type="button" class="btn btn-next btn-start-full" onclick="goToStep(1)">我要開始線上課表！</button>
+            </div>
+          </section>
+
+          <!-- ==================== 階段 1：基本資料與聯絡資訊 ==================== -->
+          <section class="step-panel" data-step="1">
+            <div class="section-intro">
+              <h2>一、基本資料與聯絡資訊</h2>
+              <p>用於建立學員檔案、估算生理區間，以及課表確認通知。</p>
+            </div>
+
+            <div class="desktop-form-row cols-name-gender">
+              <div class="form-group">
+                <label class="q-label" for="fullName"><span class="q-index">01</span>姓名 / 常用暱稱<span class="req-tag">*</span></label>
+                <input type="text" id="fullName" name="fullName" placeholder="請輸入你的姓名" required />
+                <div class="error-msg">請填寫姓名或暱稱</div>
+              </div>
+
+              <div class="form-group">
+                <label class="q-label"><span class="q-index">02</span>生理性別<span class="req-tag">*</span></label>
+                <div class="pill-grid" data-required-radio="gender">
+                  <label class="pill-option"><input type="radio" name="gender" value="女性" /><span>女性</span></label>
+                  <label class="pill-option"><input type="radio" name="gender" value="男性" /><span>男性</span></label>
                 </div>
-              </li>
-            </ul>
-          </div>
-
-          <!-- 申請流程 -->
-          <div class="process-box">
-            <div class="process-box-title">線上課表申請流程</div>
-            <div class="process-steps">
-              <div class="process-step-item">
-                <span class="process-step-num">STEP 01</span>
-                <h4>填寫申請表單</h4>
-                <p>提供運動背景、目標賽事與一週可訓練時段。</p>
-              </div>
-              <div class="process-step-item">
-                <span class="process-step-num">STEP 02</span>
-                <h4>2 個工作天內聯繫</h4>
-                <p>教練檢視資料後，於兩個工作天內透過 LINE 與你聯繫。</p>
-              </div>
-              <div class="process-step-item">
-                <span class="process-step-num">STEP 03</span>
-                <h4>綁定正式開課</h4>
-                <p>完成 TrainingPeaks 帳號串接，啟動第一週專屬課表。</p>
+                <div class="error-msg">請選擇生理性別</div>
               </div>
             </div>
-          </div>
 
-          <!-- 常見問題 FAQ -->
-          <div class="faq-box">
-            <div class="faq-box-title">常見問題</div>
-            <div class="faq-list">
-              <details class="faq-item">
-                <summary>沒有三鐵經驗，或沒有功率計／高階運動錶可以參加嗎？</summary>
-                <div class="faq-answer">可以。只要有基本的 GPS 運動手錶就能開始，初期會依你現有的設備，搭配心率與主觀體感安排強度，不需先買齊所有裝備。</div>
-              </details>
-              <details class="faq-item">
-                <summary>課表可以隨時修改嗎？執行課表時有疑問怎麼辦？</summary>
-                <div class="faq-answer">課表以週為單位規劃，每週至多調整一次；但只要對「如何執行課表」或動作操作有任何疑問，都可以隨時透過 LINE 詢問教練。</div>
-              </details>
-              <details class="faq-item">
-                <summary>最低需要配合多久？可以只買單週或兩週的課表嗎？</summary>
-                <div class="faq-answer">最低配合門檻為 1 個月（NT$ 6,000／月）。為確保訓練週期完整與安全，低於 4 週恕無法接單。</div>
-              </details>
-              <details class="faq-item">
-                <summary>送出申請表後，多久會收到教練聯繫？</summary>
-                <div class="faq-answer">接到你的表單資料後，教練將於 2 個工作天內透過 LINE 主動與你聯繫，確認訓練目標、付款方式與 TrainingPeaks 綁定連結。</div>
-              </details>
-            </div>
-          </div>
-
-          <div class="nav-actions">
-            <button type="button" class="btn btn-next btn-start-full" onclick="goToStep(1)">我要開始線上課表！</button>
-          </div>
-        </section>
-
-        <!-- ==================== 階段 1：基本資料與聯絡資訊 ==================== -->
-        <section class="step-panel" data-step="1">
-          <div class="section-intro">
-            <h2>一、基本資料與聯絡資訊</h2>
-            <p>用於建立學員檔案、估算生理區間，以及課表確認通知。</p>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label" for="fullName"><span class="q-index">01</span>姓名 / 常用暱稱<span class="req-tag">*</span></label>
-            <input type="text" id="fullName" name="fullName" placeholder="請輸入你的姓名" required />
-            <div class="error-msg">請填寫姓名或暱稱</div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">02</span>生理性別<span class="req-tag">*</span></label>
-            <div class="pill-grid" data-required-radio="gender">
-              <label class="pill-option"><input type="radio" name="gender" value="女性" /><span>女性</span></label>
-              <label class="pill-option"><input type="radio" name="gender" value="男性" /><span>男性</span></label>
-            </div>
-            <div class="error-msg">請選擇生理性別</div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label" for="birthDate"><span class="q-index">03</span>出生年月日<span class="req-tag">*</span></label>
-            <input type="text" id="birthDate" name="birthDate" class="smart-date-input" placeholder="年 / 月 / 日" required />
-            <div class="error-msg">請選擇出生年月日</div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">04</span>身高與體重<span class="req-tag">*</span></label>
-            <div class="form-row-2">
-              <div>
-                <input type="number" id="height" name="height" placeholder="身高（cm），例如：168" min="100" max="230" step="0.1" required />
-                <div class="error-msg">請填寫身高</div>
+            <div class="desktop-form-row cols-birth-body">
+              <div class="form-group">
+                <label class="q-label" for="birthDate"><span class="q-index">03</span>出生年月日<span class="req-tag">*</span></label>
+                <input type="text" id="birthDate" name="birthDate" class="smart-date-input" placeholder="年 / 月 / 日" required />
+                <div class="error-msg">請選擇出生年月日</div>
               </div>
-              <div>
-                <input type="number" id="weight" name="weight" placeholder="體重（kg），例如：58" min="30" max="200" step="0.1" required />
-                <div class="error-msg">請填寫體重</div>
+
+              <div class="form-group">
+                <label class="q-label"><span class="q-index">04</span>身高與體重<span class="req-tag">*</span></label>
+                <div class="form-row-2">
+                  <div>
+                    <input type="number" id="height" name="height" placeholder="身高（cm），例如：168" min="100" max="230" step="0.1" required />
+                    <div class="error-msg">請填寫身高</div>
+                  </div>
+                  <div>
+                    <input type="number" id="weight" name="weight" placeholder="體重（kg），例如：58" min="30" max="200" step="0.1" required />
+                    <div class="error-msg">請填寫體重</div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">05</span>LINE 顯示名稱與常用 Email<span class="req-tag">*</span></label>
-            <div class="form-row-2">
-              <div>
-                <input type="text" id="lineName" name="lineName" placeholder="LINE 顯示名稱（方便核對聯絡）" required />
-                <div class="error-msg">請填寫 LINE 顯示名稱</div>
-              </div>
-              <div>
-                <input type="email" id="email" name="email" placeholder="常用 Email" required />
-                <div class="error-msg">請填寫有效的 Email</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">06</span>緊急聯絡人與電話<span class="req-tag">*</span></label>
-            <div class="form-row-2">
-              <div>
-                <input type="text" id="emergencyName" name="emergencyName" placeholder="緊急聯絡人姓名（關係）" required />
-                <div class="error-msg">請填寫緊急聯絡人</div>
-              </div>
-              <div>
-                <input type="tel" id="emergencyPhone" name="emergencyPhone" placeholder="緊急聯絡人電話" required />
-                <div class="error-msg">請填寫聯絡電話</div>
+            <div class="form-group">
+              <label class="q-label"><span class="q-index">05</span>LINE 顯示名稱與常用 Email<span class="req-tag">*</span></label>
+              <div class="form-row-2">
+                <div>
+                  <input type="text" id="lineName" name="lineName" placeholder="LINE 顯示名稱（方便核對聯絡）" required />
+                  <div class="error-msg">請填寫 LINE 顯示名稱</div>
+                </div>
+                <div>
+                  <input type="email" id="email" name="email" placeholder="常用 Email" required />
+                  <div class="error-msg">請填寫有效的 Email</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="nav-actions">
-            <button type="button" class="btn btn-prev" onclick="goToStep(0)">教練與費用說明</button>
-            <button type="button" class="btn btn-next" onclick="nextStep(1)">下一步</button>
-          </div>
-        </section>
-
-        <!-- ==================== 階段 2：運動背景與目標設定 ==================== -->
-        <section class="step-panel" data-step="2">
-          <div class="section-intro">
-            <h2>二、運動背景與目標設定</h2>
-            <p>了解你的訓練方向、賽事時程與身體狀態，才能安排合適的週期負荷。</p>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">07</span>主要訓練方向（可複選）<span class="req-tag">*</span></label>
-            <div class="pill-grid" data-required-checkbox="trainingFocus">
-              <label class="pill-option"><input type="checkbox" id="focusTri" name="trainingFocus" value="鐵人三項" /><span>鐵人三項</span></label>
-              <label class="pill-option"><input type="checkbox" id="focusRun" name="trainingFocus" value="跑步" /><span>跑步</span></label>
-              <label class="pill-option"><input type="checkbox" name="trainingFocus" value="自行車" /><span>自行車</span></label>
+            <div class="form-group">
+              <label class="q-label"><span class="q-index">06</span>緊急聯絡人與電話<span class="req-tag">*</span></label>
+              <div class="form-row-2">
+                <div>
+                  <input type="text" id="emergencyName" name="emergencyName" placeholder="緊急聯絡人姓名（關係）" required />
+                  <div class="error-msg">請填寫緊急聯絡人</div>
+                </div>
+                <div>
+                  <input type="tel" id="emergencyPhone" name="emergencyPhone" placeholder="緊急聯絡人電話" required />
+                  <div class="error-msg">請填寫聯絡電話</div>
+                </div>
+              </div>
             </div>
 
-            <!-- 點選「鐵人三項」時展開 -->
-            <div class="sub-input-box" id="triDistanceBox" style="display: none;">
-              <label class="sub-label">鐵人三項目標距離（可複選）</label>
+            <div class="nav-actions">
+              <button type="button" class="btn btn-prev" onclick="goToStep(0)">教練與費用說明</button>
+              <button type="button" class="btn btn-next" onclick="nextStep(1)">下一步</button>
+            </div>
+          </section>
+
+          <!-- ==================== 階段 2：運動背景與目標設定 ==================== -->
+          <section class="step-panel" data-step="2">
+            <div class="section-intro">
+              <h2>二、運動背景與目標設定</h2>
+              <p>了解你的訓練方向、賽事時程與身體狀態，才能安排合適的週期負荷。</p>
+            </div>
+
+            <div class="form-group">
+              <label class="q-label"><span class="q-index">07</span>主要訓練方向（可複選）<span class="req-tag">*</span></label>
+              <div class="pill-grid" data-required-checkbox="trainingFocus">
+                <label class="pill-option"><input type="checkbox" id="focusTri" name="trainingFocus" value="鐵人三項" /><span>鐵人三項</span></label>
+                <label class="pill-option"><input type="checkbox" id="focusRun" name="trainingFocus" value="跑步" /><span>跑步</span></label>
+                <label class="pill-option"><input type="checkbox" name="trainingFocus" value="自行車" /><span>自行車</span></label>
+              </div>
+
+              <!-- 點選「鐵人三項」時展開 -->
+              <div class="sub-input-box" id="triDistanceBox" style="display: none;">
+                <label class="sub-label">鐵人三項目標距離（可複選）</label>
+                <div class="pill-grid">
+                  <label class="pill-option"><input type="checkbox" name="triDistance" value="25.75K" /><span>25.75K</span></label>
+                  <label class="pill-option"><input type="checkbox" name="triDistance" value="51.5K" /><span>51.5K</span></label>
+                  <label class="pill-option"><input type="checkbox" name="triDistance" value="113K" /><span>113K</span></label>
+                  <label class="pill-option"><input type="checkbox" name="triDistance" value="226K" /><span>226K</span></label>
+                </div>
+              </div>
+
+              <!-- 點選「跑步」時展開 -->
+              <div class="sub-input-box" id="runDistanceBox" style="display: none;">
+                <label class="sub-label">跑步目標距離（可複選）</label>
+                <div class="pill-grid">
+                  <label class="pill-option"><input type="checkbox" name="runDistance" value="10K" /><span>10K</span></label>
+                  <label class="pill-option"><input type="checkbox" name="runDistance" value="21K" /><span>21K</span></label>
+                  <label class="pill-option"><input type="checkbox" name="runDistance" value="42K" /><span>42K</span></label>
+                </div>
+              </div>
+
+              <div class="error-msg">請至少選擇一項訓練方向</div>
+            </div>
+
+            <div class="form-group">
+              <label class="q-label"><span class="q-index">08</span>近期目標賽事與日期<span class="opt-tag">（無特定賽事可留白，可新增多場已報名賽事）</span></label>
+              <div class="race-list" id="raceList"></div>
+              <button type="button" class="btn-add-item" onclick="addRaceRow(true)">+ 新增賽事</button>
+            </div>
+
+            <div class="form-group" id="goalGroup">
+              <label class="q-label"><span class="q-index">09</span>訓練 / 賽事目標設定<span class="req-tag">*</span></label>
               <div class="pill-grid">
-                <label class="pill-option"><input type="checkbox" name="triDistance" value="25.75K" /><span>25.75K</span></label>
-                <label class="pill-option"><input type="checkbox" name="triDistance" value="51.5K" /><span>51.5K</span></label>
-                <label class="pill-option"><input type="checkbox" name="triDistance" value="113K" /><span>113K</span></label>
-                <label class="pill-option"><input type="checkbox" name="triDistance" value="226K" /><span>226K</span></label>
+                <label class="pill-option"><input type="checkbox" name="goalType" value="順利完賽" /><span>順利完賽</span></label>
+                <label class="pill-option"><input type="checkbox" name="goalType" value="突破個人最佳（PB）" /><span>突破個人最佳（PB）</span></label>
+                <label class="pill-option"><input type="checkbox" name="goalType" value="達成特定目標時間" /><span>達成特定目標時間</span></label>
+                <label class="pill-option"><input type="checkbox" name="goalType" value="提升單項能力" /><span>提升單項能力</span></label>
+                <label class="pill-option"><input type="checkbox" name="goalType" value="培養規律運動習慣" /><span>培養規律運動習慣</span></label>
               </div>
+              <textarea id="raceGoalDetail" name="raceGoalDetail" class="mt-10" placeholder="可勾選上方目標，或直接於此填寫具體說明（例如：目標完賽時間、想加強的弱項或期望達成的狀態）"></textarea>
+              <div class="error-msg" id="goalError">請勾選上方目標選項，或於文字框填寫具體目標（擇一即可）</div>
             </div>
 
-            <!-- 點選「跑步」時展開 -->
-            <div class="sub-input-box" id="runDistanceBox" style="display: none;">
-              <label class="sub-label">跑步目標距離（可複選）</label>
+            <div class="form-group">
+              <label class="q-label" for="sportHistory"><span class="q-index">10</span>過往運動背景與代表成績<span class="req-tag">*</span></label>
+              <textarea id="sportHistory" name="sportHistory" placeholder="請簡述運動年資、接觸過哪些運動項目、過往完賽經歷或近期代表成績（例如：半馬 1:55、標鐵 2:45；若無經驗請填「無經驗」）" required></textarea>
+              <div class="error-msg">請填寫過往運動背景與代表成績</div>
+            </div>
+
+            <div class="form-group">
+              <label class="q-label" for="injuryHistory"><span class="q-index">11</span>傷痛史或目前身體緊繃、不適部位<span class="req-tag">*</span></label>
+              <textarea id="injuryHistory" name="injuryHistory" placeholder="請列出舊傷、開刀史或目前容易緊繃疼痛的部位（若無請填「無」）" required></textarea>
+              <div class="error-msg">請填寫身體狀況（若無請填「無」）</div>
+            </div>
+
+            <div class="nav-actions">
+              <button type="button" class="btn btn-prev" onclick="prevStep(2)">上一步</button>
+              <button type="button" class="btn btn-next" onclick="nextStep(2)">下一步</button>
+            </div>
+          </section>
+
+          <!-- ==================== 階段 3：TrainingPeaks 與訓練數據 ==================== -->
+          <section class="step-panel" data-step="3">
+            <div class="section-intro">
+              <h2>三、TrainingPeaks 帳號與訓練數據</h2>
+              <p>線上課表將透過 TrainingPeaks 進行，成績參考數據不知道可留白。</p>
+            </div>
+
+            <div class="info-callout mb-20">
+              請先至 <a href="https://www.trainingpeaks.com/" target="_blank" rel="noopener noreferrer">TrainingPeaks 官網</a> 免費申請帳號；完成註冊並送出表單後，教練將於 2 個工作天內透過 LINE 發送綁定連結給你。
+            </div>
+
+            <div class="form-group">
+              <label class="q-label"><span class="q-index">12</span>主要同步運動錶與訓練器材（可複選）<span class="opt-tag">（選填）</span></label>
               <div class="pill-grid">
-                <label class="pill-option"><input type="checkbox" name="runDistance" value="10K" /><span>10K</span></label>
-                <label class="pill-option"><input type="checkbox" name="runDistance" value="21K" /><span>21K</span></label>
-                <label class="pill-option"><input type="checkbox" name="runDistance" value="42K" /><span>42K</span></label>
+                <label class="pill-option"><input type="checkbox" name="devices" value="Garmin" /><span>Garmin</span></label>
+                <label class="pill-option"><input type="checkbox" name="devices" value="Coros" /><span>Coros</span></label>
+                <label class="pill-option"><input type="checkbox" name="devices" value="Apple Watch" /><span>Apple Watch</span></label>
+                <label class="pill-option"><input type="checkbox" name="devices" value="Wahoo" /><span>Wahoo</span></label>
+                <label class="pill-option"><input type="checkbox" id="devicePowerMeter" name="devices" value="自行車功率計" /><span>自行車功率計</span></label>
+                <label class="pill-option"><input type="checkbox" name="devices" value="智慧訓練台" /><span>智慧訓練台</span></label>
+                <label class="pill-option"><input type="checkbox" id="deviceOther" value="其他" /><span>其他</span></label>
+              </div>
+
+              <!-- 勾選「自行車功率計」時展開 -->
+              <div class="sub-input-box" id="powerMeterBrandBox" style="display: none;">
+                <label class="sub-label" for="powerMeterBrand">功率計品牌</label>
+                <input type="text" id="powerMeterBrand" name="powerMeterBrand" placeholder="請填寫功率計品牌或型號，例如：Assioma、Garmin Rally、Quarq、4iiii" />
+              </div>
+
+              <!-- 勾選「其他」時展開，可新增多個 -->
+              <div class="sub-input-box" id="otherDevicesBox" style="display: none;">
+                <label class="sub-label">其他裝置或訓練器材名稱</label>
+                <div class="dynamic-list" id="otherDevicesList"></div>
+                <button type="button" class="btn-add-item" onclick="addOtherDeviceInput()">+ 新增其他器材</button>
               </div>
             </div>
 
-            <div class="error-msg">請至少選擇一項訓練方向</div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">08</span>近期目標賽事與日期<span class="opt-tag">（無特定賽事可留白，可新增多場已報名賽事）</span></label>
-            <div class="race-list" id="raceList"></div>
-            <button type="button" class="btn-add-item" onclick="addRaceRow(true)">+ 新增賽事</button>
-          </div>
-
-          <div class="form-group" id="goalGroup">
-            <label class="q-label"><span class="q-index">09</span>訓練 / 賽事目標設定<span class="req-tag">*</span></label>
-            <div class="pill-grid">
-              <label class="pill-option"><input type="checkbox" name="goalType" value="順利完賽" /><span>順利完賽</span></label>
-              <label class="pill-option"><input type="checkbox" name="goalType" value="突破個人最佳（PB）" /><span>突破個人最佳（PB）</span></label>
-              <label class="pill-option"><input type="checkbox" name="goalType" value="達成特定目標時間" /><span>達成特定目標時間</span></label>
-              <label class="pill-option"><input type="checkbox" name="goalType" value="提升單項能力" /><span>提升單項能力</span></label>
-              <label class="pill-option"><input type="checkbox" name="goalType" value="培養規律運動習慣" /><span>培養規律運動習慣</span></label>
-            </div>
-            <textarea id="raceGoalDetail" name="raceGoalDetail" class="mt-10" placeholder="可勾選上方目標，或直接於此填寫具體說明（例如：目標完賽時間、想加強的弱項或期望達成的狀態）"></textarea>
-            <div class="error-msg" id="goalError">請勾選上方目標選項，或於文字框填寫具體目標（擇一即可）</div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label" for="sportHistory"><span class="q-index">10</span>過往運動背景與代表成績<span class="req-tag">*</span></label>
-            <textarea id="sportHistory" name="sportHistory" placeholder="請簡述運動年資、接觸過哪些運動項目、過往完賽經歷或近期代表成績（例如：半馬 1:55、標鐵 2:45；若無經驗請填「無經驗」）" required></textarea>
-            <div class="error-msg">請填寫過往運動背景與代表成績</div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label" for="injuryHistory"><span class="q-index">11</span>傷痛史或目前身體緊繃、不適部位<span class="req-tag">*</span></label>
-            <textarea id="injuryHistory" name="injuryHistory" placeholder="請列出舊傷、開刀史或目前容易緊繃疼痛的部位（若無請填「無」）" required></textarea>
-            <div class="error-msg">請填寫身體狀況（若無請填「無」）</div>
-          </div>
-
-          <div class="nav-actions">
-            <button type="button" class="btn btn-prev" onclick="prevStep(2)">上一步</button>
-            <button type="button" class="btn btn-next" onclick="nextStep(2)">下一步</button>
-          </div>
-        </section>
-
-        <!-- ==================== 階段 3：TrainingPeaks 與訓練數據 ==================== -->
-        <section class="step-panel" data-step="3">
-          <div class="section-intro">
-            <h2>三、TrainingPeaks 帳號與訓練數據</h2>
-            <p>線上課表將透過 TrainingPeaks 進行，成績參考數據不知道可留白。</p>
-          </div>
-
-          <div class="info-callout mb-20">
-            請先至 <a href="https://www.trainingpeaks.com/" target="_blank" rel="noopener noreferrer">TrainingPeaks 官網</a> 免費申請帳號；完成註冊並送出表單後，教練將於 2 個工作天內透過 LINE 發送綁定連結給你。
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">12</span>主要同步運動錶與訓練器材（可複選）<span class="opt-tag">（選填）</span></label>
-            <div class="pill-grid">
-              <label class="pill-option"><input type="checkbox" name="devices" value="Garmin" /><span>Garmin</span></label>
-              <label class="pill-option"><input type="checkbox" name="devices" value="Coros" /><span>Coros</span></label>
-              <label class="pill-option"><input type="checkbox" name="devices" value="Apple Watch" /><span>Apple Watch</span></label>
-              <label class="pill-option"><input type="checkbox" name="devices" value="Wahoo" /><span>Wahoo</span></label>
-              <label class="pill-option"><input type="checkbox" id="devicePowerMeter" name="devices" value="自行車功率計" /><span>自行車功率計</span></label>
-              <label class="pill-option"><input type="checkbox" name="devices" value="智慧訓練台" /><span>智慧訓練台</span></label>
-              <label class="pill-option"><input type="checkbox" id="deviceOther" value="其他" /><span>其他</span></label>
-            </div>
-
-            <!-- 勾選「自行車功率計」時展開 -->
-            <div class="sub-input-box" id="powerMeterBrandBox" style="display: none;">
-              <label class="sub-label" for="powerMeterBrand">功率計品牌</label>
-              <input type="text" id="powerMeterBrand" name="powerMeterBrand" placeholder="請填寫功率計品牌或型號，例如：Assioma、Garmin Rally、Quarq、4iiii" />
-            </div>
-
-            <!-- 勾選「其他」時展開，可新增多個 -->
-            <div class="sub-input-box" id="otherDevicesBox" style="display: none;">
-              <label class="sub-label">其他裝置或訓練器材名稱</label>
-              <div class="dynamic-list" id="otherDevicesList"></div>
-              <button type="button" class="btn-add-item" onclick="addOtherDeviceInput()">+ 新增其他器材</button>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">13</span>數據參考<span class="opt-tag">（選填）</span></label>
-            <div class="form-row-3">
-              <div>
-                <input type="text" id="swimTime" name="swimTime" placeholder="游泳 400m 或 100m 時間" />
-              </div>
-              <div>
-                <input type="text" id="bikeFtp" name="bikeFtp" placeholder="自行車 FTP（W）" />
-              </div>
-              <div>
-                <input type="text" id="runTime" name="runTime" placeholder="跑步 3K 或 5K 成績" />
-              </div>
-            </div>
-          </div>
-
-          <div class="nav-actions">
-            <button type="button" class="btn btn-prev" onclick="prevStep(3)">上一步</button>
-            <button type="button" class="btn btn-next" onclick="nextStep(3)">下一步</button>
-          </div>
-        </section>
-
-        <!-- ==================== 階段 4：一週訓練規劃與作息 ==================== -->
-        <section class="step-panel" data-step="4">
-          <div class="section-intro">
-            <h2>四、一週訓練規劃與日常作息</h2>
-            <p>請填寫你一週每日早、午、晚的規劃與可用時間，以及平日可訓練時段。</p>
-          </div>
-
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">14</span>一週訓練規劃<span class="req-tag">*</span></label>
-            <div class="info-callout schedule-note">
-              ① 在每天的「早、午、晚」選擇可以或習慣的訓練項目（無特定項目請選「皆可」，無安排請留白）。<br />
-              ② 在最下方填寫當日「可訓練時間（分鐘）」（例如 40 分鐘填 40，2.5 小時填 150）。
-            </div>
-            <div class="swipe-hint">表格可左右滑動填寫一至日</div>
-
-            <div class="schedule-table-wrap">
-              <div class="schedule-grid" id="scheduleGrid">
-                <!-- 由 JS 動態產生橫向表格 -->
+            <div class="form-group">
+              <label class="q-label"><span class="q-index">13</span>數據參考<span class="opt-tag">（選填）</span></label>
+              <div class="form-row-3">
+                <div>
+                  <input type="text" id="swimTime" name="swimTime" placeholder="游泳 400m 或 100m 時間" />
+                </div>
+                <div>
+                  <input type="text" id="bikeFtp" name="bikeFtp" placeholder="自行車 FTP（W）" />
+                </div>
+                <div>
+                  <input type="text" id="runTime" name="runTime" placeholder="跑步 3K 或 5K 成績" />
+                </div>
               </div>
             </div>
 
-            <div class="total-summary-box">
-              <div class="total-hours-text" id="totalHoursDisplay">Total：0 hr（0 分鐘）</div>
-              <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇訓練項目</div>
+            <div class="nav-actions">
+              <button type="button" class="btn btn-prev" onclick="prevStep(3)">上一步</button>
+              <button type="button" class="btn btn-next" onclick="nextStep(3)">下一步</button>
             </div>
-            <div class="error-msg" id="scheduleError">請至少在其中一天填寫可訓練時間或選擇訓練項目</div>
-          </div>
+          </section>
 
-          <div class="form-group" id="timeSlotsGroup">
-            <label class="q-label"><span class="q-index">15</span>平日可訓練時段（複選）<span class="opt-tag">（點選後請於右方填寫具體時間）</span><span class="req-tag">*</span></label>
-            <div class="vertical-slot-list">
-              <div class="slot-item-row">
-                <label class="pill-option">
-                  <input type="checkbox" class="slot-toggle" name="timeSlots" value="早上" data-target="slotInputMorn" />
-                  <span>早上</span>
-                </label>
-                <input type="text" id="slotInputMorn" class="slot-detail-input" placeholder="例如：06:00-07:30" />
+          <!-- ==================== 階段 4：一週訓練規劃與作息 ==================== -->
+          <section class="step-panel" data-step="4">
+            <div class="section-intro">
+              <h2>四、一週訓練規劃與日常作息</h2>
+              <p>請填寫你一週每日早、午、晚的規劃與可用時間，以及平日可訓練時段。</p>
+            </div>
+
+            <div class="form-group">
+              <label class="q-label"><span class="q-index">14</span>一週訓練規劃<span class="req-tag">*</span></label>
+              <div class="info-callout schedule-note">
+                ① 在每天的「早、午、晚」選擇可以或習慣的訓練項目（無特定項目請選「皆可」，無安排請留白）。<br />
+                ② 在最下方填寫當日「可訓練時間（分鐘）」（例如 40 分鐘填 40，2.5 小時填 150）。
+              </div>
+              <div class="swipe-hint">表格可左右滑動填寫一至日</div>
+
+              <div class="schedule-table-wrap">
+                <div class="schedule-grid" id="scheduleGrid">
+                  <!-- 由 JS 動態產生橫向表格 -->
+                </div>
               </div>
 
-              <div class="slot-item-row">
-                <label class="pill-option">
-                  <input type="checkbox" class="slot-toggle" name="timeSlots" value="午休" data-target="slotInputNoon" />
-                  <span>午休</span>
-                </label>
-                <input type="text" id="slotInputNoon" class="slot-detail-input" placeholder="例如：12:00-13:00" />
+              <div class="total-summary-box">
+                <div class="total-hours-text" id="totalHoursDisplay">Total：0 hr（0 分鐘）</div>
+                <div class="sport-breakdown" id="sportBreakdownDisplay">尚未選擇訓練項目</div>
               </div>
+              <div class="error-msg" id="scheduleError">請至少在其中一天填寫可訓練時間或選擇訓練項目</div>
+            </div>
 
-              <div class="slot-item-row">
-                <label class="pill-option">
-                  <input type="checkbox" class="slot-toggle" name="timeSlots" value="晚上" data-target="slotInputEve" />
-                  <span>晚上</span>
-                </label>
-                <input type="text" id="slotInputEve" class="slot-detail-input" placeholder="例如：19:00-21:00" />
+            <div class="form-group" id="timeSlotsGroup">
+              <label class="q-label"><span class="q-index">15</span>平日可訓練時段（複選）<span class="opt-tag">（點選後請於右方填寫具體時間）</span><span class="req-tag">*</span></label>
+              <div class="vertical-slot-list">
+                <div class="slot-item-row">
+                  <label class="pill-option">
+                    <input type="checkbox" class="slot-toggle" name="timeSlots" value="早上" data-target="slotInputMorn" />
+                    <span>早上</span>
+                  </label>
+                  <input type="text" id="slotInputMorn" class="slot-detail-input" placeholder="例如：06:00-07:30" />
+                </div>
+
+                <div class="slot-item-row">
+                  <label class="pill-option">
+                    <input type="checkbox" class="slot-toggle" name="timeSlots" value="午休" data-target="slotInputNoon" />
+                    <span>午休</span>
+                  </label>
+                  <input type="text" id="slotInputNoon" class="slot-detail-input" placeholder="例如：12:00-13:00" />
+                </div>
+
+                <div class="slot-item-row">
+                  <label class="pill-option">
+                    <input type="checkbox" class="slot-toggle" name="timeSlots" value="晚上" data-target="slotInputEve" />
+                    <span>晚上</span>
+                  </label>
+                  <input type="text" id="slotInputEve" class="slot-detail-input" placeholder="例如：19:00-21:00" />
+                </div>
+
+                <div class="slot-item-row">
+                  <label class="pill-option">
+                    <input type="checkbox" class="slot-toggle" name="timeSlots" value="彈性" data-target="slotInputFlex" />
+                    <span>彈性</span>
+                  </label>
+                  <input type="text" id="slotInputFlex" class="slot-detail-input" placeholder="例如：平日下午或彈性" />
+                </div>
               </div>
+              <div class="error-msg" id="timeSlotsError">請至少勾選一個可訓練時段，並於右方填寫具體時間</div>
+            </div>
 
-              <div class="slot-item-row">
-                <label class="pill-option">
-                  <input type="checkbox" class="slot-toggle" name="timeSlots" value="彈性" data-target="slotInputFlex" />
-                  <span>彈性</span>
-                </label>
-                <input type="text" id="slotInputFlex" class="slot-detail-input" placeholder="例如：平日下午或彈性" />
+            <div class="form-group">
+              <label class="q-label"><span class="q-index">16</span>固定不能練的日子 / 期望休息日（複選）<span class="req-tag">*</span></label>
+              <div class="pill-grid" data-required-checkbox="restDays">
+                <label class="pill-option"><input type="checkbox" name="restDays" value="週一" /><span>週一</span></label>
+                <label class="pill-option"><input type="checkbox" name="restDays" value="週二" /><span>週二</span></label>
+                <label class="pill-option"><input type="checkbox" name="restDays" value="週三" /><span>週三</span></label>
+                <label class="pill-option"><input type="checkbox" name="restDays" value="週四" /><span>週四</span></label>
+                <label class="pill-option"><input type="checkbox" name="restDays" value="週五" /><span>週五</span></label>
+                <label class="pill-option"><input type="checkbox" name="restDays" value="週六" /><span>週六</span></label>
+                <label class="pill-option"><input type="checkbox" name="restDays" value="週日" /><span>週日</span></label>
+                <label class="pill-option"><input type="checkbox" name="restDays" value="無固定限制" /><span>無固定限制</span></label>
+              </div>
+              <div class="error-msg">請至少選擇一項（若無限制請選「無固定限制」）</div>
+            </div>
+
+            <div class="form-group">
+              <label class="q-label"><span class="q-index">17</span>日常工作型態與平均睡眠時數<span class="req-tag">*</span></label>
+              <div class="form-row-2">
+                <div>
+                  <select id="workType" name="workType" required>
+                    <option value="">請選擇工作型態</option>
+                    <option value="久坐辦公室 / 內勤">久坐辦公室 / 內勤</option>
+                    <option value="需經常走動或站立">需經常走動或站立</option>
+                    <option value="高體力勞動">高體力勞動</option>
+                    <option value="輪班制 / 作息不固定">輪班制 / 作息不固定</option>
+                    <option value="自由業 / 學生">自由業 / 學生</option>
+                  </select>
+                  <div class="error-msg">請選擇工作型態</div>
+                </div>
+                <div>
+                  <input type="number" id="sleepHours" name="sleepHours" placeholder="平均每日睡眠時數（hr），例如：7" min="3" max="14" step="0.5" required />
+                  <div class="error-msg">請填寫平均睡眠時數</div>
+                </div>
               </div>
             </div>
-            <div class="error-msg" id="timeSlotsError">請至少勾選一個可訓練時段，並於右方填寫具體時間</div>
-          </div>
 
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">16</span>固定不能練的日子 / 期望休息日（複選）<span class="req-tag">*</span></label>
-            <div class="pill-grid" data-required-checkbox="restDays">
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週一" /><span>週一</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週二" /><span>週二</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週三" /><span>週三</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週四" /><span>週四</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週五" /><span>週五</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週六" /><span>週六</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="週日" /><span>週日</span></label>
-              <label class="pill-option"><input type="checkbox" name="restDays" value="無固定限制" /><span>無固定限制</span></label>
+            <div class="nav-actions">
+              <button type="button" class="btn btn-prev" onclick="prevStep(4)">上一步</button>
+              <button type="submit" class="btn btn-submit" id="submitBtn">確認送出</button>
             </div>
-            <div class="error-msg">請至少選擇一項（若無限制請選「無固定限制」）</div>
-          </div>
+          </section>
 
-          <div class="form-group">
-            <label class="q-label"><span class="q-index">17</span>日常工作型態與平均睡眠時數<span class="req-tag">*</span></label>
-            <div class="form-row-2">
-              <div>
-                <select id="workType" name="workType" required>
-                  <option value="">請選擇工作型態</option>
-                  <option value="久坐辦公室 / 內勤">久坐辦公室 / 內勤</option>
-                  <option value="需經常走動或站立">需經常走動或站立</option>
-                  <option value="高體力勞動">高體力勞動</option>
-                  <option value="輪班制 / 作息不固定">輪班制 / 作息不固定</option>
-                  <option value="自由業 / 學生">自由業 / 學生</option>
-                </select>
-                <div class="error-msg">請選擇工作型態</div>
-              </div>
-              <div>
-                <input type="number" id="sleepHours" name="sleepHours" placeholder="平均每日睡眠時數（hr），例如：7" min="3" max="14" step="0.5" required />
-                <div class="error-msg">請填寫平均睡眠時數</div>
-              </div>
-            </div>
-          </div>
+        </form>
 
-          <div class="nav-actions">
-            <button type="button" class="btn btn-prev" onclick="prevStep(4)">上一步</button>
-            <button type="submit" class="btn btn-submit" id="submitBtn">確認送出</button>
-          </div>
-        </section>
-
-      </form>
-
-      <!-- 送出成功畫面 -->
-      <div class="success-panel" id="successPanel">
-        <div class="success-badge">資料已成功送出</div>
-        <h2>感謝你的填寫，我們已收到線上課表申請資料</h2>
-        <p id="successSummaryText">教練團隊將於 2 個工作天內透過 LINE 與你聯繫後續安排。</p>
+        <!-- 送出成功畫面 -->
+        <div class="success-panel" id="successPanel">
+          <div class="success-badge">資料已成功送出</div>
+          <h2>感謝你的填寫，我們已收到線上課表申請資料</h2>
+          <p id="successSummaryText">教練團隊將於 2 個工作天內透過 LINE 與你聯繫後續安排。</p>
+        </div>
       </div>
+
     </div>
   </main>
 
@@ -1769,6 +2346,9 @@
       3: { title: "階段 3 / 4：TrainingPeaks 帳號與訓練數據", remainingStages: 1, remainingQuestions: 6 },
       4: { title: "階段 4 / 4：一週訓練規劃與日常作息", remainingStages: 0, remainingQuestions: 4 }
     };
+
+    let currentStep = 0;
+    let maxReachedStep = 0;
 
     // 日期欄位未點選前顯示「年 / 月 / 日」，點選後開啟系統日曆並防止 iOS 寬度溢出
     function bindSmartDateInput(input) {
@@ -2057,6 +2637,11 @@
     function updateProgressUI(step) {
       const brandBar = document.getElementById("brandBar");
       const progressControls = document.getElementById("progressControls");
+      const workspaceLayout = document.getElementById("workspaceLayout");
+
+      const isFormStep = step >= 1 && step <= 4;
+      document.body.classList.toggle("desktop-form-mode", isFormStep);
+      workspaceLayout.classList.toggle("has-sidebar", isFormStep);
 
       if (step === 0) {
         brandBar.classList.remove("with-progress");
@@ -2070,20 +2655,52 @@
 
       const meta = STAGE_META[step];
       const percent = step * 25;
-
-      document.getElementById("currentStageLabel").textContent = meta.title;
-      document.getElementById("progressPercent").textContent = `${percent}%`;
-      document.getElementById("progressFill").style.width = `${percent}%`;
-      document.getElementById("remainingBadge").innerHTML =
+      const remainingHtml =
         meta.remainingStages > 0
           ? `剩餘 <strong>${meta.remainingStages}</strong> 個階段・還有 <strong>${meta.remainingQuestions}</strong> 題待填`
           : `最後階段・還有 <strong>${meta.remainingQuestions}</strong> 題即可完成`;
+
+      // 同步更新頂部進度列（手機版）
+      document.getElementById("currentStageLabel").textContent = meta.title;
+      document.getElementById("progressPercent").textContent = `${percent}%`;
+      document.getElementById("progressFill").style.width = `${percent}%`;
+      document.getElementById("remainingBadge").innerHTML = remainingHtml;
+
+      // 同步更新電腦版左側導覽欄
+      document.getElementById("sidebarPercent").textContent = `${percent}%`;
+      document.getElementById("sidebarProgressFill").style.width = `${percent}%`;
+      document.getElementById("sidebarRemainingBadge").innerHTML = remainingHtml;
 
       for (let i = 1; i <= 4; i++) {
         const dot = document.getElementById(`dot-${i}`);
         dot.classList.remove("active", "done");
         if (i < step) dot.classList.add("done");
         if (i === step) dot.classList.add("active");
+
+        const sideItem = document.getElementById(`side-step-${i}`);
+        sideItem.classList.remove("active", "done", "clickable");
+        if (i < step) sideItem.classList.add("done");
+        if (i === step) sideItem.classList.add("active");
+        if (PREVIEW_MODE || i <= maxReachedStep) {
+          if (i !== step) sideItem.classList.add("clickable");
+        }
+      }
+    }
+
+    function handleSidebarStepClick(targetStep) {
+      if (targetStep === currentStep) return;
+      if (PREVIEW_MODE) {
+        goToStep(targetStep);
+        return;
+      }
+      if (targetStep < currentStep) {
+        goToStep(targetStep);
+        return;
+      }
+      if (targetStep <= maxReachedStep) {
+        if (validateStep(currentStep)) {
+          goToStep(targetStep);
+        }
       }
     }
 
@@ -2186,6 +2803,10 @@
     }
 
     function goToStep(step) {
+      currentStep = step;
+      if (step > maxReachedStep) {
+        maxReachedStep = step;
+      }
       document.querySelectorAll(".step-panel").forEach(p => p.classList.remove("active"));
       document.querySelector(`.step-panel[data-step="${step}"]`).classList.add("active");
       updateProgressUI(step);
@@ -2357,10 +2978,17 @@
           body: JSON.stringify(payload)
         });
 
+        document.body.classList.remove("desktop-form-mode");
+        document.getElementById("workspaceLayout").classList.remove("has-sidebar");
         document.getElementById("intakeForm").style.display = "none";
         document.getElementById("progressFill").style.width = "100%";
         document.getElementById("remainingBadge").innerHTML = "填寫完成";
         document.getElementById("currentStageLabel").textContent = "已完成全部 4 個階段";
+        for (let i = 1; i <= 4; i++) {
+          const dot = document.getElementById(`dot-${i}`);
+          dot.classList.remove("active");
+          dot.classList.add("done");
+        }
         document.getElementById("successSummaryText").textContent =
           `${payload.fullName || "學員"} 你好，你的每週可訓練總時數為 ${payload.totalHours} 小時（${payload.totalMinutes} 分鐘）。教練團隊檢視完畢後，將於 2 個工作天內透過 LINE 與你聯繫並傳送 TrainingPeaks 綁定連結。`;
         document.getElementById("successPanel").classList.add("active");
