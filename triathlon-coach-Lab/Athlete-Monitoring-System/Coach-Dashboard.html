@@ -355,6 +355,7 @@ tbody tr:hover td{background:#fafbf7}
 .card .detail{background:#fafbf7;box-shadow:none}
 .detail small{color:var(--muted);font-size:13px;display:block}
 .detail strong{display:block;margin-top:6px;font-size:21px;color:var(--ink);font-variant-numeric:tabular-nums}
+.detail-note{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5}
 
 /* Session RPE */
 .session-rpe-card{border-color:#d0ded0}
@@ -553,27 +554,25 @@ tbody tr:hover td{background:#fafbf7}
   touch-action:auto;
 }
 
-/* Two-Row Summary Analytics Box with Metric Color Dots */
+/* Balanced 2-Row Bento Summary below Chart */
 .combined-analysis{
   display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);
-  gap:14px 24px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
   margin-top:14px;
-  padding:16px 20px;
+  padding:14px;
   background:#f6f8f3;
   border:1px solid var(--line);
-  border-radius:11px;
-  align-items:start;
+  border-radius:12px;
 }
-.analysis-item{display:flex;flex-direction:column;justify-content:flex-start}
-.analysis-item.rpe-avg-col{
-  border-right:1px solid var(--line);
-  padding-right:20px;
-}
-.analysis-item.insight-row{
-  grid-column:1 / -1;
-  padding-top:12px;
-  border-top:1px solid var(--line);
+.analysis-kpi-card{
+  background:var(--paper);
+  border:1px solid #e1e8df;
+  border-radius:10px;
+  padding:13px 16px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
 }
 .analysis-label{
   display:inline-flex;
@@ -581,37 +580,49 @@ tbody tr:hover td{background:#fafbf7}
   gap:7px;
   font-size:12.5px;
   color:var(--muted);
-  font-weight:600;
+  font-weight:650;
 }
-.analysis-item strong{
-  display:block;
-  font-size:20px;
+.analysis-kpi-value{
+  display:flex;
+  align-items:baseline;
+  gap:6px;
+  margin-top:8px;
+  font-variant-numeric:tabular-nums;
+}
+.analysis-kpi-value strong{
+  font-size:24px;
   font-weight:800;
+  line-height:1.15;
   color:var(--ink);
-  margin-top:6px;
-  line-height:1.4;
+  letter-spacing:-.3px;
 }
-.analysis-item.insight-row strong{
-  font-size:15.5px;
-  font-weight:750;
-  margin-top:4px;
-}
-
-.load-compare-stack{display:flex;flex-direction:column;gap:6px;margin-top:6px}
-.load-compare-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-.load-compare-row.primary-row{padding-bottom:5px;border-bottom:1px dashed #d5dfd4}
-.load-row-label{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  font-size:13px;
+.analysis-kpi-value span{
+  font-size:12.5px;
   font-weight:600;
   color:var(--muted);
 }
-.load-row-value{font-variant-numeric:tabular-nums;color:var(--ink)}
-.load-compare-row.primary-row .load-row-value{font-size:21px;font-weight:800;letter-spacing:-.2px}
-.load-compare-row.secondary-row .load-row-value{font-size:16.5px;font-weight:750;color:#3c4f43}
-.load-row-unit{font-size:12px;font-weight:550;color:var(--muted);margin-left:3px}
+.analysis-kpi-sub{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:5px;
+}
+.analysis-insight-bar{
+  grid-column:1 / -1;
+  background:var(--paper);
+  border:1px solid #e1e8df;
+  border-radius:10px;
+  padding:12px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px 18px;
+  flex-wrap:wrap;
+}
+.analysis-insight-bar strong{
+  font-size:15px;
+  font-weight:750;
+  color:var(--ink);
+}
 
 .chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}
 .chart-hint{font-size:13px;line-height:1.65;color:var(--muted);margin-top:6px}
@@ -828,6 +839,8 @@ tbody tr:hover td{background:#fafbf7}
   .detail{padding:11px 8px;text-align:center}
   .detail small{font-size:11px;white-space:nowrap}
   .detail strong{font-size:16px;margin-top:4px}
+  .recovery-summary-grid{grid-template-columns:1fr !important}
+  .recovery-summary-grid .detail{text-align:left;padding:12px 14px}
 
   .session-rpe-row{grid-template-columns:minmax(0,1fr) 82px;gap:6px 10px}
   .session-rpe-status{grid-column:1 / -1;text-align:left;font-size:12px}
@@ -877,15 +890,11 @@ tbody tr:hover td{background:#fafbf7}
   .callout-chip{font-size:11px;padding:1px 4px}
   #loadChart{min-height:215px}
 
-  .combined-analysis{grid-template-columns:1fr;gap:12px;padding:13px 14px}
-  .analysis-item.rpe-avg-col{
-    border-right:0;
-    padding-right:0;
-    padding-bottom:12px;
-    border-bottom:1px solid var(--line);
-  }
-  .analysis-item strong{font-size:18px}
-  .analysis-item.insight-row strong{font-size:14.5px}
+  .combined-analysis{grid-template-columns:1fr;gap:8px;padding:10px}
+  .analysis-kpi-card{padding:11px 13px}
+  .analysis-kpi-value strong{font-size:20px}
+  .analysis-insight-bar{padding:11px 13px}
+  .analysis-insight-bar strong{font-size:14px}
 
   .chart-foot{flex-direction:column;gap:4px;font-size:12px}
   .chart-hint{font-size:12px}
@@ -1129,24 +1138,22 @@ tbody tr:hover td{background:#fafbf7}
     </div>
 
     <div class="combined-analysis" id="combinedAnalysisBox">
-      <div class="analysis-item rpe-avg-col">
+      <div class="analysis-kpi-card">
         <small class="analysis-label"><i class="metric-dot rpe"></i> 區間平均 RPE</small>
-        <strong id="statAvgRpe">—</strong>
+        <div class="analysis-kpi-value"><strong id="statAvgRpe">—</strong><span id="statAvgRpeUnit"></span></div>
+        <div class="analysis-kpi-sub" id="statAvgRpeSub">尚無 RPE 紀錄</div>
       </div>
-      <div class="analysis-item">
-        <small class="analysis-label">訓練負荷總計</small>
-        <div class="load-compare-stack">
-          <div class="load-compare-row primary-row">
-            <span class="load-row-label"><i class="metric-dot srpe"></i> 累計 sRPE 負荷</span>
-            <span class="load-row-value"><span id="statTotalSrpe">—</span><span class="load-row-unit">AU</span></span>
-          </div>
-          <div class="load-compare-row secondary-row">
-            <span class="load-row-label"><i class="metric-dot tss"></i> 累計 TSS</span>
-            <span class="load-row-value" id="statTotalTss">—</span>
-          </div>
-        </div>
+      <div class="analysis-kpi-card">
+        <small class="analysis-label"><i class="metric-dot srpe"></i> 累計 sRPE 負荷</small>
+        <div class="analysis-kpi-value"><strong id="statTotalSrpe">—</strong><span>AU</span></div>
+        <div class="analysis-kpi-sub">主觀強度 × 訓練時間</div>
       </div>
-      <div class="analysis-item insight-row">
+      <div class="analysis-kpi-card">
+        <small class="analysis-label"><i class="metric-dot tss"></i> 累計 TSS</small>
+        <div class="analysis-kpi-value"><strong id="statTotalTss">—</strong><span>TSS</span></div>
+        <div class="analysis-kpi-sub">外部訓練壓力總和</div>
+      </div>
+      <div class="analysis-insight-bar">
         <small class="analysis-label">RPE 與負荷共同判讀</small>
         <strong id="statLoadInsight">—</strong>
       </div>
@@ -1161,10 +1168,22 @@ tbody tr:hover td{background:#fafbf7}
 
   <div class="card" style="margin-bottom:18px">
     <div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div>
-    <div class="grid detail-grid" style="margin:0">
-      <div class="detail"><small>自動判讀狀態</small><strong id="pReportStatus">尚未回報</strong></div>
-      <div class="detail"><small>負責教練</small><strong id="pCoach">—</strong></div>
-      <div class="detail"><small>學員目標</small><strong id="pGoal" style="font-size:15px">—</strong></div>
+    <div class="grid detail-grid recovery-summary-grid" style="margin:0">
+      <div class="detail">
+        <small>今日判讀狀態</small>
+        <strong id="pReportStatus">尚未回報</strong>
+        <div class="detail-note" id="pReportReason">等待今日恢復問卷回報</div>
+      </div>
+      <div class="detail">
+        <small>恢復指標綜合檢視</small>
+        <strong id="pRecoverySummary" style="font-size:16px">—</strong>
+        <div class="detail-note" id="pRecoverySub">主觀疲勞、睡眠品質與肌肉狀態</div>
+      </div>
+      <div class="detail">
+        <small>教練追蹤建議</small>
+        <strong id="pCoachAction" style="font-size:16px">—</strong>
+        <div class="detail-note" id="pReminderNote">—</div>
+      </div>
     </div>
   </div>
 
@@ -1229,14 +1248,14 @@ function sleepScoreLabel(a){
 
 /* Unified automatic status evaluation from 1-10 RPE/fatigue + 1-5 sleep score + body status */
 function evaluateAthleteStatus(a){
-  if(a.active==='paused')return {level:'paused',label:'暫停課表',pillClass:'pill',reason:''};
+  if(a.active==='paused')return {level:'paused',label:'暫停課表',pillClass:'pill',reason:'目前暫停課表追蹤'};
   const rpeVal=Number(a.rpe||a.fatigue||0);
   const sleepVal=getSleepScore(a);
   const bodyStr=String(a.body||'');
   const bodyScore=a.bodyScore!==undefined&&a.bodyScore!==null&&a.bodyScore!==''?Number(a.bodyScore):null;
 
   if(!rpeVal&&sleepVal===null&&!bodyStr&&bodyScore===null){
-    return {level:'pending',label:'尚未回報',pillClass:'pill',reason:''};
+    return {level:'pending',label:'尚未回報',pillClass:'pill',reason:'尚未填寫今日恢復問卷'};
   }
 
   const isPain=bodyStr==='疼痛'||bodyScore===1;
@@ -1255,7 +1274,7 @@ function evaluateAthleteStatus(a){
   if(rpeVal>=6||(sleepVal!==null&&sleepVal<=2)||isSore){
     return {level:'watch',label:'留意',pillClass:'pill watch',reason:reasons.join(' · ')};
   }
-  return {level:'ok',label:'正常',pillClass:'pill ok',reason:'恢復與負荷平衡'};
+  return {level:'ok',label:'正常',pillClass:'pill ok',reason:'主觀疲勞與睡眠恢復平衡'};
 }
 
 /* Status indicator: green checkmark (正常), yellow circle + light triangle (留意), red ! (需要關注) */
@@ -1426,18 +1445,46 @@ function openProfile(id){
   if(!a)return;
   const st=evaluateAthleteStatus(a);
   const rpeVal=a.rpe||a.fatigue;
+  const sleepVal=getSleepScore(a);
+
   document.getElementById('pInitial').textContent=initials(a.name);
   document.getElementById('pName').textContent=a.name;
   document.getElementById('pMeta').textContent=a.sport+' · 負責教練：'+a.coach;
   document.getElementById('pFatigue').textContent=rpeVal?rpeVal+'/10':'尚未回報';
   document.getElementById('pSleep').textContent=sleepScoreLabel(a);
   document.getElementById('pBody').textContent=a.body||'—';
+
+  /* Populate meaningful Recovery Monitoring Summary */
   document.getElementById('pReportStatus').innerHTML=statusBadgeHtml(a,'',true);
-  document.getElementById('pCoach').textContent=a.coach;
-  document.getElementById('pGoal').textContent=a.goal||'尚未設定';
+  document.getElementById('pReportReason').textContent=st.reason;
+
+  if(st.level==='pending'){
+    document.getElementById('pRecoverySummary').textContent='今日尚未回報';
+    document.getElementById('pRecoverySub').textContent='請學員填寫疲勞、睡眠與身體狀態';
+  }else{
+    const parts=[];
+    if(rpeVal)parts.push(`疲勞 ${rpeVal}/10`);
+    if(sleepVal!==null)parts.push(`睡眠 ${sleepVal}/5`);
+    if(a.body)parts.push(`身體${a.body}`);
+    document.getElementById('pRecoverySummary').textContent=parts.join(' · ')||'已收到回報';
+    document.getElementById('pRecoverySub').textContent=(sleepVal!==null&&sleepVal<=2)?'睡眠品質偏低，留意恢復節奏':((rpeVal&&rpeVal>=7)?'主觀疲勞偏高，觀察隔日反應':'三項恢復指標皆在可接受範圍');
+  }
+
+  const actionMap={
+    ok:'維持原訂課表推進',
+    watch:'課前確認疲勞與睡眠狀態',
+    alert:'建議主動聯繫確認疼痛與恢復',
+    pending:'發送問卷提醒以掌握狀態',
+    paused:'課表暫停中，無需調整'
+  };
+  document.getElementById('pCoachAction').textContent=actionMap[st.level]||'持續觀察';
+  document.getElementById('pReminderNote').textContent=a.lastReminder
+    ?`最近提醒：${new Date(a.lastReminder).toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}`
+    :(st.level==='pending'?'尚未發送 LINE 提醒':'今日已完成回報，無需提醒');
+
   document.getElementById('profileReminderBtn').style.display=st.level==='pending'?'inline-flex':'none';
   document.getElementById('clearCsvBtn').hidden=!(Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length);
-  document.getElementById('profileInfo').innerHTML='<b>目標／比賽：</b>'+esc(a.goal||'尚未設定')+'<br><br><b>TrainingPeaks ID：</b>'+esc(a.tp||'尚未設定')+'<br><br><b>教練備註：</b>'+esc(a.note||'尚無備註')+'<br><br><b>學員狀態：</b>'+(a.active==='paused'?'暫停課表':'管理中');
+  document.getElementById('profileInfo').innerHTML='<b>負責教練：</b>'+esc(a.coach)+'<br><br><b>目標／比賽：</b>'+esc(a.goal||'尚未設定')+'<br><br><b>TrainingPeaks ID：</b>'+esc(a.tp||'尚未設定')+'<br><br><b>教練備註：</b>'+esc(a.note||'尚無備註')+'<br><br><b>學員狀態：</b>'+(a.active==='paused'?'暫停課表':'管理中');
   renderSessionRpe(a);
   showPage('profile');
   chartEnd=getLatestAthleteDate(a);
@@ -1495,6 +1542,7 @@ function remindAthlete(id){
   const message=`嗨 ${a.name}！提醒你今天的每日恢復與 RPE 問卷還沒填寫喔。請記得花一點時間完成回報，讓${a.coach}教練掌握你的恢復狀態，謝謝！`;
   a.lastReminder=new Date().toISOString();
   persist();
+  if(currentId===id)openProfile(id);
   const lineUrl='https://line.me/R/msg/text/?'+encodeURIComponent(message);
   window.open(lineUrl,'_blank','noopener');
   toast('已開啟 LINE 分享頁面，請確認收件人並按送出；系統已記錄提醒時間。');
@@ -1814,7 +1862,15 @@ function updateCombinedAnalysis(data){
   const totalTss=data.reduce((s,d)=>s+(d.TSS||0),0);
   const latest=data[data.length-1];
 
-  document.getElementById('statAvgRpe').textContent=avgRpe!==null?`${avgRpe.toFixed(1)} / 10（${rpeDays.length} 筆）`:'尚無 RPE 紀錄';
+  if(avgRpe!==null){
+    document.getElementById('statAvgRpe').textContent=avgRpe.toFixed(1);
+    document.getElementById('statAvgRpeUnit').textContent='/ 10';
+    document.getElementById('statAvgRpeSub').textContent=`共 ${rpeDays.length} 筆訓練紀錄`;
+  }else{
+    document.getElementById('statAvgRpe').textContent='—';
+    document.getElementById('statAvgRpeUnit').textContent='';
+    document.getElementById('statAvgRpeSub').textContent='尚無 RPE 紀錄';
+  }
   document.getElementById('statTotalSrpe').textContent=Math.round(totalSrpe).toLocaleString('en-US');
   document.getElementById('statTotalTss').textContent=Math.round(totalTss).toLocaleString('en-US');
 
