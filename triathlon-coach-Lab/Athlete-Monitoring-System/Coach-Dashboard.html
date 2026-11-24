@@ -650,6 +650,7 @@ button:active{transform:translateY(.5px)}
   .coach-roster-table{min-width:720px}
 }
 
+.week-start-date{display:block;margin-top:2px;color:var(--muted);font-size:10px;font-weight:500;line-height:1.15;white-space:nowrap;}
 /* Weekly multi-sport breakdown tabs */
 .weekly-sport-switch{
   display:flex;
@@ -2488,8 +2489,8 @@ button:active{transform:translateY(.5px)}
               <th class="grp-basic col-sticky-group" colspan="2">週期</th>
               <th class="grp-est" colspan="2">預計訓練時間<br><span style="font-weight:500;font-size:11px">Estimate Duration</span></th>
               <th class="grp-real" colspan="2">實際完成時間<br><span style="font-weight:500;font-size:11px">Real Duration</span></th>
-              <th class="grp-est">預計跑量<br><span style="font-weight:500;font-size:11px">Run (km)</span></th>
-              <th class="grp-real">實際跑量<br><span style="font-weight:500;font-size:11px">Real (km)</span></th>
+              <th class="grp-est" id="weeklyPlanMetricGroup">預計距離<br><span style="font-weight:500;font-size:11px">Distance (km)</span></th>
+              <th class="grp-real" id="weeklyActualMetricGroup">實際距離<br><span style="font-weight:500;font-size:11px">Distance (km)</span></th>
               <th class="grp-basic">備註<br><span style="font-weight:500;font-size:11px">Remark</span></th>
             </tr>
             <tr>
@@ -2499,8 +2500,8 @@ button:active{transform:translateY(.5px)}
               <th class="sub-est">分鐘 min</th>
               <th class="sub-real">小時 hr</th>
               <th class="sub-real">分鐘 min</th>
-              <th class="sub-est">公里 km</th>
-              <th class="sub-real">公里 km</th>
+              <th class="sub-est" id="weeklyPlanMetricSub">公里 km</th>
+              <th class="sub-real" id="weeklyActualMetricSub">公里 km</th>
               <th class="sub-remark">備註內容</th>
             </tr>
           </thead>
@@ -3720,7 +3721,7 @@ function getWeeklySportBreakdown(a,weeks){
   weeks.forEach(w=>{
     byWeek[w.date]={};
     Object.keys(WEEKLY_SPORT_META).forEach(k=>{
-      byWeek[w.date][k]={mins:0,planMins:0,km:0,planKm:0,sessions:0};
+      byWeek[w.date][k]={mins:0,planMins:0,km:0,planKm:0,sessions:0,plannedSessions:0};
     });
   });
   const workouts=Array.isArray(a?.tpWorkouts)?a.tpWorkouts:[];
@@ -3735,6 +3736,7 @@ function getWeeklySportBreakdown(a,weeks){
     bucket.km+=Number(w.distanceKm)||0;
     bucket.planKm+=Number(w.plannedDistanceKm)||0;
     bucket.sessions+=1;
+    if((Number(w.plannedDuration)||0)>0||(Number(w.plannedDistanceKm)||0)>0)bucket.plannedSessions+=1;
   });
   // Manual weekly run-distance overrides remain available when no TP run records exist for that week.
   weeks.forEach(w=>{
@@ -3847,63 +3849,66 @@ function renderWeeklyVolume(){
     ?`已同步週期紀錄（顯示 ${visible.length} 週）`
     :'目前顯示週期示意資料';
 
-  let totEstMin=0,totRealMin=0,totEstRun=0,totRealRun=0;
+  const meta=WEEKLY_SPORT_META[weeklySelectedSport]||WEEKLY_SPORT_META.swim;
+  const sportWeeks=getWeeklySportBreakdown(a,visible);
+  const isCountMetric=weeklySelectedSport==='strength'||weeklySelectedSport==='other';
+  const metricLabel=isCountMetric?'堂數':'距離';
 
+  const planGroup=document.getElementById('weeklyPlanMetricGroup');
+  const actualGroup=document.getElementById('weeklyActualMetricGroup');
+  const planSub=document.getElementById('weeklyPlanMetricSub');
+  const actualSub=document.getElementById('weeklyActualMetricSub');
+  if(planGroup)planGroup.innerHTML=`預計${metricLabel}<br><span style="font-weight:500;font-size:11px">${isCountMetric?'Sessions':'Distance (km)'}</span>`;
+  if(actualGroup)actualGroup.innerHTML=`實際${metricLabel}<br><span style="font-weight:500;font-size:11px">${isCountMetric?'Sessions':'Distance (km)'}</span>`;
+  if(planSub)planSub.textContent=isCountMetric?'堂':'公里 km';
+  if(actualSub)actualSub.textContent=isCountMetric?'堂':'公里 km';
+
+  let totEstMin=0,totRealMin=0,totPlanMetric=0,totActualMetric=0;
   tbody.innerHTML=visible.map(w=>{
-    totEstMin+=w.estMin;
-    totRealMin+=w.realMin;
-    totEstRun+=w.estRun;
-    totRealRun+=w.realRun;
+    const item=sportWeeks[w.date]?.[weeklySelectedSport]||{mins:0,planMins:0,km:0,planKm:0,sessions:0,plannedSessions:0};
+    const estMin=item.planMins,realMin=item.mins;
+    const planMetric=isCountMetric?item.plannedSessions:item.planKm;
+    const actualMetric=isCountMetric?item.sessions:item.km;
+    totEstMin+=estMin;totRealMin+=realMin;
+    totPlanMetric+=planMetric;totActualMetric+=actualMetric;
 
-    const estHr=Math.floor(w.estMin/60);
-    const estMn=Math.round(w.estMin%60);
-    const realHr=Math.floor(w.realMin/60);
-    const realMn=Math.round(w.realMin%60);
-
+    const metricPlanText=isCountMetric?planMetric:(Math.round(planMetric*10)/10);
+    const metricActualText=isCountMetric?actualMetric:(Math.round(actualMetric*10)/10);
     return `<tr onclick="openWeekModal('${esc(w.date)}')" title="點選編輯此週數據與備註">
       <td class="col-sticky-1"><strong>${esc(fmtShortDate(w.date))}</strong></td>
-      <td class="col-sticky-2">${esc(w.weekNum)}</td>
-      <td class="col-est">${estHr}</td>
-      <td class="col-est">${estMn}</td>
-      <td class="col-real">${realHr}</td>
-      <td class="col-real">${realMn}</td>
-      <td class="col-est">${w.estRun}</td>
-      <td class="col-real">${w.realRun}</td>
+      <td class="col-sticky-2"><strong>W${esc(w.weekNum)}</strong><small class="week-start-date">(${esc(fmtShortDate(w.date))})</small></td>
+      <td class="col-est">${Math.floor(estMin/60)}</td>
+      <td class="col-est">${Math.round(estMin%60)}</td>
+      <td class="col-real">${Math.floor(realMin/60)}</td>
+      <td class="col-real">${Math.round(realMin%60)}</td>
+      <td class="col-est">${metricPlanText||'—'}</td>
+      <td class="col-real">${metricActualText||'—'}</td>
       <td class="col-remark">${esc(w.remark||'—')}</td>
     </tr>`;
   }).join('');
 
-  const totEstHr=Math.floor(totEstMin/60);
-  const totEstMn=Math.round(totEstMin%60);
-  const totRealHr=Math.floor(totRealMin/60);
-  const totRealMn=Math.round(totRealMin%60);
-
+  const totEstHr=Math.floor(totEstMin/60),totEstMn=Math.round(totEstMin%60);
+  const totRealHr=Math.floor(totRealMin/60),totRealMn=Math.round(totRealMin%60);
   const durPct=totEstMin>0?Math.round((totRealMin/totEstMin)*100):null;
-  const runPct=totEstRun>0?Math.round((totRealRun/totEstRun)*100):null;
-
+  const metricPct=totPlanMetric>0?Math.round((totActualMetric/totPlanMetric)*100):null;
   const pctBadge=pct=>{
     if(pct===null)return '<span class="pill">—</span>';
     const cls=pct>=90&&pct<=115?'good':(pct>115?'high':'low');
     return `<span class="rate-badge ${cls}">${pct}%</span>`;
   };
-
   tfoot.innerHTML=`
     <tr class="total-row">
       <td class="col-sticky-group" colspan="2">總計 Total</td>
-      <td class="col-est">${totEstHr}</td>
-      <td class="col-est">${totEstMn}</td>
-      <td class="col-real">${totRealHr}</td>
-      <td class="col-real">${totRealMn}</td>
-      <td class="col-est">${Math.round(totEstRun)}</td>
-      <td class="col-real">${Math.round(totRealRun)}</td>
-      <td></td>
+      <td class="col-est">${totEstHr}</td><td class="col-est">${totEstMn}</td>
+      <td class="col-real">${totRealHr}</td><td class="col-real">${totRealMn}</td>
+      <td class="col-est">${isCountMetric?totPlanMetric:(Math.round(totPlanMetric*10)/10)}</td>
+      <td class="col-real">${isCountMetric?totActualMetric:(Math.round(totActualMetric*10)/10)}</td><td></td>
     </tr>
     <tr class="rate-row">
       <td colspan="4" style="text-align:right;color:var(--muted);font-size:12.5px">訓練時數完成度</td>
       <td colspan="2">${pctBadge(durPct)}</td>
-      <td style="text-align:right;color:var(--muted);font-size:12.5px">跑量完成度</td>
-      <td>${pctBadge(runPct)}</td>
-      <td></td>
+      <td style="text-align:right;color:var(--muted);font-size:12.5px">${metricLabel}完成度</td>
+      <td>${pctBadge(metricPct)}</td><td></td>
     </tr>
   `;
 
@@ -3912,8 +3917,6 @@ function renderWeeklyVolume(){
   document.getElementById('weeklyDurAvgLabel').textContent=`週均 ${avgHrs} 小時`;
   document.getElementById('weeklyRunAvgLabel').textContent=`週均 ${avgRun} km`;
 
-  const meta=WEEKLY_SPORT_META[weeklySelectedSport]||WEEKLY_SPORT_META.swim;
-  const sportWeeks=getWeeklySportBreakdown(a,visible);
   const catRows=visible.map(w=>({
     week:w,
     item:sportWeeks[w.date]?.[weeklySelectedSport]||{mins:0,km:0,sessions:0,planMins:0,planKm:0}
@@ -3932,11 +3935,11 @@ function renderWeeklyVolume(){
   document.getElementById('weeklyRunAvgLabel').textContent=`週均 ${avgMetric} ${meta.unit}`;
 
   renderWeeklyBarSvg('weeklyDurationChart',catRows.map(row=>({
-    label:`W${row.week.weekNum}`,val:Math.round((row.item.mins/60)*10)/10
+    label:`W${row.week.weekNum}|${fmtShortDate(row.week.date)}`,val:Math.round((row.item.mins/60)*10)/10
   })),meta.color,'小時');
 
   const metricValues=catRows.map(row=>({
-    label:`W${row.week.weekNum}`,
+    label:`W${row.week.weekNum}|${fmtShortDate(row.week.date)}`,
     val:weeklySelectedSport==='strength'||weeklySelectedSport==='other'
       ?row.item.sessions:Math.round(row.item.km*10)/10
   }));
@@ -3986,7 +3989,12 @@ function renderWeeklyBarSvg(svgId,items,barColor,unitLabel){
       out+=`<text x="${cx.toFixed(1)}" y="${Math.max(11,y-4).toFixed(1)}" text-anchor="middle" fill="#25332b" font-size="10" font-weight="700">${Math.round(item.val)}</text>`;
     }
     if(items.length<=14||idx%2===0){
-      out+=`<text x="${cx.toFixed(1)}" y="${H-12}" text-anchor="middle" fill="#647268" font-size="10.5">${esc(item.label)}</text>`;
+      const labelParts=String(item.label).split('|');
+      if(labelParts.length>1){
+        out+=`<text x="${cx.toFixed(1)}" y="${H-20}" text-anchor="middle" fill="#647268" font-size="10.5"><tspan x="${cx.toFixed(1)}" dy="0">${esc(labelParts[0])}</tspan><tspan x="${cx.toFixed(1)}" dy="12" font-size="9.5">(${esc(labelParts[1])})</tspan></text>`;
+      }else{
+        out+=`<text x="${cx.toFixed(1)}" y="${H-12}" text-anchor="middle" fill="#647268" font-size="10.5">${esc(item.label)}</text>`;
+      }
     }
   });
 
