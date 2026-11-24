@@ -15,8 +15,9 @@
   --muted:#647268;
   --amber:#a67634;
   --amberbg:#f7efe1;
-  --red:#b35c54;
+  --red:#c4453d;
   --redbg:#f8ebe8;
+  --ok-green:#2f7a53;
   --shadow:0 4px 20px rgba(36,63,50,.06);
 }
 
@@ -208,23 +209,38 @@ tbody tr:hover td{background:#fafbf7}
   padding:0;
   color:var(--ink);
   font:inherit;
-  font-weight:700;
-  font-size:15.5px;
+  font-weight:750;
+  font-size:16px;
   text-align:left;
 }
 .dashboard-name-link:hover{color:var(--sage);text-decoration:underline}
 .dashboard-name-link:focus-visible{outline:2px solid var(--sage);outline-offset:3px;border-radius:3px}
 
-/* Inline status pill inside #athletes is hidden on desktop (shown in Status column) and shown next to name on mobile */
-.mobile-inline-status{display:none}
+/* Status Indicators: Green Checkmark (正常), Red Exclamation (需要關注), Compact Pills */
+.status-icon{
+  width:21px;
+  height:21px;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:12.5px;
+  font-weight:800;
+  line-height:1;
+  flex-shrink:0;
+}
+.status-icon.ok{background:var(--ok-green)}
+.status-icon.alert{background:var(--red)}
+.status-icon svg{width:12px;height:12px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
 
 .pill{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:5px 11px;
+  padding:4px 10px;
   border-radius:20px;
-  font-size:12.5px;
+  font-size:12px;
   font-weight:700;
   background:#eef0ea;
   color:#59665b;
@@ -233,6 +249,8 @@ tbody tr:hover td{background:#fafbf7}
 .pill.ok{background:var(--sage2);color:#375c43}
 .pill.watch{background:var(--amberbg);color:#926830}
 .pill.alert{background:var(--redbg);color:#a04f48}
+
+.mobile-inline-status{display:none}
 
 .remind-btn{
   border:1px solid #c3d2c4;
@@ -252,15 +270,15 @@ tbody tr:hover td{background:#fafbf7}
 .coach-roster-group+.coach-roster-group{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
 .coach-roster-title{font-size:15.5px;font-weight:750;color:var(--ink);margin:0 0 12px}
 .coach-roster-group table{table-layout:fixed;width:100%}
-.coach-roster-group th:nth-child(1),.coach-roster-group td:nth-child(1){width:26%;text-align:left}
+.coach-roster-group th:nth-child(1),.coach-roster-group td:nth-child(1){width:28%;text-align:left}
 .coach-roster-group th:nth-child(2),.coach-roster-group td:nth-child(2){width:8%;text-align:center}
 .coach-roster-group th:nth-child(3),.coach-roster-group td:nth-child(3){width:10%;text-align:center}
 .coach-roster-group th:nth-child(4),.coach-roster-group td:nth-child(4){width:13%;text-align:center}
-.coach-roster-group th:nth-child(5),.coach-roster-group td:nth-child(5){width:12%;text-align:center}
-.coach-roster-group th:nth-child(6),.coach-roster-group td:nth-child(6){width:16%;text-align:center;font-size:13px;color:var(--muted)}
+.coach-roster-group th:nth-child(5),.coach-roster-group td:nth-child(5){width:11%;text-align:center}
+.coach-roster-group th:nth-child(6),.coach-roster-group td:nth-child(6){width:15%;text-align:center;font-size:13px;color:var(--muted)}
 .coach-roster-group th:nth-child(7),.coach-roster-group td:nth-child(7){width:15%;text-align:center}
 
-/* Notice & Empty States */
+/* Notice & Coach Tags */
 #noticeArea{display:flex;flex-direction:column;align-items:stretch;text-align:left;gap:0;padding:4px 0}
 #noticeArea.empty{padding:36px 14px;text-align:center;align-items:center}
 .notice{
@@ -269,29 +287,46 @@ tbody tr:hover td{background:#fafbf7}
   grid-template-columns:26px minmax(0,1fr);
   align-items:start;
   gap:12px;
-  padding:15px 2px;
+  padding:16px 2px;
   border-bottom:1px solid var(--line);
   text-align:left;
 }
 .notice:last-child{border-bottom:0;padding-bottom:4px}
 .notice:first-child{padding-top:4px}
 .notice-alert-icon{
-  width:22px;
-  height:22px;
+  width:23px;
+  height:23px;
   border-radius:50%;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   background:var(--red);
   color:#fff;
-  font-size:13px;
+  font-size:13.5px;
   font-weight:800;
   line-height:1;
   margin-top:2px;
 }
 .notice-content{min-width:0}
-.notice strong{display:block;font-size:16px;line-height:1.35;color:var(--ink);font-weight:750}
-.notice p{font-size:13.5px;color:var(--muted);line-height:1.55;margin:4px 0 0}
+.notice-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.notice-name{display:block;font-size:18.5px;line-height:1.3;color:var(--ink);font-weight:800}
+.notice p{font-size:13.5px;color:var(--muted);line-height:1.55;margin:6px 0 0}
+
+.coach-tag{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:12.5px;
+  font-weight:750;
+  letter-spacing:.4px;
+  flex-shrink:0;
+}
+.coach-tag.yufan{background:#fbe3ed;color:#b52862;border:1px solid #f2bdd3}
+.coach-tag.kuangwu{background:#e2effb;color:#1d5d96;border:1px solid #b9d7f4}
+.coach-tag.other{background:var(--sage2);color:#2d4e3a;border:1px solid #c7d6c8}
+
 .empty{padding:40px 18px;text-align:center;color:var(--muted);font-size:14.5px;line-height:1.8}
 .empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:6px}
 
@@ -540,7 +575,12 @@ tbody tr:hover td{background:#fafbf7}
   .card-head h3{font-size:15.5px}
   .card-head small{font-size:11.5px}
 
-  /* Transform tables into clean mobile cards */
+  /* Show inline status next to athlete name on mobile, hide desktop status column */
+  .mobile-inline-status{display:inline-flex}
+  .coach-roster-group td:nth-child(5),
+  #athletes td:nth-child(7){display:none !important}
+
+  /* Transform tables into clean mobile cards with explicit grid rows */
   .table-wrap{overflow-x:visible}
   .coach-roster-group table,
   #athletes table{
@@ -577,12 +617,12 @@ tbody tr:hover td{background:#fafbf7}
     font-size:13.5px;
   }
 
-  /* Dashboard Roster Mobile Card Slots */
-  .coach-roster-group td:nth-child(1){grid-column:1 / 3;align-self:center}
-  .coach-roster-group td:nth-child(5){grid-column:3 / 4;justify-self:end;align-self:center}
+  /* Dashboard Roster Mobile Card Layout */
+  .coach-roster-group td:nth-child(1){grid-column:1 / -1;grid-row:1;align-self:center}
   .coach-roster-group td:nth-child(2),
   .coach-roster-group td:nth-child(3),
   .coach-roster-group td:nth-child(4){
+    grid-row:2;
     background:var(--paper) !important;
     border:1px solid var(--line);
     border-radius:8px;
@@ -592,29 +632,30 @@ tbody tr:hover td{background:#fafbf7}
     font-size:13.5px;
     color:var(--ink);
   }
+  .coach-roster-group td:nth-child(2){grid-column:1 / 2}
+  .coach-roster-group td:nth-child(3){grid-column:2 / 3}
+  .coach-roster-group td:nth-child(4){grid-column:3 / 4}
   .coach-roster-group td:nth-child(2)::before{content:"RPE";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
   .coach-roster-group td:nth-child(3)::before{content:"睡眠 /5";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
   .coach-roster-group td:nth-child(4)::before{content:"身體狀況";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
-  .coach-roster-group td:nth-child(6){grid-column:1 / 3;align-self:center;font-size:12px;color:var(--muted);padding-top:2px}
-  .coach-roster-group td:nth-child(7){grid-column:3 / 4;justify-self:end;align-self:center;padding-top:2px}
+
+  /* Only show reminder row when athlete is pending report */
+  .coach-roster-group tr:not(.is-pending) td:nth-child(6),
+  .coach-roster-group tr:not(.is-pending) td:nth-child(7){display:none !important}
+  .coach-roster-group tr.is-pending td:nth-child(6){grid-column:1 / 3;grid-row:3;align-self:center;font-size:12px;color:var(--muted);padding-top:2px}
+  .coach-roster-group tr.is-pending td:nth-child(7){grid-column:3 / 4;grid-row:3;justify-self:end;align-self:center;padding-top:2px}
   .coach-roster-group .remind-btn{padding:8px 12px;font-size:12px}
 
-  /* Athletes List Mobile Card Slots:
-     1: Person (Name + Inline Status Pill + Sport below name)
-     2: Goal (shown cleanly on left)
-     3: Coach (shown cleanly on right)
-     4, 5, 6: Fatigue / Sleep / Body boxes
-     7: Desktop Status column (hidden on mobile because status is next to name) */
-  #athletes td:nth-child(1){grid-column:1 / -1;align-self:center}
-  #athletes .mobile-inline-status{display:inline-flex}
-  #athletes td:nth-child(7){display:none}
-  #athletes td:nth-child(2){grid-column:1 / 3;font-size:12.5px;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* Athletes List Mobile Card Layout */
+  #athletes td:nth-child(1){grid-column:1 / -1;grid-row:1;align-self:center}
+  #athletes td:nth-child(2){grid-column:1 / 3;grid-row:2;font-size:12.5px;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #athletes td:nth-child(2)::before{content:"目標：";font-weight:400;color:var(--muted)}
-  #athletes td:nth-child(3){grid-column:3 / 4;font-size:12.5px;color:var(--ink);font-weight:600;text-align:right !important;white-space:nowrap}
+  #athletes td:nth-child(3){grid-column:3 / 4;grid-row:2;font-size:12.5px;color:var(--ink);font-weight:600;text-align:right !important;white-space:nowrap}
   #athletes td:nth-child(3)::before{content:"教練：";font-weight:400;color:var(--muted)}
   #athletes td:nth-child(4),
   #athletes td:nth-child(5),
   #athletes td:nth-child(6){
+    grid-row:3;
     background:var(--paper) !important;
     border:1px solid var(--line);
     border-radius:8px;
@@ -624,6 +665,9 @@ tbody tr:hover td{background:#fafbf7}
     font-size:13.5px;
     color:var(--ink);
   }
+  #athletes td:nth-child(4){grid-column:1 / 2}
+  #athletes td:nth-child(5){grid-column:2 / 3}
+  #athletes td:nth-child(6){grid-column:3 / 4}
   #athletes td:nth-child(4)::before{content:"今日疲勞";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
   #athletes td:nth-child(5)::before{content:"睡眠";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
   #athletes td:nth-child(6)::before{content:"身體狀況";display:block;font-size:10.5px;font-weight:500;color:var(--muted);margin-bottom:2px}
@@ -993,9 +1037,25 @@ function evaluateAthleteStatus(a){
   return {level:'ok',label:'正常',pillClass:'pill ok',reason:'恢復與負荷平衡'};
 }
 
-function statusPillHtml(a,extraClass=''){
+/* Compact status indicator: green checkmark for 正常, red ! for 需要關注, compact badge for others */
+function statusBadgeHtml(a,extraClass='',verbose=false){
   const st=evaluateAthleteStatus(a);
-  return `<span class="${st.pillClass}${extraClass?' '+extraClass:''}">${st.label}</span>`;
+  const cls=extraClass?' '+extraClass:'';
+  if(st.level==='ok'){
+    if(verbose)return `<span class="pill ok${cls}" style="gap:5px"><span class="status-icon ok" style="width:16px;height:16px"><svg viewBox="0 0 16 16"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"/></svg></span>正常</span>`;
+    return `<span class="status-icon ok${cls}" title="正常" aria-label="正常"><svg viewBox="0 0 16 16"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"/></svg></span>`;
+  }
+  if(st.level==='alert'){
+    if(verbose)return `<span class="pill alert${cls}" style="gap:5px"><span class="status-icon alert" style="width:16px;height:16px;font-size:11px">!</span>需要關注</span>`;
+    return `<span class="status-icon alert${cls}" title="需要關注" aria-label="需要關注">!</span>`;
+  }
+  return `<span class="${st.pillClass}${cls}">${st.label}</span>`;
+}
+
+function coachTagHtml(coach){
+  const c=String(coach||'').trim();
+  const cls=c==='聿凡'?'yufan':(c==='光武'?'kuangwu':'other');
+  return `<span class="coach-tag ${cls}">${esc(c||'未指派')}</span>`;
 }
 
 function render(){
@@ -1013,30 +1073,41 @@ function render(){
       const pending=st.level==='pending';
       const rpeDisplay=a.rpe||a.fatigue||'—';
       const reminded=a.lastReminder?('已提醒 '+new Date(a.lastReminder).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})):'尚未提醒';
-      return `<tr>
-        <td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button><small>${esc(a.sport)}${a.isDemo?' · 示範資料':''}</small></div></div></td>
+      const subLine=`${esc(a.sport)}${a.goal?' · '+esc(a.goal):''}`;
+      return `<tr class="${pending?'is-pending':''}">
+        <td>
+          <div class="person">
+            <div class="initial">${esc(initials(a.name))}</div>
+            <div>
+              <div class="person-title-row">
+                <button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button>
+                ${statusBadgeHtml(a,'mobile-inline-status',false)}
+              </div>
+              <small>${subLine}</small>
+            </div>
+          </div>
+        </td>
         <td>${esc(rpeDisplay)}</td>
         <td>${sleepScoreLabel(a)}</td>
         <td>${esc(a.body||'—')}</td>
-        <td>${pending?'<span class="pill watch">尚未回報</span>':statusPillHtml(a)}</td>
+        <td>${statusBadgeHtml(a,'',false)}</td>
         <td>${pending?esc(reminded):'—'}</td>
         <td class="dashboard-action-cell">${pending?`<button class="remind-btn ${a.lastReminder?'sent':''}" onclick="remindAthlete('${a.id}')">${a.lastReminder?'再次提醒':'提醒回報'}</button>`:'—'}</td>
       </tr>`;
     }).join('');
-    return `<section class="coach-roster-group"><h4 class="coach-roster-title">${coach}教練</h4><div class="table-wrap"><table><thead><tr><th>學員</th><th>RPE</th><th>睡眠 /5</th><th>身體狀況</th><th>回報狀態</th><th>提醒紀錄</th><th>提醒</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+    return `<section class="coach-roster-group"><h4 class="coach-roster-title">${coach}教練</h4><div class="table-wrap"><table><thead><tr><th>學員</th><th>RPE</th><th>睡眠 /5</th><th>身體狀況</th><th>狀態</th><th>提醒紀錄</th><th>提醒</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
   }).join('');
 
   const otherCoachMembers=active.filter(a=>!coachOrder.includes(a.coach||''));
-  const otherCoachHtml=otherCoachMembers.length?`<section class="coach-roster-group"><h4 class="coach-roster-title">其他負責教練</h4><div class="table-wrap"><table><thead><tr><th>學員</th><th>RPE</th><th>睡眠 /5</th><th>身體狀況</th><th>回報狀態</th><th>提醒紀錄</th><th>提醒</th></tr></thead><tbody>${otherCoachMembers.map(a=>{const st=evaluateAthleteStatus(a);const pending=st.level==='pending';return `<tr><td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button><small>${esc(a.sport)}</small></div></div></td><td>${esc(a.rpe||a.fatigue||'—')}</td><td>${sleepScoreLabel(a)}</td><td>${esc(a.body||'—')}</td><td>${pending?'<span class="pill watch">尚未回報</span>':statusPillHtml(a)}</td><td>${pending?(a.lastReminder?'已提醒':'尚未提醒'):'—'}</td><td>${pending?`<button class="remind-btn" onclick="remindAthlete('${a.id}')">提醒回報</button>`:'—'}</td></tr>`}).join('')}</tbody></table></div></section>`:'';
+  const otherCoachHtml=otherCoachMembers.length?`<section class="coach-roster-group"><h4 class="coach-roster-title">其他負責教練</h4><div class="table-wrap"><table><thead><tr><th>學員</th><th>RPE</th><th>睡眠 /5</th><th>身體狀況</th><th>狀態</th><th>提醒紀錄</th><th>提醒</th></tr></thead><tbody>${otherCoachMembers.map(a=>{const st=evaluateAthleteStatus(a);const pending=st.level==='pending';const subLine=`${esc(a.sport)}${a.goal?' · '+esc(a.goal):''}`;return `<tr class="${pending?'is-pending':''}"><td><div class="person"><div class="initial">${esc(initials(a.name))}</div><div><div class="person-title-row"><button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button>${statusBadgeHtml(a,'mobile-inline-status',false)}</div><small>${subLine}</small></div></div></td><td>${esc(a.rpe||a.fatigue||'—')}</td><td>${sleepScoreLabel(a)}</td><td>${esc(a.body||'—')}</td><td>${statusBadgeHtml(a,'',false)}</td><td>${pending?(a.lastReminder?'已提醒':'尚未提醒'):'—'}</td><td>${pending?`<button class="remind-btn" onclick="remindAthlete('${a.id}')">提醒回報</button>`:'—'}</td></tr>`}).join('')}</tbody></table></div></section>`:'';
 
   document.getElementById('coachGroups').innerHTML=coachGroups+otherCoachHtml;
   document.getElementById('dashboardEmpty').style.display=active.length?'none':'block';
 
   /* Athlete List (#athletes):
-     - No "個人頁面→" column/button; click athlete name directly.
-     - Status badge placed right beside athlete name on mobile.
-     - Sport name placed right under athlete name (no "運動項目：" prefix).
-     - Goal placed in the second column / mobile meta row. */
+     - Status icon (green check / red !) placed right beside athlete name.
+     - Sport name directly under athlete name (no "運動項目：" prefix).
+     - Goal clearly shown in column 2 (and mobile row 2). */
   document.getElementById('athleteRows').innerHTML=active.map(a=>{
     const rpeVal=a.rpe||a.fatigue;
     return `<tr>
@@ -1046,7 +1117,7 @@ function render(){
           <div>
             <div class="person-title-row">
               <button class="dashboard-name-link" onclick="openProfile('${a.id}')">${esc(a.name)}</button>
-              ${statusPillHtml(a,'mobile-inline-status')}
+              ${statusBadgeHtml(a,'mobile-inline-status',false)}
             </div>
             <small>${esc(a.sport)}</small>
           </div>
@@ -1057,7 +1128,7 @@ function render(){
       <td>${rpeVal?esc(rpeVal)+'/10':'—'}</td>
       <td>${sleepScoreLabel(a)}</td>
       <td>${esc(a.body||'—')}</td>
-      <td>${statusPillHtml(a)}</td>
+      <td>${statusBadgeHtml(a,'',false)}</td>
     </tr>`;
   }).join('');
 
@@ -1067,7 +1138,16 @@ function render(){
   let alerts=active.filter(a=>evaluateAthleteStatus(a).level==='alert');
   document.getElementById('noticeArea').innerHTML=alerts.length?alerts.map(a=>{
     const st=evaluateAthleteStatus(a);
-    return `<div class="notice"><span class="notice-alert-icon" aria-label="需要關注">!</span><div class="notice-content"><strong>${esc(a.name)}</strong><p>${esc(st.reason)}。（${esc(a.coach)}教練）</p></div></div>`;
+    return `<div class="notice">
+      <span class="notice-alert-icon" aria-label="需要關注">!</span>
+      <div class="notice-content">
+        <div class="notice-top">
+          <strong class="notice-name">${esc(a.name)}</strong>
+          ${coachTagHtml(a.coach)}
+        </div>
+        <p>${esc(st.reason)}</p>
+      </div>
+    </div>`;
   }).join(''):'目前沒有待確認事項。<br>學員有異常回報時，提醒會顯示在這裡。';
 }
 
@@ -1105,7 +1185,6 @@ function updateSessionRpeScore(uid,val){
   const rec=a.sessionRpe.find((r,i)=>String(r.uid??i)===String(uid));
   if(!rec)return;
   rec.rpe=val===''?null:Number(val);
-  // Sync latest workout RPE back to athlete's current RPE summary if this is the most recent workout
   const sorted=a.sessionRpe.slice().sort((x,y)=>String(y.date||'').localeCompare(String(x.date||'')));
   if(sorted[0]&&sorted[0].rpe){
     a.rpe=sorted[0].rpe;
@@ -1128,7 +1207,7 @@ function openProfile(id){
   document.getElementById('pFatigue').textContent=rpeVal?rpeVal+'/10':'尚未回報';
   document.getElementById('pSleep').textContent=sleepScoreLabel(a);
   document.getElementById('pBody').textContent=a.body||'—';
-  document.getElementById('pReportStatus').innerHTML=statusPillHtml(a);
+  document.getElementById('pReportStatus').innerHTML=statusBadgeHtml(a,'',true);
   document.getElementById('pCoach').textContent=a.coach;
   document.getElementById('pGoal').textContent=a.goal||'尚未設定';
   document.getElementById('profileReminderBtn').style.display=st.level==='pending'?'inline-flex':'none';
@@ -1254,7 +1333,6 @@ function parseDurationMinutes(raw){
   }
   const num=parseFloat(str);
   if(Number.isNaN(num))return 0;
-  // TrainingPeaks TimeTotalInHours is typically in decimal hours (e.g. 1.25 = 75 mins)
   return num<=24?num*60:num;
 }
 
@@ -1336,7 +1414,6 @@ function handleTpCsvUpload(event){
         a.fatigue=latestWithRpe.rpe;
       }
 
-      // Snap chart end date to latest workout date in CSV so imported history shows immediately
       const latestDate=workouts[workouts.length-1].date;
       chartEnd=dayStart(new Date(latestDate+'T00:00:00'));
       chartStart=null;
@@ -1483,7 +1560,6 @@ function buildAthleteSeries(a,start,end){
     return {data:arr,isReal:false,workoutCount:0};
   }
 
-  // Build daily map from earliest workout in CSV (or start) through end
   const byDay={};
   const sessionList=Array.isArray(a.sessionRpe)&&a.sessionRpe.length?a.sessionRpe:a.tpWorkouts;
   sessionList.forEach(w=>{
@@ -1584,7 +1660,6 @@ function renderLoadChart(){
   };
 
   let out='';
-  // Horizontal grid + Left axis (CTL/ATL/TSS) + Right axis (RPE 0-10)
   for(let k=0;k<=5;k++){
     let yy=T+k*PH/5;
     out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e5eae3" stroke-width="1"/>`;
@@ -1594,7 +1669,6 @@ function renderLoadChart(){
   out+=`<text x="16" y="${T+PH/2}" fill="#6d7b71" font-size="11.5" transform="rotate(-90 16 ${T+PH/2})">CTL / ATL / TSS</text>`;
   out+=`<text x="${W-14}" y="${T+PH/2}" fill="#3e6b52" font-size="11.5" font-weight="600" transform="rotate(90 ${W-14} ${T+PH/2})">RPE (1–10)</text>`;
 
-  // RPE bars (drawn behind curves so lines remain crisp)
   if(active.RPE){
     const barW=Math.max(4,Math.min(18,(PW/Math.max(1,data.length))*0.52));
     data.forEach((d,i)=>{
@@ -1638,7 +1712,6 @@ function renderLoadChart(){
     });
   }
 
-  // RPE top cap dots for clear visual tracking
   if(active.RPE){
     data.forEach((d,i)=>{
       if(d.RPE!==null&&d.RPE>0){
@@ -1648,14 +1721,12 @@ function renderLoadChart(){
     });
   }
 
-  // X-axis date ticks
   let ticks=Math.min(8,data.length);
   for(let j=0;j<ticks;j++){
     let i=Math.round(j*(data.length-1)/Math.max(1,ticks-1));
     out+=`<text x="${x(i)}" y="${H-16}" text-anchor="middle" fill="#6d7b71" font-size="11">${String(data[i].date.getMonth()+1).padStart(2,'0')}/${String(data[i].date.getDate()).padStart(2,'0')}</text>`;
   }
 
-  // Interactive hit targets
   data.forEach((d,i)=>{
     out+=`<rect x="${x(i)-Math.max(4,PW/data.length/2)}" y="${T}" width="${Math.max(8,PW/data.length)}" height="${PH}" fill="transparent" data-index="${i}" class="chart-hit"/>`;
   });
