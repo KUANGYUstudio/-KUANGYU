@@ -752,7 +752,6 @@ tbody tr:hover td{background:#f2f6f0}
   margin-top:6px;
 }
 
-/* 4th Card: Combined Judgment styled cleanly alongside the 3 KPI cards */
 .analysis-insight-card{
   background:#f7faf5;
   border:1px solid #bdd0bc;
@@ -785,6 +784,160 @@ tbody tr:hover td{background:#f2f6f0}
 }
 .load-chart-card.fullscreen{position:fixed;inset:12px;z-index:50;overflow:auto;background:var(--paper);box-shadow:0 12px 50px rgba(0,0,0,.25)}
 .load-chart-card.fullscreen #loadChart{min-height:calc(100vh - 340px)}
+
+/* =========================================================
+   Weekly Training Volume & Compliance Tracker
+   ========================================================= */
+.weekly-card{border-color:#c6d5c5}
+.weekly-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  background:var(--sage-surface);
+  border:1px solid #cdd9cb;
+  border-radius:11px;
+  padding:11px 15px;
+  margin-bottom:16px;
+}
+.weekly-toolbar-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.weekly-toolbar-left label{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:650;color:var(--ink)}
+.weekly-toolbar-left select{
+  border:1px solid #c2d0c0;
+  background:var(--paper);
+  border-radius:8px;
+  padding:6px 10px;
+  font-size:13px;
+  color:var(--ink);
+}
+.weekly-toolbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+.weekly-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.42fr) minmax(320px,1fr);
+  gap:20px;
+  align-items:start;
+}
+
+.weekly-table-wrap{
+  overflow-x:auto;
+  border:1px solid #c8d6c7;
+  border-radius:12px;
+  background:var(--paper);
+}
+.weekly-table{
+  width:100%;
+  border-collapse:collapse;
+  text-align:center;
+  font-size:13.5px;
+  font-variant-numeric:tabular-nums;
+}
+.weekly-table th{
+  padding:8px 8px;
+  border-bottom:1px solid #c8d6c7;
+  border-right:1px solid #d9e3d7;
+  font-size:12px;
+  font-weight:750;
+  line-height:1.35;
+}
+.weekly-table th:last-child,.weekly-table td:last-child{border-right:0}
+.weekly-table th.grp-basic{background:var(--sage-surface);color:var(--ink)}
+.weekly-table th.grp-est{background:#e4eef6;color:#234663}
+.weekly-table th.grp-real{background:#fbeae7;color:#8e342d}
+.weekly-table th.sub-est{background:#eff5fa;color:#355875;font-weight:650}
+.weekly-table th.sub-real{background:#fdf3f1;color:#8e342d;font-weight:650}
+.weekly-table th.sub-remark{background:var(--sage-surface);color:#485a4e;font-weight:650}
+
+.weekly-table td{
+  padding:9px 7px;
+  border-bottom:1px solid var(--line-soft);
+  border-right:1px solid #edf2eb;
+  font-size:13.5px;
+  color:var(--ink);
+}
+.weekly-table tbody tr{cursor:pointer}
+.weekly-table tbody tr:hover td{background:#f0f6ee}
+.weekly-table td.col-real{background:rgba(251,234,231,.24);font-weight:650}
+.weekly-table td.col-est{background:rgba(228,238,246,.22)}
+.weekly-table td.col-remark{
+  text-align:left;
+  font-size:12.5px;
+  color:#46574c;
+  max-width:165px;
+  min-width:110px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Total & Compliance Summary Rows */
+.weekly-table tfoot tr.total-row td{
+  background:var(--sage-surface);
+  border-top:2px solid #b8c9b7;
+  border-bottom:1px solid #c8d6c7;
+  font-weight:800;
+  font-size:14px;
+  color:var(--ink);
+  padding:11px 7px;
+}
+.weekly-table tfoot tr.total-row td.col-real{background:#f9e4e0;color:#842d26}
+.weekly-table tfoot tr.total-row td.col-est{background:#dfeaf4;color:#1f415d}
+
+.weekly-table tfoot tr.rate-row td{
+  background:#f8faf6;
+  font-weight:800;
+  font-size:14px;
+  padding:11px 7px;
+  border-bottom:0;
+}
+.rate-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:3px 10px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
+}
+.rate-badge.good{background:var(--sage2);color:#254c34;border:1px solid #bfd3be}
+.rate-badge.high{background:var(--amberbg);color:#8b5c1c;border:1px solid #e2cfa9}
+.rate-badge.low{background:var(--redbg);color:#983932;border:1px solid #e6c3bf}
+
+.weekly-charts-col{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.weekly-chart-box{
+  background:var(--paper);
+  border:1px solid #cdd9cb;
+  border-radius:12px;
+  padding:14px 16px;
+}
+.weekly-chart-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:8px;
+}
+.weekly-chart-head h4{
+  margin:0;
+  font-size:14.5px;
+  font-weight:750;
+  color:var(--ink);
+}
+.weekly-chart-head span{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:600;
+}
+.weekly-bar-svg{
+  width:100%;
+  height:auto;
+  display:block;
+}
 
 /* Form & Modal */
 .field{margin:14px 0}
@@ -845,6 +998,7 @@ tbody tr:hover td{background:#f2f6f0}
 @media (max-width: 1180px){
   .two{grid-template-columns:1fr}
   .combined-analysis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .weekly-layout{grid-template-columns:1fr}
   .content{padding:24px 24px 44px}
   .topbar{padding:0 24px}
 }
@@ -1325,6 +1479,82 @@ tbody tr:hover td{background:#f2f6f0}
     <div class="chart-hint">共同分析說明：長條為每日主觀 RPE（右軸 1–10 分，8 分以上標為警示色），曲線為 TrainingPeaks 訓練負荷（左軸）。若外部 TSS 不高但主觀 RPE 連續偏高，代表恢復不足或非訓練壓力累積。</div>
   </div>
 
+  <div class="card weekly-card section-gap">
+    <div class="card-head">
+      <div>
+        <h3>週訓練量與課表完成度追蹤</h3>
+        <div class="sub">ESTIMATE vs REAL DURATION &amp; RUN DISTANCE · 預計／實際訓練時數與跑量統計</div>
+      </div>
+      <small id="weeklySourceBadge">週期統計</small>
+    </div>
+
+    <div class="weekly-toolbar">
+      <div class="weekly-toolbar-left">
+        <label>顯示週數範圍
+          <select id="weeklyLimitSelect" onchange="renderWeeklyVolume()">
+            <option value="all" selected>全部週次（最多 24 週）</option>
+            <option value="12">最近 12 週</option>
+            <option value="8">最近 8 週</option>
+            <option value="4">最近 4 週</option>
+          </select>
+        </label>
+        <span class="hint" style="font-size:12.5px">點選任一週次列即可編輯時數、跑量或備註</span>
+      </div>
+      <div class="weekly-toolbar-right">
+        <button class="btn soft" type="button" onclick="openWeekModal()">＋ 新增週次紀錄</button>
+        <button class="btn outline" type="button" onclick="exportWeeklyCsv()">匯出週報 CSV</button>
+      </div>
+    </div>
+
+    <div class="weekly-layout">
+      <div class="weekly-table-wrap">
+        <table class="weekly-table">
+          <thead>
+            <tr>
+              <th class="grp-basic" colspan="2">週期</th>
+              <th class="grp-est" colspan="2">預計訓練時間<br><span style="font-weight:500;font-size:11px">Estimate Duration</span></th>
+              <th class="grp-real" colspan="2">實際完成時間<br><span style="font-weight:500;font-size:11px">Real Duration</span></th>
+              <th class="grp-est">預計跑量<br><span style="font-weight:500;font-size:11px">Run (km)</span></th>
+              <th class="grp-real">實際跑量<br><span style="font-weight:500;font-size:11px">Real (km)</span></th>
+              <th class="grp-basic">備註<br><span style="font-weight:500;font-size:11px">Remark</span></th>
+            </tr>
+            <tr>
+              <th class="sub-remark">日期 date</th>
+              <th class="sub-remark">週數 week</th>
+              <th class="sub-est">小時 hr</th>
+              <th class="sub-est">分鐘 min</th>
+              <th class="sub-real">小時 hr</th>
+              <th class="sub-real">分鐘 min</th>
+              <th class="sub-est">公里 km</th>
+              <th class="sub-real">公里 km</th>
+              <th class="sub-remark">備註內容</th>
+            </tr>
+          </thead>
+          <tbody id="weeklyTableBody"></tbody>
+          <tfoot id="weeklyTableFoot"></tfoot>
+        </table>
+      </div>
+
+      <div class="weekly-charts-col">
+        <div class="weekly-chart-box">
+          <div class="weekly-chart-head">
+            <h4>小時 Duration（每週實際訓練時數）</h4>
+            <span id="weeklyDurAvgLabel">—</span>
+          </div>
+          <svg id="weeklyDurationChart" class="weekly-bar-svg" viewBox="0 0 520 220" role="img" aria-label="每週實際訓練時數長條圖"></svg>
+        </div>
+
+        <div class="weekly-chart-box">
+          <div class="weekly-chart-head">
+            <h4>實際 Real 跑量 Run / 公里 km</h4>
+            <span id="weeklyRunAvgLabel">—</span>
+          </div>
+          <svg id="weeklyRunChart" class="weekly-bar-svg" viewBox="0 0 520 220" role="img" aria-label="每週實際跑量長條圖"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="card section-gap">
     <div class="card-head"><h3>恢復監控摘要</h3><small>DAILY RECOVERY</small></div>
     <div class="grid detail-grid recovery-summary-grid">
@@ -1370,6 +1600,29 @@ tbody tr:hover td{background:#f2f6f0}
     <div class="modal-foot">
       <button class="btn outline" onclick="closeModal()">取消</button>
       <button class="btn primary" onclick="saveAthlete()">儲存資料</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="weekModal">
+  <div class="modal">
+    <h2 id="weekModalTitle">編輯週次訓練量與備註</h2>
+    <div class="hint">可手動微調該週的預計／實際訓練時數、跑步公里數與備註；若有匯入 TP CSV，手動修改的值會優先保留。</div>
+    <div class="form-grid">
+      <div class="field"><label>該週起始日期（週一）*</label><input type="date" id="wDate"></div>
+      <div class="field"><label>週數標籤（選填）</label><input id="wWeekLabel" placeholder="例如：1"></div>
+      <div class="field"><label>預計訓練時間 — 小時 (hr)</label><input type="number" min="0" id="wEstHr" placeholder="0"></div>
+      <div class="field"><label>預計訓練時間 — 分鐘 (min)</label><input type="number" min="0" max="59" id="wEstMin" placeholder="0"></div>
+      <div class="field"><label>實際完成時間 — 小時 (hr)</label><input type="number" min="0" id="wRealHr" placeholder="0"></div>
+      <div class="field"><label>實際完成時間 — 分鐘 (min)</label><input type="number" min="0" max="59" id="wRealMin" placeholder="0"></div>
+      <div class="field"><label>預計跑量 (km)</label><input type="number" min="0" step="0.1" id="wEstRun" placeholder="0"></div>
+      <div class="field"><label>實際跑量 (km)</label><input type="number" min="0" step="0.1" id="wRealRun" placeholder="0"></div>
+    </div>
+    <div class="field"><label>備註 Remark</label><input id="wRemark" placeholder="例如：半馬比賽週、出國旅遊、恢復週"></div>
+    <div class="modal-foot">
+      <button class="btn outline" id="deleteWeekBtn" type="button" style="margin-right:auto;color:var(--red);border-color:#e5c3bf" onclick="deleteWeekOverride()">恢復自動計算 / 刪除</button>
+      <button class="btn outline" type="button" onclick="closeWeekModal()">取消</button>
+      <button class="btn primary" type="button" onclick="saveWeekRecord()">儲存週次</button>
     </div>
   </div>
 </div>
@@ -1613,7 +1866,6 @@ function openProfile(id){
   document.getElementById('pSleep').textContent=sleepScoreLabel(a);
   document.getElementById('pBody').textContent=a.body||'—';
 
-  /* Populate meaningful Recovery Monitoring Summary */
   document.getElementById('pReportStatus').innerHTML=statusBadgeHtml(a,'',true);
   document.getElementById('pReportReason').textContent=st.reason;
 
@@ -1655,6 +1907,7 @@ function openProfile(id){
   chartEnd=getLatestAthleteDate(a);
   chartStart=null;
   renderLoadChart();
+  renderWeeklyVolume();
 }
 
 function openAthleteModal(id=null){
@@ -1776,6 +2029,14 @@ function parseDurationMinutes(raw){
   return num<=24?num*60:num;
 }
 
+function parseDistanceKm(raw,headerName=''){
+  if(!raw)return 0;
+  const num=parseFloat(String(raw).trim());
+  if(Number.isNaN(num)||num<=0)return 0;
+  if(headerName.includes('kilometer')||headerName.includes('km'))return num;
+  return num/1000;
+}
+
 function normalizeIsoDate(raw){
   if(!raw)return null;
   const m=String(raw).trim().match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
@@ -1808,9 +2069,14 @@ function handleTpCsvUpload(event){
       const iDate=findCol('workoutday','date','day','completeddate');
       const iTitle=findCol('title','workouttitle','name');
       const iType=findCol('workouttype','type','sport');
-      const iHours=findCol('timetotalinhours','totaltimeinhours','actualduration','duration','plannedduration');
+      const iHours=findCol('timetotalinhours','totaltimeinhours','actualduration','duration');
+      const iPlanHours=findCol('plannedduration','plannedtimetotalinhours');
+      const iDist=findCol('distanceinmeters','distance','actualdistanceinmeters','distanceinkilometers');
+      const iPlanDist=findCol('planneddistanceinmeters','planneddistance','planneddistanceinkilometers');
       const iTss=findCol('tss','actualtss','plannedtss');
       const iRpe=findCol('rpe','sessionrpe','perceivedexertion');
+      const iCoachNote=findCol('coachcomments','workoutdescription','description');
+      const iAthNote=findCol('athletecomments','comments');
 
       if(iDate===-1){
         toast('找不到日期欄位（WorkoutDay / Date），請確認是否為 TrainingPeaks 匯出的 CSV');
@@ -1825,17 +2091,26 @@ function handleTpCsvUpload(event){
         const title=(iTitle!==-1?cols[iTitle]:'')||(iType!==-1?cols[iType]:'')||'TrainingPeaks 訓練';
         const type=iType!==-1?cols[iType]:'';
         const mins=iHours!==-1?parseDurationMinutes(cols[iHours]):0;
+        const planMins=iPlanHours!==-1?parseDurationMinutes(cols[iPlanHours]):0;
+        const distKm=iDist!==-1?parseDistanceKm(cols[iDist],headers[iDist]):0;
+        const planDistKm=iPlanDist!==-1?parseDistanceKm(cols[iPlanDist],headers[iPlanDist]):0;
         const tss=iTss!==-1?(parseFloat(cols[iTss])||0):0;
         const rawRpe=iRpe!==-1?parseFloat(cols[iRpe]):NaN;
         const rpe=!Number.isNaN(rawRpe)&&rawRpe>0?Math.min(10,Math.max(1,rawRpe)):null;
+        const comment=(iAthNote!==-1?cols[iAthNote]:'')||(iCoachNote!==-1?cols[iCoachNote]:'');
+
         workouts.push({
           uid:`tp_${iso}_${r}`,
           date:iso,
           sessionName:title,
           type,
           duration:Math.round(mins),
+          plannedDuration:Math.round(planMins),
+          distanceKm:Math.round(distKm*100)/100,
+          plannedDistanceKm:Math.round(planDistKm*100)/100,
           tss,
-          rpe
+          rpe,
+          comment:String(comment||'').trim()
         });
       }
 
@@ -2054,7 +2329,6 @@ function updateCombinedAnalysis(data){
   document.getElementById('statLoadInsight').textContent=insight;
 }
 
-/* Render Date on Top + Metrics directly underneath Date, aligned with vertical indicator line */
 function updateChartCallout(index,svgXRatio){
   const band=document.getElementById('chartCalloutBand');
   if(!band)return;
@@ -2178,7 +2452,6 @@ function renderLoadChart(){
   out+=`<text x="13" y="${T+PH/2}" fill="#6d7b71" font-size="${isMobile?'12':'11.5'}" transform="rotate(-90 13 ${T+PH/2})">CTL / ATL / TSS</text>`;
   out+=`<text x="${W-12}" y="${T+PH/2}" fill="#3e6b52" font-size="${isMobile?'12':'11.5'}" font-weight="600" transform="rotate(90 ${W-12} ${T+PH/2})">RPE (1–10)</text>`;
 
-  /* Vertical Dashed Indicator Line extending straight down from top Date+Data Callout */
   if(selectedChartIndex!==null&&data[selectedChartIndex]){
     const sx=x(selectedChartIndex);
     out+=`<line x1="${sx.toFixed(1)}" y1="0" x2="${sx.toFixed(1)}" y2="${T+PH}" stroke="#243f32" stroke-width="2" stroke-dasharray="5 4"/>`;
@@ -2238,7 +2511,6 @@ function renderLoadChart(){
     });
   }
 
-  /* Highlight rings on active lines at selected day */
   if(selectedChartIndex!==null&&data[selectedChartIndex]){
     const sd=data[selectedChartIndex];
     const sx=x(selectedChartIndex).toFixed(1);
@@ -2256,6 +2528,347 @@ function renderLoadChart(){
 
   svg.innerHTML=out;
   document.getElementById('chartDateLabel').textContent=`${fmtDate(start)} — ${fmtDate(end)} · 共 ${total} 天`;
+}
+
+/* =========================================================
+   Weekly Training Volume & Compliance Calculator + Charts
+   ========================================================= */
+let lastRenderedWeeks=[];
+
+function getMondayIso(iso){
+  const d=dayStart(new Date(iso+'T00:00:00'));
+  const diff=(d.getDay()+6)%7;
+  d.setDate(d.getDate()-diff);
+  return isoKey(d);
+}
+
+function fmtShortDate(iso){
+  const parts=String(iso||'').split('-');
+  if(parts.length!==3)return iso||'—';
+  return `${Number(parts[1])}/${Number(parts[2])}`;
+}
+
+function isRunWorkout(w){
+  const t=String(w.type||'').toLowerCase();
+  const name=String(w.sessionName||'').toLowerCase();
+  return t.includes('run')||t.includes('跑')||name.includes('run')||name.includes('跑')||name.includes('marathon')||name.includes('馬拉松');
+}
+
+function buildDemoWeeks(){
+  const seed=[
+    {date:'2026-06-08',estMin:367,realMin:419,estRun:32,realRun:29,remark:''},
+    {date:'2026-06-15',estMin:260,realMin:337,estRun:26,realRun:17,remark:'vacation'},
+    {date:'2026-06-22',estMin:130,realMin:493,estRun:18,realRun:28,remark:'Hiking'},
+    {date:'2026-06-29',estMin:218,realMin:416,estRun:33,realRun:31,remark:'wrist has improved'},
+    {date:'2026-07-06',estMin:414,realMin:428,estRun:47,realRun:40,remark:''},
+    {date:'2026-07-13',estMin:200,realMin:417,estRun:23,realRun:23,remark:''},
+    {date:'2026-07-20',estMin:365,realMin:413,estRun:17,realRun:18,remark:''},
+    {date:'2026-07-27',estMin:430,realMin:533,estRun:26,realRun:28,remark:''},
+    {date:'2026-08-03',estMin:565,realMin:538,estRun:26,realRun:25,remark:''},
+    {date:'2026-08-10',estMin:275,realMin:359,estRun:15,realRun:14,remark:''},
+    {date:'2026-08-17',estMin:485,realMin:541,estRun:23,realRun:30,remark:''},
+    {date:'2026-08-24',estMin:445,realMin:401,estRun:25,realRun:6,remark:'sick'}
+  ];
+  return seed.map((s,idx)=>({...s,weekNum:idx+1,isManual:false}));
+}
+
+function buildAthleteWeeklyData(a){
+  const hasCsv=a&&Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length>0;
+  const overrides=(a&&a.weeklyOverrides&&typeof a.weeklyOverrides==='object')?a.weeklyOverrides:{};
+  const hasOverrides=Object.keys(overrides).length>0;
+
+  if(!hasCsv&&!hasOverrides){
+    return {weeks:buildDemoWeeks(),isReal:false};
+  }
+
+  const map={};
+  if(hasCsv){
+    a.tpWorkouts.forEach(w=>{
+      if(!w.date)return;
+      const mon=getMondayIso(w.date);
+      if(!map[mon])map[mon]={date:mon,estMin:0,realMin:0,estRun:0,realRun:0,comments:[]};
+      map[mon].estMin+=Number(w.plannedDuration||0);
+      map[mon].realMin+=Number(w.duration||0);
+      if(isRunWorkout(w)){
+        map[mon].estRun+=Number(w.plannedDistanceKm||0);
+        map[mon].realRun+=Number(w.distanceKm||0);
+      }
+      if(w.comment&&map[mon].comments.length<2&&!map[mon].comments.includes(w.comment)){
+        map[mon].comments.push(w.comment);
+      }
+    });
+  }
+
+  Object.keys(overrides).forEach(mon=>{
+    const ov=overrides[mon];
+    if(!map[mon])map[mon]={date:mon,estMin:0,realMin:0,estRun:0,realRun:0,comments:[]};
+    if(ov.estMin!==undefined&&ov.estMin!==null)map[mon].estMin=Number(ov.estMin);
+    if(ov.realMin!==undefined&&ov.realMin!==null)map[mon].realMin=Number(ov.realMin);
+    if(ov.estRun!==undefined&&ov.estRun!==null)map[mon].estRun=Number(ov.estRun);
+    if(ov.realRun!==undefined&&ov.realRun!==null)map[mon].realRun=Number(ov.realRun);
+    map[mon].customRemark=ov.remark??'';
+    map[mon].customWeekLabel=ov.weekLabel??'';
+    map[mon].isManual=true;
+  });
+
+  const sortedKeys=Object.keys(map).sort((x,y)=>x.localeCompare(y));
+  const weeks=sortedKeys.map((k,idx)=>{
+    const item=map[k];
+    const remark=item.customRemark!==undefined?item.customRemark:(item.comments.join('；'));
+    return {
+      date:item.date,
+      weekNum:item.customWeekLabel||String(idx+1),
+      estMin:Math.round(item.estMin),
+      realMin:Math.round(item.realMin),
+      estRun:Math.round(item.estRun*10)/10,
+      realRun:Math.round(item.realRun*10)/10,
+      remark,
+      isManual:Boolean(item.isManual)
+    };
+  });
+
+  return {weeks,isReal:true};
+}
+
+function renderWeeklyVolume(){
+  const tbody=document.getElementById('weeklyTableBody');
+  const tfoot=document.getElementById('weeklyTableFoot');
+  if(!tbody||!tfoot)return;
+
+  const a=athletes.find(x=>x.id===currentId);
+  const {weeks,isReal}=buildAthleteWeeklyData(a);
+  const limitVal=document.getElementById('weeklyLimitSelect')?.value||'all';
+  const maxSlice=limitVal==='all'?24:Number(limitVal);
+  const visible=weeks.slice(-maxSlice);
+  lastRenderedWeeks=visible;
+
+  document.getElementById('weeklySourceBadge').textContent=isReal
+    ?`已同步週期紀錄（顯示 ${visible.length} 週）`
+    :'目前顯示週期示意資料';
+
+  let totEstMin=0,totRealMin=0,totEstRun=0,totRealRun=0;
+
+  tbody.innerHTML=visible.map(w=>{
+    totEstMin+=w.estMin;
+    totRealMin+=w.realMin;
+    totEstRun+=w.estRun;
+    totRealRun+=w.realRun;
+
+    const estHr=Math.floor(w.estMin/60);
+    const estMn=Math.round(w.estMin%60);
+    const realHr=Math.floor(w.realMin/60);
+    const realMn=Math.round(w.realMin%60);
+
+    return `<tr onclick="openWeekModal('${esc(w.date)}')" title="點選編輯此週數據與備註">
+      <td><strong>${esc(fmtShortDate(w.date))}</strong></td>
+      <td>${esc(w.weekNum)}</td>
+      <td class="col-est">${estHr}</td>
+      <td class="col-est">${estMn}</td>
+      <td class="col-real">${realHr}</td>
+      <td class="col-real">${realMn}</td>
+      <td class="col-est">${w.estRun}</td>
+      <td class="col-real">${w.realRun}</td>
+      <td class="col-remark">${esc(w.remark||'—')}</td>
+    </tr>`;
+  }).join('');
+
+  const totEstHr=Math.floor(totEstMin/60);
+  const totEstMn=Math.round(totEstMin%60);
+  const totRealHr=Math.floor(totRealMin/60);
+  const totRealMn=Math.round(totRealMin%60);
+
+  const durPct=totEstMin>0?Math.round((totRealMin/totEstMin)*100):null;
+  const runPct=totEstRun>0?Math.round((totRealRun/totEstRun)*100):null;
+
+  const pctBadge=pct=>{
+    if(pct===null)return '<span class="pill">—</span>';
+    const cls=pct>=90&&pct<=115?'good':(pct>115?'high':'low');
+    return `<span class="rate-badge ${cls}">${pct}%</span>`;
+  };
+
+  tfoot.innerHTML=`
+    <tr class="total-row">
+      <td colspan="2">總時數 Total</td>
+      <td class="col-est">${totEstHr}</td>
+      <td class="col-est">${totEstMn}</td>
+      <td class="col-real">${totRealHr}</td>
+      <td class="col-real">${totRealMn}</td>
+      <td class="col-est">${Math.round(totEstRun)}</td>
+      <td class="col-real">${Math.round(totRealRun)}</td>
+      <td></td>
+    </tr>
+    <tr class="rate-row">
+      <td colspan="4" style="text-align:right;color:var(--muted);font-size:13px">訓練時數完成度</td>
+      <td colspan="2">${pctBadge(durPct)}</td>
+      <td style="text-align:right;color:var(--muted);font-size:13px">跑量完成度</td>
+      <td>${pctBadge(runPct)}</td>
+      <td></td>
+    </tr>
+  `;
+
+  const avgHrs=visible.length?(totRealMin/60/visible.length).toFixed(1):'0.0';
+  const avgRun=visible.length?(totRealRun/visible.length).toFixed(1):'0.0';
+  document.getElementById('weeklyDurAvgLabel').textContent=`週均 ${avgHrs} 小時`;
+  document.getElementById('weeklyRunAvgLabel').textContent=`週均 ${avgRun} km`;
+
+  renderWeeklyBarSvg('weeklyDurationChart',visible.map(w=>({
+    label:`W${w.weekNum}`,
+    val:Math.round((w.realMin/60)*10)/10
+  })),'#4d6f5a','小時');
+
+  renderWeeklyBarSvg('weeklyRunChart',visible.map(w=>({
+    label:`W${w.weekNum}`,
+    val:Math.round(w.realRun*10)/10
+  })),'#3b6e8c','km');
+}
+
+function renderWeeklyBarSvg(svgId,items,barColor,unitLabel){
+  const svg=document.getElementById(svgId);
+  if(!svg)return;
+  if(!items.length){
+    svg.innerHTML='<text x="260" y="110" text-anchor="middle" fill="#647268" font-size="13">尚無週次資料</text>';
+    return;
+  }
+
+  const W=520,H=220,L=38,R=14,T=18,B=34;
+  const PW=W-L-R,PH=H-T-B;
+  const maxVal=Math.max(10,...items.map(i=>i.val));
+  const step=maxVal<=15?2:(maxVal<=35?5:10);
+  const ceil=Math.ceil(maxVal/step)*step;
+
+  let out='';
+  const gridCount=4;
+  for(let g=0;g<=gridCount;g++){
+    const yy=T+(g/gridCount)*PH;
+    const v=Math.round(ceil*(1-g/gridCount));
+    out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e3eae2" stroke-width="1"/>`;
+    out+=`<text x="${L-6}" y="${yy+4}" text-anchor="end" fill="#647268" font-size="11">${v}</text>`;
+  }
+
+  const slotW=PW/items.length;
+  const barW=Math.max(6,Math.min(20,slotW*0.58));
+
+  items.forEach((item,idx)=>{
+    const cx=L+slotW*(idx+0.5);
+    const h=(item.val/ceil)*PH;
+    const y=T+PH-h;
+    out+=`<rect x="${(cx-barW/2).toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.max(1,h).toFixed(1)}" rx="3" fill="${barColor}" opacity="0.88"><title>${item.label}: ${item.val} ${unitLabel}</title></rect>`;
+    if(items.length<=16&&item.val>0){
+      out+=`<text x="${cx.toFixed(1)}" y="${Math.max(11,y-4).toFixed(1)}" text-anchor="middle" fill="#26322b" font-size="10" font-weight="700">${Math.round(item.val)}</text>`;
+    }
+    if(items.length<=14||idx%2===0){
+      out+=`<text x="${cx.toFixed(1)}" y="${H-12}" text-anchor="middle" fill="#647268" font-size="10.5">${esc(item.label)}</text>`;
+    }
+  });
+
+  svg.innerHTML=out;
+}
+
+function openWeekModal(dateIso=null){
+  const a=athletes.find(x=>x.id===currentId);
+  if(!a)return;
+  const existing=dateIso?lastRenderedWeeks.find(w=>w.date===dateIso):null;
+  const modal=document.getElementById('weekModal');
+  document.getElementById('weekModalTitle').textContent=existing?`編輯週次（${fmtShortDate(existing.date)}）`:'新增週次訓練量紀錄';
+
+  if(existing){
+    document.getElementById('wDate').value=existing.date;
+    document.getElementById('wWeekLabel').value=existing.weekNum;
+    document.getElementById('wEstHr').value=Math.floor(existing.estMin/60);
+    document.getElementById('wEstMin').value=Math.round(existing.estMin%60);
+    document.getElementById('wRealHr').value=Math.floor(existing.realMin/60);
+    document.getElementById('wRealMin').value=Math.round(existing.realMin%60);
+    document.getElementById('wEstRun').value=existing.estRun;
+    document.getElementById('wRealRun').value=existing.realRun;
+    document.getElementById('wRemark').value=existing.remark||'';
+    document.getElementById('deleteWeekBtn').hidden=!(a.weeklyOverrides&&a.weeklyOverrides[existing.date]);
+  }else{
+    const todayMon=getMondayIso(isoKey(new Date()));
+    document.getElementById('wDate').value=todayMon;
+    document.getElementById('wWeekLabel').value=String((lastRenderedWeeks.length||0)+1);
+    document.getElementById('wEstHr').value='';
+    document.getElementById('wEstMin').value='';
+    document.getElementById('wRealHr').value='';
+    document.getElementById('wRealMin').value='';
+    document.getElementById('wEstRun').value='';
+    document.getElementById('wRealRun').value='';
+    document.getElementById('wRemark').value='';
+    document.getElementById('deleteWeekBtn').hidden=true;
+  }
+
+  modal.dataset.editDate=existing?existing.date:'';
+  modal.classList.add('show');
+}
+
+function closeWeekModal(){
+  document.getElementById('weekModal').classList.remove('show');
+}
+
+function saveWeekRecord(){
+  const a=athletes.find(x=>x.id===currentId);
+  if(!a)return;
+  const rawDate=document.getElementById('wDate').value;
+  if(!rawDate){toast('請選擇該週起始日期');return}
+  const monDate=getMondayIso(rawDate);
+
+  const estMin=(Number(document.getElementById('wEstHr').value)||0)*60+(Number(document.getElementById('wEstMin').value)||0);
+  const realMin=(Number(document.getElementById('wRealHr').value)||0)*60+(Number(document.getElementById('wRealMin').value)||0);
+  const estRun=parseFloat(document.getElementById('wEstRun').value)||0;
+  const realRun=parseFloat(document.getElementById('wRealRun').value)||0;
+  const remark=document.getElementById('wRemark').value.trim();
+  const weekLabel=document.getElementById('wWeekLabel').value.trim();
+
+  if(!a.weeklyOverrides)a.weeklyOverrides={};
+  const oldDate=document.getElementById('weekModal').dataset.editDate;
+  if(oldDate&&oldDate!==monDate)delete a.weeklyOverrides[oldDate];
+
+  a.weeklyOverrides[monDate]={estMin,realMin,estRun,realRun,remark,weekLabel};
+  persist();
+  closeWeekModal();
+  renderWeeklyVolume();
+  toast('已儲存該週訓練量與備註');
+}
+
+function deleteWeekOverride(){
+  const a=athletes.find(x=>x.id===currentId);
+  const editDate=document.getElementById('weekModal').dataset.editDate;
+  if(a&&a.weeklyOverrides&&editDate){
+    delete a.weeklyOverrides[editDate];
+    persist();
+    closeWeekModal();
+    renderWeeklyVolume();
+    toast('已移除該週手動覆寫紀錄');
+  }
+}
+
+function exportWeeklyCsv(){
+  const a=athletes.find(x=>x.id===currentId);
+  if(!lastRenderedWeeks.length){toast('目前沒有可匯出的週次資料');return}
+  const lines=[
+    ['Date','Week','Estimate_Hr','Estimate_Min','Real_Hr','Real_Min','Estimate_Run_km','Real_Run_km','Remark'].join(',')
+  ];
+  lastRenderedWeeks.forEach(w=>{
+    const safeRemark='"'+String(w.remark||'').replace(/"/g,'""')+'"';
+    lines.push([
+      w.date,
+      w.weekNum,
+      Math.floor(w.estMin/60),
+      Math.round(w.estMin%60),
+      Math.floor(w.realMin/60),
+      Math.round(w.realMin%60),
+      w.estRun,
+      w.realRun,
+      safeRemark
+    ].join(','));
+  });
+  const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  link.href=url;
+  link.download=`${a?a.name:'athlete'}_weekly_volume.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  toast('已下載週訓練量與完成度 CSV');
 }
 
 /* =========================================================
@@ -2325,4 +2938,5 @@ function renderLoadChart(){
 
 render();
 renderLoadChart();
+renderWeeklyVolume();
 </script></body></html>
