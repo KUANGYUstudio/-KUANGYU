@@ -415,7 +415,7 @@
     .pricing-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       flex-wrap: wrap;
       gap: 12px;
       padding-bottom: 16px;
@@ -439,7 +439,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 5px;
+      gap: 7px;
     }
 
     .price-pill {
@@ -458,10 +458,21 @@
       font-weight: 600;
     }
 
-    .price-sub-note {
+    .price-sub-notes {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      text-align: left;
+    }
+
+    .price-sub-notes li {
       font-size: 12px;
       font-weight: 600;
       color: var(--text-sub);
+      line-height: 1.5;
+      padding-left: 1em;
+      text-indent: -1em;
     }
 
     /* 服務項目兩欄（標題＋具體說明） */
@@ -1917,7 +1928,10 @@
                 </div>
                 <div class="price-group">
                   <div class="price-pill">NT$ 6,000 <small>/ 月</small></div>
-                  <span class="price-sub-note">最低配合門檻為 1 個月（低於 4 週恕無法接單）</span>
+                  <ul class="price-sub-notes">
+                    <li>・最低配合門檻為 1 個月</li>
+                    <li>・超過 1 個月後不滿整月，以 NT$ 1,500 / 週計費</li>
+                  </ul>
                 </div>
               </div>
               <ul class="service-grid">
@@ -1995,7 +2009,7 @@
                 </details>
                 <details class="faq-item">
                   <summary>最低需要配合多久？可以只買單週或兩週的課表嗎？</summary>
-                  <div class="faq-answer">最低配合門檻為 1 個月（NT$ 6,000／月）。為確保訓練週期完整與安全，低於 4 週恕無法接單。</div>
+                  <div class="faq-answer">最低配合門檻為 1 個月（NT$ 6,000／月）。為確保訓練週期完整與安全，低於 4 週恕無法接單；若配合滿 1 個月後，剩餘備賽期不滿整月，則以 NT$ 1,500／週計算。</div>
                 </details>
                 <details class="faq-item">
                   <summary>送出申請表後，多久會收到教練聯繫？</summary>
