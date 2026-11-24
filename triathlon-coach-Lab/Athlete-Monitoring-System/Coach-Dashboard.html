@@ -217,7 +217,7 @@ tbody tr:hover td{background:#fafbf7}
 .dashboard-name-link:hover{color:var(--sage);text-decoration:underline}
 .dashboard-name-link:focus-visible{outline:2px solid var(--sage);outline-offset:3px;border-radius:3px}
 
-/* Status Indicators: Green Checkmark (正常), Yellow Circle + Light Triangle (留意), Red Exclamation (需要關注) */
+/* Status Indicators */
 .status-icon{
   width:21px;
   height:21px;
@@ -425,7 +425,7 @@ tbody tr:hover td{background:#fafbf7}
 .metric-toggles>span{font-weight:700;color:var(--ink)}
 .metric-toggle{display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
 .metric-toggle input{accent-color:var(--ink);width:16px;height:16px}
-.metric-dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle}
+.metric-dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;flex-shrink:0}
 .metric-dot.rpe{background:#3e6b52}
 .metric-dot.srpe{background:#8a7ca8}
 .metric-dot.ctl{background:#718b79}
@@ -553,28 +553,64 @@ tbody tr:hover td{background:#fafbf7}
   touch-action:auto;
 }
 
-/* Summary Analytics Box with clear typographic hierarchy */
+/* Two-Row Summary Analytics Box with Metric Color Dots */
 .combined-analysis{
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);
+  gap:14px 24px;
   margin-top:14px;
-  padding:14px 16px;
+  padding:16px 20px;
   background:#f6f8f3;
   border:1px solid var(--line);
   border-radius:11px;
+  align-items:start;
 }
-.analysis-item{display:flex;flex-direction:column;justify-content:center}
-.analysis-item small{display:block;font-size:12.5px;color:var(--muted);font-weight:550}
-.analysis-item strong{display:block;font-size:17px;color:var(--ink);margin-top:4px;line-height:1.45}
+.analysis-item{display:flex;flex-direction:column;justify-content:flex-start}
+.analysis-item.rpe-avg-col{
+  border-right:1px solid var(--line);
+  padding-right:20px;
+}
+.analysis-item.insight-row{
+  grid-column:1 / -1;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+}
+.analysis-label{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-size:12.5px;
+  color:var(--muted);
+  font-weight:600;
+}
+.analysis-item strong{
+  display:block;
+  font-size:20px;
+  font-weight:800;
+  color:var(--ink);
+  margin-top:6px;
+  line-height:1.4;
+}
+.analysis-item.insight-row strong{
+  font-size:15.5px;
+  font-weight:750;
+  margin-top:4px;
+}
 
-.load-compare-stack{display:flex;flex-direction:column;gap:5px;margin-top:6px}
-.load-compare-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.load-compare-row.primary-row{padding-bottom:4px;border-bottom:1px dashed #d5dfd4}
-.load-row-label{font-size:12.5px;font-weight:550;color:var(--muted)}
+.load-compare-stack{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.load-compare-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.load-compare-row.primary-row{padding-bottom:5px;border-bottom:1px dashed #d5dfd4}
+.load-row-label{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+}
 .load-row-value{font-variant-numeric:tabular-nums;color:var(--ink)}
 .load-compare-row.primary-row .load-row-value{font-size:21px;font-weight:800;letter-spacing:-.2px}
-.load-compare-row.secondary-row .load-row-value{font-size:16px;font-weight:700;color:#3c4f43}
+.load-compare-row.secondary-row .load-row-value{font-size:16.5px;font-weight:750;color:#3c4f43}
 .load-row-unit{font-size:12px;font-weight:550;color:var(--muted);margin-left:3px}
 
 .chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}
@@ -841,7 +877,16 @@ tbody tr:hover td{background:#fafbf7}
   .callout-chip{font-size:11px;padding:1px 4px}
   #loadChart{min-height:215px}
 
-  .combined-analysis{grid-template-columns:1fr;gap:10px;padding:12px}
+  .combined-analysis{grid-template-columns:1fr;gap:12px;padding:13px 14px}
+  .analysis-item.rpe-avg-col{
+    border-right:0;
+    padding-right:0;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+  .analysis-item strong{font-size:18px}
+  .analysis-item.insight-row strong{font-size:14.5px}
+
   .chart-foot{flex-direction:column;gap:4px;font-size:12px}
   .chart-hint{font-size:12px}
   .load-chart-card.fullscreen{inset:6px;padding:12px}
@@ -1084,25 +1129,25 @@ tbody tr:hover td{background:#fafbf7}
     </div>
 
     <div class="combined-analysis" id="combinedAnalysisBox">
-      <div class="analysis-item">
-        <small>區間平均 RPE</small>
+      <div class="analysis-item rpe-avg-col">
+        <small class="analysis-label"><i class="metric-dot rpe"></i> 區間平均 RPE</small>
         <strong id="statAvgRpe">—</strong>
       </div>
       <div class="analysis-item">
-        <small>訓練負荷總計</small>
+        <small class="analysis-label">訓練負荷總計</small>
         <div class="load-compare-stack">
           <div class="load-compare-row primary-row">
-            <span class="load-row-label">累計 sRPE 負荷</span>
+            <span class="load-row-label"><i class="metric-dot srpe"></i> 累計 sRPE 負荷</span>
             <span class="load-row-value"><span id="statTotalSrpe">—</span><span class="load-row-unit">AU</span></span>
           </div>
           <div class="load-compare-row secondary-row">
-            <span class="load-row-label">累計 TSS</span>
+            <span class="load-row-label"><i class="metric-dot tss"></i> 累計 TSS</span>
             <span class="load-row-value" id="statTotalTss">—</span>
           </div>
         </div>
       </div>
-      <div class="analysis-item">
-        <small>RPE 與負荷共同判讀</small>
+      <div class="analysis-item insight-row">
+        <small class="analysis-label">RPE 與負荷共同判讀</small>
         <strong id="statLoadInsight">—</strong>
       </div>
     </div>
