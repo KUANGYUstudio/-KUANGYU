@@ -397,15 +397,15 @@ tbody tr:hover td{background:#fafbf7}
 .load-chart-card{overflow:hidden}
 .chart-title-row{align-items:flex-start}
 .chart-title-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.chart-controls{background:#f7f8f3;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.chart-controls{background:#f7f8f3;border:1px solid var(--line);border-radius:12px;padding:13px 16px;margin-bottom:14px}
 .chart-control-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .chart-range-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.chart-control-row label{display:flex;align-items:center;gap:8px;font-size:13.5px;color:#485a4e;font-weight:550}
+.chart-control-row label{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#485a4e;font-weight:600}
 .chart-control-row select,.custom-dates input{
   border:1px solid #d1dbd0;
   background:var(--paper);
   border-radius:8px;
-  padding:8px 11px;
+  padding:8px 12px;
   font-size:13.5px;
   color:var(--ink);
 }
@@ -440,6 +440,8 @@ tbody tr:hover td{background:#fafbf7}
   background:var(--paper);
   padding:12px;
   touch-action:pan-y;
+  user-select:none;
+  -webkit-user-select:none;
 }
 .chart-plot-top{
   display:flex;
@@ -452,84 +454,192 @@ tbody tr:hover td{background:#fafbf7}
 .chart-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#5c6b60}
 .chart-legend span{display:inline-flex;align-items:center;gap:6px}
 .chart-expand-btn{padding:6px 12px;font-size:12.5px;margin-left:auto}
-#loadChart{width:100%;height:auto;display:block;min-height:240px;user-select:none;-webkit-user-select:none}
+#loadChart{width:100%;height:auto;display:block;min-height:240px;cursor:crosshair}
 
-/* Non-blocking Docked Day Inspector below chart */
+/* Non-overlapping Single-Day Inspector Strip below the chart */
 .chart-inspector{
   margin-top:10px;
   padding:11px 14px;
   border-radius:10px;
-  background:#f4f7f1;
-  border:1px solid #d5e0d4;
+  background:#f5f8f2;
+  border:1px solid #dce5da;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px;
+  gap:10px 16px;
   flex-wrap:wrap;
   font-size:13px;
-  color:var(--ink);
 }
 .chart-inspector.idle{
-  background:#fafbf7;
+  background:#fafbf8;
   border-style:dashed;
   color:var(--muted);
   justify-content:center;
+  padding:9px 12px;
+  font-size:12.5px;
 }
-.inspector-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.inspector-date{font-weight:800;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
-.inspector-title{font-size:12.5px;color:var(--sage);font-weight:650}
-.inspector-metrics{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.inspector-chip{
+.inspector-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.inspector-date{
   display:inline-flex;
   align-items:center;
-  gap:5px;
-  padding:4px 9px;
-  border-radius:7px;
-  background:var(--paper);
-  border:1px solid var(--line);
+  padding:3px 9px;
+  border-radius:6px;
+  background:var(--ink);
+  color:#fffefa;
+  font-weight:750;
   font-size:12.5px;
-  color:var(--muted);
   font-variant-numeric:tabular-nums;
 }
-.inspector-chip b{color:var(--ink);font-weight:750}
-.inspector-close{
+.inspector-title{
+  font-weight:700;
+  color:var(--ink);
+  font-size:13.5px;
+}
+.inspector-metrics{
+  display:flex;
+  align-items:center;
+  gap:8px 14px;
+  flex-wrap:wrap;
+  font-variant-numeric:tabular-nums;
+}
+.inspector-chip{
+  display:inline-flex;
+  align-items:baseline;
+  gap:5px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:7px;
+  padding:4px 9px;
+}
+.inspector-chip span{font-size:11.5px;color:var(--muted);font-weight:600}
+.inspector-chip strong{font-size:14.5px;color:var(--ink);font-weight:800}
+.inspector-clear{
   border:0;
   background:transparent;
   color:var(--muted);
-  font-size:12.5px;
-  padding:4px 8px;
+  font-size:12px;
+  font-weight:650;
+  padding:3px 6px;
   border-radius:6px;
 }
-.inspector-close:hover{background:#e6eee5;color:var(--ink)}
+.inspector-clear:hover{background:#e6eee5;color:var(--ink)}
 
-/* Summary Analytics Box with clear typographic hierarchy */
+/* Combined Analysis Summary Cards with Clear Typography Hierarchy */
 .combined-analysis{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:12px;
   margin-top:14px;
+}
+.analysis-item{
   padding:14px 16px;
   background:#f6f8f3;
   border:1px solid var(--line);
-  border-radius:11px;
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
-.analysis-item{display:flex;flex-direction:column;justify-content:center}
-.analysis-item small{display:block;font-size:12.5px;color:var(--muted);font-weight:550}
-.analysis-item strong{display:block;font-size:17px;color:var(--ink);margin-top:4px;line-height:1.45}
+.analysis-item>small{
+  display:block;
+  font-size:12px;
+  font-weight:650;
+  color:var(--muted);
+  letter-spacing:.3px;
+  margin-bottom:6px;
+}
+.analysis-big{
+  display:flex;
+  align-items:baseline;
+  gap:5px;
+  font-variant-numeric:tabular-nums;
+}
+.analysis-big .num{
+  font-size:24px;
+  font-weight:800;
+  line-height:1.15;
+  color:var(--ink);
+}
+.analysis-big .unit{
+  font-size:13px;
+  font-weight:500;
+  color:var(--muted);
+}
+.analysis-sub{
+  margin-top:4px;
+  font-size:12px;
+  font-weight:500;
+  color:var(--muted);
+}
+.load-stack{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+.load-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  padding-bottom:6px;
+  border-bottom:1px dashed #dbe3d9;
+}
+.load-row:last-child{
+  padding-bottom:0;
+  border-bottom:0;
+}
+.load-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:12.5px;
+  font-weight:650;
+  color:#485a4e;
+}
+.load-val{
+  display:inline-flex;
+  align-items:baseline;
+  gap:4px;
+  font-variant-numeric:tabular-nums;
+}
+.load-val strong{
+  font-size:20px;
+  font-weight:800;
+  line-height:1.15;
+  color:var(--ink);
+}
+.load-val em{
+  font-style:normal;
+  font-size:12px;
+  font-weight:500;
+  color:var(--muted);
+}
+.analysis-insight-text{
+  font-size:14.5px;
+  font-weight:700;
+  line-height:1.55;
+  color:var(--ink);
+}
 
-.load-compare-stack{display:flex;flex-direction:column;gap:5px;margin-top:6px}
-.load-compare-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.load-compare-row.primary-row{padding-bottom:4px;border-bottom:1px dashed #d5dfd4}
-.load-row-label{font-size:12.5px;font-weight:550;color:var(--muted)}
-.load-row-value{font-variant-numeric:tabular-nums;color:var(--ink)}
-.load-compare-row.primary-row .load-row-value{font-size:21px;font-weight:800;letter-spacing:-.2px}
-.load-compare-row.secondary-row .load-row-value{font-size:16px;font-weight:700;color:#3c4f43}
-.load-row-unit{font-size:12px;font-weight:550;color:var(--muted);margin-left:3px}
-
-.chart-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}
+.chart-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted)}
+.chart-date-group{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pinch-reset-link{
+  border:1px solid #c7d4c8;
+  background:var(--sage2);
+  color:#2d4e3a;
+  border-radius:6px;
+  padding:2px 9px;
+  font-size:12px;
+  font-weight:700;
+}
 .chart-hint{font-size:13px;line-height:1.65;color:var(--muted);margin-top:6px}
-.load-chart-card.fullscreen{position:fixed;inset:12px;z-index:50;overflow:auto;background:var(--paper);box-shadow:0 12px 50px rgba(0,0,0,.25)}
-.load-chart-card.fullscreen #loadChart{min-height:calc(100vh - 360px)}
+.load-chart-card.fullscreen{position:fixed;inset:14px;z-index:50;overflow:auto;background:var(--paper);box-shadow:0 12px 50px rgba(0,0,0,.25)}
+.load-chart-card.fullscreen #loadChart{min-height:calc(100vh - 420px)}
 
 /* Form & Modal */
 .field{margin:14px 0}
@@ -746,8 +856,7 @@ tbody tr:hover td{background:#fafbf7}
   .session-rpe-status{grid-column:1 / -1;text-align:left;font-size:12px}
 
   /* Chart Controls & Aligned Custom Date Inputs on Mobile */
-  .chart-controls{padding:12px}
-  .chart-control-row{flex-direction:column;align-items:stretch;gap:10px}
+  .chart-controls{padding:11px 12px}
   .chart-range-main{width:100%}
   .chart-range-main label{width:100%;justify-content:space-between}
   .chart-range-main select{flex:1;min-width:0}
@@ -782,31 +891,21 @@ tbody tr:hover td{background:#fafbf7}
   }
 
   .metric-toggles{gap:10px;font-size:12.5px}
-  #loadChart{min-height:210px}
   .chart-inspector{padding:10px 11px;gap:8px}
-  .inspector-metrics{gap:6px}
-  .inspector-chip{padding:3px 7px;font-size:11.5px}
-
-  .combined-analysis{grid-template-columns:1fr;gap:10px;padding:12px}
-  .chart-foot{flex-direction:column;gap:4px;font-size:12px}
+  .inspector-metrics{gap:6px 8px}
+  .inspector-chip{padding:3px 8px}
+  .inspector-chip strong{font-size:13.5px}
+  .combined-analysis{grid-template-columns:1fr;gap:10px}
+  .chart-foot{flex-direction:column;align-items:flex-start;gap:4px;font-size:12px}
   .chart-hint{font-size:12px}
-  .load-chart-card.fullscreen{inset:6px;padding:12px}
-  .load-chart-card.fullscreen #loadChart{min-height:48vh}
+  .load-chart-card.fullscreen{inset:6px;padding:14px}
+  .load-chart-card.fullscreen #loadChart{min-height:46vh}
 
   /* Prevent iOS Safari zoom on input focus */
   .field input,.field select,.field textarea,.chart-control-row select,.custom-dates input{font-size:16px}
   .form-grid{grid-template-columns:1fr}
   .modal{padding:18px 16px}
   .toast{left:14px;right:14px;bottom:14px;max-width:none;font-size:13.5px}
-}
-
-@media (orientation: landscape) and (max-height: 520px){
-  .load-chart-card.fullscreen{inset:4px;padding:10px 14px}
-  .load-chart-card.fullscreen .chart-controls,
-  .load-chart-card.fullscreen .combined-analysis,
-  .load-chart-card.fullscreen .chart-foot,
-  .load-chart-card.fullscreen .chart-hint{display:none}
-  .load-chart-card.fullscreen #loadChart{min-height:54vh;max-height:58vh}
 }
 
 @media (max-width: 440px){
@@ -1021,35 +1120,29 @@ tbody tr:hover td{background:#fafbf7}
         <button class="btn outline chart-expand-btn" type="button" id="fullscreenChartBtn" onclick="toggleChartFullscreen()">放大圖表</button>
       </div>
       <svg id="loadChart" viewBox="0 0 1000 400" role="img" aria-label="RPE 與個人訓練負荷趨勢圖"></svg>
-      <div id="chartInspector" class="chart-inspector idle">點選或滑動圖表上的任一天，即可顯示垂直指示線與當日詳細數據；雙指張開可縮放時間區間。</div>
+      <div id="chartInspector" class="chart-inspector idle">點選或滑動圖表任一天，即可顯示垂直指示線與當日詳細數據；雙指可縮放時間軸</div>
     </div>
 
     <div class="combined-analysis" id="combinedAnalysisBox">
       <div class="analysis-item">
         <small>區間平均 RPE</small>
-        <strong id="statAvgRpe">—</strong>
+        <div id="statAvgRpe"><div class="analysis-big"><span class="num">—</span></div></div>
       </div>
       <div class="analysis-item">
-        <small>訓練負荷總計</small>
-        <div class="load-compare-stack">
-          <div class="load-compare-row primary-row">
-            <span class="load-row-label">累計 sRPE 負荷</span>
-            <span class="load-row-value"><span id="statTotalSrpe">—</span><span class="load-row-unit">AU</span></span>
-          </div>
-          <div class="load-compare-row secondary-row">
-            <span class="load-row-label">累計 TSS</span>
-            <span class="load-row-value" id="statTotalTss">—</span>
-          </div>
-        </div>
+        <small>區間累計負荷</small>
+        <div id="statLoadCompare" class="load-stack"></div>
       </div>
       <div class="analysis-item">
         <small>RPE 與負荷共同判讀</small>
-        <strong id="statLoadInsight">—</strong>
+        <div id="statLoadInsight" class="analysis-insight-text">—</div>
       </div>
     </div>
 
     <div class="chart-foot">
-      <span id="chartDateLabel">顯示最近 28 天</span>
+      <div class="chart-date-group">
+        <span id="chartDateLabel">顯示最近 28 天</span>
+        <button type="button" class="pinch-reset-link" id="pinchResetBtn" hidden onclick="resetPinchZoom()">還原預設區間</button>
+      </div>
       <span id="chartDataSourceLabel">目前顯示視覺示意資料；可點選上方「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。</span>
     </div>
     <div class="chart-hint">共同分析說明：長條為每日主觀 RPE（右軸 1–10 分，8 分以上標為警示色），曲線為 TrainingPeaks 訓練負荷（左軸）。若外部 TSS 不高但主觀 RPE 連續偏高，代表恢復不足或非訓練壓力累積。</div>
@@ -1317,11 +1410,19 @@ function updateSessionRpeScore(uid,val){
 
 function openProfile(id){
   currentId=id;
-  selectedChartIndex=null;
   let a=athletes.find(x=>x.id===id);
   if(!a)return;
   const st=evaluateAthleteStatus(a);
   const rpeVal=a.rpe||a.fatigue;
+  selectedChartDate=null;
+  isPinchZoomed=false;
+  chartStart=null;
+  chartEnd=getLatestAthleteDate(a);
+  chartMode='days';
+  chartDays=28;
+  syncRangeUI('28');
+  document.getElementById('customDates').hidden=true;
+
   document.getElementById('pInitial').textContent=initials(a.name);
   document.getElementById('pName').textContent=a.name;
   document.getElementById('pMeta').textContent=a.sport+' · 負責教練：'+a.coach;
@@ -1336,8 +1437,6 @@ function openProfile(id){
   document.getElementById('profileInfo').innerHTML='<b>目標／比賽：</b>'+esc(a.goal||'尚未設定')+'<br><br><b>TrainingPeaks ID：</b>'+esc(a.tp||'尚未設定')+'<br><br><b>教練備註：</b>'+esc(a.note||'尚無備註')+'<br><br><b>學員狀態：</b>'+(a.active==='paused'?'暫停課表':'管理中');
   renderSessionRpe(a);
   showPage('profile');
-  chartEnd=getLatestAthleteDate(a);
-  chartStart=null;
   renderLoadChart();
 }
 
@@ -1541,6 +1640,7 @@ function handleTpCsvUpload(event){
       chartEnd=dayStart(new Date(latestDate+'T00:00:00'));
       chartStart=null;
       chartMode='days';
+      isPinchZoomed=false;
 
       persist();
       openProfile(a.id);
@@ -1562,13 +1662,14 @@ function clearImportedCsv(){
   delete a.tpWorkouts;
   a.sessionRpe=[];
   chartEnd=dayStart(new Date());
+  isPinchZoomed=false;
   persist();
   openProfile(a.id);
   toast('已清除匯入的 CSV 資料');
 }
 
 let chartDays=28, chartMode='days', chartEnd=new Date(), chartStart=null;
-let selectedChartIndex=null, lastRenderedData=[];
+let selectedChartDate=null, isPinchZoomed=false, lastRenderedSeries=[];
 const chartColors={RPE:'#3e6b52',SRPE:'#8a7ca8',CTL:'#718b79',ATL:'#c69a5b',TSB:'#648db5',TSS:'#c86d69'};
 
 function dayStart(d){let x=new Date(d);x.setHours(0,0,0,0);return x}
@@ -1592,7 +1693,7 @@ function applyRangeSelect(v){
   const a=athletes.find(x=>x.id===currentId);
   const custom=document.getElementById('customDates');
   custom.hidden=(v!=='custom');
-  selectedChartIndex=null;
+  isPinchZoomed=false;
   if(v==='custom'){
     const end=chartEnd||getLatestAthleteDate(a);
     const start=chartStart||dateMinus(end,chartDays-1);
@@ -1627,7 +1728,18 @@ function applyCustomDates(){
   chartEnd=dayStart(new Date(b+'T00:00:00'));
   chartDays=Math.max(1,Math.round((chartEnd-chartStart)/86400000)+1);
   chartMode='custom';
-  selectedChartIndex=null;
+  isPinchZoomed=false;
+  renderLoadChart();
+}
+function resetPinchZoom(){
+  const a=athletes.find(x=>x.id===currentId);
+  isPinchZoomed=false;
+  chartStart=null;
+  chartEnd=getLatestAthleteDate(a);
+  chartMode='days';
+  chartDays=28;
+  document.getElementById('customDates').hidden=true;
+  syncRangeUI('28');
   renderLoadChart();
 }
 function toggleChartFullscreen(){
@@ -1635,6 +1747,10 @@ function toggleChartFullscreen(){
   el.classList.toggle('fullscreen');
   let btn=document.getElementById('fullscreenChartBtn');
   btn.textContent=el.classList.contains('fullscreen')?'收合圖表':'放大圖表';
+  renderLoadChart();
+}
+function clearSelectedChartPoint(){
+  selectedChartDate=null;
   renderLoadChart();
 }
 
@@ -1655,11 +1771,13 @@ function buildAthleteSeries(a,start,end){
   const hasCsv=a&&Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length>0;
 
   if(!hasCsv){
+    const anchor=dayStart(new Date('2026-01-01T00:00:00'));
     const arr=[];
     for(let i=0;i<total;i++){
       let d=new Date(start);
       d.setDate(start.getDate()+i);
-      arr.push({date:d,...demoSeries(d,i)});
+      const dayIdx=Math.round((d-anchor)/86400000);
+      arr.push({date:d,...demoSeries(d,dayIdx)});
     }
     return {data:arr,isReal:false,workoutCount:0};
   }
@@ -1706,13 +1824,26 @@ function buildAthleteSeries(a,start,end){
 function updateCombinedAnalysis(data){
   const rpeDays=data.filter(d=>d.RPE!==null&&d.RPE>0);
   const avgRpe=rpeDays.length?(rpeDays.reduce((s,d)=>s+d.RPE,0)/rpeDays.length):null;
-  const totalSrpe=data.reduce((s,d)=>s+(d.SRPE||0),0);
-  const totalTss=data.reduce((s,d)=>s+(d.TSS||0),0);
+  const totalSrpe=Math.round(data.reduce((s,d)=>s+(d.SRPE||0),0));
+  const totalTss=Math.round(data.reduce((s,d)=>s+(d.TSS||0),0));
   const latest=data[data.length-1];
 
-  document.getElementById('statAvgRpe').textContent=avgRpe!==null?`${avgRpe.toFixed(1)} / 10（${rpeDays.length} 筆）`:'尚無 RPE 紀錄';
-  document.getElementById('statTotalSrpe').textContent=Math.round(totalSrpe).toLocaleString('en-US');
-  document.getElementById('statTotalTss').textContent=Math.round(totalTss).toLocaleString('en-US');
+  const avgHost=document.getElementById('statAvgRpe');
+  if(avgRpe!==null){
+    avgHost.innerHTML=`<div class="analysis-big"><span class="num">${avgRpe.toFixed(1)}</span><span class="unit">/ 10</span></div><div class="analysis-sub">共 ${rpeDays.length} 筆有效訓練紀錄</div>`;
+  }else{
+    avgHost.innerHTML=`<div class="analysis-big"><span class="num">—</span></div><div class="analysis-sub">尚無 RPE 紀錄</div>`;
+  }
+
+  document.getElementById('statLoadCompare').innerHTML=`
+    <div class="load-row">
+      <span class="load-tag"><i class="metric-dot srpe"></i> sRPE 負荷</span>
+      <span class="load-val"><strong>${totalSrpe.toLocaleString()}</strong><em>AU</em></span>
+    </div>
+    <div class="load-row">
+      <span class="load-tag"><i class="metric-dot tss"></i> TSS 負荷</span>
+      <span class="load-val"><strong>${totalTss.toLocaleString()}</strong><em>TSS</em></span>
+    </div>`;
 
   let insight='待累積更多 RPE 與訓練負荷數據';
   if(avgRpe!==null&&latest){
@@ -1729,54 +1860,32 @@ function updateCombinedAnalysis(data){
   document.getElementById('statLoadInsight').textContent=insight;
 }
 
-function updateChartInspector(index){
+function updateChartInspector(d,active){
   const box=document.getElementById('chartInspector');
   if(!box)return;
-  if(index===null||index===undefined||!lastRenderedData[index]){
+  if(!d){
     box.className='chart-inspector idle';
-    box.innerHTML='點選或滑動圖表上的任一天，即可顯示垂直指示線與當日詳細數據；雙指張開可縮放時間區間。';
+    box.textContent='點選或滑動圖表任一天，即可顯示垂直指示線與當日詳細數據；雙指可縮放時間軸';
     return;
   }
-  const d=lastRenderedData[index];
-  const active={
-    RPE:document.getElementById('metricRPE').checked,
-    CTL:document.getElementById('metricCTL').checked,
-    ATL:document.getElementById('metricATL').checked,
-    SRPE:document.getElementById('metricSRPE').checked,
-    TSB:document.getElementById('metricTSB').checked,
-    TSS:document.getElementById('metricTSS').checked
-  };
-  const chips=[];
-  if(active.RPE)chips.push(`<span class="inspector-chip">RPE <b>${d.RPE!==null?d.RPE+' / 10':'未填'}</b></span>`);
-  if(active.CTL)chips.push(`<span class="inspector-chip">CTL <b>${d.CTL.toFixed(1)}</b></span>`);
-  if(active.ATL)chips.push(`<span class="inspector-chip">ATL <b>${d.ATL.toFixed(1)}</b></span>`);
-  if(active.SRPE)chips.push(`<span class="inspector-chip">sRPE <b>${d.SRPE} AU</b></span>`);
-  if(active.TSB)chips.push(`<span class="inspector-chip">TSB <b>${d.TSB.toFixed(1)}</b></span>`);
-  if(active.TSS)chips.push(`<span class="inspector-chip">TSS <b>${Math.round(d.TSS)}</b></span>`);
-
   box.className='chart-inspector';
+  const chips=[];
+  if(active.RPE)chips.push(`<div class="inspector-chip"><span>RPE</span><strong>${d.RPE!==null?d.RPE+' / 10':'未填寫'}</strong></div>`);
+  if(active.CTL)chips.push(`<div class="inspector-chip"><span>CTL</span><strong>${d.CTL.toFixed(1)}</strong></div>`);
+  if(active.ATL)chips.push(`<div class="inspector-chip"><span>ATL</span><strong>${d.ATL.toFixed(1)}</strong></div>`);
+  if(active.SRPE)chips.push(`<div class="inspector-chip"><span>sRPE</span><strong>${d.SRPE.toLocaleString()} AU</strong></div>`);
+  if(active.TSB)chips.push(`<div class="inspector-chip"><span>TSB</span><strong>${d.TSB.toFixed(1)}</strong></div>`);
+  if(active.TSS)chips.push(`<div class="inspector-chip"><span>TSS</span><strong>${Math.round(d.TSS)}</strong></div>`);
+
   box.innerHTML=`
     <div class="inspector-head">
       <span class="inspector-date">${fmtDate(d.date)}</span>
-      ${d.title?`<span class="inspector-title">· ${esc(d.title)}</span>`:''}
+      ${d.title?`<span class="inspector-title">${esc(d.title)}</span>`:''}
     </div>
     <div class="inspector-metrics">
       ${chips.join('')}
-      <button type="button" class="inspector-close" onclick="clearChartSelection()">清除選取</button>
-    </div>
-  `;
-}
-
-function clearChartSelection(){
-  selectedChartIndex=null;
-  renderLoadChart();
-}
-
-function selectChartPoint(idx){
-  if(idx===null||idx<0||idx>=lastRenderedData.length)return;
-  if(selectedChartIndex===idx)return;
-  selectedChartIndex=idx;
-  renderLoadChart();
+      <button type="button" class="inspector-clear" onclick="clearSelectedChartPoint()" title="取消鎖定">清除</button>
+    </div>`;
 }
 
 function renderLoadChart(){
@@ -1786,16 +1895,12 @@ function renderLoadChart(){
   const end=chartEnd||getLatestAthleteDate(a);
   const start=chartStart||dateMinus(end,chartDays-1);
   const {data,isReal,workoutCount}=buildAthleteSeries(a,start,end);
-  lastRenderedData=data;
+  lastRenderedSeries=data;
   const total=data.length;
 
-  if(selectedChartIndex!==null&&selectedChartIndex>=total){
-    selectedChartIndex=total-1;
-  }
-
   updateCombinedAnalysis(data);
-  updateChartInspector(selectedChartIndex);
 
+  document.getElementById('pinchResetBtn').hidden=!isPinchZoomed;
   document.getElementById('chartDataSourceLabel').textContent=isReal
     ?`已匯入 TrainingPeaks CSV（共 ${workoutCount} 筆訓練紀錄，本機保存）`
     :'目前顯示視覺示意資料；可點選上方「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。';
@@ -1804,7 +1909,7 @@ function renderLoadChart(){
   const loadCeil=Math.ceil(maxLoad/25)*25;
   const maxSrpe=Math.max(600,...data.map(d=>d.SRPE||0));
 
-  const W=1000,H=400,L=62,R=62,T=28,B=48,PW=W-L-R,PH=H-T-B;
+  const W=1000,H=400,L=62,R=62,T=24,B=48,PW=W-L-R,PH=H-T-B;
   const x=i=>L+(data.length===1?PW/2:(i/(data.length-1))*PW);
   const yLoad=v=>T+PH-(Math.max(0,v)/loadCeil)*PH;
   const yTsb=v=>T+PH-((v+50)/100)*PH;
@@ -1830,18 +1935,6 @@ function renderLoadChart(){
   out+=`<text x="16" y="${T+PH/2}" fill="#6d7b71" font-size="11.5" transform="rotate(-90 16 ${T+PH/2})">CTL / ATL / TSS</text>`;
   out+=`<text x="${W-14}" y="${T+PH/2}" fill="#3e6b52" font-size="11.5" font-weight="600" transform="rotate(90 ${W-14} ${T+PH/2})">RPE (1–10)</text>`;
 
-  /* Vertical Crosshair Line when a day is selected */
-  if(selectedChartIndex!==null&&data[selectedChartIndex]){
-    const sx=x(selectedChartIndex);
-    const selDate=data[selectedChartIndex].date;
-    const tagText=`${String(selDate.getMonth()+1).padStart(2,'0')}/${String(selDate.getDate()).padStart(2,'0')}`;
-    const pillW=56,pillH=20;
-    const pillX=Math.max(L,Math.min(W-R-pillW,sx-pillW/2));
-    out+=`<line x1="${sx.toFixed(1)}" y1="${T}" x2="${sx.toFixed(1)}" y2="${T+PH}" stroke="#243f32" stroke-width="1.8" stroke-dasharray="5 4"/>`;
-    out+=`<rect x="${pillX.toFixed(1)}" y="3" width="${pillW}" height="${pillH}" rx="10" fill="#243f32"/>`;
-    out+=`<text x="${(pillX+pillW/2).toFixed(1)}" y="16.5" text-anchor="middle" fill="#fffefa" font-size="11" font-weight="700">${tagText}</text>`;
-  }
-
   if(active.RPE){
     const barW=Math.max(4,Math.min(18,(PW/Math.max(1,data.length))*0.52));
     data.forEach((d,i)=>{
@@ -1849,10 +1942,9 @@ function renderLoadChart(){
         const top=yRpe(d.RPE);
         const h=(T+PH)-top;
         const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#d49422':'#52745f');
-        const isSel=(i===selectedChartIndex);
-        out+=`<rect x="${(x(i)-barW/2).toFixed(1)}" y="${top.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${fill}" opacity="${isSel?'0.62':'0.28'}" ${isSel?`stroke="${fill}" stroke-width="1.8"`:''}/>`;
-        if(data.length<=35||isSel){
-          out+=`<text x="${x(i).toFixed(1)}" y="${Math.max(T+11,top-4).toFixed(1)}" text-anchor="middle" fill="${fill}" font-size="${isSel?'12':'10.5'}" font-weight="800">${d.RPE}</text>`;
+        out+=`<rect x="${(x(i)-barW/2).toFixed(1)}" y="${top.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${fill}" opacity="0.28"/>`;
+        if(data.length<=35){
+          out+=`<text x="${x(i).toFixed(1)}" y="${Math.max(T+11,top-4).toFixed(1)}" text-anchor="middle" fill="${fill}" font-size="10.5" font-weight="700">${d.RPE}</text>`;
         }
       }
     });
@@ -1890,20 +1982,9 @@ function renderLoadChart(){
     data.forEach((d,i)=>{
       if(d.RPE!==null&&d.RPE>0){
         const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#d49422':'#243f32');
-        const isSel=(i===selectedChartIndex);
-        out+=`<circle cx="${x(i).toFixed(1)}" cy="${yRpe(d.RPE).toFixed(1)}" r="${isSel?'5.5':'3.6'}" fill="${fill}" ${isSel?'stroke="#fffefa" stroke-width="2"':''}/>`;
+        out+=`<circle cx="${x(i).toFixed(1)}" cy="${yRpe(d.RPE).toFixed(1)}" r="3.6" fill="${fill}"/>`;
       }
     });
-  }
-
-  /* Highlight rings on active lines at selected day */
-  if(selectedChartIndex!==null&&data[selectedChartIndex]){
-    const sd=data[selectedChartIndex];
-    const sx=x(selectedChartIndex).toFixed(1);
-    if(active.CTL)out+=`<circle cx="${sx}" cy="${yLoad(sd.CTL).toFixed(1)}" r="5.5" fill="${chartColors.CTL}" stroke="#fffefa" stroke-width="2"/>`;
-    if(active.ATL)out+=`<circle cx="${sx}" cy="${yLoad(sd.ATL).toFixed(1)}" r="5.5" fill="${chartColors.ATL}" stroke="#fffefa" stroke-width="2"/>`;
-    if(active.SRPE&&sd.SRPE>0)out+=`<circle cx="${sx}" cy="${ySrpe(sd.SRPE).toFixed(1)}" r="5" fill="${chartColors.SRPE}" stroke="#fffefa" stroke-width="2"/>`;
-    if(active.TSB)out+=`<circle cx="${sx}" cy="${yTsb(sd.TSB).toFixed(1)}" r="5" fill="${chartColors.TSB}" stroke="#fffefa" stroke-width="2"/>`;
   }
 
   let ticks=Math.min(8,data.length);
@@ -1912,105 +1993,154 @@ function renderLoadChart(){
     out+=`<text x="${x(i)}" y="${H-16}" text-anchor="middle" fill="#6d7b71" font-size="11">${String(data[i].date.getMonth()+1).padStart(2,'0')}/${String(data[i].date.getDate()).padStart(2,'0')}</text>`;
   }
 
+  /* Vertical Crosshair Indicator Line, Point Rings, and Highlighted Date Pill */
+  const selIdx=selectedChartDate?data.findIndex(d=>isoKey(d.date)===selectedChartDate):-1;
+  if(selIdx>=0){
+    const d=data[selIdx];
+    const cx=x(selIdx);
+    const md=`${String(d.date.getMonth()+1).padStart(2,'0')}/${String(d.date.getDate()).padStart(2,'0')}`;
+    out+=`<line x1="${cx.toFixed(1)}" y1="${T}" x2="${cx.toFixed(1)}" y2="${T+PH}" stroke="#243f32" stroke-width="1.8" stroke-dasharray="4 3"/>`;
+    if(active.RPE&&d.RPE!==null&&d.RPE>0){
+      out+=`<circle cx="${cx.toFixed(1)}" cy="${yRpe(d.RPE).toFixed(1)}" r="6.5" fill="#fffefa" stroke="#243f32" stroke-width="2.4"/>`;
+    }
+    if(active.CTL){
+      out+=`<circle cx="${cx.toFixed(1)}" cy="${yLoad(d.CTL).toFixed(1)}" r="5.5" fill="#fffefa" stroke="${chartColors.CTL}" stroke-width="2.4"/>`;
+    }
+    if(active.ATL){
+      out+=`<circle cx="${cx.toFixed(1)}" cy="${yLoad(d.ATL).toFixed(1)}" r="5.5" fill="#fffefa" stroke="${chartColors.ATL}" stroke-width="2.4"/>`;
+    }
+    if(active.TSB){
+      out+=`<circle cx="${cx.toFixed(1)}" cy="${yTsb(d.TSB).toFixed(1)}" r="5.5" fill="#fffefa" stroke="${chartColors.TSB}" stroke-width="2.4"/>`;
+    }
+    out+=`<rect x="${(cx-23).toFixed(1)}" y="${H-30}" width="46" height="19" rx="5" fill="#243f32"/>`;
+    out+=`<text x="${cx.toFixed(1)}" y="${H-16.5}" text-anchor="middle" fill="#fffefa" font-size="11" font-weight="700">${md}</text>`;
+    updateChartInspector(d,active);
+  }else{
+    updateChartInspector(null,active);
+  }
+
   svg.innerHTML=out;
   document.getElementById('chartDateLabel').textContent=`${fmtDate(start)} — ${fmtDate(end)} · 共 ${total} 天`;
 }
 
-/* =========================================================
-   Interactive Touch (2-Finger Pinch Zoom & Pan + 1-Finger Scrub) & Mouse
-   ========================================================= */
+/* Interactive Chart Pointer, Pinch-to-Zoom (Two Fingers), and Horizontal Pan */
 (function initChartGestures(){
   const svg=document.getElementById('loadChart');
-  if(!svg)return;
+  const wrap=document.getElementById('chartPlotWrap');
+  if(!svg||!wrap)return;
 
+  const W=1000,L=62,R=62,PW=W-L-R;
   let pinchState=null;
+  let panState=null;
 
-  function clientXToIndex(clientX){
-    if(!lastRenderedData.length)return null;
+  function clientXToRatio(clientX){
     const rect=svg.getBoundingClientRect();
-    if(!rect.width)return null;
-    const svgX=((clientX-rect.left)/rect.width)*1000;
-    const L=62,R=62,PW=1000-L-R;
-    const ratio=Math.max(0,Math.min(1,(svgX-L)/PW));
-    return Math.round(ratio*(lastRenderedData.length-1));
+    if(!rect.width)return 0.5;
+    const svgX=((clientX-rect.left)/rect.width)*W;
+    return Math.max(0,Math.min(1,(svgX-L)/PW));
   }
 
-  function touchDistance(t1,t2){
-    return Math.hypot(t2.clientX-t1.clientX,t2.clientY-t1.clientY);
+  function selectByClientX(clientX){
+    if(!lastRenderedSeries.length)return;
+    const ratio=clientXToRatio(clientX);
+    const idx=Math.round(ratio*(lastRenderedSeries.length-1));
+    const clamped=Math.max(0,Math.min(lastRenderedSeries.length-1,idx));
+    const nextIso=isoKey(lastRenderedSeries[clamped].date);
+    if(selectedChartDate!==nextIso){
+      selectedChartDate=nextIso;
+      renderLoadChart();
+    }
   }
 
-  /* Mouse hover & click */
+  /* Desktop Mouse Hover & Click */
   svg.addEventListener('mousemove',e=>{
-    const idx=clientXToIndex(e.clientX);
-    if(idx!==null)selectChartPoint(idx);
+    if(e.buttons===0)selectByClientX(e.clientX);
   });
   svg.addEventListener('click',e=>{
-    const idx=clientXToIndex(e.clientX);
-    if(idx!==null)selectChartPoint(idx);
+    selectByClientX(e.clientX);
   });
 
-  /* Touch gestures: 1-finger tap/scrub + 2-finger pinch-to-zoom & horizontal pan */
-  svg.addEventListener('touchstart',e=>{
+  /* Touch: 2-Finger Pinch-to-Zoom + 1-Finger Horizontal Pan + Tap Select */
+  wrap.addEventListener('touchstart',e=>{
+    if(e.target.closest('button'))return;
+    const a=athletes.find(x=>x.id===currentId);
+    const curEnd=chartEnd||getLatestAthleteDate(a);
+    const curStart=chartStart||dateMinus(curEnd,chartDays-1);
+
     if(e.touches.length===2){
       e.preventDefault();
-      const a=athletes.find(x=>x.id===currentId);
-      const end=chartEnd||getLatestAthleteDate(a);
-      const start=chartStart||dateMinus(end,chartDays-1);
-      const rect=svg.getBoundingClientRect();
-      const midX=(e.touches[0].clientX+e.touches[1].clientX)/2;
-      const anchorRatio=rect.width?Math.max(0,Math.min(1,(midX-rect.left)/rect.width)):0.5;
+      panState=null;
+      const t1=e.touches[0],t2=e.touches[1];
+      const dist=Math.hypot(t1.clientX-t2.clientX,t1.clientY-t2.clientY);
+      const midX=(t1.clientX+t2.clientX)/2;
       pinchState={
-        dist:Math.max(10,touchDistance(e.touches[0],e.touches[1])),
-        midX,
-        start:new Date(start),
-        end:new Date(end),
-        spanDays:Math.max(1,Math.round((end-start)/86400000)+1),
-        anchorRatio
+        dist:Math.max(10,dist),
+        start:new Date(curStart),
+        end:new Date(curEnd),
+        anchorRatio:clientXToRatio(midX)
       };
-    }else if(e.touches.length===1&&!pinchState){
-      const idx=clientXToIndex(e.touches[0].clientX);
-      if(idx!==null)selectChartPoint(idx);
+    }else if(e.touches.length===1){
+      const t=e.touches[0];
+      panState={
+        x:t.clientX,
+        y:t.clientY,
+        start:new Date(curStart),
+        end:new Date(curEnd),
+        moved:false
+      };
     }
   },{passive:false});
 
-  svg.addEventListener('touchmove',e=>{
+  wrap.addEventListener('touchmove',e=>{
     if(e.touches.length===2&&pinchState){
       e.preventDefault();
-      const rect=svg.getBoundingClientRect();
-      const newDist=Math.max(10,touchDistance(e.touches[0],e.touches[1]));
-      const newMidX=(e.touches[0].clientX+e.touches[1].clientX)/2;
-      const scale=newDist/pinchState.dist;
+      const t1=e.touches[0],t2=e.touches[1];
+      const curDist=Math.hypot(t1.clientX-t2.clientX,t1.clientY-t2.clientY);
+      const scale=pinchState.dist/Math.max(10,curDist);
+      const origSpan=Math.max(1,Math.round((pinchState.end-pinchState.start)/86400000)+1);
+      const newSpan=Math.max(5,Math.min(730,Math.round(origSpan*scale)));
 
-      const newSpan=Math.max(5,Math.min(730,Math.round(pinchState.spanDays/scale)));
-      const anchorDayOffset=pinchState.anchorRatio*(pinchState.spanDays-1);
-      const anchorDate=new Date(pinchState.start);
-      anchorDate.setDate(pinchState.start.getDate()+Math.round(anchorDayOffset));
-
-      /* Also allow 2-finger horizontal pan */
-      const panPx=newMidX-pinchState.midX;
-      const panDays=rect.width?Math.round((panPx/rect.width)*newSpan):0;
-
-      const newStart=new Date(anchorDate);
-      newStart.setDate(anchorDate.getDate()-Math.round(pinchState.anchorRatio*(newSpan-1))-panDays);
-      const newEnd=new Date(newStart);
-      newEnd.setDate(newStart.getDate()+newSpan-1);
-
-      chartStart=dayStart(newStart);
-      chartEnd=dayStart(newEnd);
+      const anchorMs=pinchState.start.getTime()+pinchState.anchorRatio*(origSpan-1)*86400000;
+      const newStartMs=anchorMs-pinchState.anchorRatio*(newSpan-1)*86400000;
+      chartStart=dayStart(new Date(newStartMs));
+      chartEnd=dayStart(new Date(chartStart.getTime()+(newSpan-1)*86400000));
       chartDays=newSpan;
       chartMode='custom';
-      syncRangeUI([7,14,28,90,180,365,730].includes(newSpan)?String(newSpan):'custom');
+      isPinchZoomed=true;
       renderLoadChart();
-    }else if(e.touches.length===1&&!pinchState){
-      const idx=clientXToIndex(e.touches[0].clientX);
-      if(idx!==null)selectChartPoint(idx);
+    }else if(e.touches.length===1&&panState&&!pinchState){
+      const t=e.touches[0];
+      const dx=t.clientX-panState.x;
+      const dy=t.clientY-panState.y;
+      if(!panState.moved&&Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)){
+        panState.moved=true;
+      }
+      if(panState.moved){
+        e.preventDefault();
+        const rect=svg.getBoundingClientRect();
+        const plotPx=Math.max(100,rect.width*(PW/W));
+        const spanDays=Math.max(1,Math.round((panState.end-panState.start)/86400000)+1);
+        const shiftDays=Math.round((-dx/plotPx)*spanDays);
+        chartStart=dayStart(new Date(panState.start.getTime()+shiftDays*86400000));
+        chartEnd=dayStart(new Date(panState.end.getTime()+shiftDays*86400000));
+        chartMode='custom';
+        isPinchZoomed=true;
+        renderLoadChart();
+      }
     }
   },{passive:false});
 
-  svg.addEventListener('touchend',e=>{
-    if(e.touches.length<2)pinchState=null;
+  wrap.addEventListener('touchend',e=>{
+    if(pinchState&&e.touches.length<2){
+      pinchState=null;
+    }
+    if(panState&&e.touches.length===0){
+      if(!panState.moved&&e.changedTouches.length){
+        selectByClientX(e.changedTouches[0].clientX);
+      }
+      panState=null;
+    }
   });
-  svg.addEventListener('touchcancel',()=>{pinchState=null});
 })();
 
 render();
