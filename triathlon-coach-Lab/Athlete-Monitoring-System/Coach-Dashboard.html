@@ -650,7 +650,6 @@ button:active{transform:translateY(.5px)}
   .coach-roster-table{min-width:720px}
 }
 
-.week-start-date{display:block;margin-top:2px;color:var(--muted);font-size:10px;font-weight:500;line-height:1.15;white-space:nowrap;}
 /* Weekly multi-sport breakdown tabs */
 .weekly-sport-switch{
   display:flex;
@@ -3601,17 +3600,17 @@ function renderLoadChart(){
   }
 
   if(active.RPE){
-    // RPE is a subjective 1–10 score: show it as a compact line with markers,
-    // not full-height bars that visually overpower CTL/ATL/TSS.
-    const rpePoints=data.map((d,i)=>d.RPE!==null&&d.RPE>0?{x:x(i),y:yRpe(d.RPE),v:d.RPE,i}:null).filter(Boolean);
-    if(rpePoints.length>1){
-      out+=`<polyline points="${rpePoints.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')}" fill="none" stroke="#52745f" stroke-width="${total>35?1.8:2.2}" stroke-linecap="round" stroke-linejoin="round" opacity=".88"/>`;
-    }
-    rpePoints.forEach(p=>{
-      const isSel=p.i===selectedChartIndex;
-      out+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isSel?5.2:3.2}" fill="#52745f" stroke="#fffefa" stroke-width="${isSel?1.8:1.1}"/>`;
+    // RPE is subjective 1–10: use narrow columns on the right axis.
+    // Column width adapts to date density; no extra colored dot is placed above each bar.
+    const baseline=yRpe(0);
+    const slotWidth=total>1?PW/(total-1):PW;
+    const rpeBarWidth=Math.max(3.2,Math.min(13,slotWidth*0.58));
+    data.forEach((d,i)=>{
+      if(d.RPE===null||d.RPE===undefined||d.RPE<=0)return;
+      const cx=x(i),top=yRpe(d.RPE),isSel=i===selectedChartIndex;
+      out+=`<rect x="${(cx-rpeBarWidth/2).toFixed(1)}" y="${top.toFixed(1)}" width="${rpeBarWidth.toFixed(1)}" height="${Math.max(1,baseline-top).toFixed(1)}" rx="${total>90?1.2:2.5}" fill="#52745f" opacity="${isSel?0.9:(total>90?0.38:0.55)}"><title>${fmtDate(d.date)} · RPE ${d.RPE}/10</title></rect>`;
       if(total<=35||isSel){
-        out+=`<text x="${p.x.toFixed(1)}" y="${Math.max(T+11,p.y-8).toFixed(1)}" text-anchor="middle" fill="#52745f" font-size="${isSel?12:10}" font-weight="750">${p.v}</text>`;
+        out+=`<text x="${cx.toFixed(1)}" y="${Math.max(T+11,top-6).toFixed(1)}" text-anchor="middle" fill="#52745f" font-size="${isSel?12:10}" font-weight="750">${d.RPE}</text>`;
       }
     });
   }
@@ -3644,7 +3643,7 @@ function renderLoadChart(){
     });
   }
 
-  /* RPE values are encoded by bar height and the numeric label; no extra dot marker. */
+  /* RPE is rendered as narrow bars on the right 1–10 axis. */
 
   if(selectedChartIndex!==null&&data[selectedChartIndex]){
     const sd=data[selectedChartIndex];
@@ -3796,9 +3795,6 @@ function buildAthleteWeeklyData(a){
         map[mon].estRun+=Number(w.plannedDistanceKm||0);
         map[mon].realRun+=Number(w.distanceKm||0);
       }
-      if(w.comment&&map[mon].comments.length<2&&!map[mon].comments.includes(w.comment)){
-        map[mon].comments.push(w.comment);
-      }
     });
   }
 
@@ -3817,7 +3813,7 @@ function buildAthleteWeeklyData(a){
   const sortedKeys=Object.keys(map).sort((x,y)=>x.localeCompare(y));
   const weeks=sortedKeys.map((k,idx)=>{
     const item=map[k];
-    const remark=item.customRemark!==undefined?item.customRemark:(item.comments.join('；'));
+    const remark=item.customRemark!==undefined?item.customRemark:'';
     return {
       date:item.date,
       weekNum:item.customWeekLabel||String(idx+1),
@@ -3876,7 +3872,7 @@ function renderWeeklyVolume(){
     const metricActualText=isCountMetric?actualMetric:(Math.round(actualMetric*10)/10);
     return `<tr onclick="openWeekModal('${esc(w.date)}')" title="點選編輯此週數據與備註">
       <td class="col-sticky-1"><strong>${esc(fmtShortDate(w.date))}</strong></td>
-      <td class="col-sticky-2"><strong>W${esc(w.weekNum)}</strong><small class="week-start-date">(${esc(fmtShortDate(w.date))})</small></td>
+      <td class="col-sticky-2"><strong>W${esc(w.weekNum)}</strong></td>
       <td class="col-est">${Math.floor(estMin/60)}</td>
       <td class="col-est">${Math.round(estMin%60)}</td>
       <td class="col-real">${Math.floor(realMin/60)}</td>
@@ -3911,11 +3907,6 @@ function renderWeeklyVolume(){
       <td>${pctBadge(metricPct)}</td><td></td>
     </tr>
   `;
-
-  const avgHrs=visible.length?(totRealMin/60/visible.length).toFixed(1):'0.0';
-  const avgRun=visible.length?(totRealRun/visible.length).toFixed(1):'0.0';
-  document.getElementById('weeklyDurAvgLabel').textContent=`週均 ${avgHrs} 小時`;
-  document.getElementById('weeklyRunAvgLabel').textContent=`週均 ${avgRun} km`;
 
   const catRows=visible.map(w=>({
     week:w,
