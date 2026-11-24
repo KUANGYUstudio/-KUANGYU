@@ -549,6 +549,107 @@ button:active{transform:translateY(.5px)}
   opacity:.78;
 }
 
+/* Independent coach sections in the full athlete list */
+.coach-roster-groups{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+.coach-roster-section{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--surface, #fff);
+  box-shadow:0 3px 12px rgba(35,55,42,.045);
+}
+.coach-roster-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:17px 22px;
+  border-bottom:1px solid var(--line-soft);
+}
+.coach-roster-title{
+  font-size:16px;
+  line-height:1.35;
+  font-weight:800;
+  letter-spacing:.2px;
+}
+.coach-roster-count{
+  flex:0 0 auto;
+  font-size:12px;
+  font-weight:650;
+  color:var(--muted);
+  background:rgba(255,255,255,.68);
+  border:1px solid currentColor;
+  border-color:var(--line);
+  border-radius:999px;
+  padding:4px 10px;
+}
+.coach-roster-section.theme-kuangwu .coach-roster-heading{
+  color:var(--kw-main);
+  background:var(--kw-surface);
+  box-shadow:inset 4px 0 0 var(--kw-main);
+}
+.coach-roster-section.theme-yufan .coach-roster-heading{
+  color:var(--yf-main);
+  background:var(--yf-surface);
+  box-shadow:inset 4px 0 0 var(--yf-main);
+}
+.coach-roster-section.theme-other .coach-roster-heading{
+  color:var(--green);
+  background:var(--sage-surface);
+  box-shadow:inset 4px 0 0 var(--sage);
+}
+.coach-roster-table-wrap{width:100%;overflow-x:auto}
+.coach-roster-table{
+  width:100%;
+  min-width:760px;
+  table-layout:fixed;
+  border-collapse:collapse;
+  text-align:left;
+}
+.coach-roster-table th{
+  padding:11px 12px;
+  background:#f7f9f5;
+  color:#56675c;
+  font-size:12px;
+  font-weight:750;
+  white-space:nowrap;
+  border-bottom:1px solid var(--line);
+}
+.coach-roster-table th:first-child,
+.coach-roster-table td:first-child{padding-left:22px}
+.coach-roster-table th:last-child,
+.coach-roster-table td:last-child{padding-right:22px}
+.coach-roster-table th:nth-child(1){width:22%;text-align:left}
+.coach-roster-table th:nth-child(2){width:25%;text-align:left}
+.coach-roster-table th:nth-child(3){width:10%;text-align:center}
+.coach-roster-table th:nth-child(4){width:11%;text-align:center}
+.coach-roster-table th:nth-child(5){width:18%;text-align:center}
+.coach-roster-table th:nth-child(6){width:14%;text-align:center}
+.coach-roster-table td{
+  padding:14px 12px;
+  font-size:14px;
+  vertical-align:middle;
+  border-bottom:1px solid var(--line-soft);
+}
+.coach-roster-table tbody tr:last-child td{border-bottom:0}
+.coach-roster-table td:nth-child(3),
+.coach-roster-table td:nth-child(4),
+.coach-roster-table td:nth-child(5),
+.coach-roster-table td:nth-child(6){text-align:center}
+.coach-roster-section.theme-kuangwu .coach-roster-table tbody tr:hover td{background:var(--kw-tint)}
+.coach-roster-section.theme-yufan .coach-roster-table tbody tr:hover td{background:var(--yf-tint)}
+.coach-roster-section.theme-other .coach-roster-table tbody tr:hover td{background:#f5f8f3}
+@media(max-width:760px){
+  .coach-roster-groups{gap:16px}
+  .coach-roster-heading{padding:14px 16px}
+  .coach-roster-table{min-width:720px}
+}
+
 /* Column alignments for Dashboard Roster */
 #dashboardRosterTable{table-layout:fixed}
 #dashboardRosterTable th:nth-child(1),#dashboardRosterTable td:nth-child(1){width:29%;text-align:left}
@@ -1999,20 +2100,8 @@ button:active{transform:translateY(.5px)}
 
   <div class="card roster-card">
     <div class="card-head"><h3>學員列表</h3><small id="listCount">0 位學員</small></div>
-    <div class="roster-table-wrap" id="athletesRosterWrap">
-      <table class="roster-table" id="athletesRosterTable">
-        <thead>
-          <tr>
-            <th>學員</th>
-            <th>目標／比賽</th>
-            <th>RPE</th>
-            <th>睡眠 /5</th>
-            <th>身體狀況</th>
-            <th>狀態</th>
-          </tr>
-        </thead>
-        <tbody id="athleteRows"></tbody>
-      </table>
+    <div class="coach-roster-groups" id="athletesRosterWrap">
+      <div id="athleteRows"></div>
     </div>
     <div id="listEmpty" class="empty"><b>尚未建立學員資料</b>點選右上角「新增學員」開始建立真實名單，或先載入示範資料預覽。</div>
   </div>
@@ -2604,9 +2693,6 @@ function render(){
   document.getElementById('listCount').textContent=active.length+' 位學員';
 
   listBody.innerHTML=groups.map(g=>{
-    const headRow=`<tr class="coach-group-row theme-${g.theme}">
-      <td colspan="6"><div class="coach-group-inner"><span>${esc(g.label)}</span><span class="coach-group-count">${g.members.length} 位學員</span></div></td>
-    </tr>`;
     const memberRows=g.members.map(a=>{
       const rpeVal=a.rpe||a.fatigue;
       return `<tr class="athlete-row theme-${g.theme}">
@@ -2629,7 +2715,25 @@ function render(){
         <td>${statusBadgeHtml(a,'',false)}</td>
       </tr>`;
     }).join('');
-    return headRow+memberRows;
+    return `<section class="coach-roster-section theme-${g.theme}">
+      <div class="coach-roster-heading">
+        <div class="coach-roster-title">${esc(g.label)}</div>
+        <span class="coach-roster-count">${g.members.length} 位學員</span>
+      </div>
+      <div class="coach-roster-table-wrap">
+        <table class="coach-roster-table">
+          <thead><tr>
+            <th>學員</th>
+            <th>目標／比賽</th>
+            <th>RPE</th>
+            <th>睡眠 /5</th>
+            <th>身體狀況</th>
+            <th>狀態</th>
+          </tr></thead>
+          <tbody>${memberRows}</tbody>
+        </table>
+      </div>
+    </section>`;
   }).join('');
 
   /* 3. Cross-Coach Alerts */
