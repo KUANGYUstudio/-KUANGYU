@@ -650,6 +650,138 @@ button:active{transform:translateY(.5px)}
   .coach-roster-table{min-width:720px}
 }
 
+/* Weekly multi-sport breakdown tabs */
+.weekly-sport-switch{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#f8f5f5;
+}
+.weekly-sport-tab{
+  appearance:none;
+  border:1px solid #d9c4ca;
+  background:#fffefa;
+  color:#526257;
+  border-radius:999px;
+  padding:7px 14px;
+  font:inherit;
+  font-size:12.5px;
+  font-weight:750;
+  cursor:pointer;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.weekly-sport-tab:hover{border-color:var(--accent);color:var(--accent)}
+.weekly-sport-tab.is-active{
+  color:#fff;
+  background:var(--accent);
+  border-color:var(--accent);
+  box-shadow:0 2px 6px rgba(50,40,45,.12);
+}
+.weekly-sport-note{
+  margin:0;
+  padding:0 3px 4px;
+  color:var(--muted);
+  font-size:11.5px;
+  line-height:1.55;
+}
+.weekly-chart-box{min-width:0}
+@media(max-width:760px){
+  .weekly-sport-switch{gap:6px;padding:9px}
+  .weekly-sport-tab{padding:7px 11px;font-size:12px}
+}
+
+/* Independent coach sections in Today's Athlete Status */
+.dashboard-coach-groups{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.dashboard-coach-section{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--surface, #fff);
+  box-shadow:0 2px 9px rgba(35,55,42,.04);
+}
+.dashboard-coach-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 18px;
+  font-size:13px;
+  font-weight:800;
+  border-bottom:1px solid var(--line-soft);
+}
+.dashboard-coach-heading span{
+  font-size:11.5px;
+  font-weight:650;
+  opacity:.78;
+  white-space:nowrap;
+}
+.dashboard-coach-section.theme-kuangwu .dashboard-coach-heading{
+  color:var(--kw-main);
+  background:var(--kw-surface);
+  box-shadow:inset 4px 0 0 var(--kw-main);
+}
+.dashboard-coach-section.theme-yufan .dashboard-coach-heading{
+  color:var(--yf-main);
+  background:var(--yf-surface);
+  box-shadow:inset 4px 0 0 var(--yf-main);
+}
+.dashboard-coach-section.theme-other .dashboard-coach-heading{
+  color:var(--green);
+  background:var(--sage-surface);
+  box-shadow:inset 4px 0 0 var(--sage);
+}
+.dashboard-coach-table-wrap{width:100%;overflow-x:auto}
+.dashboard-coach-table{
+  width:100%;
+  min-width:700px;
+  table-layout:fixed;
+  border-collapse:collapse;
+  text-align:left;
+}
+.dashboard-coach-table th{
+  padding:10px 9px;
+  background:#f7f9f5;
+  color:#56675c;
+  font-size:11.5px;
+  font-weight:750;
+  white-space:nowrap;
+  border-bottom:1px solid var(--line);
+}
+.dashboard-coach-table th:first-child,
+.dashboard-coach-table td:first-child{padding-left:18px}
+.dashboard-coach-table th:last-child,
+.dashboard-coach-table td:last-child{padding-right:18px}
+.dashboard-coach-table th:nth-child(1){width:25%;text-align:left}
+.dashboard-coach-table th:nth-child(2){width:8%;text-align:center}
+.dashboard-coach-table th:nth-child(3){width:10%;text-align:center}
+.dashboard-coach-table th:nth-child(4){width:14%;text-align:center}
+.dashboard-coach-table th:nth-child(5){width:10%;text-align:center}
+.dashboard-coach-table th:nth-child(6){width:16%;text-align:center}
+.dashboard-coach-table th:nth-child(7){width:17%;text-align:center}
+.dashboard-coach-table td{
+  padding:12px 9px;
+  font-size:13px;
+  vertical-align:middle;
+  border-bottom:1px solid var(--line-soft);
+}
+.dashboard-coach-table tbody tr:last-child td{border-bottom:0}
+.dashboard-coach-table td:nth-child(n+2){text-align:center}
+.dashboard-coach-section.theme-kuangwu .dashboard-coach-table tbody tr:hover td{background:var(--kw-tint)}
+.dashboard-coach-section.theme-yufan .dashboard-coach-table tbody tr:hover td{background:var(--yf-tint)}
+.dashboard-coach-section.theme-other .dashboard-coach-table tbody tr:hover td{background:#f5f8f3}
+@media(max-width:760px){
+  .dashboard-coach-groups{gap:14px}
+  .dashboard-coach-table{min-width:680px}
+}
+
 /* Column alignments for Dashboard Roster */
 #dashboardRosterTable{table-layout:fixed}
 #dashboardRosterTable th:nth-child(1),#dashboardRosterTable td:nth-child(1){width:29%;text-align:left}
@@ -2052,21 +2184,8 @@ button:active{transform:translateY(.5px)}
   <div class="grid two">
     <div class="card roster-card">
       <div class="card-head"><h3>學員今日狀態</h3><small>共同監控 · RPE 為單次訓練回報</small></div>
-      <div class="roster-table-wrap" id="dashboardRosterWrap">
-        <table class="roster-table" id="dashboardRosterTable">
-          <thead>
-            <tr>
-              <th>學員</th>
-              <th>RPE</th>
-              <th>睡眠 /5</th>
-              <th>身體狀況</th>
-              <th>狀態</th>
-              <th>提醒紀錄</th>
-              <th>提醒</th>
-            </tr>
-          </thead>
-          <tbody id="dashboardRosterBody"></tbody>
-        </table>
+      <div class="dashboard-coach-groups" id="dashboardRosterWrap">
+        <div id="dashboardRosterBody"></div>
       </div>
       <div id="dashboardEmpty" class="empty"><b>目前還沒有正式學員</b>這裡會顯示每位學員最新的恢復回報。<br>尚未回報的學員可以直接點選「提醒回報」。</div>
     </div>
@@ -2338,21 +2457,28 @@ button:active{transform:translateY(.5px)}
       </div>
 
       <div class="weekly-charts-col">
+        <div class="weekly-sport-switch" role="group" aria-label="選擇訓練項目">
+          <button type="button" class="weekly-sport-tab is-active" data-sport="swim" onclick="selectWeeklySport('swim',this)">游泳</button>
+          <button type="button" class="weekly-sport-tab" data-sport="bike" onclick="selectWeeklySport('bike',this)">自行車</button>
+          <button type="button" class="weekly-sport-tab" data-sport="run" onclick="selectWeeklySport('run',this)">跑步</button>
+          <button type="button" class="weekly-sport-tab" data-sport="strength" onclick="selectWeeklySport('strength',this)">肌力</button>
+          <button type="button" class="weekly-sport-tab" data-sport="other" onclick="selectWeeklySport('other',this)">其他</button>
+        </div>
         <div class="weekly-chart-box">
           <div class="weekly-chart-head">
-            <h4>每週實際訓練時數 (hr)</h4>
+            <h4 id="weeklyDurChartTitle">每週實際游泳訓練時數 (hr)</h4>
             <span id="weeklyDurAvgLabel">—</span>
           </div>
-          <svg id="weeklyDurationChart" class="weekly-bar-svg" viewBox="0 0 520 220" role="img" aria-label="每週實際訓練時數長條圖"></svg>
+          <svg id="weeklyDurationChart" class="weekly-bar-svg" viewBox="0 0 520 220" role="img" aria-label="每週分項實際訓練時數長條圖"></svg>
         </div>
-
         <div class="weekly-chart-box">
           <div class="weekly-chart-head">
-            <h4>每週實際跑量 (km)</h4>
+            <h4 id="weeklyMetricChartTitle">每週實際游泳距離 (km)</h4>
             <span id="weeklyRunAvgLabel">—</span>
           </div>
-          <svg id="weeklyRunChart" class="weekly-bar-svg" viewBox="0 0 520 220" role="img" aria-label="每週實際跑量長條圖"></svg>
+          <svg id="weeklyRunChart" class="weekly-bar-svg" viewBox="0 0 520 220" role="img" aria-label="每週分項距離或堂數長條圖"></svg>
         </div>
+        <p class="weekly-sport-note" id="weeklySportNote">依 TrainingPeaks 匯入紀錄分類；沒有資料的項目不會自行推估。</p>
       </div>
     </div>
   </div>
@@ -2652,9 +2778,6 @@ function render(){
   document.getElementById('dashboardEmpty').style.display=active.length?'none':'block';
 
   dashBody.innerHTML=groups.map(g=>{
-    const headRow=`<tr class="coach-group-row theme-${g.theme}">
-      <td colspan="7"><div class="coach-group-inner"><span>${esc(g.label)}</span><span class="coach-group-count">${g.members.length} 位學員</span></div></td>
-    </tr>`;
     const memberRows=g.members.map(a=>{
       const st=evaluateAthleteStatus(a);
       const pending=st.level==='pending';
@@ -2682,7 +2805,26 @@ function render(){
         <td class="dashboard-action-cell">${pending?`<button class="remind-btn ${a.lastReminder?'sent':''}" onclick="remindAthlete('${a.id}')">${a.lastReminder?'再次提醒':'提醒回報'}</button>`:'—'}</td>
       </tr>`;
     }).join('');
-    return headRow+memberRows;
+    return `<section class="dashboard-coach-section theme-${g.theme}">
+      <div class="dashboard-coach-heading">
+        <strong>${esc(g.label)}</strong>
+        <span>${g.members.length} 位學員</span>
+      </div>
+      <div class="dashboard-coach-table-wrap">
+        <table class="dashboard-coach-table">
+          <thead><tr>
+            <th>學員</th>
+            <th>RPE</th>
+            <th>睡眠 /5</th>
+            <th>身體狀況</th>
+            <th>狀態</th>
+            <th>提醒紀錄</th>
+            <th>提醒</th>
+          </tr></thead>
+          <tbody>${memberRows}</tbody>
+        </table>
+      </div>
+    </section>`;
   }).join('');
 
   /* 2. Athletes List Borderless Grouped Roster (No coach column, grouped like dashboard) */
@@ -3387,6 +3529,13 @@ function renderLoadChart(){
   const maxLoad=Math.max(100,...data.map(d=>Math.max(d.CTL,d.ATL,d.TSS)));
   const loadCeil=Math.ceil(maxLoad/25)*25;
   const maxSrpe=Math.max(600,...data.map(d=>d.SRPE||0));
+  // Keep short ranges expressive; soften strokes and fills as the timeline gets denser.
+  const densityScale=total>35?0.52:(total>21?0.66:(total>14?0.82:1));
+  const loadStroke=(3*densityScale).toFixed(2);
+  const tsbStroke=(2.6*densityScale).toFixed(2);
+  const srpeStroke=(2.2*densityScale).toFixed(2);
+  const areaOpacity=total>21?0.075:(total>14?0.105:0.15);
+
 
   const yLoad=v=>T+PH-(Math.max(0,v)/loadCeil)*PH;
   const yTsb=v=>T+PH-((v+50)/100)*PH;
@@ -3439,20 +3588,20 @@ function renderLoadChart(){
   ['CTL','ATL'].forEach(k=>{
     if(active[k]){
       let sc=yLoad,base=T+PH;
-      out+=`<path d="${areaPath(k,sc,base)}" fill="${chartColors[k]}" opacity=".15"/>`;
-      out+=`<path d="${linePath(k,sc)}" fill="none" stroke="${chartColors[k]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+      out+=`<path d="${areaPath(k,sc,base)}" fill="${chartColors[k]}" opacity="${areaOpacity}"/>`;
+      out+=`<path d="${linePath(k,sc)}" fill="none" stroke="${chartColors[k]}" stroke-width="${loadStroke}" stroke-linecap="round" stroke-linejoin="round"/>`;
     }
   });
 
   if(active.SRPE){
-    out+=`<path d="${linePath('SRPE',ySrpe)}" fill="none" stroke="${chartColors.SRPE}" stroke-width="2.2" stroke-dasharray="6 4" stroke-linecap="round"/>`;
+    out+=`<path d="${linePath('SRPE',ySrpe)}" fill="none" stroke="${chartColors.SRPE}" stroke-width="${srpeStroke}" stroke-dasharray="5 4" stroke-linecap="round"/>`;
   }
 
   if(active.TSB){
     const zeroY=yTsb(0);
     out+=`<line x1="${L}" y1="${zeroY}" x2="${W-R}" y2="${zeroY}" stroke="#648db5" stroke-dasharray="4 4" opacity=".45"/>`;
-    out+=`<path d="${areaPath('TSB',yTsb,zeroY)}" fill="${chartColors.TSB}" opacity=".14"/>`;
-    out+=`<path d="${linePath('TSB',yTsb)}" fill="none" stroke="${chartColors.TSB}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`;
+    out+=`<path d="${areaPath('TSB',yTsb,zeroY)}" fill="${chartColors.TSB}" opacity="${areaOpacity}"/>`;
+    out+=`<path d="${linePath('TSB',yTsb)}" fill="none" stroke="${chartColors.TSB}" stroke-width="${tsbStroke}" stroke-linecap="round" stroke-linejoin="round"/>`;
   }
 
   if(active.TSS){
@@ -3461,15 +3610,7 @@ function renderLoadChart(){
     });
   }
 
-  if(active.RPE){
-    data.forEach((d,i)=>{
-      if(d.RPE!==null&&d.RPE>0){
-        const fill=d.RPE>=8?'#b35c54':(d.RPE>=6?'#d49422':'#213a2e');
-        const isSel=(i===selectedChartIndex);
-        out+=`<circle cx="${x(i).toFixed(1)}" cy="${yRpe(d.RPE).toFixed(1)}" r="${isSel?'5.5':'3.6'}" fill="${fill}" ${isSel?'stroke="#fffefa" stroke-width="2"':''}/>`;
-      }
-    });
-  }
+  /* RPE values are encoded by bar height and the numeric label; no extra dot marker. */
 
   if(selectedChartIndex!==null&&data[selectedChartIndex]){
     const sd=data[selectedChartIndex];
@@ -3516,17 +3657,69 @@ function fmtHrMin(totalMin){
 }
 
 function classifyWorkoutSport(w){
-  const t=String(w.type||'').toLowerCase();
-  const name=String(w.sessionName||'').toLowerCase();
-  const txt=t+' '+name;
-  if(txt.includes('swim')||txt.includes('泳'))return 'swim';
-  if(txt.includes('bike')||txt.includes('cycl')||txt.includes('ride')||txt.includes('騎')||txt.includes('自行車')||txt.includes('單車')||txt.includes('功率台'))return 'bike';
-  if(txt.includes('run')||txt.includes('跑')||txt.includes('marathon')||txt.includes('馬拉松'))return 'run';
-  return 'other';
+  const normalize=v=>String(v||'').toLowerCase().trim().replace(/[：:＿_\-]/g,' ');
+  const classifyText=txt=>{
+    if(/swim|泳|游泳/.test(txt))return 'swim';
+    if(/bike|cycling|cycle|ride|騎車|自行車|單車|功率台|室內車/.test(txt))return 'bike';
+    if(/run|running|跑步|跑走|馬拉松|越野跑/.test(txt))return 'run';
+    if(/strength|weight training|weightlifting|gym|resistance|muscle|肌力|重訓|重量訓練|阻力訓練|核心訓練/.test(txt))return 'strength';
+    return null;
+  };
+  // TrainingPeaks workout type is the primary source; use title only when type is generic or absent.
+  return classifyText(normalize(w.type))||classifyText(normalize(w.sessionName))||'other';
 }
 
 function isRunWorkout(w){
   return classifyWorkoutSport(w)==='run';
+}
+
+let weeklySelectedSport='swim';
+const WEEKLY_SPORT_META={
+  swim:{label:'游泳',metric:'距離',unit:'km',color:'#477f9a'},
+  bike:{label:'自行車',metric:'距離',unit:'km',color:'#668b70'},
+  run:{label:'跑步',metric:'距離',unit:'km',color:'#b47758'},
+  strength:{label:'肌力',metric:'堂數',unit:'堂',color:'#8a78a8'},
+  other:{label:'其他',metric:'堂數',unit:'堂',color:'#8a9690'}
+};
+
+function getWeeklySportBreakdown(a,weeks){
+  const byWeek={};
+  weeks.forEach(w=>{
+    byWeek[w.date]={};
+    Object.keys(WEEKLY_SPORT_META).forEach(k=>{
+      byWeek[w.date][k]={mins:0,planMins:0,km:0,planKm:0,sessions:0};
+    });
+  });
+  const workouts=Array.isArray(a?.tpWorkouts)?a.tpWorkouts:[];
+  workouts.forEach(w=>{
+    if(!w.date)return;
+    const mon=getMondayIso(w.date);
+    if(!byWeek[mon])return;
+    const cat=classifyWorkoutSport(w);
+    const bucket=byWeek[mon][cat]||byWeek[mon].other;
+    bucket.mins+=Number(w.duration)||0;
+    bucket.planMins+=Number(w.plannedDuration)||0;
+    bucket.km+=Number(w.distanceKm)||0;
+    bucket.planKm+=Number(w.plannedDistanceKm)||0;
+    bucket.sessions+=1;
+  });
+  // Manual weekly run-distance overrides remain available when no TP run records exist for that week.
+  weeks.forEach(w=>{
+    const bucket=byWeek[w.date]?.run;
+    const hasTpRun=workouts.some(x=>x.date&&getMondayIso(x.date)===w.date&&classifyWorkoutSport(x)==='run');
+    if(bucket&&!hasTpRun&&Number(w.realRun)>0)bucket.km=Number(w.realRun);
+    if(bucket&&!hasTpRun&&Number(w.estRun)>0)bucket.planKm=Number(w.estRun);
+  });
+  return byWeek;
+}
+
+function selectWeeklySport(sport,button){
+  if(!WEEKLY_SPORT_META[sport])return;
+  weeklySelectedSport=sport;
+  document.querySelectorAll('.weekly-sport-tab').forEach(btn=>{
+    btn.classList.toggle('is-active',btn.dataset.sport===sport);
+  });
+  renderWeeklyVolume();
 }
 
 function buildDemoWeeks(){
@@ -3686,15 +3879,43 @@ function renderWeeklyVolume(){
   document.getElementById('weeklyDurAvgLabel').textContent=`週均 ${avgHrs} 小時`;
   document.getElementById('weeklyRunAvgLabel').textContent=`週均 ${avgRun} km`;
 
-  renderWeeklyBarSvg('weeklyDurationChart',visible.map(w=>({
-    label:`W${w.weekNum}`,
-    val:Math.round((w.realMin/60)*10)/10
-  })),'#4b6e59','小時');
+  const meta=WEEKLY_SPORT_META[weeklySelectedSport]||WEEKLY_SPORT_META.swim;
+  const sportWeeks=getWeeklySportBreakdown(a,visible);
+  const catRows=visible.map(w=>({
+    week:w,
+    item:sportWeeks[w.date]?.[weeklySelectedSport]||{mins:0,km:0,sessions:0,planMins:0,planKm:0}
+  }));
+  const totalMins=catRows.reduce((sum,row)=>sum+row.item.mins,0);
+  const totalSessions=catRows.reduce((sum,row)=>sum+row.item.sessions,0);
+  const totalKm=catRows.reduce((sum,row)=>sum+row.item.km,0);
+  const avgHours=visible.length?(totalMins/60/visible.length).toFixed(1):'0.0';
+  const avgMetric=visible.length?(weeklySelectedSport==='strength'||weeklySelectedSport==='other'
+    ?(totalSessions/visible.length).toFixed(1)
+    :(totalKm/visible.length).toFixed(1)):'0.0';
 
-  renderWeeklyBarSvg('weeklyRunChart',visible.map(w=>({
-    label:`W${w.weekNum}`,
-    val:Math.round(w.realRun*10)/10
-  })),'#47728c','km');
+  document.getElementById('weeklyDurChartTitle').textContent=`每週實際${meta.label}訓練時數 (hr)`;
+  document.getElementById('weeklyDurAvgLabel').textContent=`週均 ${avgHours} 小時`;
+  document.getElementById('weeklyMetricChartTitle').textContent=`每週實際${meta.label}${meta.metric} (${meta.unit})`;
+  document.getElementById('weeklyRunAvgLabel').textContent=`週均 ${avgMetric} ${meta.unit}`;
+
+  renderWeeklyBarSvg('weeklyDurationChart',catRows.map(row=>({
+    label:`W${row.week.weekNum}`,val:Math.round((row.item.mins/60)*10)/10
+  })),meta.color,'小時');
+
+  const metricValues=catRows.map(row=>({
+    label:`W${row.week.weekNum}`,
+    val:weeklySelectedSport==='strength'||weeklySelectedSport==='other'
+      ?row.item.sessions:Math.round(row.item.km*10)/10
+  }));
+  renderWeeklyBarSvg('weeklyRunChart',metricValues,meta.color,meta.unit);
+
+  const hasTp=Array.isArray(a?.tpWorkouts)&&a.tpWorkouts.length>0;
+  const note=document.getElementById('weeklySportNote');
+  if(note){
+    note.textContent=hasTp
+      ?`依 TrainingPeaks CSV 的訓練類型與名稱分類；${meta.label}共 ${totalSessions} 堂、${fmtHrMin(totalMins)}${(weeklySelectedSport==='strength'||weeklySelectedSport==='other')?'':`、${totalKm.toFixed(1)} km`}。`
+      :'尚未匯入 TrainingPeaks CSV。分項圖表不會將總時數自行分配到各項運動；手動週紀錄的跑量仍保留在左側表格。';
+  }
 }
 
 function renderWeeklyBarSvg(svgId,items,barColor,unitLabel){
@@ -3894,7 +4115,8 @@ function computeWeeklyReportMetrics(a,weekObj){
     swim:{label:'游泳 Swim',mins:0,planMins:0,km:0,sessions:0},
     bike:{label:'自行車 Bike',mins:0,planMins:0,km:0,sessions:0},
     run:{label:'跑步 Run',mins:0,planMins:0,km:0,sessions:0},
-    other:{label:'肌力／其他 Other',mins:0,planMins:0,km:0,sessions:0}
+    strength:{label:'肌力 Strength',mins:0,planMins:0,km:0,sessions:0},
+    other:{label:'其他 Other',mins:0,planMins:0,km:0,sessions:0}
   };
 
   let sportSource='none';
