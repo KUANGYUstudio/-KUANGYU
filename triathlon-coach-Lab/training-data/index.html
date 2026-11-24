@@ -339,7 +339,7 @@ footer {
       <b>01｜訓練負荷分析</b><small>單次負荷、CTL、ATL、TSB 與 Ramp Rate</small>
     </button>
     <button class="tab" data-category="physiology">
-      <b>02｜生理指標與強度</b><small>乳酸閾值、訓練區間與游泳配速</small>
+      <b>02｜生理指標與恢復</b><small>HRV、心率、睡眠、壓力與訓練強度</small>
     </button>
     <button class="tab" data-category="planning">
       <b>03｜訓練週期與賽季</b><small>訓練階段與年度訓練計畫</small>
@@ -676,6 +676,144 @@ const data = {
       ["TrainingPeaks Glossary","https://help.trainingpeaks.com/hc/en-us/articles/115001271712-Glossary"]
     ]
   },
+  hrv:{
+    title:"HRV｜心率變異度",en:"Heart Rate Variability",tag:"優先比較個人基準",
+    desc:"HRV 是連續心跳間隔的變異程度，常以毫秒（ms）呈現。它可作為觀察自律神經調節與恢復狀態的線索，但會受到測量時間、姿勢、呼吸、睡眠、訓練、疾病與生活壓力影響。不同裝置與演算法的數值不一定能直接互相比較。",
+    heads:["觀察方式","教練判讀"],
+    rows:[
+      ["7 日平均落在個人正常範圍","通常代表近期 HRV 維持在個人基準附近；Garmin 可能標示 Balanced。"],
+      ["7 日平均偏離個人正常範圍","Garmin 可能標示 Unbalanced；先觀察偏離方向、幅度與持續時間。"],
+      ["持續低於個人正常範圍","搭配睡眠、RHR、訓練負荷、RPE 與身體不適進一步了解。"],
+      ["單日突然升高或降低","先確認測量品質與前一日狀況，不以單日數值直接下結論。"]
+    ],
+    example:"例如 HRV 52 ms：對某位選手可能在正常範圍內，對另一位選手則可能偏低。必須看該選手自己的基準區間與 7 日平均。",
+    coach:"建立穩定的晨間或睡眠測量習慣，觀察至少數週的個人趨勢。若 HRV 持續偏離基準，再交叉查看 RHR、睡眠、訓練負荷、RPE、情緒與疾病症狀。",
+    note:"HRV 沒有適用所有人的單一優秀數字，也不是越高越好。Garmin 的個人 HRV 狀態分類與個人基準，不應被解讀成醫療診斷或單獨的訓練許可／禁止訊號。",
+    extraTitle:"Garmin HRV 狀態｜以個人基準為核心",
+    extraHeads:["Garmin 常見狀態","理解方式"],
+    extraRows:[
+      ["Balanced｜平衡","近期平均落在個人基準範圍內。"],
+      ["Unbalanced｜不平衡","近期平均偏離個人基準範圍。"],
+      ["Low｜偏低","近期平均低於個人基準範圍。"],
+      ["Poor｜較差","個人基準相對偏低；需結合裝置定義與長期脈絡理解。"]
+    ],
+    extraCaption:"狀態名稱與呈現方式可能因 Garmin 裝置、韌體與 Garmin Connect 版本而異；請以該裝置實際顯示為準。",
+    sources:[["Garmin Support：Heart Rate Variability Status","https://support.garmin.com/en-US/?faq=04pnPSBTYSAYL9FylZoUl5"]]
+  },
+  rhr:{
+    title:"RHR｜靜息心率",en:"Resting Heart Rate",tag:"看個人基準與持續變化",
+    desc:"靜息心率是身體在安靜、休息狀態下每分鐘的心跳次數，單位為 bpm。長期耐力訓練者可能有較低的靜息心率；解讀時應同時考慮年齡、健康狀況、測量條件與個人平常值。",
+    heads:["數值（成人一般參考）","初步理解"],
+    rows:[
+      ["低於 60 bpm","低於一般成人常見範圍；部分耐力運動員可能如此，若伴隨頭暈、昏厥或不適需評估。"],
+      ["60–100 bpm","一般成人常見靜息心率參考範圍。"],
+      ["持續高於 100 bpm","高於一般成人常見靜息範圍，應結合症狀與健康背景評估。"]
+    ],
+    example:"若某位選手平常 RHR 約 48 bpm，某天 50 bpm 不一定有意義；若連續多天升到 58–62 bpm，則值得回看睡眠、訓練負荷、補水、壓力與是否生病。",
+    coach:"盡量在相近條件下比較，例如睡眠期間或起床前後的測量。觀察個人 2–4 週基準，並注意持續上升是否同時伴隨 HRV 下降、睡眠變差、RPE 上升或表現下降。",
+    note:"一般成人常見參考值約 60–100 bpm；訓練者可能低於 60 bpm。低心率不自動等於體能優秀，高心率也不能單獨診斷疾病。若有胸痛、暈厥、呼吸困難或明顯不適，應尋求醫療評估。",
+    extraTitle:"Pulse 與 RHR 的差別",
+    extraHeads:["資料名稱","判讀方式"],
+    extraRows:[
+      ["Pulse｜脈搏／心率","可能是任何測量時點的心率，必須知道當時是在休息、活動或運動。"],
+      ["RHR｜靜息心率","是在休息狀態下估算或測得的心率，可與個人基準比較。"]
+    ],
+    sources:[["American Heart Association：All About Heart Rate","https://www.heart.org/en/健康主題/心臟病預防/心率/靜息心率"]]
+  },
+  sleep:{
+    title:"Sleep｜睡眠時間與結構",en:"Sleep Duration & Stages",tag:"先看總睡眠時間與規律性",
+    desc:"睡眠資料可分為總睡眠時間、深層睡眠、淺層睡眠、REM 與睡眠期間清醒時間。對教練來說，優先看總睡眠時間、規律性與長期變化，再把睡眠階段當作輔助資訊。",
+    heads:["指標","參考觀察方式"],
+    rows:[
+      ["總睡眠時間","多數成年人建議規律睡眠至少 7 小時；常見建議範圍約 7–9 小時。運動員在高負荷期可能需要更多。"],
+      ["Deep Sleep｜深層睡眠","成人常見比例約 13–23%，僅作群體參考，不是個人每晚必達標準。"],
+      ["Light Sleep｜淺層睡眠","成人常見比例約 45–55%，比例會隨年齡、個體與夜晚變化。"],
+      ["REM Sleep｜快速動眼期","成人常見比例約 20–25%，不宜用單晚穿戴裝置數值判定恢復好壞。"],
+      ["Total Time Awake｜清醒時間","短暫醒來很常見；觀察是否長期增加、頻繁中斷，以及白天是否受影響。"]
+    ],
+    example:"例如總睡眠 4.62 小時、深層 1.03 小時、淺層 3.03 小時、REM 0.55 小時，階段比例約為深層 22%、淺層 66%、REM 12%。即使深層比例落在常見參考範圍，總睡眠時間仍偏短。",
+    coach:"先確認總睡眠時間是否足夠且規律，再看清醒時間、主觀睡眠品質與隔天精神。若連續多日睡眠不足，需把課表負荷、生活作息與恢復安排一起檢視。",
+    note:"睡眠階段比例是群體研究的概略參考，不是 Garmin 官方健康分級，也不是診斷門檻。穿戴裝置是依感測器與演算法估算睡眠階段，通常不如睡眠檢查的腦波分期精確；不要因單晚某一階段少了幾分鐘就下結論。",
+    extraTitle:"睡眠數值快速參考",
+    extraHeads:["每晚／比例","初步觀察"],
+    extraRows:[
+      ["總睡眠少於 5 小時","明顯偏少；若反覆出現，應檢視作息與恢復安排。"],
+      ["5–6 小時","通常不足以滿足多數成年人的睡眠建議。"],
+      ["6–7 小時","可能仍不足，需看個人需求與白天狀態。"],
+      ["7–9 小時","多數成年人的常見建議範圍。"],
+      ["深層約 13–23%","成人群體常見參考比例。"],
+      ["淺層約 45–55%","成人群體常見參考比例。"],
+      ["REM 約 20–25%","成人群體常見參考比例。"],
+      ["夜間清醒時間","不設通用優劣硬門檻；看持續趨勢、睡眠困擾與白天功能。"]
+    ],
+    extraCaption:"睡眠階段百分比是概略群體參考，會受年齡與個體差異影響；穿戴裝置的睡眠階段估算應審慎使用。",
+    sources:[
+      ["CDC：About Sleep","https://www.cdc.gov/sleep/about/index.html"],
+      ["Sleep Foundation：Stages of Sleep","https://www.sleepfoundation.org/stages-of-sleep"]
+    ]
+  },
+  bodybattery:{
+    title:"Body Battery｜身體能量指數",en:"Garmin Body Battery",tag:"Garmin 整合型估算指標",
+    desc:"Body Battery 是 Garmin 根據 HRV、壓力、睡眠與活動等資料估算的身體能量指數，通常以 5–100 呈現。它適合觀察一天中的能量變化與個人趨勢，不是直接測量的生理能量或恢復程度。",
+    heads:["分數","Garmin 常見區間理解"],
+    rows:[
+      ["5–25","低／非常低：能量指數偏低。"],
+      ["26–50","低：能量儲備相對有限。"],
+      ["51–75","中等：有一定能量指數。"],
+      ["76–100","高：能量指數較高。"]
+    ],
+    example:"若畫面顯示 Low 44、High 81，通常代表所選期間的最低與最高值，不一定是起床時的分數。需要查看時間軸，確認何時充電、何時消耗。",
+    coach:"比較起床時 Body Battery、白天下降速度、夜間回升幅度與連續數日趨勢。搭配 HRV、RHR、睡眠與 RPE 判讀，不以單一分數決定是否能做高強度課。",
+    note:"Body Battery 是 Garmin 專有演算法的估算值，並非醫療測量。分數高不保證完全恢復，分數低也不單獨代表不能訓練；不同裝置與資料完整度可能影響結果。",
+    sources:[["Garmin Support：Body Battery","https://support.garmin.com/en-US/?faq=VOFJAsiXut9K19k1qEn5z5"]]
+  },
+  stress:{
+    title:"Stress Level｜壓力指數",en:"Garmin Stress Tracking",tag:"觀察生理壓力，不等於心理壓力",
+    desc:"Garmin Stress Level 主要利用心率變異等生理訊號估算身體壓力狀態，分數通常介於 0–100。運動、睡眠不足、工作壓力、疾病與其他生理因素都可能影響分數。",
+    heads:["分數","Garmin 常見分類"],
+    rows:[
+      ["0–25","Resting｜休息狀態"],
+      ["26–50","Low｜低壓力"],
+      ["51–75","Medium｜中度壓力"],
+      ["76–100","High｜高壓力"]
+    ],
+    example:"若平均 Stress Level 為 19，依 Garmin 分級屬於休息區間。但平均值可能掩蓋某些時段的高壓力，仍可查看全天趨勢。",
+    coach:"先分辨壓力出現的時段：運動中、運動後、工作時或睡眠期間。休息時若連續偏高，再搭配 HRV、RHR、睡眠、主觀壓力與疾病狀況了解背景。",
+    note:"這是 Garmin 的生理壓力估算，不是心理壓力問卷，也不是疾病診斷。運動期間的壓力分數不應直接與休息時分數比較。",
+    sources:[["Garmin Support：全天壓力追蹤","https://support.garmin.com/en-US/?faq=WT9BmhjacO4ZpxbCc0EKn9"]]
+  },
+  recovery:{
+    title:"Recovery Monitoring｜恢復監控整合判讀",en:"HRV · RHR · Sleep · Body Battery · Stress",tag:"把客觀數據與選手感受放在一起",
+    desc:"恢復監控不是尋找一個完美分數，而是觀察多項指標是否同時偏離個人基準，以及這些變化是否反映在訓練表現與主觀感受。先看趨勢，再找背景，最後才做訓練決策。",
+    heads:["指標組合","可能提供的線索","教練下一步"],
+    rows:[
+      ["HRV 持續下降＋RHR 上升","可能反映近期生理壓力增加或恢復狀態改變。","檢查訓練負荷、睡眠、疾病、補水與生活壓力。"],
+      ["睡眠時間連續不足","恢復時間可能不夠，白天精神與訓練品質可能受影響。","了解作息限制，重新檢視近期訓練安排與恢復時間。"],
+      ["Body Battery 起床時持續偏低","夜間能量指數回升可能有限。","對照睡眠、HRV、RHR 與主觀疲勞，不單靠分數決策。"],
+      ["休息時 Stress 持續偏高","可能有持續的生理壓力訊號。","查看時段與背景，詢問身體不適、心理壓力與睡眠狀況。"],
+      ["數據偏離但表現與感受正常","可能是短期波動、測量誤差或個體差異。","持續追蹤，不急著改課表。"],
+      ["多項指標惡化＋RPE 上升／表現下降","多個訊號互相支持，值得認真檢視恢復與負荷。","與選手討論，考慮調整負荷；有持續症狀或疼痛時尋求適當評估。"]
+    ],
+    example:"例如選手 HRV 低於個人基準、RHR 比平常高、連續幾晚睡眠不足，而且同樣配速下 RPE 上升。這比單看其中一項更值得教練進一步了解。",
+    coach:"① 看 2–4 週個人基準與近期趨勢。<br><br>② 確認測量條件與資料是否完整。<br><br>③ 對照 CTL、ATL、TSB、課表內容與近期比賽。<br><br>④ 詢問 RPE、精神、痠痛、情緒、疾病與生活壓力。<br><br>⑤ 綜合判斷維持、調整或安排恢復，並追蹤後續反應。",
+    note:"HRV、RHR、睡眠階段、Body Battery 與 Stress 都不能單獨診斷過度訓練、疾病或傷病，也不能單獨決定訓練是否安全。若有持續或加劇的疼痛、胸痛、暈厥、呼吸困難或明顯疾病症狀，應停止相關訓練並尋求適當醫療評估。",
+    extraTitle:"恢復監控的教練判讀原則",
+    extraHeads:["層次","要回答的問題"],
+    extraRows:[
+      ["1｜個人基準","這個數字與選手自己過去 2–4 週相比如何？"],
+      ["2｜變化持續時間","是單日波動，還是連續多日／多週的趨勢？"],
+      ["3｜多指標交叉驗證","HRV、RHR、睡眠、Body Battery、Stress 是否呈現一致訊號？"],
+      ["4｜主觀與表現","RPE、情緒、痠痛、精神、配速／功率與心率反應如何？"],
+      ["5｜訓練決策與追蹤","目前課表是否需要維持、調整或恢復？之後是否改善？"]
+    ],
+    extraCaption:"這是教練監控流程，不是診斷工具或固定的訓練處方。",
+    sources:[
+      ["Garmin Support：HRV Status","https://support.garmin.com/en-US/?faq=04pnPSBTYSAYL9FylZoUl5"],
+      ["Garmin Support：Body Battery","https://support.garmin.com/en-US/?faq=VOFJAsiXut9K19k1qEn5z5"],
+      ["Garmin Support：Stress Tracking","https://support.garmin.com/en-US/?faq=WT9BmhjacO4ZpxbCc0EKn9"],
+      ["CDC：About Sleep","https://www.cdc.gov/sleep/about/index.html"]
+    ]
+  },
   atp:{
     title:"ATP｜年度訓練量參考",en:"Annual Training Plan · TrainingPeaks",tag:"賽季規劃參考",
     desc:"TrainingPeaks ATP 提供的概略指引，依賽季中最長一場目標賽事的預計完賽時間，以及選手的目標（完賽或高表現），估算年度訓練量與每週平均訓練時數／TSS。",
@@ -1000,8 +1138,11 @@ const categoryConfig = {
     ]
   },
   physiology: {
-    label:"PHYSIOLOGY & INTENSITY｜生理指標與強度設定",
+    label:"PHYSIOLOGY, RECOVERY & INTENSITY｜生理指標、恢復與強度",
     items:[
+      ["hrv","HRV｜心率變異度"],["rhr","RHR｜靜息心率"],
+      ["sleep","Sleep｜睡眠指標"],["bodybattery","Body Battery｜身體能量"],
+      ["stress","Stress｜壓力指數"],["recovery","恢復監控｜整合判讀"],
       ["lt","LT｜乳酸閾值"],["zones","Training Zones｜強度區間"],
       ["css","CSS｜游泳臨界配速"]
     ]
