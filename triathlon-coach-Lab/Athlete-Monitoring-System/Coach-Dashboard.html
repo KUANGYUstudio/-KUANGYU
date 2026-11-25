@@ -650,6 +650,11 @@ button:active{transform:translateY(.5px)}
   .coach-roster-table{min-width:720px}
 }
 
+
+.weekly-table td.col-remark .other-remark-list{display:grid;gap:4px;min-width:180px;max-width:320px}
+.weekly-table td.col-remark .other-remark-item{font-size:11px;line-height:1.45;color:#526257;white-space:normal;overflow-wrap:anywhere}
+.weekly-table td.col-remark .other-remark-item strong{color:#263c30;font-weight:750}
+.weekly-table td.col-remark .other-remark-meta{display:block;color:#7a877e;font-size:10px}
 /* Weekly multi-sport breakdown tabs */
 .weekly-sport-switch{
   display:flex;
@@ -675,10 +680,10 @@ button:active{transform:translateY(.5px)}
 }
 .weekly-sport-tab:hover{border-color:var(--accent);color:var(--accent)}
 .weekly-sport-tab.is-active{
-  color:#fff;
-  background:var(--accent);
-  border-color:var(--accent);
-  box-shadow:0 2px 6px rgba(50,40,45,.12);
+  color:#563746;
+  background:#f1dfe5;
+  border-color:#a85e78;
+  box-shadow:inset 0 0 0 1px rgba(168,94,120,.12),0 2px 6px rgba(50,40,45,.08);
 }
 .weekly-sport-note{
   margin:0;
@@ -2550,10 +2555,7 @@ button:active{transform:translateY(.5px)}
         </div>
         <p class="weekly-sport-note" id="weeklySportNote">依 TrainingPeaks 匯入紀錄分類；沒有資料的項目不會自行推估。</p>
         <div class="weekly-other-details" id="weeklyOtherDetails" hidden>
-          <div class="weekly-other-head">
-            <h4>其他訓練紀錄明細</h4>
-            <span class="weekly-other-count" id="weeklyOtherCount"></span>
-          </div>
+          <div class="weekly-other-head"><h4>其他訓練紀錄明細</h4><span class="weekly-other-count" id="weeklyOtherCount"></span></div>
           <div class="weekly-other-list" id="weeklyOtherList"></div>
         </div>
       </div>
@@ -2628,10 +2630,11 @@ button:active{transform:translateY(.5px)}
     <h2>匯出週訓練分析報告 (PDF)</h2>
     <div class="hint">請選擇要產出報告的週次，並檢視或修改下方的 AI 訓練建議；按下「產生 / 另存 PDF」後，於列印視窗選擇「另存為 PDF」即可下載高品質 A4 報告。</div>
 
-    <div class="field" style="margin-top:14px">
-      <label>選擇匯出週次</label>
-      <select id="pdfWeekSelect" onchange="refreshPdfModal()"></select>
+    <div class="form-grid" style="margin-top:14px">
+      <div class="field"><label>報告開始日期</label><input type="date" id="pdfRangeStart" onchange="refreshPdfModal()"></div>
+      <div class="field"><label>報告結束日期</label><input type="date" id="pdfRangeEnd" onchange="refreshPdfModal()"></div>
     </div>
+    <div class="hint">日期會自動對齊完整訓練週（週一至週日），確保週訓練量不被切成不完整週次。</div>
 
     <div class="pdf-preview-box" id="pdfSummaryPreview"></div>
 
@@ -3862,7 +3865,13 @@ function renderWeeklyVolume(){
   const {weeks,isReal}=buildAthleteWeeklyData(a);
   const limitVal=document.getElementById('weeklyLimitSelect')?.value||'all';
   const maxSlice=limitVal==='all'?24:Number(limitVal);
-  const visible=weeks.slice(-maxSlice);
+  const allVisible=weeks.slice(-maxSlice);
+  const sportWeeks=getWeeklySportBreakdown(a,allVisible);
+  const hasSportData=w=>{
+    const v=sportWeeks[w.date]?.[weeklySelectedSport];
+    return !!v && (v.mins>0||v.planMins>0||v.km>0||v.planKm>0||v.sessions>0||v.plannedSessions>0);
+  };
+  const visible=allVisible.filter(hasSportData);
   lastRenderedWeeks=visible;
 
   document.getElementById('weeklySourceBadge').textContent=isReal
@@ -3870,7 +3879,7 @@ function renderWeeklyVolume(){
     :'目前顯示週期示意資料';
 
   const meta=WEEKLY_SPORT_META[weeklySelectedSport]||WEEKLY_SPORT_META.swim;
-  const sportWeeks=getWeeklySportBreakdown(a,visible);
+  const visibleSportWeeks=getWeeklySportBreakdown(a,visible);
   const isCountMetric=weeklySelectedSport==='strength'||weeklySelectedSport==='other';
   const metricLabel=isCountMetric?'堂數':'距離';
 
@@ -3884,8 +3893,8 @@ function renderWeeklyVolume(){
   if(actualSub)actualSub.textContent=isCountMetric?'堂':'公里 km';
 
   let totEstMin=0,totRealMin=0,totPlanMetric=0,totActualMetric=0;
-  tbody.innerHTML=visible.map(w=>{
-    const item=sportWeeks[w.date]?.[weeklySelectedSport]||{mins:0,planMins:0,km:0,planKm:0,sessions:0,plannedSessions:0};
+  tbody.innerHTML=visible.length?visible.map(w=>{
+    const item=visibleSportWeeks[w.date]?.[weeklySelectedSport]||{mins:0,planMins:0,km:0,planKm:0,sessions:0,plannedSessions:0};
     const estMin=item.planMins,realMin=item.mins;
     const planMetric=isCountMetric?item.plannedSessions:item.planKm;
     const actualMetric=isCountMetric?item.sessions:item.km;
@@ -3903,9 +3912,11 @@ function renderWeeklyVolume(){
       <td class="col-real">${Math.round(realMin%60)}</td>
       <td class="col-est">${metricPlanText||'—'}</td>
       <td class="col-real">${metricActualText||'—'}</td>
-      <td class="col-remark">${esc(w.remark||'—')}</td>
+      <td class="col-remark">${weeklySelectedSport==='other'
+        ? (()=>{const list=(Array.isArray(a?.tpWorkouts)?a.tpWorkouts:[]).filter(x=>x.date&&getMondayIso(x.date)===w.date&&classifyWorkoutSport(x)==='other').sort((x,y)=>String(x.date).localeCompare(String(y.date)));const bits=list.map(x=>`<div class="other-remark-item"><strong>${esc(String(x.sessionName||'未命名訓練').trim()||'未命名訓練')}</strong><span class="other-remark-meta">${esc(fmtShortDate(x.date))} · ${esc(String(x.type||'未提供類型'))} · ${Number(x.duration)>0?esc(fmtHrMin(x.duration)):'未提供時數'}${Number(x.distanceKm)>0?' · '+Number(x.distanceKm).toFixed(1)+' km':''}</span>${x.comment?`<span class="other-remark-meta">備註：${esc(x.comment)}</span>`:''}</div>`);return (w.remark?`<div class="other-remark-item">${esc(w.remark)}</div>`:'')+(bits.join('')||'—')})()
+        : esc(w.remark||'—')}</td>
     </tr>`;
-  }).join('');
+  }).join(''):'<tr><td colspan="9" style="padding:22px;text-align:center;color:var(--muted)">目前選擇的項目沒有可顯示的訓練紀錄</td></tr>';
 
   const totEstHr=Math.floor(totEstMin/60),totEstMn=Math.round(totEstMin%60);
   const totRealHr=Math.floor(totRealMin/60),totRealMn=Math.round(totRealMin%60);
@@ -3934,7 +3945,7 @@ function renderWeeklyVolume(){
 
   const catRows=visible.map(w=>({
     week:w,
-    item:sportWeeks[w.date]?.[weeklySelectedSport]||{mins:0,km:0,sessions:0,planMins:0,planKm:0}
+    item:visibleSportWeeks[w.date]?.[weeklySelectedSport]||{mins:0,km:0,sessions:0,planMins:0,planKm:0}
   }));
   const totalMins=catRows.reduce((sum,row)=>sum+row.item.mins,0);
   const totalSessions=catRows.reduce((sum,row)=>sum+row.item.sessions,0);
@@ -3968,33 +3979,9 @@ function renderWeeklyVolume(){
       :'尚未匯入 TrainingPeaks CSV。分項圖表不會將總時數自行分配到各項運動；手動週紀錄的跑量仍保留在左側表格。';
   }
 
-  // 「其他」分類需能追溯到原始 TrainingPeaks 紀錄，避免教練只看到無法辨識的堂數。
+  // 「其他」訓練明細已整合到左側各週備註欄，避免額外長清單。
   const otherPanel=document.getElementById('weeklyOtherDetails');
-  const otherList=document.getElementById('weeklyOtherList');
-  const otherCount=document.getElementById('weeklyOtherCount');
-  if(otherPanel&&otherList&&otherCount){
-    const visibleDates=new Set(visible.map(w=>w.date));
-    const otherWorkouts=(Array.isArray(a?.tpWorkouts)?a.tpWorkouts:[])
-      .filter(w=>w.date&&visibleDates.has(getMondayIso(w.date))&&classifyWorkoutSport(w)==='other')
-      .sort((x,y)=>String(y.date).localeCompare(String(x.date)));
-    const showOther=weeklySelectedSport==='other';
-    otherPanel.hidden=!showOther;
-    if(showOther){
-      otherCount.textContent=`目前範圍 ${otherWorkouts.length} 筆`;
-      otherList.innerHTML=otherWorkouts.length?otherWorkouts.map(w=>{
-        const title=String(w.sessionName||'未命名訓練').trim()||'未命名訓練';
-        const type=String(w.type||'未提供').trim()||'未提供';
-        const duration=Number(w.duration)>0?fmtHrMin(w.duration):'未提供時數';
-        const distance=Number(w.distanceKm)>0?`${Number(w.distanceKm).toFixed(2).replace(/\.?0+$/,'')} km`:'';
-        const comment=String(w.comment||'').trim();
-        return `<article class="weekly-other-item">
-          <div class="weekly-other-title">${esc(title)}</div>
-          <div class="weekly-other-meta"><span>${esc(fmtShortDate(w.date))}</span><span>類型：${esc(type)}</span><span>時間：${esc(duration)}</span>${distance?`<span>距離：${esc(distance)}</span>`:''}</div>
-          ${comment?`<div class="weekly-other-comment">備註：${esc(comment)}</div>`:''}
-        </article>`;
-      }).join(''):'<div class="weekly-other-empty">這段週期沒有被歸類為「其他」的 TrainingPeaks 紀錄。</div>';
-    }
-  }
+  if(otherPanel)otherPanel.hidden=true;
 }
 
 function renderWeeklyBarSvg(svgId,items,barColor,unitLabel){
@@ -4159,9 +4146,9 @@ function exportWeeklyCsv(btn){
    ========================================================= */
 let currentPdfData=null;
 
-function computeWeeklyReportMetrics(a,weekObj){
+function computeWeeklyReportMetrics(a,weekObj,rangeEndIso=null){
   const startDate=dayStart(new Date(weekObj.date+'T00:00:00'));
-  const endDate=datePlus(startDate,6);
+  const endDate=rangeEndIso?dayStart(new Date(rangeEndIso+'T00:00:00')):datePlus(startDate,6);
   const prevStart=dateMinus(startDate,7);
 
   const seriesRes=buildAthleteSeries(a,prevStart,endDate);
@@ -4268,7 +4255,7 @@ function generateAiAdviceDraft(m){
   if(m.dCtl!==null&&m.dCtl>=1){
     hl.push(`長期體能 CTL 提升至 ${m.ctl.toFixed(1)}（較上週 +${m.dCtl.toFixed(1)}），有氧基礎持續堆疊。`);
   }
-  lines.push('【本週表現亮點】\n'+hl.join(''));
+  lines.push('【區間表現亮點】\n'+hl.join(''));
 
   /* 2. Fatigue & Risk */
   const risk=[];
@@ -4283,7 +4270,7 @@ function generateAiAdviceDraft(m){
     risk.push(`狀態值 TSB 維持在 +${m.tsb.toFixed(1)}，身體新鮮度佳。`);
   }
   if(m.avgRpe!==null){
-    risk.push(`本週平均主觀強度 RPE 為 ${m.avgRpe.toFixed(1)}/10（單週 sRPE ${m.weekSrpe.toLocaleString('en-US')} AU）${m.avgRpe>=7.5?'，主觀體感偏吃力，建議留意睡眠品質與非訓練壓力':''}。`);
+    risk.push(`區間平均主觀強度 RPE 為 ${m.avgRpe.toFixed(1)}/10（單週 sRPE ${m.weekSrpe.toLocaleString('en-US')} AU）${m.avgRpe>=7.5?'，主觀體感偏吃力，建議留意睡眠品質與非訓練壓力':''}。`);
   }
   if(m.week.remark){
     risk.push(`本週備註事項：「${m.week.remark}」，評估數據時已納入考量。`);
@@ -4320,14 +4307,11 @@ function openPdfModal(triggerBtn=null){
   if(!a){toast('請先開啟學員個人頁面');return}
   const {weeks}=buildAthleteWeeklyData(a);
   if(!weeks.length){toast('目前沒有可匯出的週次資料');return}
-
   setTriggerActive(triggerBtn);
-  const sel=document.getElementById('pdfWeekSelect');
-  sel.innerHTML=weeks.slice().reverse().map(w=>{
-    const endIso=isoKey(datePlus(dayStart(new Date(w.date+'T00:00:00')),6));
-    return `<option value="${esc(w.date)}">第 ${esc(w.weekNum)} 週（${fmtShortDate(w.date)} – ${fmtShortDate(endIso)}）· 實際 ${fmtHrMin(w.realMin)}</option>`;
-  }).join('');
-
+  const last=weeks[weeks.length-1];
+  const first=weeks[Math.max(0,weeks.length-4)];
+  document.getElementById('pdfRangeStart').value=first.date;
+  document.getElementById('pdfRangeEnd').value=isoKey(datePlus(dayStart(new Date(last.date+'T00:00:00')),6));
   refreshPdfModal();
   document.getElementById('pdfModal').classList.add('show');
 }
@@ -4340,42 +4324,63 @@ function closePdfModal(){
 function refreshPdfModal(){
   const a=athletes.find(x=>x.id===currentId);
   if(!a)return;
-  const {weeks}=buildAthleteWeeklyData(a);
-  const chosenDate=document.getElementById('pdfWeekSelect').value;
-  const w=weeks.find(x=>x.date===chosenDate)||weeks[weeks.length-1];
-  if(!w)return;
+  const startInput=document.getElementById('pdfRangeStart');
+  const endInput=document.getElementById('pdfRangeEnd');
+  if(!startInput?.value||!endInput?.value)return;
+  if(startInput.value>endInput.value){toast('報告開始日期不能晚於結束日期');return;}
 
-  const m=computeWeeklyReportMetrics(a,w);
+  // Align the selected interval to complete Monday–Sunday training weeks.
+  const startDate=dayStart(new Date(startInput.value+'T00:00:00'));
+  const endDate=dayStart(new Date(endInput.value+'T00:00:00'));
+  const rangeStart=isoKey(datePlus(startDate,-((startDate.getDay()+6)%7)));
+  const rangeEnd=isoKey(datePlus(endDate,6-((endDate.getDay()+6)%7)));
+  startInput.value=rangeStart;
+  endInput.value=rangeEnd;
+
+  const {weeks}=buildAthleteWeeklyData(a);
+  const selectedWeeks=weeks.filter(w=>w.date>=rangeStart&&w.date<=rangeEnd);
+  const synthetic={
+    date:rangeStart,weekNum:`${selectedWeeks[0]?.weekNum||'—'}–${selectedWeeks[selectedWeeks.length-1]?.weekNum||'—'}`,
+    estMin:selectedWeeks.reduce((v,w)=>v+w.estMin,0),
+    realMin:selectedWeeks.reduce((v,w)=>v+w.realMin,0),
+    estRun:selectedWeeks.reduce((v,w)=>v+w.estRun,0),
+    realRun:selectedWeeks.reduce((v,w)=>v+w.realRun,0),
+    remark:selectedWeeks.map(w=>w.remark).filter(Boolean).join('；'),
+    isManual:selectedWeeks.some(w=>w.isManual)
+  };
+  if(!selectedWeeks.length){toast('選擇的日期區間沒有週次資料');return;}
+
+  const m=computeWeeklyReportMetrics(a,synthetic,rangeEnd);
+  m.rangeStart=rangeStart;m.rangeEnd=rangeEnd;m.rangeWeeks=selectedWeeks;
   currentPdfData=m;
 
-  const savedNote=a.weeklyPdfNotes&&a.weeklyPdfNotes[w.date];
+  const savedKey=`${rangeStart}_${rangeEnd}`;
+  const savedNote=a.weeklyPdfNotes&&a.weeklyPdfNotes[savedKey];
   document.getElementById('pdfAiTextarea').value=(savedNote!==undefined&&savedNote!=='')?savedNote:generateAiAdviceDraft(m);
 
   const sportEntries=Object.values(m.sports).filter(s=>s.mins>0||s.km>0);
   const sportHtml=sportEntries.length
-    ?`<div class="pdf-sport-chips">${sportEntries.map(s=>`<div class="pdf-sport-chip"><strong>${esc(s.label)}</strong>${fmtHrMin(s.mins)}${s.km>0?` · ${Math.round(s.km*10)/10} km`:''}</div>`).join('')}</div>${m.sportSource==='demo-tri'?'<div class="hint" style="margin-top:6px">註：尚未匯入 TP CSV，以上三項拆解為示意比例；匯入 CSV 後將自動依真實課表統計。</div>':''}`
+    ?`<div class="pdf-sport-chips">${sportEntries.map(s=>`<div class="pdf-sport-chip"><strong>${esc(s.label)}</strong>${fmtHrMin(s.mins)}${s.km>0?` · ${Math.round(s.km*10)/10} km`:''}</div>`).join('')}</div>`
     :'';
-
   document.getElementById('pdfSummaryPreview').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-      <strong style="font-size:15px;color:var(--ink)">${esc(a.name)} · 第 ${esc(w.weekNum)} 週（${fmtDate(m.startDate)} – ${fmtDate(m.endDate)}）</strong>
+      <strong style="font-size:15px;color:var(--ink)">${esc(a.name)} · ${fmtDate(rangeStart)} – ${fmtDate(rangeEnd)}</strong>
       <span class="pill ${m.durPct>=90&&m.durPct<=115?'ok':(m.durPct>115?'watch':'alert')}">時數達成率 ${m.durPct!==null?m.durPct+'%':'—'}</span>
     </div>
     <div class="pdf-mini-grid">
-      <div class="pdf-mini-card"><small>實際訓練時數</small><strong>${fmtHrMin(w.realMin)}</strong><span>預計 ${fmtHrMin(w.estMin)}</span></div>
-      <div class="pdf-mini-card"><small>週累計負荷</small><strong>${m.weekTss} TSS</strong><span>sRPE ${m.weekSrpe.toLocaleString('en-US')} AU</span></div>
-      <div class="pdf-mini-card"><small>CTL / ATL / TSB</small><strong>${m.ctl.toFixed(0)} / ${m.atl.toFixed(0)} / ${m.tsb>=0?'+':''}${m.tsb.toFixed(0)}</strong><span>${fmtDelta(m.dCtl)||'期末狀態'}</span></div>
+      <div class="pdf-mini-card"><small>實際訓練時數</small><strong>${fmtHrMin(synthetic.realMin)}</strong><span>預計 ${fmtHrMin(synthetic.estMin)}</span></div>
+      <div class="pdf-mini-card"><small>區間累計負荷</small><strong>${m.weekTss} TSS</strong><span>sRPE ${m.weekSrpe.toLocaleString('en-US')} AU</span></div>
+      <div class="pdf-mini-card"><small>CTL / ATL / TSB</small><strong>${m.ctl.toFixed(0)} / ${m.atl.toFixed(0)} / ${m.tsb>=0?'+':''}${m.tsb.toFixed(0)}</strong><span>區間末狀態</span></div>
       <div class="pdf-mini-card"><small>ACWR / 平均 RPE</small><strong>${m.acwr!==null?m.acwr.toFixed(2):'—'} / ${m.avgRpe!==null?m.avgRpe.toFixed(1):'—'}</strong><span>${esc(m.acwrLabel)}</span></div>
-    </div>
-    ${sportHtml}
-  `;
+    </div>${sportHtml}`;
 }
 
 function saveCurrentPdfNote(){
   const a=athletes.find(x=>x.id===currentId);
   if(!a||!currentPdfData)return;
   if(!a.weeklyPdfNotes)a.weeklyPdfNotes={};
-  a.weeklyPdfNotes[currentPdfData.week.date]=document.getElementById('pdfAiTextarea').value;
+  const noteKey=currentPdfData.rangeStart?`${currentPdfData.rangeStart}_${currentPdfData.rangeEnd}`:currentPdfData.week.date;
+  a.weeklyPdfNotes[noteKey]=document.getElementById('pdfAiTextarea').value;
   localStorage.setItem(STORE,JSON.stringify(athletes));
 }
 
@@ -4441,19 +4446,22 @@ function printWeeklyPdf(){
 
   const printHost=document.getElementById('pdfPrintArea');
   // Build chart series from the athlete's actual records; never fabricate missing metrics.
-  const chartStart=dateMinus(dayStart(new Date(w.date+'T00:00:00')),56);
-  const chartEnd=datePlus(dayStart(new Date(w.date+'T00:00:00')),6);
+  const reportStart=dayStart(new Date((m.rangeStart||w.date)+'T00:00:00'));
+  const reportEnd=dayStart(new Date((m.rangeEnd||isoKey(datePlus(dayStart(new Date(w.date+'T00:00:00')),6)))+'T00:00:00'));
+  const chartStart=reportStart;
+  const chartEnd=reportEnd;
   const series=buildAthleteSeries(a,chartStart,chartEnd).data;
   const weekStart=dayStart(new Date(w.date+'T00:00:00'));
-  const daily=series.filter(d=>d.date>=weekStart&&d.date<=datePlus(weekStart,6));
+  const daily=series.filter(d=>d.date>=reportStart&&d.date<=reportEnd);
   const dayLabels=['一','二','三','四','五','六','日'];
   const maxTss=Math.max(10,...daily.map(d=>Number(d.TSS||0)));
-  const dailyBars=daily.map((d,i)=>{const x=28+i*42,h=(Number(d.TSS||0)/maxTss)*74,y=94-h;return `<rect x="${x}" y="${y}" width="22" height="${h}" rx="3" fill="#6f9278"><title>${dayLabels[i]}：${Math.round(d.TSS||0)} TSS</title></rect><text x="${x+11}" y="108" text-anchor="middle" font-size="9" fill="#627067">${dayLabels[i]}</text>`}).join('');
-  const rpePts=daily.map((d,i)=>d.RPE?`${39+i*42},${94-(Number(d.RPE)/10)*74}`:null).filter(Boolean);
+  const daySlot=286/Math.max(1,daily.length),barW=Math.max(2,Math.min(16,daySlot*.55));
+  const dailyBars=daily.map((d,i)=>{const x=22+i*daySlot+(daySlot-barW)/2,h=(Number(d.TSS||0)/maxTss)*74,y=94-h;return `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="2" fill="#6f9278"><title>${fmtShortDate(d.date)}：${Math.round(d.TSS||0)} TSS</title></rect>${daily.length<=14?`<text x="${x+barW/2}" y="108" text-anchor="middle" font-size="8" fill="#627067">${fmtShortDate(d.date)}</text>`:''}`}).join('');
+  const rpePts=daily.map((d,i)=>d.RPE?`${22+i*daySlot+daySlot/2},${94-(Number(d.RPE)/10)*74}`:null).filter(Boolean);
   const rpeLine=rpePts.length>1?`<polyline points="${rpePts.join(' ')}" fill="none" stroke="#bd8751" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`:'';
-  const dailySvg=`<svg viewBox="0 0 330 120" role="img" aria-label="每日 TSS 與 RPE 圖表"><line x1="20" y1="94" x2="315" y2="94" stroke="#dfe7de"/>${dailyBars}${rpeLine}<text x="22" y="12" font-size="9" fill="#6f9278">TSS</text><text x="308" y="12" text-anchor="end" font-size="9" fill="#bd8751">RPE</text></svg>`;
+  const dailySvg=`<svg viewBox="0 0 330 120" role="img" aria-label="區間每日 TSS 與 RPE 圖表"><line x1="20" y1="94" x2="315" y2="94" stroke="#dfe7de"/>${dailyBars}${rpeLine}<text x="22" y="12" font-size="9" fill="#6f9278">TSS</text><text x="308" y="12" text-anchor="end" font-size="9" fill="#bd8751">RPE</text></svg>`;
   // 28-day PMC trend: three daily vector lines, with the selected report week highlighted.
-  const last28=series.slice(-28);
+  const last28=buildAthleteSeries(a,dateMinus(reportEnd,27),reportEnd).data.slice(-28);
   const pmcW=600,pmcH=190,pmcL=34,pmcR=18,pmcT=24;
   const plotW=pmcW-pmcL-pmcR,plotH=pmcH-pmcT-30;
   const maxLoad=Math.max(10,...last28.flatMap(d=>[Number(d.CTL||0),Number(d.ATL||0)]));
@@ -4467,7 +4475,7 @@ function printWeeklyPdf(){
   const weekTicks=[0,7,14,21].filter(i=>i<last28.length).map((i,n)=>`<text x="${xAt(i)}" y="${pmcH-7}" text-anchor="middle" font-size="10" fill="#68766d">${['四週前','三週前','兩週前','本週'][n]}</text>`).join('');
   const pmcSvg=`<svg viewBox="0 0 ${pmcW} ${pmcH}" role="img" aria-label="近四週每日 CTL、ATL、TSB 趨勢折線圖"><rect x="${currentBandStart}" y="${pmcT-5}" width="${Math.max(0,currentBandEnd-currentBandStart)}" height="${plotH+12}" rx="5" fill="#eaf1e8"/><line x1="${pmcL}" y1="${pmcT+plotH}" x2="${pmcW-pmcR}" y2="${pmcT+plotH}" stroke="#dfe7de"/><line x1="${pmcL}" y1="${yTsb(0)}" x2="${pmcW-pmcR}" y2="${yTsb(0)}" stroke="#cbd5cc" stroke-dasharray="4 4"/><path d="${makePmcPath('CTL',yLoad)}" fill="none" stroke="#557b61" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="${makePmcPath('ATL',yLoad)}" fill="none" stroke="#c18a57" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="${makePmcPath('TSB',yTsb)}" fill="none" stroke="#648db5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${weekTicks}<text x="${pmcL}" y="13" font-size="10" fill="#557b61">CTL</text><text x="${pmcL+42}" y="13" font-size="10" fill="#c18a57">ATL</text><text x="${pmcL+82}" y="13" font-size="10" fill="#648db5">TSB</text><text x="${pmcW-pmcR}" y="13" text-anchor="end" font-size="9" fill="#627067">淡綠底：本週</text></svg>`;
   const {weeks:allWeeks}=buildAthleteWeeklyData(a);
-  const last8=allWeeks.filter(x=>x.date<=w.date).slice(-8);
+  const last8=allWeeks.filter(x=>x.date<=isoKey(reportEnd)).slice(-8);
   const maxHours=Math.max(1,...last8.flatMap(x=>[x.estMin/60,x.realMin/60]));
   const hasRunVolume=last8.some(x=>Number(x.estRun||0)>0||Number(x.realRun||0)>0);
   const hoursBars=last8.map((x,i)=>{const slot=560/Math.max(1,last8.length),cx=20+slot*(i+.5),bw=Math.min(15,slot*.25),eh=x.estMin/60/maxHours*62,rh=x.realMin/60/maxHours*62;return `<rect x="${cx-bw-1}" y="${91-eh}" width="${bw}" height="${eh}" rx="2" fill="#b7c6b6"><title>第 ${x.weekNum} 週預計 ${fmtHrMin(x.estMin)}</title></rect><rect x="${cx+1}" y="${91-rh}" width="${bw}" height="${rh}" rx="2" fill="#557b61"><title>第 ${x.weekNum} 週實際 ${fmtHrMin(x.realMin)}</title></rect><text x="${cx}" y="105" text-anchor="middle" font-size="9" fill="#627067">W${esc(x.weekNum)}</text>`}).join('');
@@ -4497,12 +4505,12 @@ function printWeeklyPdf(){
   if(m.avgRpe!==null){
     loadInterpretation.push(`學員回報平均 RPE ${m.avgRpe.toFixed(1)}/10，單週 sRPE ${m.weekSrpe} AU；主觀感受可與 TSS、CTL／ATL 趨勢交叉判讀。`);
   }else{
-    loadInterpretation.push('本週尚無足夠的單次 RPE 回報，主觀感受暫不作推論。');
+    loadInterpretation.push('此區間尚無足夠的單次 RPE 回報，主觀感受暫不作推論。');
   }
   if(m.acwr!==null){
     loadInterpretation.push(`ACWR ${m.acwr.toFixed(2)}：${m.acwrLabel}。CTL ${m.ctl.toFixed(1)}、ATL ${m.atl.toFixed(1)}、TSB ${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}，需搭配訓練內容與恢復回報判讀。`);
   }
-  const interpretationHtml=`<div class="rpt-interpretation"><strong>本週數據判讀</strong><ul>${loadInterpretation.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`;
+  const interpretationHtml=`<div class="rpt-interpretation"><strong>區間數據判讀</strong><ul>${loadInterpretation.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`;
   const trendNote=m.isRealSeries?'依 TrainingPeaks 匯入資料':'目前為示意趨勢資料';
   const sportNote=m.sportSource==='csv'?'依 TrainingPeaks 訓練紀錄':'目前無真實分項時間資料';
 
@@ -4511,10 +4519,10 @@ function printWeeklyPdf(){
       <div class="rpt-page">
         <div class="rpt-header" style="background:${palette.bg}">
           <div><small>KUANGYU STUDIO · WEEKLY TRAINING REPORT</small><h1>${esc(a.name)} 週訓練分析報告</h1><p>${esc(a.sport)}${a.goal?' · 目標：'+esc(a.goal):''}</p></div>
-          <div class="rpt-header-right"><div class="rpt-week-badge">第 ${esc(w.weekNum)} 週</div><p>${fmtDate(m.startDate)} — ${fmtDate(m.endDate)}</p></div>
+          <div class="rpt-header-right"><div class="rpt-week-badge">自訂日期區間</div><p>${fmtDate(m.rangeStart||m.startDate)} — ${fmtDate(m.rangeEnd||m.endDate)}</p></div>
         </div>
         <div class="rpt-section">
-          <div class="rpt-section-title" style="color:${palette.bg}">本週訓練摘要<span>WEEKLY SUMMARY</span></div>
+          <div class="rpt-section-title" style="color:${palette.bg}">區間訓練摘要<span>PERIOD SUMMARY</span></div>
           <div class="rpt-kpi-4">
             <div class="rpt-box"><small>實際訓練時數</small><strong>${fmtHrMin(w.realMin)}</strong><span class="rpt-sub">預計 ${fmtHrMin(w.estMin)}</span></div>
             <div class="rpt-box"><small>時數達成率</small><strong>${m.durPct!==null?m.durPct+'%':'—'}</strong><span class="rpt-sub">${m.trainDays} 天訓練</span></div>
@@ -4539,7 +4547,7 @@ function printWeeklyPdf(){
         <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 1 / 2 頁</span></div>
       </div>
       <div class="rpt-page">
-        <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · PERFORMANCE REVIEW</small><h1>進階趨勢與教練判讀</h1><p>${esc(a.name)} · 第 ${esc(w.weekNum)} 週</p></div><div class="rpt-header-right"><div class="rpt-week-badge">ADVANCED REVIEW</div><p>${fmtDate(m.startDate)} — ${fmtDate(m.endDate)}</p></div></div>
+        <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · PERFORMANCE REVIEW</small><h1>進階趨勢與教練判讀</h1><p>${esc(a.name)} · ${fmtDate(m.rangeStart||m.startDate)} – ${fmtDate(m.rangeEnd||m.endDate)}</p></div><div class="rpt-header-right"><div class="rpt-week-badge">ADVANCED REVIEW</div><p>${fmtDate(m.rangeStart||m.startDate)} — ${fmtDate(m.rangeEnd||m.endDate)}</p></div></div>
         <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近四週 CTL／ATL／TSB 趨勢（PMC）<span>${trendNote}</span></div>${pmcSvg}<div class="rpt-chart-note">每日曲線呈現 CTL、ATL 與 TSB；淡綠底標示本週區間。${m.isRealSeries?'':'目前為示意資料，請勿視為真實訓練負荷。'}</div></div>
         <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近八週預計與實際訓練量<span>PLANNED VS ACTUAL</span></div>${hoursSvg}<div class="rpt-chart-note">淺色為預計、深色為實際；有跑量資料時同步顯示跑量對比。沒有紀錄的週次不會自行補造。</div></div>
         <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">負荷與疲勞指標<span>TRAINING LOAD</span></div><div class="rpt-kpi-4">
@@ -4555,7 +4563,7 @@ function printWeeklyPdf(){
   `;
 
   const oldTitle=document.title;
-  document.title=`${a.name}_W${w.weekNum}_週訓練分析報告`;
+  document.title=`${a.name}_${m.rangeStart||w.date}_${m.rangeEnd||w.date}_訓練分析報告`;
   setTimeout(()=>{
     window.print();
     document.title=oldTitle;
