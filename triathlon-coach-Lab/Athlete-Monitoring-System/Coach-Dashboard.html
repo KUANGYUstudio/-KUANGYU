@@ -1812,6 +1812,13 @@ button:active{transform:translateY(.5px)}
   .rpt-chart-legend i{display:inline-block;width:8px;height:8px;border-radius:50%}
   .rpt-chart-card svg{max-height:150px !important}
 
+
+  .rpt-data-limits{margin-top:7px;padding-top:6px;border-top:1px dashed #dbe4d9;font-size:9.5px;line-height:1.45;color:#647268}
+  .rpt-data-limits strong{color:#45594b}
+  .rpt-kpi-3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .rpt-table th,.rpt-table td{padding:5px 5px !important}
+  .rpt-chart-note{line-height:1.45}
+
   .rpt-footer{
     display:flex;
     justify-content:space-between;
@@ -2634,7 +2641,7 @@ button:active{transform:translateY(.5px)}
 <div class="modal-backdrop" id="pdfModal" onclick="if(event.target===this)closePdfModal()">
   <div class="modal modal-wide">
     <h2>匯出週訓練分析報告 (PDF)</h2>
-    <div class="hint">請選擇要產出報告的週次，並檢視或修改下方的 AI 訓練建議；按下「產生 / 另存 PDF」後，於列印視窗選擇「另存為 PDF」即可下載高品質 A4 報告。</div>
+    <div class="hint">請選擇要產出報告的週次，並檢視或修改下方的 教練分析與建議；按下「產生 / 另存 PDF」後，於列印視窗選擇「另存為 PDF」即可下載高品質 A4 報告。</div>
 
     <div class="form-grid" style="margin-top:14px">
       <div class="field"><label>報告開始日期</label><input type="date" id="pdfRangeStart" onchange="refreshPdfModal()"></div>
@@ -2646,8 +2653,8 @@ button:active{transform:translateY(.5px)}
 
     <div class="field">
       <div class="pdf-ai-head">
-        <label style="margin:0">AI 訓練分析與教練建議（可直接編輯，自動保存）</label>
-        <button class="btn outline" type="button" style="padding:5px 11px;font-size:12px" onclick="regeneratePdfAiAdvice()">重新產生建議草稿</button>
+        <label style="margin:0">教練分析與下週建議（可直接編輯，自動保存）</label>
+        <button class="btn outline" type="button" style="padding:5px 11px;font-size:12px" onclick="regeneratePdfAiAdvice()">重新產生分析草稿</button>
       </div>
       <textarea id="pdfAiTextarea" oninput="saveCurrentPdfNote()"></textarea>
     </div>
@@ -3238,6 +3245,10 @@ function handleTpCsvUpload(event){
       const iPlanDist=findCol('planneddistanceinmeters','planneddistance','planneddistanceinkilometers');
       const iTss=findCol('tss','actualtss','plannedtss');
       const iRpe=findCol('rpe','sessionrpe','perceivedexertion');
+      const iAvgHr=findCol('averageheartrate','avgheartrate','averagehr','avghr');
+      const iMaxHr=findCol('maxheartrate','maximumheartrate','maxhr');
+      const iAvgPower=findCol('averagepower','avgpower');
+      const iNormalizedPower=findCol('normalizedpower','np');
       const iCoachNote=findCol('coachcomments','workoutdescription','description');
       const iAthNote=findCol('athletecomments','comments');
 
@@ -3260,6 +3271,10 @@ function handleTpCsvUpload(event){
         const tss=iTss!==-1?(parseFloat(cols[iTss])||0):0;
         const rawRpe=iRpe!==-1?parseFloat(cols[iRpe]):NaN;
         const rpe=!Number.isNaN(rawRpe)&&rawRpe>0?Math.min(10,Math.max(1,rawRpe)):null;
+        const avgHr=iAvgHr!==-1?(parseFloat(cols[iAvgHr])||0):0;
+        const maxHr=iMaxHr!==-1?(parseFloat(cols[iMaxHr])||0):0;
+        const avgPower=iAvgPower!==-1?(parseFloat(cols[iAvgPower])||0):0;
+        const normalizedPower=iNormalizedPower!==-1?(parseFloat(cols[iNormalizedPower])||0):0;
         const comment=(iAthNote!==-1?cols[iAthNote]:'')||(iCoachNote!==-1?cols[iCoachNote]:'');
 
         workouts.push({
@@ -3273,6 +3288,10 @@ function handleTpCsvUpload(event){
           plannedDistanceKm:Math.round(planDistKm*100)/100,
           tss,
           rpe,
+          avgHr,
+          maxHr,
+          avgPower,
+          normalizedPower,
           comment:String(comment||'').trim()
         });
       }
@@ -4148,160 +4167,148 @@ function exportWeeklyCsv(btn){
 }
 
 /* =========================================================
-   Weekly Report PDF Engine (Multi-Sport + PMC/ACWR + Editable AI Advice)
+   Weekly Report PDF Engine (Multi-Sport + Coach Analysis)
    ========================================================= */
 let currentPdfData=null;
 
 function computeWeeklyReportMetrics(a,weekObj,rangeEndIso=null){
   const startDate=dayStart(new Date(weekObj.date+'T00:00:00'));
   const endDate=rangeEndIso?dayStart(new Date(rangeEndIso+'T00:00:00')):datePlus(startDate,6);
-  const prevStart=dateMinus(startDate,7);
+  const periodDays=Math.max(1,Math.round((endDate-startDate)/86400000)+1);
+  const prevStart=dateMinus(startDate,periodDays);
+  const prevEnd=dateMinus(startDate,1);
 
   const seriesRes=buildAthleteSeries(a,prevStart,endDate);
   const allDays=seriesRes.data;
-  const prevWeekDays=allDays.filter(d=>d.date<startDate);
-  const thisWeekDays=allDays.filter(d=>d.date>=startDate&&d.date<=endDate);
+  const prevDays=allDays.filter(d=>d.date>=prevStart&&d.date<=prevEnd);
+  const thisDays=allDays.filter(d=>d.date>=startDate&&d.date<=endDate);
+  const endDay=thisDays[thisDays.length-1]||{CTL:0,ATL:0,TSB:0,TSS:0,RPE:null,SRPE:0};
+  const prevEndDay=prevDays[prevDays.length-1]||null;
 
-  const endDay=thisWeekDays[thisWeekDays.length-1]||{CTL:0,ATL:0,TSB:0,TSS:0,RPE:null,SRPE:0};
-  const prevEndDay=prevWeekDays[prevWeekDays.length-1]||null;
+  const ctl=Number(endDay.CTL)||0, atl=Number(endDay.ATL)||0, tsb=Number(endDay.TSB)||0;
+  const dCtl=prevEndDay?(ctl-(Number(prevEndDay.CTL)||0)):null;
+  const dAtl=prevEndDay?(atl-(Number(prevEndDay.ATL)||0)):null;
+  const dTsb=prevEndDay?(tsb-(Number(prevEndDay.TSB)||0)):null;
 
-  const ctl=endDay.CTL||0;
-  const atl=endDay.ATL||0;
-  const tsb=endDay.TSB||0;
-  const dCtl=prevEndDay?(ctl-prevEndDay.CTL):null;
-  const dAtl=prevEndDay?(atl-prevEndDay.ATL):null;
-  const dTsb=prevEndDay?(tsb-prevEndDay.TSB):null;
-  const acwr=ctl>1?(atl/ctl):null;
-
-  const weekTss=thisWeekDays.reduce((s,d)=>s+(d.TSS||0),0);
-  const weekSrpe=thisWeekDays.reduce((s,d)=>s+(d.SRPE||0),0);
-  const rpeList=thisWeekDays.filter(d=>d.RPE!==null&&d.RPE>0).map(d=>d.RPE);
-  const avgRpe=rpeList.length?(rpeList.reduce((s,v)=>s+v,0)/rpeList.length):null;
+  const weekTss=thisDays.reduce((s,d)=>s+(Number(d.TSS)||0),0);
+  const prevTss=prevDays.reduce((s,d)=>s+(Number(d.TSS)||0),0);
+  const weekSrpe=thisDays.reduce((s,d)=>s+(Number(d.SRPE)||0),0);
+  const rpeList=thisDays.filter(d=>d.RPE!==null&&d.RPE!==undefined&&Number(d.RPE)>0).map(d=>Number(d.RPE));
+  const prevRpeList=prevDays.filter(d=>d.RPE!==null&&d.RPE!==undefined&&Number(d.RPE)>0).map(d=>Number(d.RPE));
+  const avgRpe=rpeList.length?rpeList.reduce((s,v)=>s+v,0)/rpeList.length:null;
+  const prevAvgRpe=prevRpeList.length?prevRpeList.reduce((s,v)=>s+v,0)/prevRpeList.length:null;
   const maxRpe=rpeList.length?Math.max(...rpeList):null;
-  const maxTss=thisWeekDays.length?Math.max(...thisWeekDays.map(d=>d.TSS||0)):0;
-  const trainDays=thisWeekDays.filter(d=>(d.TSS||0)>0||(d.RPE||0)>0||(d.SRPE||0)>0).length;
-
+  const maxTss=thisDays.length?Math.max(...thisDays.map(d=>Number(d.TSS)||0)):0;
+  const trainDays=thisDays.filter(d=>(Number(d.TSS)||0)>0||(Number(d.RPE)||0)>0||(Number(d.SRPE)||0)>0).length;
   const durPct=weekObj.estMin>0?Math.round((weekObj.realMin/weekObj.estMin)*100):null;
   const runPct=weekObj.estRun>0?Math.round((weekObj.realRun/weekObj.estRun)*100):null;
+  const tssChange=prevTss>0?((weekTss-prevTss)/prevTss)*100:null;
 
-  /* Multi-sport Breakdown */
-  const hasRealCsv=a&&Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length>0;
-  const startIso=isoKey(startDate);
-  const endIso=isoKey(endDate);
   const sports={
-    swim:{label:'游泳 Swim',mins:0,planMins:0,km:0,sessions:0},
-    bike:{label:'自行車 Bike',mins:0,planMins:0,km:0,sessions:0},
-    run:{label:'跑步 Run',mins:0,planMins:0,km:0,sessions:0},
-    strength:{label:'肌力 Strength',mins:0,planMins:0,km:0,sessions:0},
-    other:{label:'其他 Other',mins:0,planMins:0,km:0,sessions:0}
+    swim:{label:'游泳 Swim',mins:0,planMins:0,km:0,sessions:0,tss:0,rpeValues:[]},
+    bike:{label:'自行車 Bike',mins:0,planMins:0,km:0,sessions:0,tss:0,rpeValues:[]},
+    run:{label:'跑步 Run',mins:0,planMins:0,km:0,sessions:0,tss:0,rpeValues:[]},
+    strength:{label:'肌力 Strength',mins:0,planMins:0,km:0,sessions:0,tss:0,rpeValues:[]},
+    other:{label:'其他 Other',mins:0,planMins:0,km:0,sessions:0,tss:0,rpeValues:[]}
   };
-
+  const hasRealCsv=Array.isArray(a?.tpWorkouts)&&a.tpWorkouts.length>0;
+  const startIso=isoKey(startDate),endIso=isoKey(endDate);
   let sportSource='none';
   if(hasRealCsv){
-    const weekWorkouts=a.tpWorkouts.filter(w=>w.date>=startIso&&w.date<=endIso);
-    if(weekWorkouts.length){
+    const periodWorkouts=a.tpWorkouts.filter(w=>w.date>=startIso&&w.date<=endIso);
+    if(periodWorkouts.length){
       sportSource='csv';
-      weekWorkouts.forEach(w=>{
-        const cat=classifyWorkoutSport(w);
-        sports[cat].mins+=Number(w.duration||0);
-        sports[cat].planMins+=Number(w.plannedDuration||0);
-        sports[cat].km+=Number(w.distanceKm||0);
-        sports[cat].sessions+=1;
+      periodWorkouts.forEach(w=>{
+        const cat=classifyWorkoutSport(w),bucket=sports[cat]||sports.other;
+        bucket.mins+=Number(w.duration)||0;
+        bucket.planMins+=Number(w.plannedDuration)||0;
+        bucket.km+=Number(w.distanceKm)||0;
+        bucket.sessions+=1;
+        bucket.tss+=Number(w.tss)||0;
+        if(w.rpe!==null&&w.rpe!==undefined&&w.rpe!==''&&Number(w.rpe)>0)bucket.rpeValues.push(Number(w.rpe));
       });
     }
-  }else if(a&&a.sport==='鐵人三項'){
-    /* Demo estimation for triathlon preview before CSV upload */
-    sportSource='demo-tri';
-    const runMins=Math.min(Math.round(weekObj.realMin*0.42),Math.round(weekObj.realRun*6.2));
-    const swimMins=Math.round(weekObj.realMin*0.16);
-    const bikeMins=Math.max(0,weekObj.realMin-runMins-swimMins);
-    sports.swim={label:'游泳 Swim',mins:swimMins,planMins:Math.round(weekObj.estMin*0.16),km:Math.round((swimMins/28)*10)/10,sessions:swimMins>0?2:0};
-    sports.bike={label:'自行車 Bike',mins:bikeMins,planMins:Math.round(weekObj.estMin*0.46),km:Math.round((bikeMins/60)*26),sessions:bikeMins>0?2:0};
-    sports.run={label:'跑步 Run',mins:runMins,planMins:Math.round(weekObj.estMin*0.38),km:weekObj.realRun,sessions:weekObj.realRun>0?3:0};
   }
+  Object.values(sports).forEach(s=>{
+    s.avgRpe=s.rpeValues.length?s.rpeValues.reduce((sum,v)=>sum+v,0)/s.rpeValues.length:null;
+    delete s.rpeValues;
+  });
 
-  let acwrLabel='資料累積中';
-  if(acwr!==null){
-    if(acwr>1.35)acwrLabel='負荷急升（留意傷痛風險）';
-    else if(acwr>=0.8)acwrLabel='甜蜜區間（適應穩定）';
-    else acwrLabel='低負荷／減量恢復期';
-  }
-
+  const weeklyData=buildAthleteWeeklyData(a);
+  const periodWeeks=(weeklyData.weeks||[]).filter(w=>w.date>=startIso&&w.date<=endIso);
+  const dataIsReal=Boolean(seriesRes.isReal||weeklyData.isReal);
+  const periodWorkoutsForAvailability=hasRealCsv?a.tpWorkouts.filter(w=>w.date>=startIso&&w.date<=endIso):[];
+  const hasTss=periodWorkoutsForAvailability.some(w=>Number(w.tss)>0);
+  const hasRpe=periodWorkoutsForAvailability.some(w=>w.rpe!==null&&w.rpe!==undefined&&w.rpe!==''&&Number(w.rpe)>0);
+  const hasHeartRate=periodWorkoutsForAvailability.some(w=>['avgHr','averageHr','avgHeartRate','averageHeartRate','maxHr','maxHeartRate','hr'].some(k=>Number(w[k])>0));
+  const hasPower=periodWorkoutsForAvailability.some(w=>['avgPower','averagePower','normalizedPower','np','maxPower','power'].some(k=>Number(w[k])>0));
+  const hasLoadTrend=Boolean(seriesRes.isReal)&&hasTss;
+  const hasPlannedActual=periodWeeks.some(w=>Number(w.estMin)>0||Number(w.realMin)>0);
   return {
-    athlete:a,
-    week:weekObj,
-    startDate,
-    endDate,
-    isRealSeries:seriesRes.isReal,
-    ctl,atl,tsb,dCtl,dAtl,dTsb,acwr,acwrLabel,
-    weekTss:Math.round(weekTss),
-    weekSrpe:Math.round(weekSrpe),
-    avgRpe,maxRpe,maxTss:Math.round(maxTss),
-    trainDays,
-    durPct,runPct,
-    sports,
-    sportSource
+    athlete:a,week:weekObj,startDate,endDate,periodDays,
+    isRealSeries:seriesRes.isReal,isRealWeekly:weeklyData.isReal,dataIsReal,
+    ctl,atl,tsb,dCtl,dAtl,dTsb,
+    weekTss:Math.round(weekTss),prevTss:Math.round(prevTss),tssChange,
+    weekSrpe:Math.round(weekSrpe),avgRpe,prevAvgRpe,maxRpe,maxTss:Math.round(maxTss),
+    trainDays,durPct,runPct,sports,sportSource,periodWeeks,hasTss,hasRpe,hasHeartRate,hasPower,hasLoadTrend,hasPlannedActual
   };
 }
-
 function generateAiAdviceDraft(m){
   const lines=[];
-  /* 1. Highlights */
-  const hl=[];
-  if(m.durPct!==null){
-    if(m.durPct>=90&&m.durPct<=115)hl.push(`本週實際完成 ${fmtHrMin(m.week.realMin)}，課表時數達成率 ${m.durPct}%，執行節奏穩定。`);
-    else if(m.durPct>115)hl.push(`本週完成 ${fmtHrMin(m.week.realMin)}（達成率 ${m.durPct}%），總訓練量高於原訂課表。`);
-    else hl.push(`本週完成 ${fmtHrMin(m.week.realMin)}（達成率 ${m.durPct}%），總量較原訂規劃保守。`);
-  }else{
-    hl.push(`本週累計訓練 ${fmtHrMin(m.week.realMin)}，共完成 ${m.trainDays} 天訓練。`);
-  }
-  if(m.week.realRun>0){
-    hl.push(`跑步累計 ${m.week.realRun} km${m.runPct!==null?`（達成率 ${m.runPct}%）`:''}。`);
-  }
-  if(m.dCtl!==null&&m.dCtl>=1){
-    hl.push(`長期體能 CTL 提升至 ${m.ctl.toFixed(1)}（較上週 +${m.dCtl.toFixed(1)}），有氧基礎持續堆疊。`);
-  }
-  lines.push('【區間表現亮點】\n'+hl.join(''));
-
-  /* 2. Fatigue & Risk */
-  const risk=[];
-  if(m.acwr!==null){
-    if(m.acwr>1.35)risk.push(`急慢性負荷比 ACWR 達 ${m.acwr.toFixed(2)}，短期疲勞（ATL ${m.atl.toFixed(1)}）上升速度較快，需密切追蹤下肢緊繃與關節反應。`);
-    else if(m.acwr>=0.8)risk.push(`目前 ACWR 為 ${m.acwr.toFixed(2)}（位於 0.8–1.3 穩定區間），短期疲勞 ATL ${m.atl.toFixed(1)} 與體能基礎匹配良好。`);
-    else risk.push(`目前 ACWR 為 ${m.acwr.toFixed(2)}，屬於減量或恢復週節奏，有助於消除前期累積疲勞。`);
-  }
-  if(m.tsb<-20){
-    risk.push(`狀態值 TSB 降至 ${m.tsb.toFixed(1)}，處於明顯疲勞累積階段。`);
-  }else if(m.tsb>10){
-    risk.push(`狀態值 TSB 維持在 +${m.tsb.toFixed(1)}，身體新鮮度佳。`);
-  }
-  if(m.avgRpe!==null){
-    risk.push(`區間平均主觀強度 RPE 為 ${m.avgRpe.toFixed(1)}/10（單週 sRPE ${m.weekSrpe.toLocaleString('en-US')} AU）${m.avgRpe>=7.5?'，主觀體感偏吃力，建議留意睡眠品質與非訓練壓力':''}。`);
-  }
-  if(m.week.remark){
-    risk.push(`本週備註事項：「${m.week.remark}」，評估數據時已納入考量。`);
-  }
-  lines.push('【疲勞與風險觀察】\n'+(risk.join('')||'目前主觀疲勞與外部負荷指標維持在可接受範圍內。'));
-
-  /* 3. Next Week Recommendations */
+  const strengths=[];
+  const watch=[];
   const next=[];
-  if((m.acwr!==null&&m.acwr>1.35)||m.tsb<-20||(m.avgRpe!==null&&m.avgRpe>=7.5)){
-    next.push('建議下週先安排 1 至 2 天低強度恢復日或減少 15–20% 總量，優先拉回睡眠與肌肉彈性，再恢復高強度間歇課表。');
-  }else if(m.durPct!==null&&m.durPct<80){
-    next.push('下週建議先以維持訓練頻率與基礎有氧節奏為主，避免為了補量而在單一課表過度拉高強度。');
+  if(m.durPct!==null){
+    if(m.durPct>=90&&m.durPct<=110)strengths.push(`本期完成 ${fmtHrMin(m.week.realMin)}，達成預計訓練時數 ${m.durPct}%；訓練量與原規劃接近。`);
+    else if(m.durPct>110)watch.push(`本期時數達成率 ${m.durPct}%，高於原規劃；建議對照實際強度與恢復回報，確認增加的訓練量是否符合週期目的。`);
+    else watch.push(`本期時數達成率 ${m.durPct}%；低於原規劃，建議先確認未完成原因，不以額外補課方式一次追回訓練量。`);
   }else{
-    next.push('目前身體適應良好，下週可依原訂週期推進，並維持高強度課表前後的動態熱身與課後收操伸展。');
+    strengths.push(`本期累計訓練 ${fmtHrMin(m.week.realMin)}，有 ${m.trainDays} 天留下負荷紀錄。`);
   }
-  if(m.athlete&&m.athlete.sport==='鐵人三項'){
-    next.push('三項配置上可留意高強度跑步與長距離騎乘之間的間隔，並於週中回報單次 RPE 以利微調配速與功率區間。');
+  const activeSports=Object.values(m.sports).filter(s=>s.sessions>0);
+  if(activeSports.length){
+    const best=activeSports.slice().sort((a,b)=>b.mins-a.mins)[0];
+    strengths.push(`分項紀錄中，${best.label.replace(/\s+.*$/,'')}累計 ${fmtHrMin(best.mins)}、${best.sessions} 堂；分項數據以匯入紀錄為準。`);
+  }
+  if(m.hasLoadTrend&&m.dCtl!==null){
+    strengths.push(`CTL ${m.ctl.toFixed(1)}，相較前一個等長區間${m.dCtl>=0?'增加':'減少'} ${Math.abs(m.dCtl).toFixed(1)}。此為訓練負荷趨勢，不單獨代表能力進步或退步。`);
+  }
+  if(m.hasRpe&&m.avgRpe!==null){
+    if(m.prevAvgRpe!==null){
+      const diff=m.avgRpe-m.prevAvgRpe;
+      if(diff>=1)watch.push(`本期平均 RPE ${m.avgRpe.toFixed(1)}/10，較前一個等長區間上升 ${diff.toFixed(1)}；建議確認課表強度、睡眠與生活壓力。`);
+      else if(diff<=-1)strengths.push(`本期平均 RPE ${m.avgRpe.toFixed(1)}/10，較前一個等長區間下降 ${Math.abs(diff).toFixed(1)}；可搭配相近課表的輸出表現，確認是否出現適應改善。`);
+      else strengths.push(`本期平均 RPE ${m.avgRpe.toFixed(1)}/10，與前一個等長區間接近。`);
+    }else{
+      strengths.push(`本期平均 RPE ${m.avgRpe.toFixed(1)}/10；目前缺少前期可比較資料，先建立個人基準。`);
+    }
   }else{
-    next.push('請持續於每堂課後填寫單次 RPE 與每日睡眠評分，讓教練更精準掌握恢復曲線。');
+    watch.push('本期缺少單次 RPE 回報，暫時無法判斷主觀訓練代價。');
   }
-  lines.push('【下週調整建議】\n'+next.join(''));
+  if(m.hasTss&&m.tssChange!==null){
+    const sign=m.tssChange>=0?'+':'';
+    watch.push(`本期 TSS ${m.weekTss}，前一個等長區間為 ${m.prevTss}（變化 ${sign}${m.tssChange.toFixed(1)}%）；請搭配主觀回報與訓練內容解讀，不以單一百分比判定風險。`);
+  }else if(m.hasTss){
+    watch.push('前一個等長區間沒有足夠 TSS，暫不比較負荷變化。');
+  }
+  if(m.week.remark)watch.push(`區間備註：「${m.week.remark}」。`);
 
+  if(watch.length){
+    next.push('下週先確認上述觀察項目，尤其是 RPE、睡眠、疼痛／痠痛與未完成課表原因，再決定是否調整總量或強度。');
+  }else{
+    next.push('目前可依原訓練週期持續執行；下一週仍需追蹤課表完成品質與主觀回饋，不因單週數值直接加量。');
+  }
+  if(m.athlete?.sport==='鐵人三項'){
+    next.push('三項配置請依目前訓練週期與個人弱項檢視；若安排 Brick，建議保留同日騎乘與轉換跑資料，後續才能評估轉換表現。');
+  }
+  if(!m.dataIsReal){
+    watch.unshift('注意：目前部分週次或負荷曲線來自示範資料／本機手動紀錄，請勿將示意數值當作 TrainingPeaks 完整實際紀錄。');
+  }
+  lines.push('【本期做得好的地方】\n'+(strengths.join('\n')||'目前資料不足，暫不下正向結論。'));
+  lines.push('【需要留意與確認】\n'+(watch.join('\n')||'目前沒有明確異常訊號；仍需搭配學員回報確認。'));
+  lines.push('【下週教練建議】\n'+next.join('\n'));
   return lines.join('\n\n');
 }
-
 function fmtDelta(v){
   if(v===null||v===undefined||Number.isNaN(v))return '';
   const sign=v>=0?'+':'';
@@ -4381,13 +4388,13 @@ function refreshPdfModal(){
   document.getElementById('pdfSummaryPreview').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
       <strong style="font-size:15px;color:var(--ink)">${esc(a.name)} · ${fmtDate(dayStart(new Date(rangeStart+'T00:00:00')))} – ${fmtDate(dayStart(new Date(rangeEnd+'T00:00:00')))}</strong>
-      <span class="pill ${m.durPct>=90&&m.durPct<=115?'ok':(m.durPct>115?'watch':'alert')}">時數達成率 ${m.durPct!==null?m.durPct+'%':'—'}</span>
+      <span class="pill ${!m.dataIsReal?'watch':(m.durPct>=90&&m.durPct<=110?'ok':(m.durPct>110?'watch':'alert'))}">${!m.dataIsReal?'含示範／手動資料':'時數達成率 '+(m.durPct!==null?m.durPct+'%':'—')}</span>
     </div>
     <div class="pdf-mini-grid">
       <div class="pdf-mini-card"><small>實際訓練時數</small><strong>${fmtHrMin(synthetic.realMin)}</strong><span>預計 ${fmtHrMin(synthetic.estMin)}</span></div>
       <div class="pdf-mini-card"><small>區間累計負荷</small><strong>${m.weekTss} TSS</strong><span>sRPE ${m.weekSrpe.toLocaleString('en-US')} AU</span></div>
-      <div class="pdf-mini-card"><small>CTL / ATL / TSB</small><strong>${m.ctl.toFixed(0)} / ${m.atl.toFixed(0)} / ${m.tsb>=0?'+':''}${m.tsb.toFixed(0)}</strong><span>區間末狀態</span></div>
-      <div class="pdf-mini-card"><small>ACWR / 平均 RPE</small><strong>${m.acwr!==null?m.acwr.toFixed(2):'—'} / ${m.avgRpe!==null?m.avgRpe.toFixed(1):'—'}</strong><span>${esc(m.acwrLabel)}</span></div>
+      ${m.hasLoadTrend?`<div class="pdf-mini-card"><small>CTL / ATL / TSB</small><strong>${m.ctl.toFixed(0)} / ${m.atl.toFixed(0)} / ${m.tsb>=0?'+':''}${m.tsb.toFixed(0)}</strong><span>區間末狀態</span></div>`:''}
+      <div class="pdf-mini-card"><small>平均 RPE / TSS 變化</small><strong>${m.avgRpe!==null?m.avgRpe.toFixed(1)+'/10':'—'} / ${m.tssChange!==null?(m.tssChange>=0?'+':'')+m.tssChange.toFixed(0)+'%':'—'}</strong><span>與前一個等長區間比較</span></div>
     </div>${sportHtml}`;
 }
 
@@ -4405,7 +4412,7 @@ function regeneratePdfAiAdvice(){
   const fresh=generateAiAdviceDraft(currentPdfData);
   document.getElementById('pdfAiTextarea').value=fresh;
   saveCurrentPdfNote();
-  toast('已重新產生本週建議草稿');
+  toast('已已重新產生教練分析草稿');
 }
 
 function printWeeklyPdf(){
@@ -4428,7 +4435,7 @@ function printWeeklyPdf(){
   const durBarW=m.durPct!==null?Math.min(100,Math.max(4,m.durPct)):0;
   const runBarW=m.runPct!==null?Math.min(100,Math.max(4,m.runPct)):0;
 
-  const sportEntries=Object.values(m.sports).filter(s=>s.mins>0||s.km>0);
+  const sportEntries=Object.values(m.sports).filter(s=>s.sessions>0||s.mins>0||s.km>0);
   const sportTableHtml=sportEntries.length?`
     <div class="rpt-section">
       <div class="rpt-section-title" style="color:${palette.bg}">
@@ -4442,17 +4449,22 @@ function printWeeklyPdf(){
             <th class="num">完成堂數</th>
             <th class="num">實際時數</th>
             <th class="num">距離 (km)</th>
+            <th class="num">TSS</th>
+            <th class="num">平均 RPE</th>
             <th class="num">時數佔比</th>
           </tr>
         </thead>
         <tbody>
           ${sportEntries.map(s=>{
-            const share=w.realMin>0?Math.round((s.mins/w.realMin)*100):0;
+            const recordedSportMinutes=sportEntries.reduce((sum,item)=>sum+item.mins,0);
+            const share=recordedSportMinutes>0?Math.round((s.mins/recordedSportMinutes)*100):0;
             return `<tr>
               <td><strong>${esc(s.label)}</strong></td>
               <td class="num">${s.sessions||'—'}</td>
               <td class="num">${fmtHrMin(s.mins)}</td>
               <td class="num">${s.km>0?(Math.round(s.km*10)/10)+' km':'—'}</td>
+              <td class="num">${s.tss>0?Math.round(s.tss):'—'}</td>
+              <td class="num">${s.avgRpe!==null?s.avgRpe.toFixed(1)+'/10':'—'}</td>
               <td class="num">${share}%</td>
             </tr>`;
           }).join('')}
@@ -4476,7 +4488,10 @@ function printWeeklyPdf(){
   const dailyBars=daily.map((d,i)=>{const x=22+i*daySlot+(daySlot-barW)/2,h=(Number(d.TSS||0)/maxTss)*68,y=88-h;const shortDate=String(d.date||'').slice(5).replace('-','/');const showLabel=(i%2===0||i===daily.length-1);return `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="2" fill="#6f9278"><title>${shortDate}：${Math.round(d.TSS||0)} TSS</title></rect>${showLabel?`<text x="${x+barW/2}" y="108" text-anchor="middle" font-size="7.5" fill="#627067">${shortDate}</text>`:''}`}).join('');
   const rpePts=daily.map((d,i)=>d.RPE?`${22+i*daySlot+daySlot/2},${88-(Number(d.RPE)/10)*68}`:null).filter(Boolean);
   const rpeLine=rpePts.length>1?`<polyline points="${rpePts.join(' ')}" fill="none" stroke="#bd8751" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`:'';
-  const dailySvg=`<svg viewBox="0 0 330 120" role="img" aria-label="區間每日 TSS 與 RPE 圖表"><line x1="20" y1="88" x2="315" y2="88" stroke="#dfe7de"/>${dailyBars}${rpeLine}</svg>`;
+  const hasDailyTss=daily.some(d=>Number(d.TSS)>0);
+  const hasDailyRpe=daily.some(d=>Number(d.RPE)>0);
+  const dailySvg=`<svg viewBox="0 0 330 120" role="img" aria-label="區間每日訓練負荷圖表"><line x1="20" y1="88" x2="315" y2="88" stroke="#dfe7de"/>${hasDailyTss?dailyBars:''}${hasDailyRpe?rpeLine:''}</svg>`;
+  const dailyChartHtml=(hasDailyTss||hasDailyRpe)?`<div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">每日訓練節奏<span>${[hasDailyTss?'TSS':'',hasDailyRpe?'RPE':''].filter(Boolean).join(' + ')}</span></div><div class="rpt-chart-legend">${hasDailyTss?'<span><i style="background:#6f9278"></i>TSS（長條）</span>':''}${hasDailyRpe?'<span><i style="background:#bd8751"></i>RPE（折線）</span>':''}</div>${dailySvg}<div class="rpt-chart-note">僅呈現本期有紀錄的指標；缺少回報的日期不補值。</div></div>`:'';
   // 28-day PMC trend: three daily vector lines, with the selected report week highlighted.
   const last28=buildAthleteSeries(a,dateMinus(reportEnd,27),reportEnd).data.slice(-28);
   const pmcW=600,pmcH=190,pmcL=34,pmcR=18,pmcT=24;
@@ -4491,6 +4506,7 @@ function printWeeklyPdf(){
   const currentBandEnd=xAt(Math.max(0,last28.length-1))+10;
   const weekTicks=[0,7,14,21].filter(i=>i<last28.length).map((i,n)=>`<text x="${xAt(i)}" y="${pmcH-7}" text-anchor="middle" font-size="10" fill="#68766d">${['四週前','三週前','兩週前','本週'][n]}</text>`).join('');
   const pmcSvg=`<svg viewBox="0 0 ${pmcW} ${pmcH}" role="img" aria-label="近四週每日 CTL、ATL、TSB 趨勢折線圖"><rect x="${currentBandStart}" y="${pmcT-5}" width="${Math.max(0,currentBandEnd-currentBandStart)}" height="${plotH+12}" rx="5" fill="#eaf1e8"/><line x1="${pmcL}" y1="${pmcT+plotH}" x2="${pmcW-pmcR}" y2="${pmcT+plotH}" stroke="#dfe7de"/><line x1="${pmcL}" y1="${yTsb(0)}" x2="${pmcW-pmcR}" y2="${yTsb(0)}" stroke="#cbd5cc" stroke-dasharray="4 4"/><path d="${makePmcPath('CTL',yLoad)}" fill="none" stroke="#557b61" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="${makePmcPath('ATL',yLoad)}" fill="none" stroke="#c18a57" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="${makePmcPath('TSB',yTsb)}" fill="none" stroke="#648db5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${weekTicks}<text x="${pmcL}" y="13" font-size="10" fill="#557b61">CTL</text><text x="${pmcL+42}" y="13" font-size="10" fill="#c18a57">ATL</text><text x="${pmcL+82}" y="13" font-size="10" fill="#648db5">TSB</text><text x="${pmcW-pmcR}" y="13" text-anchor="end" font-size="9" fill="#627067">淡綠底：本週</text></svg>`;
+  const pmcHtml=m.hasLoadTrend?`<div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近四週 CTL／ATL／TSB 趨勢（PMC）<span>PERFORMANCE MANAGEMENT</span></div>${pmcSvg}<div class="rpt-chart-note">依可用 TSS 記錄計算；負荷模型需搭配個人感受與訓練表現判讀。</div></div>`:'';
   const {weeks:allWeeks}=buildAthleteWeeklyData(a);
   const last8=allWeeks.filter(x=>x.date<=isoKey(reportEnd)).slice(-8);
   const maxHours=Math.max(1,...last8.flatMap(x=>[x.estMin/60,x.realMin/60]));
@@ -4525,25 +4541,46 @@ function printWeeklyPdf(){
     const ring=(pct,cx,color)=>{const r=30,c=2*Math.PI*r,v=pct===null?0:c*pct/100;return `<circle cx="${cx}" cy="57" r="${r}" fill="none" stroke="#e7ede6" stroke-width="10"/><circle cx="${cx}" cy="57" r="${r}" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${v} ${c-v}" transform="rotate(-90 ${cx} 57)"/><text x="${cx}" y="61" text-anchor="middle" font-size="11" font-weight="700" fill="#2b4032">${pct===null?'—':pct+'%'}</text>`};
     donutSvg=`<svg viewBox="0 0 330 125" role="img" aria-label="訓練時數與跑量達成率">${ring(hoursPct,82,'#557b61')}${ring(runPctValue,235,'#c18a57')}<text x="82" y="105" text-anchor="middle" font-size="10" fill="#526257">時數達成</text><text x="235" y="105" text-anchor="middle" font-size="10" fill="#526257">跑量達成</text></svg>`;
   }
+  const hasSportTime=positiveSports.some(x=>x.mins>0);
+  const sportMixHtml=hasSportTime?`<div class="rpt-chart-card"><h4>各運動項目時間占比</h4>${donutSvg}<div class="rpt-chart-note">依本期已分類的實際訓練時間計算。</div></div>`:'';
+  const plannedActualHtml=m.hasPlannedActual?`<div class="rpt-chart-card"><h4>訓練完成度</h4>
+    ${m.durPct!==null?`<div class="rpt-bar-row"><div class="rpt-bar-label"><span>訓練時數</span><span>${m.durPct}%</span></div><div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${durBarW}%;background:${palette.accent}"></div></div><div class="rpt-chart-note">實際 ${fmtHrMin(w.realMin)}／預計 ${fmtHrMin(w.estMin)}</div></div>`:''}
+    ${m.runPct!==null?`<div class="rpt-bar-row"><div class="rpt-bar-label"><span>跑步里程</span><span>${m.runPct}%</span></div><div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${runBarW}%;background:#47728c"></div></div><div class="rpt-chart-note">實際 ${Number(w.realRun||0).toFixed(1)} km／預計 ${Number(w.estRun||0).toFixed(1)} km</div></div>`:''}
+  </div>`:'';
   const loadInterpretation=[];
   if(m.durPct!==null){
-    loadInterpretation.push(m.durPct>=90&&m.durPct<=115
-      ?`本週完成 ${fmtHrMin(w.realMin)}，達成預計訓練時數 ${m.durPct}%，整體執行符合規劃。`
-      :m.durPct>115
-        ?`本週完成 ${fmtHrMin(w.realMin)}，達成率 ${m.durPct}%，高於原訂時數，需一併檢視恢復與課表強度。`
-        :`本週完成 ${fmtHrMin(w.realMin)}，達成率 ${m.durPct}%，低於原訂時數；建議對照缺課原因與身體反應解讀。`);
+    loadInterpretation.push(m.durPct>=90&&m.durPct<=110
+      ?`本期實際訓練 ${fmtHrMin(w.realMin)}，時數達成率 ${m.durPct}%，與預計訓練量接近。`
+      :m.durPct>110
+        ?`本期時數達成率 ${m.durPct}%，高於原規劃；需搭配強度與恢復反應確認是否符合週期目的。`
+        :`本期時數達成率 ${m.durPct}%，低於原規劃；建議確認未完成原因與身體反應。`);
   }else{
-    loadInterpretation.push(`本週累計 ${fmtHrMin(w.realMin)}，共 ${m.trainDays} 天有訓練紀錄。`);
+    loadInterpretation.push(`本期累計訓練 ${fmtHrMin(w.realMin)}，有 ${m.trainDays} 天負荷紀錄。`);
   }
   if(m.avgRpe!==null){
-    loadInterpretation.push(`學員回報平均 RPE ${m.avgRpe.toFixed(1)}/10，單週 sRPE ${m.weekSrpe} AU；主觀感受可與 TSS、CTL／ATL 趨勢交叉判讀。`);
-  }else{
-    loadInterpretation.push('此區間尚無足夠的單次 RPE 回報，主觀感受暫不作推論。');
+    loadInterpretation.push(`平均單次 RPE ${m.avgRpe.toFixed(1)}/10，累計 sRPE ${m.weekSrpe.toLocaleString('en-US')} AU；這是內部負荷，可與 TSS 外部負荷一起觀察。`);
   }
-  if(m.acwr!==null){
-    loadInterpretation.push(`ACWR ${m.acwr.toFixed(2)}：${m.acwrLabel}。CTL ${m.ctl.toFixed(1)}、ATL ${m.atl.toFixed(1)}、TSB ${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}，需搭配訓練內容與恢復回報判讀。`);
+  if(m.hasTss&&m.tssChange!==null){
+    const sign=m.tssChange>=0?'+':'';
+    loadInterpretation.push(`本期 TSS ${m.weekTss}，前一個等長區間 ${m.prevTss}，變化 ${sign}${m.tssChange.toFixed(1)}%。此比較僅描述負荷變化，不單獨作為傷病風險判斷。`);
   }
-  const interpretationHtml=`<div class="rpt-interpretation"><strong>區間數據判讀</strong><ul>${loadInterpretation.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`;
+  if(m.hasLoadTrend&&m.dCtl!==null){
+    loadInterpretation.push(`區間末 CTL ${m.ctl.toFixed(1)}（較前一個等長區間 ${m.dCtl>=0?'+':''}${m.dCtl.toFixed(1)}）、ATL ${m.atl.toFixed(1)}、TSB ${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}；這些是負荷模型指標，需結合個人感受與訓練表現判讀。`);
+  }
+  const periodWorkouts=m.athlete?.tpWorkouts?.filter(x=>x.date>=m.rangeStart&&x.date<=m.rangeEnd)||[];
+  const hrValues=periodWorkouts.map(x=>Number(x.avgHr)||0).filter(x=>x>0);
+  const maxHrValues=periodWorkouts.map(x=>Number(x.maxHr)||0).filter(x=>x>0);
+  const powerValues=periodWorkouts.map(x=>Number(x.avgPower)||0).filter(x=>x>0);
+  const npValues=periodWorkouts.map(x=>Number(x.normalizedPower)||0).filter(x=>x>0);
+  if(m.hasHeartRate&&hrValues.length){
+    loadInterpretation.push(`有心率紀錄的訓練平均心率約 ${Math.round(hrValues.reduce((a,b)=>a+b,0)/hrValues.length)} bpm${maxHrValues.length?`，紀錄中的最高心率 ${Math.max(...maxHrValues)} bpm`:''}；僅代表有心率資料的訓練，不等同全期平均。`);
+  }
+  if(m.hasPower&&powerValues.length){
+    loadInterpretation.push(`有功率紀錄的訓練平均功率約 ${Math.round(powerValues.reduce((a,b)=>a+b,0)/powerValues.length)} W${npValues.length?`，平均標準化功率 ${Math.round(npValues.reduce((a,b)=>a+b,0)/npValues.length)} W`:''}；僅統計有功率資料的訓練。`);
+  }
+  const dataLimits=[];
+  if(m.sportSource!=='csv')dataLimits.push('分項運動時間／距離尚無完整匯入紀錄，圖表不以推估值補齊。');
+  const interpretationHtml=(loadInterpretation.length||dataLimits.length)?`<div class="rpt-interpretation"><strong>本期數據判讀</strong>${loadInterpretation.length?`<ul>${loadInterpretation.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${dataLimits.length?`<div class="rpt-data-limits"><strong>資料範圍：</strong>${dataLimits.map(esc).join(' ')}</div>`:''}</div>`:'';
   const trendNote=m.isRealSeries?'依 TrainingPeaks 匯入資料':'目前為示意趨勢資料';
   const sportNote=m.sportSource==='csv'?'依 TrainingPeaks 訓練紀錄':'目前無真實分項時間資料';
 
@@ -4559,47 +4596,33 @@ function printWeeklyPdf(){
           <div class="rpt-kpi-4">
             <div class="rpt-box"><small>實際訓練時數</small><strong>${fmtHrMin(w.realMin)}</strong><span class="rpt-sub">預計 ${fmtHrMin(w.estMin)}</span></div>
             <div class="rpt-box"><small>時數達成率</small><strong>${m.durPct!==null?m.durPct+'%':'—'}</strong><span class="rpt-sub">${m.trainDays} 天訓練</span></div>
-            <div class="rpt-box"><small>週累計 TSS</small><strong>${m.weekTss}</strong><span class="rpt-sub">單日最高 ${m.maxTss}</span></div>
-            <div class="rpt-box"><small>平均 RPE</small><strong>${m.avgRpe!==null?m.avgRpe.toFixed(1)+'/10':'—'}</strong><span class="rpt-sub">sRPE ${m.weekSrpe} AU</span></div>
+            ${m.hasTss?`<div class="rpt-box"><small>週累計 TSS</small><strong>${m.weekTss}</strong><span class="rpt-sub">單日最高 ${m.maxTss}</span></div>`:''}
+            ${m.hasRpe?`<div class="rpt-box"><small>平均 RPE</small><strong>${m.avgRpe!==null?m.avgRpe.toFixed(1)+'/10':'—'}</strong><span class="rpt-sub">sRPE ${m.weekSrpe} AU</span></div>`:''}
           </div>
           ${w.remark?`<div style="margin-top:9px;font-size:10.5px;color:#526257">本週備註：${esc(w.remark)}</div>`:''}
         </div>
         ${interpretationHtml}
         ${sportTableHtml}
-        <div class="rpt-chart-grid">
-          <div class="rpt-chart-card"><h4>各運動項目時間占比</h4>${donutSvg}<div class="rpt-chart-note">${m.sportSource==='csv'?'依匯入訓練紀錄分類':'目前無完整分項時間資料，請勿將推估值視為實際紀錄'}</div></div>
-          <div class="rpt-chart-card"><h4>訓練完成度</h4>
-            <div class="rpt-bar-row"><div class="rpt-bar-label"><span>訓練時數</span><span>${m.durPct!==null?m.durPct+'%':'—'}</span></div><div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${durBarW}%;background:${palette.accent}"></div></div><div class="rpt-chart-note">實際 ${fmtHrMin(w.realMin)}／預計 ${fmtHrMin(w.estMin)}</div></div>
-            <div class="rpt-bar-row"><div class="rpt-bar-label"><span>跑步里程</span><span>${m.runPct!==null?m.runPct+'%':'未設定目標'}</span></div><div class="rpt-bar-track"><div class="rpt-bar-fill" style="width:${runBarW}%;background:#47728c"></div></div><div class="rpt-chart-note">實際 ${Number(w.realRun||0).toFixed(1)} km／預計 ${Number(w.estRun||0).toFixed(1)} km</div></div>
-          </div>
-        </div>
+        ${sportMixHtml||plannedActualHtml?`<div class="rpt-chart-grid">${sportMixHtml}${plannedActualHtml}</div>`:''}
         <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 1 / 3 頁</span></div>
       </div>
 
       <div class="rpt-page">
         <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · TRAINING RHYTHM</small><h1>訓練節奏與體能趨勢</h1><p>${esc(a.name)} · ${fmtDate(dayStart(new Date((m.rangeStart||isoKey(m.startDate))+'T00:00:00')))} – ${fmtDate(dayStart(new Date((m.rangeEnd||isoKey(m.endDate))+'T00:00:00')))}</p></div></div>
-        <div class="rpt-section">
-          <div class="rpt-section-title" style="color:${palette.bg}">每日訓練節奏<span>DAILY TSS + RPE</span></div>
-          <div class="rpt-chart-legend"><span><i style="background:#6f9278"></i>TSS（長條）</span><span><i style="background:#bd8751"></i>RPE（折線）</span></div>
-          ${dailySvg}<div class="rpt-chart-note">長條為每日 TSS，折線為單日 RPE；缺少資料的日期不補值。</div>
-        </div>
-        <div class="rpt-section">
-          <div class="rpt-section-title" style="color:${palette.bg}">近四週 CTL／ATL／TSB 趨勢（PMC）<span>PERFORMANCE MANAGEMENT</span></div>
-          ${pmcSvg}<div class="rpt-chart-note">每日曲線呈現 CTL、ATL 與 TSB；淡綠底標示報告區間。${m.isRealSeries?'':'目前為示意資料，請勿視為真實訓練負荷。'}</div>
-        </div>
+        ${dailyChartHtml}
+        ${pmcHtml}
         <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 2 / 3 頁</span></div>
       </div>
 
       <div class="rpt-page">
         <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · COACH REVIEW</small><h1>訓練量比較與教練建議</h1><p>${esc(a.name)} · ${fmtDate(dayStart(new Date((m.rangeStart||isoKey(m.startDate))+'T00:00:00')))} – ${fmtDate(dayStart(new Date((m.rangeEnd||isoKey(m.endDate))+'T00:00:00')))}</p></div></div>
-        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近八週預計與實際訓練量<span>PLANNED VS ACTUAL</span></div>${hoursSvg}<div class="rpt-chart-note">數值標示於各柱上方；淺色為預計、深色為實際。跑量僅在有紀錄時顯示。</div></div>
-        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">負荷與疲勞指標<span>TRAINING LOAD</span></div><div class="rpt-kpi-4">
-          <div class="rpt-box"><small>CTL 長期體能</small><strong>${m.ctl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dCtl)||'期末值'}</span></div>
-          <div class="rpt-box"><small>ATL 短期疲勞</small><strong>${m.atl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dAtl)||'近七日負荷'}</span></div>
-          <div class="rpt-box"><small>TSB 狀態值</small><strong>${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dTsb)||'體能減疲勞'}</span></div>
-          <div class="rpt-box"><small>ACWR 急慢性比</small><strong>${m.acwr!==null?m.acwr.toFixed(2):'—'}</strong><span class="rpt-sub">${esc(m.acwrLabel)}</span></div>
-        </div></div>
-        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">教練建議<span>COACH RECOMMENDATIONS</span></div><p class="rpt-explain">以下內容為教練根據本期訓練完成度、主觀回報與近期負荷趨勢整理的建議，並應搭配學員實際回報與身體反應調整。</p><div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div></div>
+        ${m.hasPlannedActual?`<div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近八週預計與實際訓練量<span>PLANNED VS ACTUAL</span></div>${hoursSvg}<div class="rpt-chart-note">數值標示於各柱上方；淺色為預計、深色為實際。跑量僅在有紀錄時顯示。</div></div>`:''}
+        ${m.hasLoadTrend?`<div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">負荷趨勢摘要<span>TRAINING LOAD TREND</span></div><div class="rpt-kpi-3">
+          <div class="rpt-box"><small>CTL 長期負荷</small><strong>${m.ctl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dCtl)||'區間末值'}</span></div>
+          <div class="rpt-box"><small>ATL 短期負荷</small><strong>${m.atl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dAtl)||'區間末值'}</span></div>
+          <div class="rpt-box"><small>TSB 狀態值</small><strong>${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dTsb)||'區間末值'}</span></div>
+        </div><p class="rpt-explain">CTL、ATL、TSB 為依 TSS 計算的負荷模型指標，用來觀察長期負荷、短期負荷與兩者差值；不直接等同於實際體能、疲勞診斷或比賽準備度。</p></div>`:''}
+        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">教練建議<span>COACH REVIEW & NEXT STEPS</span></div><p class="rpt-explain">以下為依本期可取得資料整理的教練觀察與下週方向；請結合學員回報、課表內容與實際狀況，由負責教練確認後執行。</p><div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div></div>
         <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 3 / 3 頁 · 報告日期：${fmtDate(new Date())}</span></div>
       </div>
     </div>
