@@ -4393,7 +4393,8 @@ function regeneratePdfAiAdvice(){
 }
 
 function printWeeklyPdf(){
-  if(!currentPdfData)return;
+  if(!currentPdfData){toast('請先選擇有效的報告日期區間');return;}
+  try{
   saveCurrentPdfNote();
   const m=currentPdfData;
   const a=m.athlete;
@@ -4519,7 +4520,7 @@ function printWeeklyPdf(){
       <div class="rpt-page">
         <div class="rpt-header" style="background:${palette.bg}">
           <div><small>KUANGYU STUDIO · WEEKLY TRAINING REPORT</small><h1>${esc(a.name)} 週訓練分析報告</h1><p>${esc(a.sport)}${a.goal?' · 目標：'+esc(a.goal):''}</p></div>
-          <div class="rpt-header-right"><div class="rpt-week-badge">自訂日期區間</div><p>${fmtDate(m.rangeStart||m.startDate)} — ${fmtDate(m.rangeEnd||m.endDate)}</p></div>
+          <div class="rpt-header-right"><div class="rpt-week-badge">自訂日期區間</div><p>${fmtDate(dayStart(new Date((m.rangeStart||isoKey(m.startDate))+'T00:00:00')))} — ${fmtDate(dayStart(new Date((m.rangeEnd||isoKey(m.endDate))+'T00:00:00')))}</p></div>
         </div>
         <div class="rpt-section">
           <div class="rpt-section-title" style="color:${palette.bg}">區間訓練摘要<span>PERIOD SUMMARY</span></div>
@@ -4547,7 +4548,7 @@ function printWeeklyPdf(){
         <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 1 / 2 頁</span></div>
       </div>
       <div class="rpt-page">
-        <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · PERFORMANCE REVIEW</small><h1>進階趨勢與教練判讀</h1><p>${esc(a.name)} · ${fmtDate(m.rangeStart||m.startDate)} – ${fmtDate(m.rangeEnd||m.endDate)}</p></div><div class="rpt-header-right"><div class="rpt-week-badge">ADVANCED REVIEW</div><p>${fmtDate(m.rangeStart||m.startDate)} — ${fmtDate(m.rangeEnd||m.endDate)}</p></div></div>
+        <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · PERFORMANCE REVIEW</small><h1>進階趨勢與教練判讀</h1><p>${esc(a.name)} · ${fmtDate(dayStart(new Date((m.rangeStart||isoKey(m.startDate))+'T00:00:00')))} – ${fmtDate(dayStart(new Date((m.rangeEnd||isoKey(m.endDate))+'T00:00:00')))}</p></div><div class="rpt-header-right"><div class="rpt-week-badge">ADVANCED REVIEW</div><p>${fmtDate(dayStart(new Date((m.rangeStart||isoKey(m.startDate))+'T00:00:00')))} — ${fmtDate(dayStart(new Date((m.rangeEnd||isoKey(m.endDate))+'T00:00:00')))}</p></div></div>
         <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近四週 CTL／ATL／TSB 趨勢（PMC）<span>${trendNote}</span></div>${pmcSvg}<div class="rpt-chart-note">每日曲線呈現 CTL、ATL 與 TSB；淡綠底標示本週區間。${m.isRealSeries?'':'目前為示意資料，請勿視為真實訓練負荷。'}</div></div>
         <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">近八週預計與實際訓練量<span>PLANNED VS ACTUAL</span></div>${hoursSvg}<div class="rpt-chart-note">淺色為預計、深色為實際；有跑量資料時同步顯示跑量對比。沒有紀錄的週次不會自行補造。</div></div>
         <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">負荷與疲勞指標<span>TRAINING LOAD</span></div><div class="rpt-kpi-4">
@@ -4565,9 +4566,14 @@ function printWeeklyPdf(){
   const oldTitle=document.title;
   document.title=`${a.name}_${m.rangeStart||w.date}_${m.rangeEnd||w.date}_訓練分析報告`;
   setTimeout(()=>{
-    window.print();
+    try{window.print();}
+    catch(err){console.error(err);toast('無法開啟列印視窗，請檢查瀏覽器是否封鎖彈出視窗');}
     document.title=oldTitle;
   },80);
+  }catch(err){
+    console.error('Weekly PDF export failed:',err);
+    toast('報告產生失敗：'+(err&&err.message?err.message:'請重新選擇日期區間'));
+  }
 }
 
 /* =========================================================
