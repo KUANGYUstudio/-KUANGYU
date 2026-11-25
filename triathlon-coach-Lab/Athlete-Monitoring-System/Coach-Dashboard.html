@@ -2162,6 +2162,17 @@ button:active{transform:translateY(.5px)}
   .rpt-kpi-4{gap:6px !important}
   .rpt-box{padding:8px 9px !important}
   .rpt-box strong{font-size:17px !important}
+  .rpt-device-section{break-inside:avoid-page}
+  .rpt-device-sport{border:1px solid #e2e9e1;border-radius:9px;padding:9px 11px;margin-top:8px;break-inside:avoid}
+  .rpt-device-sport h4{margin:0 0 5px;color:#294638;font-size:11px}
+  .rpt-device-metrics{font-size:9px;color:#526257;line-height:1.8}
+  .rpt-zone-group{margin-top:7px}
+  .rpt-zone-group>strong{display:block;font-size:9px;color:#526257;margin-bottom:4px}
+  .rpt-zone-row{display:grid;grid-template-columns:42px 1fr 48px 30px;gap:6px;align-items:center;font-size:8px;color:#526257;margin:3px 0}
+  .rpt-zone-track{height:6px;background:#edf1ec;border-radius:8px;overflow:hidden}
+  .rpt-zone-track i{display:block;height:100%;background:#6f9278;border-radius:8px}
+  .rpt-zone-row b{text-align:right;font-weight:600}
+  .rpt-zone-row small{text-align:right}
   .rpt-interpretation{
     margin:7px 0 9px;padding:8px 11px;border:1px solid #e1e8df;
     border-left:3px solid #6f9278;border-radius:7px;background:#f7faf6;
@@ -3245,10 +3256,6 @@ function handleTpCsvUpload(event){
       const iPlanDist=findCol('planneddistanceinmeters','planneddistance','planneddistanceinkilometers');
       const iTss=findCol('tss','actualtss','plannedtss');
       const iRpe=findCol('rpe','sessionrpe','perceivedexertion');
-      const iAvgHr=findCol('averageheartrate','avgheartrate','averagehr','avghr');
-      const iMaxHr=findCol('maxheartrate','maximumheartrate','maxhr');
-      const iAvgPower=findCol('averagepower','avgpower');
-      const iNormalizedPower=findCol('normalizedpower','np');
       const iCoachNote=findCol('coachcomments','workoutdescription','description');
       const iAthNote=findCol('athletecomments','comments');
 
@@ -3271,10 +3278,6 @@ function handleTpCsvUpload(event){
         const tss=iTss!==-1?(parseFloat(cols[iTss])||0):0;
         const rawRpe=iRpe!==-1?parseFloat(cols[iRpe]):NaN;
         const rpe=!Number.isNaN(rawRpe)&&rawRpe>0?Math.min(10,Math.max(1,rawRpe)):null;
-        const avgHr=iAvgHr!==-1?(parseFloat(cols[iAvgHr])||0):0;
-        const maxHr=iMaxHr!==-1?(parseFloat(cols[iMaxHr])||0):0;
-        const avgPower=iAvgPower!==-1?(parseFloat(cols[iAvgPower])||0):0;
-        const normalizedPower=iNormalizedPower!==-1?(parseFloat(cols[iNormalizedPower])||0):0;
         const comment=(iAthNote!==-1?cols[iAthNote]:'')||(iCoachNote!==-1?cols[iCoachNote]:'');
 
         workouts.push({
@@ -3288,10 +3291,6 @@ function handleTpCsvUpload(event){
           plannedDistanceKm:Math.round(planDistKm*100)/100,
           tss,
           rpe,
-          avgHr,
-          maxHr,
-          avgPower,
-          normalizedPower,
           comment:String(comment||'').trim()
         });
       }
@@ -4171,6 +4170,45 @@ function exportWeeklyCsv(btn){
    ========================================================= */
 let currentPdfData=null;
 
+function buildTpDeviceAnalytics(workouts,startIso,endIso){
+  const rows=(Array.isArray(workouts)?workouts:[]).filter(w=>w.date>=startIso&&w.date<=endIso&&!w.plannedOnly&&!w.isRest&&Number(w.duration)>0);
+  const bySport={};
+  const zoneTotals={hr:{},power:{}};
+  const sums={hr:0,hrN:0,hrMax:0,power:0,powerN:0,powerMax:0,if:0,ifN:0,velocity:0,velocityN:0,cadence:0,cadenceN:0};
+  rows.forEach(w=>{
+    const sport=classifyWorkoutSport(w);
+    if(!bySport[sport])bySport[sport]={sport,workouts:0,minutes:0,km:0,tss:0,hr:[],power:[],if:[],cadence:[],hrZones:Array(10).fill(0),powerZones:Array(10).fill(0)};
+    const b=bySport[sport];b.workouts++;b.minutes+=Number(w.duration)||0;b.km+=Number(w.distanceKm)||0;b.tss+=Number(w.tss)||0;
+    if(Number(w.avgHr)>0){b.hr.push(Number(w.avgHr));sums.hr+=Number(w.avgHr);sums.hrN++}
+    if(Number(w.maxHr)>0)sums.hrMax=Math.max(sums.hrMax,Number(w.maxHr));
+    if(Number(w.avgPower)>0){b.power.push(Number(w.avgPower));sums.power+=Number(w.avgPower);sums.powerN++}
+    if(Number(w.maxPower)>0)sums.powerMax=Math.max(sums.powerMax,Number(w.maxPower));
+    if(Number(w.intensityFactor)>0){b.if.push(Number(w.intensityFactor));sums.if+=Number(w.intensityFactor);sums.ifN++}
+    if(Number(w.avgCadence)>0){b.cadence.push(Number(w.avgCadence));sums.cadence+=Number(w.avgCadence);sums.cadenceN++}
+    (w.hrZones||[]).forEach((v,i)=>{const n=Number(v)||0;b.hrZones[i]+=n;if(n>0)zoneTotals.hr[i+1]=(zoneTotals.hr[i+1]||0)+n});
+    (w.powerZones||[]).forEach((v,i)=>{const n=Number(v)||0;b.powerZones[i]+=n;if(n>0)zoneTotals.power[i+1]=(zoneTotals.power[i+1]||0)+n});
+  });
+  Object.values(bySport).forEach(b=>{
+    b.avgHr=b.hr.length?b.hr.reduce((a,v)=>a+v,0)/b.hr.length:null;
+    b.avgPower=b.power.length?b.power.reduce((a,v)=>a+v,0)/b.power.length:null;
+    b.avgIf=b.if.length?b.if.reduce((a,v)=>a+v,0)/b.if.length:null;
+    b.avgCadence=b.cadence.length?b.cadence.reduce((a,v)=>a+v,0)/b.cadence.length:null;
+    delete b.hr;delete b.power;delete b.if;delete b.cadence;
+  });
+  return {rows,bySport,zoneTotals,summary:{
+    avgHr:sums.hrN?sums.hr/sums.hrN:null,hrMax:sums.hrMax||null,
+    avgPower:sums.powerN?sums.power/sums.powerN:null,powerMax:sums.powerMax||null,
+    avgIf:sums.ifN?sums.if/sums.ifN:null,avgCadence:sums.cadenceN?sums.cadence/sums.cadenceN:null,
+    hrCount:sums.hrN,powerCount:sums.powerN,ifCount:sums.ifN
+  }};
+}
+
+function renderZoneRows(zones,label){
+  const total=zones.reduce((s,v)=>s+(Number(v)||0),0);
+  if(!total)return '';
+  return zones.map((v,i)=>Number(v)>0?`<div class="rpt-zone-row"><span>${label} ${i+1}</span><div class="rpt-zone-track"><i style="width:${Math.max(1,Number(v)/total*100)}%"></i></div><b>${Math.round(Number(v))} min</b><small>${Math.round(Number(v)/total*100)}%</small></div>`:'').join('');
+}
+
 function computeWeeklyReportMetrics(a,weekObj,rangeEndIso=null){
   const startDate=dayStart(new Date(weekObj.date+'T00:00:00'));
   const endDate=rangeEndIso?dayStart(new Date(rangeEndIso+'T00:00:00')):datePlus(startDate,6);
@@ -4234,6 +4272,7 @@ function computeWeeklyReportMetrics(a,weekObj,rangeEndIso=null){
     delete s.rpeValues;
   });
 
+  const deviceAnalytics=buildTpDeviceAnalytics(a?.tpWorkouts,startIso,endIso);
   const weeklyData=buildAthleteWeeklyData(a);
   const periodWeeks=(weeklyData.weeks||[]).filter(w=>w.date>=startIso&&w.date<=endIso);
   const dataIsReal=Boolean(seriesRes.isReal)&&Boolean(weeklyData.isReal);
@@ -4243,7 +4282,7 @@ function computeWeeklyReportMetrics(a,weekObj,rangeEndIso=null){
     ctl,atl,tsb,dCtl,dAtl,dTsb,
     weekTss:Math.round(weekTss),prevTss:Math.round(prevTss),tssChange,
     weekSrpe:Math.round(weekSrpe),avgRpe,prevAvgRpe,maxRpe,maxTss:Math.round(maxTss),
-    trainDays,durPct,runPct,sports,sportSource,periodWeeks
+    trainDays,durPct,runPct,sports,sportSource,periodWeeks,deviceAnalytics
   };
 }
 function generateAiAdviceDraft(m){
@@ -4554,30 +4593,34 @@ function printWeeklyPdf(){
   if(m.dCtl!==null){
     loadInterpretation.push(`區間末 CTL ${m.ctl.toFixed(1)}（較前一個等長區間 ${m.dCtl>=0?'+':''}${m.dCtl.toFixed(1)}）、ATL ${m.atl.toFixed(1)}、TSB ${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}；這些是負荷模型指標，需結合個人感受與訓練表現判讀。`);
   }
-  const hasPowerOrHrData=false;
   const dataLimits=[];
   if(m.sportSource!=='csv')dataLimits.push('分項運動時間／距離尚無完整匯入紀錄，圖表不以推估值補齊。');
-  dataLimits.push('目前匯入欄位未包含心率、功率、配速區間明細，因此本報告不計算 Time in Zone、有氧效率因子、VI 或有氧脫鉤。');
+  if(!m.deviceAnalytics?.summary?.hrCount)dataLimits.push('本期沒有可用心率資料，心率區間分析不顯示。');
+  if(!m.deviceAnalytics?.summary?.powerCount)dataLimits.push('本期沒有可用功率資料，功率區間分析不顯示。');
+  dataLimits.push('目前匯出資料為訓練摘要，沒有逐秒原始檔；因此不推算 VI、有氧脫耦率或 EF。');
+  const da=m.deviceAnalytics||{rows:[],bySport:{},zoneTotals:{hr:{},power:{}},summary:{}};
+  const deviceSportCards=Object.values(da.bySport).map(b=>{
+    const name=({swim:'游泳',bike:'自行車',run:'跑步',strength:'肌力',other:'其他'})[b.sport]||b.sport;
+    const hrZones=renderZoneRows(b.hrZones,'HR Z');
+    const pwrZones=renderZoneRows(b.powerZones,'PWR Z');
+    const metrics=[
+      `<span>${b.workouts} 堂 · ${fmtHrMin(b.minutes)}</span>`,
+      b.km>0?`<span>${b.km.toFixed(1)} km</span>`:'',
+      b.tss>0?`<span>${Math.round(b.tss)} TSS</span>`:'',
+      b.avgHr?`<span>平均心率 ${Math.round(b.avgHr)} bpm</span>`:'',
+      b.avgPower?`<span>平均功率 ${Math.round(b.avgPower)} W</span>`:'',
+      b.avgIf?`<span>平均 IF ${b.avgIf.toFixed(2)}</span>`:'',
+      b.avgCadence?`<span>平均步頻／踏頻 ${Math.round(b.avgCadence)}</span>`:''
+    ].filter(Boolean).join('　');
+    return `<div class="rpt-device-sport"><h4>${name}</h4><div class="rpt-device-metrics">${metrics}</div>${hrZones?`<div class="rpt-zone-group"><strong>心率區間分布</strong>${hrZones}</div>`:''}${pwrZones?`<div class="rpt-zone-group"><strong>功率區間分布</strong>${pwrZones}</div>`:''}</div>`;
+  }).join('');
+  const deviceSummary=da.rows.length?`<div class="rpt-section rpt-device-section"><div class="rpt-section-title" style="color:${palette.bg}">設備數據與運動分項分析<span>DEVICE & SPORT ANALYSIS</span></div>
+    <div class="rpt-kpi-3">
+      ${da.summary.hrCount?`<div class="rpt-box"><small>有心率紀錄的平均心率</small><strong>${Math.round(da.summary.avgHr)} bpm</strong><span class="rpt-sub">${da.summary.hrCount} 筆紀錄${da.summary.hrMax?` · 最高 ${da.summary.hrMax} bpm`:''}</span></div>`:''}
+      ${da.summary.powerCount?`<div class="rpt-box"><small>有功率紀錄的平均功率</small><strong>${Math.round(da.summary.avgPower)} W</strong><span class="rpt-sub">${da.summary.powerCount} 筆紀錄${da.summary.powerMax?` · 最高 ${da.summary.powerMax} W`:''}</span></div>`:''}
+      ${da.summary.ifCount?`<div class="rpt-box"><small>有 IF 紀錄的平均強度</small><strong>${da.summary.avgIf.toFixed(2)}</strong><span class="rpt-sub">${da.summary.ifCount} 筆紀錄</span></div>`:''}
+    </div>${deviceSportCards}<p class="rpt-chart-note">區間僅統計各運動實際有回報的分鐘數；不同運動的心率與功率區間分開呈現，缺少設備資料不補零。</p></div>`:'';
   const interpretationHtml=`<div class="rpt-interpretation"><strong>本期數據判讀</strong><ul>${loadInterpretation.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="rpt-data-limits"><strong>資料範圍：</strong>${dataLimits.map(esc).join(' ')}</div></div>`;
-  // Optional device-data analysis. These are additive panels; all original v6 report sections remain unchanged.
-  const reportWorkouts=Array.isArray(a.tpWorkouts)?a.tpWorkouts.filter(x=>x.date>=(m.rangeStart||isoKey(m.startDate))&&x.date<=(m.rangeEnd||isoKey(m.endDate))):[];
-  const hrRecords=reportWorkouts.filter(x=>Number(x.avgHr)>0);
-  const powerRecords=reportWorkouts.filter(x=>Number(x.avgPower)>0);
-  const npRecords=reportWorkouts.filter(x=>Number(x.normalizedPower)>0);
-  const hrAvg=hrRecords.length?Math.round(hrRecords.reduce((s,x)=>s+Number(x.avgHr),0)/hrRecords.length):null;
-  const hrMax=hrRecords.length?Math.max(...hrRecords.map(x=>Number(x.maxHr)||0)):null;
-  const powerAvg=powerRecords.length?Math.round(powerRecords.reduce((s,x)=>s+Number(x.avgPower),0)/powerRecords.length):null;
-  const npAvg=npRecords.length?Math.round(npRecords.reduce((s,x)=>s+Number(x.normalizedPower),0)/npRecords.length):null;
-  const deviceAnalysisHtml=(hrRecords.length||powerRecords.length)?`
-    <div class="rpt-section">
-      <div class="rpt-section-title" style="color:${palette.bg}">設備數據補充分析<span>DEVICE DATA INSIGHTS</span></div>
-      <div class="rpt-kpi-3">
-        ${hrRecords.length?`<div class="rpt-box"><small>有心率紀錄訓練的平均心率</small><strong>${hrAvg} bpm</strong><span class="rpt-sub">${hrMax?`最高紀錄 ${hrMax} bpm`:`共 ${hrRecords.length} 筆紀錄`}</span></div>`:''}
-        ${powerRecords.length?`<div class="rpt-box"><small>有功率紀錄訓練的平均功率</small><strong>${powerAvg} W</strong><span class="rpt-sub">${powerRecords.length} 筆有功率紀錄</span></div>`:''}
-        ${npRecords.length?`<div class="rpt-box"><small>平均標準化功率</small><strong>${npAvg} W</strong><span class="rpt-sub">${npRecords.length} 筆有 NP 紀錄</span></div>`:''}
-      </div>
-      <p class="rpt-explain">以上只統計實際有對應設備數據的訓練，不將缺少心率或功率的課程視為零，也不以其他課程推估。</p>
-    </div>`:'';
   const trendNote=m.isRealSeries?'依 TrainingPeaks 匯入資料':'目前為示意趨勢資料';
   const sportNote=m.sportSource==='csv'?'依 TrainingPeaks 訓練紀錄':'目前無真實分項時間資料';
 
@@ -4632,7 +4675,7 @@ function printWeeklyPdf(){
           <div class="rpt-box"><small>ATL 短期負荷</small><strong>${m.atl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dAtl)||'區間末值'}</span></div>
           <div class="rpt-box"><small>TSB 狀態值</small><strong>${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dTsb)||'區間末值'}</span></div>
         </div><p class="rpt-explain">CTL、ATL、TSB 為依 TSS 計算的負荷模型指標，用來觀察長期負荷、短期負荷與兩者差值；不直接等同於實際體能、疲勞診斷或比賽準備度。</p></div>
-        ${deviceAnalysisHtml}
+        ${deviceSummary}
         <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">教練建議<span>COACH REVIEW & NEXT STEPS</span></div><p class="rpt-explain">以下為依本期可取得資料整理的教練觀察與下週方向；請結合學員回報、課表內容與實際狀況，由負責教練確認後執行。</p><div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div></div>
         <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 3 / 3 頁 · 報告日期：${fmtDate(new Date())}</span></div>
       </div>
