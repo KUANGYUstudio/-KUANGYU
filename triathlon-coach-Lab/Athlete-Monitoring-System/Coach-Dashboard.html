@@ -4303,17 +4303,27 @@ function fmtDelta(v){
 }
 
 function openPdfModal(triggerBtn=null){
-  const a=athletes.find(x=>x.id===currentId);
-  if(!a){toast('請先開啟學員個人頁面');return}
-  const {weeks}=buildAthleteWeeklyData(a);
-  if(!weeks.length){toast('目前沒有可匯出的週次資料');return}
-  setTriggerActive(triggerBtn);
-  const last=weeks[weeks.length-1];
-  const first=weeks[Math.max(0,weeks.length-4)];
-  document.getElementById('pdfRangeStart').value=first.date;
-  document.getElementById('pdfRangeEnd').value=isoKey(datePlus(dayStart(new Date(last.date+'T00:00:00')),6));
-  refreshPdfModal();
-  document.getElementById('pdfModal').classList.add('show');
+  try{
+    const a=athletes.find(x=>x.id===currentId);
+    if(!a){toast('請先開啟學員個人頁面');return}
+    const {weeks}=buildAthleteWeeklyData(a);
+    if(!weeks.length){toast('目前沒有可匯出的週次資料');return}
+    const startInput=document.getElementById('pdfRangeStart');
+    const endInput=document.getElementById('pdfRangeEnd');
+    const modal=document.getElementById('pdfModal');
+    if(!startInput||!endInput||!modal){toast('PDF 報告視窗元件載入不完整，請重新整理頁面');return}
+    const last=weeks[weeks.length-1];
+    const first=weeks[Math.max(0,weeks.length-4)];
+    startInput.value=first.date;
+    endInput.value=isoKey(datePlus(dayStart(new Date(last.date+'T00:00:00')),6));
+    refreshPdfModal();
+    if(!currentPdfData){toast('目前選取的日期區間沒有可用資料');return}
+    setTriggerActive(triggerBtn);
+    modal.classList.add('show');
+  }catch(err){
+    console.error('openPdfModal failed:',err);
+    toast('PDF 報告視窗開啟失敗：'+(err&&err.message?err.message:'請重新整理後再試'));
+  }
 }
 
 function closePdfModal(){
@@ -4364,7 +4374,7 @@ function refreshPdfModal(){
     :'';
   document.getElementById('pdfSummaryPreview').innerHTML=`
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-      <strong style="font-size:15px;color:var(--ink)">${esc(a.name)} · ${fmtDate(rangeStart)} – ${fmtDate(rangeEnd)}</strong>
+      <strong style="font-size:15px;color:var(--ink)">${esc(a.name)} · ${fmtDate(dayStart(new Date(rangeStart+'T00:00:00')))} – ${fmtDate(dayStart(new Date(rangeEnd+'T00:00:00')))}</strong>
       <span class="pill ${m.durPct>=90&&m.durPct<=115?'ok':(m.durPct>115?'watch':'alert')}">時數達成率 ${m.durPct!==null?m.durPct+'%':'—'}</span>
     </div>
     <div class="pdf-mini-grid">
