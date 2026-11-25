@@ -1819,6 +1819,10 @@ button:active{transform:translateY(.5px)}
   .rpt-table th,.rpt-table td{padding:5px 5px !important}
   .rpt-chart-note{line-height:1.45}
 
+  .rpt-page{min-height:265mm;overflow:visible}
+  .rpt-page .rpt-section{break-inside:avoid;page-break-inside:avoid}
+  .rpt-ai-box{font-size:12px;line-height:1.8;padding:15px 17px}
+  .rpt-device-sport{break-inside:avoid;page-break-inside:avoid}
   .rpt-footer{
     display:flex;
     justify-content:space-between;
@@ -4517,7 +4521,8 @@ function printWeeklyPdf(){
   const dayLabels=['一','二','三','四','五','六','日'];
   const maxTss=Math.max(10,...daily.map(d=>Number(d.TSS||0)));
   const daySlot=286/Math.max(1,daily.length),barW=Math.max(2,Math.min(16,daySlot*.55));
-  const dailyBars=daily.map((d,i)=>{const x=22+i*daySlot+(daySlot-barW)/2,h=(Number(d.TSS||0)/maxTss)*68,y=88-h;const shortDate=String(d.date||'').slice(5).replace('-','/');const showLabel=(i%2===0||i===daily.length-1);return `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="2" fill="#6f9278"><title>${shortDate}：${Math.round(d.TSS||0)} TSS</title></rect>${showLabel?`<text x="${x+barW/2}" y="108" text-anchor="middle" font-size="7.5" fill="#627067">${shortDate}</text>`:''}`}).join('');
+  const labelEvery=daily.length<=10?1:(daily.length<=21?3:(daily.length<=42?7:14));
+  const dailyBars=daily.map((d,i)=>{const x=22+i*daySlot+(daySlot-barW)/2,h=(Number(d.TSS||0)/maxTss)*68,y=88-h;const shortDate=String(d.date||'').slice(5).replace('-','/');const showLabel=(i%labelEvery===0||i===daily.length-1);return `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="2" fill="#6f9278"><title>${shortDate}：${Math.round(d.TSS||0)} TSS</title></rect>${showLabel?`<text x="${x+barW/2}" y="108" text-anchor="middle" font-size="${daily.length>42?6.5:7.5}" fill="#627067">${shortDate}</text>`:''}`}).join('');
   const rpePts=daily.map((d,i)=>d.RPE?`${22+i*daySlot+daySlot/2},${88-(Number(d.RPE)/10)*68}`:null).filter(Boolean);
   const rpeLine=rpePts.length>1?`<polyline points="${rpePts.join(' ')}" fill="none" stroke="#bd8751" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`:'';
   const dailySvg=`<svg viewBox="0 0 330 120" role="img" aria-label="區間每日 TSS 與 RPE 圖表"><line x1="20" y1="88" x2="315" y2="88" stroke="#dfe7de"/>${dailyBars}${rpeLine}</svg>`;
@@ -4656,9 +4661,9 @@ function printWeeklyPdf(){
       <div class="rpt-page">
         <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · TRAINING RHYTHM</small><h1>訓練節奏與體能趨勢</h1><p>${esc(a.name)} · ${fmtDate(dayStart(new Date((m.rangeStart||isoKey(m.startDate))+'T00:00:00')))} – ${fmtDate(dayStart(new Date((m.rangeEnd||isoKey(m.endDate))+'T00:00:00')))}</p></div></div>
         <div class="rpt-section">
-          <div class="rpt-section-title" style="color:${palette.bg}">每日訓練節奏<span>DAILY TSS + RPE</span></div>
+          <div class="rpt-section-title" style="color:${palette.bg}">訓練負荷與主觀疲勞追蹤<span>DAILY TSS + RPE</span></div>
           <div class="rpt-chart-legend"><span><i style="background:#6f9278"></i>TSS（長條）</span><span><i style="background:#bd8751"></i>RPE（折線）</span></div>
-          ${dailySvg}<div class="rpt-chart-note">長條為每日 TSS，折線為當日最高單次 RPE；缺少回報的日期不補值。日期標籤依區間長度自動疏開。</div>
+          ${dailySvg}<div class="rpt-chart-note">長條為每日 TSS（外部訓練負荷），折線為當日最高單次 RPE（主觀疲勞感受）；缺少 RPE 回報的日期不補值。長區間會自動減少日期標籤，避免重疊。</div>
         </div>
         <div class="rpt-section">
           <div class="rpt-section-title" style="color:${palette.bg}">近四週 CTL／ATL／TSB 趨勢（PMC）<span>PERFORMANCE MANAGEMENT</span></div>
@@ -4675,9 +4680,20 @@ function printWeeklyPdf(){
           <div class="rpt-box"><small>ATL 短期負荷</small><strong>${m.atl.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dAtl)||'區間末值'}</span></div>
           <div class="rpt-box"><small>TSB 狀態值</small><strong>${m.tsb>=0?'+':''}${m.tsb.toFixed(1)}</strong><span class="rpt-sub">${fmtDelta(m.dTsb)||'區間末值'}</span></div>
         </div><p class="rpt-explain">CTL、ATL、TSB 為依 TSS 計算的負荷模型指標，用來觀察長期負荷、短期負荷與兩者差值；不直接等同於實際體能、疲勞診斷或比賽準備度。</p></div>
-        ${deviceSummary}
-        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">教練建議<span>COACH REVIEW & NEXT STEPS</span></div><p class="rpt-explain">以下為依本期可取得資料整理的教練觀察與下週方向；請結合學員回報、課表內容與實際狀況，由負責教練確認後執行。</p><div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div></div>
+
         <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 3 / 3 頁 · 報告日期：${fmtDate(new Date())}</span></div>
+      </div>
+
+      <div class="rpt-page">
+        <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · DEVICE & SPORT ANALYSIS</small><h1>設備數據與運動分項分析</h1><p>${esc(a.name)} · ${fmtDate(dayStart(new Date((m.rangeStart||isoKey(m.startDate))+'T00:00:00')))} – ${fmtDate(dayStart(new Date((m.rangeEnd||isoKey(m.endDate))+'T00:00:00')))}</p></div></div>
+        ${deviceSummary||'<div class="rpt-section"><p class="rpt-explain">本期沒有可用的心率或功率設備數據，因此隱藏設備分析。基本訓練摘要與負荷趨勢仍保留於前頁。</p></div>'}
+        <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 4 / 5 頁</span></div>
+      </div>
+
+      <div class="rpt-page">
+        <div class="rpt-header" style="background:${palette.bg}"><div><small>KUANGYU STUDIO · COACH REVIEW</small><h1>教練判讀與下週調整建議</h1><p>${esc(a.name)} · ${fmtDate(dayStart(new Date((m.rangeStart||isoKey(m.startDate))+'T00:00:00')))} – ${fmtDate(dayStart(new Date((m.rangeEnd||isoKey(m.endDate))+'T00:00:00')))}</p></div></div>
+        <div class="rpt-section"><div class="rpt-section-title" style="color:${palette.bg}">教練建議<span>COACH REVIEW & NEXT STEPS</span></div><p class="rpt-explain">以下為依本期可取得資料整理的教練觀察與下週方向；請結合學員回報、課表內容與實際狀況，由負責教練確認後執行。</p><div class="rpt-ai-box" style="border-left:4px solid ${palette.bg}">${esc(adviceText)}</div></div>
+        <div class="rpt-footer"><span>KUANGYU STUDIO · Athlete Monitoring System</span><span>第 5 / 5 頁 · 報告日期：${fmtDate(new Date())}</span></div>
       </div>
     </div>
   `;
