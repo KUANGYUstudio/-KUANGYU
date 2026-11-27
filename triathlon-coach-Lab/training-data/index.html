@@ -368,6 +368,7 @@ footer {
     </button>
   </nav>
   <div class="subnav-wrap">
+    <div class="subnav-label" id="subnavLabel"></div>
     <nav class="subtabs" id="subtabs" aria-label="分類內學習單元"></nav>
   </div>
 
@@ -1345,6 +1346,7 @@ function categoryFor(key) {
 
 function renderCategory(category, selectedKey) {
   const config = categoryConfig[category];
+  document.getElementById("subnavLabel").textContent = config.label;
   document.querySelectorAll("#categoryTabs [data-category]").forEach(button => {
     button.classList.toggle("active", button.dataset.category === category);
   });
