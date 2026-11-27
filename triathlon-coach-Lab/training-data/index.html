@@ -1194,7 +1194,7 @@ function diagramFor(key) {
       ${svg}
       ${note ? `<p class="diagram-note">${note}</p>` : ""}
     </section>`;
-  const svg = content => `<svg class="diagram-svg" viewBox="0 0 720 250" role="img" aria-label="教學概念示意圖" xmlns="http://www.w3.org/2000/svg">${content}</svg>`;
+  const svg = (content, viewBox="0 0 720 250") => `<svg class="diagram-svg" viewBox="${viewBox}" role="img" aria-label="教學概念示意圖" xmlns="http://www.w3.org/2000/svg">${content}</svg>`;
   const pyramid = svg(`
     <polygon points="360,18 270,94 450,94" fill="#e5a94f"/>
     <polygon points="270,100 450,100 520,166 200,166" fill="#6d91b8"/>
@@ -1207,16 +1207,16 @@ function diagramFor(key) {
     <text x="625" y="208" class="diagram-small">LT1 以下</text>
   `);
   const timeline = svg(`
-    <path d="M55 205 H675" class="diagram-axis"/>
+    <path d="M55 205 H470" class="diagram-axis"/>
     <path d="M55 205 V28" class="diagram-axis"/>
-    <path d="M65 176 C150 170 205 150 270 137 S395 106 455 88 S575 62 660 35" class="diagram-line"/>
-    <path d="M65 188 C170 188 215 176 280 165 S400 143 465 118 S575 92 660 82" stroke="#d49b43" stroke-width="3" fill="none"/>
-    <path d="M65 194 C160 194 220 190 285 178 S410 160 475 145 S580 128 660 118" stroke="#8eaf68" stroke-width="3" fill="none"/>
+    <path d="M65 176 C125 170 170 150 225 137 S335 106 370 88 S425 62 455 35" class="diagram-line"/>
+    <path d="M65 188 C130 188 175 176 230 165 S340 143 380 118 S430 92 455 82" stroke="#d49b43" stroke-width="3" fill="none"/>
+    <path d="M65 194 C125 194 180 190 235 178 S345 160 390 145 S435 128 455 118" stroke="#8eaf68" stroke-width="3" fill="none"/>
     <text x="65" y="18" class="diagram-small">負荷指標</text>
-    <text x="660" y="228" text-anchor="end" class="diagram-small">時間 →</text>
-    <text x="540" y="28" class="diagram-small">CTL 長期趨勢</text>
-    <text x="540" y="75" class="diagram-small">ATL 短期反應</text>
-    <text x="540" y="111" class="diagram-small">TSB = CTL − ATL</text>
+    <text x="470" y="228" text-anchor="end" class="diagram-small">時間 →</text>
+    <circle cx="500" cy="25" r="4.5" fill="#24496b"/><text x="512" y="29" class="diagram-small">CTL｜長期趨勢</text>
+    <circle cx="500" cy="48" r="4.5" fill="#d49b43"/><text x="512" y="52" class="diagram-small">ATL｜短期反應</text>
+    <circle cx="500" cy="71" r="4.5" fill="#8eaf68"/><text x="512" y="75" class="diagram-small">TSB｜CTL − ATL</text>
   `);
   const bars = (labels, colors, desc) => svg(`
     ${labels.map((label,i)=>`<rect x="${48+i*132}" y="${48+i*8}" width="104" height="${142-i*16}" rx="8" fill="${colors[i]}"/><text x="${100+i*132}" y="218" text-anchor="middle" class="diagram-label">${label}</text>`).join("")}
@@ -1245,13 +1245,13 @@ function diagramFor(key) {
     case "ramp":
       return wrap("Ramp Rate｜負荷爬升速度",
         "觀察 CTL 在一段時間內增加的速度，而不是只看某一天的高低。", svg(`
-          <path d="M70 205 H660 M70 205 V28" class="diagram-axis"/>
-          <path d="M85 185 L250 160 L415 112 L590 45" stroke="#8eaf68" stroke-width="5" fill="none" stroke-linecap="round"/>
-          <path d="M85 185 L250 145 L415 82 L590 28" stroke="#d49b43" stroke-width="3" stroke-dasharray="7 6" fill="none"/>
-          <text x="90" y="225" class="diagram-small">起始</text><text x="590" y="225" text-anchor="end" class="diagram-small">時間</text>
-          <line x1="405" y1="48" x2="438" y2="48" stroke="#8eaf68" stroke-width="5" stroke-linecap="round"/><text x="447" y="53" class="diagram-small">較緩爬升</text>
-          <line x1="405" y1="72" x2="438" y2="72" stroke="#d49b43" stroke-width="3" stroke-dasharray="7 5"/><text x="447" y="77" class="diagram-small">較快爬升</text>
-        `), "Ramp Rate 不能單獨當作受傷風險預測器；需考慮目前 CTL 基礎、運動項目、訓練史與個人恢復反應。");
+          <path d="M70 205 H620 M70 205 V28" class="diagram-axis"/>
+          <path d="M85 185 L230 160 L375 112 L525 45" stroke="#8eaf68" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M85 185 L230 145 L375 82 L525 28" stroke="#d49b43" stroke-width="3" stroke-dasharray="7 6" fill="none"/>
+          <text x="90" y="225" class="diagram-small">起始</text><text x="620" y="225" text-anchor="end" class="diagram-small">時間</text>
+          <line x1="650" y1="75" x2="678" y2="75" stroke="#8eaf68" stroke-width="5" stroke-linecap="round"/><text x="687" y="79" class="diagram-small">較緩爬升</text>
+          <line x1="650" y1="103" x2="678" y2="103" stroke="#d49b43" stroke-width="3" stroke-dasharray="7 5"/><text x="687" y="107" class="diagram-small">較快爬升</text>
+        `, "0 0 820 250"), "Ramp Rate 不能單獨當作受傷風險預測器；需考慮目前 CTL 基礎、運動項目、訓練史與個人恢復反應。");
     case "cycle":
       return wrap("訓練週期｜不同階段有不同任務",
         "週期安排是依目標逐步調整訓練重點；實際長度與順序需依賽事及選手狀態調整。", svg(`
@@ -1282,14 +1282,19 @@ function diagramFor(key) {
         `), "測試需盡量標準化；轉身、泳池長度、配速策略與疲勞都會影響結果。");
     case "runpaces":
       return wrap("E／M／T／I／R｜訓練類型與強度",
-        "由輕鬆耐力到短時間速度刺激，五種類型各有不同主要目的；並非每一類都能用心率即時控強度。", bars(["E","M","T","I","R"],["#8eaf68","#9bb58b","#6d91b8","#d49b43","#c17d69"],"概念性強度排列（非固定配速百分比）"),
-        "E：輕鬆有氧；M：馬拉松專項；T：閾值；I：VO₂max 間歇；R：速度與動作經濟性。實際排序與課表設計仍需看工作時間與恢復。");
+        "E、M、T、I、R 是五種不同訓練目的，不是由低到高的固定強度排名。", svg(`
+          ${["E","M","T","I","R"].map((x,i)=>`<rect x="${35+i*137}" y="72" width="108" height="112" rx="9" fill="${["#8eaf68","#9bb58b","#6d91b8","#d49b43","#c17d69"][i]}"/><text x="${89+i*137}" y="135" text-anchor="middle" class="diagram-label" style="fill:#ffffff;font-size:22px">${x}</text>`).join("")}
+          <path d="M28 190 H692" class="diagram-axis"/>
+          <text x="360" y="222" text-anchor="middle" class="diagram-small">五種訓練類型｜各自有不同目的，並非強度排名</text>
+        `),
+        "E：輕鬆有氧；M：馬拉松專項；T：閾值；I：VO₂max 間歇；R：速度與動作經濟性。實際強度仍須依配速、工作時間、恢復與選手能力設定。");
     case "runabilities":
       return wrap("跑步五大能力｜彼此連動而非各自獨立",
         "五個教學面向共同影響跑步表現；有氧能力是較大的基礎概念，其他能力與之重疊。", svg(`
-          <circle cx="360" cy="125" r="48" fill="#24496b"/><text x="360" y="130" text-anchor="middle" class="diagram-label" fill="#fff">跑步表現</text>
-          ${[["有氧能力",360,28],["乳酸閾值",560,92],["VO₂max",485,218],["跑步經濟性",235,218],["速度／神經肌肉",160,92]].map(a=>`<line x1="360" y1="125" x2="${a[1]}" y2="${a[2]}" stroke="#9aa8b8" stroke-width="2"/><circle cx="${a[1]}" cy="${a[2]}" r="40" fill="#e8eff8" stroke="#9db0c3"/><text x="${a[1]}" y="${a[2]+4}" text-anchor="middle" class="diagram-small">${a[0]}</text>`).join("")}
-        `), "這是教學架構，不是完整的生理學分類。技術、肌耐力、補給、心理、環境與訓練史也會影響表現。");
+          ${[["有氧能力",360,48],["乳酸閾值",590,120],["VO₂max",500,258],["跑步經濟性",220,258],["速度／神經肌肉",130,120]].map(a=>`<line x1="360" y1="155" x2="${a[1]}" y2="${a[2]}" stroke="#9aa8b8" stroke-width="2"/>`).join("")}
+          ${[["有氧能力",360,48],["乳酸閾值",590,120],["VO₂max",500,258],["跑步經濟性",220,258],["速度／神經肌肉",130,120]].map(a=>`<circle cx="${a[1]}" cy="${a[2]}" r="43" fill="#e8eff8" stroke="#9db0c3"/><text x="${a[1]}" y="${a[2]+4}" text-anchor="middle" class="diagram-small">${a[0]}</text>`).join("")}
+          <circle cx="360" cy="155" r="50" fill="#24496b"/><text x="360" y="160" text-anchor="middle" class="diagram-label" style="fill:#ffffff">跑步表現</text>
+        `, "0 0 720 310"), "這是教學架構，不是完整的生理學分類。技術、肌耐力、補給、心理、環境與訓練史也會影響表現。");
     case "practice":
       return wrap("教練判讀流程｜從資料到訓練決策",
         "把客觀負荷、訓練表現與選手回饋整合，才形成可追蹤的教練決策。", svg(`
@@ -1313,7 +1318,7 @@ function diagramFor(key) {
           <rect x="35" y="65" width="185" height="115" rx="12" fill="#e8eff8"/><rect x="267" y="65" width="185" height="115" rx="12" fill="#e8eff8"/><rect x="499" y="65" width="185" height="115" rx="12" fill="#24496b"/>
           <text x="127" y="108" text-anchor="middle" class="diagram-label">強度</text><text x="127" y="134" text-anchor="middle" class="diagram-small">Power / HR / RPE</text>
           <text x="359" y="108" text-anchor="middle" class="diagram-label">時間</text><text x="359" y="134" text-anchor="middle" class="diagram-small">工作段／總量</text>
-          <text x="591" y="108" text-anchor="middle" class="diagram-label" fill="#fff">恢復</text><text x="591" y="134" text-anchor="middle" class="diagram-small" fill="#fff">組間／課間</text>
+          <text x="591" y="108" text-anchor="middle" class="diagram-label" style="fill:#ffffff">恢復</text><text x="591" y="134" text-anchor="middle" class="diagram-small" style="fill:#ffffff">組間／課間</text>
           <path d="M224 122 H258 M456 122 H490" stroke="#8b9bad" stroke-width="2.5"/>
         `), "一次只增加一個主要變項，例如先延長 Z2 時間，或先增加閾值工作總時間；不要同時大幅增加時數與強度。");
     case "swimzones":
@@ -1339,7 +1344,7 @@ function diagramFor(key) {
     case "runroadmap":
       return wrap("教練學習路線｜從基礎到整合",
         "依序學習強度監控、閾值、高強度、訓練量，再整合成完整課表。", svg(`
-          ${["Zone 2","LT／Tempo","VO₂max","跑量／時間","整合課表"].map((x,i)=>`<rect x="${25+i*139}" y="82" width="118" height="76" rx="10" fill="${["#8eaf68","#6d91b8","#d49b43","#9bb58b","#24496b"][i]}"/><text x="${84+i*139}" y="125" text-anchor="middle" class="diagram-label" style="fill:${i===4?"#ffffff":"#24364b"}">${x}</text>${i<4?`<path d="M145 ${120} H160" stroke="#8b9bad" stroke-width="2"/>`:``}`).join("")}
+          ${["Zone 2","LT／Tempo","VO₂max","跑量／時間","整合課表"].map((x,i)=>`<text x="${84+i*139}" y="62" text-anchor="middle" class="diagram-small" style="font-weight:800">第 ${i+1} 階段</text><rect x="${25+i*139}" y="82" width="118" height="76" rx="10" fill="${["#8eaf68","#6d91b8","#d49b43","#9bb58b","#24496b"][i]}"/><text x="${84+i*139}" y="125" text-anchor="middle" class="diagram-label" style="fill:${i===4?"#ffffff":"#24364b"}">${x}</text>${i<4?`<path d="M145 ${120} H160 M155 115 L160 120 L155 125" stroke="#8b9bad" stroke-width="2" fill="none"/>`:``}`).join("")}
           <text x="360" y="205" text-anchor="middle" class="diagram-small">理解 → 應用 → 監控 → 調整</text>
         `), "這是教練知識的學習順序，不代表每位運動員都必須按此順序才可以開始訓練。");
     default:
@@ -1351,7 +1356,7 @@ function diagramFor(key) {
 function render(key) {
   const d = data[key];
 
-  document.querySelectorAll(".tab").forEach(button => {
+  document.querySelectorAll("#subtabs .subtab").forEach(button => {
     button.classList.toggle("active",button.dataset.key===key);
   });
 
