@@ -91,7 +91,7 @@ header:after {
   background:#fff;
   border:1px solid var(--line);
   border-radius:13px;
-  padding:12px 14px;
+  padding:14px;
   margin-bottom:20px;
 }
 .subnav-label {
@@ -128,13 +128,29 @@ header:after {
   border:1px solid var(--line);
   background:white;
   border-radius:13px;
-  padding:14px 15px;
+  padding:13px 14px;
   text-align:left;
   cursor:pointer;
   transition:.18s;
   color:var(--ink);
-  min-height:76px;
+  min-height:112px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:0;
 }
+.tab-number {
+  display:block;
+  font-size:13px;
+  line-height:1.15;
+  font-weight:800;
+  letter-spacing:.7px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+.tab.active .tab-number { color:#d7e2ed; }
+.tab-title { display:block;font-size:15px;line-height:1.35;font-weight:800;letter-spacing:0;white-space:nowrap; }
 .tab:hover { transform:translateY(-2px);border-color:#9cb86c; }
 .tab.active {
   background:var(--navy);
@@ -142,11 +158,11 @@ header:after {
   border-color:var(--navy);
   box-shadow:0 7px 18px #24496b20;
 }
-.tab b { display:block;font-size:17px;letter-spacing:.3px; }
 .tab small {
   display:block;
-  margin-top:5px;
+  margin-top:7px;
   font-size:11px;
+  line-height:1.5;
   color:var(--muted);
 }
 .tab.active small { color:#d7e2ed; }
@@ -336,23 +352,22 @@ footer {
 
   <nav class="category-tabs" id="categoryTabs" aria-label="教學主分類">
     <button class="tab active" data-category="load">
-      <b>01｜訓練負荷分析</b><small>單次負荷、CTL、ATL、TSB 與 Ramp Rate</small>
+      <span class="tab-number">01</span><b class="tab-title">訓練負荷分析</b><small>單次負荷、CTL、ATL、TSB 與 Ramp Rate</small>
     </button>
     <button class="tab" data-category="physiology">
-      <b>02｜生理指標與恢復</b><small>HRV、心率、睡眠、壓力與訓練強度</small>
+      <span class="tab-number">02</span><b class="tab-title">生理指標與恢復</b><small>HRV、心率、睡眠、壓力與訓練強度</small>
     </button>
     <button class="tab" data-category="planning">
-      <b>03｜訓練週期與賽季</b><small>訓練階段與年度訓練計畫</small>
+      <span class="tab-number">03</span><b class="tab-title">訓練週期與賽季</b><small>訓練階段與年度訓練計畫</small>
     </button>
     <button class="tab" data-category="practice">
-      <b>04｜教練實戰與案例</b><small>整合數據、辨識問題與訓練決策</small>
+      <span class="tab-number">04</span><b class="tab-title">教練實戰與案例</b><small>整合數據、辨識問題與訓練決策</small>
     </button>
     <button class="tab" data-category="running">
-      <b>05｜跑步強度與能力發展</b><small>心率 Zone、E/M/T/I/R、五大能力與課表設計</small>
+      <span class="tab-number">05</span><b class="tab-title">跑步強度與能力發展</b><small>心率 Zone、E/M/T/I/R、五大能力與課表設計</small>
     </button>
   </nav>
   <div class="subnav-wrap">
-    <div class="subnav-label" id="subnavLabel">TRAINING LOAD ANALYSIS｜選擇學習單元</div>
     <nav class="subtabs" id="subtabs" aria-label="分類內學習單元"></nav>
   </div>
 
@@ -1333,7 +1348,6 @@ function renderCategory(category, selectedKey) {
   document.querySelectorAll("#categoryTabs [data-category]").forEach(button => {
     button.classList.toggle("active", button.dataset.category === category);
   });
-  document.getElementById("subnavLabel").textContent = config.label + "｜選擇學習單元";
   document.getElementById("subtabs").innerHTML = config.items.map(([key,label]) =>
     `<button class="subtab ${key === selectedKey ? "active" : ""}" data-key="${key}">${label}</button>`
   ).join("");
