@@ -152,6 +152,12 @@ header:after {
 .tab.active .tab-number { color:#d7e2ed; }
 .tab-title { display:block;font-size:16px;line-height:1.35;font-weight:800;letter-spacing:0;white-space:nowrap; }
 .tab:hover { transform:translateY(-2px);border-color:#9cb86c; }
+.category-tabs .tab.active {
+  background:var(--navy);
+  color:#ffffff;
+  border-color:var(--navy);
+  box-shadow:0 7px 18px #24496b35;
+}
 .tab.active {
   background:var(--navy);
   color:white;
@@ -1218,8 +1224,6 @@ function diagramFor(key) {
   `);
   switch(key) {
     case "zones":
-    case "lt":
-    case "runzones":
       return wrap("訓練強度金字塔｜由低強度到高強度",
         "以 LT1、LT2 作為生理強度分界的概念模型；金字塔高度代表強度層級，不代表每位選手都必須採用固定訓練比例。", pyramid,
         "低強度通常構成耐力訓練的主要時間；中、高強度則依選手程度、賽事目標與週期安排。Friel 七區心率是另一套操作性分區，不可直接把每一區等同於 LT1／LT2。");
@@ -1231,21 +1235,9 @@ function diagramFor(key) {
           <rect x="505" y="66" width="170" height="110" rx="12" fill="#24496b"/>
           <text x="130" y="108" text-anchor="middle" class="diagram-label">訓練時間</text><text x="130" y="135" text-anchor="middle" class="diagram-small">Duration</text>
           <text x="360" y="108" text-anchor="middle" class="diagram-label">相對強度²</text><text x="360" y="135" text-anchor="middle" class="diagram-small">IF × IF</text>
-          <text x="590" y="108" text-anchor="middle" class="diagram-label" fill="#fff">單次負荷</text><text x="590" y="135" text-anchor="middle" class="diagram-small" fill="#fff">TSS</text>
+          <text x="590" y="108" text-anchor="middle" class="diagram-label" style="fill:#ffffff">單次負荷</text><text x="590" y="135" text-anchor="middle" class="diagram-small" style="fill:#ffffff">TSS</text>
           <path d="M220 121 H265 M450 121 H495" stroke="#8b9bad" stroke-width="2.5"/><path d="M258 114 L266 121 L258 128 M488 114 L496 121 L488 128" stroke="#8b9bad" fill="none" stroke-width="2.5"/>
-        `), "這張圖呈現自行車功率 TSS 的簡化邏輯；跑步、游泳與心率估算負荷的算法可能不同。");
-    case "if":
-      return wrap("IF｜相對於閾值的強度",
-        "IF 不是單純的速度或功率，而是本次訓練強度相對於個人閾值能力的比例。", svg(`
-          <path d="M100 190 A260 150 0 0 1 620 190" stroke="#dce4ed" stroke-width="28" fill="none" stroke-linecap="round"/>
-          <path d="M100 190 A260 150 0 0 1 360 42" stroke="#8eaf68" stroke-width="28" fill="none" stroke-linecap="round"/>
-          <path d="M360 42 A260 150 0 0 1 620 190" stroke="#d49b43" stroke-width="28" fill="none" stroke-linecap="round"/>
-          <text x="360" y="130" text-anchor="middle" class="diagram-label">IF = 本次標準化輸出 ÷ 閾值輸出</text>
-          <text x="125" y="220" class="diagram-small">低於閾值</text><text x="595" y="220" text-anchor="end" class="diagram-small">高於閾值</text>
-        `), "相同 IF 不代表不同選手的絕對速度或功率相同；解讀時必須確認閾值設定是否有效。");
-    case "ctl":
-    case "atl":
-    case "tsb":
+        `), "這張圖以自行車功率 TSS 為例：以功率相對 FTP 的 IF 與時間計算。跑步 rTSS 通常以配速相對閾值配速估算；游泳 sTSS 常以游泳配速相對 CSS／閾值配速估算；心率負荷則以心率相對個人閾值心率估算。各模式的強度基準與換算方式不同，數值不宜直接視為完全等價。");
     case "load":
       return wrap("CTL／ATL／TSB｜長短期負荷的互動",
         "示意趨勢用來理解時間尺度，不是實際選手數據，也不代表三條線必然以此形狀變化。", timeline,
@@ -1257,20 +1249,16 @@ function diagramFor(key) {
           <path d="M85 185 L250 160 L415 112 L590 45" stroke="#8eaf68" stroke-width="5" fill="none" stroke-linecap="round"/>
           <path d="M85 185 L250 145 L415 82 L590 28" stroke="#d49b43" stroke-width="3" stroke-dasharray="7 6" fill="none"/>
           <text x="90" y="225" class="diagram-small">起始</text><text x="590" y="225" text-anchor="end" class="diagram-small">時間</text>
-          <text x="390" y="185" class="diagram-small">較緩的爬升</text><text x="480" y="65" class="diagram-small">較快的爬升</text>
+          <line x1="405" y1="48" x2="438" y2="48" stroke="#8eaf68" stroke-width="5" stroke-linecap="round"/><text x="447" y="53" class="diagram-small">較緩爬升</text>
+          <line x1="405" y1="72" x2="438" y2="72" stroke="#d49b43" stroke-width="3" stroke-dasharray="7 5"/><text x="447" y="77" class="diagram-small">較快爬升</text>
         `), "Ramp Rate 不能單獨當作受傷風險預測器；需考慮目前 CTL 基礎、運動項目、訓練史與個人恢復反應。");
     case "cycle":
-    case "atp":
       return wrap("訓練週期｜不同階段有不同任務",
         "週期安排是依目標逐步調整訓練重點；實際長度與順序需依賽事及選手狀態調整。", svg(`
-          ${["基礎期","建構期","專項期","減量期","比賽"].map((x,i)=>`<rect x="${35+i*137}" y="${70+(i===4?25:0)}" width="112" height="${i===4?95:120}" rx="9" fill="${["#8eaf68","#6d91b8","#d49b43","#b9c6d3","#24496b"][i]}"/><text x="${91+i*137}" y="${i===4?123:125}" text-anchor="middle" class="diagram-label" fill="${i===4?"#fff":"#24364b"}">${x}</text>`).join("")}
+          ${["基礎期","建構期","專項期","減量期","比賽"].map((x,i)=>`<rect x="${35+i*137}" y="${70+(i===4?25:0)}" width="112" height="${i===4?95:120}" rx="9" fill="${["#8eaf68","#6d91b8","#d49b43","#b9c6d3","#24496b"][i]}"/><text x="${91+i*137}" y="${i===4?123:125}" text-anchor="middle" class="diagram-label" style="fill:${i===4?"#ffffff":"#24364b"}">${x}</text>`).join("")}
           <path d="M45 210 H675" class="diagram-axis"/><text x="360" y="235" text-anchor="middle" class="diagram-small">賽季時間推進 →</text>
         `), "減量期的目的通常是降低疲勞、保留已建立的能力；不是臨時補做大量訓練。");
-    case "hrv":
-    case "rhr":
     case "recovery":
-    case "bodybattery":
-    case "stress":
       return wrap("恢復監控｜多個訊號一起看",
         "單一指標容易受日常波動影響；教練應比較個人基準與連續趨勢。", svg(`
           ${[["HRV","個人基準"],["RHR","個人基準"],["睡眠","時數＋品質"],["主觀感受","RPE／精神"]].map((a,i)=>`<rect x="${28+i*174}" y="55" width="150" height="115" rx="10" fill="#fff" stroke="#dce4ed"/><text x="${103+i*174}" y="92" text-anchor="middle" class="diagram-label">${a[0]}</text><text x="${103+i*174}" y="122" text-anchor="middle" class="diagram-small">${a[1]}</text>`).join("")}
@@ -1351,7 +1339,7 @@ function diagramFor(key) {
     case "runroadmap":
       return wrap("教練學習路線｜從基礎到整合",
         "依序學習強度監控、閾值、高強度、訓練量，再整合成完整課表。", svg(`
-          ${["Zone 2","LT／Tempo","VO₂max","跑量／時間","整合課表"].map((x,i)=>`<rect x="${25+i*139}" y="82" width="118" height="76" rx="10" fill="${["#8eaf68","#6d91b8","#d49b43","#9bb58b","#24496b"][i]}"/><text x="${84+i*139}" y="125" text-anchor="middle" class="diagram-label" fill="${i===4?"#fff":"#24364b"}">${x}</text>${i<4?`<path d="M145 ${120} H160" stroke="#8b9bad" stroke-width="2"/>`:``}`).join("")}
+          ${["Zone 2","LT／Tempo","VO₂max","跑量／時間","整合課表"].map((x,i)=>`<rect x="${25+i*139}" y="82" width="118" height="76" rx="10" fill="${["#8eaf68","#6d91b8","#d49b43","#9bb58b","#24496b"][i]}"/><text x="${84+i*139}" y="125" text-anchor="middle" class="diagram-label" style="fill:${i===4?"#ffffff":"#24364b"}">${x}</text>${i<4?`<path d="M145 ${120} H160" stroke="#8b9bad" stroke-width="2"/>`:``}`).join("")}
           <text x="360" y="205" text-anchor="middle" class="diagram-small">理解 → 應用 → 監控 → 調整</text>
         `), "這是教練知識的學習順序，不代表每位運動員都必須按此順序才可以開始訓練。");
     default:
