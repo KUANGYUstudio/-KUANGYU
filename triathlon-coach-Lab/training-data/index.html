@@ -16,7 +16,7 @@
   --card:#fff;
   --blue:#eaf1fb;
 }
-- { box-sizing:border-box; }
+* { box-sizing:border-box; }
 body {
   margin:0;
   background:var(--bg);
@@ -42,19 +42,19 @@ header:after {
 }
 .eyebrow {
   color:var(--lime);
-  font-size:13px;
+  font-size:11px;
   letter-spacing:2px;
   font-weight:800;
 }
 .brand {
-  font-size:clamp(28px,4.5vw,42px);
+  font-size:clamp(26px,4vw,38px);
   font-weight:850;
   letter-spacing:-1px;
   margin:10px 0 6px;
 }
 .sub {
   color:#d0dce8;
-  font-size:16px;
+  font-size:14px;
   max-width:650px;
   line-height:1.7;
 }
@@ -70,10 +70,10 @@ header:after {
   align-items:end;
   margin-bottom:18px;
 }
-.intro h2 { font-size:22px;margin:0 0 5px; }
-.intro p { margin:0;color:var(--muted);font-size:15px; }
+.intro h2 { font-size:19px;margin:0 0 5px; }
+.intro p { margin:0;color:var(--muted);font-size:13px; }
 .pill {
-  font-size:13px;
+  font-size:11px;
   font-weight:750;
   background:#eaf5d8;
   color:#46631d;
@@ -83,7 +83,7 @@ header:after {
 }
 .category-tabs {
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:10px;
   margin:18px 0 12px;
 }
@@ -96,7 +96,7 @@ header:after {
 }
 .subnav-label {
   color:var(--muted);
-  font-size:13px;
+  font-size:10px;
   font-weight:800;
   letter-spacing:1px;
   margin:0 0 9px;
@@ -114,7 +114,7 @@ header:after {
   padding:9px 12px;
   cursor:pointer;
   font:inherit;
-  font-size:15px;
+  font-size:12px;
   font-weight:700;
   transition:.18s;
 }
@@ -142,7 +142,7 @@ header:after {
 }
 .tab-number {
   display:block;
-  font-size:14px;
+  font-size:13px;
   line-height:1.15;
   font-weight:800;
   letter-spacing:.7px;
@@ -150,7 +150,7 @@ header:after {
   margin-bottom:6px;
 }
 .tab.active .tab-number { color:#d7e2ed; }
-.tab-title { display:block;font-size:16px;line-height:1.35;font-weight:800;letter-spacing:0;white-space:nowrap; }
+.tab-title { display:block;font-size:15px;line-height:1.35;font-weight:800;letter-spacing:0;white-space:nowrap; }
 .tab:hover { transform:translateY(-2px);border-color:#9cb86c; }
 .tab.active {
   background:var(--navy);
@@ -161,7 +161,7 @@ header:after {
 .tab small {
   display:block;
   margin-top:7px;
-  font-size:13px;
+  font-size:11px;
   line-height:1.5;
   color:var(--muted);
 }
@@ -183,36 +183,36 @@ header:after {
   margin-bottom:20px;
 }
 .kicker {
-  font-size:13px;
+  font-size:11px;
   letter-spacing:1.5px;
   color:#76913e;
   font-weight:850;
 }
-.panel h3 { font-size:28px;margin:5px 0; }
-.english { font-size:14px;color:var(--muted); }
+.panel h3 { font-size:26px;margin:5px 0; }
+.english { font-size:12px;color:var(--muted); }
 .tag {
   background:var(--blue);
   color:#38577d;
   border-radius:7px;
   padding:7px 10px;
-  font-size:13px;
+  font-size:11px;
   font-weight:750;
   white-space:nowrap;
 }
-.definition { font-size:17px;line-height:1.85;margin:0 0 20px; }
+.definition { font-size:15px;line-height:1.85;margin:0 0 20px; }
 .formula {
   background:var(--navy);
   color:white;
   padding:15px 17px;
   border-radius:11px;
-  font-size:17px;
+  font-size:15px;
   font-weight:750;
   margin:12px 0;
 }
 .formula small {
   display:block;
   color:#d0dce8;
-  font-size:14px;
+  font-size:11px;
   font-weight:450;
   margin-top:6px;
 }
@@ -227,9 +227,9 @@ header:after {
   padding:17px;
   min-width:0;
 }
-.section h4 { margin:0 0 12px;font-size:17px; }
+.section h4 { margin:0 0 12px;font-size:14px; }
 .section p {
-  font-size:16px;
+  font-size:13px;
   line-height:1.8;
   color:#4c5b6d;
   margin:0;
@@ -239,7 +239,7 @@ header:after {
 .grid .section:first-child td:first-child {
   white-space:nowrap;
 }
-table { border-collapse:collapse;width:100%;font-size:14px; }
+table { border-collapse:collapse;width:100%;font-size:12px; }
 th {
   text-align:left;
   color:#687789;
@@ -253,10 +253,10 @@ td,th {
 }
 tr:last-child td { border-bottom:0; }
 .magnitude { margin-top:16px; }
-.magnitude h4 { margin:0 0 12px;font-size:17px; }
+.magnitude h4 { margin:0 0 12px;font-size:14px; }
 .magnitude-caption {
   color:var(--muted);
-  font-size:14px;
+  font-size:11px;
   line-height:1.75;
   margin:10px 0 0;
 }
@@ -265,10 +265,10 @@ tr:last-child td { border-bottom:0; }
   border-top:1px solid var(--line);
   padding-top:14px;
 }
-.source h4 { font-size:16px;margin:0 0 9px; }
+.source h4 { font-size:13px;margin:0 0 9px; }
 .source ul { margin:0;padding-left:18px; }
 .source li {
-  font-size:14px;
+  font-size:11px;
   line-height:1.8;
   color:var(--muted);
   margin:3px 0;
@@ -281,19 +281,22 @@ a:hover { text-decoration:underline; }
   border:1px solid #f2e4c4;
   padding:14px 16px;
   border-radius:11px;
-  font-size:15px;
+  font-size:12px;
   line-height:1.8;
   color:#6d572b;
 }
 footer {
   text-align:center;
   color:#8a96a5;
-  font-size:13px;
+  font-size:11px;
   margin-top:24px;
   line-height:1.8;
 }
+@media(max-width:980px) {
+  .category-tabs { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
 @media(max-width:720px) {
-  .category-tabs { grid-template-columns:repeat(2,1fr); }
+  .category-tabs { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .subtabs {
     flex-wrap:nowrap;
     overflow-x:auto;
@@ -309,25 +312,56 @@ footer {
 
 /* TSB interactive calculator */
 .tsb-calc{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#edf3f9,#fff)}
-.tsb-calc h4{margin:0 0 7px;font-size:18px;color:var(--ink)}
-.tsb-calc-intro{margin:0 0 16px;color:var(--muted);font-size:15px;line-height:1.75}
+.tsb-calc h4{margin:0 0 7px;font-size:16px;color:var(--ink)}
+.tsb-calc-intro{margin:0 0 16px;color:var(--muted);font-size:13px;line-height:1.75}
 .tsb-calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tsb-calc-control{padding:14px;border:1px solid var(--line);border-radius:11px;background:#fff;min-width:0}
-.tsb-calc-control label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:750;margin-bottom:10px}
-.tsb-calc-control output{font-size:24px;color:var(--navy);font-weight:850;font-variant-numeric:tabular-nums}
+.tsb-calc-control label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;font-weight:750;margin-bottom:10px}
+.tsb-calc-control output{font-size:21px;color:var(--navy);font-weight:850;font-variant-numeric:tabular-nums}
 .tsb-calc-control input{width:100%;accent-color:#477da8;cursor:pointer}
-.tsb-calc-scale{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+.tsb-calc-scale{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}
 .tsb-calc-result{margin-top:12px;padding:18px;border:1px solid #cfdae6;border-radius:11px;background:#eaf1f8;text-align:center}
-.tsb-calc-result small{display:block;color:var(--muted);font-size:14px;margin-bottom:4px}
-.tsb-calc-number{font-size:42px;line-height:1.2;font-weight:850;color:var(--navy);font-variant-numeric:tabular-nums}
-.tsb-calc-formula{margin-top:5px;color:var(--muted);font-size:15px}
-.tsb-calc-status{display:inline-block;margin-top:10px;padding:6px 11px;border-radius:30px;font-size:14px;font-weight:800;background:#edf0f3;color:#526174}
+.tsb-calc-result small{display:block;color:var(--muted);font-size:11px;margin-bottom:4px}
+.tsb-calc-number{font-size:38px;line-height:1.2;font-weight:850;color:var(--navy);font-variant-numeric:tabular-nums}
+.tsb-calc-formula{margin-top:5px;color:var(--muted);font-size:13px}
+.tsb-calc-status{display:inline-block;margin-top:10px;padding:6px 11px;border-radius:30px;font-size:11px;font-weight:800;background:#edf0f3;color:#526174}
 .tsb-calc-status.positive{color:#176d54;background:#def2e9}
 .tsb-calc-status.negative{color:#8a5b16;background:#fff0d4}
-.tsb-calc-explain{margin:12px 0 0;color:#4c5b6d;font-size:15px;line-height:1.8}
+.tsb-calc-explain{margin:12px 0 0;color:#4c5b6d;font-size:12px;line-height:1.8}
 .tsb-calc-actions{display:flex;justify-content:flex-end;margin-top:12px}
-.tsb-calc-reset{border:1px solid #cbd5df;border-radius:8px;background:#fff;color:var(--ink);padding:8px 12px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
-@media(max-width:620px){.tsb-calc{padding:15px}.tsb-calc-grid{grid-template-columns:1fr}.tsb-calc-number{font-size:36px}}
+.tsb-calc-reset{border:1px solid #cbd5df;border-radius:8px;background:#fff;color:var(--ink);padding:8px 12px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+@media(max-width:620px){.tsb-calc{padding:15px}.tsb-calc-grid{grid-template-columns:1fr}.tsb-calc-number{font-size:32px}}
+
+
+/* 教學示意圖 */
+.diagram-card {
+  margin:18px 0 22px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:linear-gradient(145deg,#fbfcfe,#f4f7fa);
+  overflow:hidden;
+}
+.diagram-heading {
+  display:flex;align-items:center;gap:9px;
+  margin:0 0 5px;font-size:14px;font-weight:850;color:var(--navy);
+}
+.diagram-heading:before {
+  content:"";width:4px;height:17px;border-radius:5px;background:var(--lime);
+}
+.diagram-caption {margin:0 0 12px;color:var(--muted);font-size:12px;line-height:1.65}
+.diagram-svg {display:block;width:100%;height:auto;max-height:310px}
+.diagram-note {margin:10px 0 0;padding:10px 12px;border-radius:9px;background:#fff;color:#536276;font-size:11px;line-height:1.65}
+.diagram-label {font:700 12px Inter,"Noto Sans TC",sans-serif;fill:#24364b}
+.diagram-small {font:500 10px Inter,"Noto Sans TC",sans-serif;fill:#536276}
+.diagram-axis {stroke:#9aa8b8;stroke-width:1.4;fill:none}
+.diagram-line {stroke:#24496b;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:620px){
+  .diagram-card{padding:13px;margin:14px 0 18px}
+  .diagram-svg{max-height:260px}
+  .diagram-label{font-size:11px}
+  .diagram-small{font-size:9px}
+}
 
 </style>
 </head>
@@ -345,7 +379,7 @@ footer {
   <div class="intro">
     <div>
       <h2>訓練數據快速查詢</h2>
-      <p>選擇下方主題，從訓練負荷、生理恢復、訓練週期，到跑步強度與能力發展，逐步把數據轉化為課表決策。</p>
+      <p>選擇下方主題，從訓練負荷、生理恢復、訓練週期，以及游泳、自行車、跑步三項強度與課表設計，逐步把數據轉化為課表決策。</p>
     </div>
     <span class="pill">COACH TOOLKIT · 01</span>
   </div>
@@ -365,6 +399,12 @@ footer {
     </button>
     <button class="tab" data-category="running">
       <span class="tab-number">05</span><b class="tab-title">跑步強度與能力發展</b><small>心率 Zone、E/M/T/I/R、五大能力與課表設計</small>
+    </button>
+    <button class="tab" data-category="cycling">
+      <span class="tab-number">06</span><b class="tab-title">自行車強度與功率</b><small>FTP、功率 Zone、閾值心率與騎乘課表</small>
+    </button>
+    <button class="tab" data-category="swimming">
+      <span class="tab-number">07</span><b class="tab-title">游泳強度與配速</b><small>CSS、T-time、配速區間與游泳課表</small>
     </button>
   </nav>
   <div class="subnav-wrap">
@@ -514,13 +554,13 @@ const data = {
     en:"Training Load Integration & Coaching Decisions",
     tag:"從數字走向訓練決策",
     desc:"這三個指標要一起看，而不是各自單獨下結論。CTL 描述較長期的訓練負荷累積（預設時間常數約 42 天）；ATL 描述較近期的訓練負荷變化（預設約 7 天）；TSB 描述兩者的差距。它們是由訓練負荷模型推估的指標，不是直接測量體能、肌肉疲勞或恢復程度。",
-    formula:"CTL：長期負荷 ｜ ATL：近期負荷 ｜ TSB：前一日 CTL − 前一日 ATL",
+    formula:"CTL：長期負荷　｜　ATL：近期負荷　｜　TSB：前一日 CTL − 前一日 ATL",
     fsub:"TrainingPeaks 的今日 TSB 使用前一天的 CTL 與 ATL 計算；查看圖表時要確認日期對齊方式與平台設定。",
     heads:["看到的變化","可以先怎麼理解","接著要確認什麼"],
     rows:[
       ["CTL 逐漸上升","長期訓練負荷正在累積","訓練完成率、表現測試、恢復是否跟得上？"],
       ["CTL 大致持平","長期負荷維持在相近水準","是否符合目前訓練階段與賽季目標？"],
-      ["CTL 逐漸下降","長期訓練負荷正在降低","是計畫減量、恢復期、訓練中斷，還是資料缺漏？"],
+      ["CTL 逐漸下降","長期負荷正在降低","是計畫減量、恢復期、訓練中斷，還是資料缺漏？"],
       ["ATL 高於 CTL","近期負荷高於長期基準","是否剛增加訓練量、強度或連續高負荷日？"],
       ["ATL 接近 CTL","近期負荷與長期基準相近","仍要看訓練內容、分布與選手實際反應。"],
       ["ATL 低於 CTL","近期負荷低於長期基準","可能是恢復或減量，也可能是訓練中斷。"],
@@ -864,6 +904,165 @@ const data = {
       ["TrainingPeaks：How To Plan Your Season with Training Stress Score","https://www.trainingpeaks.com/learn/articles/how-to-plan-your-season-with-training-stress-score/"]
     ]
   },
+  bikepower:{
+    title:"Cycling Power Zones｜自行車功率區間",
+    en:"FTP-based Cycling Power Training",
+    tag:"以 FTP 設定功率訓練區間",
+    desc:"自行車功率區間通常以 FTP（Functional Threshold Power，功能性閾值功率）作為基準。功率是外在輸出，能即時反映踩踏輸出變化；心率則是身體對負荷的反應，會有延遲。此處採 TrainingPeaks／Coggan 常見的 FTP 六區架構，另說明短衝刺的神經肌肉區。",
+    formula:"功率區間 = FTP × 對應百分比",
+    fsub:"例如 FTP = 250 W，Z2 約為 140–188 W（56–75% FTP）。不同平台可能因採用模型與邊界取整而略有差異。",
+    heads:["區間","FTP 百分比（常見 Coggan 架構）","訓練目的與體感"],
+    rows:[
+      ["Z1｜Active Recovery","低於 55%","恢復踩、熱身與放鬆；非常輕鬆"],
+      ["Z2｜Endurance","56–75%","有氧耐力、長時間穩定騎乘；可持續交談"],
+      ["Z3｜Tempo","76–90%","節奏與肌耐力；呼吸加深，交談較不連貫"],
+      ["Z4｜Threshold","91–105%","閾值附近；持續吃力，常拆成多組工作段"],
+      ["Z5｜VO₂max","106–120%","提高最大攝氧刺激；常見數分鐘間歇"],
+      ["Z6｜Anaerobic Capacity","高於 120%","短時間高強度；心率不適合即時控強度"],
+      ["Z7｜Neuromuscular Power","不以固定 FTP 百分比定義","極短衝刺、起步與神經肌肉輸出；看個人短時間峰值功率"]
+    ],
+    example:"假設選手 FTP = 250 W：Z2 約 140–188 W；Z4 約 228–263 W。若一堂課安排 3 × 10 分鐘 Z4，應觀察每組功率是否穩定、組間恢復是否足夠，以及 RPE 是否逐組失控。",
+    coach:"先確認功率計校正、室內外測試條件與 FTP 是否合理，再用功率設定工作段。長時間穩定騎乘可同時看心率與 RPE；短間歇優先看功率、時間與動作品質。爬坡、逆風、團騎與滑行會改變功率分布，不能只看整堂平均功率。",
+    note:"FTP 是實務上的功能性閾值估計，不必然等於實驗室 LT2 或 MLSS。功率區間模型不是生理上截然分開的牆；不同平台可採 Coggan、Friel、USAT 等不同模型。此處的六區百分比依 TrainingPeaks／Coggan 常見區間整理，Z7 不用固定 FTP 百分比設定。",
+    extraTitle:"功率是外在負荷，心率與 RPE 是內在反應",
+    extraHeads:["資料","主要回答","使用時機"],
+    extraRows:[
+      ["Power（W）","踩踏輸出有多大？","即時控制功率、間歇工作段與配速策略"],
+      ["Heart Rate（bpm）","身體對當下負荷反應如何？","觀察長時間穩定騎乘、熱壓力與疲勞反應"],
+      ["RPE（主觀用力）","選手感覺有多吃力？","交叉確認功率與心率是否符合預期"],
+      ["Cadence（rpm）","踩踏頻率與肌肉負荷策略如何？","搭配齒比、地形與動作控制觀察，不是單獨的強度分區"]
+    ],
+    extraCaption:"相同功率下，炎熱、脫水、睡眠不足與疲勞可能讓心率或 RPE 上升；相同心率也不保證輸出功率相同。",
+    sources:[
+      ["TrainingPeaks：Cycling Power Zones Explained（Andrew Coggan）","https://www.trainingpeaks.com/blog/power-training-levels/"],
+      ["TrainingPeaks Help：Zones Calculator Overview","https://help.trainingpeaks.com/hc/en-us/articles/360017420092-Zones-Calculator-Overview"],
+      ["Joe Friel：A Quick Guide to Setting Zones（2025 修訂）","https://joefrieltraining.com/a-quick-guide-to-setting-zones/"]
+    ]
+  },
+  bikehr:{
+    title:"Cycling Heart Rate Zones｜自行車閾值心率七區",
+    en:"Bike LTHR-based Heart Rate Zones",
+    tag:"以自行車專項閾值心率設定",
+    desc:"自行車閾值心率（Bike LTHR／FTHR）是自行車測試條件下取得的個人閾值心率。Joe Friel 的七區模型可用它設定心率區間。心率適合監控較長時間的穩定強度，但在短間歇中會延遲，不能要求心率一開始就立刻到達目標區。",
+    formula:"自行車各區心率 = Bike LTHR × 對應百分比",
+    fsub:"此處使用 Joe Friel 自行車七區心率範例；不要直接拿跑步 LTHR 代替自行車 LTHR。",
+    heads:["區間","Bike LTHR 百分比","常見用途"],
+    rows:[
+      ["Z1","低於 81%","恢復、熱身與放鬆騎"],
+      ["Z2","81–89%","有氧耐力與長時間穩定騎乘"],
+      ["Z3","90–93%","Tempo／穩定節奏訓練"],
+      ["Z4","94–99%","閾值附近持續或間歇訓練"],
+      ["Z5a","100–102%","閾值以上短間歇"],
+      ["Z5b","103–106%","高強度有氧能力刺激"],
+      ["Z5c","高於 106%","極高強度；短時間不宜單靠心率控強度"]
+    ],
+    example:"若 Bike LTHR = 165 bpm，Z2 約 134–147 bpm（165 × 81–89%），Z4 約 155–163 bpm（165 × 94–99%）。這是區間換算示例，實際邊界會受取整方式影響。",
+    coach:"建立自行車心率區間時，先確認測試是在自行車上完成，並記錄測試日期、環境與測試方式。若有功率計，穩定騎乘可同時觀察功率與心率；若相同功率下心率逐漸升高，需考慮熱、補水、騎乘時間與疲勞，而不是直接判定能力下降。",
+    note:"Joe Friel 2025 修訂指南已說明跑步與自行車心率區間應依各自專項測試資料設定。不要用年齡公式 220−年齡代替閾值測試；高強度測試應由具備基礎且適合測試的選手，在安全條件下執行。",
+    extraTitle:"自行車功率與心率的分工",
+    extraHeads:["情境","優先參考","原因"],
+    extraRows:[
+      ["短間歇（例如 30 秒至 2 分鐘）","功率／時間／RPE","心率反應有延遲，可能在工作段結束後才上升"],
+      ["較長間歇（例如 8–20 分鐘）","功率＋心率＋RPE","心率逐漸進入穩態，可協助觀察內在負荷"],
+      ["長距離耐力騎","功率＋心率漂移＋補給狀態","觀察輸出是否穩定，以及心率是否隨時間異常上升"]
+    ],
+    sources:[
+      ["Joe Friel：A Quick Guide to Setting Zones（2025 修訂）","https://joefrieltraining.com/a-quick-guide-to-setting-zones/"],
+      ["TrainingPeaks：Joe Friel's Quick Guide to Setting Training Zones","https://www.trainingpeaks.com/learn/articles/joe-friel-s-quick-guide-to-setting-zones/"]
+    ]
+  },
+  bikeguide:{
+    title:"Bike Intensity｜自行車強度怎麼設定與使用",
+    en:"Power · Heart Rate · RPE · Duration",
+    tag:"從數據設定到課表執行",
+    desc:"自行車訓練常以功率作為外在強度主控，心率與 RPE 用來確認身體反應。沒有功率計時，可以用自行車閾值心率、RPE、談話測試與地形情境控制強度，但不要把估算值假裝成精確功率區間。",
+    heads:["訓練目的","主要控制方式","課表示例（教學情境）"],
+    rows:[
+      ["恢復騎","低功率／低心率＋很輕鬆 RPE","30–60 分鐘輕鬆踩，重點是恢復而非追速度"],
+      ["有氧耐力","Z2 功率或 Bike HR Z2＋可交談","60–180 分鐘穩定騎，依訓練背景漸進增加"],
+      ["Tempo／肌耐力","Z3 功率＋RPE","例如 2 × 15 分鐘穩定節奏，中間輕鬆踩"],
+      ["Threshold","Z4 功率或閾值附近心率＋RPE","例如 3 × 8 分鐘，觀察每組輸出穩定性"],
+      ["VO₂max","Z5 功率／工作時間／恢復品質","例如 4 × 3 分鐘高強度，組間充分恢復"]
+    ],
+    example:"若選手 FTP = 250 W，教練安排 2 小時耐力騎，主要工作區可能放在 Z2。若後半段同樣功率下心率逐步上升，先檢查氣溫、補水、補給與前段是否騎太快，再判斷是否需要調整時間或強度。",
+    coach:"初期先建立穩定的 Z2 騎乘時間與踩踏習慣，再加入 Tempo／Threshold。每次品質課只設定一個主要刺激，並規劃總工作時間、組數、組間恢復與隔天安排。不要只因 FTP 數字提高就同時增加時數與高強度密度。",
+    note:"表格課表示例僅用來說明課表結構，不是對所有選手的處方。訓練時數、組數與強度應依訓練史、賽事目標、恢復能力與可用時間調整。",
+    sources:[
+      ["TrainingPeaks：Cycling Power Zones Explained（Andrew Coggan）","https://www.trainingpeaks.com/blog/power-training-levels/"],
+      ["Joe Friel：A Quick Guide to Setting Zones（2025 修訂）","https://joefrieltraining.com/a-quick-guide-to-setting-zones/"]
+    ]
+  },
+  swimzones:{
+    title:"Swimming Pace Zones｜游泳配速強度",
+    en:"CSS / T-Pace / RPE-based Swim Training",
+    tag:"以每 100 公尺配速與技術品質控制",
+    desc:"游泳強度最常用配速（例如每 100 公尺幾分幾秒）、組間休息與動作品質來控制。CSS（Critical Swim Speed）可作為閾值附近的配速參考；T-time 則是另一種以 1000 公尺測試平均配速設定訓練的方式。兩者相關但不是同一個測試定義，不能混用計算結果。",
+    heads:["訓練類型","相對 CSS／T-time 的概念","主要訓練目的"],
+    rows:[
+      ["Recovery／Technique","明顯慢於閾值配速；留意放鬆與動作","恢復、技術、身體位置與划水效率"],
+      ["Aerobic Endurance","低於 CSS，能維持穩定動作與節奏","有氧耐力與長時間游泳能力"],
+      ["Tempo／Steady","接近但通常低於 CSS，依組距調整","穩定輸出、節奏控制與耐力"],
+      ["CSS／Threshold","以個人 CSS 附近作為工作段目標","閾值附近的持續游泳能力"],
+      ["Above CSS／VO₂-oriented","快於 CSS 的短間歇，需充分恢復","高強度有氧刺激與速度耐受"],
+      ["Sprint／Speed","短距離快速游，品質優先","速度、爆發與神經肌肉協調"]
+    ],
+    example:"若 CSS = 2:00／100m，4 × 100m CSS 可先以每趟約 2:00 作為目標，並設定固定休息；若前兩趟就明顯掉速、划水變形，應降低速度或增加恢復，而不是硬撐配速。",
+    coach:"游泳強度不能只看秒數。要同時看每趟配速是否穩定、划水次數／節奏、身體位置、呼吸是否失控，以及組間休息。初學者先建立技術與連續游泳能力，再逐步使用 CSS 間歇；開放水域還要考慮水流、浪況、導航與 wetsuit 等環境差異。",
+    note:"本教材不提供一組適用所有泳者的 CSS 百分比區間。不同教練會使用 CSS、T-time 或其他測試建立配速帶；測試距離、泳池長度、出發方式、轉身與技術熟練度都會影響結果。高強度測試不適合缺乏基礎或身體不適者自行執行。",
+    extraTitle:"游泳強度的四個控制旋鈕",
+    extraHeads:["控制變項","教練觀察","常見調整方式"],
+    extraRows:[
+      ["配速（秒／100m）","每趟是否穩定？是否越游越慢？","放慢目標配速或縮短工作距離"],
+      ["距離／總工作量","每組與整堂課累積多少距離？","先增加總距離，不急著同時加快配速"],
+      ["休息時間","恢復是否足以維持下一趟品質？","調整間歇休息或出發間隔"],
+      ["技術品質","划水、身體線條、呼吸是否崩解？","降低強度、增加技術練習或休息"]
+    ],
+    sources:[
+      ["Joe Friel：A Quick Guide to Setting Zones（Swimming Pace）","https://joefrieltraining.com/a-quick-guide-to-setting-zones/"],
+      ["U.S. Masters Swimming：How to Train With Critical Swim Speed Intervals","https://www.usms.org/fitness-and-training/articles-and-videos/articles/how-to-train-with-critical-swim-speed-intervals"],
+      ["Garmin Support：What is Critical Swim Speed?","https://support.garmin.com/en-MY/?faq=h56ydwZxU8A7oi2OSh0y66"]
+    ]
+  },
+  swimguide:{
+    title:"CSS 與 T-time｜游泳閾值配速的兩種設定方法",
+    en:"Two Different Swim Pace Benchmarks",
+    tag:"先認識測試，再使用配速",
+    desc:"游泳常見兩種實務配速基準：CSS 通常由 200m 與 400m 測試時間估算；Joe Friel 的 T-time 則可用 1000m 計時游泳的平均每 100m 配速。兩者都可協助設計課表，但測試協定與解讀方式不同。",
+    heads:["方法","測試方式","計算／結果","主要用途"],
+    rows:[
+      ["CSS","200m 與 400m 計時測試","每 100m CSS 配速 =（400m 時間 − 200m 時間）÷ 2","設定 CSS 附近的閾值工作段與間歇"],
+      ["T-time","1000m 計時游泳","1000m 總時間 ÷ 10 = 平均每 100m 配速","以 T-time 加減秒數設定訓練配速"]
+    ],
+    formula:"CSS 配速（秒／100m）=（T400 − T200）÷ 2",
+    fsub:"例如 400m = 8:00（480 秒），200m = 3:50（230 秒）：CSS =（480 − 230）÷ 2 = 125 秒／100m，即 2:05／100m。",
+    example:"同一位泳者可能得到 CSS 2:05／100m，也可能在 1000m 測試得到 T-time 2:10／100m。不要把這兩個值當成測量同一件事，也不要把 CSS 的工作配速直接套用成 T-time 的加減秒數。",
+    coach:"測試前先確認選手能安全、穩定完成測試距離，並統一泳池長度、出發方式、轉身規則、熱身與休息。測試結果要記錄日期、泳姿與測試協定；技術正在快速進步的初學者，測試數值可能同時反映技術變化，不完全是生理能力改變。",
+    note:"CSS 是臨界游速的實務估算，不是乳酸實驗室直接測量值；T-time 是訓練配速基準，也不是 CSS 的別名。若測試中出現明顯技術崩解、頭暈、胸悶或異常呼吸困難，應停止測試。",
+    sources:[
+      ["U.S. Masters Swimming：How to Train With Critical Swim Speed Intervals","https://www.usms.org/fitness-and-training/articles-and-videos/articles/how-to-train-with-critical-swim-speed-intervals"],
+      ["Joe Friel：A Quick Guide to Setting Zones（2025 修訂）","https://joefrieltraining.com/a-quick-guide-to-setting-zones/"]
+    ]
+  },
+  triintensity:{
+    title:"Triathlon Intensity｜三項運動強度如何整合",
+    en:"Bike · Run · Swim — Separate Benchmarks, One Plan",
+    tag:"三項分開設定，課表整合判讀",
+    desc:"鐵人三項需要把游泳、自行車與跑步放在同一個賽季計畫中，但三項的強度基準必須分別建立。游泳以配速與技術品質為主；自行車以功率／FTP、心率與 RPE 交叉判讀；跑步以配速／LTHR、心率與 RPE 交叉判讀。",
+    heads:["項目","常見外在強度指標","內在反應／輔助","重要限制"],
+    rows:[
+      ["游泳","CSS、T-time、每 100m 配速、組間休息","RPE、划水品質、呼吸節奏","配速受泳姿、技術、泳池長度與水況影響"],
+      ["自行車","FTP、功率（W）、功率區間","Bike LTHR、RPE、踏頻","短間歇心率延遲；地形與滑行改變功率分布"],
+      ["跑步","閾值配速、E/M/T/I/R、配速區間","Run LTHR、RPE、心率漂移","坡度、溫度、疲勞與跑步經濟性會影響配速與心率"]
+    ],
+    example:"例如同一週安排游泳 CSS 間歇、自行車 Z2 長騎與跑步 E／Zone 2。雖然三堂課都在訓練耐力，但控制方式不同：游泳看每 100m 配速和動作，自行車看功率與心率，跑步看配速、心率與跑姿品質。",
+    coach:"整合課表時，先指定每堂課的主要目的，再安排工作時間／距離、強度、頻率與恢復。避免把三項運動的 Zone 2 當成相同的絕對強度；應比較各自的生理負荷與訓練反應，而不是比較數字大小。",
+    note:"三項運動的 TSS 或其他負荷分數也可能採不同算法，不宜未經校準就視為完全等價。訓練週安排要考慮轉換課（Brick）、跑步衝擊、游泳技術品質與個別恢復狀況。",
+    sources:[
+      ["TrainingPeaks：Zones Calculator Overview","https://help.trainingpeaks.com/hc/en-us/articles/360017420092-Zones-Calculator-Overview"],
+      ["Joe Friel：A Quick Guide to Setting Zones","https://joefrieltraining.com/a-quick-guide-to-setting-zones/"],
+      ["TrainingPeaks：Cycling Power Zones Explained","https://www.trainingpeaks.com/blog/power-training-levels/"]
+    ]
+  },
   runzones:{
     title:"Running HR Zones｜跑步心率七區",
     en:"LTHR-based Heart Rate Training Zones",
@@ -980,6 +1179,187 @@ function makeTable(headers, rows) {
   `;
 }
 
+
+function diagramFor(key) {
+  const wrap = (title, caption, svg, note="") => `
+    <section class="diagram-card" aria-label="${title}">
+      <h4 class="diagram-heading">${title}</h4>
+      <p class="diagram-caption">${caption}</p>
+      ${svg}
+      ${note ? `<p class="diagram-note">${note}</p>` : ""}
+    </section>`;
+  const svg = content => `<svg class="diagram-svg" viewBox="0 0 720 250" role="img" aria-label="教學概念示意圖" xmlns="http://www.w3.org/2000/svg">${content}</svg>`;
+  const pyramid = svg(`
+    <polygon points="360,18 270,94 450,94" fill="#e5a94f"/>
+    <polygon points="270,100 450,100 520,166 200,166" fill="#6d91b8"/>
+    <polygon points="200,172 520,172 620,238 100,238" fill="#8eaf68"/>
+    <text x="360" y="62" text-anchor="middle" class="diagram-label" fill="#26364a">高強度</text>
+    <text x="360" y="132" text-anchor="middle" class="diagram-label" fill="#fff">中強度</text>
+    <text x="360" y="210" text-anchor="middle" class="diagram-label" fill="#fff">低強度｜有氧基礎</text>
+    <text x="470" y="48" class="diagram-small">LT2 以上</text>
+    <text x="535" y="130" class="diagram-small">LT1–LT2</text>
+    <text x="625" y="208" class="diagram-small">LT1 以下</text>
+  `);
+  const timeline = svg(`
+    <path d="M55 205 H675" class="diagram-axis"/>
+    <path d="M55 205 V28" class="diagram-axis"/>
+    <path d="M65 176 C150 170 205 150 270 137 S395 106 455 88 S575 62 660 35" class="diagram-line"/>
+    <path d="M65 188 C170 188 215 176 280 165 S400 143 465 118 S575 92 660 82" stroke="#d49b43" stroke-width="3" fill="none"/>
+    <path d="M65 194 C160 194 220 190 285 178 S410 160 475 145 S580 128 660 118" stroke="#8eaf68" stroke-width="3" fill="none"/>
+    <text x="65" y="18" class="diagram-small">負荷指標</text>
+    <text x="660" y="228" text-anchor="end" class="diagram-small">時間 →</text>
+    <text x="540" y="28" class="diagram-small">CTL 長期趨勢</text>
+    <text x="540" y="75" class="diagram-small">ATL 短期反應</text>
+    <text x="540" y="111" class="diagram-small">TSB = CTL − ATL</text>
+  `);
+  const bars = (labels, colors, desc) => svg(`
+    ${labels.map((label,i)=>`<rect x="${48+i*132}" y="${48+i*8}" width="104" height="${142-i*16}" rx="8" fill="${colors[i]}"/><text x="${100+i*132}" y="218" text-anchor="middle" class="diagram-label">${label}</text>`).join("")}
+    <text x="360" y="22" text-anchor="middle" class="diagram-small">${desc}</text>
+  `);
+  switch(key) {
+    case "zones":
+    case "lt":
+    case "runzones":
+      return wrap("訓練強度金字塔｜由低強度到高強度",
+        "以 LT1、LT2 作為生理強度分界的概念模型；金字塔高度代表強度層級，不代表每位選手都必須採用固定訓練比例。", pyramid,
+        "低強度通常構成耐力訓練的主要時間；中、高強度則依選手程度、賽事目標與週期安排。Friel 七區心率是另一套操作性分區，不可直接把每一區等同於 LT1／LT2。");
+    case "tss":
+      return wrap("TSS 如何形成｜時間 × 相對強度",
+        "在自行車功率 TSS 的簡化模型中，訓練時間與 IF² 共同影響單次訓練負荷。", svg(`
+          <rect x="45" y="66" width="170" height="110" rx="12" fill="#e8eff8"/>
+          <rect x="275" y="66" width="170" height="110" rx="12" fill="#e8eff8"/>
+          <rect x="505" y="66" width="170" height="110" rx="12" fill="#24496b"/>
+          <text x="130" y="108" text-anchor="middle" class="diagram-label">訓練時間</text><text x="130" y="135" text-anchor="middle" class="diagram-small">Duration</text>
+          <text x="360" y="108" text-anchor="middle" class="diagram-label">相對強度²</text><text x="360" y="135" text-anchor="middle" class="diagram-small">IF × IF</text>
+          <text x="590" y="108" text-anchor="middle" class="diagram-label" fill="#fff">單次負荷</text><text x="590" y="135" text-anchor="middle" class="diagram-small" fill="#fff">TSS</text>
+          <path d="M220 121 H265 M450 121 H495" stroke="#8b9bad" stroke-width="2.5"/><path d="M258 114 L266 121 L258 128 M488 114 L496 121 L488 128" stroke="#8b9bad" fill="none" stroke-width="2.5"/>
+        `), "這張圖呈現自行車功率 TSS 的簡化邏輯；跑步、游泳與心率估算負荷的算法可能不同。");
+    case "if":
+      return wrap("IF｜相對於閾值的強度",
+        "IF 不是單純的速度或功率，而是本次訓練強度相對於個人閾值能力的比例。", svg(`
+          <path d="M100 190 A260 150 0 0 1 620 190" stroke="#dce4ed" stroke-width="28" fill="none" stroke-linecap="round"/>
+          <path d="M100 190 A260 150 0 0 1 360 42" stroke="#8eaf68" stroke-width="28" fill="none" stroke-linecap="round"/>
+          <path d="M360 42 A260 150 0 0 1 620 190" stroke="#d49b43" stroke-width="28" fill="none" stroke-linecap="round"/>
+          <text x="360" y="130" text-anchor="middle" class="diagram-label">IF = 本次標準化輸出 ÷ 閾值輸出</text>
+          <text x="125" y="220" class="diagram-small">低於閾值</text><text x="595" y="220" text-anchor="end" class="diagram-small">高於閾值</text>
+        `), "相同 IF 不代表不同選手的絕對速度或功率相同；解讀時必須確認閾值設定是否有效。");
+    case "ctl":
+    case "atl":
+    case "tsb":
+    case "load":
+      return wrap("CTL／ATL／TSB｜長短期負荷的互動",
+        "示意趨勢用來理解時間尺度，不是實際選手數據，也不代表三條線必然以此形狀變化。", timeline,
+        "CTL 常用來描述較長期的訓練負荷趨勢；ATL 反映較近期負荷；TSB 是兩者差值。請搭配表現、主觀感受與恢復資料判讀。");
+    case "ramp":
+      return wrap("Ramp Rate｜負荷爬升速度",
+        "觀察 CTL 在一段時間內增加的速度，而不是只看某一天的高低。", svg(`
+          <path d="M70 205 H660 M70 205 V28" class="diagram-axis"/>
+          <path d="M85 185 L250 160 L415 112 L590 45" stroke="#8eaf68" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M85 185 L250 145 L415 82 L590 28" stroke="#d49b43" stroke-width="3" stroke-dasharray="7 6" fill="none"/>
+          <text x="90" y="225" class="diagram-small">起始</text><text x="590" y="225" text-anchor="end" class="diagram-small">時間</text>
+          <text x="390" y="185" class="diagram-small">較緩的爬升</text><text x="480" y="65" class="diagram-small">較快的爬升</text>
+        `), "Ramp Rate 不能單獨當作受傷風險預測器；需考慮目前 CTL 基礎、運動項目、訓練史與個人恢復反應。");
+    case "cycle":
+    case "atp":
+      return wrap("訓練週期｜不同階段有不同任務",
+        "週期安排是依目標逐步調整訓練重點；實際長度與順序需依賽事及選手狀態調整。", svg(`
+          ${["基礎期","建構期","專項期","減量期","比賽"].map((x,i)=>`<rect x="${35+i*137}" y="${70+(i===4?25:0)}" width="112" height="${i===4?95:120}" rx="9" fill="${["#8eaf68","#6d91b8","#d49b43","#b9c6d3","#24496b"][i]}"/><text x="${91+i*137}" y="${i===4?123:125}" text-anchor="middle" class="diagram-label" fill="${i===4?"#fff":"#24364b"}">${x}</text>`).join("")}
+          <path d="M45 210 H675" class="diagram-axis"/><text x="360" y="235" text-anchor="middle" class="diagram-small">賽季時間推進 →</text>
+        `), "減量期的目的通常是降低疲勞、保留已建立的能力；不是臨時補做大量訓練。");
+    case "hrv":
+    case "rhr":
+    case "recovery":
+    case "bodybattery":
+    case "stress":
+      return wrap("恢復監控｜多個訊號一起看",
+        "單一指標容易受日常波動影響；教練應比較個人基準與連續趨勢。", svg(`
+          ${[["HRV","個人基準"],["RHR","個人基準"],["睡眠","時數＋品質"],["主觀感受","RPE／精神"]].map((a,i)=>`<rect x="${28+i*174}" y="55" width="150" height="115" rx="10" fill="#fff" stroke="#dce4ed"/><text x="${103+i*174}" y="92" text-anchor="middle" class="diagram-label">${a[0]}</text><text x="${103+i*174}" y="122" text-anchor="middle" class="diagram-small">${a[1]}</text>`).join("")}
+          <path d="M105 185 H615" stroke="#8eaf68" stroke-width="4" stroke-linecap="round"/><text x="360" y="220" text-anchor="middle" class="diagram-label">整合判讀 → 訓練決策</text>
+        `), "HRV、RHR、睡眠與主觀感受都不是單獨的訓練許可／禁止開關；留意持續異常、症狀與疼痛。");
+    case "sleep":
+      return wrap("睡眠結構｜夜間不同階段的循環",
+        "以下為概念化示意，不是實際睡眠檢測結果；穿戴裝置的睡眠階段屬估算。", svg(`
+          <path d="M55 205 H675 M55 35 V205" class="diagram-axis"/>
+          <path d="M60 70 L135 70 L135 130 L205 130 L205 175 L275 175 L275 100 L345 100 L345 155 L415 155 L415 185 L485 185 L485 105 L555 105 L555 145 L625 145 L625 65 L670 65" stroke="#6d91b8" stroke-width="4" fill="none" stroke-linejoin="round"/>
+          <text x="60" y="22" class="diagram-small">較清醒</text><text x="60" y="235" class="diagram-small">入睡</text><text x="670" y="235" text-anchor="end" class="diagram-small">醒來 →</text>
+        `), "睡眠階段比例不宜過度解讀；先看總睡眠時間、規律性、白天精神與長期趨勢。");
+    case "css":
+      return wrap("CSS｜用兩段距離估算臨界游速",
+        "以 200m 與 400m 測試時間差，估算可持續游速的參考值。", svg(`
+          <rect x="75" y="62" width="210" height="105" rx="12" fill="#e8eff8"/><rect x="435" y="62" width="210" height="105" rx="12" fill="#e8eff8"/>
+          <text x="180" y="105" text-anchor="middle" class="diagram-label">400m 測試</text><text x="180" y="132" text-anchor="middle" class="diagram-small">較長距離時間</text>
+          <text x="540" y="105" text-anchor="middle" class="diagram-label">200m 測試</text><text x="540" y="132" text-anchor="middle" class="diagram-small">較短距離時間</text>
+          <path d="M295 114 H425" stroke="#8eaf68" stroke-width="3"/><text x="360" y="95" text-anchor="middle" class="diagram-small">時間差 ÷ 200m</text>
+          <text x="360" y="215" text-anchor="middle" class="diagram-label">估算 CSS 配速（秒／100m）</text>
+        `), "測試需盡量標準化；轉身、泳池長度、配速策略與疲勞都會影響結果。");
+    case "runpaces":
+      return wrap("E／M／T／I／R｜訓練類型與強度",
+        "由輕鬆耐力到短時間速度刺激，五種類型各有不同主要目的；並非每一類都能用心率即時控強度。", bars(["E","M","T","I","R"],["#8eaf68","#9bb58b","#6d91b8","#d49b43","#c17d69"],"概念性強度排列（非固定配速百分比）"),
+        "E：輕鬆有氧；M：馬拉松專項；T：閾值；I：VO₂max 間歇；R：速度與動作經濟性。實際排序與課表設計仍需看工作時間與恢復。");
+    case "runabilities":
+      return wrap("跑步五大能力｜彼此連動而非各自獨立",
+        "五個教學面向共同影響跑步表現；有氧能力是較大的基礎概念，其他能力與之重疊。", svg(`
+          <circle cx="360" cy="125" r="48" fill="#24496b"/><text x="360" y="130" text-anchor="middle" class="diagram-label" fill="#fff">跑步表現</text>
+          ${[["有氧能力",360,28],["乳酸閾值",560,92],["VO₂max",485,218],["跑步經濟性",235,218],["速度／神經肌肉",160,92]].map(a=>`<line x1="360" y1="125" x2="${a[1]}" y2="${a[2]}" stroke="#9aa8b8" stroke-width="2"/><circle cx="${a[1]}" cy="${a[2]}" r="40" fill="#e8eff8" stroke="#9db0c3"/><text x="${a[1]}" y="${a[2]+4}" text-anchor="middle" class="diagram-small">${a[0]}</text>`).join("")}
+        `), "這是教學架構，不是完整的生理學分類。技術、肌耐力、補給、心理、環境與訓練史也會影響表現。");
+    case "practice":
+      return wrap("教練判讀流程｜從資料到訓練決策",
+        "把客觀負荷、訓練表現與選手回饋整合，才形成可追蹤的教練決策。", svg(`
+          ${["看趨勢","找變化","對照反應","調整課表","追蹤結果"].map((x,i)=>`<rect x="${20+i*140}" y="82" width="118" height="78" rx="9" fill="${["#e8eff8","#dce8f2","#dcebd0","#f4e5c8","#24496b"][i]}"/><text x="${79+i*140}" y="125" text-anchor="middle" class="diagram-label">${x}</text>${i<4?`<path d="M140 ${121} H158" stroke="#8b9bad" stroke-width="2"/>`:``}`).join("")}
+        `), "每次調整都要留下依據與追蹤日期，才能知道改變是否真的有效。");
+    case "bikepower":
+      return wrap("自行車功率區間｜FTP 作為強度基準",
+        "FTP 六個功率區間加上不以 FTP 百分比定義的短衝刺區；區間是訓練模型，不是生理斷層。", svg(`
+          ${["Z1","Z2","Z3","Z4","Z5","Z6","Z7"].map((x,i)=>`<rect x="${22+i*98}" y="${175-i*18}" width="82" height="${30+i*18}" rx="5" fill="${["#8eaf68","#a8bd8d","#6d91b8","#d49b43","#c88a54","#b76c61","#805f8f"][i]}"/><text x="${63+i*98}" y="${194-i*18}" text-anchor="middle" class="diagram-label" fill="#fff">${x}</text>`).join("")}
+          <text x="360" y="20" text-anchor="middle" class="diagram-small">相對 FTP 的功率強度概念</text>
+        `), "功率可即時控制輸出；心率反映身體反應且有延遲。短間歇尤其不要只追心率。" );
+    case "bikehr":
+      return wrap("自行車心率區間｜依 Bike LTHR 設定",
+        "此為 Joe Friel 自行車閾值心率七區模型，與跑步閾值心率分開建立。", svg(`
+          ${["Z1","Z2","Z3","Z4","Z5a","Z5b","Z5c"].map((x,i)=>`<rect x="${24+i*98}" y="70" width="82" height="${65+i*14}" rx="6" fill="${["#8eaf68","#a8bd8d","#6d91b8","#d49b43","#c88a54","#b76c61","#805f8f"][i]}"/><text x="${65+i*98}" y="${108+i*7}" text-anchor="middle" class="diagram-label" fill="#fff">${x}</text>`).join("")}
+          <text x="360" y="220" text-anchor="middle" class="diagram-small">恢復／耐力 → Tempo／閾值 → 高強度</text>
+        `), "心率是內在反應；功率是外在輸出。相同功率下心率變化，需結合溫度、補水與疲勞解讀。");
+    case "bikeguide":
+      return wrap("自行車課表設計｜強度 × 時間 × 恢復",
+        "同一堂課要先定義主要刺激，再安排工作段和恢復，不是每個區間都要練。", svg(`
+          <rect x="35" y="65" width="185" height="115" rx="12" fill="#e8eff8"/><rect x="267" y="65" width="185" height="115" rx="12" fill="#e8eff8"/><rect x="499" y="65" width="185" height="115" rx="12" fill="#24496b"/>
+          <text x="127" y="108" text-anchor="middle" class="diagram-label">強度</text><text x="127" y="134" text-anchor="middle" class="diagram-small">Power / HR / RPE</text>
+          <text x="359" y="108" text-anchor="middle" class="diagram-label">時間</text><text x="359" y="134" text-anchor="middle" class="diagram-small">工作段／總量</text>
+          <text x="591" y="108" text-anchor="middle" class="diagram-label" fill="#fff">恢復</text><text x="591" y="134" text-anchor="middle" class="diagram-small" fill="#fff">組間／課間</text>
+          <path d="M224 122 H258 M456 122 H490" stroke="#8b9bad" stroke-width="2.5"/>
+        `), "一次只增加一個主要變項，例如先延長 Z2 時間，或先增加閾值工作總時間；不要同時大幅增加時數與強度。");
+    case "swimzones":
+      return wrap("游泳強度｜配速與技術必須一起看",
+        "每 100m 配速是外在目標，划水效率、呼吸節奏與每趟穩定性是品質檢查。", svg(`
+          ${[["技術／恢復", "#8eaf68"],["有氧耐力","#a8bd8d"],["Tempo／CSS","#6d91b8"],["高強度間歇","#d49b43"],["短衝刺","#b76c61"]].map((a,i)=>`<rect x="${42+i*132}" y="70" width="112" height="100" rx="9" fill="${a[1]}"/><text x="${98+i*132}" y="125" text-anchor="middle" class="diagram-small" fill="#fff">${a[0]}</text>`).join("")}
+          <text x="360" y="220" text-anchor="middle" class="diagram-small">強度提高時，技術品質仍要維持</text>
+        `), "游泳不能只追秒數；如果配速達標但划水、身體線條與呼吸明顯崩解，這組訓練品質就需要調整。");
+    case "swimguide":
+      return wrap("CSS 與 T-time｜兩種測試，不要混為一談",
+        "CSS 常由 200m＋400m 估算；T-time 常用 1000m 平均每 100m 配速。", svg(`
+          <rect x="65" y="55" width="245" height="125" rx="12" fill="#e8eff8"/><rect x="410" y="55" width="245" height="125" rx="12" fill="#e8eff8"/>
+          <text x="187" y="95" text-anchor="middle" class="diagram-label">CSS</text><text x="187" y="123" text-anchor="middle" class="diagram-small">200m + 400m</text><text x="187" y="148" text-anchor="middle" class="diagram-small">差值換算每 100m 配速</text>
+          <text x="532" y="95" text-anchor="middle" class="diagram-label">T-time</text><text x="532" y="123" text-anchor="middle" class="diagram-small">1000m 計時</text><text x="532" y="148" text-anchor="middle" class="diagram-small">總時間 ÷ 10</text>
+          <text x="360" y="220" text-anchor="middle" class="diagram-small">兩者都是配速參考，但測試方法與定義不同</text>
+        `), "記錄測試距離、泳池長度、出發方式、日期與泳姿；不要把兩套測試數值直接互換。");
+    case "triintensity":
+      return wrap("三項強度整合｜各自設定、一起規劃",
+        "游泳、騎車、跑步使用不同的外在強度基準，最後再整合進同一週課表。", svg(`
+          ${[["游泳","CSS／T-time","#6d91b8"],["自行車","FTP／Power","#8eaf68"],["跑步","Pace／LTHR","#d49b43"]].map((a,i)=>`<rect x="${38+i*226}" y="48" width="192" height="130" rx="12" fill="${a[2]}"/><text x="${134+i*226}" y="90" text-anchor="middle" class="diagram-label" fill="#fff">${a[0]}</text><text x="${134+i*226}" y="123" text-anchor="middle" class="diagram-small" fill="#fff">${a[1]}</text>`).join("")}
+          <path d="M134 185 V208 H586 V185 M360 208 V228" stroke="#9aa8b8" stroke-width="2" fill="none"/><text x="360" y="245" text-anchor="middle" class="diagram-small">整合成同一個賽季與每週課表</text>
+        `), "不要比較三項的 Zone 數字大小；比較各項的訓練目的、工作時間、恢復需求與實際反應。");
+    case "runroadmap":
+      return wrap("教練學習路線｜從基礎到整合",
+        "依序學習強度監控、閾值、高強度、訓練量，再整合成完整課表。", svg(`
+          ${["Zone 2","LT／Tempo","VO₂max","跑量／時間","整合課表"].map((x,i)=>`<rect x="${25+i*139}" y="82" width="118" height="76" rx="10" fill="${["#8eaf68","#6d91b8","#d49b43","#9bb58b","#24496b"][i]}"/><text x="${84+i*139}" y="125" text-anchor="middle" class="diagram-label" fill="${i===4?"#fff":"#24364b"}">${x}</text>${i<4?`<path d="M145 ${120} H160" stroke="#8b9bad" stroke-width="2"/>`:``}`).join("")}
+          <text x="360" y="205" text-anchor="middle" class="diagram-small">理解 → 應用 → 監控 → 調整</text>
+        `), "這是教練知識的學習順序，不代表每位運動員都必須按此順序才可以開始訓練。");
+    default:
+      return "";
+  }
+}
+
+
 function render(key) {
   const d = data[key];
 
@@ -1010,6 +1390,8 @@ function render(key) {
     </div>
 
     <p class="definition">${d.desc}</p>
+
+    ${diagramFor(key)}
 
     ${d.formula ? `
       <div class="formula">
@@ -1046,9 +1428,36 @@ function render(key) {
           <div class="tsb-calc-scale"><span>100</span><span>210 bpm</span></div>
         </div>
         <div class="tsb-calc-result" style="text-align:left;background:#fff">
-          <div id="runZoneResults" style="font-size:15px;line-height:2"></div>
+          <div id="runZoneResults" style="font-size:13px;line-height:2"></div>
         </div>
         <p class="tsb-calc-explain">計算方式採跑步 LTHR 百分比：Z1 &lt;85%；Z2 85–89%；Z3 90–94%；Z4 95–99%；Z5a 100–102%；Z5b 103–106%；Z5c &gt;106%。邊界取整可能因平台設定而有 1 bpm 差異。</p>
+      </section>
+    ` : ""}
+
+    ${key === "bikepower" ? `
+      <section class="tsb-calc" id="bikePowerCalc" aria-labelledby="bikePowerCalcTitle">
+        <h4 id="bikePowerCalcTitle">自行車 FTP 功率區間計算器｜Coggan 六區</h4>
+        <p class="tsb-calc-intro">輸入已測得的 FTP（瓦特），即時計算各區功率範圍。Z7 神經肌肉衝刺不以固定 FTP 百分比定義。</p>
+        <div class="tsb-calc-control">
+          <label for="bikeFtpInput"><span>自行車 FTP｜W</span><output id="bikeFtpValue">250</output></label>
+          <input id="bikeFtpInput" type="range" min="80" max="500" step="1" value="250">
+          <div class="tsb-calc-scale"><span>80 W</span><span>500 W</span></div>
+        </div>
+        <div class="tsb-calc-result" style="text-align:left;background:#fff"><div id="bikePowerResults" style="font-size:13px;line-height:2"></div></div>
+        <p class="tsb-calc-explain">使用區間：Z1 &lt;55%；Z2 56–75%；Z3 76–90%；Z4 91–105%；Z5 106–120%；Z6 &gt;120%。實際平台可能有取整或邊界差異。</p>
+      </section>
+    ` : ""}
+
+    ${key === "swimguide" ? `
+      <section class="tsb-calc" id="swimCssCalc" aria-labelledby="swimCssCalcTitle">
+        <h4 id="swimCssCalcTitle">CSS 互動計算器｜200m＋400m</h4>
+        <p class="tsb-calc-intro">輸入 200m 與 400m 的完泳時間（秒），計算 CSS 每 100m 配速。請使用同一泳池長度與一致測試條件。</p>
+        <div class="tsb-calc-grid">
+          <div class="tsb-calc-control"><label for="swim200Input"><span>200m 時間｜秒</span><output id="swim200Value">230</output></label><input id="swim200Input" type="range" min="100" max="600" step="1" value="230"><div class="tsb-calc-scale"><span>100</span><span>600 秒</span></div></div>
+          <div class="tsb-calc-control"><label for="swim400Input"><span>400m 時間｜秒</span><output id="swim400Value">480</output></label><input id="swim400Input" type="range" min="200" max="1200" step="1" value="480"><div class="tsb-calc-scale"><span>200</span><span>1200 秒</span></div></div>
+        </div>
+        <div class="tsb-calc-result"><small>估算 CSS 配速</small><div class="tsb-calc-number" id="swimCssValue">2:05</div><div class="tsb-calc-formula" id="swimCssFormula">(480 − 230) ÷ 2 = 125 秒／100m</div><span class="tsb-calc-status" id="swimCssStatus">可用作閾值附近配速參考</span></div>
+        <p class="tsb-calc-explain" id="swimCssExplain">CSS 是實務估算值，不是乳酸實驗室測量。測試結果需要搭配游泳技術與每趟配速穩定性判讀。</p>
       </section>
     ` : ""}
 
@@ -1223,6 +1632,23 @@ function render(key) {
     </div>
   `;
 
+  if (key === "bikepower") {
+    const input=document.getElementById("bikeFtpInput"), output=document.getElementById("bikeFtpValue"), results=document.getElementById("bikePowerResults");
+    const round=Math.round;
+    function updateBikePower(){
+      const ftp=Number(input.value); output.textContent=ftp;
+      const zones=[["Z1｜恢復",0,0.55,true],["Z2｜耐力",0.56,0.75,false],["Z3｜Tempo",0.76,0.90,false],["Z4｜閾值",0.91,1.05,false],["Z5｜VO₂max",1.06,1.20,false],["Z6｜無氧能力",1.20,null,false]];
+      results.innerHTML=zones.map((z,i)=>{const low=z[3]?"<":String(round(ftp*z[1]));const range=i===0?`低於 ${round(ftp*0.55)} W`:i===5?`高於 ${round(ftp*1.20)} W`:`${round(ftp*z[1])}–${round(ftp*z[2])} W`;return `<div style="display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #e3e8ee;padding:5px 0"><b>${z[0]}</b><span style="font-variant-numeric:tabular-nums">${range}</span></div>`}).join("")+`<div style="padding-top:7px"><b>Z7｜神經肌肉衝刺：</b>不以固定 FTP 百分比設定，參考個人短時間峰值功率與動作品質。</div>`;
+    }
+    input.addEventListener("input",updateBikePower); updateBikePower();
+  }
+  if (key === "swimguide") {
+    const a=document.getElementById("swim200Input"), b=document.getElementById("swim400Input"), ao=document.getElementById("swim200Value"), bo=document.getElementById("swim400Value"), value=document.getElementById("swimCssValue"), formula=document.getElementById("swimCssFormula"), status=document.getElementById("swimCssStatus"), explain=document.getElementById("swimCssExplain");
+    const fmt=sec=>`${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}`;
+    function updateCss(){const t200=Number(a.value),t400=Number(b.value);ao.textContent=fmt(t200);bo.textContent=fmt(t400);const css=(t400-t200)/2;if(t400<=t200*1.5){value.textContent="—";formula.textContent="請確認 400m 測試時間應大於 200m 時間的 1.5 倍";status.textContent="測試時間組合需檢查";status.className="tsb-calc-status negative";explain.textContent="請確認輸入的是同一泳池長度、同一泳姿且有效的 200m 與 400m 測試成績。";return;}value.textContent=fmt(Math.round(css));formula.textContent=`(${t400} − ${t200}) ÷ 2 = ${Math.round(css)} 秒／100m`;status.textContent="可用作閾值附近配速參考";status.className="tsb-calc-status positive";explain.textContent="此為估算 CSS；如果測試配速策略不穩、轉身或技術差異明顯，結果可能失真。";}
+    a.addEventListener("input",updateCss);b.addEventListener("input",updateCss);updateCss();
+  }
+
   if (key === "tsb") {
     const ctlInput = document.getElementById("tsbCtlInput");
     const atlInput = document.getElementById("tsbAtlInput");
@@ -1311,8 +1737,7 @@ const categoryConfig = {
       ["hrv","HRV｜心率變異度"],["rhr","RHR｜靜息心率"],
       ["sleep","Sleep｜睡眠指標"],["bodybattery","Body Battery｜身體能量"],
       ["stress","Stress｜壓力指數"],["recovery","恢復監控｜整合判讀"],
-      ["lt","LT｜乳酸閾值"],["zones","Training Zones｜強度區間"],
-      ["css","CSS｜游泳臨界配速"]
+      ["lt","LT｜乳酸閾值"],["zones","Training Zones｜強度區間"]
     ]
   },
   planning: {
@@ -1332,6 +1757,23 @@ const categoryConfig = {
     ]
   },
 
+  cycling: {
+    label:"CYCLING INTENSITY & COACHING｜自行車強度與教練課表",
+    items:[
+      ["bikepower","FTP／功率 Zone｜Coggan 架構"],
+      ["bikehr","自行車心率 Zone｜Friel 七區"],
+      ["bikeguide","自行車強度設定與課表應用"]
+    ]
+  },
+  swimming: {
+    label:"SWIMMING INTENSITY & COACHING｜游泳強度與教練課表",
+    items:[
+      ["css","CSS｜臨界游速"],
+      ["swimguide","CSS 與 T-time｜測試與計算"],
+      ["swimzones","游泳配速強度與課表應用"],
+      ["triintensity","三項運動強度整合比較"]
+    ]
+  },
   practice: {
     label:"COACHING PRACTICE｜教練實戰與案例分析",
     items:[["practice","個案分析流程與紀錄模板"]]
