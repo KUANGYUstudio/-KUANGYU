@@ -83,7 +83,7 @@ header:after {
 }
 .category-tabs {
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(5,1fr);
   gap:10px;
   margin:18px 0 12px;
 }
@@ -844,7 +844,110 @@ const data = {
       ["TrainingPeaks：The Comprehensive Guide to Creating an Annual Training Plan","https://www.trainingpeaks.com/learn/articles/the-comprehensive-guide-to-creating-an-annual-training-plan/"],
       ["TrainingPeaks：How To Plan Your Season with Training Stress Score","https://www.trainingpeaks.com/learn/articles/how-to-plan-your-season-with-training-stress-score/"]
     ]
-  }
+  },
+  runzones:{
+    title:"Running HR Zones｜跑步心率七區",
+    en:"LTHR-based Heart Rate Training Zones",
+    tag:"以跑步閾值心率為核心",
+    desc:"本單元採用 Joe Friel 的跑步七區架構作為可操作的心率範例，以跑步 LTHR（乳酸閾值心率）為基準計算。它是一套訓練分區模型，不等同於生理三區模型，也不能把每一區直接視為 LT1、LT2 的精確測量。",
+    formula:"各區心率 = 跑步 LTHR × 對應百分比",
+    fsub:"請輸入跑步 LTHR。若尚未實測，不要用年齡公式或自行猜測值冒充 LTHR。",
+    heads:["區間","LTHR 百分比","常見訓練用途"],
+    rows:[
+      ["Z1","低於 85%","恢復、非常輕鬆跑"],
+      ["Z2","85–89%","有氧耐力"],
+      ["Z3","90–94%","穩定有氧、Tempo 類訓練"],
+      ["Z4","95–99%","閾值附近訓練"],
+      ["Z5a","100–102%","閾值以上的高強度工作"],
+      ["Z5b","103–106%","高強度有氧／VO₂max 間歇情境"],
+      ["Z5c","高於 106%","短時間極高強度；心率不適合當作即時控速目標"]
+    ],
+    example:"若跑步 LTHR = 170 bpm，Z2 約為 145–151 bpm（170 × 85–89%），Z4 約為 162–168 bpm（170 × 95–99%）。計算器會依整數 bpm 顯示範圍。",
+    coach:"先確認測試方式與數據品質，再設定區間。心率主要用於控制整體生理負荷；短間歇時心率有延遲，應以間歇配速、時間、動作品質及 RPE 輔助。炎熱、坡度、脫水、睡眠與疲勞都會影響心率。",
+    note:"此七區表依 Joe Friel 跑步 LTHR 區間整理。30 分鐘個人計時測試的後 20 分鐘平均心率可作為 LTHR 估計方法之一，但並非乳酸實驗室測量；不適合缺乏跑步基礎、身體不適或不適合高強度測試者自行執行。LTHR、LT1、LT2、VT1、VT2 並非可互換的同義詞。",
+    extraTitle:"心率分區與生理閾值：不要混成同一套命名",
+    extraHeads:["系統","主要用途","教練使用方式"],
+    extraRows:[
+      ["Friel 七區心率","以 LTHR 百分比設定訓練監控區間","適合建立個人 bpm 區間與記錄訓練"],
+      ["生理三區模型","以 LT1、LT2 切分低、中、高強度","適合理解訓練強度分布與生理轉折"],
+      ["Talk Test／RPE","輔助判斷當下感受與可持續程度","在沒有實測閾值、天候變化或心率資料不可靠時交叉確認"]
+    ],
+    extraCaption:"不同平台的五區、七區與三區模型可能使用不同邊界。建立學生資料時，務必註明採用哪一套模型。",
+    sources:[
+      ["Joe Friel：A Quick Guide to Setting Zones（2025 修訂）","https://joefrieltraining.com/a-quick-guide-to-setting-zones/"],
+      ["TrainingPeaks：Joe Friel's Quick Guide to Setting Training Zones","https://www.trainingpeaks.com/learn/articles/joe-friel-s-quick-guide-to-setting-training-zones/"]
+    ]
+  },
+  runpaces:{
+    title:"E / M / T / I / R｜跑步訓練配速",
+    en:"Daniels Running Intensity Types",
+    tag:"配速是目標，心率是輔助監控",
+    desc:"Jack Daniels 的 E、M、T、I、R 是依訓練目的區分的跑步強度類型。這套配速分類與心率 Zone 是兩套不同工具，不能一對一硬配。",
+    heads:["代號","名稱","訓練目的","心率如何使用"],
+    rows:[
+      ["E","Easy","輕鬆跑、有氧累積與恢復","以輕鬆感受與可交談為主，心率作上限監控"],
+      ["M","Marathon","馬拉松專項配速與比賽節奏熟悉","觀察穩定性與心率漂移，不以固定 bpm 取代目標配速"],
+      ["T","Threshold","提升可持續的高強度耐力","可參考 LTHR 附近反應，搭配配速與 RPE"],
+      ["I","Interval","刺激 VO₂max","工作段短時不宜追心率數字，使用配速／時間／恢復控制"],
+      ["R","Repetition","速度、動作協調與跑步經濟性","時間太短，心率通常不是主要控強度工具"]
+    ],
+    example:"同一位跑者的 M pace 可能落在不同心率反應：天氣熱、長距離後段或疲勞時心率會上升。因此 M pace 是比賽專項配速，不是固定的某一個心率 Zone。",
+    coach:"配速建議以近期比賽成績或合適的 VDOT／配速模型估算，再依課表目的、地形、天候與學生能力調整。心率用來檢查內在負荷是否與預期相符。",
+    note:"E/M/T/I/R 主要來自 Jack Daniels 跑步訓練架構。M 是馬拉松配速，只有在馬拉松訓練情境中特別有意義；它不等於一般中強度，也不必然落在所有人的同一心率區。",
+    sources:[
+      ["Jack Daniels' Running Formula：Types of Training and Intensities","https://static1.squarespace.com/static/5ee7adf2d2607b6317b264a2/t/646395e31537db2f0c2de367/1684248037207/Jack%2BDaniels%2B-%2BDaniels%27%2BRunning%2BFormula-Human%2BKinetics%2B%282021%29%2Breduced.pdf"],
+      ["運動筆記：用丹尼爾斯訓練法看懂配速安排","https://running.biji.co/index.php?act=info&id=114398&q=news"]
+    ]
+  },
+  runabilities:{
+    title:"Running Performance｜跑步五個核心能力",
+    en:"Five Interacting Performance Capacities",
+    tag:"理解能力、訓練刺激與表現",
+    desc:"以下五項是教練教學用的能力架構，不是唯一或互斥的運動生理學分類。它們彼此重疊、互相影響；尤其有氧能力是較大的概念，VO₂max 與乳酸閾值都是其中重要的生理面向。",
+    heads:["核心能力","它在回答什麼問題？","常見訓練方向","可觀察的指標"],
+    rows:[
+      ["1｜有氧能力","身體能否長時間以氧化代謝供應能量？","Easy／Zone 2、長距離、穩定有氧累積","相同心率下配速、心率漂移、長時間穩定度"],
+      ["2｜乳酸閾值能力","能否在較高強度下維持穩定輸出？","Tempo、Threshold、巡航間歇","LT1／LT2 或閾值心率／配速、閾值段完成品質"],
+      ["3｜最大攝氧能力（VO₂max）","身體運送與利用氧氣的最高能力如何？","適當的高強度間歇、較長 I 類工作段","VO₂max 測試、間歇完成品質、相關配速表現"],
+      ["4｜跑步經濟性","以特定速度跑步時，身體需要多少能量／氧氣成本？","肌力訓練、跑姿與協調、適量短加速／R 類訓練","固定速度下氧氣成本（實驗室）、相同配速下的生理反應"],
+      ["5｜速度與神經肌肉能力","能否快速產生力量並協調完成動作？","短加速跑、坡跑、R 類訓練、適當肌力與彈跳訓練","短距離速度、步頻與動作品質、力量／爆發力測試"]
+    ],
+    example:"兩位跑者 VO₂max 相近，仍可能因乳酸閾值、跑步經濟性與速度能力不同，而有不同的 10 公里或馬拉松表現。",
+    coach:"先找出學生目前最限制表現的環節，再選擇訓練刺激。不要把五項能力當成五種完全獨立的課表；一堂課可能同時刺激多個能力，但應先清楚設定主要目的。",
+    note:"這五項是便於教練分析與教學的框架，不代表跑步表現只由五項因素決定。技術、肌腱特性、肌耐力、補給、心理、環境與訓練史也會影響表現。心率不能直接測量跑步經濟性或速度能力。",
+    extraTitle:"五項能力與五階段學習路線的關係",
+    extraHeads:["學習階段","主要學習任務","主要連結能力"],
+    extraRows:[
+      ["第一階段｜Zone 2","建立心率區間與有氧時間","有氧能力"],
+      ["第二階段｜Tempo／Threshold","理解 LT1、LT2 與持續輸出","乳酸閾值能力"],
+      ["第三階段｜VO₂max／Interval","安排高強度刺激與恢復","最大攝氧能力"],
+      ["第四階段｜時間與跑量","建立長時間耐力與負荷承受","有氧能力、肌耐力與經濟性"],
+      ["第五階段｜整合課表","依限制因素安排多種刺激","五項能力整合"]
+    ],
+    extraCaption:"學習階段是教練學習順序；核心能力則是分析跑者表現的框架，兩者不是同一種分類。",
+    sources:[
+      ["Jack Daniels' Running Formula：Types of Training and Intensities","https://static1.squarespace.com/static/5ee7adf2d2607b6317b264a2/t/646395e31537db2f0c2de367/1684248037207/Jack%2BDaniels%2B-%2BDaniels%27%2BRunning%2BFormula-Human%2BKinetics%2B%282021%29%2Breduced.pdf"],
+      ["Joe Friel：A Quick Guide to Setting Zones","https://joefrieltraining.com/a-quick-guide-to-setting-zones/"]
+    ]
+  },
+  runroadmap:{
+    title:"Five Learning Stages｜跑步強度與課表設計",
+    en:"Coach Learning Roadmap",
+    tag:"從心率設定走向完整課表",
+    desc:"這是教練的學習順序，不是運動員必須依序完成的生理階段。先掌握低強度與心率設定，再逐步學習閾值、高強度、訓練量與整合課表。",
+    heads:["階段","學習重點","要能回答的教練問題"],
+    rows:[
+      ["第一階段｜有氧強度與 Zone 2","心率區間、低強度配速、每週有氧時間","如何找出個人有氧上限？每週如何累積時間？"],
+      ["第二階段｜Tempo 與 Threshold","LT1／LT2、工作時間、組數、組間休息","如何區分穩定有氧、Tempo 與閾值訓練？"],
+      ["第三階段｜VO₂max 與 Interval","工作段長度、強度、恢復與品質","如何安排刺激而不讓每組品質崩落？"],
+      ["第四階段｜訓練時間與跑量進階","週跑量、長距離、總時間、漸進負荷","如何增加時間與跑量並觀察恢復？"],
+      ["第五階段｜整合課表設計","強度、時間、頻率、CTL／ATL／TSB、心率漂移與肌耐力","如何把單次課表安排成可持續的訓練週期？"]
+    ],
+    example:"例如先建立每週穩定的 Zone 2 訓練，再逐步加入閾值課，之後才依學生目標加入 VO₂max 間歇，最後整合跑量與恢復安排。",
+    coach:"每個階段都要能從數據提出訓練決策：本週要練什麼、為什麼、做多少、如何監控，以及下次如何依反應調整。",
+    note:"學習路線不代表所有學生都要先完成五階段才可訓練。實際課表仍須依訓練經驗、健康狀況、賽事目標、可用時間與恢復能力調整。"
+  },
+
 };
 
 function makeTable(headers, rows) {
@@ -912,6 +1015,23 @@ function render(key) {
     </div>
 
     ${extraTable}
+
+
+    ${key === "runzones" ? `
+      <section class="tsb-calc" id="runHrCalc" aria-labelledby="runHrCalcTitle">
+        <h4 id="runHrCalcTitle">跑步心率 Zone 互動計算器｜Friel 七區</h4>
+        <p class="tsb-calc-intro">輸入已測得或合理估計的跑步 LTHR，計算各區間心率。這不是 LT1／LT2 檢測器。</p>
+        <div class="tsb-calc-control">
+          <label for="runLthrInput"><span>跑步 LTHR｜bpm</span><output id="runLthrValue">170</output></label>
+          <input id="runLthrInput" type="range" min="100" max="210" step="1" value="170">
+          <div class="tsb-calc-scale"><span>100</span><span>210 bpm</span></div>
+        </div>
+        <div class="tsb-calc-result" style="text-align:left;background:#fff">
+          <div id="runZoneResults" style="font-size:13px;line-height:2"></div>
+        </div>
+        <p class="tsb-calc-explain">計算方式採跑步 LTHR 百分比：Z1 &lt;85%；Z2 85–89%；Z3 90–94%；Z4 95–99%；Z5a 100–102%；Z5b 103–106%；Z5c &gt;106%。邊界取整可能因平台設定而有 1 bpm 差異。</p>
+      </section>
+    ` : ""}
 
     ${key === "tsb" ? `
       <section class="tsb-calc" id="tsbInteractiveCalc" aria-labelledby="tsbCalcTitle">
@@ -1125,6 +1245,35 @@ function render(key) {
     });
     updateTsbCalculator();
   }
+
+  if (key === "runzones") {
+    const input = document.getElementById("runLthrInput");
+    const output = document.getElementById("runLthrValue");
+    const results = document.getElementById("runZoneResults");
+    const round = value => Math.round(value);
+    function updateRunZones() {
+      const lthr = Number(input.value);
+      output.textContent = lthr;
+      const zones = [
+        ["Z1｜恢復", null, 0.85],
+        ["Z2｜有氧耐力", 0.85, 0.89],
+        ["Z3｜Tempo／穩定有氧", 0.90, 0.94],
+        ["Z4｜閾值附近", 0.95, 0.99],
+        ["Z5a｜閾值以上", 1.00, 1.02],
+        ["Z5b｜高強度有氧", 1.03, 1.06],
+        ["Z5c｜極高強度", 1.06, null]
+      ];
+      results.innerHTML = zones.map((z, i) => {
+        let range = "";
+        if (i === 0) range = "≤ " + (round(lthr * 0.85) - 1) + " bpm";
+        else if (i === 6) range = "≥ " + (round(lthr * 1.06) + 1) + " bpm";
+        else range = round(lthr * z[1]) + "–" + round(lthr * z[2]) + " bpm";
+        return `<div style="display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #e3e8ee;padding:5px 0"><b>${z[0]}</b><span style="font-variant-numeric:tabular-nums">${range}</span></div>`;
+      }).join("");
+    }
+    input.addEventListener("input", updateRunZones);
+    updateRunZones();
+  }
 }
 
 const categoryConfig = {
@@ -1153,6 +1302,17 @@ const categoryConfig = {
       ["cycle","Training Cycle｜訓練週期"],["atp","ATP｜年度訓練計畫"]
     ]
   },
+
+  running: {
+    label:"RUNNING INTENSITY & COACHING｜跑步強度與教練課表",
+    items:[
+      ["runzones","心率 Zone｜LTHR 七區"],
+      ["runpaces","E／M／T／I／R｜跑步配速"],
+      ["runabilities","跑步五個核心能力"],
+      ["runroadmap","五階段教練學習路線"]
+    ]
+  },
+
   practice: {
     label:"COACHING PRACTICE｜教練實戰與案例分析",
     items:[["practice","個案分析流程與紀錄模板"]]
