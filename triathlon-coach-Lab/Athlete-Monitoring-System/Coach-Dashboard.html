@@ -1218,6 +1218,7 @@ button:active{transform:translateY(.5px)}
 .metric-dot.atl{background:#e85b9a}
 .metric-dot.tsb{background:#D9A514}
 .metric-dot.tss{background:#c23b32}
+.metric-dot.if{background:#D9A514}
 
 .chart-plot-wrap{
   position:relative;
@@ -1353,6 +1354,24 @@ button:active{transform:translateY(.5px)}
 .trend-panel-head strong{font-size:14px;font-weight:800}
 .trend-panel-head span{font-size:12px;color:var(--muted)}
 .trend-panel svg{width:100%;height:auto;display:block;min-height:120px;cursor:pointer;touch-action:pan-y}
+.unified-trend-panel{padding-top:10px}
+.unified-chart-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:4px 2px 8px}
+.unified-chart-controls label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.unified-chart-controls select{border:1px solid var(--theme-border);border-radius:7px;padding:4px 8px;background:var(--surface);color:var(--ink);font:inherit}
+.unified-chart-legend{display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap;margin:0 2px 6px;font-size:11px;color:var(--muted)}
+.unified-chart-legend span{display:inline-flex;align-items:center;gap:5px}
+.unified-chart-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.unified-trend-panel .chart-note{margin:6px 2px 2px;font-size:11px;color:var(--muted);line-height:1.5}
+.chart-callout-band{min-height:0;align-items:flex-start;justify-content:flex-start;margin:4px 0 8px}
+.chart-callout-card.chart-callout-vertical{position:relative;top:auto;left:0;display:flex;align-items:stretch;width:min(340px,100%);max-width:100%;gap:5px}
+.chart-callout-vertical .callout-date-row{align-self:flex-start}
+.callout-vertical-list{display:flex;flex-direction:column;gap:3px;padding:7px 10px;background:rgba(255,254,250,.98);border:1px solid var(--theme-border);border-radius:9px;box-shadow:0 3px 10px rgba(0,0,0,.07)}
+.callout-vertical-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;font-size:11.5px;line-height:1.4;color:var(--muted)}
+.callout-vertical-row>span{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.callout-vertical-row i{display:inline-block;width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.callout-vertical-row b{color:var(--ink);font-weight:750;text-align:right;overflow-wrap:anywhere}
+
+.unified-trend-panel svg{min-height:250px}
 .trend-panel-combined svg{min-height:220px}
 @media(max-width:768px){.trend-panel-combined svg{min-height:190px}}
 
@@ -2477,12 +2496,13 @@ button:active{transform:translateY(.5px)}
 
       <div class="metric-toggles">
         <span>顯示指標</span>
-        <label class="metric-toggle"><input type="checkbox" id="metricRPE" checked onchange="renderLoadChart()"><i class="metric-dot rpe"></i> 單次 RPE 圖表</label>
         <label class="metric-toggle"><input type="checkbox" id="metricCTL" checked onchange="renderLoadChart()"><i class="metric-dot ctl"></i> CTL 長期負荷</label>
         <label class="metric-toggle"><input type="checkbox" id="metricATL" checked onchange="renderLoadChart()"><i class="metric-dot atl"></i> ATL 短期疲勞</label>
-        <label class="metric-toggle"><input type="checkbox" id="metricSRPE" onchange="renderLoadChart()"><i class="metric-dot srpe"></i> sRPE 圖表</label>
         <label class="metric-toggle"><input type="checkbox" id="metricTSB" checked onchange="renderLoadChart()"><i class="metric-dot tsb"></i> TSB 負荷平衡</label>
         <label class="metric-toggle"><input type="checkbox" id="metricTSS" onchange="renderLoadChart()"><i class="metric-dot tss"></i> 每日 TSS</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricIF" onchange="renderLoadChart()"><i class="metric-dot if"></i> 單次 IF</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricRPE" checked onchange="renderLoadChart()"><i class="metric-dot rpe"></i> 單次 RPE</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricSRPE" onchange="renderLoadChart()"><i class="metric-dot srpe"></i> 每日 sRPE</label>
       </div>
     </div>
 
@@ -2492,10 +2512,21 @@ button:active{transform:translateY(.5px)}
         <button class="btn outline chart-expand-btn" type="button" id="fullscreenChartBtn" onclick="toggleChartFullscreen()">放大圖表</button>
       </div>
       <div class="chart-callout-band" id="chartCalloutBand"><div class="chart-callout-placeholder">點選任一圖表日期，可查看當日完整數據</div></div>
-      <div class="trend-panel trend-panel-combined"><div class="trend-panel-head"><strong>① 訓練負荷與 TSB 綜合趨勢</strong><span>左軸：CTL／ATL／每日 TSS　·　右軸：TSB（含正負值，0 為基準線）</span></div><div class="chart-fill-controls"><label><input type="checkbox" id="chartFillEnabled" checked onchange="renderLoadChart()"> 填滿區域</label><label>填滿項目 <select id="chartFillMetric" onchange="renderLoadChart()"><option value="CTL" selected>CTL</option><option value="ATL">ATL</option><option value="TSB">TSB</option></select></label></div><svg id="loadChart" viewBox="0 0 1000 310" role="img" aria-label="CTL ATL TSB 與每日 TSS 綜合趨勢圖"></svg></div>
-      <div class="trend-panel"><div class="trend-panel-head"><strong>② 主觀訓練反應</strong><span>單次 RPE（1–10）</span></div><svg id="rpeChart" viewBox="0 0 1000 190" role="img" aria-label="單次訓練 RPE 趨勢圖"></svg></div>
-      <div class="trend-panel"><div class="trend-panel-head"><strong>③ 主觀負荷累積</strong><span>sRPE（RPE × 訓練時間，AU）</span></div><svg id="srpeChart" viewBox="0 0 1000 190" role="img" aria-label="每日 sRPE 負荷趨勢圖"></svg></div>
-      <div class="trend-panel trend-panel-if"><div class="trend-panel-head"><strong>④ 單次訓練強度（IF）</strong><span>每個點代表一堂有 IF 紀錄的訓練；不同運動依各自閾值計算，不合併平均</span></div><div class="if-chart-controls"><label>運動項目 <select id="ifSportFilter" onchange="renderIntensityFactorChart()"><option value="all">全部（游泳／自行車／跑步）</option><option value="swim">游泳</option><option value="bike">自行車</option><option value="run">跑步</option></select></label><div class="if-legend"><span><i style="background:#D9A514"></i>游泳</span><span><i style="background:#477FBD"></i>自行車</span><span><i style="background:#E85B9A"></i>跑步</span></div></div><svg id="intensityFactorChart" viewBox="0 0 1000 220" role="img" aria-label="依運動項目區分的單次訓練 IF 散佈圖"></svg><div class="if-detail" id="ifWorkoutDetail"><span class="if-detail-placeholder">滑過或點選 IF 資料點，可查看該堂訓練的運動項目、日期、名稱、IF 與 TSS。</span></div><p class="chart-note">IF 僅呈現 TrainingPeaks 匯入且有有效 IF 數值的游泳、單車及跑步紀錄。沒有 IF 的訓練不補值；肌力、休息日及未分類項目不納入此圖。</p></div>
+      <div class="trend-panel trend-panel-combined unified-trend-panel">
+        <div class="trend-panel-head"><strong>① 訓練負荷與身體反應整合趨勢</strong><span>共用日期軸；各指標依自己的單位與尺度呈現，不能直接比較不同指標的高度</span></div>
+        <div class="chart-fill-controls unified-chart-controls">
+          <label><input type="checkbox" id="chartFillEnabled" checked onchange="renderLoadChart()"> 填滿區域</label>
+          <label>填滿項目 <select id="chartFillMetric" onchange="renderLoadChart()"><option value="CTL" selected>CTL</option><option value="ATL">ATL</option><option value="TSB">TSB</option></select></label>
+          <label id="ifSportFilterWrap">IF 運動項目 <select id="ifSportFilter" onchange="renderLoadChart()"><option value="all">全部（游泳／自行車／跑步）</option><option value="swim">游泳</option><option value="bike">自行車</option><option value="run">跑步</option></select></label>
+        </div>
+        <div class="unified-chart-legend">
+          <span><i style="background:#477FBD"></i>CTL</span><span><i style="background:#E85B9A"></i>ATL</span><span><i style="background:#D9A514"></i>TSB</span><span><i style="background:#B58A3A"></i>每日 TSS（獨立尺度）</span>
+          <span><i style="background:#D9A514"></i>IF 游泳（獨立尺度）</span><span><i style="background:#477FBD"></i>IF 單車</span><span><i style="background:#E85B9A"></i>IF 跑步</span>
+          <span><i style="background:#3E6B52"></i>RPE（1–10）</span><span><i style="background:#8A7CA8"></i>sRPE（AU，獨立尺度）</span>
+        </div>
+        <svg id="loadChart" viewBox="0 0 1000 360" role="img" aria-label="CTL ATL TSB TSS IF RPE 與 sRPE 整合趨勢圖"></svg>
+        <p class="chart-note">IF 點依游泳、單車、跑步分色；RPE 為每日最高單次回報；sRPE 為每日累積值。CTL／ATL 使用左軸、TSB 使用右軸；TSS、IF、RPE、sRPE 以各自尺度映射在同一繪圖區，僅比較各自的變化，不以不同單位的垂直高度互相比較。</p>
+      </div>
     </div>
 
     <div class="combined-analysis" id="combinedAnalysisBox">
@@ -3495,7 +3526,7 @@ function buildAthleteSeries(a,start,end){
   const sessionList=Array.isArray(a.sessionRpe)&&a.sessionRpe.length?a.sessionRpe:a.tpWorkouts;
   sessionList.forEach(w=>{
     if(!w.date)return;
-    if(!byDay[w.date])byDay[w.date]={tss:0,rpes:[],srpe:0,titles:[]};
+    if(!byDay[w.date])byDay[w.date]={tss:0,rpes:[],srpe:0,titles:[],ifWorkouts:[]};
     byDay[w.date].tss+=Number(w.tss||0);
     if(w.rpe!==null&&w.rpe!==undefined&&w.rpe!==''){
       const r=Number(w.rpe);
@@ -3503,6 +3534,20 @@ function buildAthleteSeries(a,start,end){
       byDay[w.date].srpe+=r*Number(w.duration||0);
     }
     if(w.sessionName)byDay[w.date].titles.push(w.sessionName);
+  });
+
+  // Keep workout-level IF records separate: each sport retains its own threshold basis.
+  a.tpWorkouts.forEach(w=>{
+    if(!w.date||!Number.isFinite(Number(w.intensityFactor))||Number(w.intensityFactor)<=0)return;
+    if(!byDay[w.date])byDay[w.date]={tss:0,rpes:[],srpe:0,titles:[],ifWorkouts:[]};
+    const sport=classifyWorkoutSport(w);
+    if(IF_SPORT_META[sport])byDay[w.date].ifWorkouts.push({
+      sport,label:IF_SPORT_META[sport].label,
+      intensityFactor:Number(w.intensityFactor),
+      sessionName:w.sessionName||'未命名訓練',
+      tss:Number(w.tss)||0,
+      duration:Number(w.duration)||0
+    });
   });
 
   const firstCsvDate=dayStart(new Date(a.tpWorkouts[0].date+'T00:00:00'));
@@ -3524,7 +3569,7 @@ function buildAthleteSeries(a,start,end){
     const srpe=rec?Math.round(rec.srpe):0;
     const title=rec&&rec.titles.length?rec.titles.join(' / '):'';
     if(d>=start&&d<=end){
-      out.push({date:d,CTL:ctl,ATL:atl,TSB:tsb,TSS:tss,RPE:rpe,SRPE:srpe,title});
+      out.push({date:d,CTL:ctl,ATL:atl,TSB:tsb,TSS:tss,RPE:rpe,SRPE:srpe,title,IFs:rec&&rec.ifWorkouts?rec.ifWorkouts:[]});
     }
   }
   return {data:out,isReal:true,workoutCount:a.tpWorkouts.length};
@@ -3584,7 +3629,7 @@ function updateChartCallout(index,svgXRatio){
   const band=document.getElementById('chartCalloutBand');
   if(!band)return;
   if(index===null||index===undefined||!lastRenderedData[index]){
-    band.innerHTML='<div class="chart-callout-placeholder">點選圖表任一天可查看當日完整數據</div>';
+    band.innerHTML='<div class="chart-callout-placeholder">滑過圖表可預覽當日數據；點擊日期可固定顯示</div>';
     return;
   }
   const d=lastRenderedData[index];
@@ -3594,37 +3639,37 @@ function updateChartCallout(index,svgXRatio){
     ATL:document.getElementById('metricATL').checked,
     SRPE:document.getElementById('metricSRPE').checked,
     TSB:document.getElementById('metricTSB').checked,
-    TSS:document.getElementById('metricTSS').checked
+    TSS:document.getElementById('metricTSS').checked,
+    IF:document.getElementById('metricIF').checked
   };
-  const chips=[];
-  if(active.RPE)chips.push(`<span class="callout-chip">RPE <b>${d.RPE!==null?d.RPE+'/10':'未填'}</b></span>`);
-  if(active.CTL)chips.push(`<span class="callout-chip">CTL <b>${d.CTL.toFixed(1)}</b></span>`);
-  if(active.ATL)chips.push(`<span class="callout-chip">ATL <b>${d.ATL.toFixed(1)}</b></span>`);
-  if(active.SRPE)chips.push(`<span class="callout-chip">sRPE <b>${d.SRPE}</b></span>`);
-  if(active.TSB)chips.push(`<span class="callout-chip">TSB <b>${d.TSB.toFixed(1)}</b></span>`);
-  if(active.TSS)chips.push(`<span class="callout-chip">TSS <b>${Math.round(d.TSS)}</b></span>`);
-
+  const rows=[];
+  const add=(name,value,color)=>rows.push(`<div class="callout-vertical-row"><span><i style="background:${color}"></i>${name}</span><b>${value}</b></div>`);
+  if(active.CTL)add('CTL',d.CTL.toFixed(1),chartColors.CTL);
+  if(active.ATL)add('ATL',d.ATL.toFixed(1),chartColors.ATL);
+  if(active.TSB)add('TSB',(d.TSB>0?'+':'')+d.TSB.toFixed(1),chartColors.TSB);
+  if(active.TSS)add('每日 TSS',Math.round(d.TSS),chartColors.TSS);
+  if(active.RPE)add('RPE',d.RPE!==null?`${d.RPE}/10`:'未填','#3E6B52');
+  if(active.SRPE)add('sRPE',`${Math.round(d.SRPE||0)} AU`,'#8A7CA8');
+  if(active.IF){
+    const filter=document.getElementById('ifSportFilter')?.value||'all';
+    const ifRows=(d.IFs||[]).filter(w=>filter==='all'||w.sport===filter);
+    if(ifRows.length){
+      ifRows.forEach((w,i)=>add(`IF｜${w.label}${ifRows.length>1?' '+(i+1):''}`,`${w.intensityFactor.toFixed(2)} · ${esc(w.sessionName)}${w.tss?` · TSS ${Math.round(w.tss)}`:''}`,IF_SPORT_META[w.sport]?.color||'#477FBD'));
+    }else add('IF','當日無有效 IF 紀錄','#477FBD');
+  }
   band.innerHTML=`
-    <div class="chart-callout-card" id="chartCalloutCard">
-      <div class="callout-date-row">
-        <strong>${fmtDate(d.date)}</strong>
-        ${d.title?`<span>· ${esc(d.title)}</span>`:''}
-        <button type="button" class="callout-clear-btn" onclick="clearChartSelection(event)" aria-label="清除選取">✕</button>
-      </div>
-      <div class="callout-metrics-row">${chips.join('')}</div>
-    </div>
-  `;
-
+    <div class="chart-callout-card chart-callout-vertical" id="chartCalloutCard">
+      <div class="callout-date-row"><strong>${fmtDate(d.date)}</strong>${d.title?`<span>· ${esc(d.title)}</span>`:''}<button type="button" class="callout-clear-btn" onclick="clearChartSelection(event)" aria-label="清除選取">✕</button></div>
+      <div class="callout-vertical-list">${rows.join('')}</div>
+    </div>`;
   const card=document.getElementById('chartCalloutCard');
   if(card){
-    const bandW=band.clientWidth||300;
-    const cardW=card.offsetWidth||180;
+    const bandW=band.clientWidth||300,cardW=card.offsetWidth||220;
     const targetCenter=svgXRatio*bandW;
     const clampedLeft=Math.max(2,Math.min(Math.max(2,bandW-cardW-2),targetCenter-cardW/2));
     card.style.left=clampedLeft+'px';
   }
 }
-
 function clearChartSelection(e){
   if(e)e.stopPropagation();
   selectedChartIndex=null;hoveredChartIndex=null;
@@ -3638,168 +3683,156 @@ function selectChartPoint(idx){
 }
 
 function renderLoadChart(){
-  const mainSvg=document.getElementById('loadChart');
-  if(!mainSvg)return;
+  const svg=document.getElementById('loadChart');
+  if(!svg)return;
   const a=athletes.find(x=>x.id===currentId);
   const end=chartEnd||getLatestAthleteDate(a);
   const start=chartStart||dateMinus(end,chartDays-1);
   const {data,isReal,workoutCount}=buildAthleteSeries(a,start,end);
   lastRenderedData=data;
   const total=data.length;
+  if(!total){svg.innerHTML='';return;}
   if(selectedChartIndex!==null&&selectedChartIndex>=total)selectedChartIndex=total-1;
   updateCombinedAnalysis(data);
   const displayIndex=hoveredChartIndex!==null?hoveredChartIndex:selectedChartIndex;
-  updateChartCallout(displayIndex, displayIndex!==null&&total>1?displayIndex/(total-1):0.5);
+  updateChartCallout(displayIndex,displayIndex!==null&&total>1?displayIndex/(total-1):0.5);
   document.getElementById('chartDataSourceLabel').textContent=isReal
     ?`已匯入 TrainingPeaks CSV（共 ${workoutCount} 筆訓練紀錄，本機保存）`
     :'目前顯示視覺示意資料；可點選上方「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。';
-  const active={RPE:document.getElementById('metricRPE').checked,CTL:document.getElementById('metricCTL').checked,ATL:document.getElementById('metricATL').checked,SRPE:document.getElementById('metricSRPE').checked,TSB:document.getElementById('metricTSB').checked,TSS:document.getElementById('metricTSS').checked};
-  const mobile=window.innerWidth<=768, W=1000, L=66, R=72, PW=W-L-R;
+
+  const active={
+    RPE:document.getElementById('metricRPE').checked,
+    CTL:document.getElementById('metricCTL').checked,
+    ATL:document.getElementById('metricATL').checked,
+    SRPE:document.getElementById('metricSRPE').checked,
+    TSB:document.getElementById('metricTSB').checked,
+    TSS:document.getElementById('metricTSS').checked,
+    IF:document.getElementById('metricIF').checked
+  };
+  const filter=document.getElementById('ifSportFilter')?.value||'all';
+  const ifFilterWrap=document.getElementById('ifSportFilterWrap');
+  if(ifFilterWrap)ifFilterWrap.style.display=active.IF?'flex':'none';
+  const visibleIF=data.flatMap((d,i)=>(d.IFs||[])
+    .filter(w=>filter==='all'||w.sport===filter)
+    .map((w,j)=>({...w,dayIndex:i,pointIndex:j,pointCount:(d.IFs||[]).filter(z=>filter==='all'||z.sport===filter).length})));
+  const mobile=window.innerWidth<=768,W=1000,H=360,L=66,R=76,PW=W-L-R,T=20,B=38,PH=H-T-B;
   lastChartLayout={W,L,R,PW};
-  const dateLabel=(i,H)=>`<text x="${L+(total<=1?PW/2:i/(total-1)*PW)}" y="${H-8}" text-anchor="middle" fill="#6d7b71" font-size="12">${String(data[i].date.getMonth()+1).padStart(2,'0')}/${String(data[i].date.getDate()).padStart(2,'0')}</text>`;
-  const ticks=Math.min(mobile?5:8,total);
-  const tickMarkup=H=>{let z='';for(let j=0;j<ticks;j++){const i=Math.round(j*(total-1)/Math.max(1,ticks-1));z+=dateLabel(i,H);}return z;};
   const x=i=>L+(total<=1?PW/2:i/(total-1)*PW);
+  const dateLabel=i=>`<text x="${x(i)}" y="${H-9}" text-anchor="middle" fill="#6d7b71" font-size="12">${String(data[i].date.getMonth()+1).padStart(2,'0')}/${String(data[i].date.getDate()).padStart(2,'0')}</text>`;
+  const ticks=Math.min(mobile?5:8,total);
+  const tickMarkup=()=>{let z='';for(let j=0;j<ticks;j++){const i=Math.round(j*(total-1)/Math.max(1,ticks-1));z+=dateLabel(i);}return z;};
   const line=(key,scale)=>data.map((d,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+scale(d[key]).toFixed(1)).join(' ');
-  const selected=(H,T,B)=>selectedChartIndex!==null&&data[selectedChartIndex]?`<line x1="${x(selectedChartIndex)}" y1="${T}" x2="${x(selectedChartIndex)}" y2="${H-B}" stroke="#213a2e" stroke-width="2" stroke-dasharray="5 4"/>`:'';
-  function drawLoad(){
-    const svg=mainSvg,H=310,T=18,B=34,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-    // CTL / ATL use the left axis. TSB uses a symmetric right axis so zero
-    // sits at the vertical midpoint, matching the TrainingPeaks PMC layout.
-    const maxLoad=Math.max(40,...data.map(d=>Math.max(Number(d.CTL)||0,Number(d.ATL)||0)));
-    const ceil=Math.max(40,Math.ceil(maxLoad/20)*20);
-    const yLoad=v=>T+PH-(Math.max(0,Number(v)||0)/ceil)*PH;
-    const tsbAbs=Math.max(60,...data.map(d=>Math.abs(Number(d.TSB)||0)));
-    const tsbMax=Math.ceil(tsbAbs/10)*10;
-    const yTsb=v=>T+PH/2-((Number(v)||0)/tsbMax)*(PH/2);
-    const tssMax=Math.max(100,...data.map(d=>Number(d.TSS)||0));
-    const tssCeil=Math.ceil(tssMax/100)*100;
-    const yTss=v=>T+PH-(Math.max(0,Number(v)||0)/tssCeil)*PH;
-    let out='';
-    for(let k=0;k<=4;k++){
-      const yy=T+k*PH/4,loadVal=ceil*(1-k/4),tsbVal=tsbMax*(1-k/2);
-      out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="${k===2?'#b9c8d8':'#e7ece5'}" stroke-width="${k===2?1.5:1}"/>`;
-      out+=`<text x="${L-10}" y="${yy+4}" text-anchor="end" fill="#66758a" font-size="12">${Math.round(loadVal)}</text>`;
-      if(active.TSB)out+=`<text x="${W-R+10}" y="${yy+4}" text-anchor="start" fill="${chartColors.TSB}" font-size="12">${Math.round(tsbVal)}</text>`;
-      if(active.TSS)out+=`<text x="${L-48}" y="${yy+4}" text-anchor="end" fill="${chartColors.TSS}" font-size="11">${Math.round(tssCeil*(1-k/4))}</text>`;
-    }
-    out+=`<text x="${active.TSS?34:15}" y="${T+PH/2}" transform="rotate(-90 ${active.TSS?34:15} ${T+PH/2})" fill="#66758a" font-size="12">CTL / ATL</text>`;
-    if(active.TSS)out+=`<text x="10" y="${T+PH/2}" transform="rotate(-90 10 ${T+PH/2})" fill="${chartColors.TSS}" font-size="11">TSS / day</text>`;
-    if(active.TSB){
-      out+=`<text x="${W-13}" y="${T+PH/2}" transform="rotate(90 ${W-13} ${T+PH/2})" fill="${chartColors.TSB}" font-size="12">TSB</text>`;
-      out+=`<text x="${W-R-5}" y="${T+PH/2-6}" text-anchor="end" fill="${chartColors.TSB}" font-size="10">TSB 0</text>`;
-      if(document.getElementById('chartFillEnabled')?.checked && document.getElementById('chartFillMetric')?.value==='TSB'){
-        const zeroY=yTsb(0),areaPath=`${line('TSB',yTsb)} L${x(total-1).toFixed(1)} ${zeroY.toFixed(1)} L${x(0).toFixed(1)} ${zeroY.toFixed(1)} Z`;
-        out+=`<path d="${areaPath}" fill="${chartColors.TSB}" opacity=".16"/>`;
-      }
-      out+=`<path d="${line('TSB',yTsb)}" fill="none" stroke="${chartColors.TSB}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
-    }
-    if(active.CTL){
-      if(document.getElementById('chartFillEnabled')?.checked && document.getElementById('chartFillMetric')?.value==='CTL'){
-        const areaPath=`${line('CTL',yLoad)} L${x(total-1).toFixed(1)} ${(T+PH).toFixed(1)} L${x(0).toFixed(1)} ${(T+PH).toFixed(1)} Z`;
-        out+=`<path d="${areaPath}" fill="${chartColors.CTL}" opacity=".16"/>`;
-      }
-      out+=`<path d="${line('CTL',yLoad)}" fill="none" stroke="${chartColors.CTL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
-    }
-    if(active.ATL){
-      if(document.getElementById('chartFillEnabled')?.checked && document.getElementById('chartFillMetric')?.value==='ATL'){
-        const areaPath=`${line('ATL',yLoad)} L${x(total-1).toFixed(1)} ${(T+PH).toFixed(1)} L${x(0).toFixed(1)} ${(T+PH).toFixed(1)} Z`;
-        out+=`<path d="${areaPath}" fill="${chartColors.ATL}" opacity=".15"/>`;
-      }
-      out+=`<path d="${line('ATL',yLoad)}" fill="none" stroke="${chartColors.ATL}" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>`;
-    }
-    if(active.TSS)data.forEach((d,i)=>{if(d.TSS>0)out+=`<circle cx="${x(i)}" cy="${yTss(d.TSS)}" r="3" fill="${chartColors.TSS}"><title>${fmtDate(d.date)} · TSS ${Math.round(d.TSS)}</title></circle>`;});
-    if(selectedChartIndex!==null&&data[selectedChartIndex]){
-      const d=data[selectedChartIndex];
-      if(active.TSB)out+=`<circle cx="${x(selectedChartIndex)}" cy="${yTsb(d.TSB)}" r="5" fill="${chartColors.TSB}" stroke="#fff" stroke-width="2"/>`;
-      if(active.CTL)out+=`<circle cx="${x(selectedChartIndex)}" cy="${yLoad(d.CTL)}" r="4" fill="${chartColors.CTL}" stroke="#fff" stroke-width="1.5"/>`;
-      if(active.ATL)out+=`<circle cx="${x(selectedChartIndex)}" cy="${yLoad(d.ATL)}" r="4" fill="${chartColors.ATL}" stroke="#fff" stroke-width="1.5"/>`;
-    }
-    out+=selected(H,T,B)+tickMarkup(H);
-    out+=`<rect class="chart-interaction-layer" x="${L}" y="${T}" width="${PW}" height="${PH}" fill="transparent" style="cursor:crosshair"/>`;
-    svg.innerHTML=out;
-    const interaction=svg.querySelector('.chart-interaction-layer');
-    if(interaction){
-      const indexAt=e=>{
-        const rect=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
-        const px=(e.clientX-rect.left)/rect.width*vb.width;
-        return Math.max(0,Math.min(total-1,Math.round((px-L)/PW*Math.max(0,total-1))));
-      };
-      interaction.addEventListener('mousemove',e=>{
-        const idx=indexAt(e);hoveredChartIndex=idx;
-        updateChartCallout(idx,total>1?idx/(total-1):0.5);
-      });
-      interaction.addEventListener('mouseleave',()=>{
-        hoveredChartIndex=null;
-        const idx=selectedChartIndex;
-        updateChartCallout(idx,idx!==null&&total>1?idx/(total-1):0.5);
-      });
-      interaction.addEventListener('click',e=>{
-        const idx=indexAt(e);selectedChartIndex=idx;hoveredChartIndex=idx;
-        renderLoadChart();
-      });
-    }
+  const maxLoad=Math.max(40,...data.map(d=>Math.max(Number(d.CTL)||0,Number(d.ATL)||0)));
+  const ceil=Math.max(40,Math.ceil(maxLoad/20)*20);
+  const yLoad=v=>T+PH-(Math.max(0,Number(v)||0)/ceil)*PH;
+  const tsbAbs=Math.max(60,...data.map(d=>Math.abs(Number(d.TSB)||0)));
+  const tsbMax=Math.ceil(tsbAbs/10)*10;
+  const yTsb=v=>T+PH/2-((Number(v)||0)/tsbMax)*(PH/2);
+  const tssMax=Math.max(100,...data.map(d=>Number(d.TSS)||0));
+  const tssCeil=Math.ceil(tssMax/100)*100;
+  const yTss=v=>T+PH-(Math.max(0,Number(v)||0)/tssCeil)*PH;
+  const maxSrpe=Math.max(10,...data.map(d=>Number(d.SRPE)||0));
+  const srpeCeil=Math.ceil(maxSrpe/10)*10;
+  const ySrpe=v=>T+PH-(Math.max(0,Number(v)||0)/srpeCeil)*PH;
+  const yRpe=v=>T+PH-(Math.max(0,Math.min(10,Number(v)||0))/10)*PH;
+  const maxIF=Math.max(1.6,Math.ceil(Math.max(0,...visibleIF.map(w=>w.intensityFactor))*10)/10);
+  const yIF=v=>T+PH-(Math.max(0,Number(v)||0)/maxIF)*PH;
+
+  let out='';
+  for(let k=0;k<=4;k++){
+    const yy=T+k*PH/4,loadVal=ceil*(1-k/4),tsbVal=tsbMax*(1-k/2);
+    out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="${k===2?'#b9c8d8':'#e7ece5'}" stroke-width="${k===2?1.5:1}"/>`;
+    out+=`<text x="${L-10}" y="${yy+4}" text-anchor="end" fill="#66758a" font-size="12">${Math.round(loadVal)}</text>`;
+    if(active.TSB)out+=`<text x="${W-R+10}" y="${yy+4}" text-anchor="start" fill="${chartColors.TSB}" font-size="12">${Math.round(tsbVal)}</text>`;
   }
-  function drawRpe(){
-    const svg=document.getElementById('rpeChart'),H=190,T=12,B=28,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);let out=grid(H,T,B,[10,7.5,5,2.5,0]);
-    if(active.RPE)data.forEach((d,i)=>{if(d.RPE==null||d.RPE<=0)return;const yy=T+PH-d.RPE/10*PH;out+=`<rect x="${x(i)-Math.max(2,Math.min(8,PW/Math.max(1,total)*.3))}" y="${yy}" width="${Math.max(4,Math.min(16,PW/Math.max(1,total)*.6))}" height="${T+PH-yy}" rx="3" fill="${d.RPE>=8?'#c86d69':'#3e6b52'}" opacity=".8"><title>${fmtDate(d.date)} · RPE ${d.RPE}/10</title></rect>`;});
-    out+=selected(H,T,B)+tickMarkup(H);
-    out+=`<rect class="chart-interaction-layer" x="${L}" y="${T}" width="${PW}" height="${PH}" fill="transparent" style="cursor:crosshair"/>`;
-    svg.innerHTML=out;
-    const interaction=svg.querySelector('.chart-interaction-layer');
-    if(interaction){
-      const indexAt=e=>{
-        const rect=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
-        const px=(e.clientX-rect.left)/rect.width*vb.width;
-        return Math.max(0,Math.min(total-1,Math.round((px-L)/PW*Math.max(0,total-1))));
-      };
-      interaction.addEventListener('mousemove',e=>{
-        const idx=indexAt(e);hoveredChartIndex=idx;
-        updateChartCallout(idx,total>1?idx/(total-1):0.5);
-      });
-      interaction.addEventListener('mouseleave',()=>{
-        hoveredChartIndex=null;
-        const idx=selectedChartIndex;
-        updateChartCallout(idx,idx!==null&&total>1?idx/(total-1):0.5);
-      });
-      interaction.addEventListener('click',e=>{
-        const idx=indexAt(e);selectedChartIndex=idx;hoveredChartIndex=idx;
-        renderLoadChart();
-      });
+  out+=`<text x="18" y="${T+PH/2}" transform="rotate(-90 18 ${T+PH/2})" fill="#66758a" font-size="12">CTL / ATL</text>`;
+  if(active.TSB)out+=`<text x="${W-13}" y="${T+PH/2}" transform="rotate(90 ${W-13} ${T+PH/2})" fill="${chartColors.TSB}" font-size="12">TSB</text>`;
+
+  if(active.TSB){
+    if(document.getElementById('chartFillEnabled')?.checked&&document.getElementById('chartFillMetric')?.value==='TSB'){
+      const zeroY=yTsb(0),areaPath=`${line('TSB',yTsb)} L${x(total-1).toFixed(1)} ${zeroY.toFixed(1)} L${x(0).toFixed(1)} ${zeroY.toFixed(1)} Z`;
+      out+=`<path d="${areaPath}" fill="${chartColors.TSB}" opacity=".16"/>`;
     }
+    out+=`<path d="${line('TSB',yTsb)}" fill="none" stroke="${chartColors.TSB}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
   }
-  function drawSrpe(){
-    const svg=document.getElementById('srpeChart'),H=190,T=12,B=28,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);const max=Math.max(10,...data.map(d=>d.SRPE||0)),ceil=Math.ceil(max/10)*10,y=v=>T+PH-v/ceil*PH;let out=grid(H,T,B,[ceil,ceil*.75,ceil*.5,ceil*.25,0].map(v=>Math.round(v)));
-    if(active.SRPE){data.forEach((d,i)=>{if(d.SRPE>0){const yy=y(d.SRPE);out+=`<rect x="${x(i)-Math.max(2,Math.min(8,PW/Math.max(1,total)*.3))}" y="${yy}" width="${Math.max(4,Math.min(16,PW/Math.max(1,total)*.6))}" height="${T+PH-yy}" rx="3" fill="${chartColors.SRPE}" opacity=".75"><title>${fmtDate(d.date)} · sRPE ${d.SRPE} AU</title></rect>`;}});}
-    out+=selected(H,T,B)+tickMarkup(H);
-    out+=`<rect class="chart-interaction-layer" x="${L}" y="${T}" width="${PW}" height="${PH}" fill="transparent" style="cursor:crosshair"/>`;
-    svg.innerHTML=out;
-    const interaction=svg.querySelector('.chart-interaction-layer');
-    if(interaction){
-      const indexAt=e=>{
-        const rect=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
-        const px=(e.clientX-rect.left)/rect.width*vb.width;
-        return Math.max(0,Math.min(total-1,Math.round((px-L)/PW*Math.max(0,total-1))));
-      };
-      interaction.addEventListener('mousemove',e=>{
-        const idx=indexAt(e);hoveredChartIndex=idx;
-        updateChartCallout(idx,total>1?idx/(total-1):0.5);
-      });
-      interaction.addEventListener('mouseleave',()=>{
-        hoveredChartIndex=null;
-        const idx=selectedChartIndex;
-        updateChartCallout(idx,idx!==null&&total>1?idx/(total-1):0.5);
-      });
-      interaction.addEventListener('click',e=>{
-        const idx=indexAt(e);selectedChartIndex=idx;hoveredChartIndex=idx;
-        renderLoadChart();
-      });
+  if(active.CTL){
+    if(document.getElementById('chartFillEnabled')?.checked&&document.getElementById('chartFillMetric')?.value==='CTL'){
+      const areaPath=`${line('CTL',yLoad)} L${x(total-1).toFixed(1)} ${(T+PH).toFixed(1)} L${x(0).toFixed(1)} ${(T+PH).toFixed(1)} Z`;
+      out+=`<path d="${areaPath}" fill="${chartColors.CTL}" opacity=".16"/>`;
     }
+    out+=`<path d="${line('CTL',yLoad)}" fill="none" stroke="${chartColors.CTL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
   }
-  drawLoad();drawRpe();drawSrpe();renderIntensityFactorChart();
+  if(active.ATL){
+    if(document.getElementById('chartFillEnabled')?.checked&&document.getElementById('chartFillMetric')?.value==='ATL'){
+      const areaPath=`${line('ATL',yLoad)} L${x(total-1).toFixed(1)} ${(T+PH).toFixed(1)} L${x(0).toFixed(1)} ${(T+PH).toFixed(1)} Z`;
+      out+=`<path d="${areaPath}" fill="${chartColors.ATL}" opacity=".14"/>`;
+    }
+    out+=`<path d="${line('ATL',yLoad)}" fill="none" stroke="${chartColors.ATL}" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>`;
+  }
+
+  // All supplementary metrics share the same date plot, but each is mapped to its own scale.
+  // The chart note and tooltip explicitly prevent cross-unit height comparisons.
+  if(active.TSS)data.forEach((d,i)=>{
+    if(d.TSS>0)out+=`<circle cx="${x(i)}" cy="${yTss(d.TSS)}" r="3.2" fill="${chartColors.TSS}" opacity=".9"><title>${fmtDate(d.date)} · 每日 TSS ${Math.round(d.TSS)}</title></circle>`;
+  });
+  if(active.SRPE)data.forEach((d,i)=>{
+    if(d.SRPE>0){
+      const yy=ySrpe(d.SRPE);
+      out+=`<line x1="${x(i)}" y1="${T+PH}" x2="${x(i)}" y2="${yy}" stroke="#8A7CA8" stroke-width="4" stroke-linecap="round" opacity=".68"><title>${fmtDate(d.date)} · sRPE ${Math.round(d.SRPE)} AU</title></line><circle cx="${x(i)}" cy="${yy}" r="3.5" fill="#8A7CA8"/>`;
+    }
+  });
+  if(active.RPE)data.forEach((d,i)=>{
+    if(d.RPE!==null&&d.RPE>0){
+      const yy=yRpe(d.RPE),xx=x(i);
+      out+=`<path d="M${xx} ${yy-5} L${xx+5} ${yy} L${xx} ${yy+5} L${xx-5} ${yy} Z" fill="#3E6B52" stroke="#fff" stroke-width="1"><title>${fmtDate(d.date)} · RPE ${d.RPE}/10</title></path>`;
+    }
+  });
+  if(active.IF)visibleIF.forEach(w=>{
+    const baseX=x(w.dayIndex);
+    const offset=(w.pointIndex-(w.pointCount-1)/2)*8;
+    const xx=baseX+offset,yy=yIF(w.intensityFactor);
+    const color=IF_SPORT_META[w.sport]?.color||'#477FBD';
+    out+=`<circle cx="${xx}" cy="${yy}" r="5" fill="${color}" stroke="#fff" stroke-width="1.4" opacity=".96"><title>${fmtDate(data[w.dayIndex].date)} · ${w.label} · ${esc(w.sessionName)} · IF ${w.intensityFactor.toFixed(2)} · TSS ${Math.round(w.tss||0)}</title></circle>`;
+  });
+
+  if(selectedChartIndex!==null&&data[selectedChartIndex]){
+    const d=data[selectedChartIndex],i=selectedChartIndex;
+    if(active.TSB)out+=`<circle cx="${x(i)}" cy="${yTsb(d.TSB)}" r="5" fill="${chartColors.TSB}" stroke="#fff" stroke-width="2"/>`;
+    if(active.CTL)out+=`<circle cx="${x(i)}" cy="${yLoad(d.CTL)}" r="4" fill="${chartColors.CTL}" stroke="#fff" stroke-width="1.5"/>`;
+    if(active.ATL)out+=`<circle cx="${x(i)}" cy="${yLoad(d.ATL)}" r="4" fill="${chartColors.ATL}" stroke="#fff" stroke-width="1.5"/>`;
+  }
+  if(selectedChartIndex!==null&&data[selectedChartIndex]){
+    out+=`<line x1="${x(selectedChartIndex)}" y1="${T}" x2="${x(selectedChartIndex)}" y2="${H-B}" stroke="#213a2e" stroke-width="2" stroke-dasharray="5 4"/>`;
+  }
+  out+=tickMarkup();
+  out+=`<rect class="chart-interaction-layer" x="${L}" y="${T}" width="${PW}" height="${PH}" fill="transparent" style="cursor:crosshair"/>`;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.innerHTML=out;
+  const interaction=svg.querySelector('.chart-interaction-layer');
+  if(interaction){
+    const indexAt=e=>{
+      const rect=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
+      const px=(e.clientX-rect.left)/rect.width*vb.width;
+      return Math.max(0,Math.min(total-1,Math.round((px-L)/PW*Math.max(0,total-1))));
+    };
+    interaction.addEventListener('mousemove',e=>{
+      const idx=indexAt(e);hoveredChartIndex=idx;
+      updateChartCallout(idx,total>1?idx/(total-1):0.5);
+    });
+    interaction.addEventListener('mouseleave',()=>{
+      hoveredChartIndex=null;
+      const idx=selectedChartIndex;
+      updateChartCallout(idx,idx!==null&&total>1?idx/(total-1):0.5);
+    });
+    interaction.addEventListener('click',e=>{
+      const idx=indexAt(e);
+      selectedChartIndex=selectedChartIndex===idx?null:idx;
+      hoveredChartIndex=null;
+      renderLoadChart();
+    });
+  }
   document.getElementById('chartDateLabel').textContent=`${fmtDate(start)} — ${fmtDate(end)} · 共 ${total} 天`;
 }
-
 function renderIntensityFactorChart(){
   const svg=document.getElementById('intensityFactorChart');
   if(!svg)return;
