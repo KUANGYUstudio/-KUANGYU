@@ -3264,6 +3264,8 @@ function handleTpCsvUpload(event){
 
   const reader=new FileReader();
   reader.onload=e=>{
+    let importCommitted=false;
+    let importedCount=0;
     try{
       const rows=parseCsvRows(String(e.target?.result||''));
       if(rows.length<2){toast('CSV 檔案內容為空或格式不符');return}
@@ -3349,11 +3351,23 @@ function handleTpCsvUpload(event){
       chartMode='days';
 
       persist();
-      openProfile(a.id);
+      importCommitted=true;
+      importedCount=workouts.length;
       const rpeCount=workouts.filter(w=>w.rpe!==null).length;
-      toast(`已匯入 ${workouts.length} 筆 TrainingPeaks 訓練（含 ${rpeCount} 筆 RPE）`);
+      try{
+        openProfile(a.id);
+        toast(`已匯入 ${workouts.length} 筆 TrainingPeaks 訓練（含 ${rpeCount} 筆 RPE）`);
+      }catch(renderErr){
+        console.error('CSV imported, but profile refresh failed:',renderErr);
+        toast(`資料已成功匯入 ${workouts.length} 筆，但畫面更新發生問題；請重新整理頁面`);
+      }
     }catch(err){
-      toast('CSV 解析失敗，請確認檔案編碼為 UTF-8');
+      console.error('TrainingPeaks CSV import failed:',err);
+      if(importCommitted){
+        toast(`資料已匯入 ${importedCount} 筆，但後續處理發生問題；請重新整理頁面`);
+      }else{
+        toast('CSV 讀取或解析失敗，請確認檔案格式與 UTF-8 編碼');
+      }
     }finally{
       event.target.value='';
     }
