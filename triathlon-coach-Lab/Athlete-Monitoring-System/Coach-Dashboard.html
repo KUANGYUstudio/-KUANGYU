@@ -1216,7 +1216,7 @@ button:active{transform:translateY(.5px)}
 .metric-dot.srpe{background:#8a7ca8}
 .metric-dot.ctl{background:#477fbd}
 .metric-dot.atl{background:#e85b9a}
-.metric-dot.tsb{background:#f07816}
+.metric-dot.tsb{background:#D9A514}
 .metric-dot.tss{background:#c23b32}
 
 .chart-plot-wrap{
@@ -1249,6 +1249,7 @@ button:active{transform:translateY(.5px)}
 .chart-expand-btn{padding:6px 12px;font-size:12px;margin-left:auto}
 
 .chart-stage{position:relative;width:100%;touch-action:auto}
+.chart-fill-controls{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;padding:5px 10px 8px;color:var(--muted);font-size:12px}.chart-fill-controls label{display:inline-flex;align-items:center;gap:6px}.chart-fill-controls select{border:1px solid var(--theme-border);border-radius:7px;padding:4px 8px;background:var(--surface);color:var(--ink);font:inherit}.callout-metrics-row{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:3px!important;min-width:118px}.callout-chip{display:flex!important;justify-content:space-between!important;width:100%;box-sizing:border-box;padding:2px 7px!important}
 .chart-callout-band{
   position:relative;
   width:100%;
@@ -2489,7 +2490,7 @@ button:active{transform:translateY(.5px)}
         <button class="btn outline chart-expand-btn" type="button" id="fullscreenChartBtn" onclick="toggleChartFullscreen()">放大圖表</button>
       </div>
       <div class="chart-callout-band" id="chartCalloutBand"><div class="chart-callout-placeholder">點選任一圖表日期，可查看當日完整數據</div></div>
-      <div class="trend-panel trend-panel-combined"><div class="trend-panel-head"><strong>① 訓練負荷與 TSB 綜合趨勢</strong><span>左軸：CTL／ATL／每日 TSS　·　右軸：TSB（含正負值，0 為基準線）</span></div><svg id="loadChart" viewBox="0 0 1000 310" role="img" aria-label="CTL ATL TSB 與每日 TSS 綜合趨勢圖"></svg></div>
+      <div class="trend-panel trend-panel-combined"><div class="trend-panel-head"><strong>① 訓練負荷與 TSB 綜合趨勢</strong><span>左軸：CTL／ATL／每日 TSS　·　右軸：TSB（含正負值，0 為基準線）</span></div><div class="chart-fill-controls"><label><input type="checkbox" id="chartFillEnabled" checked onchange="renderLoadChart()"> 填滿區域</label><label>填滿項目 <select id="chartFillMetric" onchange="renderLoadChart()"><option value="CTL" selected>CTL</option><option value="ATL">ATL</option><option value="TSB">TSB</option></select></label></div><svg id="loadChart" viewBox="0 0 1000 310" role="img" aria-label="CTL ATL TSB 與每日 TSS 綜合趨勢圖"></svg></div>
       <div class="trend-panel"><div class="trend-panel-head"><strong>② 主觀訓練反應</strong><span>單次 RPE（1–10）</span></div><svg id="rpeChart" viewBox="0 0 1000 190" role="img" aria-label="單次訓練 RPE 趨勢圖"></svg></div>
       <div class="trend-panel"><div class="trend-panel-head"><strong>③ 主觀負荷累積</strong><span>sRPE（RPE × 訓練時間，AU）</span></div><svg id="srpeChart" viewBox="0 0 1000 190" role="img" aria-label="每日 sRPE 負荷趨勢圖"></svg></div>
     </div>
@@ -3366,8 +3367,8 @@ function clearImportedCsv(){
 }
 
 let chartDays=28, chartMode='days', chartEnd=new Date(), chartStart=null;
-let selectedChartIndex=null, lastRenderedData=[], lastChartLayout={W:1000,L:58,R:58,PW:884};
-const chartColors={RPE:'#3e6b52',SRPE:'#8a7ca8',CTL:'#477fbd',ATL:'#e85b9a',TSB:'#f07816',TSS:'#c23b32'};
+let selectedChartIndex=null, hoveredChartIndex=null, lastRenderedData=[], lastChartLayout={W:1000,L:58,R:58,PW:884};
+const chartColors={RPE:'#3e6b52',SRPE:'#8a7ca8',CTL:'#477fbd',ATL:'#e85b9a',TSB:'#D9A514',TSS:'#B58A3A'};
 
 function dayStart(d){let x=new Date(d);x.setHours(0,0,0,0);return x}
 function fmtDate(d){return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`}
@@ -3603,7 +3604,7 @@ function updateChartCallout(index,svgXRatio){
 
 function clearChartSelection(e){
   if(e)e.stopPropagation();
-  selectedChartIndex=null;
+  selectedChartIndex=null;hoveredChartIndex=null;
   renderLoadChart();
 }
 
@@ -3624,7 +3625,8 @@ function renderLoadChart(){
   const total=data.length;
   if(selectedChartIndex!==null&&selectedChartIndex>=total)selectedChartIndex=total-1;
   updateCombinedAnalysis(data);
-  updateChartCallout(selectedChartIndex, selectedChartIndex!==null&&total>1?selectedChartIndex/(total-1):0.5);
+  const displayIndex=hoveredChartIndex!==null?hoveredChartIndex:selectedChartIndex;
+  updateChartCallout(displayIndex, displayIndex!==null&&total>1?displayIndex/(total-1):0.5);
   document.getElementById('chartDataSourceLabel').textContent=isReal
     ?`已匯入 TrainingPeaks CSV（共 ${workoutCount} 筆訓練紀錄，本機保存）`
     :'目前顯示視覺示意資料；可點選上方「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。';
@@ -3663,14 +3665,26 @@ function renderLoadChart(){
     if(active.TSB){
       out+=`<text x="${W-13}" y="${T+PH/2}" transform="rotate(90 ${W-13} ${T+PH/2})" fill="${chartColors.TSB}" font-size="12">TSB</text>`;
       out+=`<text x="${W-R-5}" y="${T+PH/2-6}" text-anchor="end" fill="${chartColors.TSB}" font-size="10">TSB 0</text>`;
-      out+=`<path d="${line('TSB',yTsb)}" fill="none" stroke="${chartColors.TSB}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`;
+      if(document.getElementById('chartFillEnabled')?.checked && document.getElementById('chartFillMetric')?.value==='TSB'){
+        const zeroY=yTsb(0),areaPath=`${line('TSB',yTsb)} L${x(total-1).toFixed(1)} ${zeroY.toFixed(1)} L${x(0).toFixed(1)} ${zeroY.toFixed(1)} Z`;
+        out+=`<path d="${areaPath}" fill="${chartColors.TSB}" opacity=".16"/>`;
+      }
+      out+=`<path d="${line('TSB',yTsb)}" fill="none" stroke="${chartColors.TSB}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
     }
     if(active.CTL){
-      const areaPath=`${line('CTL',yLoad)} L${x(total-1).toFixed(1)} ${(T+PH).toFixed(1)} L${x(0).toFixed(1)} ${(T+PH).toFixed(1)} Z`;
-      out+=`<path d="${areaPath}" fill="${chartColors.CTL}" opacity=".16"/>`;
+      if(document.getElementById('chartFillEnabled')?.checked && document.getElementById('chartFillMetric')?.value==='CTL'){
+        const areaPath=`${line('CTL',yLoad)} L${x(total-1).toFixed(1)} ${(T+PH).toFixed(1)} L${x(0).toFixed(1)} ${(T+PH).toFixed(1)} Z`;
+        out+=`<path d="${areaPath}" fill="${chartColors.CTL}" opacity=".16"/>`;
+      }
       out+=`<path d="${line('CTL',yLoad)}" fill="none" stroke="${chartColors.CTL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
     }
-    if(active.ATL)out+=`<path d="${line('ATL',yLoad)}" fill="none" stroke="${chartColors.ATL}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+    if(active.ATL){
+      if(document.getElementById('chartFillEnabled')?.checked && document.getElementById('chartFillMetric')?.value==='ATL'){
+        const areaPath=`${line('ATL',yLoad)} L${x(total-1).toFixed(1)} ${(T+PH).toFixed(1)} L${x(0).toFixed(1)} ${(T+PH).toFixed(1)} Z`;
+        out+=`<path d="${areaPath}" fill="${chartColors.ATL}" opacity=".15"/>`;
+      }
+      out+=`<path d="${line('ATL',yLoad)}" fill="none" stroke="${chartColors.ATL}" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
     if(active.TSS)data.forEach((d,i)=>{if(d.TSS>0)out+=`<circle cx="${x(i)}" cy="${yTss(d.TSS)}" r="3" fill="${chartColors.TSS}"><title>${fmtDate(d.date)} · TSS ${Math.round(d.TSS)}</title></circle>`;});
     if(selectedChartIndex!==null&&data[selectedChartIndex]){
       const d=data[selectedChartIndex];
@@ -3678,17 +3692,86 @@ function renderLoadChart(){
       if(active.CTL)out+=`<circle cx="${x(selectedChartIndex)}" cy="${yLoad(d.CTL)}" r="4" fill="${chartColors.CTL}" stroke="#fff" stroke-width="1.5"/>`;
       if(active.ATL)out+=`<circle cx="${x(selectedChartIndex)}" cy="${yLoad(d.ATL)}" r="4" fill="${chartColors.ATL}" stroke="#fff" stroke-width="1.5"/>`;
     }
-    out+=selected(H,T,B)+tickMarkup(H);svg.innerHTML=out;
+    out+=selected(H,T,B)+tickMarkup(H);
+    out+=`<rect class="chart-interaction-layer" x="${L}" y="${T}" width="${PW}" height="${PH}" fill="transparent" style="cursor:crosshair"/>`;
+    svg.innerHTML=out;
+    const interaction=svg.querySelector('.chart-interaction-layer');
+    if(interaction){
+      const indexAt=e=>{
+        const rect=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
+        const px=(e.clientX-rect.left)/rect.width*vb.width;
+        return Math.max(0,Math.min(total-1,Math.round((px-L)/PW*Math.max(0,total-1))));
+      };
+      interaction.addEventListener('mousemove',e=>{
+        const idx=indexAt(e);hoveredChartIndex=idx;
+        updateChartCallout(idx,total>1?idx/(total-1):0.5);
+      });
+      interaction.addEventListener('mouseleave',()=>{
+        hoveredChartIndex=null;
+        const idx=selectedChartIndex;
+        updateChartCallout(idx,idx!==null&&total>1?idx/(total-1):0.5);
+      });
+      interaction.addEventListener('click',e=>{
+        const idx=indexAt(e);selectedChartIndex=idx;hoveredChartIndex=idx;
+        renderLoadChart();
+      });
+    }
   }
   function drawRpe(){
     const svg=document.getElementById('rpeChart'),H=190,T=12,B=28,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);let out=grid(H,T,B,[10,7.5,5,2.5,0]);
     if(active.RPE)data.forEach((d,i)=>{if(d.RPE==null||d.RPE<=0)return;const yy=T+PH-d.RPE/10*PH;out+=`<rect x="${x(i)-Math.max(2,Math.min(8,PW/Math.max(1,total)*.3))}" y="${yy}" width="${Math.max(4,Math.min(16,PW/Math.max(1,total)*.6))}" height="${T+PH-yy}" rx="3" fill="${d.RPE>=8?'#c86d69':'#3e6b52'}" opacity=".8"><title>${fmtDate(d.date)} · RPE ${d.RPE}/10</title></rect>`;});
-    out+=selected(H,T,B)+tickMarkup(H);svg.innerHTML=out;
+    out+=selected(H,T,B)+tickMarkup(H);
+    out+=`<rect class="chart-interaction-layer" x="${L}" y="${T}" width="${PW}" height="${PH}" fill="transparent" style="cursor:crosshair"/>`;
+    svg.innerHTML=out;
+    const interaction=svg.querySelector('.chart-interaction-layer');
+    if(interaction){
+      const indexAt=e=>{
+        const rect=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
+        const px=(e.clientX-rect.left)/rect.width*vb.width;
+        return Math.max(0,Math.min(total-1,Math.round((px-L)/PW*Math.max(0,total-1))));
+      };
+      interaction.addEventListener('mousemove',e=>{
+        const idx=indexAt(e);hoveredChartIndex=idx;
+        updateChartCallout(idx,total>1?idx/(total-1):0.5);
+      });
+      interaction.addEventListener('mouseleave',()=>{
+        hoveredChartIndex=null;
+        const idx=selectedChartIndex;
+        updateChartCallout(idx,idx!==null&&total>1?idx/(total-1):0.5);
+      });
+      interaction.addEventListener('click',e=>{
+        const idx=indexAt(e);selectedChartIndex=idx;hoveredChartIndex=idx;
+        renderLoadChart();
+      });
+    }
   }
   function drawSrpe(){
     const svg=document.getElementById('srpeChart'),H=190,T=12,B=28,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);const max=Math.max(10,...data.map(d=>d.SRPE||0)),ceil=Math.ceil(max/10)*10,y=v=>T+PH-v/ceil*PH;let out=grid(H,T,B,[ceil,ceil*.75,ceil*.5,ceil*.25,0].map(v=>Math.round(v)));
     if(active.SRPE){data.forEach((d,i)=>{if(d.SRPE>0){const yy=y(d.SRPE);out+=`<rect x="${x(i)-Math.max(2,Math.min(8,PW/Math.max(1,total)*.3))}" y="${yy}" width="${Math.max(4,Math.min(16,PW/Math.max(1,total)*.6))}" height="${T+PH-yy}" rx="3" fill="${chartColors.SRPE}" opacity=".75"><title>${fmtDate(d.date)} · sRPE ${d.SRPE} AU</title></rect>`;}});}
-    out+=selected(H,T,B)+tickMarkup(H);svg.innerHTML=out;
+    out+=selected(H,T,B)+tickMarkup(H);
+    out+=`<rect class="chart-interaction-layer" x="${L}" y="${T}" width="${PW}" height="${PH}" fill="transparent" style="cursor:crosshair"/>`;
+    svg.innerHTML=out;
+    const interaction=svg.querySelector('.chart-interaction-layer');
+    if(interaction){
+      const indexAt=e=>{
+        const rect=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;
+        const px=(e.clientX-rect.left)/rect.width*vb.width;
+        return Math.max(0,Math.min(total-1,Math.round((px-L)/PW*Math.max(0,total-1))));
+      };
+      interaction.addEventListener('mousemove',e=>{
+        const idx=indexAt(e);hoveredChartIndex=idx;
+        updateChartCallout(idx,total>1?idx/(total-1):0.5);
+      });
+      interaction.addEventListener('mouseleave',()=>{
+        hoveredChartIndex=null;
+        const idx=selectedChartIndex;
+        updateChartCallout(idx,idx!==null&&total>1?idx/(total-1):0.5);
+      });
+      interaction.addEventListener('click',e=>{
+        const idx=indexAt(e);selectedChartIndex=idx;hoveredChartIndex=idx;
+        renderLoadChart();
+      });
+    }
   }
   drawLoad();drawRpe();drawSrpe();
   document.getElementById('chartDateLabel').textContent=`${fmtDate(start)} — ${fmtDate(end)} · 共 ${total} 天`;
