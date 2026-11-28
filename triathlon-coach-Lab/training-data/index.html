@@ -682,17 +682,26 @@ const data = {
     extraCaption:"紀錄時請標明資料來源與日期，避免把不同期間或不同運動項目的負荷直接混為一談。"
   },
   lt:{
-    title:"LT｜乳酸閾值",en:"Lactate Threshold",tag:"個人生理測試參考",
-    desc:"乳酸閾值描述運動強度增加時，血乳酸濃度出現特定變化的強度點或區域。常見討論包括 LT1 與 LT2，但定義與判讀會受測試協定、取樣方式及分析模型影響。",
-    heads:["概念","教練如何理解"],
+    title:"LT｜乳酸閾值",en:"Lactate Threshold",tag:"理解生理轉折與訓練應用",
+    desc:"乳酸閾值不是乳酸突然「堆積」的單一開關，而是運動強度提高時，血乳酸濃度與清除／利用能力之間的動態平衡逐漸改變，所呈現出的轉折區域。常用 LT1 與 LT2 描述兩個不同強度層級；實際位置會受測試協定、取樣頻率、判讀模型、運動項目與個體狀態影響。",
+    heads:["概念","生理意義與教練判讀"],
     rows:[
-      ["LT1","較低強度的乳酸轉折，可協助描述低至中等強度耐力範圍"],
-      ["LT2","較高強度的乳酸轉折，與較高強度持續運動能力相關"],
-      ["閾值心率／配速／功率","是在特定測試條件下，與閾值相對應的個人化指標"]
+      ["LT1｜第一乳酸閾值","在漸增強度測試中，血乳酸開始持續高於低強度基線的第一個轉折。可作為低強度有氧範圍與中等強度範圍的參考；通常仍能相對穩定地長時間運動。"],
+      ["LT2｜第二乳酸閾值","較高強度下，血乳酸上升速度明顯加快的第二個轉折或相關判讀點。常用來描述高強度持續能力的上緣；接近或高於此強度時，維持時間通常縮短。"],
+      ["閾值心率／配速／功率","是測試時與 LT1 或 LT2 對應的外在／內在指標。跑步、騎車、游泳要分項建立；同一人的不同項目數值不可直接互換。"],
+      ["乳酸生成與清除","乳酸持續生成，也會被其他肌纖維與器官利用或氧化。血乳酸濃度反映生成、轉運、利用與清除的整體結果，不是單純比較「生成是否大於代謝」就能完整解釋。"]
     ],
-    example:"若某次跑步測試估計 LT2 心率為 170 bpm，這是該選手在該測試協定下的結果，不是所有跑者的標準。",
-    coach:"記錄測試日期、測試模式、階段長度、乳酸採樣與判讀方法。LT1、LT2、VT1、VT2、MLSS、FTP 與 CP 相關但不可不加區分地視為同一概念。",
-    note:"LT 沒有適用所有選手的絕對數字量級表。應呈現個人測試結果與測試方法；沒有乳酸測試時，請清楚標示估算方式。",
+    example:"假設某跑者測得 LT1 約 145 bpm、LT2 約 170 bpm。低於 145 bpm 可先視為 LT1 以下的低強度範圍；145–170 bpm 是兩閾值之間；接近或高於 170 bpm 則進入 LT2 附近或以上的高強度範圍。這只是示範，實際區間仍須依測試方法與個人反應設定。",
+    coach:"判讀時先問：測的是哪個運動項目？使用何種測試協定？閾值是以乳酸曲線、通氣閾值還是場地估算得出？再把閾值對應到心率、配速或功率。心率有反應延遲，短間歇不宜只靠心率控強度；配速會受坡度、氣候與路面影響；功率也要確認設備與測試條件。",
+    note:"LT1 不等於 Tempo，LT2 也不等於所有系統中的 FTP、CP 或 MLSS。Tempo 是訓練術語，各教練與課表系統的定義可能不同，常落在 LT1–LT2 之間的某個範圍，也可能接近 LT2。沒有乳酸測試時，可用談話測試、RPE、通氣反應或場地表現作估算，但應清楚標示為估算／代理指標，而不是直接宣稱測得 LT。",
+    extraTitle:"LT1 與 LT2 之間｜三個生理強度區域",
+    extraHeads:["區域","相對位置","訓練與體感上的常見特徵"],
+    extraRows:[
+      ["Zone 1｜低強度","低於 LT1","通常可完整交談、呼吸較可控；適合累積有氧時間與恢復。長時間運動仍需看補給、肌肉負荷與個人耐受。"],
+      ["Zone 2｜中等／重度範圍","LT1 至 LT2 之間","呼吸與主觀用力逐漸提高，說話變得較短；可包含穩定耐力、Tempo 或部分閾值導向訓練，不能把整段一概稱為 Tempo。"],
+      ["Zone 3｜高強度範圍","高於 LT2","呼吸明顯急促，通常只能說短句；較難長時間維持，常以間歇方式安排。" ]
+    ],
+    extraCaption:"這是以 LT1／LT2 為界的三區生理模型（常稱三區模型），不是跑步 Friel 七區、Coggan 功率區或平台自訂 Zone。不同分區系統的 Zone 1、2、3 名稱可能相同，但界線不一定相同。",
     sources:[
       ["TrainingPeaks Glossary","https://help.trainingpeaks.com/hc/en-us/articles/115001271712-Glossary"]
     ]
@@ -1223,6 +1232,24 @@ function diagramFor(key) {
     <text x="360" y="22" text-anchor="middle" class="diagram-small">${desc}</text>
   `);
   switch(key) {
+    case "lt":
+      return wrap("乳酸反應曲線｜LT1 與 LT2 是兩個不同轉折",
+        "示意圖呈現運動強度增加時血乳酸濃度的典型變化；曲線形狀與閾值位置因人、運動項目及測試方法而異。",
+        svg(`
+          <path d="M70 205 H660 M70 205 V28" class="diagram-axis"/>
+          <path d="M78 185 C175 181 230 173 295 156 S390 126 445 92 S535 42 640 24" stroke="#24496b" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <line x1="290" y1="158" x2="290" y2="205" stroke="#8eaf68" stroke-width="2" stroke-dasharray="5 5"/>
+          <line x1="465" y1="82" x2="465" y2="205" stroke="#d49b43" stroke-width="2" stroke-dasharray="5 5"/>
+          <circle cx="290" cy="158" r="6" fill="#8eaf68"/><circle cx="465" cy="82" r="6" fill="#d49b43"/>
+          <text x="290" y="143" text-anchor="middle" class="diagram-label">LT1</text>
+          <text x="465" y="66" text-anchor="middle" class="diagram-label">LT2</text>
+          <text x="178" y="230" text-anchor="middle" class="diagram-small">LT1 以下</text>
+          <text x="377" y="230" text-anchor="middle" class="diagram-small">LT1–LT2</text>
+          <text x="565" y="230" text-anchor="middle" class="diagram-small">LT2 以上</text>
+          <text x="80" y="18" class="diagram-small">血乳酸濃度 ↑</text>
+          <text x="660" y="248" text-anchor="end" class="diagram-small">運動強度 →</text>
+        `, "0 0 720 260"),
+        "乳酸不是廢物，也不是只在高強度才生成。此圖只用來說明濃度變化與轉折概念，不能從圖形讀取任何人的實際 LT 數值。");
     case "zones":
       return wrap("訓練強度金字塔｜由低強度到高強度",
         "以 LT1、LT2 作為生理強度分界的概念模型；金字塔高度代表強度層級，不代表每位選手都必須採用固定訓練比例。", pyramid,
