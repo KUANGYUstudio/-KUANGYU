@@ -1214,10 +1214,10 @@ button:active{transform:translateY(.5px)}
 .metric-dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;flex-shrink:0}
 .metric-dot.rpe{background:#3e6b52}
 .metric-dot.srpe{background:#8a7ca8}
-.metric-dot.ctl{background:#718b79}
-.metric-dot.atl{background:#c69a5b}
-.metric-dot.tsb{background:#648db5}
-.metric-dot.tss{background:#c86d69}
+.metric-dot.ctl{background:#477fbd}
+.metric-dot.atl{background:#e85b9a}
+.metric-dot.tsb{background:#f07816}
+.metric-dot.tss{background:#c23b32}
 
 .chart-plot-wrap{
   position:relative;
@@ -3367,7 +3367,7 @@ function clearImportedCsv(){
 
 let chartDays=28, chartMode='days', chartEnd=new Date(), chartStart=null;
 let selectedChartIndex=null, lastRenderedData=[], lastChartLayout={W:1000,L:58,R:58,PW:884};
-const chartColors={RPE:'#3e6b52',SRPE:'#8a7ca8',CTL:'#718b79',ATL:'#c69a5b',TSB:'#648db5',TSS:'#c86d69'};
+const chartColors={RPE:'#3e6b52',SRPE:'#8a7ca8',CTL:'#477fbd',ATL:'#e85b9a',TSB:'#f07816',TSS:'#c23b32'};
 
 function dayStart(d){let x=new Date(d);x.setHours(0,0,0,0);return x}
 function fmtDate(d){return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`}
@@ -3639,28 +3639,39 @@ function renderLoadChart(){
   const selected=(H,T,B)=>selectedChartIndex!==null&&data[selectedChartIndex]?`<line x1="${x(selectedChartIndex)}" y1="${T}" x2="${x(selectedChartIndex)}" y2="${H-B}" stroke="#213a2e" stroke-width="2" stroke-dasharray="5 4"/>`:'';
   function drawLoad(){
     const svg=mainSvg,H=310,T=18,B=34,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-    const maxLoad=Math.max(100,...data.map(d=>Math.max(d.CTL||0,d.ATL||0,d.TSS||0))),ceil=Math.max(100,Math.ceil(maxLoad/25)*25);
-    const yLoad=v=>T+PH-Math.max(0,v)/ceil*PH;
-    const tsbAbs=Math.max(10,...data.map(d=>Math.abs(Number(d.TSB)||0)));
-    const tsbMax=Math.ceil(tsbAbs/5)*5;
-    const yTsb=v=>T+PH/2-(Number(v)||0)/(tsbMax*1.12)*PH/2;
+    // CTL / ATL use the left axis. TSB uses a symmetric right axis so zero
+    // sits at the vertical midpoint, matching the TrainingPeaks PMC layout.
+    const maxLoad=Math.max(40,...data.map(d=>Math.max(Number(d.CTL)||0,Number(d.ATL)||0)));
+    const ceil=Math.max(40,Math.ceil(maxLoad/20)*20);
+    const yLoad=v=>T+PH-(Math.max(0,Number(v)||0)/ceil)*PH;
+    const tsbAbs=Math.max(60,...data.map(d=>Math.abs(Number(d.TSB)||0)));
+    const tsbMax=Math.ceil(tsbAbs/10)*10;
+    const yTsb=v=>T+PH/2-((Number(v)||0)/tsbMax)*(PH/2);
+    const tssMax=Math.max(100,...data.map(d=>Number(d.TSS)||0));
+    const tssCeil=Math.ceil(tssMax/100)*100;
+    const yTss=v=>T+PH-(Math.max(0,Number(v)||0)/tssCeil)*PH;
     let out='';
     for(let k=0;k<=4;k++){
-      const yy=T+k*PH/4,loadVal=ceil*(1-k/4),tsbVal=tsbMax*1.12*(1-k/2);
-      out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e7ece5"/>`;
-      out+=`<text x="${L-10}" y="${yy+4}" text-anchor="end" fill="#6d7b71" font-size="12">${Math.round(loadVal)}</text>`;
-      if(active.TSB)out+=`<text x="${W-R+10}" y="${yy+4}" text-anchor="start" fill="#648db5" font-size="12">${Math.round(tsbVal)}</text>`;
+      const yy=T+k*PH/4,loadVal=ceil*(1-k/4),tsbVal=tsbMax*(1-k/2);
+      out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="${k===2?'#b9c8d8':'#e7ece5'}" stroke-width="${k===2?1.5:1}"/>`;
+      out+=`<text x="${L-10}" y="${yy+4}" text-anchor="end" fill="#66758a" font-size="12">${Math.round(loadVal)}</text>`;
+      if(active.TSB)out+=`<text x="${W-R+10}" y="${yy+4}" text-anchor="start" fill="${chartColors.TSB}" font-size="12">${Math.round(tsbVal)}</text>`;
+      if(active.TSS)out+=`<text x="${L-48}" y="${yy+4}" text-anchor="end" fill="${chartColors.TSS}" font-size="11">${Math.round(tssCeil*(1-k/4))}</text>`;
     }
-    out+=`<text x="15" y="${T+PH/2}" transform="rotate(-90 15 ${T+PH/2})" fill="#6d7b71" font-size="12">CTL / ATL / TSS</text>`;
+    out+=`<text x="${active.TSS?34:15}" y="${T+PH/2}" transform="rotate(-90 ${active.TSS?34:15} ${T+PH/2})" fill="#66758a" font-size="12">CTL / ATL</text>`;
+    if(active.TSS)out+=`<text x="10" y="${T+PH/2}" transform="rotate(-90 10 ${T+PH/2})" fill="${chartColors.TSS}" font-size="11">TSS / day</text>`;
     if(active.TSB){
-      const zeroY=yTsb(0);
-      out+=`<line x1="${L}" y1="${zeroY}" x2="${W-R}" y2="${zeroY}" stroke="#648db5" stroke-width="1.8" stroke-dasharray="6 4"/>`;
-      out+=`<text x="${W-13}" y="${T+PH/2}" transform="rotate(90 ${W-13} ${T+PH/2})" fill="#648db5" font-size="12">TSB</text>`;
-      out+=`<text x="${W-R-5}" y="${zeroY-6}" text-anchor="end" fill="#648db5" font-size="10">TSB 0</text>`;
+      out+=`<text x="${W-13}" y="${T+PH/2}" transform="rotate(90 ${W-13} ${T+PH/2})" fill="${chartColors.TSB}" font-size="12">TSB</text>`;
+      out+=`<text x="${W-R-5}" y="${T+PH/2-6}" text-anchor="end" fill="${chartColors.TSB}" font-size="10">TSB 0</text>`;
       out+=`<path d="${line('TSB',yTsb)}" fill="none" stroke="${chartColors.TSB}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`;
     }
-    ['CTL','ATL'].forEach(k=>{if(active[k])out+=`<path d="${line(k,yLoad)}" fill="none" stroke="${chartColors[k]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;});
-    if(active.TSS)data.forEach((d,i)=>{if(d.TSS>0)out+=`<circle cx="${x(i)}" cy="${yLoad(d.TSS)}" r="3.1" fill="${chartColors.TSS}"><title>${fmtDate(d.date)} · TSS ${Math.round(d.TSS)}</title></circle>`;});
+    if(active.CTL){
+      const areaPath=`${line('CTL',yLoad)} L${x(total-1).toFixed(1)} ${(T+PH).toFixed(1)} L${x(0).toFixed(1)} ${(T+PH).toFixed(1)} Z`;
+      out+=`<path d="${areaPath}" fill="${chartColors.CTL}" opacity=".16"/>`;
+      out+=`<path d="${line('CTL',yLoad)}" fill="none" stroke="${chartColors.CTL}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+    if(active.ATL)out+=`<path d="${line('ATL',yLoad)}" fill="none" stroke="${chartColors.ATL}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+    if(active.TSS)data.forEach((d,i)=>{if(d.TSS>0)out+=`<circle cx="${x(i)}" cy="${yTss(d.TSS)}" r="3" fill="${chartColors.TSS}"><title>${fmtDate(d.date)} · TSS ${Math.round(d.TSS)}</title></circle>`;});
     if(selectedChartIndex!==null&&data[selectedChartIndex]){
       const d=data[selectedChartIndex];
       if(active.TSB)out+=`<circle cx="${x(selectedChartIndex)}" cy="${yTsb(d.TSB)}" r="5" fill="${chartColors.TSB}" stroke="#fff" stroke-width="2"/>`;
