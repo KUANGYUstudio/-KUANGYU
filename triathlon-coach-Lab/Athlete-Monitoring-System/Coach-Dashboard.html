@@ -1700,6 +1700,21 @@ button:active{transform:translateY(.5px)}
 }
 
 /* =========================================================
+
+.pdf-progression-preview{
+  margin-top:12px;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-left:4px solid var(--sage);
+  border-radius:10px;
+  background:var(--sage-tint);
+  color:var(--ink);
+  font-size:12.5px;
+  line-height:1.65;
+}
+.pdf-progression-preview strong{display:block;margin-bottom:5px;font-size:13px}
+.pdf-progression-preview p{margin:0;white-space:pre-line;color:#526257}
+
    Dedicated A4 Printable PDF Report Area (Hidden on Screen)
    ========================================================= */
 #pdfPrintArea{display:none}
@@ -4289,6 +4304,88 @@ function computeWeeklyReportMetrics(a,weekObj,rangeEndIso=null){
     trainDays,durPct,runPct,sports,sportSource,periodWeeks,deviceAnalytics
   };
 }
+function generateTrainingLoadReview(m){
+  const lines=[];
+  const a=m.athlete||{};
+  const endIso=m.rangeEnd||isoKey(m.endDate||new Date());
+  const endMonday=getMondayIso(endIso);
+  const weekly=buildAthleteWeeklyData(a);
+  const recentWeeks=(weekly.weeks||[]).filter(w=>w.date<=endMonday).slice(-4);
+  const isConsecutive=recentWeeks.length>=2&&recentWeeks.every((w,i)=>i===0||Math.round((new Date(w.date+'T00:00:00')-new Date(recentWeeks[i-1].date+'T00:00:00'))/86400000)===7);
+
+  if(isConsecutive){
+    const first=recentWeeks[0],last=recentWeeks[recentWeeks.length-1];
+    const startMin=Number(first.realMin)||0,endMin=Number(last.realMin)||0;
+    const totalChange=startMin>0?((endMin-startMin)/startMin)*100:null;
+    const changes=recentWeeks.slice(1).map((w,i)=>{
+      const prev=Number(recentWeeks[i].realMin)||0,cur=Number(w.realMin)||0;
+      return prev>0?((cur-prev)/prev)*100:null;
+    }).filter(v=>v!==null);
+    lines.push(`訓練量走勢：最近 ${recentWeeks.length} 個連續有紀錄週，實際訓練時間由 ${fmtHrMin(startMin)} 變為 ${fmtHrMin(endMin)}${totalChange!==null?`（首末變化 ${totalChange>=0?'+':''}${totalChange.toFixed(1)}%）`:''}。`);
+    if(changes.length&&changes.every(v=>v>0)){
+      lines.push('觀察：連續週次的訓練時間逐週增加。這可能符合 build phase 的安排，但應確認增加的是頻率、單次時間或強度，並檢查睡眠、RPE、疼痛與課表品質；不要同時大幅增加多個變項。');
+    }else if(changes.some(v=>v>15)){
+      lines.push('觀察：部分週次的訓練時間增加幅度較明顯。這不是單獨的風險判定，建議回看該週的課表內容、強度分布及恢復反應，確認是否符合週期目標。');
+    }else if(changes.some(v=>v<-15)){
+      lines.push('觀察：部分週次訓練時間明顯下降。請確認這是預先安排的恢復週、比賽週，還是因疲勞、疼痛或時間因素而未完成。');
+    }else{
+      lines.push('觀察：近期訓練時間沒有呈現連續快速上升；可依週期目標安排維持、漸進增加或恢復週，不必為了追求數字而加量。');
+    }
+
+    const workouts=Array.isArray(a.tpWorkouts)?a.tpWorkouts:[];
+    const weeklyTss=recentWeeks.map(w=>workouts.filter(x=>x.date&&getMondayIso(x.date)===w.date).reduce((sum,x)=>sum+(Number(x.tss)||0),0));
+    if(weeklyTss.some(v=>v>0)){
+      const firstTss=weeklyTss[0],lastTss=weeklyTss[weeklyTss.length-1];
+      lines.push(`週 TSS 由 ${Math.round(firstTss)} 變為 ${Math.round(lastTss)}；請與訓練時間一起看：若 TSS 上升速度高於時數，可能代表整體強度／訓練密度也在提高，需回到各堂課內容確認。`);
+    }
+  }else{
+    lines.push('訓練量走勢：目前近四週沒有足夠連續的週紀錄，暫不判斷是否循序增加。請先補齊缺漏週次或確認匯入範圍，避免把沒有資料誤判成休息週。');
+  }
+
+  const endDate=m.endDate?dayStart(new Date(m.endDate)):dayStart(new Date(endIso+'T00:00:00'));
+  const loadStart=dateMinus(endDate,27);
+  const firstWorkoutDate=Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length
+    ?dayStart(new Date(a.tpWorkouts[0].date+'T00:00:00')):null;
+  const hasFullLoadHistory=firstWorkoutDate&&firstWorkoutDate<=loadStart;
+  const loadWindow=hasFullLoadHistory?buildAthleteSeries(a,loadStart,endDate):{isReal:false,data:[]};
+  if(loadWindow.isReal&&loadWindow.data.length>=28){
+    const acute=loadWindow.data.slice(-7).reduce((sum,d)=>sum+(Number(d.TSS)||0),0);
+    const chronic=loadWindow.data.reduce((sum,d)=>sum+(Number(d.TSS)||0),0)/4;
+    if(chronic>0){
+      const ratio=acute/chronic;
+      lines.push(`近 7 日／28 日平均週負荷比：${ratio.toFixed(2)}（近 7 日 TSS ${Math.round(acute)}；近 28 日平均每週 ${Math.round(chronic)}）。這是負荷變化的輔助觀察值，不是傷害預測或通用安全門檻，不可單獨決定加量。`);
+    }
+  }
+
+  const device=m.deviceAnalytics||{};
+  const bySport=Object.values(device.bySport||{});
+  const zoneLines=[];
+  const zoneSummary=arr=>{
+    const vals=Array.isArray(arr)?arr.map(v=>Number(v)||0):[];
+    const total=vals.reduce((sum,v)=>sum+v,0);
+    if(!total)return '';
+    const pct=(from,to)=>Math.round(vals.slice(from,to).reduce((sum,v)=>sum+v,0)/total*100);
+    return `Z1–2 ${pct(0,2)}%／Z3–4 ${pct(2,4)}%／Z5+ ${pct(4,vals.length)}%`;
+  };
+  bySport.forEach(b=>{
+    const label=({swim:'游泳',bike:'自行車',run:'跑步',strength:'肌力',other:'其他'})[b.sport]||b.sport;
+    const hr=zoneSummary(b.hrZones),power=zoneSummary(b.powerZones);
+    if(hr)zoneLines.push(`${label}心率區間：${hr}`);
+    if(power)zoneLines.push(`${label}功率區間：${power}`);
+    if(Number(b.avgIf)>0)zoneLines.push(`${label}平均 IF：${Number(b.avgIf).toFixed(2)}（${b.workouts} 堂有紀錄課程）`);
+  });
+  if(zoneLines.length){
+    lines.push('強度分布：\n'+zoneLines.join('\n'));
+    lines.push('強度判讀提醒：以上 Z1–Z10 分布依匯入資料的區間定義呈現；不同運動項目應使用各自的個人化門檻。Z1–2 不可直接等同 LT1 以下，Z4 也不可直接等同 LT2。');
+  }else{
+    lines.push('強度分布：目前沒有足夠的心率區間、功率區間或 IF 資料，無法可靠判斷低／中／高強度時間比例。可先以單次 RPE、訓練內容及可用的 HR／功率紀錄建立基準。');
+  }
+  lines.push('LT1／LT2 應用：目前資料尚未包含學員各運動項目的 LT1／LT2 個人門檻設定，因此系統不會自行推算閾值配速、心率或功率；取得測試或可靠場測數據後，再分項設定與分析。');
+  lines.push('教練調整原則：一次優先調整一個主要變項（頻率、單次時間、總量或強度）；若近期 RPE 上升、睡眠變差、疼痛增加，或 ATL 明顯高於 CTL 且 TSB 持續走低，先確認恢復與課表品質，再決定是否進階。');
+  if(!weekly.isReal)lines.push('資料註記：本期週訓練量含示意資料，以上走勢僅供操作示範，不作為學員實際訓練判斷。');
+  return lines.join('\n');
+}
+
 function generateAiAdviceDraft(m){
   const lines=[];
   const strengths=[];
@@ -4342,6 +4439,7 @@ function generateAiAdviceDraft(m){
   }
   lines.push('【本期做得好的地方】\n'+(strengths.join('\n')||'目前資料不足，暫不下正向結論。'));
   lines.push('【需要留意與確認】\n'+(watch.join('\n')||'目前沒有明確異常訊號；仍需搭配學員回報確認。'));
+  lines.push('【循序漸進與強度安排分析】\n'+generateTrainingLoadReview(m));
   lines.push('【下週教練建議】\n'+next.join('\n'));
   return lines.join('\n\n');
 }
@@ -4431,7 +4529,11 @@ function refreshPdfModal(){
       <div class="pdf-mini-card"><small>區間累計負荷</small><strong>${m.weekTss} TSS</strong><span>sRPE ${m.weekSrpe.toLocaleString('en-US')} AU</span></div>
       <div class="pdf-mini-card"><small>CTL / ATL / TSB</small><strong>${m.ctl.toFixed(0)} / ${m.atl.toFixed(0)} / ${m.tsb>=0?'+':''}${m.tsb.toFixed(0)}</strong><span>區間末狀態</span></div>
       <div class="pdf-mini-card"><small>平均 RPE / TSS 變化</small><strong>${m.avgRpe!==null?m.avgRpe.toFixed(1)+'/10':'—'} / ${m.tssChange!==null?(m.tssChange>=0?'+':'')+m.tssChange.toFixed(0)+'%':'—'}</strong><span>與前一個等長區間比較</span></div>
-    </div>${sportHtml}`;
+    </div>${sportHtml}
+    <div class="pdf-progression-preview">
+      <strong>循序漸進與強度分析</strong>
+      <p>${esc(generateTrainingLoadReview(m))}</p>
+    </div>`;
 }
 
 function saveCurrentPdfNote(){
