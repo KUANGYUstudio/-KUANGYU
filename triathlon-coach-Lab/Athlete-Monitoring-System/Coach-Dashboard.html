@@ -2222,6 +2222,8 @@ button:active{transform:translateY(.5px)}
   .rpt-footer{position:absolute;bottom:0;left:0;right:0}
 }
 
+
+.if-chart-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:5px 8px 10px;color:var(--muted);font-size:12px}.if-chart-controls label{display:flex;align-items:center;gap:8px}.if-chart-controls select{border:1px solid var(--theme-border);border-radius:7px;padding:5px 9px;background:var(--surface);color:var(--ink);font:inherit}.if-legend{display:flex;gap:14px;flex-wrap:wrap}.if-legend span{display:inline-flex;align-items:center;gap:5px}.if-legend i{display:inline-block;width:9px;height:9px;border-radius:50%}.if-detail{margin:4px 8px 8px;padding:10px 12px;border:1px solid var(--line-soft);border-radius:9px;background:var(--surface);font-size:12px}.if-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 18px}.if-detail-row{display:flex;justify-content:space-between;gap:10px}.if-detail-row b{color:var(--ink)}.if-detail-placeholder{color:var(--muted)}.if-point{cursor:pointer;stroke:#fff;stroke-width:1.5}.if-point.is-selected{stroke:#24364b;stroke-width:3; r:7}@media(max-width:600px){.if-detail-grid{grid-template-columns:1fr}}
 </style></head>
 <body><div class="app">
 <aside class="sidebar">
@@ -2493,6 +2495,7 @@ button:active{transform:translateY(.5px)}
       <div class="trend-panel trend-panel-combined"><div class="trend-panel-head"><strong>① 訓練負荷與 TSB 綜合趨勢</strong><span>左軸：CTL／ATL／每日 TSS　·　右軸：TSB（含正負值，0 為基準線）</span></div><div class="chart-fill-controls"><label><input type="checkbox" id="chartFillEnabled" checked onchange="renderLoadChart()"> 填滿區域</label><label>填滿項目 <select id="chartFillMetric" onchange="renderLoadChart()"><option value="CTL" selected>CTL</option><option value="ATL">ATL</option><option value="TSB">TSB</option></select></label></div><svg id="loadChart" viewBox="0 0 1000 310" role="img" aria-label="CTL ATL TSB 與每日 TSS 綜合趨勢圖"></svg></div>
       <div class="trend-panel"><div class="trend-panel-head"><strong>② 主觀訓練反應</strong><span>單次 RPE（1–10）</span></div><svg id="rpeChart" viewBox="0 0 1000 190" role="img" aria-label="單次訓練 RPE 趨勢圖"></svg></div>
       <div class="trend-panel"><div class="trend-panel-head"><strong>③ 主觀負荷累積</strong><span>sRPE（RPE × 訓練時間，AU）</span></div><svg id="srpeChart" viewBox="0 0 1000 190" role="img" aria-label="每日 sRPE 負荷趨勢圖"></svg></div>
+      <div class="trend-panel trend-panel-if"><div class="trend-panel-head"><strong>④ 單次訓練強度（IF）</strong><span>每個點代表一堂有 IF 紀錄的訓練；不同運動依各自閾值計算，不合併平均</span></div><div class="if-chart-controls"><label>運動項目 <select id="ifSportFilter" onchange="renderIntensityFactorChart()"><option value="all">全部（游泳／自行車／跑步）</option><option value="swim">游泳</option><option value="bike">自行車</option><option value="run">跑步</option></select></label><div class="if-legend"><span><i style="background:#D9A514"></i>游泳</span><span><i style="background:#477FBD"></i>自行車</span><span><i style="background:#E85B9A"></i>跑步</span></div></div><svg id="intensityFactorChart" viewBox="0 0 1000 220" role="img" aria-label="依運動項目區分的單次訓練 IF 散佈圖"></svg><div class="if-detail" id="ifWorkoutDetail"><span class="if-detail-placeholder">滑過或點選 IF 資料點，可查看該堂訓練的運動項目、日期、名稱、IF 與 TSS。</span></div><p class="chart-note">IF 僅呈現 TrainingPeaks 匯入且有有效 IF 數值的游泳、單車及跑步紀錄。沒有 IF 的訓練不補值；肌力、休息日及未分類項目不納入此圖。</p></div>
     </div>
 
     <div class="combined-analysis" id="combinedAnalysisBox">
@@ -3281,6 +3284,7 @@ function handleTpCsvUpload(event){
       const iDist=findCol('distanceinmeters','distance','actualdistanceinmeters','distanceinkilometers');
       const iPlanDist=findCol('planneddistanceinmeters','planneddistance','planneddistanceinkilometers');
       const iTss=findCol('tss','actualtss','plannedtss');
+      const iIf=findCol('if','intensityfactor','intensityfactorvalue');
       const iRpe=findCol('rpe','sessionrpe','perceivedexertion');
       const iCoachNote=findCol('coachcomments','workoutdescription','description');
       const iAthNote=findCol('athletecomments','comments');
@@ -3302,6 +3306,8 @@ function handleTpCsvUpload(event){
         const distKm=iDist!==-1?parseDistanceKm(cols[iDist],headers[iDist]):0;
         const planDistKm=iPlanDist!==-1?parseDistanceKm(cols[iPlanDist],headers[iPlanDist]):0;
         const tss=iTss!==-1?(parseFloat(cols[iTss])||0):0;
+        const rawIf=iIf!==-1?parseFloat(String(cols[iIf]||'').replace('%','')):NaN;
+        const intensityFactor=Number.isFinite(rawIf)&&rawIf>0?(rawIf>3?rawIf/100:rawIf):null;
         const rawRpe=iRpe!==-1?parseFloat(cols[iRpe]):NaN;
         const rpe=!Number.isNaN(rawRpe)&&rawRpe>0?Math.min(10,Math.max(1,rawRpe)):null;
         const comment=(iAthNote!==-1?cols[iAthNote]:'')||(iCoachNote!==-1?cols[iCoachNote]:'');
@@ -3316,6 +3322,7 @@ function handleTpCsvUpload(event){
           distanceKm:Math.round(distKm*100)/100,
           plannedDistanceKm:Math.round(planDistKm*100)/100,
           tss,
+          intensityFactor,
           rpe,
           comment:String(comment||'').trim()
         });
@@ -3369,6 +3376,8 @@ function clearImportedCsv(){
 let chartDays=28, chartMode='days', chartEnd=new Date(), chartStart=null;
 let selectedChartIndex=null, hoveredChartIndex=null, lastRenderedData=[], lastChartLayout={W:1000,L:58,R:58,PW:884};
 const chartColors={RPE:'#3e6b52',SRPE:'#8a7ca8',CTL:'#477fbd',ATL:'#e85b9a',TSB:'#D9A514',TSS:'#B58A3A'};
+let selectedIfWorkoutId=null,hoveredIfWorkoutId=null;
+const IF_SPORT_META={swim:{label:'游泳',color:'#D9A514'},bike:{label:'自行車',color:'#477FBD'},run:{label:'跑步',color:'#E85B9A'}};
 
 function dayStart(d){let x=new Date(d);x.setHours(0,0,0,0);return x}
 function fmtDate(d){return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`}
@@ -3773,8 +3782,68 @@ function renderLoadChart(){
       });
     }
   }
-  drawLoad();drawRpe();drawSrpe();
+  drawLoad();drawRpe();drawSrpe();renderIntensityFactorChart();
   document.getElementById('chartDateLabel').textContent=`${fmtDate(start)} — ${fmtDate(end)} · 共 ${total} 天`;
+}
+
+function renderIntensityFactorChart(){
+  const svg=document.getElementById('intensityFactorChart');
+  if(!svg)return;
+  const a=athletes.find(x=>x.id===currentId);
+  const start=chartStart||dateMinus(chartEnd||getLatestAthleteDate(a),chartDays-1);
+  const end=chartEnd||getLatestAthleteDate(a);
+  const filter=document.getElementById('ifSportFilter')?.value||'all';
+  const workouts=(Array.isArray(a?.tpWorkouts)?a.tpWorkouts:[]).filter(w=>{
+    if(!w.date||w.date<isoKey(start)||w.date>isoKey(end))return false;
+    const sport=classifyWorkoutSport(w);
+    return IF_SPORT_META[sport]&&Number.isFinite(Number(w.intensityFactor))&&Number(w.intensityFactor)>0&&(filter==='all'||sport===filter);
+  }).sort((x,y)=>String(x.date).localeCompare(String(y.date)));
+  const W=1000,H=220,L=66,R=34,T=14,B=32,PH=H-T-B,PW=W-L-R;
+  const maxIF=Math.max(1.6,Math.ceil(Math.max(0,...workouts.map(w=>Number(w.intensityFactor)||0))*10)/10);
+  const y=v=>T+PH-(v/maxIF)*PH;
+  const x=date=>{const d=new Date(date+'T00:00:00');const span=Math.max(1,end-start);return L+Math.max(0,Math.min(1,(d-start)/span))*PW};
+  let out='';
+  for(let i=0;i<=4;i++){
+    const val=maxIF*(1-i/4),yy=y(val);
+    out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e7ece5"/>`;
+    out+=`<text x="${L-10}" y="${yy+4}" text-anchor="end" fill="#66758a" font-size="12">${val.toFixed(1)}</text>`;
+  }
+  out+=`<text x="18" y="${T+PH/2}" transform="rotate(-90 18 ${T+PH/2})" fill="#66758a" font-size="12">Intensity Factor（IF）</text>`;
+  const totalDays=Math.max(1,Math.round((end-start)/86400000));
+  const tickCount=Math.min(window.innerWidth<=768?5:8,totalDays+1);
+  for(let i=0;i<tickCount;i++){
+    const d=new Date(start);d.setDate(d.getDate()+Math.round(i*totalDays/Math.max(1,tickCount-1)));
+    out+=`<text x="${x(d)}" y="${H-8}" text-anchor="middle" fill="#6d7b71" font-size="11">${d.getMonth()+1}/${d.getDate()}</text>`;
+  }
+  if(!workouts.length){
+    out+=`<text x="${L+PW/2}" y="${T+PH/2}" text-anchor="middle" fill="#89958d" font-size="14">此日期區間沒有可呈現的 IF 紀錄</text>`;
+  }else{
+    const sameDay={};
+    workouts.forEach(w=>{
+      const sport=classifyWorkoutSport(w),meta=IF_SPORT_META[sport];
+      const n=sameDay[w.date]||0;sameDay[w.date]=n+1;
+      const offset=(n-(workouts.filter(z=>z.date===w.date).length-1)/2)*8;
+      const cx=x(new Date(w.date+'T00:00:00'))+offset,cy=y(Number(w.intensityFactor));
+      const id=String(w.uid||`${w.date}_${w.sessionName}_${w.type}`);
+      const selected=id===selectedIfWorkoutId?' is-selected':'';
+      out+=`<circle class="if-point${selected}" data-if-id="${esc(id)}" cx="${cx}" cy="${cy}" r="5" fill="${meta.color}"><title>${esc(meta.label)} · ${esc(w.date)} · ${esc(w.sessionName||'未命名訓練')} · IF ${Number(w.intensityFactor).toFixed(2)} · TSS ${Number(w.tss)||0}</title></circle>`;
+    });
+  }
+  svg.innerHTML=out;
+  const detail=document.getElementById('ifWorkoutDetail');
+  const showWorkout=w=>{
+    if(!w){detail.innerHTML='<span class="if-detail-placeholder">滑過或點選 IF 資料點，可查看該堂訓練的運動項目、日期、名稱、IF 與 TSS。</span>';return;}
+    const sport=classifyWorkoutSport(w),meta=IF_SPORT_META[sport];
+    detail.innerHTML=`<div class="if-detail-grid"><div class="if-detail-row"><span>日期</span><b>${esc(w.date||'—')}</b></div><div class="if-detail-row"><span>運動項目</span><b style="color:${meta.color}">${meta.label}</b></div><div class="if-detail-row"><span>訓練名稱</span><b>${esc(w.sessionName||'未命名訓練')}</b></div><div class="if-detail-row"><span>Intensity Factor</span><b>${Number(w.intensityFactor).toFixed(2)}</b></div><div class="if-detail-row"><span>TSS</span><b>${Number(w.tss)>0?Math.round(Number(w.tss)):'未提供'}</b></div><div class="if-detail-row"><span>訓練時間</span><b>${Number(w.duration)>0?fmtHrMin(w.duration):'未提供'}</b></div></div>`;
+  };
+  const findById=id=>workouts.find(w=>String(w.uid||`${w.date}_${w.sessionName}_${w.type}`)===id);
+  svg.querySelectorAll('.if-point').forEach(point=>{
+    const id=point.getAttribute('data-if-id');
+    point.addEventListener('mouseenter',()=>{hoveredIfWorkoutId=id;showWorkout(findById(id));});
+    point.addEventListener('mouseleave',()=>{hoveredIfWorkoutId=null;showWorkout(selectedIfWorkoutId?findById(selectedIfWorkoutId):null);});
+    point.addEventListener('click',()=>{selectedIfWorkoutId=selectedIfWorkoutId===id?null:id;renderIntensityFactorChart();});
+  });
+  showWorkout(hoveredIfWorkoutId?findById(hoveredIfWorkoutId):(selectedIfWorkoutId?findById(selectedIfWorkoutId):null));
 }
 
 /* =========================================================
