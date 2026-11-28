@@ -1347,7 +1347,22 @@ button:active{transform:translateY(.5px)}
 }
 
 
-/* Trend panels: load and TSB share one dual-axis timeline; subjective metrics remain separate. */
+/* TrainingPeaks-inspired PMC settings panel */
+.pmc-settings{margin:8px 0 10px;border:1px solid var(--theme-border);border-radius:10px;background:var(--surface);overflow:hidden}
+.pmc-settings>summary{cursor:pointer;list-style:none;padding:9px 12px;font-size:12px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:8px}
+.pmc-settings>summary::-webkit-details-marker{display:none}
+.pmc-settings>summary:after{content:"＋";margin-left:auto;color:var(--muted);font-size:14px}
+.pmc-settings[open]>summary:after{content:"－"}
+.pmc-settings-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:10px;padding:0 12px 12px}
+.pmc-setting-group{border:1px solid var(--line-soft);border-radius:8px;padding:9px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
+.pmc-setting-group legend{font-size:11px;font-weight:800;color:var(--muted);padding:0 4px}
+.pmc-setting-group label{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ink)}
+.pmc-setting-group input[type=number]{width:64px;padding:4px 5px;border:1px solid var(--theme-border);border-radius:6px;background:var(--surface);color:var(--ink);font:inherit}
+.pmc-setting-group button{padding:4px 8px;font-size:11px}
+.pmc-settings-note{grid-column:1/-1;font-size:11px;line-height:1.5;color:var(--muted)}
+@media(max-width:720px){.pmc-settings-grid{grid-template-columns:1fr}.pmc-settings-note{grid-column:auto}}
+
+/* Unified performance chart: all enabled metrics share one timeline. */
 .trend-panel{padding:12px 4px 8px;border-bottom:1px solid var(--line-soft)}
 .trend-panel:last-child{border-bottom:0}
 .trend-panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 2px 5px;color:var(--ink)}
@@ -2494,6 +2509,28 @@ button:active{transform:translateY(.5px)}
         <button class="btn soft" type="button" onclick="applyCustomDates(this)">套用自訂區間</button>
       </div>
 
+      <details class="pmc-settings" id="pmcSettings">
+        <summary>圖表設定與運動項目</summary>
+        <div class="pmc-settings-grid">
+          <fieldset class="pmc-setting-group">
+            <legend>納入運動項目</legend>
+            <label><input type="checkbox" class="chart-sport-filter" value="swim" checked onchange="renderLoadChart()"> 游泳</label>
+            <label><input type="checkbox" class="chart-sport-filter" value="bike" checked onchange="renderLoadChart()"> 自行車</label>
+            <label><input type="checkbox" class="chart-sport-filter" value="run" checked onchange="renderLoadChart()"> 跑步</label>
+            <button class="btn soft" type="button" onclick="setAllChartSports(true)">全選</button>
+            <button class="btn soft" type="button" onclick="setAllChartSports(false)">清除</button>
+          </fieldset>
+          <fieldset class="pmc-setting-group">
+            <legend>負荷計算參數</legend>
+            <label>CTL 常數 <input type="number" id="ctlConstant" min="1" max="365" value="42" onchange="renderLoadChart()"></label>
+            <label>ATL 常數 <input type="number" id="atlConstant" min="1" max="90" value="7" onchange="renderLoadChart()"></label>
+            <label>CTL 起始值 <input type="number" id="ctlStartValue" min="0" step="0.1" value="0" onchange="renderLoadChart()"></label>
+            <label>ATL 起始值 <input type="number" id="atlStartValue" min="0" step="0.1" value="0" onchange="renderLoadChart()"></label>
+          </fieldset>
+          <div class="pmc-settings-note">CTL／ATL 依所選運動項目的每日 TSS 重新計算。若要與 TrainingPeaks 完全對照，請確認匯入期間、運動類型及 CTL／ATL 常數一致；起始值會影響歷史資料不足時的計算結果。</div>
+        </div>
+      </details>
+
       <div class="metric-toggles">
         <span>顯示指標</span>
         <label class="metric-toggle"><input type="checkbox" id="metricCTL" checked onchange="renderLoadChart()"><i class="metric-dot ctl"></i> CTL 長期負荷</label>
@@ -2525,7 +2562,7 @@ button:active{transform:translateY(.5px)}
           <span><i style="background:#3E6B52"></i>RPE（1–10）</span><span><i style="background:#8A7CA8"></i>sRPE（AU，獨立尺度）</span>
         </div>
         <svg id="loadChart" viewBox="0 0 1000 360" role="img" aria-label="CTL ATL TSB TSS IF RPE 與 sRPE 整合趨勢圖"></svg>
-        <p class="chart-note">IF 點依游泳、單車、跑步分色；RPE 為每日最高單次回報；sRPE 為每日累積值。CTL／ATL 使用左軸、TSB 使用右軸；TSS、IF、RPE、sRPE 以各自尺度映射在同一繪圖區，僅比較各自的變化，不以不同單位的垂直高度互相比較。</p>
+        <p class="chart-note">運動項目篩選會同步影響 TSS、CTL、ATL、TSB、RPE 與 sRPE；IF 仍逐筆保留各運動自己的閾值基準，不跨運動平均。CTL／ATL 使用左軸、TSB 使用右軸；TSS、IF、RPE、sRPE 以各自尺度映射於同一繪圖區，僅比較各自的時間變化，不以不同單位的垂直高度互相比較。</p>
       </div>
     </div>
 
@@ -3506,6 +3543,27 @@ function demoSeries(d,i){
   return {CTL:ctl,ATL:atl,TSB:tsb,TSS:tss,RPE:rpe,SRPE:srpe,title:isWorkoutDay?'示意訓練課表':'休息日'};
 }
 
+function getSelectedChartSports(){
+  const checked=[...document.querySelectorAll('.chart-sport-filter:checked')].map(el=>el.value);
+  return new Set(checked);
+}
+function setAllChartSports(on){
+  document.querySelectorAll('.chart-sport-filter').forEach(el=>el.checked=!!on);
+  selectedChartIndex=null;hoveredChartIndex=null;renderLoadChart();
+}
+function getPmcLoadSettings(){
+  const read=(id,fallback,min,max)=>{
+    const el=document.getElementById(id),v=Number(el?.value);
+    return Number.isFinite(v)?Math.min(max,Math.max(min,v)):fallback;
+  };
+  return {
+    ctlConstant:read('ctlConstant',42,1,365),
+    atlConstant:read('atlConstant',7,1,90),
+    ctlStart:read('ctlStartValue',0,0,10000),
+    atlStart:read('atlStartValue',0,0,10000)
+  };
+}
+
 function buildAthleteSeries(a,start,end){
   const total=Math.max(1,Math.round((end-start)/86400000)+1);
   const hasCsv=a&&Array.isArray(a.tpWorkouts)&&a.tpWorkouts.length>0;
@@ -3523,9 +3581,12 @@ function buildAthleteSeries(a,start,end){
   }
 
   const byDay={};
+  const selectedSports=getSelectedChartSports();
   const sessionList=Array.isArray(a.sessionRpe)&&a.sessionRpe.length?a.sessionRpe:a.tpWorkouts;
   sessionList.forEach(w=>{
     if(!w.date)return;
+    const sport=classifyWorkoutSport(w);
+    if(!selectedSports.has(sport))return;
     if(!byDay[w.date])byDay[w.date]={tss:0,rpes:[],srpe:0,titles:[],ifWorkouts:[]};
     byDay[w.date].tss+=Number(w.tss||0);
     if(w.rpe!==null&&w.rpe!==undefined&&w.rpe!==''){
@@ -3539,8 +3600,9 @@ function buildAthleteSeries(a,start,end){
   // Keep workout-level IF records separate: each sport retains its own threshold basis.
   a.tpWorkouts.forEach(w=>{
     if(!w.date||!Number.isFinite(Number(w.intensityFactor))||Number(w.intensityFactor)<=0)return;
-    if(!byDay[w.date])byDay[w.date]={tss:0,rpes:[],srpe:0,titles:[],ifWorkouts:[]};
     const sport=classifyWorkoutSport(w);
+    if(!selectedSports.has(sport))return;
+    if(!byDay[w.date])byDay[w.date]={tss:0,rpes:[],srpe:0,titles:[],ifWorkouts:[]};
     if(IF_SPORT_META[sport])byDay[w.date].ifWorkouts.push({
       sport,label:IF_SPORT_META[sport].label,
       intensityFactor:Number(w.intensityFactor),
@@ -3554,7 +3616,8 @@ function buildAthleteSeries(a,start,end){
   const simStart=firstCsvDate<start?firstCsvDate:start;
   const simDays=Math.max(1,Math.round((end-simStart)/86400000)+1);
 
-  let ctl=0,atl=0;
+  const loadSettings=getPmcLoadSettings();
+  let ctl=loadSettings.ctlStart,atl=loadSettings.atlStart;
   const out=[];
   for(let i=0;i<simDays;i++){
     const d=new Date(simStart);
@@ -3562,8 +3625,8 @@ function buildAthleteSeries(a,start,end){
     const key=isoKey(d);
     const rec=byDay[key];
     const tss=rec?rec.tss:0;
-    ctl=ctl+(tss-ctl)/42;
-    atl=atl+(tss-atl)/7;
+    ctl=ctl+(tss-ctl)/loadSettings.ctlConstant;
+    atl=atl+(tss-atl)/loadSettings.atlConstant;
     const tsb=ctl-atl;
     const rpe=rec&&rec.rpes.length?Math.max(...rec.rpes):null;
     const srpe=rec?Math.round(rec.srpe):0;
@@ -3688,6 +3751,7 @@ function renderLoadChart(){
   const a=athletes.find(x=>x.id===currentId);
   const end=chartEnd||getLatestAthleteDate(a);
   const start=chartStart||dateMinus(end,chartDays-1);
+  const selectedSports=getSelectedChartSports();
   const {data,isReal,workoutCount}=buildAthleteSeries(a,start,end);
   lastRenderedData=data;
   const total=data.length;
@@ -3697,7 +3761,7 @@ function renderLoadChart(){
   const displayIndex=hoveredChartIndex!==null?hoveredChartIndex:selectedChartIndex;
   updateChartCallout(displayIndex,displayIndex!==null&&total>1?displayIndex/(total-1):0.5);
   document.getElementById('chartDataSourceLabel').textContent=isReal
-    ?`已匯入 TrainingPeaks CSV（共 ${workoutCount} 筆訓練紀錄，本機保存）`
+    ?`已匯入 TrainingPeaks CSV（共 ${workoutCount} 筆原始紀錄）；目前納入：${[...selectedSports].map(k=>IF_SPORT_META[k]?.label||k).join('、')||'未選擇運動項目'}`
     :'目前顯示視覺示意資料；可點選上方「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。';
 
   const active={
