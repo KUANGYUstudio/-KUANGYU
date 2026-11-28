@@ -1298,19 +1298,19 @@ function diagramFor(key) {
     case "practice":
       return wrap("教練判讀流程｜從資料到訓練決策",
         "把客觀負荷、訓練表現與選手回饋整合，才形成可追蹤的教練決策。", svg(`
-          ${["看趨勢","找變化","對照反應","調整課表","追蹤結果"].map((x,i)=>`<rect x="${20+i*140}" y="82" width="118" height="78" rx="9" fill="${["#e8eff8","#dce8f2","#dcebd0","#f4e5c8","#24496b"][i]}"/><text x="${79+i*140}" y="125" text-anchor="middle" class="diagram-label">${x}</text>${i<4?`<path d="M140 ${121} H158" stroke="#8b9bad" stroke-width="2"/>`:``}`).join("")}
+          ${["看趨勢","找變化","對照反應","調整課表","追蹤結果"].map((x,i)=>`<rect x="${20+i*140}" y="82" width="118" height="78" rx="9" fill="${["#e8eff8","#dce8f2","#dcebd0","#f4e5c8","#24496b"][i]}"/><text x="${79+i*140}" y="125" text-anchor="middle" class="diagram-label" style="fill:${i===4?"#ffffff":"#24364b"}">${x}</text>${i<4?`<path d="M140 ${121} H158" stroke="#8b9bad" stroke-width="2"/>`:``}`).join("")}
         `), "每次調整都要留下依據與追蹤日期，才能知道改變是否真的有效。");
     case "bikepower":
       return wrap("自行車功率區間｜FTP 作為強度基準",
         "FTP 六個功率區間加上不以 FTP 百分比定義的短衝刺區；區間是訓練模型，不是生理斷層。", svg(`
-          ${["Z1","Z2","Z3","Z4","Z5","Z6","Z7"].map((x,i)=>`<rect x="${22+i*98}" y="${175-i*18}" width="82" height="${30+i*18}" rx="5" fill="${["#8eaf68","#a8bd8d","#6d91b8","#d49b43","#c88a54","#b76c61","#805f8f"][i]}"/><text x="${63+i*98}" y="${194-i*18}" text-anchor="middle" class="diagram-label" fill="#fff">${x}</text>`).join("")}
+          ${["Z1","Z2","Z3","Z4","Z5","Z6","Z7"].map((x,i)=>`<rect x="${22+i*98}" y="${175-i*18}" width="82" height="${30+i*18}" rx="5" fill="${["#8eaf68","#a8bd8d","#6d91b8","#d49b43","#c88a54","#b76c61","#805f8f"][i]}"/><text x="${63+i*98}" y="${194-i*18}" text-anchor="middle" class="diagram-label" fill="#fff">${x}</text><text x="${63+i*98}" y="228" text-anchor="middle" class="diagram-small" style="font-weight:700">${["≤55%","56–75%","76–90%","91–105%","106–120%",">120%","無固定%"] [i]}</text>`).join("")}
           <text x="360" y="20" text-anchor="middle" class="diagram-small">相對 FTP 的功率強度概念</text>
         `), "功率可即時控制輸出；心率反映身體反應且有延遲。短間歇尤其不要只追心率。" );
     case "bikehr":
       return wrap("自行車心率區間｜依 Bike LTHR 設定",
         "此為 Joe Friel 自行車閾值心率七區模型，與跑步閾值心率分開建立。", svg(`
-          ${["Z1","Z2","Z3","Z4","Z5a","Z5b","Z5c"].map((x,i)=>`<rect x="${24+i*98}" y="70" width="82" height="${65+i*14}" rx="6" fill="${["#8eaf68","#a8bd8d","#6d91b8","#d49b43","#c88a54","#b76c61","#805f8f"][i]}"/><text x="${65+i*98}" y="${108+i*7}" text-anchor="middle" class="diagram-label" fill="#fff">${x}</text>`).join("")}
-          <text x="360" y="220" text-anchor="middle" class="diagram-small">恢復／耐力 → Tempo／閾值 → 高強度</text>
+          ${["Z1","Z2","Z3","Z4","Z5a","Z5b","Z5c"].map((x,i)=>`<text x="${65+i*98}" y="56" text-anchor="middle" class="diagram-small" style="font-weight:700">${["＜81%","81–89%","90–93%","94–99%","100–102%","103–106%","＞106%"][i]}</text><rect x="${24+i*98}" y="70" width="82" height="${65+i*14}" rx="6" fill="${["#8eaf68","#a8bd8d","#6d91b8","#d49b43","#c88a54","#b76c61","#805f8f"][i]}"/><text x="${65+i*98}" y="${108+i*7}" text-anchor="middle" class="diagram-label" fill="#fff">${x}</text>`).join("")}
+          <text x="360" y="238" text-anchor="middle" class="diagram-small">恢復／耐力 → Tempo／閾值 → 高強度</text>
         `), "心率是內在反應；功率是外在輸出。相同功率下心率變化，需結合溫度、補水與疲勞解讀。");
     case "bikeguide":
       return wrap("自行車課表設計｜強度 × 時間 × 恢復",
@@ -1324,21 +1324,25 @@ function diagramFor(key) {
     case "swimzones":
       return wrap("游泳強度｜配速與技術必須一起看",
         "每 100m 配速是外在目標，划水效率、呼吸節奏與每趟穩定性是品質檢查。", svg(`
-          ${[["技術／恢復", "#8eaf68"],["有氧耐力","#a8bd8d"],["Tempo／CSS","#6d91b8"],["高強度間歇","#d49b43"],["短衝刺","#b76c61"]].map((a,i)=>`<rect x="${42+i*132}" y="70" width="112" height="100" rx="9" fill="${a[1]}"/><text x="${98+i*132}" y="125" text-anchor="middle" class="diagram-small" fill="#fff">${a[0]}</text>`).join("")}
+          ${[["技術／恢復", "#8eaf68"],["有氧耐力","#a8bd8d"],["Tempo／CSS","#6d91b8"],["高強度間歇","#d49b43"],["短衝刺","#b76c61"]].map((a,i)=>`<rect x="${42+i*132}" y="70" width="112" height="100" rx="9" fill="${a[1]}"/><text x="${98+i*132}" y="125" text-anchor="middle" class="diagram-small" style="fill:#ffffff">${a[0]}</text>`).join("")}
           <text x="360" y="220" text-anchor="middle" class="diagram-small">強度提高時，技術品質仍要維持</text>
         `), "游泳不能只追秒數；如果配速達標但划水、身體線條與呼吸明顯崩解，這組訓練品質就需要調整。");
     case "swimguide":
       return wrap("CSS 與 T-time｜兩種測試，不要混為一談",
         "CSS 常由 200m＋400m 估算；T-time 常用 1000m 平均每 100m 配速。", svg(`
-          <rect x="65" y="55" width="245" height="125" rx="12" fill="#e8eff8"/><rect x="410" y="55" width="245" height="125" rx="12" fill="#e8eff8"/>
-          <text x="187" y="95" text-anchor="middle" class="diagram-label">CSS</text><text x="187" y="123" text-anchor="middle" class="diagram-small">200m + 400m</text><text x="187" y="148" text-anchor="middle" class="diagram-small">差值換算每 100m 配速</text>
-          <text x="532" y="95" text-anchor="middle" class="diagram-label">T-time</text><text x="532" y="123" text-anchor="middle" class="diagram-small">1000m 計時</text><text x="532" y="148" text-anchor="middle" class="diagram-small">總時間 ÷ 10</text>
-          <text x="360" y="220" text-anchor="middle" class="diagram-small">兩者都是配速參考，但測試方法與定義不同</text>
-        `), "記錄測試距離、泳池長度、出發方式、日期與泳姿；不要把兩套測試數值直接互換。");
+          <rect x="55" y="18" width="610" height="82" rx="12" fill="#e8eff8"/>
+          <text x="360" y="47" text-anchor="middle" class="diagram-label">CSS 配速（秒／100m）＝（400m 時間 − 200m 時間）÷ 2</text>
+          <text x="360" y="75" text-anchor="middle" class="diagram-small">兩次測驗時間以「秒」計算；距離差為 200m，因此換算成每 100m 要除以 2</text>
+          <rect x="55" y="112" width="610" height="62" rx="10" fill="#f4f7fa" stroke="#d8e1eb"/>
+          <text x="360" y="138" text-anchor="middle" class="diagram-label">若要計算 CSS 速度（m/s）：200 ÷（T400 − T200）</text>
+          <text x="360" y="158" text-anchor="middle" class="diagram-small">這是速度公式；與上方的每 100m 配速公式不同</text>
+          <text x="360" y="205" text-anchor="middle" class="diagram-small">例：T400＝480 秒、T200＝220 秒 →（480−220）÷2＝130 秒／100m</text>
+          <text x="360" y="235" text-anchor="middle" class="diagram-small">T-time：1000m 總時間 ÷ 10 ＝平均每 100m 配速</text>
+        `, "0 0 720 260"), "CSS 配速以每 100m 秒數表示；若使用速度（m/s），則用 200m 除以兩次測驗的時間差。兩種寫法單位不同，不能混用。");
     case "triintensity":
       return wrap("三項強度整合｜各自設定、一起規劃",
         "游泳、騎車、跑步使用不同的外在強度基準，最後再整合進同一週課表。", svg(`
-          ${[["游泳","CSS／T-time","#6d91b8"],["自行車","FTP／Power","#8eaf68"],["跑步","Pace／LTHR","#d49b43"]].map((a,i)=>`<rect x="${38+i*226}" y="48" width="192" height="130" rx="12" fill="${a[2]}"/><text x="${134+i*226}" y="90" text-anchor="middle" class="diagram-label" fill="#fff">${a[0]}</text><text x="${134+i*226}" y="123" text-anchor="middle" class="diagram-small" fill="#fff">${a[1]}</text>`).join("")}
+          ${[["游泳","CSS／T-time","#6d91b8"],["自行車","FTP／Power","#8eaf68"],["跑步","Pace／LTHR","#d49b43"]].map((a,i)=>`<rect x="${38+i*226}" y="48" width="192" height="130" rx="12" fill="${a[2]}"/><text x="${134+i*226}" y="90" text-anchor="middle" class="diagram-label" style="fill:#ffffff">${a[0]}</text><text x="${134+i*226}" y="123" text-anchor="middle" class="diagram-small" style="fill:#ffffff">${a[1]}</text>`).join("")}
           <path d="M134 185 V208 H586 V185 M360 208 V228" stroke="#9aa8b8" stroke-width="2" fill="none"/><text x="360" y="245" text-anchor="middle" class="diagram-small">整合成同一個賽季與每週課表</text>
         `), "不要比較三項的 Zone 數字大小；比較各項的訓練目的、工作時間、恢復需求與實際反應。");
     case "runroadmap":
