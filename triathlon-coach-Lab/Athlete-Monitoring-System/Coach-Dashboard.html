@@ -1344,6 +1344,15 @@ button:active{transform:translateY(.5px)}
   touch-action:auto;
 }
 
+
+/* Separate trend panels keep unlike units from sharing an axis. */
+.trend-panel{padding:12px 4px 8px;border-bottom:1px solid var(--line-soft)}
+.trend-panel:last-child{border-bottom:0}
+.trend-panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 2px 5px;color:var(--ink)}
+.trend-panel-head strong{font-size:14px;font-weight:800}
+.trend-panel-head span{font-size:12px;color:var(--muted)}
+.trend-panel svg{width:100%;height:auto;display:block;min-height:120px;cursor:pointer;touch-action:pan-y}
+
 /* Single-Row 4-Card Summary Bar */
 .combined-analysis{
   display:grid;
@@ -2463,29 +2472,25 @@ button:active{transform:translateY(.5px)}
 
       <div class="metric-toggles">
         <span>顯示指標</span>
-        <label class="metric-toggle"><input type="checkbox" id="metricRPE" checked onchange="renderLoadChart()"><i class="metric-dot rpe"></i> 單次 RPE (右軸 1–10)</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricRPE" checked onchange="renderLoadChart()"><i class="metric-dot rpe"></i> 單次 RPE 圖表</label>
         <label class="metric-toggle"><input type="checkbox" id="metricCTL" checked onchange="renderLoadChart()"><i class="metric-dot ctl"></i> CTL 長期負荷</label>
         <label class="metric-toggle"><input type="checkbox" id="metricATL" checked onchange="renderLoadChart()"><i class="metric-dot atl"></i> ATL 短期疲勞</label>
-        <label class="metric-toggle"><input type="checkbox" id="metricSRPE" onchange="renderLoadChart()"><i class="metric-dot srpe"></i> sRPE 負荷</label>
-        <label class="metric-toggle"><input type="checkbox" id="metricTSB" onchange="renderLoadChart()"><i class="metric-dot tsb"></i> TSB 狀態值</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricSRPE" onchange="renderLoadChart()"><i class="metric-dot srpe"></i> sRPE 圖表</label>
+        <label class="metric-toggle"><input type="checkbox" id="metricTSB" onchange="renderLoadChart()"><i class="metric-dot tsb"></i> TSB 圖表</label>
         <label class="metric-toggle"><input type="checkbox" id="metricTSS" onchange="renderLoadChart()"><i class="metric-dot tss"></i> 每日 TSS</label>
       </div>
     </div>
 
     <div class="chart-plot-wrap" id="chartPlotWrap">
       <div class="chart-plot-top">
-        <div class="chart-axis-guide">
-          <span>左軸：CTL / ATL / TSS</span>
-          <span>右軸：主觀 RPE (1–10)</span>
-        </div>
+        <div class="chart-axis-guide"><span>共用日期區間 · 點選任一圖表日期，可同步查看當日數據</span></div>
         <button class="btn outline chart-expand-btn" type="button" id="fullscreenChartBtn" onclick="toggleChartFullscreen()">放大圖表</button>
       </div>
-      <div class="chart-stage" id="chartStage">
-        <div class="chart-callout-band" id="chartCalloutBand">
-          <div class="chart-callout-placeholder">點選圖表任一天可查看當日完整數據</div>
-        </div>
-        <svg id="loadChart" viewBox="0 0 1000 370" role="img" aria-label="RPE 與個人訓練負荷趨勢圖"></svg>
-      </div>
+      <div class="chart-callout-band" id="chartCalloutBand"><div class="chart-callout-placeholder">點選任一圖表日期，可查看當日完整數據</div></div>
+      <div class="trend-panel"><div class="trend-panel-head"><strong>① 訓練負荷趨勢</strong><span>CTL 長期負荷 · ATL 短期疲勞 · 每日 TSS</span></div><svg id="loadChart" viewBox="0 0 1000 260" role="img" aria-label="CTL ATL 與每日 TSS 趨勢圖"></svg></div>
+      <div class="trend-panel"><div class="trend-panel-head"><strong>② TSB 負荷平衡</strong><span>獨立數值軸 · 0 為基準線 · 正負值清楚呈現</span></div><svg id="tsbChart" viewBox="0 0 1000 220" role="img" aria-label="TSB 負荷平衡趨勢圖"></svg></div>
+      <div class="trend-panel"><div class="trend-panel-head"><strong>③ 主觀訓練反應</strong><span>單次 RPE（1–10）</span></div><svg id="rpeChart" viewBox="0 0 1000 190" role="img" aria-label="單次訓練 RPE 趨勢圖"></svg></div>
+      <div class="trend-panel"><div class="trend-panel-head"><strong>④ 主觀負荷累積</strong><span>sRPE（RPE × 訓練時間，AU）</span></div><svg id="srpeChart" viewBox="0 0 1000 190" role="img" aria-label="每日 sRPE 負荷趨勢圖"></svg></div>
     </div>
 
     <div class="combined-analysis" id="combinedAnalysisBox">
@@ -2514,7 +2519,7 @@ button:active{transform:translateY(.5px)}
       <span id="chartDateLabel">顯示最近 28 天</span>
       <span id="chartDataSourceLabel">目前顯示視覺示意資料；可點選上方「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。</span>
     </div>
-    <div class="chart-hint">共同分析說明：長條為每日主觀 RPE（右軸 1–10 分，8 分以上標為警示色），曲線為 TrainingPeaks 訓練負荷（左軸）。若外部 TSS 不高但主觀 RPE 連續偏高，代表恢復不足或非訓練壓力累積。</div>
+    <div class="chart-hint">圖表判讀：①先看每日 TSS，找出負荷增加的日期；②看 ATL 是否快速上升、CTL 是否逐步累積；③看 TSB 是否下降或轉負，理解短期負荷相對長期負荷的變化；④對照 RPE 是否同步升高。若 TSS／ATL 上升、TSB 下降且 RPE 也升高，代表外部負荷與主觀疲勞同向增加；若 RPE 升高但 TSS 沒有增加，則要檢視睡眠、恢復、疼痛、環境與生活壓力。TSB 正負值不是好壞判決，需結合課表目的與選手反應解讀。</div>
   </div>
 
   <div class="card weekly-card section-gap scroll-anchor" id="sec-weekly">
@@ -3506,11 +3511,10 @@ function updateCombinedAnalysis(data){
   const totalSrpe=data.reduce((s,d)=>s+(d.SRPE||0),0);
   const totalTss=data.reduce((s,d)=>s+(d.TSS||0),0);
   const latest=data[data.length-1];
-
   if(avgRpe!==null){
     document.getElementById('statAvgRpe').textContent=avgRpe.toFixed(1);
     document.getElementById('statAvgRpeUnit').textContent='/ 10';
-    document.getElementById('statAvgRpeSub').textContent=`共 ${rpeDays.length} 筆訓練紀錄`;
+    document.getElementById('statAvgRpeSub').textContent=`共 ${rpeDays.length} 天有 RPE 回報`;
   }else{
     document.getElementById('statAvgRpe').textContent='—';
     document.getElementById('statAvgRpeUnit').textContent='';
@@ -3519,17 +3523,34 @@ function updateCombinedAnalysis(data){
   document.getElementById('statTotalSrpe').textContent=Math.round(totalSrpe).toLocaleString('en-US');
   document.getElementById('statTotalTss').textContent=Math.round(totalTss).toLocaleString('en-US');
 
-  let insight='待累積更多 RPE 與訓練負荷數據';
-  if(avgRpe!==null&&latest){
-    if(avgRpe>=7.5&&latest.ATL<55){
-      insight='主觀 RPE 偏高但外部負荷不高，留意睡眠與恢復';
-    }else if(avgRpe>=7.5&&latest.ATL>=55){
-      insight='高負荷與高主觀疲勞同步累積，建議安排減量日';
-    }else if(avgRpe<=5&&latest.CTL>=45){
-      insight='體能基礎穩定且主觀輕鬆，適應良好';
-    }else{
-      insight='主觀 RPE 與訓練負荷處於正常平衡區間';
-    }
+  let insight='資料尚不足：持續累積每日訓練負荷與單次 RPE，才能比較外部負荷和主觀反應。';
+  if(latest&&data.length>=7){
+    const recent=data.slice(-7),prior=data.slice(-14,-7);
+    const sumTss=arr=>arr.reduce((s,d)=>s+(d.TSS||0),0);
+    const recentTss=sumTss(recent),priorTss=sumTss(prior);
+    const recentRpe=recent.filter(d=>d.RPE>0),priorRpe=prior.filter(d=>d.RPE>0);
+    const mean=arr=>arr.length?arr.reduce((s,d)=>s+d.RPE,0)/arr.length:null;
+    const rNow=mean(recentRpe),rBefore=mean(priorRpe);
+    const notes=[];
+    if(latest.TSB<0)notes.push(`目前 TSB ${latest.TSB.toFixed(1)} 為負值，代表短期負荷高於長期負荷`);
+    else notes.push(`目前 TSB ${latest.TSB.toFixed(1)} 為正值，代表短期負荷低於長期負荷`);
+    if(prior.length===7&&priorTss>0){
+      const change=(recentTss-priorTss)/priorTss*100;
+      if(change>=20)notes.push(`近 7 天 TSS 較前 7 天增加 ${change.toFixed(0)}%`);
+      else if(change<=-20)notes.push(`近 7 天 TSS 較前 7 天下降 ${Math.abs(change).toFixed(0)}%`);
+      else notes.push('近 7 天 TSS 與前 7 天大致接近');
+    }else if(recentTss>0)notes.push('前一週資料不足，暫不比較週負荷變化');
+    if(rNow!==null){
+      if(rNow>=7)notes.push(`近 7 天平均 RPE ${rNow.toFixed(1)}，主觀強度偏高`);
+      else if(rBefore!==null&&rNow-rBefore>=1)notes.push(`平均 RPE 較前一週上升 ${(rNow-rBefore).toFixed(1)} 分`);
+      else if(rBefore!==null&&rBefore-rNow>=1)notes.push(`平均 RPE 較前一週下降 ${(rBefore-rNow).toFixed(1)} 分`);
+      else notes.push(`近 7 天平均 RPE ${rNow.toFixed(1)}/10`);
+    }else notes.push('近 7 天缺少 RPE 回報，主觀反應資料不足');
+    let recommendation='建議把三者放在一起看：TSS 描述當日外部負荷，TSB 描述短長期負荷差，RPE 描述選手主觀反應；不要單靠其中一項決定訓練。';
+    if(latest.TSB<0&&rNow!==null&&rNow>=7)recommendation='負荷差為負且主觀強度偏高，優先檢查恢復、睡眠與疼痛反應，必要時調整接下來 1–2 天訓練。';
+    else if(latest.TSB<0&&rNow!==null&&rNow<6)recommendation='雖然短期負荷高於長期負荷，但主觀感受尚可；持續追蹤趨勢，不必只因 TSB 負值就判定狀態不佳。';
+    else if(latest.TSB>=0&&rNow!==null&&rNow>=7)recommendation='TSB 為正但 RPE 偏高，主觀反應與負荷指標不一致；檢查睡眠、壓力、疼痛、環境與課表強度。';
+    insight=notes.join('；')+'。'+recommendation;
   }
   document.getElementById('statLoadInsight').textContent=insight;
 }
@@ -3592,145 +3613,58 @@ function selectChartPoint(idx){
 }
 
 function renderLoadChart(){
-  const svg=document.getElementById('loadChart');
-  if(!svg)return;
+  const mainSvg=document.getElementById('loadChart');
+  if(!mainSvg)return;
   const a=athletes.find(x=>x.id===currentId);
   const end=chartEnd||getLatestAthleteDate(a);
   const start=chartStart||dateMinus(end,chartDays-1);
   const {data,isReal,workoutCount}=buildAthleteSeries(a,start,end);
   lastRenderedData=data;
   const total=data.length;
-
-  if(selectedChartIndex!==null&&selectedChartIndex>=total){
-    selectedChartIndex=total-1;
-  }
-
-  const isMobile=window.innerWidth<=768;
-  const W=isMobile?620:1000;
-  const H=isMobile?330:360;
-  const L=isMobile?46:58;
-  const R=isMobile?46:58;
-  const T=12;
-  const B=isMobile?38:42;
-  const PW=W-L-R;
-  const PH=H-T-B;
-  const axisFont=isMobile?'13':'11.5';
-  lastChartLayout={W,L,R,PW};
-
-  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-
-  const x=i=>L+(data.length===1?PW/2:(i/(data.length-1))*PW);
-  const svgXRatio=(selectedChartIndex!==null&&data[selectedChartIndex])?(x(selectedChartIndex)/W):0.5;
-
+  if(selectedChartIndex!==null&&selectedChartIndex>=total)selectedChartIndex=total-1;
   updateCombinedAnalysis(data);
-  updateChartCallout(selectedChartIndex,svgXRatio);
-
+  updateChartCallout(selectedChartIndex, selectedChartIndex!==null&&total>1?selectedChartIndex/(total-1):0.5);
   document.getElementById('chartDataSourceLabel').textContent=isReal
     ?`已匯入 TrainingPeaks CSV（共 ${workoutCount} 筆訓練紀錄，本機保存）`
     :'目前顯示視覺示意資料；可點選上方「匯入 TP CSV」載入 TrainingPeaks 訓練紀錄。';
-
-  const maxLoad=Math.max(100,...data.map(d=>Math.max(d.CTL,d.ATL,d.TSS)));
-  const loadCeil=Math.ceil(maxLoad/25)*25;
-  const maxSrpe=Math.max(600,...data.map(d=>d.SRPE||0));
-  // Keep short ranges expressive; soften strokes and fills as the timeline gets denser.
-  const densityScale=total>35?0.52:(total>21?0.66:(total>14?0.82:1));
-  const loadStroke=(3*densityScale).toFixed(2);
-  const tsbStroke=(2.6*densityScale).toFixed(2);
-  const srpeStroke=(2.2*densityScale).toFixed(2);
-  const areaOpacity=total>21?0.075:(total>14?0.105:0.15);
-
-
-  const yLoad=v=>T+PH-(Math.max(0,v)/loadCeil)*PH;
-  const yTsb=v=>T+PH-((v+50)/100)*PH;
-  const yRpe=v=>T+PH-(Math.min(10,Math.max(0,v))/10)*PH;
-  const ySrpe=v=>T+PH-(Math.min(maxSrpe,Math.max(0,v))/maxSrpe)*PH;
-
-  const active={
-    RPE:document.getElementById('metricRPE').checked,
-    CTL:document.getElementById('metricCTL').checked,
-    ATL:document.getElementById('metricATL').checked,
-    SRPE:document.getElementById('metricSRPE').checked,
-    TSB:document.getElementById('metricTSB').checked,
-    TSS:document.getElementById('metricTSS').checked
-  };
-
-  let out='';
-  for(let k=0;k<=5;k++){
-    let yy=T+k*PH/5;
-    out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e7ece5" stroke-width="1"/>`;
-    out+=`<text x="${L-8}" y="${yy+4}" text-anchor="end" fill="#6d7b71" font-size="${axisFont}">${Math.round(loadCeil*(1-k/5))}</text>`;
-    out+=`<text x="${W-R+8}" y="${yy+4}" text-anchor="start" fill="#3e6b52" font-size="${axisFont}" font-weight="600">${10-k*2}</text>`;
+  const active={RPE:document.getElementById('metricRPE').checked,CTL:document.getElementById('metricCTL').checked,ATL:document.getElementById('metricATL').checked,SRPE:document.getElementById('metricSRPE').checked,TSB:document.getElementById('metricTSB').checked,TSS:document.getElementById('metricTSS').checked};
+  const mobile=window.innerWidth<=768, W=1000, L=58, R=58, PW=W-L-R;
+  lastChartLayout={W,L,R,PW};
+  const dateLabel=(i,H)=>`<text x="${L+(total<=1?PW/2:i/(total-1)*PW)}" y="${H-8}" text-anchor="middle" fill="#6d7b71" font-size="12">${String(data[i].date.getMonth()+1).padStart(2,'0')}/${String(data[i].date.getDate()).padStart(2,'0')}</text>`;
+  const ticks=Math.min(mobile?5:8,total);
+  const tickMarkup=H=>{let z='';for(let j=0;j<ticks;j++){const i=Math.round(j*(total-1)/Math.max(1,ticks-1));z+=dateLabel(i,H);}return z;};
+  const grid=(H,T,B,labels)=>{const PH=H-T-B;let z='';for(let k=0;k<=4;k++){const y=T+k*PH/4;z+=`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#e7ece5"/><text x="${L-9}" y="${y+4}" text-anchor="end" fill="#6d7b71" font-size="12">${labels[k]}</text>`;}return z;};
+  const x=i=>L+(total<=1?PW/2:i/(total-1)*PW);
+  const line=(key,scale)=>data.map((d,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+scale(d[key]).toFixed(1)).join(' ');
+  const selected=(H,T,B)=>selectedChartIndex!==null&&data[selectedChartIndex]?`<line x1="${x(selectedChartIndex)}" y1="${T}" x2="${x(selectedChartIndex)}" y2="${H-B}" stroke="#213a2e" stroke-width="2" stroke-dasharray="5 4"/>`:'';
+  function drawLoad(){
+    const svg=mainSvg,H=260,T=12,B=30,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+    const max=Math.max(100,...data.map(d=>Math.max(d.CTL,d.ATL,d.TSS))),ceil=Math.ceil(max/25)*25;
+    const y=v=>T+PH-Math.max(0,v)/ceil*PH;let out=grid(H,T,B,[ceil,Math.round(ceil*.75),Math.round(ceil*.5),Math.round(ceil*.25),0]);
+    out+=`<text x="14" y="${T+PH/2}" transform="rotate(-90 14 ${T+PH/2})" fill="#6d7b71" font-size="12">負荷</text>`;
+    ['CTL','ATL'].forEach(k=>{if(active[k])out+=`<path d="${line(k,y)}" fill="none" stroke="${chartColors[k]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;});
+    if(active.TSS)data.forEach((d,i)=>{if(d.TSS>0)out+=`<circle cx="${x(i)}" cy="${y(d.TSS)}" r="3.2" fill="${chartColors.TSS}"/>`;});
+    out+=selected(H,T,B)+tickMarkup(H);svg.innerHTML=out;
   }
-  out+=`<text x="13" y="${T+PH/2}" fill="#6d7b71" font-size="${isMobile?'12':'11.5'}" transform="rotate(-90 13 ${T+PH/2})">CTL / ATL / TSS</text>`;
-  out+=`<text x="${W-12}" y="${T+PH/2}" fill="#3e6b52" font-size="${isMobile?'12':'11.5'}" font-weight="600" transform="rotate(90 ${W-12} ${T+PH/2})">RPE (1–10)</text>`;
-
-  if(selectedChartIndex!==null&&data[selectedChartIndex]){
-    const sx=x(selectedChartIndex);
-    out+=`<line x1="${sx.toFixed(1)}" y1="0" x2="${sx.toFixed(1)}" y2="${T+PH}" stroke="#213a2e" stroke-width="2" stroke-dasharray="5 4"/>`;
+  function drawTsb(){
+    const svg=document.getElementById('tsbChart'),H=220,T=12,B=30,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+    const vals=data.map(d=>d.TSB),lo=Math.min(0,...vals),hi=Math.max(0,...vals),span=Math.max(10,hi-lo),pad=span*.12,min=Math.floor((lo-pad)/5)*5,max=Math.ceil((hi+pad)/5)*5;
+    const y=v=>T+(max-v)/(max-min)*PH;let out='';
+    for(let k=0;k<=4;k++){const v=max-(max-min)*k/4,yy=y(v);out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="${Math.abs(v)<0.001?'#648db5':'#e7ece5'}" stroke-width="${Math.abs(v)<0.001?2:1}" ${Math.abs(v)<0.001?'stroke-dasharray="5 4"':''}/><text x="${L-9}" y="${yy+4}" text-anchor="end" fill="#6d7b71" font-size="12">${v.toFixed(0)}</text>`;}
+    if(active.TSB){out+=`<path d="${line('TSB',y)}" fill="none" stroke="${chartColors.TSB}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;if(selectedChartIndex!==null)out+=`<circle cx="${x(selectedChartIndex)}" cy="${y(data[selectedChartIndex].TSB)}" r="5" fill="${chartColors.TSB}" stroke="#fff" stroke-width="2"/>`;}
+    out+=`<text x="14" y="${T+PH/2}" transform="rotate(-90 14 ${T+PH/2})" fill="#648db5" font-size="12">TSB</text>`+selected(H,T,B)+tickMarkup(H);svg.innerHTML=out;
   }
-
-  if(active.RPE){
-    // RPE is subjective 1–10: use narrow columns on the right axis.
-    // Column width adapts to date density; no extra colored dot is placed above each bar.
-    const baseline=yRpe(0);
-    const slotWidth=total>1?PW/(total-1):PW;
-    const rpeBarWidth=Math.max(3.2,Math.min(13,slotWidth*0.58));
-    data.forEach((d,i)=>{
-      if(d.RPE===null||d.RPE===undefined||d.RPE<=0)return;
-      const cx=x(i),top=yRpe(d.RPE),isSel=i===selectedChartIndex;
-      out+=`<rect x="${(cx-rpeBarWidth/2).toFixed(1)}" y="${top.toFixed(1)}" width="${rpeBarWidth.toFixed(1)}" height="${Math.max(1,baseline-top).toFixed(1)}" rx="${total>90?1.2:2.5}" fill="#52745f" opacity="${isSel?0.9:(total>90?0.38:0.55)}"><title>${fmtDate(d.date)} · RPE ${d.RPE}/10</title></rect>`;
-      if(total<=35||isSel){
-        out+=`<text x="${cx.toFixed(1)}" y="${Math.max(T+11,top-6).toFixed(1)}" text-anchor="middle" fill="#52745f" font-size="${isSel?12:10}" font-weight="750">${d.RPE}</text>`;
-      }
-    });
+  function drawRpe(){
+    const svg=document.getElementById('rpeChart'),H=190,T=12,B=28,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);let out=grid(H,T,B,[10,7.5,5,2.5,0]);
+    if(active.RPE)data.forEach((d,i)=>{if(d.RPE==null||d.RPE<=0)return;const yy=T+PH-d.RPE/10*PH;out+=`<rect x="${x(i)-Math.max(2,Math.min(8,PW/Math.max(1,total)*.3))}" y="${yy}" width="${Math.max(4,Math.min(16,PW/Math.max(1,total)*.6))}" height="${T+PH-yy}" rx="3" fill="${d.RPE>=8?'#c86d69':'#3e6b52'}" opacity=".8"><title>${fmtDate(d.date)} · RPE ${d.RPE}/10</title></rect>`;});
+    out+=selected(H,T,B)+tickMarkup(H);svg.innerHTML=out;
   }
-
-  function linePath(key,scale){return data.map((d,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+scale(d[key]).toFixed(1)).join(' ')}
-  function areaPath(key,scale,base){return `M${x(0)},${base} `+data.map((d,i)=>`L${x(i).toFixed(1)},${scale(d[key]).toFixed(1)}`).join(' ')+` L${x(data.length-1)},${base} Z`}
-
-  ['CTL','ATL'].forEach(k=>{
-    if(active[k]){
-      let sc=yLoad,base=T+PH;
-      out+=`<path d="${areaPath(k,sc,base)}" fill="${chartColors[k]}" opacity="${areaOpacity}"/>`;
-      out+=`<path d="${linePath(k,sc)}" fill="none" stroke="${chartColors[k]}" stroke-width="${loadStroke}" stroke-linecap="round" stroke-linejoin="round"/>`;
-    }
-  });
-
-  if(active.SRPE){
-    out+=`<path d="${linePath('SRPE',ySrpe)}" fill="none" stroke="${chartColors.SRPE}" stroke-width="${srpeStroke}" stroke-dasharray="5 4" stroke-linecap="round"/>`;
+  function drawSrpe(){
+    const svg=document.getElementById('srpeChart'),H=190,T=12,B=28,PH=H-T-B;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);const max=Math.max(10,...data.map(d=>d.SRPE||0)),ceil=Math.ceil(max/10)*10,y=v=>T+PH-v/ceil*PH;let out=grid(H,T,B,[ceil,ceil*.75,ceil*.5,ceil*.25,0].map(v=>Math.round(v)));
+    if(active.SRPE){data.forEach((d,i)=>{if(d.SRPE>0){const yy=y(d.SRPE);out+=`<rect x="${x(i)-Math.max(2,Math.min(8,PW/Math.max(1,total)*.3))}" y="${yy}" width="${Math.max(4,Math.min(16,PW/Math.max(1,total)*.6))}" height="${T+PH-yy}" rx="3" fill="${chartColors.SRPE}" opacity=".75"><title>${fmtDate(d.date)} · sRPE ${d.SRPE} AU</title></rect>`;}});}
+    out+=selected(H,T,B)+tickMarkup(H);svg.innerHTML=out;
   }
-
-  if(active.TSB){
-    const zeroY=yTsb(0);
-    out+=`<line x1="${L}" y1="${zeroY}" x2="${W-R}" y2="${zeroY}" stroke="#648db5" stroke-dasharray="4 4" opacity=".45"/>`;
-    out+=`<path d="${areaPath('TSB',yTsb,zeroY)}" fill="${chartColors.TSB}" opacity="${areaOpacity}"/>`;
-    out+=`<path d="${linePath('TSB',yTsb)}" fill="none" stroke="${chartColors.TSB}" stroke-width="${tsbStroke}" stroke-linecap="round" stroke-linejoin="round"/>`;
-  }
-
-  if(active.TSS){
-    data.forEach((d,i)=>{
-      if(d.TSS>0)out+=`<circle cx="${x(i)}" cy="${yLoad(d.TSS)}" r="3.5" fill="${chartColors.TSS}" opacity=".82"/>`;
-    });
-  }
-
-  /* RPE is rendered as narrow bars on the right 1–10 axis. */
-
-  if(selectedChartIndex!==null&&data[selectedChartIndex]){
-    const sd=data[selectedChartIndex];
-    const sx=x(selectedChartIndex).toFixed(1);
-    if(active.CTL)out+=`<circle cx="${sx}" cy="${yLoad(sd.CTL).toFixed(1)}" r="5.5" fill="${chartColors.CTL}" stroke="#fffefa" stroke-width="2"/>`;
-    if(active.ATL)out+=`<circle cx="${sx}" cy="${yLoad(sd.ATL).toFixed(1)}" r="5.5" fill="${chartColors.ATL}" stroke="#fffefa" stroke-width="2"/>`;
-    if(active.SRPE&&sd.SRPE>0)out+=`<circle cx="${sx}" cy="${ySrpe(sd.SRPE).toFixed(1)}" r="5" fill="${chartColors.SRPE}" stroke="#fffefa" stroke-width="2"/>`;
-    if(active.TSB)out+=`<circle cx="${sx}" cy="${yTsb(sd.TSB).toFixed(1)}" r="5" fill="${chartColors.TSB}" stroke="#fffefa" stroke-width="2"/>`;
-  }
-
-  let ticks=Math.min(isMobile?6:8,data.length);
-  for(let j=0;j<ticks;j++){
-    let i=Math.round(j*(data.length-1)/Math.max(1,ticks-1));
-    out+=`<text x="${x(i)}" y="${H-12}" text-anchor="middle" fill="#6d7b71" font-size="${isMobile?'12.5':'11'}">${String(data[i].date.getMonth()+1).padStart(2,'0')}/${String(data[i].date.getDate()).padStart(2,'0')}</text>`;
-  }
-
-  svg.innerHTML=out;
+  drawLoad();drawTsb();drawRpe();drawSrpe();
   document.getElementById('chartDateLabel').textContent=`${fmtDate(start)} — ${fmtDate(end)} · 共 ${total} 天`;
 }
 
@@ -4875,6 +4809,13 @@ function printWeeklyPdf(){
   svg.addEventListener('touchcancel',()=>{tapStart=null},{passive:true});
   window.addEventListener('resize',()=>{
     if(document.getElementById('profile').classList.contains('active'))renderLoadChart();
+  });
+})();
+
+(function initSecondaryChartSelection(){
+  ['tsbChart','rpeChart','srpeChart'].forEach(id=>{
+    const svg=document.getElementById(id);if(!svg)return;
+    svg.addEventListener('click',e=>{if(!lastRenderedData.length)return;const rect=svg.getBoundingClientRect();if(!rect.width)return;const ratio=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));selectChartPoint(Math.round(ratio*(lastRenderedData.length-1)));});
   });
 })();
 
